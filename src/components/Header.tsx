@@ -37,7 +37,7 @@ export default Header;
 
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
         position: "absolute",
         top: 0,
         zIndex: 99999,
@@ -45,9 +45,10 @@ const styles = StyleSheet.create({
     },
     headerBox: {
         width: wp(100),
-        height: 55,
+        height: 54,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        // backgroundColor: 'red'
     },
     headerCenter: {
         width: "50%",
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: "20%",
         height: "100%",
-        paddingLeft: wp(5),
+        paddingLeft: wp(4),
     },
     headerRight: {
         position: 'absolute',
@@ -73,6 +74,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: "20%",
         height: "100%",
-        paddingRight: wp(5),
+        paddingRight: wp(4),
     }
 })
