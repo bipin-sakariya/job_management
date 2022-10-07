@@ -11,17 +11,17 @@ const JobListComponent = ({ item, index }: any) => {
         <View style={styles.itemContainer}>
             <View style={styles.dateTxtContainer}>
                 <Image source={ImagesPath.calender_icon} style={styles.calenderIconStyle} />
-                <Text style={styles.dateTxtStyle}>{item.data}</Text>
+                <Text style={[styles.dateTxtStyle]}>{item.data}</Text>
             </View>
             {item.jobs.map((i: any) => (
                 <View style={styles.jobContainerStyle}>
                     <Image source={ImagesPath.placeholder_img} style={styles.jobImageStyle} />
                     <View style={{ flex: 1 }}>
                         <View style={styles.jobTitleContainer}>
-                            <Text style={styles.titleTxt}>{i.title}</Text>
-                            <Text style={styles.distanceTxt}>{i.km}</Text>
+                            <Text style={[styles.titleTxt, globalStyles.rtlStyle]}>{i.title}</Text>
+                            <Text style={[styles.distanceTxt]}>{i.km}</Text>
                         </View>
-                        <Text style={styles.descriptionTxt}>{i.description}</Text>
+                        <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{i.description}</Text>
                     </View>
                 </View>
             ))}

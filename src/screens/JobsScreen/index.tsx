@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, I18nManager } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
@@ -70,7 +70,9 @@ const JobsScreen = () => {
                 }
                 headerRightComponent={
                     <View style={globalStyles.rowView}>
-                        <TouchableOpacity style={{ marginRight: wp(3) }}>
+                        <TouchableOpacity onPress={() => {
+                            // I18nManager.forceRTL(!I18nManager.getConstants().isRTL)
+                        }} style={{ marginRight: wp(3) }}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                         <TouchableOpacity>

@@ -6,4 +6,7 @@ export const colors = {
     app_bg: '#E8E8E8',
     white: '#FFFFFF',
     black: '#000000',
+    light_dark_blue: "#798bb6",
+    light_blue: '#cfe1fe',
+    light_purple: "#c1cfe0",
 }

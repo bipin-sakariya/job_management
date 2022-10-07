@@ -12,6 +12,9 @@ export const ImagesPath = {
     check_icon: require('../assets/images/checkCircleIcon.png'),
     unCheck_icon: require('../assets/images/unCheckCircleIcon.png'),
     calender_icon: require('../assets/images/calenderIcon.png'),
-    placeholder_img: require('../assets/images/placeholderImage.png')
+    placeholder_img: require('../assets/images/placeholderImage.png'),
+    route_icon: require('../assets/images/routeIcon.png'),
+    suitcase_icon: require('../assets/images/suitcaseIcon.png'),
+    infocircle_icon: require('../assets/images/infoCircleIcon.png'),
 }
 
