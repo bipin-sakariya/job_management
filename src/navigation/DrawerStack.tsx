@@ -3,6 +3,7 @@ import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import BottomTab from './BottomTab';
 import { DrawerStackParamList } from '../types/RootStackTypes';
+import DrawerScreen from '../screens/DrawerScreen';
 
 const Drawer = createDrawerNavigator<DrawerStackParamList>();
 
@@ -12,7 +13,8 @@ const DrawerStack = () => {
             screenOptions={{
                 headerShown: false
             }}
-            initialRouteName="BottomTabs">
+            initialRouteName="BottomTabs"
+            drawerContent={props => <DrawerScreen {...props} />}>
             <Drawer.Screen name="BottomTabs" component={BottomTab} />
         </Drawer.Navigator>
     )
