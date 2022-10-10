@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, Image, I18nManager } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import { DrawerActions, useNavigation } from '@react-navigation/native';
+import { DrawerActions, NavigationProp, useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
 import { ButtonTab, Container, CustomBottomSheet, Header, JobListComponent } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
@@ -45,7 +45,7 @@ const JobData = [
 ]
 
 const JobsScreen = () => {
-    const navigation = useNavigation();
+    const navigation: NavigationProp<any, any> = useNavigation();
     const refRBSheet = useRef<RBSheet | null>(null);
     const [selectedItem, setSelectedItem] = useState<ListDataProps | undefined>(undefined);
 
@@ -71,11 +71,11 @@ const JobsScreen = () => {
                 headerRightComponent={
                     <View style={globalStyles.rowView}>
                         <TouchableOpacity onPress={() => {
-                            // I18nManager.forceRTL(!I18nManager.getConstants().isRTL)
+                            I18nManager.forceRTL(!I18nManager.getConstants().isRTL)
                         }} style={{ marginRight: wp(3) }}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate("NotificationScreen")}>
                             <Image source={ImagesPath.notification_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                     </View>

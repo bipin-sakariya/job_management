@@ -1,3 +1,4 @@
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React from "react";
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import RBSheet, { RBSheetProps } from "react-native-raw-bottom-sheet";
@@ -22,6 +23,7 @@ interface CustomJobBottomListSheetProps {
 
 const CustomJobBottomListSheet = React.forwardRef((props: CustomJobBottomListSheetProps & RBSheetProps, ref: any) => {
 
+    const navigation: NavigationProp<any, any> = useNavigation()
     const renderItem = ({ item, index }: any) => {
         return (
             <CustomJobListComponent item={item} />
@@ -53,7 +55,10 @@ const CustomJobBottomListSheet = React.forwardRef((props: CustomJobBottomListShe
                         <Image source={ImagesPath.suitcase_icon} style={styles.jobIcon} />
                         <Text style={styles.jobsText}>Jobs</Text>
                     </View>
-                    <TouchableOpacity style={styles.routeBut}>
+                    <TouchableOpacity onPress={() => {
+                        ref.current.close()
+                        navigation.navigate("RouteScreen")
+                    }} style={styles.routeBut}>
                         <Image source={ImagesPath.route_icon} style={styles.routeIcon} />
                         <Text style={styles.routeTxt}>Route</Text>
                     </TouchableOpacity>

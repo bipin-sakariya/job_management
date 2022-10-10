@@ -9,4 +9,6 @@ export const colors = {
     light_dark_blue: "#798bb6",
     light_blue: '#cfe1fe',
     light_purple: "#c1cfe0",
+    brown: "#737373",
+    light_brown: '#666666',
 }

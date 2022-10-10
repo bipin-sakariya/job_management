@@ -5,7 +5,7 @@ import { customMapStyle, globalStyles } from '../../styles/globalStyles';
 import { Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { DrawerActions, useIsFocused, useNavigation } from '@react-navigation/native';
+import { DrawerActions, NavigationProp, useIsFocused, useNavigation } from '@react-navigation/native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import CustomBottomSheet, { ListDataProps } from '../../components/CustomBottomSheet';
 import MapView from 'react-native-maps';
@@ -30,7 +30,7 @@ const JobData = [
     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open" }
 ]
 const MapScreen = () => {
-    const navigation = useNavigation();
+    const navigation: NavigationProp<any, any> = useNavigation();
     const refRBSheet = useRef<RBSheet | null>(null);
     const refJobListSheet = useRef<RBSheet | null>(null);
     const [selectedItem, setSelectedItem] = useState<ListDataProps | undefined>(undefined);

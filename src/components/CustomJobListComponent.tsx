@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
         fontSize: FontSizes.EXTRA_SMALL_12,
         paddingLeft: wp(2.5),
         color: '#797979',
-        width: wp("45%")
+        width: wp("35%")
     },
     openButton: {
         height: wp(5),

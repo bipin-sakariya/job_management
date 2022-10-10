@@ -35,7 +35,7 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   RCTAppSetupPrepareApp(application);
 
   [GMSServices provideAPIKey:@"AIzaSyBP08czJjJVeExEovBp4raeaFMYd7VDRbc"];
-  [[RCTI18nUtil sharedInstance] allowRTL:YES];
+  
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
 
 #if RCT_NEW_ARCH_ENABLED

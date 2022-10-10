@@ -12,4 +12,7 @@ export type RootStackParamList = {
     DrawerScreens: DrawerStackParamList
     MapScreen: undefined
     IndoxScreen: undefined
+    RouteScreen: undefined
+    NotificationScreen: undefined
+    JobDetailsScreen: undefined
 };

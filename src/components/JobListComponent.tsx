@@ -1,12 +1,15 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../utils/ImagePaths';
 import FontSizes from '../styles/FontSizes';
 import fonts from '../styles/Fonts';
+import { colors } from '../styles/Colors';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 const JobListComponent = ({ item, index }: any) => {
+    const navigation: NavigationProp<any, any> = useNavigation()
     return (
         <View style={styles.itemContainer}>
             <View style={styles.dateTxtContainer}>
@@ -14,16 +17,24 @@ const JobListComponent = ({ item, index }: any) => {
                 <Text style={[styles.dateTxtStyle]}>{item.data}</Text>
             </View>
             {item.jobs.map((i: any) => (
-                <View style={styles.jobContainerStyle}>
+                <TouchableOpacity onPress={() => { navigation.navigate("JobDetailsScreen") }} style={[styles.jobContainerStyle, { backgroundColor: i.author ? "#F0F0F0" : "#D9D9D9" }]}>
                     <Image source={ImagesPath.placeholder_img} style={styles.jobImageStyle} />
                     <View style={{ flex: 1 }}>
                         <View style={styles.jobTitleContainer}>
                             <Text style={[styles.titleTxt, globalStyles.rtlStyle]}>{i.title}</Text>
                             <Text style={[styles.distanceTxt]}>{i.km}</Text>
                         </View>
-                        <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{i.description}</Text>
+                        {
+                            i.author ?
+                                <>
+                                    <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{i.jobstatus}</Text>
+                                    <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{i.author}</Text>
+                                </> :
+
+                                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{i.description}</Text>
+                        }
                     </View>
-                </View>
+                </TouchableOpacity>
             ))}
         </View>
     )
@@ -47,7 +58,8 @@ const styles = StyleSheet.create({
     dateTxtStyle: {
         fontSize: FontSizes.MEDIUM_16,
         fontFamily: fonts.FONT_POP_REGULAR,
-        paddingHorizontal: wp(2)
+        paddingHorizontal: wp(2),
+        color: colors.light_brown,
     },
     jobContainerStyle: {
         ...globalStyles.rowView,
@@ -69,7 +81,7 @@ const styles = StyleSheet.create({
     },
     titleTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
-        fontSize: FontSizes.LARGE_22,
+        fontSize: FontSizes.SEMI_LARGE_20,
         color: '#404040'
     },
     distanceTxt: {
