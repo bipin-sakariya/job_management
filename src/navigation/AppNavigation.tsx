@@ -5,7 +5,6 @@ import { RootStackParamList } from '../types/RootStackTypes';
 import DrawerStack from './DrawerStack';
 import RouteScreen from '../screens/RouteScreen';
 import NotificationScreen from '../screens/NotificationScreen';
-import JobDetailsScreen from '../screens/JobDetailsScreen.tsx';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -20,7 +19,6 @@ const AppNavigation = () => {
                 <Stack.Screen name={'DrawerScreens'} component={DrawerStack} />
                 <Stack.Screen name={'RouteScreen'} component={RouteScreen} />
                 <Stack.Screen name={'NotificationScreen'} component={NotificationScreen} />
-                <Stack.Screen name={'JobDetailsScreen'} component={JobDetailsScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );
