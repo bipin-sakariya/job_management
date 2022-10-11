@@ -7,7 +7,7 @@ import RouteScreen from '../screens/RouteScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import AuthStack from './AuthStack';
 import UsersGroupsScreen from '../screens/UsersGroupsScreen';
-import JobDetailsScreen from '../screens/JobDetailsScreen.tsx';
+import JobDetailsScreen from '../screens/JobDetailsScreen';
 import ReportGeneratorScreen from '../screens/ReportGeneratorScreen';
 import UserGroupDetailScreen from '../screens/UserGroupDetailScreen';
 

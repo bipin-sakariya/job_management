@@ -19,4 +19,16 @@ export const colors = {
     black_1: '#202020',
     gray_1: '#8F8F90',
     gray_2: '#3C3844',
+    gray_3: '#262626',
+    gray_4: '#707070',
+    gray_5: '#5D5D5D',
+    gray_6: '#595959',
+    gray_7: '#9E9E9E',
+    calendar_round: '#ABABAB',
+    calendar_background: '#D9D9D9',
+    calendar_round_border: '#979797',
+    calendar_Bg: '#F7F7F7',
+    white_1: '#EAEAEA',
+    white_2: '#F9F9F9',
+    white_3: '#DBDBDB'
 }

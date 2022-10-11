@@ -48,7 +48,10 @@ const JobsScreen = () => {
     const navigation: NavigationProp<any, any> = useNavigation();
     const refRBSheet = useRef<RBSheet | null>(null);
     const [selectedItem, setSelectedItem] = useState<ListDataProps | undefined>(undefined);
-
+    const [btn, setBtn] = useState({
+        open: true,
+        close: false
+    })
     useEffect(() => {
         let defaultSelected = data.find((i) => i.selected == true)
         setSelectedItem(defaultSelected)
@@ -83,7 +86,7 @@ const JobsScreen = () => {
                 }
             />
             <Container>
-                <ButtonTab />
+                <ButtonTab btnOneTitle='Open' btnTwoTitle='Close' setBtn={setBtn} btnValue={btn} />
                 <FlatList
                     style={{ marginBottom: wp(28) }}
                     data={JobData}
