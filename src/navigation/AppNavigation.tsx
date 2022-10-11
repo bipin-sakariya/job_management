@@ -5,6 +5,8 @@ import { RootStackParamList } from '../types/RootStackTypes';
 import DrawerStack from './DrawerStack';
 import RouteScreen from '../screens/RouteScreen';
 import NotificationScreen from '../screens/NotificationScreen';
+import AuthStack from './AuthStack';
+import UsersScreen from '../screens/UsersScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -16,9 +18,11 @@ const AppNavigation = () => {
                     headerShown: false
                 }}
                 initialRouteName={'DrawerScreens'}>
+                <Stack.Screen name={'AuthStack'} component={AuthStack} />
                 <Stack.Screen name={'DrawerScreens'} component={DrawerStack} />
                 <Stack.Screen name={'RouteScreen'} component={RouteScreen} />
                 <Stack.Screen name={'NotificationScreen'} component={NotificationScreen} />
+                <Stack.Screen name={'UsersScreen'} component={UsersScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

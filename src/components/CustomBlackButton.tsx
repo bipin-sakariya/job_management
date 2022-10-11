@@ -18,7 +18,7 @@ interface CustomBlackButtonProps {
 const CustomBlackButton = ({ title, onPress, image, buttonStyle, imageStyle, textStyle }: CustomBlackButtonProps) => {
     return (
         <TouchableOpacity onPress={onPress} style={[globalStyles.rowView, styles.blackBtnStyle, buttonStyle]}>
-            <Image source={image} style={[imageStyle, styles.imageView]} />
+            {image && <Image source={image} style={[imageStyle, styles.imageView]} />}
             <Text style={[styles.btnTextStyle, textStyle,]}>{title}</Text>
         </TouchableOpacity>
     )

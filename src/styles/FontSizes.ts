@@ -11,7 +11,8 @@ export const FontSizes = {
 	EXTRA_LARGE_24: RFValue(24),
 	SMALL_5: RFValue(5),
 	SMALL_7: RFValue(7),
-	LARGE_30: RFValue(30)
+	LARGE_30: RFValue(30),
+	EXTRA_LARGE_34: RFValue(34)
 };
 
 export default FontSizes;

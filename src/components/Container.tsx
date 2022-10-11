@@ -1,4 +1,4 @@
-import { NativeModules, StyleSheet, Text, View, ViewProps } from 'react-native';
+import { NativeModules, StyleSheet, View, ViewProps } from 'react-native';
 import React from 'react';
 const { StatusBarManager } = NativeModules;
 

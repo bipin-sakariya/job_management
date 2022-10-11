@@ -20,5 +20,16 @@ export const ImagesPath = {
     left_arrow_icon: require('../assets/images/leftArrowIcon.png'),
     right_icon: require('../assets/images/rightIcon.png'),
     menu_dots__icon: require('../assets/images/menuDotsIcon.png'),
+    app_icon: require('../assets/images/appIcon.png'),
+    close_eye_icon: require('../assets/images/closeEyeIcon.png'),
+    pencil_icon: require('../assets/images/DrawerIcons/pencilIcon.png'),
+    user_icon: require('../assets/images/DrawerIcons/userIcon.png'),
+    bill_icon: require('../assets/images/DrawerIcons/billIcon.png'),
+    form_icon: require('../assets/images/DrawerIcons/formIcon.png'),
+    group_icon: require('../assets/images/DrawerIcons/groupIcon.png'),
+    report_icon: require('../assets/images/DrawerIcons/reportIcon.png'),
+    logout_icon: require('../assets/images/DrawerIcons/logoutIcon.png'),
+    add_icon: require('../assets/images/addIcon.png'),
+    dots_menu_icon: require('../assets/images/dotsMenuIcon.png')
 }
 

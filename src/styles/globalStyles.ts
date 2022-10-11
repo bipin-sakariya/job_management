@@ -27,6 +27,12 @@ export const globalStyles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    backArrowStyle: {
+        height: wp(5),
+        width: wp(5),
+        resizeMode: "contain",
+        marginRight: wp(2)
+    },
     rtlStyle: {
         writingDirection: I18nManager.getConstants().isRTL ? "rtl" : "ltr"
     },

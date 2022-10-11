@@ -4,6 +4,8 @@ import Container from './Container';
 import ButtonTab from './ButtonTab';
 import JobListComponent from './JobListComponent';
 import InboxListComponent from './InboxListComponent';
+import CustomTextInput from './CustomTextInput';
+import CustomBlackButton from './CustomBlackButton';
 
 export {
     Header,
@@ -11,5 +13,7 @@ export {
     Container,
     ButtonTab,
     JobListComponent,
-    InboxListComponent
+    InboxListComponent,
+    CustomTextInput,
+    CustomBlackButton
 }

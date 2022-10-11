@@ -11,7 +11,8 @@ const DrawerStack = () => {
     return (
         <Drawer.Navigator
             screenOptions={{
-                headerShown: false
+                headerShown: false,
+                drawerType: 'front'
             }}
             initialRouteName="BottomTabs"
             drawerContent={props => <DrawerScreen {...props} />}>
