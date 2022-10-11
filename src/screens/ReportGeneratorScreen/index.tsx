@@ -254,14 +254,15 @@ const ReportGeneratorScreen = () => {
 
     return (
         <View style={globalStyles.container}>
-            <Header headerLeftComponent={
-                <TouchableOpacity style={[globalStyles.rowView, { width: wp(55), }]} onPress={() => { navigation.goBack() }}>
-                    <Image source={ImagesPath.left_arrow_icon} style={styles.leftArrowIcon} />
-                    <Text style={styles.ReportTxt}>Report Generator</Text>
-                </TouchableOpacity>
-            }
+            <Header
+                headerLeftComponent={
+                    <TouchableOpacity style={[globalStyles.rowView, { width: wp(55), }]} onPress={() => { navigation.goBack() }}>
+                        <Image source={ImagesPath.left_arrow_icon} style={styles.leftArrowIcon} />
+                        <Text style={styles.ReportTxt}>Report Generator</Text>
+                    </TouchableOpacity>
+                }
             />
-            <Container style={{ flex: 1, paddingHorizontal: wp(5) }}>
+            <Container style={{ flex: 1, paddingHorizontal: wp(4) }}>
                 <ScrollView showsVerticalScrollIndicator={false} >
                     <View style={[globalStyles.rowView]}>
                         <Image source={ImagesPath.note_icon} style={styles.noteIconStyle} />

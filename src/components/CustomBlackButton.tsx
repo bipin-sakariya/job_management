@@ -30,21 +30,21 @@ const styles = StyleSheet.create({
     blackBtnStyle: {
         backgroundColor: colors.black,
         justifyContent: 'center',
-        width: wp(50),
         alignSelf: "center",
         paddingVertical: wp(2),
         borderRadius: wp(1),
-        marginVertical: wp(5)
+        marginVertical: wp(5),
+        paddingHorizontal: wp(5)
     },
     btnTextStyle: {
         color: colors.white,
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.REGULAR_18,
-        marginHorizontal: wp(2)
     },
     imageView: {
-        width: wp(8),
-        height: wp(8),
-        resizeMode: 'contain'
+        width: wp(6),
+        height: wp(6),
+        resizeMode: 'contain',
+        marginRight: wp(2.5)
     },
 })
