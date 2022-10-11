@@ -11,6 +11,7 @@ import CustomDetailsComponent from './CustomDetailsComponent';
 import CustomJobBottomListSheet from './CustomJobBottomListSheet';
 import CustomJobDetailsBottomButton from './CustomJobDetailsBottomButton';
 import CustomJobListComponent from './CustomJobListComponent';
+import UserListComponent from './UserListComponent';
 
 export {
     Header,
@@ -25,5 +26,6 @@ export {
     CustomDetailsComponent,
     CustomJobBottomListSheet,
     CustomJobDetailsBottomButton,
-    CustomJobListComponent
+    CustomJobListComponent,
+    UserListComponent
 }

@@ -19,7 +19,7 @@ export const ImagesPath = {
     user_placeholder_img: require('../assets/images/userPlaceholder.png'),
     left_arrow_icon: require('../assets/images/leftArrowIcon.png'),
     right_icon: require('../assets/images/rightIcon.png'),
-    menu_dots__icon: require('../assets/images/menuDotsIcon.png'),
+    menu_dots_icon: require('../assets/images/menuDotsIcon.png'),
     app_icon: require('../assets/images/appIcon.png'),
     close_eye_icon: require('../assets/images/closeEyeIcon.png'),
     pencil_icon: require('../assets/images/DrawerIcons/pencilIcon.png'),
@@ -43,5 +43,6 @@ export const ImagesPath = {
     left_arrow_cal_icon: require('../assets/images/leftArrowcal.png'),
     bin_icon: require('../assets/images/binIcon.png'),
     edit_icon: require('../assets/images/editIcon.png'),
+    header_dots_menu: require('../assets/images/headerDotMenu.png')
 }
 

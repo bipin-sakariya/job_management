@@ -1,3 +1,5 @@
+import { RouteProp } from "@react-navigation/native";
+
 export type BottomStackParamList = {
     JobsScreen: undefined
     MapScreen: undefined
@@ -16,7 +18,8 @@ export type RootStackParamList = {
     RouteScreen: undefined
     NotificationScreen: undefined
     JobDetailsScreen: undefined
-    UsersScreen: undefined
+    UsersGroupsScreen: { type?: string }
+    UserGroupDetailScreen: { name?: string },
     ReportGeneratorScreen: undefined
 
 };
@@ -24,3 +27,8 @@ export type RootStackParamList = {
 export type AuthStackParamList = {
     SignInScreen: undefined
 }
+
+export type RootRouteProps<RouteName extends keyof RootStackParamList> = RouteProp<
+    RootStackParamList,
+    RouteName
+>;

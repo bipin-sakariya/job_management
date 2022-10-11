@@ -6,11 +6,11 @@ import { styles } from './styles';
 import { ImagesPath } from '../../utils/ImagePaths';
 
 const AdminDrawerBtn = [
-    { btnTitle: 'User', image: ImagesPath.user_icon, route: 'UsersScreen' },
-    { btnTitle: 'Group', image: ImagesPath.group_icon, route: 'UsersScreen' },
-    { btnTitle: 'Report Generator', image: ImagesPath.report_icon, route: 'UsersScreen' },
-    { btnTitle: 'Bill Section', image: ImagesPath.bill_icon, route: 'UsersScreen' },
-    { btnTitle: 'Form', image: ImagesPath.form_icon, route: 'UsersScreen' },
+    { btnTitle: 'User', image: ImagesPath.user_icon, route: 'UsersGroupsScreen' },
+    { btnTitle: 'Group', image: ImagesPath.group_icon, route: 'UsersGroupsScreen' },
+    { btnTitle: 'Report Generator', image: ImagesPath.report_icon, route: 'UsersGroupsScreen' },
+    { btnTitle: 'Bill Section', image: ImagesPath.bill_icon, route: 'UsersGroupsScreen' },
+    { btnTitle: 'Form', image: ImagesPath.form_icon, route: 'UsersGroupsScreen' },
 ]
 
 const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponentProps) => {
@@ -29,7 +29,13 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
                     {AdminDrawerBtn.map((i) => (
                         <TouchableOpacity onPress={() => {
                             navigation.closeDrawer()
-                            navigation.navigate(i.route)
+                            if (i.btnTitle == 'User') {
+                                navigation.navigate(i.route, { type: 'users' })
+                            } else if (i.btnTitle == 'Group') {
+                                navigation.navigate(i.route, { type: 'groups' })
+                            } else {
+                                navigation.navigate(i.route)
+                            }
                         }} style={globalStyles.rowView} >
                             <Image source={i.image} style={styles.btnIconStyle} />
                             <Text style={styles.btnTxtStyle}>{i.btnTitle}</Text>

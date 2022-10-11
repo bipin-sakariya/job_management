@@ -78,7 +78,7 @@ const JobDetailsScreen = () => {
                 }
                 headerRightComponent={
                     <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
-                        <Image source={ImagesPath.menu_dots__icon} style={globalStyles.headerIcon} />
+                        <Image source={ImagesPath.menu_dots_icon} style={globalStyles.headerIcon} />
                     </TouchableOpacity>
                 } />
             <Container style={[globalStyles.container, { paddingHorizontal: wp(3) }]}>
