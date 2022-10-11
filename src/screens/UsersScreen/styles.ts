@@ -2,13 +2,13 @@ import { StyleSheet } from 'react-native';
 import React from 'react';
 import fonts from '../../styles/Fonts';
 import FontSizes from '../../styles/FontSizes';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { globalStyles } from '../../styles/globalStyles';
 import { colors } from '../../styles/Colors';
 
 export const styles = StyleSheet.create({
     addUserContainer: {
-        width: wp(90),
+        width: wp(92),
         alignSelf: 'center',
         ...globalStyles.centerView,
         borderRadius: 10,
@@ -40,5 +40,8 @@ export const styles = StyleSheet.create({
         height: wp(5),
         width: wp(5),
         resizeMode: 'contain'
-    }
+    },
+    separator: {
+        height: hp(1.4),
+    },
 })

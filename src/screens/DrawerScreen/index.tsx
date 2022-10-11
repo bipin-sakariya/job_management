@@ -27,7 +27,10 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
                 <Text style={styles.roleTxt}>Admin</Text>
                 <View style={styles.btnContainer}>
                     {AdminDrawerBtn.map((i) => (
-                        <TouchableOpacity onPress={() => navigation.navigate(i.route)} style={globalStyles.rowView} >
+                        <TouchableOpacity onPress={() => {
+                            navigation.closeDrawer()
+                            navigation.navigate(i.route)
+                        }} style={globalStyles.rowView} >
                             <Image source={i.image} style={styles.btnIconStyle} />
                             <Text style={styles.btnTxtStyle}>{i.btnTitle}</Text>
                         </TouchableOpacity>

@@ -41,5 +41,7 @@ export const ImagesPath = {
     note_icon: require('../assets/images/noteIcon.png'),
     right_arrow_cal_icon: require('../assets/images/rightArrowcal.png'),
     left_arrow_cal_icon: require('../assets/images/leftArrowcal.png'),
+    bin_icon: require('../assets/images/binIcon.png'),
+    edit_icon: require('../assets/images/editIcon.png'),
 }
 

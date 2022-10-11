@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { View, StyleSheet, Image, Text } from 'react-native';
 import { BottomStackParamList } from '../types/RootStackTypes';
 import MapScreen from '../screens/MapScreen';
@@ -23,7 +23,7 @@ const BottomTab = () => {
                     backgroundColor: colors.bottom_tab_bg,
                     borderTopLeftRadius: 25,
                     borderTopRightRadius: 25,
-                    height: wp(28),
+                    height: hp(14),
                     position: 'absolute',
                 }
             }}

@@ -1,16 +1,18 @@
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import React, { useRef, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
-import fonts from '../../styles/Fonts';
-import FontSizes from '../../styles/FontSizes';
+import UserListComponent from '../../components/UserListComponent';
 
 const UsersScreen = () => {
     const navigation = useNavigation();
+    const imageRef = useRef(null);
+    const [visibale, setVisible] = useState(false);
+
     return (
         <View style={globalStyles.container}>
             <Header
@@ -36,7 +38,7 @@ const UsersScreen = () => {
                     <Image source={ImagesPath.add_icon} style={styles.addBtnStyle} />
                     <Text style={styles.addNewUserTxt}>ADD NEW USER</Text>
                 </View>
-                <View style={globalStyles.rowView}>
+                <View style={[globalStyles.rowView, { paddingVertical: wp(1.5) }]}>
                     <Image source={ImagesPath.group_icon} style={styles.folderIcon} />
                     <Text style={styles.subTitleTxt}>Added Users</Text>
                 </View>
@@ -44,21 +46,10 @@ const UsersScreen = () => {
                     data={[{}, {}, {}, {}, {}]}
                     renderItem={({ item, index }) => {
                         return (
-                            <View style={[globalStyles.rowView, { justifyContent: 'space-between', marginBottom: wp(2.5) }]}>
-                                <View style={globalStyles.rowView}>
-                                    <Image source={ImagesPath.placeholder_img} style={{ height: wp(14), width: wp(14), resizeMode: 'contain' }} />
-                                    <View style={{ paddingHorizontal: wp(2) }}>
-                                        <Text style={{ fontFamily: fonts.FONT_POP_MEDIUM, fontSize: FontSizes.REGULAR_18 }}>Stanley Lamb</Text>
-                                        <Text style={{ fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_10 }}>Role of User</Text>
-                                    </View>
-                                </View>
-                                <View style={globalStyles.rowView}>
-                                    <Text style={{ fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_10 }}>12 May 2022</Text>
-                                    <Image source={ImagesPath.menu_dots__icon} style={{ height: wp(10), width: wp(10), resizeMode: 'contain' }} />
-                                </View>
-                            </View>
+                            <UserListComponent item={item} />
                         )
                     }}
+                    ItemSeparatorComponent={() => <View style={styles.separator} />}
                 />
             </Container>
         </View>

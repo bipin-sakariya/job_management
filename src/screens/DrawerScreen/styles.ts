@@ -42,7 +42,7 @@ export const styles = StyleSheet.create({
     },
     btnContainer: {
         width: '80%',
-        marginTop: wp(6)
+        marginTop: hp(1.5)
     },
     btnTxtStyle: {
         fontFamily: fonts.FONT_POP_REGULAR,

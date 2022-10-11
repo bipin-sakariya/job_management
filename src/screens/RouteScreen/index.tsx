@@ -70,8 +70,8 @@ const RouteScreen = () => {
             <Header
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
-                        <Image source={ImagesPath.left_arrow_icon} style={styles.leftArrowIcon} />
-                        <Text style={styles.routeTxt}>Route</Text>
+                        <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
+                        <Text style={globalStyles.headerTitle}>Route</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
