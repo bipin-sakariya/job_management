@@ -21,25 +21,25 @@ const JobData = [
     {
         data: '16 May 2022',
         jobs: [
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away' },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away' },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away' }
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' }
         ]
     },
     {
         data: '16 May 2022',
         jobs: [
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away' },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away' },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away' }
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' }
         ]
     },
     {
         data: '16 May 2022',
         jobs: [
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away' },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away' },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away' }
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' }
         ]
     }
 ]
@@ -71,7 +71,8 @@ const JobsScreen = () => {
                 headerRightComponent={
                     <View style={globalStyles.rowView}>
                         <TouchableOpacity onPress={() => {
-                            I18nManager.forceRTL(!I18nManager.getConstants().isRTL)
+                            // I18nManager.forceRTL(!I18nManager.getConstants().isRTL)
+                            navigation.navigate('ReportGeneratorScreen')
                         }} style={{ marginRight: wp(3) }}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>

@@ -17,7 +17,7 @@ const JobListComponent = ({ item, index }: any) => {
                 <Text style={[styles.dateTxtStyle]}>{item.data}</Text>
             </View>
             {item.jobs.map((i: any) => (
-                <TouchableOpacity onPress={() => { navigation.navigate("JobDetailsScreen") }} style={[styles.jobContainerStyle, { backgroundColor: i.author ? "#F0F0F0" : "#D9D9D9" }]}>
+                <TouchableOpacity onPress={() => { navigation.navigate("JobDetailsScreen", { params: i }) }} style={[styles.jobContainerStyle, { backgroundColor: i.author ? "#F0F0F0" : "#D9D9D9" }]}>
                     <Image source={ImagesPath.placeholder_img} style={styles.jobImageStyle} />
                     <View style={{ flex: 1 }}>
                         <View style={styles.jobTitleContainer}>

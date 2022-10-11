@@ -30,6 +30,16 @@ export const ImagesPath = {
     report_icon: require('../assets/images/DrawerIcons/reportIcon.png'),
     logout_icon: require('../assets/images/DrawerIcons/logoutIcon.png'),
     add_icon: require('../assets/images/addIcon.png'),
-    dots_menu_icon: require('../assets/images/dotsMenuIcon.png')
+    dots_menu_icon: require('../assets/images/dotsMenuIcon.png'),
+    map_pin_line_icon: require('../assets/images/mapPinLine.png'),
+    image_white_border: require('../assets/images/imageWhiteBorder.png'),
+    check_circle: require('../assets/images/checkCircle.png'),
+    right_arrow_icon: require('../assets/images/rightArrow.png'),
+    round_arrow_icon: require('../assets/images/roundArrow.png'),
+    share_icon: require('../assets/images/shareIcon.png'),
+    download_simple_icon: require('../assets/images/downloadSimpleIcon.png'),
+    note_icon: require('../assets/images/noteIcon.png'),
+    right_arrow_cal_icon: require('../assets/images/rightArrowcal.png'),
+    left_arrow_cal_icon: require('../assets/images/leftArrowcal.png'),
 }
 

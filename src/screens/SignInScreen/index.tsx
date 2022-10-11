@@ -8,8 +8,10 @@ import fonts from '../../styles/Fonts';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { CustomBlackButton, CustomTextInput } from '../../components';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 const SignInScreen = () => {
+    const navigation: NavigationProp<any, any> = useNavigation()
     return (
         <View style={[globalStyles.container, { paddingHorizontal: wp(5), justifyContent: 'center' }]}>
             <Image source={ImagesPath.app_icon} style={styles.appLogo} />
@@ -23,13 +25,14 @@ const SignInScreen = () => {
             />
             <CustomTextInput
                 title='Password'
+                secureTextEntry
                 icon={<Image source={ImagesPath.close_eye_icon} style={styles.iconStyle} />}
             />
             <CustomBlackButton
                 title="Sign In"
-                onPress={() => { }}
+                onPress={() => { navigation.reset({ index: 0, routes: [{ name: "DrawerScreens" }] }) }}
                 buttonStyle={{ marginVertical: wp(10) }}
-            /> 
+            />
         </View>
     )
 }

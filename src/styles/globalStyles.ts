@@ -36,6 +36,10 @@ export const globalStyles = StyleSheet.create({
     rtlStyle: {
         writingDirection: I18nManager.getConstants().isRTL ? "rtl" : "ltr"
     },
+    spaceAroundView: {
+        justifyContent: "space-around",
+        alignItems: "center"
+    },
 })
 
 export const customMapStyle = [

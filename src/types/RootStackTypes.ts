@@ -17,6 +17,8 @@ export type RootStackParamList = {
     NotificationScreen: undefined
     JobDetailsScreen: undefined
     UsersScreen: undefined
+    ReportGeneratorScreen: undefined
+
 };
 
 export type AuthStackParamList = {
