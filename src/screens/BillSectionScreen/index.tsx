@@ -18,7 +18,7 @@ const BillSectionScreen = () => {
     const [visible, setVisible] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const [text, setText] = useState("")
-    const imageRef = useRef(null);
+    const menuRef = useRef(null);
     const onPress = () => {
         console.log("onPress")
     }
@@ -41,7 +41,7 @@ const BillSectionScreen = () => {
                     </TouchableOpacity>
                 }
                 headerRightComponent={
-                    <TouchableOpacity style={[globalStyles.rowView,]} ref={imageRef} onPress={() => setVisible(true)}>
+                    <TouchableOpacity style={[globalStyles.rowView,]} ref={menuRef} onPress={() => setVisible(true)}>
                         <Image source={ImagesPath.menu_dots_icon} style={globalStyles.threeDotMenuIcon} />
                     </TouchableOpacity>
                 }
@@ -87,11 +87,11 @@ const BillSectionScreen = () => {
                 </ScrollView>
             </Container>
             <CustomDropdown
-                componentRef={imageRef}
+                componentRef={menuRef}
                 dropdownData={optionData}
                 isVisible={visible}
                 setIsVisible={setVisible}
-                modalStyle={{ marginHorizontal: 0 }}
+                modalStyle={{ right: 0 }}
             />
         </View>
     )

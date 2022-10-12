@@ -20,10 +20,16 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
                 <Image source={ImagesPath.user_placeholder_img} style={styles.userPlaceholderStyle} />
             </View>
             <View style={styles.userNameContainer}>
-                <View style={globalStyles.rowView}>
+                <TouchableOpacity
+                    activeOpacity={1}
+                    onPress={() => {
+                        navigation.closeDrawer()
+                        navigation.navigate('ProfileScreen')
+                    }}
+                    style={globalStyles.rowView}>
                     <Text style={styles.userNameTxt}>Johnny Weis</Text>
                     <Image source={ImagesPath.pencil_icon} style={styles.penIcon} />
-                </View>
+                </TouchableOpacity>
                 <Text style={styles.roleTxt}>Admin</Text>
                 <View style={styles.btnContainer}>
                     {AdminDrawerBtn.map((i) => (

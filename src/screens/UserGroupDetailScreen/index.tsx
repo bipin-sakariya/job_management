@@ -96,7 +96,6 @@ const UserGroupDetailScreen = () => {
                         placeholder={'Select Role for User'}
                         container={{ marginBottom: wp(5) }}
                     />
-
                     <DropDownComponent
                         title='Permission'
                         data={data}

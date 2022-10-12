@@ -35,7 +35,9 @@ export type RootStackParamList = {
     CreateBillSectionScreen: { type?: string }
     BillSectionScreen: BillSectionScreenProps
     FormScreen: undefined
-
+    ProfileScreen: undefined
+    ResetPasswordScreen: undefined
+    EditProfileScreen: undefined
 };
 
 export type AuthStackParamList = {

@@ -55,10 +55,6 @@ const UsersScreen = () => {
                     <Image source={ImagesPath.add_icon} style={styles.addBtnStyle} />
                     <Text style={styles.addNewUserTxt}>{type == 'users' ? 'ADD NEW USER' : 'ADD NEW GROUP'}</Text>
                 </View>
-                {/* <View style={[globalStyles.rowView, { paddingVertical: wp(1.5) }]}>
-                    <Image source={ImagesPath.group_icon} style={styles.folderIcon} />
-                    <Text style={styles.subTitleTxt}>{type == 'users' ? 'Added Users' : 'Added Groups'}</Text>
-                </View> */}
                 <CustomSubTitleWithImageComponent
                     title={type == 'users' ? 'Added Users' : 'Added Groups'}
                     image={ImagesPath.group_icon}

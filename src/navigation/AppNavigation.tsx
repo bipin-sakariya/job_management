@@ -15,6 +15,9 @@ import BillCreateScreen from '../screens/CreateBillScreen';
 import CreateBillSectionScreen from '../screens/CreateBillSectionScreen';
 import BillSectionScreen from '../screens/BillSectionScreen';
 import FormScreen from '../screens/FormScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import ResetPasswordScreen from '../screens/ResetPasswordScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -39,7 +42,9 @@ const AppNavigation = () => {
                 <Stack.Screen name={'CreateBillSectionScreen'} component={CreateBillSectionScreen} />
                 <Stack.Screen name={'BillSectionScreen'} component={BillSectionScreen} />
                 <Stack.Screen name={'FormScreen'} component={FormScreen} />
-
+                <Stack.Screen name={'ProfileScreen'} component={ProfileScreen} />
+                <Stack.Screen name={'ResetPasswordScreen'} component={ResetPasswordScreen} />
+                <Stack.Screen name={'EditProfileScreen'} component={EditProfileScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );
