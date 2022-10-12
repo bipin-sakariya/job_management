@@ -21,6 +21,9 @@ export type RootStackParamList = {
     UsersGroupsScreen: { type?: string }
     UserGroupDetailScreen: { name?: string },
     ReportGeneratorScreen: undefined
+    BillListScreen: undefined
+    BillCreateScreen: undefined
+    CreateBillSectionScreen: { type?: string }
 
 };
 

@@ -9,7 +9,7 @@ const AdminDrawerBtn = [
     { btnTitle: 'User', image: ImagesPath.user_icon, route: 'UsersGroupsScreen' },
     { btnTitle: 'Group', image: ImagesPath.group_icon, route: 'UsersGroupsScreen' },
     { btnTitle: 'Report Generator', image: ImagesPath.report_icon, route: 'ReportGeneratorScreen' },
-    { btnTitle: 'Bill Section', image: ImagesPath.bill_icon, route: 'UsersGroupsScreen' },
+    { btnTitle: 'Bill Section', image: ImagesPath.bill_icon, route: 'BillListScreen' },
     { btnTitle: 'Form', image: ImagesPath.form_icon, route: 'UsersGroupsScreen' },
 ]
 

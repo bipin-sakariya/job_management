@@ -2,7 +2,6 @@ import { Alert, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity,
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { ButtonTab, Container, Header } from '../../components'
-import { NavigationProp, useNavigation } from '@react-navigation/native'
 import { ImagesPath } from '../../utils/ImagePaths'
 import { styles } from './styles'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -13,9 +12,10 @@ import { colors } from '../../styles/Colors'
 import FontSizes from '../../styles/FontSizes'
 import fonts from '../../styles/Fonts'
 import CustomReportDetailsView from '../../components/CustomReportDetailsView'
+import useCustomNavigation from '../../hooks/useCustomNavigation'
 
 const ReportGeneratorScreen = () => {
-    const navigation: NavigationProp<any, any> = useNavigation()
+    const navigation = useCustomNavigation('ReportGeneratorScreen');
 
     const [btn, setBtn] = useState({
         open: true,

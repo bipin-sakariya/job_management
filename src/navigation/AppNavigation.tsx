@@ -10,6 +10,9 @@ import UsersGroupsScreen from '../screens/UsersGroupsScreen';
 import JobDetailsScreen from '../screens/JobDetailsScreen';
 import ReportGeneratorScreen from '../screens/ReportGeneratorScreen';
 import UserGroupDetailScreen from '../screens/UserGroupDetailScreen';
+import BillListScreen from '../screens/BillScreen';
+import BillCreateScreen from '../screens/CreateBillScreen';
+import CreateBillSectionScreen from '../screens/CreateBillSectionScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -29,6 +32,9 @@ const AppNavigation = () => {
                 <Stack.Screen name={'UserGroupDetailScreen'} component={UserGroupDetailScreen} />
                 <Stack.Screen name={'JobDetailsScreen'} component={JobDetailsScreen} />
                 <Stack.Screen name={'ReportGeneratorScreen'} component={ReportGeneratorScreen} />
+                <Stack.Screen name={'BillListScreen'} component={BillListScreen} />
+                <Stack.Screen name={'BillCreateScreen'} component={BillCreateScreen} />
+                <Stack.Screen name={'CreateBillSectionScreen'} component={CreateBillSectionScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

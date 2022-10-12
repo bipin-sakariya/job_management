@@ -24,11 +24,13 @@ export const colors = {
     gray_5: '#5D5D5D',
     gray_6: '#595959',
     gray_7: '#9E9E9E',
+    gray_8: '#5B5B5B',
     calendar_round: '#ABABAB',
     calendar_background: '#D9D9D9',
     calendar_round_border: '#979797',
     calendar_Bg: '#F7F7F7',
     white_1: '#EAEAEA',
     white_2: '#F9F9F9',
-    white_3: '#DBDBDB'
+    white_3: '#DBDBDB',
+    white_4: '#F0F0F0',
 }

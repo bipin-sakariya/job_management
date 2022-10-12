@@ -45,6 +45,10 @@ export const ImagesPath = {
     edit_icon: require('../assets/images/editIcon.png'),
     header_dots_menu: require('../assets/images/headerDotMenu.png'),
     from_list_icon: require('../assets/images/fromListIcon.png'),
-    add_photo_icon: require('../assets/images/addPhotoIcon.png')
+    add_photo_icon: require('../assets/images/addPhotoIcon.png'),
+    squre_note_icon: require('../assets/images/squreNote.png'),
+    receipt_icon: require('../assets/images/receiptIcon.png'),
+    plus_white_circle_icon: require('../assets/images/plusWhiteCircle.png'),
+    down_white_arrow: require('../assets/images/downWhiteArrow.png'),
 }
 

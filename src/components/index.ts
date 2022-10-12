@@ -12,6 +12,7 @@ import CustomJobBottomListSheet from './CustomJobBottomListSheet';
 import CustomJobDetailsBottomButton from './CustomJobDetailsBottomButton';
 import CustomJobListComponent from './CustomJobListComponent';
 import UserListComponent from './UserListComponent';
+import CustomSubTitleWithImageComponent from './CustomSubTitleWithImageComponent';
 
 export {
     Header,
@@ -27,5 +28,6 @@ export {
     CustomJobBottomListSheet,
     CustomJobDetailsBottomButton,
     CustomJobListComponent,
-    UserListComponent
+    UserListComponent,
+    CustomSubTitleWithImageComponent
 }
