@@ -17,7 +17,7 @@ interface CustomSubTitleWithImageComponentProps {
 
 const CustomSubTitleWithImageComponent = ({ title, titleStyle, image, imageStyle, viewStyle }: CustomSubTitleWithImageComponentProps) => {
     return (
-        <View style={[globalStyles.rowView, viewStyle, { paddingVertical: wp(3) }]}>
+        <View style={[globalStyles.rowView, viewStyle, { paddingVertical: wp(1.5) }]}>
             <Image source={image} style={[styles.imageStyle, imageStyle]} />
             <Text style={[styles.commonTxt, titleStyle]}>{title}</Text>
         </View>

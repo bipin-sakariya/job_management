@@ -13,6 +13,7 @@ import CustomJobDetailsBottomButton from './CustomJobDetailsBottomButton';
 import CustomJobListComponent from './CustomJobListComponent';
 import UserListComponent from './UserListComponent';
 import CustomSubTitleWithImageComponent from './CustomSubTitleWithImageComponent';
+import DropDownComponent from './DropDownComponent';
 
 export {
     Header,
@@ -29,5 +30,6 @@ export {
     CustomJobDetailsBottomButton,
     CustomJobListComponent,
     UserListComponent,
-    CustomSubTitleWithImageComponent
+    CustomSubTitleWithImageComponent,
+    DropDownComponent
 }

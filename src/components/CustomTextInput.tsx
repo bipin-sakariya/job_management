@@ -5,11 +5,13 @@ import FontSizes from '../styles/FontSizes';
 import fonts from '../styles/Fonts';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { globalStyles } from '../styles/globalStyles';
+import { colors } from '../styles/Colors';
 
 interface CustomTextInputProps {
     title?: string,
     icon?: React.ReactElement,
-    container?: ViewStyle
+    container?: ViewStyle,
+    style?: TextInputProps['style']
 }
 
 const CustomTextInput = (props: CustomTextInputProps & TextInputProps) => {
@@ -18,10 +20,10 @@ const CustomTextInput = (props: CustomTextInputProps & TextInputProps) => {
             <View style={styles.titleContainer}>
                 <Text style={styles.titleTxtStyle}>{props.title}</Text>
             </View>
-            <View style={[globalStyles.rowView, { paddingHorizontal: wp(4) }]}>
+            <View style={[globalStyles.rowView, { paddingHorizontal: wp(2.5) }]}>
                 <TextInput
                     {...props}
-                    style={[styles.textInputStyle, { width: props.icon ? '95%' : '100%' }]}
+                    style={[styles.textInputStyle, props.style, { width: props.icon ? '94%' : '100%' }]}
                 />
                 {props.icon}
             </View>
@@ -33,27 +35,28 @@ export default CustomTextInput;
 
 const styles = StyleSheet.create({
     textInputContainer: {
-        borderRadius: 10,
+        borderRadius: wp(2),
         borderColor: '#999999',
-        borderWidth: 1,
+        borderWidth: wp(0.5),
     },
     titleContainer: {
         backgroundColor: '#BABABA',
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10
+        borderTopLeftRadius: wp(1.5),
+        borderTopRightRadius: wp(1.5)
     },
     titleTxtStyle: {
         fontFamily: fonts.FONT_POP_MEDIUM,
-        fontSize: FontSizes.SEMI_LARGE_20,
-        paddingVertical: wp(1.5),
-        paddingHorizontal: wp(4)
+        fontSize: FontSizes.MEDIUM_16,
+        paddingVertical: wp(2),
+        paddingHorizontal: wp(2.5)
     },
     textInputStyle: {
         fontFamily: fonts.FONT_POP_MEDIUM,
-        fontSize: FontSizes.MEDIUM_16,
+        fontSize: FontSizes.SMALL_14,
         width: '100%',
-        height: 45,
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10
+        height: 40,
+        borderBottomLeftRadius: wp(1.5),
+        borderBottomRightRadius: wp(1.5),
+        color: colors.light_brown
     }
 })

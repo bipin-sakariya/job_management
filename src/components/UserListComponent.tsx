@@ -14,7 +14,7 @@ interface itemPropsType {
     date: string
 }
 
-const UserListComponent = ({ item }: { item: itemPropsType }) => {
+const UserListComponent = ({ item, type }: { item: itemPropsType, type?: string }) => {
     const navigation = useCustomNavigation('UsersGroupsScreen')
     const imageRef = useRef(null);
     const [visible, setVisible] = useState(false);
@@ -33,7 +33,7 @@ const UserListComponent = ({ item }: { item: itemPropsType }) => {
             <View style={globalStyles.rowView}>
                 <Image source={ImagesPath.placeholder_img} style={styles.itemImgStyle} />
                 <View style={{ paddingHorizontal: wp(2) }}>
-                    <Text onPress={() => navigation.navigate('UserGroupDetailScreen', { name: item.name })} style={styles.itemTitle}>{item.name}</Text>
+                    <Text onPress={() => navigation.navigate('UserGroupDetailScreen', { type: type })} style={styles.itemTitle}>{item.name}</Text>
                     <Text style={styles.descriptionTxt}>{item.role}</Text>
                 </View>
             </View>

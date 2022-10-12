@@ -7,58 +7,69 @@ import { ImagesPath } from '../utils/ImagePaths'
 import fonts from '../styles/Fonts'
 import FontSizes from '../styles/FontSizes'
 import { colors } from '../styles/Colors'
+import { DropdownProps } from 'react-native-element-dropdown/lib/typescript/components/Dropdown/model'
 interface ButtonTypeProps {
     label: string,
     value: string
 }
 
 interface DropDownComponentProps {
-    data: any,
-    labelField: string
-    valueField: string,
-    value: string,
-    placeHolderTxt: string
-    onChange: Dispatch<SetStateAction<ButtonTypeProps>>
+    data: ButtonTypeProps[],
     image?: ImageSourcePropType,
     imageStyle?: ImageStyle,
-    placeHolderStyle?: TextStyle,
-    style?: ViewStyle,
-    containerStyle?: ViewStyle
-    selectedTxtStyle?: TextStyle
-    itemTxtStyle?: TextStyle
+    title?: string,
+    container?: ViewStyle
 }
 
-const DropDownComponent = ({ data, labelField, valueField, value, placeHolderTxt, onChange, image, imageStyle, placeHolderStyle, style, containerStyle, selectedTxtStyle, itemTxtStyle }: DropDownComponentProps) => {
+const DropDownComponent = (props: DropDownComponentProps & DropdownProps) => {
     return (
-        <Dropdown
-            data={data}
-            onChange={(data: any) => {
-                onChange(data)
-            }}
-            placeholder={placeHolderTxt}
-            placeholderStyle={[styles.placeHolderTxt, placeHolderStyle]}
-            selectedTextStyle={[styles.placeHolderTxt, selectedTxtStyle]}
-            itemTextStyle={[styles.placeHolderTxt, itemTxtStyle]}
-            labelField={labelField}
-            valueField={valueField}
-            value={value}
-            style={[style, { paddingVertical: wp(0.5) }]}
-            containerStyle={[containerStyle, { marginVertical: wp(2) }]}
-            renderRightIcon={() => {
-                return (
-                    <Image source={image} style={[globalStyles.headerIcon, imageStyle]} />
-                )
-            }}
-        />
+        <View style={[styles.textInputContainer, props.container]}>
+            <View style={styles.titleContainer}>
+                <Text style={styles.titleTxtStyle}>{props.title}</Text>
+            </View>
+            <Dropdown
+                {...props}
+                data={props.data}
+                style={styles.conatinerStyle}
+                placeholderStyle={[styles.placeHolderTxt, props.placeholderStyle, { color: colors.light_gray }]}
+                selectedTextStyle={[styles.placeHolderTxt, props.selectedTextStyle]}
+                itemTextStyle={[styles.placeHolderTxt, props.itemTextStyle]}
+                renderRightIcon={() => {
+                    return (
+                        <Image source={props.image} style={[globalStyles.headerIcon, props.imageStyle]} />
+                    )
+                }}
+            />
+        </View>
     )
 }
 
-export default DropDownComponent
+export default DropDownComponent;
 
 const styles = StyleSheet.create({
+    textInputContainer: {
+        borderRadius: wp(2),
+        borderColor: '#999999',
+        borderWidth: wp(0.5),
+    },
+    titleContainer: {
+        backgroundColor: '#BABABA',
+        borderTopLeftRadius: wp(1.5),
+        borderTopRightRadius: wp(1.5)
+    },
+    titleTxtStyle: {
+        fontFamily: fonts.FONT_POP_MEDIUM,
+        fontSize: FontSizes.MEDIUM_16,
+        paddingVertical: wp(2),
+        paddingHorizontal: wp(2.5)
+    },
     placeHolderTxt: {
-        fontFamily: fonts.FONT_POP_REGULAR,
+        fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.SMALL_14,
         color: colors.light_brown,
+    },
+    conatinerStyle: {
+        height: 40,
+        paddingHorizontal: wp(2)
     }
 })

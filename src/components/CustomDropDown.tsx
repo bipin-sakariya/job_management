@@ -84,7 +84,7 @@ const CustomDropdown = ({
         if (vertical + modalHeight + hp(10) > deviceHeight) {
             return deviceHeight - modalHeight;
         } else {
-            return Platform.OS == 'android' ? vertical - hp(4) : vertical + hp(0.5);
+            return Platform.OS == 'android' ? vertical - hp(4) : vertical + hp(1);
         }
     };
 

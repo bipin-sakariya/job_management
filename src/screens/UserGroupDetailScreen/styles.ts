@@ -10,17 +10,6 @@ export const styles = StyleSheet.create({
         width: wp(4),
         resizeMode: 'cover',
     },
-    noteIconStyle: {
-        width: wp(5),
-        height: wp(5),
-        resizeMode: "contain"
-    },
-    noteTxt: {
-        fontFamily: fonts.FONT_POP_REGULAR,
-        fontSize: FontSizes.EXTRA_SMALL_12,
-        marginHorizontal: wp(2),
-        color: colors.light_brown
-    },
     iconStyle: {
         height: wp(5),
         width: wp(5),

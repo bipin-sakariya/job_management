@@ -1,7 +1,7 @@
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { globalStyles } from '../../styles/globalStyles';
-import { Container, Header } from '../../components';
+import { Container, CustomSubTitleWithImageComponent, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { useRoute } from '@react-navigation/native';
@@ -55,15 +55,19 @@ const UsersScreen = () => {
                     <Image source={ImagesPath.add_icon} style={styles.addBtnStyle} />
                     <Text style={styles.addNewUserTxt}>{type == 'users' ? 'ADD NEW USER' : 'ADD NEW GROUP'}</Text>
                 </View>
-                <View style={[globalStyles.rowView, { paddingVertical: wp(1.5) }]}>
+                {/* <View style={[globalStyles.rowView, { paddingVertical: wp(1.5) }]}>
                     <Image source={ImagesPath.group_icon} style={styles.folderIcon} />
                     <Text style={styles.subTitleTxt}>{type == 'users' ? 'Added Users' : 'Added Groups'}</Text>
-                </View>
+                </View> */}
+                <CustomSubTitleWithImageComponent
+                    title={type == 'users' ? 'Added Users' : 'Added Groups'}
+                    image={ImagesPath.group_icon}
+                />
                 <FlatList
                     data={type == 'users' ? users : groups}
                     renderItem={({ item, index }) => {
                         return (
-                            <UserListComponent item={item} />
+                            <UserListComponent item={item} type={type} />
                         )
                     }}
                     ItemSeparatorComponent={() => <View style={styles.separator} />}

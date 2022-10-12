@@ -19,7 +19,7 @@ export type RootStackParamList = {
     NotificationScreen: undefined
     JobDetailsScreen: undefined
     UsersGroupsScreen: { type?: string }
-    UserGroupDetailScreen: { name?: string },
+    UserGroupDetailScreen: { type?: string },
     ReportGeneratorScreen: undefined
     BillListScreen: undefined
     BillCreateScreen: undefined
