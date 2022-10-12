@@ -8,6 +8,7 @@ import { styles } from './styles'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { colors } from '../../styles/Colors'
 import CustomSubTitleWithImageComponent from '../../components/CustomSubTitleWithImageComponent'
+import CustomDashedComponent from '../../components/CustomDashedComponent'
 
 const BillCreateScreen = () => {
     const navigation = useCustomNavigation('BillCreateScreen');
@@ -23,15 +24,14 @@ const BillCreateScreen = () => {
             />
             <Container style={{ paddingHorizontal: wp(5) }}>
                 <CustomSubTitleWithImageComponent title='Create Material bill section' image={ImagesPath.receipt_icon} />
-                <TouchableOpacity onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: 'material' }) }} style={styles.dashedView}>
-                    <Image source={ImagesPath.add_icon} style={globalStyles.headerIcon} />
-                    <Text style={styles.dashedTxt}>Create Material Bill</Text>
-                </TouchableOpacity>
-                <CustomSubTitleWithImageComponent title='Create Sign Bill section' image={ImagesPath.receipt_icon} />
-                <TouchableOpacity onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: 'sign' }) }} style={styles.dashedView}>
-                    <Image source={ImagesPath.add_icon} style={globalStyles.headerIcon} />
-                    <Text style={styles.dashedTxt}>Create Sign Bill</Text>
-                </TouchableOpacity>
+                <CustomDashedComponent
+                    image={ImagesPath.add_icon}
+                    onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: 'material' }) }}
+                    title='Create Material Bill' />
+                <CustomDashedComponent
+                    image={ImagesPath.add_icon}
+                    onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: 'sign' }) }}
+                    title='Create Sign Bill' />
             </Container>
         </View>
     )

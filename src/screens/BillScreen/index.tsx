@@ -72,7 +72,17 @@ const BillListScreen = () => {
 
     const renderItem = ({ item, index }: any) => {
         return (
-            <TouchableOpacity style={[globalStyles.rowView, styles.listMainView]}>
+            <TouchableOpacity onPress={() => {
+                let params = {
+                    name: item.title,
+                    unit: 'unit',
+                    ration: '15',
+                    image: '',
+                    quantity: '2',
+                    type: 'sing',
+                }
+                navigation.navigate("BillSectionScreen", params)
+            }} style={[globalStyles.rowView, styles.listMainView]}>
                 <View style={globalStyles.rowView}>
                     {
                         item.iamgeUrl &&

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { RootRouteProps } from '../../types/RootStackTypes';
 import { useRoute } from '@react-navigation/native';
@@ -8,11 +8,10 @@ import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomT
 import { styles } from './styles';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import fonts from '../../styles/Fonts';
-import FontSizes from '../../styles/FontSizes';
-import { colors } from '../../styles/Colors';
-import { Dropdown } from 'react-native-element-dropdown';
-import { DropdownProps } from '../../types/commanTypes';
+interface DropdownProps {
+    label: string,
+    value: string
+}
 
 const CreateBillSectionScreen = () => {
     const navigation = useCustomNavigation('CreateBillSectionScreen')

@@ -10,6 +10,15 @@ export type DrawerStackParamList = {
     BottomTabs: BottomStackParamList
 }
 
+interface BillSectionScreenProps {
+    name: string,
+    unit: string,
+    ration: string,
+    imageUrl?: string,
+    quantity?: string,
+    type: string,
+}
+
 export type RootStackParamList = {
     AuthStack: AuthStackParamList
     DrawerScreens: DrawerStackParamList
@@ -24,6 +33,8 @@ export type RootStackParamList = {
     BillListScreen: undefined
     BillCreateScreen: undefined
     CreateBillSectionScreen: { type?: string }
+    BillSectionScreen: BillSectionScreenProps
+    FormScreen: undefined
 
 };
 

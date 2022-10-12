@@ -40,6 +40,11 @@ export const globalStyles = StyleSheet.create({
         justifyContent: "space-around",
         alignItems: "center"
     },
+    threeDotMenuIcon: {
+        height: wp(8.5),
+        width: wp(4),
+        resizeMode: 'cover',
+    }
 })
 
 export const customMapStyle = [

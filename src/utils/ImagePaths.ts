@@ -50,5 +50,7 @@ export const ImagesPath = {
     receipt_icon: require('../assets/images/receiptIcon.png'),
     plus_white_circle_icon: require('../assets/images/plusWhiteCircle.png'),
     down_white_arrow: require('../assets/images/downWhiteArrow.png'),
+    add_photo: require('../assets/images/addPhoto.png'),
+
 }
 
