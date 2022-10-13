@@ -18,6 +18,9 @@ import FormScreen from '../screens/FormScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
+import CreateFormScreen from '../screens/CreateFormScreen';
+import FormDetailsScreen from '../screens/FormDetailsScreen';
+import ChatScreen from '../screens/ChatScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -45,6 +48,11 @@ const AppNavigation = () => {
                 <Stack.Screen name={'ProfileScreen'} component={ProfileScreen} />
                 <Stack.Screen name={'ResetPasswordScreen'} component={ResetPasswordScreen} />
                 <Stack.Screen name={'EditProfileScreen'} component={EditProfileScreen} />
+                <Stack.Screen name={'CreateFormScreen'} component={CreateFormScreen} />
+                <Stack.Screen name={'FormDetailsScreen'} component={FormDetailsScreen} />
+                <Stack.Screen name={'ChatScreen'} component={ChatScreen} />
+
+
             </Stack.Navigator>
         </NavigationContainer>
     );

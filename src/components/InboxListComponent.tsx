@@ -1,14 +1,16 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { globalStyles } from '../styles/globalStyles';
 import { ImagesPath } from '../utils/ImagePaths';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import fonts from '../styles/Fonts';
 import FontSizes from '../styles/FontSizes';
+import useCustomNavigation from '../hooks/useCustomNavigation';
 
 const InboxListComponent = ({ item, index }: any) => {
+    const navigation = useCustomNavigation('IndoxScreen')
     return (
-        <View style={styles.itemContainer}>
+        <TouchableOpacity onPress={() => { navigation.navigate("ChatScreen") }} style={styles.itemContainer}>
             <Image source={ImagesPath.placeholder_img} style={styles.imageStyle} />
             <View style={styles.txtContainer}>
                 <View>
@@ -19,7 +21,7 @@ const InboxListComponent = ({ item, index }: any) => {
                     <Text style={styles.counterTxt}>{item.count}</Text>
                 </View>}
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 

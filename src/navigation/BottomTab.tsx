@@ -5,7 +5,7 @@ import { View, StyleSheet, Image, Text } from 'react-native';
 import { BottomStackParamList } from '../types/RootStackTypes';
 import MapScreen from '../screens/MapScreen';
 import JobsScreen from '../screens/JobsScreen';
-import IndoxScreen from '../screens/IndoxScreen';
+import IndoxScreen from '../screens/InboxScreen';
 import { ImagesPath } from '../utils/ImagePaths';
 import { colors } from '../styles/Colors';
 import fonts from '../styles/Fonts';

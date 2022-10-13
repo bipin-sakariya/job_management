@@ -17,7 +17,6 @@ const BillSectionScreen = () => {
 
     const [visible, setVisible] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-    const [text, setText] = useState("")
     const menuRef = useRef(null);
     const onPress = () => {
         console.log("onPress")

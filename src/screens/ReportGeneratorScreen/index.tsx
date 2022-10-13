@@ -13,6 +13,8 @@ import FontSizes from '../../styles/FontSizes'
 import fonts from '../../styles/Fonts'
 import CustomReportDetailsView from '../../components/CustomReportDetailsView'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
+import TableHeaderView from '../../components/TableHeaderView'
+import TableDetailsComponent from '../../components/TableDetailsComponent'
 
 const ReportGeneratorScreen = () => {
     const navigation = useCustomNavigation('ReportGeneratorScreen');
@@ -231,21 +233,7 @@ const ReportGeneratorScreen = () => {
                                 })
                             }
                         </View> :
-                        <View style={[globalStyles.rowView, { paddingHorizontal: wp(2) }]}>
-                            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(15), }]}>{item.srno}</Text>
-                            <View style={[globalStyles.rowView, { width: wp(35) }]}>
-                                {
-                                    item.imageUrl &&
-                                    <View style={[globalStyles.centerView, styles.imageView]}>
-                                        <Image source={ImagesPath.image_white_border} style={styles.imageViewStyle} />
-                                    </View>
-                                }
-                                <Text numberOfLines={1} style={styles.commonScammedTxt}>{item.name}</Text>
-                            </View>
-                            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.qty}</Text>
-                            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.unit}</Text>
-                            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(12) }]}>{item.parameter}</Text>
-                        </View>
+                        <TableDetailsComponent type='report' item={item} />
                 }
 
             </>
@@ -302,7 +290,7 @@ const ReportGeneratorScreen = () => {
                             <>
                                 <View style={[globalStyles.rowView, { justifyContent: "space-between", marginVertical: wp(2) }]}>
                                     <View style={[globalStyles.rowView]}>
-                                        <Image source={ImagesPath.suitcase_icon} style={styles.iconStyle} />
+                                        <Image source={ImagesPath.suitcase_icon} style={[styles.iconStyle,]} />
                                         <Text style={styles.JobsTxt}>Jobs</Text>
                                     </View>
                                     <TouchableOpacity style={[globalStyles.rowView]} >
@@ -313,22 +301,12 @@ const ReportGeneratorScreen = () => {
                                 <FlatList scrollEnabled={true} data={data} renderItem={renderItem} ItemSeparatorComponent={() => <View style={styles.lineSeprator} />} />
                             </>
                             :
-                            <View style={styles.sammedView}>
+                            <View style={[styles.sammedView, { flexShrink: 1 }]}>
                                 <Text style={styles.noNameTxt}>No. Name</Text>
-                                <View style={{ flex: 1 }}>
-                                </View>
                                 <FlatList nestedScrollEnabled scrollEnabled={true} data={SammedData} renderItem={renderItem}
                                     ListHeaderComponent={() => {
                                         return (
-                                            <>
-                                                <View style={[globalStyles.rowView, styles.listHeaderView]}>
-                                                    <Text style={[styles.commonScammedTxt, { width: wp(15) }]}>Sr no.</Text>
-                                                    <Text style={[styles.commonScammedTxt, { width: wp(32) }]}>Name</Text>
-                                                    <Text style={[styles.commonScammedTxt, { width: wp(11) }]}>QTY</Text>
-                                                    <Text style={[styles.commonScammedTxt, { width: wp(10) }]}>Unit</Text>
-                                                </View>
-                                                <View style={styles.sammedSepratorLine} />
-                                            </>
+                                            <TableHeaderView type=' report' />
                                         )
                                     }}
                                     ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}

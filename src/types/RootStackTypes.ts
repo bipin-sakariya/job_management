@@ -38,6 +38,10 @@ export type RootStackParamList = {
     ProfileScreen: undefined
     ResetPasswordScreen: undefined
     EditProfileScreen: undefined
+    CreateFormScreen: undefined
+    FormDetailsScreen: undefined
+    ChatScreen: undefined
+
 };
 
 export type AuthStackParamList = {

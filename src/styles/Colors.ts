@@ -33,4 +33,8 @@ export const colors = {
     white_2: '#F9F9F9',
     white_3: '#DBDBDB',
     white_4: '#F0F0F0',
+    chat_left_bubble: '#9A9A9A',
+    chat_right_bubble: '#E9E9E9',
+    chat_left_Txt: '#FFFFFF',
+    chat_right_Txt: '#444444',
 }

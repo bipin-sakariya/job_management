@@ -7,6 +7,7 @@ import { styles } from './styles'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { FlatList } from 'react-native-gesture-handler'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
+import CustomListView from '../../components/CustomListView'
 
 const BillListScreen = () => {
     const navigation = useCustomNavigation('BillListScreen');
@@ -72,7 +73,7 @@ const BillListScreen = () => {
 
     const renderItem = ({ item, index }: any) => {
         return (
-            <TouchableOpacity onPress={() => {
+            <CustomListView item={item} onPress={() => {
                 let params = {
                     name: item.title,
                     unit: 'unit',
@@ -82,25 +83,7 @@ const BillListScreen = () => {
                     type: 'sing',
                 }
                 navigation.navigate("BillSectionScreen", params)
-            }} style={[globalStyles.rowView, styles.listMainView]}>
-                <View style={globalStyles.rowView}>
-                    {
-                        item.iamgeUrl &&
-                        <View style={[globalStyles.centerView, styles.imageView]}>
-                            <Image source={ImagesPath.image_white_border} style={styles.iamgeStyle} />
-                        </View>
-                    }
-                    <Text style={[styles.titleTxt, { marginHorizontal: wp(2) }]}>
-                        {item.title}
-                    </Text>
-                </View>
-                <View style={globalStyles.rowView}>
-                    <Text style={styles.dateTxt}>{item.date}</Text>
-                    <TouchableOpacity>
-                        <Image style={styles.menuImageStyle} source={ImagesPath.menu_dots_icon} />
-                    </TouchableOpacity>
-                </View>
-            </TouchableOpacity>
+            }} />
         )
     }
 
