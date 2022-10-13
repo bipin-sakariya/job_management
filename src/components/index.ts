@@ -17,6 +17,10 @@ import CustomDashedComponent from './CustomDashedComponent';
 import DropDownComponent from './DropDownComponent';
 import RenderDropdownItem from './CustomDropDown';
 import CustomReportDetailsView from './CustomReportDetailsView';
+import CustomeJobListDetailsViewComponent from './CustomJobListDetailsViewComponent';
+import CustomChatLinkView from './CustomChatLinkView';
+import CustomModal from './CustomModal';
+import CustomSwitchComponent from './CustomSwitchComponent';
 
 
 export {
@@ -38,5 +42,9 @@ export {
     CustomDashedComponent,
     DropDownComponent,
     RenderDropdownItem,
-    CustomReportDetailsView
+    CustomReportDetailsView,
+    CustomeJobListDetailsViewComponent,
+    CustomChatLinkView,
+    CustomModal,
+    CustomSwitchComponent
 }

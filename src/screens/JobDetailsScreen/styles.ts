@@ -168,4 +168,14 @@ export const styles = StyleSheet.create({
         justifyContent: "space-around",
         alignItems: "center"
     },
+    modalInnerView: {
+        width: wp(80),
+        height: wp(50),
+        backgroundColor: 'white',
+        borderRadius: wp(3),
+        justifyContent: 'space-around',
+        alignItems: "center",
+        paddingHorizontal: wp(2),
+        marginVertical: wp(10),
+    }
 })

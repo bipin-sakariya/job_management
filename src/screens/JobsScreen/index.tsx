@@ -9,12 +9,14 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { ListDataProps } from '../../components/CustomBottomSheet';
 import { FlatList } from 'react-native-gesture-handler';
+import { RootState, useAppSelector } from '../../redux/Store';
+import { strings } from '../../languages/localizedStrings';
 
 const data = [
-    { id: 1, title: 'All', selected: true },
-    { id: 2, title: 'P. Maintanence', selected: false },
-    { id: 3, title: 'Paint / Signs', selected: false },
-    { id: 4, title: 'Council', selected: false },
+    { id: 1, title: strings.All, selected: true },
+    { id: 2, title: strings.PMaintanence, selected: false },
+    { id: 3, title: strings.Paint, selected: false },
+    { id: 4, title: strings.Council, selected: false },
 ]
 
 const JobData = [
@@ -52,6 +54,7 @@ const JobsScreen = () => {
         open: true,
         close: false
     })
+    const { userData } = useAppSelector((state: RootState) => state.userDetails)
     useEffect(() => {
         let defaultSelected = data.find((i) => i.selected == true)
         setSelectedItem(defaultSelected)
@@ -74,19 +77,21 @@ const JobsScreen = () => {
                 headerRightComponent={
                     <View style={globalStyles.rowView}>
                         <TouchableOpacity onPress={() => {
-                            // I18nManager.forceRTL(!I18nManager.getConstants().isRTL)
                             navigation.navigate('ReportGeneratorScreen')
                         }} style={{ marginRight: wp(3) }}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => navigation.navigate("NotificationScreen")}>
-                            <Image source={ImagesPath.notification_icon} style={globalStyles.headerIcon} />
-                        </TouchableOpacity>
+                        {
+                            userData?.role != "Group Manager" &&
+                            <TouchableOpacity onPress={() => navigation.navigate("NotificationScreen")}>
+                                <Image source={userData?.role == "Admin" ? ImagesPath.notification_icon : ImagesPath.add_icon} style={globalStyles.headerIcon} />
+                            </TouchableOpacity>
+                        }
                     </View>
                 }
             />
             <Container>
-                <ButtonTab btnOneTitle='Open' btnTwoTitle='Close' setBtn={setBtn} btnValue={btn} />
+                <ButtonTab btnOneTitle={strings.Open} btnTwoTitle={strings.Close} setBtn={setBtn} btnValue={btn} />
                 <FlatList
                     style={{ marginBottom: wp(28) }}
                     data={JobData}

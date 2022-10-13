@@ -9,6 +9,7 @@ import { ImagesPath } from '../../utils/ImagePaths';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { styles } from './styles';
 import CustomDropdown from '../../components/CustomDropDown';
+import { strings } from '../../languages/localizedStrings';
 
 const BillSectionScreen = () => {
     const navigation = useCustomNavigation('BillSectionScreen')
@@ -23,9 +24,9 @@ const BillSectionScreen = () => {
     }
 
     const optionData = [
-        { title: 'Remove', onPress: onPress, imageSource: ImagesPath.bin_icon },
+        { title: strings.Remove, onPress: onPress, imageSource: ImagesPath.bin_icon },
         {
-            title: 'edit', onPress: () => {
+            title: strings.Edit, onPress: () => {
                 setIsEdit(true)
             }, imageSource: ImagesPath.edit_icon
         }
@@ -36,7 +37,7 @@ const BillSectionScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView,]} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={styles.billSectionTxt}>Bill name</Text>
+                        <Text style={styles.billSectionTxt}>{strings.BillName}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
@@ -52,7 +53,7 @@ const BillSectionScreen = () => {
                         <Image source={params.imageUrl ? params.imageUrl : ImagesPath.add_photo} style={styles.addPhotoStyle} />
                     }
                     <CustomTextInput
-                        title='Name'
+                        title={strings.Name}
                         container={{ marginVertical: wp(5) }}
                         value={params.name}
                         editable={isEdit}
@@ -61,7 +62,7 @@ const BillSectionScreen = () => {
                     {
                         params.type == "sing" &&
                         <CustomTextInput
-                            title='Quantity'
+                            title={strings.Quantity}
                             container={{ marginBottom: wp(5) }}
                             value={params.quantity}
                             editable={isEdit}
@@ -69,14 +70,14 @@ const BillSectionScreen = () => {
                         />
                     }
                     <CustomTextInput
-                        title='Type Counting'
+                        title={strings.TypeCounting}
                         container={{ marginBottom: wp(5) }}
                         value={params.unit}
                         editable={isEdit}
                         onChange={(text) => { }}
                     />
                     <CustomTextInput
-                        title='Jumping Ration'
+                        title={strings.JumpingRation}
                         container={{ marginBottom: wp(5) }}
                         value={params.ration}
                         editable={isEdit}

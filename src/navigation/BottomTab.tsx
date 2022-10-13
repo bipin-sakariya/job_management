@@ -10,6 +10,7 @@ import { ImagesPath } from '../utils/ImagePaths';
 import { colors } from '../styles/Colors';
 import fonts from '../styles/Fonts';
 import FontSizes from '../styles/FontSizes';
+import { strings } from '../languages/localizedStrings';
 
 const Tab = createBottomTabNavigator<BottomStackParamList>();
 
@@ -55,7 +56,7 @@ const BottomTab = () => {
                             style={[styles.labelTxt, {
                                 fontFamily: focused ? fonts.FONT_POP_SEMI_BOLD : fonts.FONT_POP_MEDIUM
                             }]}>
-                            Job
+                            {strings.Job}
                         </Text>
                     ),
                     tabBarIcon: ({ color, focused }) => (

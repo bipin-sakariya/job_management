@@ -9,6 +9,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { colors } from '../../styles/Colors'
 import CustomSubTitleWithImageComponent from '../../components/CustomSubTitleWithImageComponent'
 import CustomDashedComponent from '../../components/CustomDashedComponent'
+import { strings } from '../../languages/localizedStrings'
 
 const BillCreateScreen = () => {
     const navigation = useCustomNavigation('BillCreateScreen');
@@ -18,20 +19,20 @@ const BillCreateScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView, { width: wp(40) }]} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={styles.billSectionTxt}>Bill Section</Text>
+                        <Text style={styles.billSectionTxt}>{strings.BillSection}</Text>
                     </TouchableOpacity>
                 }
             />
             <Container style={{ paddingHorizontal: wp(5) }}>
-                <CustomSubTitleWithImageComponent title='Create Material bill section' image={ImagesPath.receipt_icon} />
+                <CustomSubTitleWithImageComponent title={strings.CreateMaterialBillSection} image={ImagesPath.receipt_icon} />
                 <CustomDashedComponent
                     image={ImagesPath.add_icon}
-                    onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: 'material' }) }}
-                    title='Create Material Bill' />
+                    onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: strings.material }) }}
+                    title={strings.CreateMaterialBill} />
                 <CustomDashedComponent
                     image={ImagesPath.add_icon}
-                    onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: 'sign' }) }}
-                    title='Create Sign Bill' />
+                    onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: strings.sign }) }}
+                    title={strings.CreateSignBill} />
             </Container>
         </View>
     )

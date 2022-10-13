@@ -8,6 +8,7 @@ import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../utils/ImagePaths';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { strings } from '../languages/localizedStrings';
 
 export interface ListDataProps {
     id: number,
@@ -72,7 +73,7 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
                     <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                     <TextInput
                         style={styles.textInputStyle}
-                        placeholder={'Search here'}
+                        placeholder={strings.SearchHere}
                         placeholderTextColor={'#666666'}
                     />
                 </View>

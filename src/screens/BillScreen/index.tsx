@@ -8,6 +8,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { FlatList } from 'react-native-gesture-handler'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import CustomListView from '../../components/CustomListView'
+import { strings } from '../../languages/localizedStrings'
 
 const BillListScreen = () => {
     const navigation = useCustomNavigation('BillListScreen');
@@ -93,7 +94,7 @@ const BillListScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={styles.JobTxt}>Bills</Text>
+                        <Text style={styles.JobTxt}>{strings.Bills}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
@@ -113,7 +114,7 @@ const BillListScreen = () => {
                         return (
                             <View style={[globalStyles.rowView, { marginBottom: wp(4) }]}>
                                 <Image source={ImagesPath.squre_note_icon} style={{ height: wp(5), width: wp(5) }} />
-                                <Text style={styles.billListTxt}>Bill List</Text>
+                                <Text style={styles.billListTxt}>{strings.BillList}</Text>
                             </View>
                         )
                     }}

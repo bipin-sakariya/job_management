@@ -21,6 +21,7 @@ import EditProfileScreen from '../screens/EditProfileScreen';
 import CreateFormScreen from '../screens/CreateFormScreen';
 import FormDetailsScreen from '../screens/FormDetailsScreen';
 import ChatScreen from '../screens/ChatScreen';
+import { strings } from '../languages/localizedStrings';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -31,7 +32,7 @@ const AppNavigation = () => {
                 screenOptions={{
                     headerShown: false
                 }}
-                initialRouteName={'DrawerScreens'}>
+                initialRouteName={'AuthStack'}>
                 <Stack.Screen name={'AuthStack'} component={AuthStack} />
                 <Stack.Screen name={'DrawerScreens'} component={DrawerStack} />
                 <Stack.Screen name={'RouteScreen'} component={RouteScreen} />

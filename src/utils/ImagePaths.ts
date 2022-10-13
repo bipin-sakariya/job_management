@@ -51,6 +51,16 @@ export const ImagesPath = {
     plus_white_circle_icon: require('../assets/images/plusWhiteCircle.png'),
     down_white_arrow: require('../assets/images/downWhiteArrow.png'),
     add_photo: require('../assets/images/addPhoto.png'),
-    save_icon: require('../assets/images/saveIcon.png')
+    save_icon: require('../assets/images/saveIcon.png'),
+    close_icon: require('../assets/images/closeIcon.png'),
+    map_pin_dark_line_icon: require('../assets/images/mapPinDrakLineIcon.png'),
+    send_btn_icon: require('../assets/images/sendBtn.png'),
+    simple_suitcase_icon: require('../assets/images/suitcaseSimpleIcon.png'),
+    folder_user_icon: require('../assets/images/folderSimpleUserIcon.png'),
+    clock_counter_clockwise_icon: require('../assets/images/clockCounterClockwiseIcon.png'),
+    arrow_counter_clockwise_icon: require('../assets/images/arrowCounterClockwiseIcon.png'),
+    list_bullet_image_icon: require('../assets/images/listBullets.png'),
+    check_circle_icon: require('../assets/images/checkIcon.png'),
+
 }
 

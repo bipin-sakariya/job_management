@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, Header } from '../../components'
@@ -6,10 +6,11 @@ import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { styles } from './styles'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { Bubble, BubbleProps, GiftedChat } from 'react-native-gifted-chat'
+import { Bubble, BubbleProps, Composer, GiftedChat, Send } from 'react-native-gifted-chat'
 import { colors } from '../../styles/Colors'
 import fonts from '../../styles/Fonts'
 import FontSizes from '../../styles/FontSizes'
+import CustomChatLinkView from '../../components/CustomChatLinkView'
 
 interface UserProps {
     _id: number
@@ -30,7 +31,7 @@ const ChatScreen = () => {
         setMessages([
             {
                 _id: 1,
-                text: 'Hello developer asdsadasdadasdasdasdasdasdasdasdasdasdasdasdasdsadsadsadsdsdasdasdasdsadasdsdasdsdasdasdasdas',
+                text: 'Hello developer',
                 createdAt: new Date(),
                 type: 'job',
                 user: {
@@ -52,7 +53,7 @@ const ChatScreen = () => {
             },
             {
                 _id: 13,
-                text: 'Hello developer asdsadasdadasdasdasdasdasdasdasdasdasdasdasdasdsadsadsadsdsdasdasdasdsadasdsdasdsdasdasdasdas',
+                text: 'Hello developer ',
                 createdAt: new Date(),
                 user: {
                     _id: 2,
@@ -72,7 +73,7 @@ const ChatScreen = () => {
             },
             {
                 _id: 15,
-                text: 'Hello developer asdsadasdadasdasdasdasdasdasdasdasdasdasdasdasdsadsadsadsdsdasdasdasdsadasdsdasdsdasdasdasdas',
+                text: 'Hello developer ',
                 createdAt: new Date(),
                 user: {
                     _id: 1,
@@ -88,18 +89,14 @@ const ChatScreen = () => {
     }, [])
 
     const renderBubble = (props: Readonly<BubbleProps<ChatProps>>) => {
-        console.log("🚀 ~ file: index.tsx ~ line 90 ~ renderBubble ~ props", props)
         return (
             <>
                 {
                     props.currentMessage?.type == 'job' ?
-                        <View style={{ backgroundColor: 'red' }}>
-                            <View style={globalStyles.rowView}>
-                                <View style={[globalStyles.centerView, { width: wp(20), height: wp(20), backgroundColor: '#D9D9D9' }]}>
-                                    <Image source={ImagesPath.image_white_border} style={{ height: wp(10), width: wp(10), resizeMode: 'contain' }} />
-                                </View>
-                            </View>
-                        </View> :
+                        <CustomChatLinkView props={props} keyBoardVisible={false} textComponent={
+                            <Text style={styles.messageTxt}>{props.currentMessage.text}</Text>
+                        } />
+                        :
                         <Bubble
                             {...props}
                             textStyle={{
@@ -141,6 +138,43 @@ const ChatScreen = () => {
         )
     }
 
+    const renderComposer = (props: any) => {
+        console.log("🚀 ~ file: index.tsx ~ line 158 ~ renderComposer ~ props", props)
+        return (
+            <View style={{ flex: 1 }}>
+                <CustomChatLinkView props={props} keyBoardVisible={true} viewStyle={{
+                    width: '95%',
+                    alignSelf: 'center',
+                }}
+                    textComponent={
+                        <Composer
+                            {...props}
+                            onTextChanged={(text) => {
+                                console.log(text);
+                                props.onTextChanged(text)
+                            }}
+                            multiline={false}
+                            textInputStyle={{
+                                backgroundColor: "red",
+                                paddingHorizontal: wp(2),
+                                marginVertical: wp(2)
+                            }}
+                        />
+                    }
+                />
+
+            </View>
+        )
+    }
+    const renderSend = (props: any) => {
+        return (
+            <View style={{ marginHorizontal: wp(2), }}>
+                <Send {...props}>
+                    <Image source={ImagesPath.send_btn_icon} style={{ height: wp(10), width: wp(10), resizeMode: 'contain', top: 0, marginVertical: wp(1) }} />
+                </Send>
+            </View>
+        )
+    }
     return (
         <View style={[globalStyles.container]}>
             <Header
@@ -160,6 +194,34 @@ const ChatScreen = () => {
                     showAvatarForEveryMessage={false}
                     showUserAvatar={false}
                     renderBubble={renderBubble}
+                    // renderComposer={renderComposer}
+                    // renderInputToolbar={(props: any) => {
+                    //     console.log("🚀 ~ file: index.tsx ~ line 270 ~ ChatScreen ~ props", props)
+                    //     return (
+                    //         <View style={[globalStyles.rowView, { flex: 1, backgroundColor: colors.white, alignItems: "center", justifyContent: "center" }]}>
+                    //             <View style={{ backgroundColor: colors.white, marginHorizontal: wp(4) }}>
+                    //                 <Composer
+                    //                     {...props}
+                    //                     placeholder='Write Message here.....'
+                    //                     onTextChanged={(text) => {
+                    //                         props.onTextChanged(text)
+                    //                     }}
+                    //                     textInputStyle={{
+                    //                         backgroundColor: '#E9E9E9',
+                    //                         width: wp('80%'),
+                    //                         paddingVertical: wp(2),
+                    //                         paddingHorizontal: wp(2),
+                    //                         borderRadius: wp(1),
+                    //                     }} />
+                    //             </View>
+                    //             <Send {...props}>
+                    //                 <Image source={ImagesPath.send_btn_icon} style={{ height: wp(10), width: wp(10), resizeMode: 'contain', }} />
+                    //             </Send>
+                    //         </View>
+                    //     )
+                    // }}
+                    renderSend={renderSend}
+                    alwaysShowSend
                     user={{
                         _id: 1,
                         name: "new one",

@@ -4,6 +4,7 @@ import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { globalStyles } from '../../styles/globalStyles';
 import { styles } from './styles';
 import { ImagesPath } from '../../utils/ImagePaths';
+import { RootState, useAppSelector } from '../../redux/Store';
 
 const AdminDrawerBtn = [
     { btnTitle: 'User', image: ImagesPath.user_icon, route: 'UsersGroupsScreen' },
@@ -12,8 +13,23 @@ const AdminDrawerBtn = [
     { btnTitle: 'Bill Section', image: ImagesPath.bill_icon, route: 'BillListScreen' },
     { btnTitle: 'Form', image: ImagesPath.form_icon, route: 'FormScreen' },
 ]
+const InspectorDrawerBtn = [
+    { btnTitle: 'Group', image: ImagesPath.group_icon, route: 'UsersGroupsScreen' },
+    { btnTitle: 'Add New Job', image: ImagesPath.add_icon, route: 'ReportGeneratorScreen' },
+    { btnTitle: 'Return Job list', image: ImagesPath.arrow_counter_clockwise_icon, route: 'BillListScreen' },
+    { btnTitle: 'Added Job History', image: ImagesPath.clock_counter_clockwise_icon, route: 'FormScreen' },
+]
+const GroupManagerDrawerBtn = [
+    { btnTitle: 'Group', image: ImagesPath.group_icon, route: 'UsersGroupsScreen' },
+    { btnTitle: 'Transfer Job', image: ImagesPath.report_icon, route: 'ReportGeneratorScreen' },
+    { btnTitle: 'Form list', image: ImagesPath.form_icon, route: 'FormScreen' },
+]
 
 const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponentProps) => {
+
+    const { userData } = useAppSelector((state: RootState) => state.userDetails)
+
+    const drawerBtn = userData?.role == "Admin" ? AdminDrawerBtn : userData?.role == "Inspector" ? InspectorDrawerBtn : GroupManagerDrawerBtn
     return (
         <View style={globalStyles.container}>
             <View style={styles.topView} >
@@ -30,9 +46,9 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
                     <Text style={styles.userNameTxt}>Johnny Weis</Text>
                     <Image source={ImagesPath.pencil_icon} style={styles.penIcon} />
                 </TouchableOpacity>
-                <Text style={styles.roleTxt}>Admin</Text>
+                <Text style={styles.roleTxt}>{userData?.role}</Text>
                 <View style={styles.btnContainer}>
-                    {AdminDrawerBtn.map((i) => (
+                    {drawerBtn.map((i) => (
                         <TouchableOpacity onPress={() => {
                             navigation.closeDrawer()
                             if (i.btnTitle == 'User') {
@@ -50,7 +66,7 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
                 </View>
             </View>
             <TouchableOpacity style={styles.logoutBtnStyle}>
-                <Text style={styles.logoutTxt}>Log Out</Text>
+                <Text style={styles.logoutTxt}>{'Log Out'}</Text>
                 <Image source={ImagesPath.logout_icon} style={styles.logoutBtn} />
             </TouchableOpacity>
         </View>
