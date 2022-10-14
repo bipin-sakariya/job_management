@@ -77,14 +77,14 @@ const JobsScreen = () => {
                 headerRightComponent={
                     <View style={globalStyles.rowView}>
                         <TouchableOpacity onPress={() => {
-                            navigation.navigate('ReportGeneratorScreen')
+                            // navigation.navigate('ReportGeneratorScreen')
                         }} style={{ marginRight: wp(3) }}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                         {
-                            userData?.role != "Group Manager" &&
+                            userData?.role != strings.GroupManager &&
                             <TouchableOpacity onPress={() => navigation.navigate("NotificationScreen")}>
-                                <Image source={userData?.role == "Admin" ? ImagesPath.notification_icon : ImagesPath.add_icon} style={globalStyles.headerIcon} />
+                                <Image source={userData?.role == strings.Admin ? ImagesPath.notification_icon : ImagesPath.add_icon} style={globalStyles.headerIcon} />
                             </TouchableOpacity>
                         }
                     </View>

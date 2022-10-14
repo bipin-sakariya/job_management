@@ -19,6 +19,7 @@ interface ListDataProps {
 
 interface CustomJobBottomListSheetProps {
     data: ListDataProps[],
+    onClose: () => void
 }
 
 const CustomJobBottomListSheet = React.forwardRef((props: CustomJobBottomListSheetProps & RBSheetProps, ref: any) => {
@@ -33,6 +34,7 @@ const CustomJobBottomListSheet = React.forwardRef((props: CustomJobBottomListShe
     return (
         <RBSheet
             ref={ref}
+            onClose={props.onClose}
             closeOnDragDown={true}
             closeOnPressMask={true}
             dragFromTopOnly={true}

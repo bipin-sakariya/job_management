@@ -245,7 +245,7 @@ const ReportGeneratorScreen = () => {
             <Header
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView, { width: wp(55), }]} onPress={() => { navigation.goBack() }}>
-                        <Image source={ImagesPath.left_arrow_icon} style={styles.leftArrowIcon} />
+                        <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
                         <Text style={styles.ReportTxt}>Report Generator</Text>
                     </TouchableOpacity>
                 }
@@ -302,11 +302,10 @@ const ReportGeneratorScreen = () => {
                             </>
                             :
                             <View style={[styles.sammedView, { flexShrink: 1 }]}>
-                                <Text style={styles.noNameTxt}>No. Name</Text>
                                 <FlatList nestedScrollEnabled scrollEnabled={true} data={SammedData} renderItem={renderItem}
                                     ListHeaderComponent={() => {
                                         return (
-                                            <TableHeaderView type=' report' />
+                                            <TableHeaderView type='report' />
                                         )
                                     }}
                                     ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}

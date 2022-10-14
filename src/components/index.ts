@@ -21,6 +21,9 @@ import CustomeJobListDetailsViewComponent from './CustomJobListDetailsViewCompon
 import CustomChatLinkView from './CustomChatLinkView';
 import CustomModal from './CustomModal';
 import CustomSwitchComponent from './CustomSwitchComponent';
+import CustomOneItemSelect from './CustomOneItemSelect';
+import CustomTextInputWithImage from './CustomTextInputWithImage';
+import CustomCarouselImageAndVideo from './CustomCarouselImageAndVideo';
 
 
 export {
@@ -46,5 +49,8 @@ export {
     CustomeJobListDetailsViewComponent,
     CustomChatLinkView,
     CustomModal,
-    CustomSwitchComponent
+    CustomSwitchComponent,
+    CustomOneItemSelect,
+    CustomTextInputWithImage,
+    CustomCarouselImageAndVideo
 }

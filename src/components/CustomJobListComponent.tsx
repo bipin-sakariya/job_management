@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { colors } from "../styles/Colors";
 import fonts from "../styles/Fonts";
@@ -7,16 +7,23 @@ import FontSizes from "../styles/FontSizes";
 import { globalStyles } from "../styles/globalStyles";
 import { ImagesPath } from "../utils/ImagePaths";
 
-const CustomJobListComponent = ({ item }: any) => {
+interface CustomJobListComponentProps {
+    item: any,
+    type?: string
+}
+const CustomJobListComponent = ({ item, type }: CustomJobListComponentProps) => {
     return (
-        <View style={[styles.jobContainerStyle]}>
+        <View style={[styles.jobContainerStyle, type == "carousel" ? styles.jobContainerBoxShadowStyle : null,]}>
             <Image source={ImagesPath.placeholder_img} style={styles.jobImageStyle} />
             <View style={{ flex: 1 }}>
                 <View style={styles.jobTitleContainer}>
                     <View style={styles.jobStatusViewStyle}>
-                        <TouchableOpacity onPress={() => { }}>
-                            <Image source={ImagesPath.infocircle_icon} style={styles.infoCircleIcon} />
-                        </TouchableOpacity>
+                        {
+                            item.status &&
+                            <TouchableOpacity onPress={() => { }}>
+                                <Image source={ImagesPath.infocircle_icon} style={styles.infoCircleIcon} />
+                            </TouchableOpacity>
+                        }
                         <Text style={styles.titleTxt}>{item.title}</Text>
                     </View>
                     <TouchableOpacity onPress={() => { }} style={styles.openButton}>
@@ -60,24 +67,25 @@ const styles = StyleSheet.create({
     titleTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.SEMI_LARGE_20,
-        color: '#404040',
+        color: colors.drak_light_brown,
         marginHorizontal: wp(1)
     },
     distanceTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
-        color: '#7F7F7F'
+        color: colors.bottom_tab_btn,
+        marginRight: wp(2)
     },
     descriptionTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
         paddingLeft: wp(2.5),
-        color: '#797979',
-        width: wp("35%")
+        color: colors.gray_12,
+        width: wp("32%")
     },
     openButton: {
         height: wp(5),
-        backgroundColor: "#8D8D8D",
+        backgroundColor: colors.status_btn,
         borderRadius: wp(1),
         alignItems: 'center',
         justifyContent: "center",
@@ -86,7 +94,7 @@ const styles = StyleSheet.create({
     smallBut: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_10,
-        color: '#FFFFFF'
+        color: colors.white_5
     },
     mapPinIcon: {
         height: wp(5),
@@ -107,5 +115,11 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "flex-end",
         justifyContent: "space-between"
+    },
+    jobContainerBoxShadowStyle: {
+        shadowColor: "rgba(0, 0, 0, 0.5)",
+        shadowOpacity: 2,
+        shadowOffset: { height: 0, width: 0 },
+        elevation: 5
     },
 })

@@ -5,6 +5,7 @@ import { globalStyles } from '../../styles/globalStyles';
 import { styles } from './styles';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { RootState, useAppSelector } from '../../redux/Store';
+import { strings } from '../../languages/localizedStrings';
 
 const AdminDrawerBtn = [
     { btnTitle: 'User', image: ImagesPath.user_icon, route: 'UsersGroupsScreen' },
@@ -29,7 +30,7 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
 
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
 
-    const drawerBtn = userData?.role == "Admin" ? AdminDrawerBtn : userData?.role == "Inspector" ? InspectorDrawerBtn : GroupManagerDrawerBtn
+    const drawerBtn = userData?.role == strings.Admin ? AdminDrawerBtn : userData?.role == strings.Inspector ? InspectorDrawerBtn : GroupManagerDrawerBtn
     return (
         <View style={globalStyles.container}>
             <View style={styles.topView} >

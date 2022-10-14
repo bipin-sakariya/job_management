@@ -41,7 +41,7 @@ const CreateFormScreen = () => {
                     onChangeText={(text) => { }}
                 />
                 <DropDownComponent
-                    title='Type Counting'
+                    title='Add Bill'
                     data={data}
                     image={ImagesPath.down_white_arrow}
                     labelField="label"

@@ -61,6 +61,15 @@ export const ImagesPath = {
     arrow_counter_clockwise_icon: require('../assets/images/arrowCounterClockwiseIcon.png'),
     list_bullet_image_icon: require('../assets/images/listBullets.png'),
     check_circle_icon: require('../assets/images/checkIcon.png'),
-
+    arrow_bend_right_icon: require('../assets/images/arrowBendRight.png'),
+    arrow_bend_right_white_icon: require('../assets/images/arrowBendRightWhite.png'),
+    arrow_counter_clockwise_black_icon: require('../assets/images/arrowCounterClockwiseBlack.png'),
+    arrow_counter_clockwise_white_icon: require('../assets/images/arrowCounterClockwiseWhite.png'),
+    arrow_bend_up_right_white_bg_icon: require('../assets/images/arrowBendUpRightWhiteBg.png'),
+    files_icon: require('../assets/images/filesIcon.png'),
+    check_circle_black_icon: require('../assets/images/checkCircleBlack.png'),
+    plus_circle_icon: require('../assets/images/plusCircle.png'),
+    add_form_icon: require('../assets/images/addForm.png'),
+    right_white_icon: require('../assets/images/rightWhiteIcon.png'),
 }
 

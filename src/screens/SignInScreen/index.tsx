@@ -11,6 +11,7 @@ import { CustomBlackButton, CustomTextInput } from '../../components';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { userDataReducer } from '../../redux/slice/authSlices/AuthUserSlice';
+import { strings } from '../../languages/localizedStrings';
 
 const SignInScreen = () => {
     const navigation: NavigationProp<any, any> = useNavigation()
@@ -38,8 +39,8 @@ const SignInScreen = () => {
                         email: "admin@123.gmail.com",
                         password: '123456',
                         // role: 'Group Manager',
-                        role: 'Admin',
-                        // role: 'Inspector',
+                        role: strings.Admin,
+                        // role: strings.Inspector,
 
                     }
                     dispatch(userDataReducer(data))

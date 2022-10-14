@@ -1,8 +1,8 @@
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Platform, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { styles } from './styles';
 import { customMapStyle, globalStyles } from '../../styles/globalStyles';
-import { Header } from '../../components';
+import { CustomJobListComponent, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { DrawerActions, NavigationProp, useIsFocused, useNavigation } from '@react-navigation/native';
@@ -22,11 +22,11 @@ const data = [
 ]
 
 const JobData = [
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open" },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Return" },
+    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", status: "info" },
+    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Return", status: "info" },
     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Transfer" },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '20 km away', date: "16 may 2022", button: "Open" },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open" },
+    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '20 km away', date: "16 may 2022", button: "Open", status: "info" },
+    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", status: "info" },
     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open" }
 ]
 const MapScreen = () => {
@@ -35,12 +35,19 @@ const MapScreen = () => {
     const refJobListSheet = useRef<RBSheet | null>(null);
     const [selectedItem, setSelectedItem] = useState<ListDataProps | undefined>(undefined);
     const isFocused = useIsFocused()
+    const [isVisibleCarousel, setIsVisibleCarousel] = useState(false)
 
     useEffect(() => {
         if (isFocused) {
             refJobListSheet.current?.open()
+        } else {
+            setIsVisibleCarousel(false)
         }
     }, [isFocused])
+
+    useEffect(() => {
+        return () => setIsVisibleCarousel(false)
+    }, [])
 
     useEffect(() => {
         let defaultSelected = data.find((i) => i.selected == true)
@@ -49,25 +56,7 @@ const MapScreen = () => {
 
     const renderItem = ({ item, index }: any) => {
         return (
-            <View style={[styles.jobContainerStyle, styles.jobContainerBoxShadowStyle]}>
-                <Image source={ImagesPath.placeholder_img} style={styles.jobImageStyle} />
-                <View style={{ flex: 1 }}>
-                    <View style={styles.jobTitleContainer}>
-                        <Text style={styles.titleTxt}>{item.title}</Text>
-                        <View style={[globalStyles.rowView, { justifyContent: "center" }]}>
-                            <Image source={ImagesPath.map_pin_icon} style={styles.mapPinIcon} />
-                            <Text style={styles.distanceTxt}>{item.km}</Text>
-                        </View>
-                    </View>
-                    <Text style={[styles.descriptionTxt, { fontSize: FontSizes.SMALL_7 }]}>{item.date}</Text>
-                    <View style={{ flexDirection: "row", alignItems: "flex-end", justifyContent: "space-between" }}>
-                        <Text numberOfLines={2} style={[styles.descriptionTxt, { width: wp("30%") }]}>{item.description}</Text>
-                        <TouchableOpacity onPress={() => { }} style={styles.openButton}>
-                            <Text style={styles.smallBut}>{item.button}</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
+            <CustomJobListComponent item={item} type='carousel' />
         )
     }
 
@@ -110,21 +99,29 @@ const MapScreen = () => {
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421
                 }} />
-            <CustomJobBottomListSheet
-                ref={refJobListSheet}
-                data={JobData}
-            />
-            <View style={styles.carouselStyle}>
-                <TouchableOpacity style={[styles.routeBut, styles.routeButShadow]}>
-                    <Image source={ImagesPath.route_icon} style={styles.pathIconStyle} />
-                </TouchableOpacity>
-                <Carousel
-                    data={JobData}
-                    sliderWidth={wp("100%")}
-                    itemWidth={wp("83%")}
-                    renderItem={renderItem}
-                />
-            </View>
+            {
+                isVisibleCarousel ?
+                    <View style={[styles.carouselStyle, { bottom: Platform.OS == 'ios' ? wp(35) : wp(30) }]}>
+                        <TouchableOpacity style={[styles.routeBut, styles.routeButShadow,]}>
+                            <Image source={ImagesPath.route_icon} style={styles.pathIconStyle} />
+                        </TouchableOpacity>
+                        <Carousel
+                            data={JobData}
+                            sliderWidth={wp("100%")}
+                            itemWidth={wp("83%")}
+                            renderItem={renderItem}
+                        />
+                    </View> :
+                    <CustomJobBottomListSheet
+                        onClose={() => {
+                            console.log("this is call");
+                            isFocused && setIsVisibleCarousel(true)
+                        }}
+                        ref={refJobListSheet}
+                        data={JobData}
+                    />
+            }
+
         </View>
     )
 }

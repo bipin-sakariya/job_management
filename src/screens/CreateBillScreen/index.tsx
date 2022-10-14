@@ -29,6 +29,7 @@ const BillCreateScreen = () => {
                     image={ImagesPath.add_icon}
                     onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: strings.material }) }}
                     title={strings.CreateMaterialBill} />
+                <CustomSubTitleWithImageComponent viewStyle={{ marginTop: wp(2) }} title={strings.CreateSignBillsection} image={ImagesPath.receipt_icon} />
                 <CustomDashedComponent
                     image={ImagesPath.add_icon}
                     onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: strings.sign }) }}

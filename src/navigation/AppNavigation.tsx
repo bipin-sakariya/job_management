@@ -22,6 +22,10 @@ import CreateFormScreen from '../screens/CreateFormScreen';
 import FormDetailsScreen from '../screens/FormDetailsScreen';
 import ChatScreen from '../screens/ChatScreen';
 import { strings } from '../languages/localizedStrings';
+import TransferJobScreen from '../screens/TransferJobScreen';
+import ReturnJobScreen from '../screens/ReturnJobScreen';
+import DuplicateScreen from '../screens/DuplicateScreen';
+import CloseJobScreen from '../screens/CloseJobScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -52,7 +56,10 @@ const AppNavigation = () => {
                 <Stack.Screen name={'CreateFormScreen'} component={CreateFormScreen} />
                 <Stack.Screen name={'FormDetailsScreen'} component={FormDetailsScreen} />
                 <Stack.Screen name={'ChatScreen'} component={ChatScreen} />
-
+                <Stack.Screen name={'TransferJobScreen'} component={TransferJobScreen} />
+                <Stack.Screen name={'ReturnJobScreen'} component={ReturnJobScreen} />
+                <Stack.Screen name={'DuplicateScreen'} component={DuplicateScreen} />
+                <Stack.Screen name={'CloseJobScreen'} component={CloseJobScreen} />
 
             </Stack.Navigator>
         </NavigationContainer>

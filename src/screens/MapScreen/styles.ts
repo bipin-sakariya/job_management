@@ -22,7 +22,6 @@ export const styles = StyleSheet.create({
     carouselStyle: {
         position: "absolute",
         alignSelf: "center",
-        bottom: wp(35),
         width: wp("100%"),
         justifyContent: "center",
         paddingVertical: wp(1),
@@ -34,11 +33,6 @@ export const styles = StyleSheet.create({
         paddingVertical: wp(2.5),
         marginVertical: wp(0.5),
         borderRadius: 8,
-    },
-    jobContainerBoxShadowStyle: {
-        shadowColor: "rgba(0, 0, 0, 0.2)",
-        shadowOpacity: 2,
-        shadowOffset: { height: 0, width: 0 }
     },
     jobImageStyle: {
         height: wp(20),
@@ -53,22 +47,22 @@ export const styles = StyleSheet.create({
     titleTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        color: '#404040'
+        color: colors.drak_light_brown
     },
     distanceTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_10,
-        color: '#7F7F7F'
+        color: colors.bottom_tab_btn
     },
     descriptionTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
         paddingLeft: wp(2.5),
-        color: '#797979'
+        color: colors.gray_12
     },
     openButton: {
         height: wp(5),
-        backgroundColor: "#8D8D8D",
+        backgroundColor: colors.status_btn,
         borderRadius: wp(1),
         alignItems: 'center',
         justifyContent: "center",
@@ -77,7 +71,7 @@ export const styles = StyleSheet.create({
     smallBut: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_10,
-        color: '#FFFFFF'
+        color: colors.white_5
     },
     mapPinIcon: {
         height: wp(4),
@@ -87,7 +81,7 @@ export const styles = StyleSheet.create({
     routeBut: {
         height: wp(15),
         width: wp(15),
-        backgroundColor: '#262626',
+        backgroundColor: colors.gray_3,
         borderRadius: wp(18),
         marginVertical: wp(2.5),
         marginHorizontal: wp(3),
@@ -96,9 +90,10 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
     },
     routeButShadow: {
-        shadowColor: "rgba(0, 0, 0, 0.25)",
-        shadowOpacity: 3,
-        shadowOffset: { height: 0, width: 0 }
+        shadowColor: "rgba(0, 0, 0, 0.5)",
+        shadowOpacity: 5,
+        shadowOffset: { height: 0, width: 0 },
+        elevation: 5
     },
     pathIconStyle: {
         height: wp(7),

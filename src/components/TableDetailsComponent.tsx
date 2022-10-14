@@ -9,7 +9,7 @@ import { colors } from '../styles/Colors'
 
 interface TableDetailsComponentProps {
     item: any,
-    type: string
+    type?: string
 }
 
 const TableDetailsComponent = ({ item, type }: TableDetailsComponentProps) => {

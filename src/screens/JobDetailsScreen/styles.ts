@@ -12,8 +12,9 @@ export const styles = StyleSheet.create({
     },
     JobTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
-        fontSize: FontSizes.REGULAR_18,
+        fontSize: FontSizes.SEMI_LARGE_20,
         marginHorizontal: wp(2),
+        color: colors.black
     },
     infoCircle: {
         height: wp(8),
@@ -96,12 +97,12 @@ export const styles = StyleSheet.create({
     fieldTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.SMALL_14,
-        color: '#5B5B5B'
+        color: colors.gray_8
     },
     roleTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.EXTRA_SMALL_10,
-        color: '#8E8E8E'
+        color: colors.gray_15
     },
     dateTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
@@ -131,11 +132,11 @@ export const styles = StyleSheet.create({
     backgroundVideo: {
         height: wp(50),
         width: '100%',
-        backgroundColor: "green",
+        backgroundColor: colors.doc_bg_color_light_gray,
         borderRadius: wp(3),
     },
     imageMainView: {
-        backgroundColor: "red",
+        backgroundColor: colors.doc_bg_color_light_gray,
         height: wp(50),
         borderRadius: wp(3),
         width: wp("94%")

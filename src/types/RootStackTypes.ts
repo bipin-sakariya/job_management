@@ -41,6 +41,10 @@ export type RootStackParamList = {
     CreateFormScreen: undefined
     FormDetailsScreen: undefined
     ChatScreen: undefined
+    TransferJobScreen: undefined
+    ReturnJobScreen: undefined
+    DuplicateScreen: undefined
+    CloseJobScreen: undefined
 
 };
 
