@@ -39,7 +39,7 @@ const CreateBillSectionScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <CustomSubTitleWithImageComponent title='Prepare your Bill' image={ImagesPath.receipt_icon} />
+                <CustomSubTitleWithImageComponent disabled title='Prepare your Bill' image={ImagesPath.receipt_icon} />
                 <CustomTextInput
                     title='Name'
                     container={{ marginVertical: wp(5) }}

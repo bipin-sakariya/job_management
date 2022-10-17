@@ -51,7 +51,7 @@ const DuplicateScreen = () => {
             />
             <Container style={{ paddingHorizontal: wp(5) }}>
                 <ScrollView>
-                    <CustomSubTitleWithImageComponent title={strings.DuplicateJob} image={ImagesPath.files_icon} />
+                    <CustomSubTitleWithImageComponent disabled title={strings.DuplicateJob} image={ImagesPath.files_icon} />
                     <View style={styles.duplicateFirstView}>
                         <CustomTextInput
                             title={strings.JobId}

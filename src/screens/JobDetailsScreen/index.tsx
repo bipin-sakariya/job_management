@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useRef, useState } from "react";
-import { Alert, Image, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { BottomSheet, Container, CustomDashedComponent, CustomJobDetailsBottomButton, CustomSubTitleWithImageComponent, CustomTextInput, Header } from "../../components";
 import CustomDetailsComponent from "../../components/CustomDetailsComponent";
@@ -22,6 +22,9 @@ import useCustomNavigation from "../../hooks/useCustomNavigation";
 import CustomCarouselImageAndVideo from "../../components/CustomCarouselImageAndVideo";
 import CustomTextInputWithImage from "../../components/CustomTextInputWithImage";
 import { colors } from "../../styles/Colors";
+import CustomJobAddedByComponent from "../../components/CustomJobAddedByComponent";
+import TableHeaderView from "../../components/TableHeaderView";
+import TableDetailsComponent from "../../components/TableDetailsComponent";
 
 const JobDetailsScreen = () => {
     const navigation = useCustomNavigation('JobDetailsScreen')
@@ -54,6 +57,144 @@ const JobDetailsScreen = () => {
         }
 
     ]
+    const FormData = [
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+
+    ]
+    const renderItem = ({ item, index }: any) => {
+        return (
+            <TableDetailsComponent item={item} />
+        )
+    }
     return (
         <View style={globalStyles.container} >
             <Header
@@ -69,7 +210,7 @@ const JobDetailsScreen = () => {
                         <Image source={ImagesPath.menu_dots_icon} style={globalStyles.headerIcon} />
                     </TouchableOpacity>
                 } />
-            <Container style={[globalStyles.container, { paddingHorizontal: wp(3) }]}>
+            <Container style={[globalStyles.container, { paddingHorizontal: wp(4) }]}>
                 <CustomModal visible={isModelVisible} onRequestClose={() => { setIsModelVisible(false) }} children={
                     <View style={styles.modalInnerView}>
                         <Image source={ImagesPath.check_circle_icon} style={globalStyles.modalImageStyle} />
@@ -82,19 +223,26 @@ const JobDetailsScreen = () => {
                     </View>
                 } />
                 <ScrollView showsVerticalScrollIndicator={false}>
+                    <View style={styles.warningView}>
+                        <View style={globalStyles.rowView}>
+                            <Image source={ImagesPath.warning_icon} style={styles.imageStyle} />
+                            <Text style={styles.jobReturnTxt}>Job is Return</Text>
+                        </View>
+                        <Text style={styles.reasonTxt}>Reason of job return Lorem Ipsum is simply dummy text of the printing and industry.</Text>
+                    </View>
                     {
                         userData?.role == strings.Inspector &&
-                        <CustomSubTitleWithImageComponent title={strings.Fillfromtocreatejob} image={ImagesPath.list_bullet_image_icon} />
+                        <CustomSubTitleWithImageComponent disabled title={strings.Fillfromtocreatejob} image={ImagesPath.list_bullet_image_icon} />
                     }
                     <View style={[globalStyles.rowView, { justifyContent: "space-between" }]}>
                         <View style={[globalStyles.rowView, { justifyContent: "space-around", alignItems: "center" }]}>
                             <Image source={ImagesPath.infocircle_icon} style={styles.infoCircle} />
-                            <Text style={styles.jobTitle}>{route.params?.params.title}</Text>
+                            <Text numberOfLines={1} style={styles.jobTitle}>{route.params?.params.title}</Text>
                         </View>
                         {
                             route.params?.params.status &&
                             <TouchableOpacity style={styles.statusBut}>
-                                <Text style={styles.statusBtnTxt}>{route.params?.params.status}</Text>
+                                <Text numberOfLines={1} style={styles.statusBtnTxt}>{route.params?.params.status}</Text>
                             </TouchableOpacity>
                         }
                     </View>
@@ -109,7 +257,7 @@ const JobDetailsScreen = () => {
                         <CustomTextInputWithImage
                             title="9 Oxfort street"
                             value='9 Oxfort street'
-                            container={{ marginVertical: wp(5), width: wp(70) }} />
+                            container={{ marginVertical: wp(5), width: wp(67) }} />
                         {
                             userData?.role == strings.Inspector &&
                             <CustomTextInput
@@ -154,48 +302,71 @@ const JobDetailsScreen = () => {
                                 </>
                                 :
                                 <>
-                                    <CustomCarouselImageAndVideo result={result} />
+                                    <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={result} />
                                     <CustomDetailsComponent
                                         title={strings.Attachment}
                                         detailsContainerStyle={{ marginVertical: wp(4) }}
                                         bottomComponent={
-                                            <View style={[globalStyles.rowView, styles.mainDocView]}>
-                                                <View style={[globalStyles.rowView, styles.docStyle]}>
-                                                    <View style={[globalStyles.centerView, styles.docPdfViewStyle]}>
-                                                        <Text style={styles.docTypeTxt}>PDF</Text>
+                                            <FlatList data={[{}, {}]} numColumns={2} renderItem={() => {
+                                                return (
+                                                    <View style={[globalStyles.rowView, styles.mainDocView]}>
+                                                        <View style={[globalStyles.centerView, styles.docPdfViewStyle]}>
+                                                            <Text style={styles.docTypeTxt}>DOC</Text>
+                                                        </View>
+                                                        <View style={{ marginHorizontal: wp(1), width: wp("27%") }}>
+                                                            <Text numberOfLines={1} style={styles.docFileNameTxt}>Doc_Name.pdf</Text>
+                                                            <Text numberOfLines={1} style={styles.docFileSizeTxt}>12 mb</Text>
+                                                        </View>
+
                                                     </View>
-                                                    <View style={{ marginHorizontal: wp(2) }}>
-                                                        <Text style={styles.docFileNameTxt}>Doc_Name.pdf</Text>
-                                                        <Text style={styles.docFileSizeTxt}>12 mb</Text>
-                                                    </View>
-                                                </View>
-                                                <View style={[globalStyles.rowView, styles.docStyle]}>
-                                                    <View style={[globalStyles.centerView, styles.docPdfViewStyle]}>
-                                                        <Text style={styles.docTypeTxt}>DOC</Text>
-                                                    </View>
-                                                    <View style={{ marginHorizontal: wp(2) }}>
-                                                        <Text style={styles.docFileNameTxt}>Doc_Name.pdf</Text>
-                                                        <Text style={styles.docFileSizeTxt}>12 mb</Text>
-                                                    </View>
-                                                </View>
-                                            </View>
+                                                )
+                                            }} />
+                                        }
+                                    />
+                                    <CustomDetailsComponent
+                                        title={strings.JobAddedby}
+                                        detailsContainerStyle={{ marginBottom: wp(4) }}
+                                        bottomComponent={
+                                            <>
+                                                <Text numberOfLines={1} style={styles.commonTxt}>P. Maintanence</Text>
+                                                <Text numberOfLines={1} style={styles.commonTxt}>Paint / Signs</Text>
+                                            </>
+                                        }
+                                    />
+                                    <View style={[styles.sammedView, { height: wp(100) }]}>
+                                        <View style={styles.formHeaderView}>
+                                            <Text style={[styles.noNameTxt]}>Forms</Text>
+                                        </View>
+                                        <FlatList
+                                            showsVerticalScrollIndicator={false}
+                                            data={FormData} renderItem={renderItem}
+                                            ListHeaderComponent={() => {
+                                                return (
+                                                    <TableHeaderView />
+                                                )
+                                            }}
+                                            ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}
+                                        />
+                                    </View>
+
+                                    <CustomDetailsComponent
+                                        title={'Notes :'}
+                                        detailsContainerStyle={{ marginBottom: wp(4) }}
+                                        bottomComponent={
+                                            <Text numberOfLines={3} style={styles.bottomTxtStyle}>Lorem Ipsum is simply dummy text of the printing and,typesetting industry has been the industry's standard dummy text....</Text>
                                         }
                                     />
                                     <CustomDetailsComponent
                                         title={strings.JobAddedby}
                                         bottomComponent={
-                                            <View style={[globalStyles.rowView, styles.jobView]}>
-                                                <View style={[globalStyles.rowView, globalStyles.spaceAroundView]}>
-                                                    <View style={styles.jobImageView}>
-                                                        <Image source={ImagesPath.image_white_border} style={styles.jobImage} />
-                                                    </View>
-                                                    <View style={styles.jobDetailsView}>
-                                                        <Text style={styles.fieldTxt} numberOfLines={1}>Oscar Fields</Text>
-                                                        <Text style={styles.roleTxt} numberOfLines={1}>Inspector</Text>
-                                                    </View>
-                                                </View>
-                                                <Text style={styles.dateTxt}>{"Job added on\n 16 may 2022"}</Text>
-                                            </View>
+                                            <CustomJobAddedByComponent date="16 may 2022" image={ImagesPath.image_white_border} role='Inspector' userName="Oscar Fields" />
+                                        }
+                                    />
+                                    <CustomDetailsComponent
+                                        title={strings.JobAddedby}
+                                        detailsContainerStyle={{ marginTop: wp(4) }}
+                                        bottomComponent={
+                                            <CustomJobAddedByComponent date="16 may 2022" image={ImagesPath.image_white_border} role='Inspector' userName="Oscar Fields" />
                                         }
                                     />
                                     <CustomDetailsComponent

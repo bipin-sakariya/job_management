@@ -5,33 +5,23 @@ import fonts from "../../styles/Fonts";
 import FontSizes from "../../styles/FontSizes";
 
 export const styles = StyleSheet.create({
-    jobMainView: {
-        flexDirection: "row",
-        alignItems: "center",
-        paddingHorizontal: wp(5),
+    textInputStyle: {
+        paddingVertical: wp(3),
+        paddingHorizontal: wp(2),
+        marginBottom: wp(3),
+        borderColor: colors.gray_9,
+        borderWidth: wp(0.4),
+        borderRadius: wp(2),
+        fontFamily: fonts.FONT_POP_REGULAR,
+        fontSize: FontSizes.MEDIUM_16
     },
-    leftArrowIcon: {
-        height: wp(5),
-        width: wp(5),
-        resizeMode: "contain",
+    boxShadowStyle: {
+        shadowColor: "rgba(0, 0, 0, 0.5)",
+        shadowOpacity: 2,
+        shadowOffset: { height: 0, width: 0 },
+        elevation: 5,
+        width: '100%',
+        position: 'absolute',
+        bottom: wp(5)
     },
-    routeTxt: {
-        fontFamily: fonts.FONT_POP_MEDIUM,
-        fontSize: FontSizes.REGULAR_18,
-        marginHorizontal: wp(2),
-    },
-    selectBoxView: {
-        height: wp(5),
-        width: wp(5),
-        justifyContent: "center",
-        alignItems: "center",
-        borderColor: colors.brown,
-        borderWidth: 1.5,
-    },
-    rightIcon: {
-        height: wp(3),
-        width: wp(3),
-        resizeMode: "contain",
-    },
-
 })

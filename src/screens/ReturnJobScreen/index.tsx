@@ -38,7 +38,7 @@ const ReturnJobScreen = () => {
                             <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "50%" }} title={strings.Okay} />
                         </View>
                     } />
-                <CustomSubTitleWithImageComponent title={strings.ResoneofReturnjob} image={ImagesPath.arrow_counter_clockwise_black_icon} />
+                <CustomSubTitleWithImageComponent disabled title={strings.ResoneofReturnjob} image={ImagesPath.arrow_counter_clockwise_black_icon} />
                 <TouchableOpacity onPress={() => { setIsDuplicate(true) }} style={[globalStyles.rowView, styles.jobListMainView]}>
                     <Text style={styles.jobNameTxt}>{strings.Duplicate}</Text>
                     <View style={styles.roundView} >

@@ -56,6 +56,7 @@ const UsersScreen = () => {
                     <Text style={styles.addNewUserTxt}>{type == 'users' ? 'ADD NEW USER' : 'ADD NEW GROUP'}</Text>
                 </View>
                 <CustomSubTitleWithImageComponent
+                    disabled
                     title={type == 'users' ? 'Added Users' : 'Added Groups'}
                     image={ImagesPath.group_icon}
                 />

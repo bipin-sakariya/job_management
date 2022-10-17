@@ -3,7 +3,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { RootStackParamList } from '../types/RootStackTypes';
 import DrawerStack from './DrawerStack';
-import RouteScreen from '../screens/RouteScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import AuthStack from './AuthStack';
 import UsersGroupsScreen from '../screens/UsersGroupsScreen';
@@ -21,11 +20,14 @@ import EditProfileScreen from '../screens/EditProfileScreen';
 import CreateFormScreen from '../screens/CreateFormScreen';
 import FormDetailsScreen from '../screens/FormDetailsScreen';
 import ChatScreen from '../screens/ChatScreen';
-import { strings } from '../languages/localizedStrings';
 import TransferJobScreen from '../screens/TransferJobScreen';
 import ReturnJobScreen from '../screens/ReturnJobScreen';
 import DuplicateScreen from '../screens/DuplicateScreen';
 import CloseJobScreen from '../screens/CloseJobScreen';
+import JobDuplicateListScreen from '../screens/JobDuplicateListScreen';
+import RouteScreen from '../screens/RouteScreen';
+import RouteChooseLocationDetailScreen from '../screens/RouteChooseLocationDetailScreen';
+import RouteMapViewScreen from '../screens/RouteMapViewScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -39,7 +41,7 @@ const AppNavigation = () => {
                 initialRouteName={'AuthStack'}>
                 <Stack.Screen name={'AuthStack'} component={AuthStack} />
                 <Stack.Screen name={'DrawerScreens'} component={DrawerStack} />
-                <Stack.Screen name={'RouteScreen'} component={RouteScreen} />
+                <Stack.Screen name={'JobDuplicateListScreen'} component={JobDuplicateListScreen} />
                 <Stack.Screen name={'NotificationScreen'} component={NotificationScreen} />
                 <Stack.Screen name={'UsersGroupsScreen'} component={UsersGroupsScreen} />
                 <Stack.Screen name={'UserGroupDetailScreen'} component={UserGroupDetailScreen} />
@@ -60,7 +62,9 @@ const AppNavigation = () => {
                 <Stack.Screen name={'ReturnJobScreen'} component={ReturnJobScreen} />
                 <Stack.Screen name={'DuplicateScreen'} component={DuplicateScreen} />
                 <Stack.Screen name={'CloseJobScreen'} component={CloseJobScreen} />
-
+                <Stack.Screen name={'RouteScreen'} component={RouteScreen} />
+                <Stack.Screen name={'RouteMapViewScreen'} component={RouteMapViewScreen} />
+                <Stack.Screen name={'RouteChooseLocationDetailScreen'} component={RouteChooseLocationDetailScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

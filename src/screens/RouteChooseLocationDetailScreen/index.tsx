@@ -1,18 +1,18 @@
 import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomBlackButton, CustomDashedComponent, CustomJobListComponent, CustomSubTitleWithImageComponent, Header } from '../../components'
-import { ImagesPath } from '../../utils/ImagePaths'
+import { Container, CustomJobListComponent, CustomSubTitleWithImageComponent, Header } from '../../components'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { strings } from '../../languages/localizedStrings'
-import Timeline from 'react-native-timeline-flatlist'
-import { colors } from '../../styles/Colors'
 import { styles } from './styles'
+import { colors } from '../../styles/Colors'
+import fonts from '../../styles/Fonts'
 import FontSizes from '../../styles/FontSizes'
 
-const RouteScreen = () => {
-    const navigation = useCustomNavigation('RouteScreen');
+const RouteChooseLocationDetailScreen = () => {
+    const navigation = useCustomNavigation('RouteChooseLocationDetailScreen');
     const JobData = [
         { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", status: "info" },
         { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Return", status: "info" },
@@ -38,36 +38,24 @@ const RouteScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <View style={[globalStyles.rowView, { alignItems: "flex-start", marginTop: wp(3) }]}>
-                    <Image source={ImagesPath.map_direction_icon} style={{ height: wp(22), width: wp(10), resizeMode: "contain", marginVertical: wp(4), marginHorizontal: wp(2) }} />
-                    <View style={{ flex: 1 }}>
-                        <TextInput
-                            style={styles.textInputStyle}
-                            placeholder={strings.ChooseStartingLocation}
-                        />
-                        <TextInput
-                            style={styles.textInputStyle}
-                            placeholder={strings.ChooseDestination}
-                        />
-                        <CustomDashedComponent
-                            title={strings.AddOtherField}
-                            image={ImagesPath.plus_circle_white_border_icon}
-                            onPress={() => { }}
-                            viewStyle={{ paddingVertical: wp(3), borderColor: colors.gray_9, marginTop: wp(0) }}
-                            textStyle={{ fontSize: FontSizes.MEDIUM_16, color: colors.gray_9 }}
-                        />
-                    </View>
+                <View style={[globalStyles.rowView, { borderColor: colors.gray_9, borderWidth: wp(0.3), borderRadius: wp(3), paddingVertical: wp(3), marginVertical: wp(3) }]}>
+                    <Image source={ImagesPath.map_pin_dark_line_icon} style={{ width: wp(7), height: wp(7), resizeMode: 'contain', marginHorizontal: wp(2) }} />
+                    <TextInput
+                        style={styles.textInputStyle}
+                        placeholder={strings.ChooseStartingLocation}
+                    />
                 </View>
-                <CustomSubTitleWithImageComponent disabled title={strings.Recent} image={ImagesPath.clock_counter_clockwise_icon} />
-                <FlatList showsVerticalScrollIndicator={false} data={JobData} renderItem={renderItem} contentContainerStyle={{ paddingBottom: wp(20) }} />
-                <CustomBlackButton title={strings.Done} image={ImagesPath.route_icon} buttonStyle={styles.boxShadowStyle} onPress={() => {
-                    // navigation.navigate("RouteChooseLocationDetailScreen")
-                    navigation.navigate("RouteMapViewScreen")
-
+                <CustomSubTitleWithImageComponent title={strings.YourLocation} image={ImagesPath.cross_hair_icon} titleStyle={styles.commonTxtStyle} />
+                <CustomSubTitleWithImageComponent title={strings.ChoosefromMap} image={ImagesPath.map_pin_darkline_icon} titleStyle={styles.commonTxtStyle} />
+                <View style={{
+                    height: wp(0.5), backgroundColor: "#B3B3B3",
+                    marginTop: wp(2)
                 }} />
+                <CustomSubTitleWithImageComponent viewStyle={{ marginVertical: wp(2) }} disabled title={strings.Recent} image={ImagesPath.clock_counter_clockwise_icon} />
+                <FlatList showsVerticalScrollIndicator={false} data={JobData} renderItem={renderItem} />
             </Container>
         </View>
     )
 }
 
-export default RouteScreen
+export default RouteChooseLocationDetailScreen

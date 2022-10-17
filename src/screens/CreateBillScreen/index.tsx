@@ -24,12 +24,12 @@ const BillCreateScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(5) }}>
-                <CustomSubTitleWithImageComponent title={strings.CreateMaterialBillSection} image={ImagesPath.receipt_icon} />
+                <CustomSubTitleWithImageComponent disabled title={strings.CreateMaterialBillSection} image={ImagesPath.receipt_icon} />
                 <CustomDashedComponent
                     image={ImagesPath.add_icon}
                     onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: strings.material }) }}
                     title={strings.CreateMaterialBill} />
-                <CustomSubTitleWithImageComponent viewStyle={{ marginTop: wp(2) }} title={strings.CreateSignBillsection} image={ImagesPath.receipt_icon} />
+                <CustomSubTitleWithImageComponent disabled viewStyle={{ marginTop: wp(2) }} title={strings.CreateSignBillsection} image={ImagesPath.receipt_icon} />
                 <CustomDashedComponent
                     image={ImagesPath.add_icon}
                     onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: strings.sign }) }}

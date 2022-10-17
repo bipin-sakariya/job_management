@@ -23,6 +23,7 @@ const ResetPasswordScreen = () => {
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomSubTitleWithImageComponent
+                    disabled
                     title={'Fill the deatil to reset Password'}
                     image={ImagesPath.from_list_icon}
                 />

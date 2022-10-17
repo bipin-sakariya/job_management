@@ -25,7 +25,8 @@ export const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_SEMI_BOLD,
         fontSize: FontSizes.SEMI_LARGE_20,
         marginHorizontal: wp(2),
-        color: colors.drak_light_brown
+        color: colors.drak_light_brown,
+        maxWidth: wp(50)
     },
     statusBut: {
         backgroundColor: colors.status_btn,
@@ -38,6 +39,7 @@ export const styles = StyleSheet.create({
         marginHorizontal: wp(2),
         marginVertical: wp(0.5),
         color: colors.white,
+        maxWidth: wp(20)
     },
     bottomTxtStyle: {
         paddingVertical: wp(2),
@@ -61,9 +63,12 @@ export const styles = StyleSheet.create({
         marginTop: wp(-0.5)
     },
     mainDocView: {
-        paddingVertical: wp(3),
-        width: '100%',
-        justifyContent: "space-between"
+        backgroundColor: "#D9D9D9",
+        marginHorizontal: wp(1),
+        padding: wp(1),
+        marginVertical: wp(2),
+        borderRadius: wp(2),
+        paddingVertical: wp(2)
     },
     docStyle: {
         backgroundColor: colors.doc_bg_color_light_gray,
@@ -77,7 +82,7 @@ export const styles = StyleSheet.create({
         height: wp(10),
         backgroundColor: colors.doc_bg_color_dark_gray,
         borderRadius: wp(2),
-        marginLeft: wp(2)
+        marginLeft: wp(1)
     },
     docTypeTxt: {
         fontFamily: fonts.FONT_POP_BOLD,
@@ -93,53 +98,6 @@ export const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.EXTRA_SMALL_10,
         color: colors.light_brown
-    },
-    fieldTxt: {
-        fontFamily: fonts.FONT_POP_MEDIUM,
-        fontSize: FontSizes.SMALL_14,
-        color: colors.gray_8
-    },
-    roleTxt: {
-        fontFamily: fonts.FONT_POP_MEDIUM,
-        fontSize: FontSizes.EXTRA_SMALL_10,
-        color: colors.gray_15
-    },
-    dateTxt: {
-        fontFamily: fonts.FONT_POP_MEDIUM,
-        fontSize: FontSizes.EXTRA_SMALL_12,
-        color: colors.brown
-    },
-    jobView: {
-        paddingVertical: wp(2),
-        justifyContent: "space-between"
-    },
-    jobImageView: {
-        height: wp(10),
-        width: wp(10),
-        backgroundColor: colors.doc_bg_color_dark_gray,
-        borderRadius: wp(2),
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    jobImage: {
-        height: wp(7),
-        width: wp(7),
-    },
-    jobDetailsView: {
-        marginHorizontal: wp(2),
-        width: wp(30)
-    },
-    backgroundVideo: {
-        height: wp(50),
-        width: '100%',
-        backgroundColor: colors.doc_bg_color_light_gray,
-        borderRadius: wp(3),
-    },
-    imageMainView: {
-        backgroundColor: colors.doc_bg_color_light_gray,
-        height: wp(50),
-        borderRadius: wp(3),
-        width: wp("94%")
     },
     imageView: {
         height: wp(50),
@@ -178,5 +136,62 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         paddingHorizontal: wp(2),
         marginVertical: wp(10),
-    }
+    },
+    jobReturnTxt: {
+        marginHorizontal: wp(2),
+        color: '#666666',
+        fontFamily: fonts.FONT_POP_MEDIUM,
+        fontSize: FontSizes.MEDIUM_16
+    },
+    imageStyle: {
+        height: wp(6),
+        width: wp(6),
+        resizeMode: 'contain'
+    },
+    warningView: {
+        backgroundColor: "#E7E7E7",
+        width: '100%',
+        borderRadius: wp(2),
+        paddingHorizontal: wp(5),
+        paddingVertical: wp(4),
+        marginBottom: wp(3)
+    },
+    reasonTxt: {
+        color: '#666666',
+        fontFamily: fonts.FONT_POP_REGULAR,
+        fontSize: FontSizes.EXTRA_SMALL_12
+    },
+    commonTxt: {
+        color: '#5B5B5B',
+        fontFamily: fonts.FONT_POP_REGULAR,
+        fontSize: FontSizes.SMALL_14,
+        marginVertical: wp(1),
+        maxWidth: wp(95)
+    },
+    sammedView: {
+        borderColor: colors.bottom_tab_bg,
+        borderWidth: wp(0.5),
+        borderRadius: wp(2),
+        marginBottom: wp(4)
+        // paddingBottom: wp(2)
+    },
+    formHeaderView: {
+        backgroundColor: colors.light_gray,
+        paddingVertical: wp(2),
+        paddingHorizontal: wp(2),
+        borderTopLeftRadius: wp(1.5),
+        borderTopRightRadius: wp(1.5)
+    },
+    noNameTxt: {
+        fontFamily: fonts.FONT_POP_MEDIUM,
+        fontSize: FontSizes.MEDIUM_16,
+        color: colors.black_1
+    },
+    sammedSepratorLine: {
+        height: wp(0.2),
+        backgroundColor: colors.white_3,
+        marginVertical: wp(2),
+        marginHorizontal: wp(3)
+    },
+
 })

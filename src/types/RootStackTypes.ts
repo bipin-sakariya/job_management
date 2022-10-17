@@ -24,7 +24,7 @@ export type RootStackParamList = {
     DrawerScreens: DrawerStackParamList
     MapScreen: undefined
     IndoxScreen: undefined
-    RouteScreen: undefined
+    JobDuplicateListScreen: undefined
     NotificationScreen: undefined
     JobDetailsScreen: undefined
     UsersGroupsScreen: { type?: string }
@@ -45,7 +45,9 @@ export type RootStackParamList = {
     ReturnJobScreen: undefined
     DuplicateScreen: undefined
     CloseJobScreen: undefined
-
+    RouteScreen: undefined
+    RouteChooseLocationDetailScreen: undefined
+    RouteMapViewScreen: undefined
 };
 
 export type AuthStackParamList = {

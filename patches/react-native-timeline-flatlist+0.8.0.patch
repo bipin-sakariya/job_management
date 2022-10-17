@@ -1,0 +1,767 @@
+diff --git a/node_modules/react-native-timeline-flatlist/lib/index.d.ts b/node_modules/react-native-timeline-flatlist/lib/index.d.ts
+index a53f89f..647d298 100644
+--- a/node_modules/react-native-timeline-flatlist/lib/index.d.ts
++++ b/node_modules/react-native-timeline-flatlist/lib/index.d.ts
+@@ -58,7 +58,8 @@ declare module "react-native-timeline-flatlist" {
+     options?: FlatListProps<Data>;
+     showTime?: boolean;
+     isUsingFlatlist?: boolean;
++    dashLine?: boolean,
+   }
+ 
+-  export default class Timeline extends React.Component<TimelineProps> {}
++  export default class Timeline extends React.Component<TimelineProps> { }
+ }
+diff --git a/node_modules/react-native-timeline-flatlist/lib/index.js b/node_modules/react-native-timeline-flatlist/lib/index.js
+index 9a453c4..28488c6 100644
+--- a/node_modules/react-native-timeline-flatlist/lib/index.js
++++ b/node_modules/react-native-timeline-flatlist/lib/index.js
+@@ -1,399 +1,266 @@
+-"use strict";
+ 
+-import {
+-  FlatList,
+-  I18nManager,
+-  Image,
+-  StyleSheet,
+-  Text,
+-  TouchableOpacity,
+-  View,
+-} from "react-native";
+-import React, { PureComponent } from "react";
++'use strict';
+ 
+-const defaultCircleSize = 16;
+-const defaultCircleColor = "#007AFF";
+-const defaultLineWidth = 2;
+-const defaultLineColor = "#007AFF";
+-const defaultTimeTextColor = "black";
+-const defaultDotColor = "white";
+-const defaultInnerCircle = "none";
+-const isRtl = I18nManager.isRTL;
++import React, { Component } from 'react'
+ 
+-export default class Timeline extends PureComponent {
+-  constructor(props, context) {
+-    super(props, context);
++import { Animated, Easing, Image, FlatList, StyleSheet, Text, TouchableOpacity, View, } from 'react-native'
++import moment from 'moment';
++import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
+ 
+-    this._renderItem = this._renderItem.bind(this);
+-    this.renderTime = (
+-      this.props.renderTime ? this.props.renderTime : this._renderTime
+-    ).bind(this);
+-    this.renderDetail = (
+-      this.props.renderDetail ? this.props.renderDetail : this._renderDetail
+-    ).bind(this);
+-    this.renderCircle = (
+-      this.props.renderCircle ? this.props.renderCircle : this._renderCircle
+-    ).bind(this);
+-    this.renderEvent = this._renderEvent.bind(this);
++let defaultCircleSize = 8
++let defaultCircleColor = '#37474f'
++let defaultLineWidth = 0.75
++let defaultLineColor = '#909090'
++let defaultTimeTextColor = 'black'
++let defaultDotColor = 'white'
++let defaultInnerCircle = 'none'
++let defaultTitleFontSize = 16
++let defaultTimeWidth = 55
++import Dash from 'react-native-dash';
+ 
++export default class Timeline extends Component {
++  constructor(props, context) {
++    super(props, context);
++    const { data, showTime } = props;
++    console.log("🚀 ~ file: index.js ~ line 24 ~ Timeline ~ constructor ~ props", props)
+     this.state = {
+-      data: this.props.data,
+-      x: 0,
+-      width: 0,
+-    };
+-  }
+-
+-  static getDerivedStateFromProps(nextProps, prevState) {
+-    if (prevState.data !== nextProps.data) {
+-      return {
+-        data: nextProps.data,
+-      };
++      data,
++      showTime: showTime,
+     }
+-
+-    return null;
+   }
+-
++  keyExtractor = (item, index) => {
++    return `${item.time}-${item.title}`
++  }
+   render() {
++    const { styleContainer, data } = this.props;
+     return (
+-      <View style={[styles.container, this.props.style]}>
+-        {this.props.isUsingFlatlist ? (
+-          <FlatList
+-            style={[styles.listview, this.props.listViewStyle]}
+-            contentContainerStyle={this.props.listViewContainerStyle}
+-            data={this.state.data}
+-            extraData={this.state}
+-            renderItem={this._renderItem}
+-            keyExtractor={(item, index) => index + ""}
+-            {...this.props.options}
+-          />
+-        ) : (
+-          this.state.data.map((item, index) => (
+-            <View key={index + ""}>{this._renderItem({ item, index })}</View>
+-          ))
+-        )}
++      <View style={[styles.container, styleContainer]}>
++        <FlatList
++          style={[styles.listview]}
++          data={data}
++          renderItem={this.renderItem}
++          automaticallyAdjustContentInsets={false}
++          keyExtractor={this.keyExtractor}
++          {...this.props}
++        />
+       </View>
+     );
+   }
+-
+-  _renderItem({ item, index }) {
+-    let content = null;
+-    switch (this.props.columnFormat) {
+-      case "single-column-left":
++  renderItem = ({ item, index }) => {
++    console.log("🚀 ~ file: index.js ~ line 47 ~ Timeline ~ item", item)
++    let content = null
++    let { columnFormat, rowContainerStyle, lineColor, lineWidth } = this.props;
++    switch (columnFormat) {
++      case 'single-column-left':
+         content = (
+-          <View style={[styles.rowContainer, this.props.rowContainerStyle]}>
+-            {this.renderTime(item, index)}
+-            {this.renderEvent(item, index)}
+-            {this.renderCircle(item, index)}
++          <View style={[styles.rowContainer, columnFormat === 'single-column-left' ? {} : { flexDirection: 'row-reverse', justifyContent: 'flex-start' }, rowContainerStyle]}>
++            <View>
++              {this.showTime && this.renderTime(item, index)}
++            </View>
++            <View>
++              {this.renderCircleAndLineVertical(item, index)}
++            </View>
++            <View style={[{ flex: 1 }]}>
++              {this.renderEvent(item, index)}
++            </View>
+           </View>
+-        );
+-        break;
+-      case "single-column-right":
++        )
++        break
++      case 'single-column-right':
+         content = (
+-          <View style={[styles.rowContainer, this.props.rowContainerStyle]}>
+-            {this.renderEvent(item, index)}
+-            {this.renderTime(item, index)}
+-            {this.renderCircle(item, index)}
+-          </View>
+-        );
+-        break;
+-      case "two-column":
+-        content =
+-          (item.position && item.position == "right") ||
+-          (!item.position && index % 2 == 0) ? (
+-            <View style={[styles.rowContainer, this.props.rowContainerStyle]}>
++          <View style={[styles.rowContainer, columnFormat === 'single-column-left' ? {} : { flexDirection: 'row-reverse', justifyContent: 'flex-start' }, rowContainerStyle]}>
++            <View>
+               {this.renderTime(item, index)}
+-              {this.renderEvent(item, index)}
+-              {this.renderCircle(item, index)}
+             </View>
+-          ) : (
+-            <View style={[styles.rowContainer, this.props.rowContainerStyle]}>
++            <View>
++              {this.renderCircleAndLineVertical(item, index)}
++            </View>
++            <View style={[{ flex: 1 }]}>
+               {this.renderEvent(item, index)}
++            </View>
++          </View>
++        )
++        break
++      case 'two-column':
++        content = (
++          <View style={[styles.rowContainer, index % 2 == 0 ? {} : { flexDirection: 'row-reverse' }, rowContainerStyle]}>
++            <View style={{ flex: 1 }} >
+               {this.renderTime(item, index)}
+-              {this.renderCircle(item, index)}
+             </View>
+-          );
+-        break;
++            <View>
++              {this.renderCircleAndLineVertical(item, index)}
++            </View>
++            <View style={{ flex: 1 }}>
++              {this.renderEvent(item, index)}
++            </View>
++          </View>
++        )
++    }
++    lineWidth = item.lineWidth ? item.lineWidth : lineWidth
++    lineColor = item.lineColor ? item.lineColor : lineColor
++    let renderSeperateTotal = null
++    if (item.renderSeperateTotal) {
++      renderSeperateTotal = <Dash style={{ flex: 1, marginBottom: 6 }} dashColor={lineColor} dashThickness={lineWidth} />
+     }
+-    return <View key={index}>{content}</View>;
++    return (
++      <View>
++        {content}
++        {renderSeperateTotal}
++      </View>
++    );
+   }
+-
+-  _renderTime(rowData, rowID) {
+-    if (!this.props.showTime) {
+-      return null;
++  renderTime = (item, index) => {
++    let textStyle = {};
++    let timeContainerWrapper = {};
++    let { timeContainerStyle, timeStyle, timeMeridiumStyle, renderTimeBottom, showAmPm, timeFormat, columnFormat } = this.props;
++    switch (columnFormat) {
++      case 'single-column-left':
++        textStyle = styles.leftText
++        timeContainerWrapper = { maxWidth: defaultTimeWidth }
++        break
++      case 'single-column-right':
++        timeContainerWrapper = { maxWidth: defaultTimeWidth }
++        break
++      case 'two-column':
++        textStyle = index % 2 == 0 ? styles.leftText : textStyle;
++        break
+     }
+-    var timeWrapper = null;
+-    switch (this.props.columnFormat) {
+-      case "single-column-left":
+-        timeWrapper = {
+-          alignItems: "flex-end",
+-        };
+-        break;
+-      case "single-column-right":
+-        timeWrapper = {
+-          alignItems: "flex-start",
+-        };
+-        break;
+-      case "two-column":
+-        timeWrapper = {
+-          flex: 1,
+-          alignItems:
+-            (rowData.position && rowData.position == "right") ||
+-            (!rowData.position && rowID % 2 == 0)
+-              ? "flex-end"
+-              : "flex-start",
+-        };
+-        break;
++    renderTimeBottom = item.renderTimeBottom ? item.renderTimeBottom : renderTimeBottom;
++    let hourFormat = null, amPmFormat = null;
++    if (typeof (item.time) === 'string') {
++      hourFormat = item.time
++    } else {
++      let timeMoment = moment(item.time);
++      hourFormat = timeMoment.format(timeFormat)
++      amPmFormat = showAmPm ? timeMoment.format('a').toUpperCase() : amPmFormat
+     }
+-    const { isAllowFontScaling } = this.props;
+     return (
+-      <View style={timeWrapper}>
+-        <View style={[styles.timeContainer, this.props.timeContainerStyle]}>
+-          <Text
+-            style={[styles.time, this.props.timeStyle]}
+-            allowFontScaling={isAllowFontScaling}
+-          >
+-            {rowData.time}
++      <View style={[styles.timeContainer, timeContainerWrapper, timeContainerStyle]}>
++        <View>
++          <Text style={[styles.timeText, textStyle, timeStyle]}>
++            {hourFormat}
+           </Text>
++          {amPmFormat
++            ? <Text style={[styles.timeText, styles.timeMeridiem, textStyle, timeMeridiumStyle]}>
++              {amPmFormat}
++            </Text>
++            : null
++          }
++        </View>
++        <View style={{ flex: 1 }}>
++          {renderTimeBottom()}
+         </View>
+       </View>
+-    );
++    )
+   }
+ 
+-  _renderEvent(rowData, rowID) {
+-    const lineWidth = rowData.lineWidth
+-      ? rowData.lineWidth
+-      : this.props.lineWidth;
+-    const isLast = this.props.renderFullLine
+-      ? !this.props.renderFullLine
+-      : this.state.data.slice(-1)[0] === rowData;
+-    const lineColor = isLast
+-      ? "rgba(0,0,0,0)"
+-      : rowData.lineColor
+-      ? rowData.lineColor
+-      : this.props.lineColor;
+-    let opStyle = null;
+-
+-    switch (this.props.columnFormat) {
+-      case "single-column-left":
+-        opStyle = {
+-          borderColor: lineColor,
+-          borderLeftWidth: lineWidth,
+-          borderRightWidth: 0,
+-          marginLeft: 20,
+-          paddingLeft: 20,
+-        };
+-        break;
+-      case "single-column-right":
+-        opStyle = {
+-          borderColor: lineColor,
+-          borderLeftWidth: 0,
+-          borderRightWidth: lineWidth,
+-          marginRight: 20,
+-          paddingRight: 20,
+-        };
+-        break;
+-      case "two-column":
+-        opStyle =
+-          (rowData.position && rowData.position == "right") ||
+-          (!rowData.position && rowID % 2 == 0)
+-            ? {
+-                borderColor: lineColor,
+-                borderLeftWidth: lineWidth,
+-                borderRightWidth: 0,
+-                marginLeft: 20,
+-                paddingLeft: 20,
+-              }
+-            : {
+-                borderColor: lineColor,
+-                borderLeftWidth: 0,
+-                borderRightWidth: lineWidth,
+-                marginRight: 20,
+-                paddingRight: 20,
+-              };
+-        break;
+-    }
+-
++  renderEvent = (item, index) => {
++    let { onEventPress, detailContainerStyle } = this.props;
++    detailContainerStyle = item.detailContainerStyle ? item.detailContainerStyle : detailContainerStyle
+     return (
+-      <View
+-        style={[
+-          styles.details,
+-          opStyle,
+-          this.props.eventContainerStyle,
+-          rowData.eventContainerStyle,
+-        ]}
+-        onLayout={(evt) => {
+-          if (!this.state.x && !this.state.width) {
+-            const { x, width } = evt.nativeEvent.layout;
+-            this.setState({ x, width });
+-          }
+-        }}
+-      >
++      <View>
+         <TouchableOpacity
+-          disabled={this.props.onEventPress == null}
+-          style={[this.props.detailContainerStyle]}
+-          onPress={() =>
+-            this.props.onEventPress ? this.props.onEventPress(rowData) : null
+-          }
++          disabled={onEventPress == null}
++          style={[detailContainerStyle]}
++          onPress={() => onEventPress ? onEventPress(item) : null}
+         >
+-          <View style={[styles.detail, this.props.eventDetailStyle]}>
+-            {this.renderDetail(rowData, rowID)}
++          <View style={{ marginBottom: 2, }}>
++            {this.renderDetail(item, index)}
+           </View>
+-          {this._renderSeparator()}
++          {this.renderSeparator()}
+         </TouchableOpacity>
+       </View>
+-    );
++    )
+   }
+ 
+-  _renderDetail(rowData, rowID) {
+-    const { isAllowFontScaling } = this.props;
+-    let description;
+-    if (typeof rowData.description === "string") {
+-      description = (
+-        <Text
+-          style={[
+-            styles.description,
+-            this.props.descriptionStyle,
+-            rowData.descriptionStyle,
+-          ]}
+-          allowFontScaling={isAllowFontScaling}
+-        >
+-          {rowData.description}
+-        </Text>
+-      );
+-    } else if (typeof rowData.description === "object") {
+-      description = rowData.description;
+-    }
+-
++  renderDetail = (item, index) => {
++    let { titleStyle, renderDetail, descriptionStyle } = this.props
++    titleStyle = item.titleStyle ? item.titleStyle : titleStyle
++    descriptionStyle = item.descriptionStyle ? item.descriptionStyle : descriptionStyle
++    renderDetail = item.renderDetail ? item.renderDetail : renderDetail
++    if (renderDetail) return renderDetail({ ...item, titleStyle: [styles.title, titleStyle], descriptionStyle, renderDetail }, index)
+     return (
+       <View style={styles.container}>
+-        <Text
+-          style={[styles.title, this.props.titleStyle, rowData.titleStyle]}
+-          allowFontScaling={isAllowFontScaling}
+-        >
+-          {rowData.title}
+-        </Text>
+-        {description}
++        <Text style={[styles.title, titleStyle]}>{item.title}</Text>
++        {item.description
++          ? <Text style={[styles.description, descriptionStyle]}>{item.description}</Text>
++          : null
++        }
+       </View>
+-    );
++    )
+   }
+ 
+-  _renderCircle(rowData, rowID) {
+-    var circleSize = rowData.circleSize
+-      ? rowData.circleSize
+-      : this.props.circleSize
+-      ? this.props.circleSize
+-      : defaultCircleSize;
+-    var circleColor = rowData.circleColor
+-      ? rowData.circleColor
+-      : this.props.circleColor
+-      ? this.props.circleColor
+-      : defaultCircleColor;
+-    var lineWidth = rowData.lineWidth
+-      ? rowData.lineWidth
+-      : this.props.lineWidth
+-      ? this.props.lineWidth
+-      : defaultLineWidth;
+-
+-    var circleStyle = null;
+-
+-    switch (this.props.columnFormat) {
+-      case "single-column-left":
+-        circleStyle = isRtl
+-          ? {
+-              width: this.state.width ? circleSize : 0,
+-              height: this.state.width ? circleSize : 0,
+-              borderRadius: circleSize / 2,
+-              backgroundColor: circleColor,
+-              right: this.state.width - circleSize / 2 - (lineWidth - 1) / 2,
+-            }
+-          : {
+-              width: this.state.x ? circleSize : 0,
+-              height: this.state.x ? circleSize : 0,
+-              borderRadius: circleSize / 2,
+-              backgroundColor: circleColor,
+-              left: this.state.x - circleSize / 2 + (lineWidth - 1) / 2,
+-            };
+-        break;
+-      case "single-column-right":
+-        circleStyle = {
+-          width: this.state.width ? circleSize : 0,
+-          height: this.state.width ? circleSize : 0,
+-          borderRadius: circleSize / 2,
+-          backgroundColor: circleColor,
+-          left: this.state.width - circleSize / 2 - (lineWidth - 1) / 2,
+-        };
+-        break;
+-      case "two-column":
+-        circleStyle = {
+-          width: this.state.width ? circleSize : 0,
+-          height: this.state.width ? circleSize : 0,
+-          borderRadius: circleSize / 2,
+-          backgroundColor: circleColor,
+-          left: this.state.width - circleSize / 2 - (lineWidth - 1) / 2,
+-        };
+-        break;
++  renderCircleAndLineVertical = (item, index) => {
++    let { lineWidth, lineColor, marginTopCircle, data, widthLineContainer, renderLine, dashLine } = this.props;
++    lineWidth = item.lineWidth ? item.lineWidth : lineWidth
++    lineColor = item.lineColor ? item.lineColor : lineColor
++    dashLine = item.dashLine ? item.dashLine : dashLine
++    renderLine = item.renderLine ? item.renderLine : renderLine
++    let innerCircle = this.renderInnerCircle(item);
++    let heightLineTop = marginTopCircle / 2;
++    let renderTopLine = renderLine || index < 1 ? renderLine : <View style={[{ width: lineWidth, height: heightLineTop, backgroundColor: data[index - 1].lineColor ? data[index - 1].lineColor : lineColor }]} />;
++    let renderBottomLine = renderLine ? renderLine : <View style={{ width: lineWidth, flex: 1, backgroundColor: lineColor }} />;
++    if (dashLine) {
++      renderBottomLine = <Dash dashGap={5} style={styles.dotedStyle} dashColor={lineColor} dashThickness={lineWidth} />
+     }
+-
+-    var innerCircle = null;
+-    switch (this.props.innerCircle) {
+-      case "icon":
+-        let iconDefault = rowData.iconDefault
+-          ? rowData.iconDefault
+-          : this.props.iconDefault;
+-        let iconSource = rowData.icon ? rowData.icon : iconDefault;
+-        if (React.isValidElement(iconSource)) {
+-          innerCircle = iconSource;
+-          break;
++    return (
++      <View style={{ alignItems: 'center', flex: 1, width: widthLineContainer }}>
++        {
++          index != 0
++            ? renderTopLine
++            : null
+         }
+-        if (rowData.icon)
+-          iconSource =
+-            rowData.icon.constructor === String
+-              ? { uri: rowData.icon }
+-              : rowData.icon;
+-        let iconStyle = {
+-          height: circleSize,
+-          width: circleSize,
+-        };
+-        innerCircle = (
+-          <Image
+-            source={iconSource}
+-            defaultSource={typeof iconDefault === "number" && iconDefault}
+-            style={[iconStyle, this.props.iconStyle]}
+-          />
+-        );
+-        break;
+-      case "dot":
+-        const dotSize = this.props.dotSize
+-          ? this.props.dotSize
+-          : circleSize / 2;
++        {this.props.renderCircle ? this.props.renderCircle(item, index) : this.renderCircle(item, index)}
++        {this.props.data.length - 1 != index && renderBottomLine}
++      </View>
++    )
++  }
++
++  renderCircle(item, index) {
++    let { renderIcon, circleStyle, circleColor, circleSize, spacingDot, marginTopCircle } = this.props;
++    circleStyle = item.circleStyle ? item.circleStyle : circleStyle;
++    circleSize = item.circleSize ? item.circleSize : circleSize
++    circleColor = item.circleColor ? item.circleColor : circleColor
++    renderIcon = item.renderIcon ? item.renderIcon : renderIcon;
++    if (renderIcon) {
++      return renderIcon()
++    } else {
++      let innerCircle = this.renderInnerCircle(item);
++      return (
++        <View style={[styles.circle, circleStyle, { backgroundColor: circleColor, width: circleSize, height: circleSize, marginTop: spacingDot, marginBottom: spacingDot }, index == 0 ? { marginTop: marginTopCircle } : {}]}>
++          {innerCircle}
++        </View>
++      )
++    }
++  }
++  renderInnerCircle(item) {
++    let { dotSize, dotColor, innerCircleType } = this.props;
++    console.log('props', this.props)
++    innerCircleType = item.innerCircleType ? item.innerCircleType : innerCircleType
++    dotSize = item.dotSize ? item.dotSize : dotSize
++    dotColor = item.dotColor ? item.dotColor : dotColor
++    let innerCircle = null;
++    switch (innerCircleType) {
++      case 'dot':
+         let dotStyle = {
+           height: dotSize,
+           width: dotSize,
+-          borderRadius: circleSize / 4,
+-          backgroundColor: rowData.dotColor
+-            ? rowData.dotColor
+-            : this.props.dotColor
+-            ? this.props.dotColor
+-            : defaultDotColor,
+-        };
+-        innerCircle = <View style={[styles.dot, dotStyle]} />;
+-        break;
+-      case "element":
+-        innerCircle = rowData.icon;
++          borderRadius: dotSize / 2,
++          backgroundColor: dotColor
++        }
++        innerCircle = (<View style={[dotStyle]} />)
+         break;
+     }
+-    return (
+-      <View style={[styles.circle, circleStyle, this.props.circleStyle]}>
+-        {innerCircle}
+-      </View>
+-    );
++    return innerCircle;
+   }
+-
+-  _renderSeparator() {
+-    if (!this.props.separator) {
+-      return null;
+-    }
+-    return <View style={[styles.separator, this.props.separatorStyle]} />;
++  renderSeparator() {
++    const { isRenderSeperator, separatorStyle } = this.props;
++    if (isRenderSeperator)
++      return (
++        <View style={[styles.separator, separatorStyle]}></View>
++      )
++    else
++      return null
+   }
+ }
+ 
+@@ -402,77 +269,87 @@ Timeline.defaultProps = {
+   circleColor: defaultCircleColor,
+   lineWidth: defaultLineWidth,
+   lineColor: defaultLineColor,
+-  innerCircle: defaultInnerCircle,
+-  columnFormat: "single-column-left",
+-  separator: false,
+-  showTime: true,
+-  isAllowFontScaling: true,
+-  isUsingFlatlist: true,
+-};
++  innerCircleType: defaultInnerCircle,
++  columnFormat: 'single-column-left',
++  dotSize: defaultCircleSize / 2,
++  dotColor: defaultDotColor,
++  renderTimeBottom: () => null,
++  marginTopCircle: defaultTitleFontSize / 2,
++  spacingDot: 4,
++  showAmPm: true,
++  timeFormat: 'hh.mm',
++  renderIcon: null,
++  renderDetail: null,
++  isRenderSeperator: false,
++  widthLineContainer: 30,
++  renderLine: null,
++  dashLine: false,
++}
+ 
+-const styles = StyleSheet.create({
++let styles = StyleSheet.create({
+   container: {
+     flex: 1,
+   },
+   listview: {
+     flex: 1,
+   },
+-  sectionHeader: {
+-    marginBottom: 15,
+-    backgroundColor: "#007AFF",
+-    height: 30,
+-    justifyContent: "center",
+-  },
+-  sectionHeaderText: {
+-    color: "#FFF",
+-    fontSize: 18,
+-    alignSelf: "center",
+-  },
+   rowContainer: {
+-    flexDirection: "row",
++    flexDirection: 'row',
+     flex: 1,
+-    justifyContent: "center",
+   },
+   timeContainer: {
+-    minWidth: 45,
++    minWidth: defaultTimeWidth,
++    // maxWidth: 55,
++    flex: 1,
++    // backgroundColor: 'green',
+   },
+   time: {
+-    textAlign: "right",
++    textAlign: 'right',
+     color: defaultTimeTextColor,
+-    overflow: "hidden",
+   },
+-  circle: {
+-    width: 16,
+-    height: 16,
+-    borderRadius: 10,
+-    zIndex: 1,
+-    position: "absolute",
+-    alignItems: "center",
+-    justifyContent: "center",
++  timeText: {
++    color: defaultTimeTextColor,
++    fontSize: 16,
+   },
+-  dot: {
+-    width: 8,
+-    height: 8,
+-    borderRadius: 4,
+-    backgroundColor: defaultDotColor,
++  timeMeridiem: {
++    fontSize: 12,
++    fontWeight: '200',
++  },
++  leftText: {
++    textAlign: 'right'
++  },
++  circle: {
++    width: defaultCircleSize,
++    height: defaultCircleSize,
++    borderRadius: 100,
++    backgroundColor: 'black',
++    // marginTop: 2,
++    // marginBottom: 2,
++    // position: 'absolute',
++    // left: -8,
++    alignItems: 'center',
++    justifyContent: 'center',
+   },
+   title: {
+-    fontSize: 16,
+-    fontWeight: "bold",
++    fontSize: defaultTitleFontSize,
++    fontWeight: 'bold',
+   },
+-  details: {
++  description: {
+     borderLeftWidth: defaultLineWidth,
+-    flexDirection: "column",
++    flexDirection: 'column',
+     flex: 1,
+-  },
+-  detail: { paddingTop: 10, paddingBottom: 10 },
+-  description: {
+-    marginTop: 10,
++    marginTop: 6,
+   },
+   separator: {
+-    height: 1,
+-    backgroundColor: "#aaa",
+-    marginTop: 10,
+-    marginBottom: 10,
++    height: 0.75,
++    backgroundColor: '#aaa',
++    marginTop: 6,
++    marginBottom: 6
+   },
++  dotedStyle: {
++    height: wp(30),
++    flexDirection: 'column',
++    position: 'absolute',
++    paddingTop: wp(6.5)
++  }
+ });
+\ No newline at end of file

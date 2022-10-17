@@ -67,7 +67,7 @@ const TransferJobScreen = () => {
                             </View>
                         </View>
                     } />
-                <CustomSubTitleWithImageComponent title={strings.Transferjobto} image={ImagesPath.arrow_bend_right_icon} />
+                <CustomSubTitleWithImageComponent disabled title={strings.Transferjobto} image={ImagesPath.arrow_bend_right_icon} />
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     data={jobData}

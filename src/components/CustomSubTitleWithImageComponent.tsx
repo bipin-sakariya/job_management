@@ -1,4 +1,4 @@
-import { Image, ImageSourcePropType, ImageStyle, StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native'
+import { Image, ImageSourcePropType, ImageStyle, StyleSheet, Text, TextStyle, TouchableOpacity, TouchableOpacityProps, View, ViewStyle } from 'react-native'
 import React from 'react'
 import { ImagesPath } from '../utils/ImagePaths'
 import { globalStyles } from '../styles/globalStyles'
@@ -12,15 +12,15 @@ interface CustomSubTitleWithImageComponentProps {
     titleStyle?: TextStyle,
     image?: ImageSourcePropType,
     imageStyle?: ImageStyle,
-    viewStyle?: ViewStyle
+    viewStyle?: ViewStyle,
 }
 
-const CustomSubTitleWithImageComponent = ({ title, titleStyle, image, imageStyle, viewStyle }: CustomSubTitleWithImageComponentProps) => {
+const CustomSubTitleWithImageComponent = (props: CustomSubTitleWithImageComponentProps & TouchableOpacityProps) => {
     return (
-        <View style={[globalStyles.rowView, viewStyle, { paddingVertical: wp(1.5) }]}>
-            <Image source={image} style={[styles.imageStyle, imageStyle]} />
-            <Text style={[styles.commonTxt, titleStyle]}>{title}</Text>
-        </View>
+        <TouchableOpacity {...props} style={[globalStyles.rowView, props.viewStyle, { paddingVertical: wp(1.5) }]}>
+            <Image source={props.image} style={[styles.imageStyle, props.imageStyle]} />
+            <Text style={[styles.commonTxt, props.titleStyle]}>{props.title}</Text>
+        </TouchableOpacity>
     )
 }
 

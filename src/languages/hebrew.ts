@@ -71,6 +71,18 @@ export const hebrew = {
     Partial: 'Partial',
     FuthurBilling: 'Futhur Billing',
 
+    Route: 'Route',
+    ChooseStartingLocation: 'Choose Starting Location',
+    ChooseDestination: 'Choose Destination',
+    AddOtherField: 'Add Other Field',
+    Recent: 'Recent',
+    Done: 'Done',
+
+    YourLocation: 'Your Location',
+    ChoosefromMap: 'Choose from Map',
+    SeetheDistance: 'See the Distance',
+    JobClosedby: 'Job Closed by',
+
 
 
 }

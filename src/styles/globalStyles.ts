@@ -46,9 +46,10 @@ export const globalStyles = StyleSheet.create({
         resizeMode: 'cover',
     },
     modalView: {
-        flex: 1,
+        // flex: 1,
         justifyContent: 'center',
-        alignItems: "center"
+        alignItems: "center",
+        alignSelf: 'center'
     },
     modalImageStyle: {
         height: wp(10),

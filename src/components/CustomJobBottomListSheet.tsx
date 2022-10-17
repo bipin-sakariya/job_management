@@ -3,6 +3,7 @@ import React from "react";
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import RBSheet, { RBSheetProps } from "react-native-raw-bottom-sheet";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
+import useCustomNavigation from "../hooks/useCustomNavigation";
 import { colors } from "../styles/Colors";
 import fonts from "../styles/Fonts";
 import FontSizes from "../styles/FontSizes";
@@ -24,7 +25,7 @@ interface CustomJobBottomListSheetProps {
 
 const CustomJobBottomListSheet = React.forwardRef((props: CustomJobBottomListSheetProps & RBSheetProps, ref: any) => {
 
-    const navigation: NavigationProp<any, any> = useNavigation()
+    const navigation = useCustomNavigation('MapScreen');
     const renderItem = ({ item, index }: any) => {
         return (
             <CustomJobListComponent item={item} />

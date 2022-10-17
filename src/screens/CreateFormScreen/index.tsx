@@ -33,7 +33,7 @@ const CreateFormScreen = () => {
                     </TouchableOpacity>
                 } />
             <Container style={{ paddingHorizontal: wp(5) }}>
-                <CustomSubTitleWithImageComponent viewStyle={{ marginTop: wp(2) }} title='Create Form' image={ImagesPath.receipt_icon} />
+                <CustomSubTitleWithImageComponent disabled viewStyle={{ marginTop: wp(2) }} title='Create Form' image={ImagesPath.receipt_icon} />
                 <CustomTextInput
                     title='Form Name'
                     container={{ marginVertical: wp(5) }}

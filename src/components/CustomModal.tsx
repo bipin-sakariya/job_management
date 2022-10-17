@@ -18,9 +18,10 @@ const CustomModal = (props: CustomModalProps & ModalProps) => {
                     flex: 1,
                     alignSelf: Platform.OS == "ios" ? 'auto' : 'stretch',
                     backgroundColor: 'transparent',
+                    alignItems: 'center', justifyContent: 'center'
                 }}
             >
-                <View style={globalStyles.modalView}>
+                <View style={[globalStyles.modalView,]}>
                     {props.children}
                 </View>
             </BlurView>

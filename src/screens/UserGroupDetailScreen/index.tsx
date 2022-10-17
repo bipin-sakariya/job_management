@@ -59,6 +59,7 @@ const UserGroupDetailScreen = () => {
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <CustomSubTitleWithImageComponent
+                        disabled
                         title={type == 'users' ? 'Fill from to create User' : 'Fill from to Create Group'}
                         image={ImagesPath.from_list_icon}
                     />
