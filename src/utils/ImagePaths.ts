@@ -77,5 +77,13 @@ export const ImagesPath = {
     map_pin_darkline_icon: require('../assets/images/MapPinDarkLine.png'),
     route_drak_line_icon: require('../assets/images/routeDrakLine.png'),
     warning_icon: require('../assets/images/warningIcon.png'),
+    share_network_icon: require('../assets/images/shareNetworkIcon.png'),
+    cross_icon: require('../assets/images/crossIcon.png'),
+    plus_icon: require('../assets/images/plusIcon.png'),
+    image_for_user_icon: require('../assets/images/imageForUser.png'),
+    arrow_right_black_border_icon: require('../assets/images/arrowRightBlackBorder.png'),
+    empty_image_white_border_icon: require('../assets/images/emptyImageWhiteBorder.png'),
+    map_pin_fill_icon: require('../assets/images/mapPinFill.png'),
+    check_circle_fill_icon: require('../assets/images/checkCircleFill.png'),
 }
 

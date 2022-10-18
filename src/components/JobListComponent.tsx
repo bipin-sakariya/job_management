@@ -8,9 +8,13 @@ import fonts from '../styles/Fonts';
 import { colors } from '../styles/Colors';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import CustomeJobListDetailsViewComponent from './CustomJobListDetailsViewComponent';
+import useCustomNavigation from '../hooks/useCustomNavigation';
+import { useAppSelector } from '../redux/Store';
+import { strings } from '../languages/localizedStrings';
 
 const JobListComponent = ({ item, index }: any) => {
-    const navigation: NavigationProp<any, any> = useNavigation()
+    const navigation = useCustomNavigation('JobsScreen')
+    const { userData } = useAppSelector(state => state.userDetails)
     return (
         <View style={styles.itemContainer}>
             <View style={styles.dateTxtContainer}>
@@ -18,7 +22,9 @@ const JobListComponent = ({ item, index }: any) => {
                 <Text style={[styles.dateTxtStyle]}>{item.data}</Text>
             </View>
             {item.jobs.map((i: any) => (
-                <CustomeJobListDetailsViewComponent onPress={() => navigation.navigate("JobDetailsScreen", { params: i })} item={i} />
+                <CustomeJobListDetailsViewComponent onPress={() => {
+                    navigation.navigate("JobDetailsScreen", { params: i })
+                }} item={i} />
             ))}
         </View>
     )

@@ -40,7 +40,8 @@ const DuplicateScreen = () => {
         <View style={globalStyles.container}>
             <Header
                 headerLeftStyle={{
-                    width: wp(30)
+                    width: '50%',
+                    paddingLeft: wp(3)
                 }}
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
@@ -49,7 +50,7 @@ const DuplicateScreen = () => {
                     </TouchableOpacity>
                 }
             />
-            <Container style={{ paddingHorizontal: wp(5) }}>
+            <Container style={{ paddingHorizontal: wp(4) }}>
                 <ScrollView>
                     <CustomSubTitleWithImageComponent disabled title={strings.DuplicateJob} image={ImagesPath.files_icon} />
                     <View style={styles.duplicateFirstView}>
@@ -58,10 +59,13 @@ const DuplicateScreen = () => {
                             container={{ marginBottom: wp(4) }}
                             value={'123'}
                         />
-                        <CustomTextInputWithImage title='9 Oxfort street' value='9 Oxfort street' container={{ width: wp(60) }} mapStyle={{
-                            paddingHorizontal: wp(3)
-                        }} />
-                        <CustomCarouselImageAndVideo result={result} viewStyle={{ width: '80%', }} />
+                        <CustomTextInputWithImage title='9 Oxfort street' value='9 Oxfort street'
+                            mainContainerStyle={{ flex: 1, }}
+                            container={{ width: wp(61) }}
+                            mapStyle={{
+                                paddingHorizontal: wp(3)
+                            }} />
+                        <CustomCarouselImageAndVideo result={result} viewStyle={{ width: '81%', }} />
                     </View>
                     <View style={[styles.duplicateFirstView, { marginTop: wp(5) }]}>
                         <CustomTextInput
@@ -69,10 +73,13 @@ const DuplicateScreen = () => {
                             container={{ marginBottom: wp(4) }}
                             value={'123'}
                         />
-                        <CustomTextInputWithImage title='9 Oxfort street' value='9 Oxfort street' container={{ width: wp(60) }} mapStyle={{
-                            paddingHorizontal: wp(3)
-                        }} />
-                        <CustomCarouselImageAndVideo result={result} viewStyle={{ width: '80%', }} />
+                        <CustomTextInputWithImage title='9 Oxfort street' value='9 Oxfort street'
+                            mainContainerStyle={{ flex: 1, }}
+                            container={{ width: wp(61) }}
+                            mapStyle={{
+                                paddingHorizontal: wp(3)
+                            }} />
+                        <CustomCarouselImageAndVideo result={result} viewStyle={{ width: '81%', }} />
                     </View>
                     <CustomBlackButton buttonStyle={{
                         marginVertical: wp(10)

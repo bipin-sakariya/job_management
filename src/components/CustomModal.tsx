@@ -11,24 +11,34 @@ interface CustomModalProps {
 
 const CustomModal = (props: CustomModalProps & ModalProps) => {
     return (
-        <Modal {...props} transparent animationType="fade" >
+        <Modal {...props} statusBarTranslucent={true} transparent={true} animationType="fade" >
             <BlurView
                 blurType={"dark"}
-                style={{
-                    flex: 1,
-                    alignSelf: Platform.OS == "ios" ? 'auto' : 'stretch',
-                    backgroundColor: 'transparent',
-                    alignItems: 'center', justifyContent: 'center'
-                }}
-            >
-                <View style={[globalStyles.modalView,]}>
-                    {props.children}
-                </View>
-            </BlurView>
+                style={globalStyles.modalView}
+            />
+            <View style={{ alignSelf: 'center', justifyContent: 'center', flex: 1 }}>
+                {props.children}
+            </View>
         </Modal>
     )
 }
 
 export default CustomModal
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    blureView: {
+        flex: 1,
+        alignSelf: Platform.OS == "ios" ? 'auto' : 'stretch',
+        backgroundColor: 'transparent',
+        alignItems: 'center',
+        alignContent: 'center',
+        justifyContent: 'center'
+    },
+    mainView: {
+        justifyContent: 'center',
+        alignSelf: 'center',
+        flex: 1
+
+    }
+
+})

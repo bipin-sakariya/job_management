@@ -24,7 +24,7 @@ import CustomSwitchComponent from './CustomSwitchComponent';
 import CustomOneItemSelect from './CustomOneItemSelect';
 import CustomTextInputWithImage from './CustomTextInputWithImage';
 import CustomCarouselImageAndVideo from './CustomCarouselImageAndVideo';
-
+import AssignedJobsComponent from './AssignedJobsComponent';
 
 export {
     Header,
@@ -52,5 +52,6 @@ export {
     CustomSwitchComponent,
     CustomOneItemSelect,
     CustomTextInputWithImage,
-    CustomCarouselImageAndVideo
+    CustomCarouselImageAndVideo,
+    AssignedJobsComponent
 }

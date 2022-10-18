@@ -19,11 +19,13 @@ export const UserSlice = createSlice({
     initialState: initialState,
     reducers: {
         userDataReducer: (state, action) => {
-            console.log("🚀 ~ file: AuthUserSlice.ts ~ line 21 ~ state", state, action)
             state.userData = action.payload
+        },
+        resetUserDataReducer: (state) => {
+            state.userData = undefined
         }
     },
 })
 
-export const { userDataReducer } = UserSlice.actions;
+export const { userDataReducer, resetUserDataReducer } = UserSlice.actions;
 export default UserSlice.reducer;

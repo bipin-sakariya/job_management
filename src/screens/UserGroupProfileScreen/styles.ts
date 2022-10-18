@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { colors } from "../../styles/Colors";
 import fonts from "../../styles/Fonts";
 import FontSizes from "../../styles/FontSizes";
 
@@ -22,6 +21,11 @@ export const styles = StyleSheet.create({
         marginVertical: wp(4),
         alignSelf: 'center'
     },
+    commonTxtStyle: {
+        fontFamily: fonts.FONT_POP_REGULAR,
+        fontSize: FontSizes.MEDIUM_16,
+        color: '#666666'
+    },
     tagStyle: {
         paddingHorizontal: wp(2),
         paddingVertical: wp(2),
@@ -29,15 +33,12 @@ export const styles = StyleSheet.create({
         borderRadius: wp(1),
         marginRight: wp(2)
     },
-    commonIconStyle: {
-        height: wp(5),
-        width: wp(5),
-        resizeMode: "contain"
-    },
-    commonTxtStyle: {
-        fontFamily: fonts.FONT_POP_REGULAR,
-        fontSize: FontSizes.MEDIUM_16,
-        color: '#666666'
+    viewAllJobs: {
+        justifyContent: "space-between",
+        paddingHorizontal: wp(3),
+        borderRadius: wp(2),
+        paddingVertical: wp(3),
+        backgroundColor: "#F5F5F5",
+        marginBottom: wp(2)
     }
-
 })

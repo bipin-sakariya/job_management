@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, I18nManager } from 'react-native';
+import { View, Text, TouchableOpacity, Image, I18nManager, Platform } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { DrawerActions, NavigationProp, useNavigation } from '@react-navigation/native';
 import { styles } from './styles';
@@ -11,6 +11,7 @@ import { ListDataProps } from '../../components/CustomBottomSheet';
 import { FlatList } from 'react-native-gesture-handler';
 import { RootState, useAppSelector } from '../../redux/Store';
 import { strings } from '../../languages/localizedStrings';
+import useCustomNavigation from '../../hooks/useCustomNavigation';
 
 const data = [
     { id: 1, title: strings.All, selected: true },
@@ -24,15 +25,15 @@ const JobData = [
         data: '16 May 2022',
         jobs: [
             { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' }
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Return' },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Transfer' }
         ]
     },
     {
         data: '16 May 2022',
         jobs: [
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Close' },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Partial' },
             { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' }
         ]
     },
@@ -47,7 +48,7 @@ const JobData = [
 ]
 
 const JobsScreen = () => {
-    const navigation: NavigationProp<any, any> = useNavigation();
+    const navigation = useCustomNavigation('JobsScreen')
     const refRBSheet = useRef<RBSheet | null>(null);
     const [selectedItem, setSelectedItem] = useState<ListDataProps | undefined>(undefined);
     const [btn, setBtn] = useState({
@@ -83,7 +84,9 @@ const JobsScreen = () => {
                         </TouchableOpacity>
                         {
                             userData?.role != strings.GroupManager &&
-                            <TouchableOpacity onPress={() => navigation.navigate("NotificationScreen")}>
+                            <TouchableOpacity onPress={() => {
+                                navigation.navigate(userData?.role == strings.Admin ? "NotificationScreen" : 'CreateNewJobScreen')
+                            }}>
                                 <Image source={userData?.role == strings.Admin ? ImagesPath.notification_icon : ImagesPath.add_icon} style={globalStyles.headerIcon} />
                             </TouchableOpacity>
                         }
@@ -93,7 +96,7 @@ const JobsScreen = () => {
             <Container>
                 <ButtonTab btnOneTitle={strings.Open} btnTwoTitle={strings.Close} setBtn={setBtn} btnValue={btn} />
                 <FlatList
-                    style={{ marginBottom: wp(28) }}
+                    style={{ marginBottom: Platform.OS == "ios" ? wp(28) : wp(22) }}
                     data={JobData}
                     renderItem={({ item, index }) => (
                         <JobListComponent item={item} index={index} />

@@ -6,6 +6,8 @@ import { styles } from './styles';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { RootState, useAppSelector } from '../../redux/Store';
 import { strings } from '../../languages/localizedStrings';
+import { useDispatch } from 'react-redux';
+import { resetUserDataReducer } from '../../redux/slice/authSlices/AuthUserSlice';
 
 const AdminDrawerBtn = [
     { btnTitle: 'User', image: ImagesPath.user_icon, route: 'UsersGroupsScreen' },
@@ -29,7 +31,7 @@ const GroupManagerDrawerBtn = [
 const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponentProps) => {
 
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
-
+    const dispatch = useDispatch()
     const drawerBtn = userData?.role == strings.Admin ? AdminDrawerBtn : userData?.role == strings.Inspector ? InspectorDrawerBtn : GroupManagerDrawerBtn
     return (
         <View style={globalStyles.container}>
@@ -66,7 +68,10 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
                     ))}
                 </View>
             </View>
-            <TouchableOpacity style={styles.logoutBtnStyle}>
+            <TouchableOpacity onPress={() => {
+                dispatch(resetUserDataReducer())
+                navigation.reset({ index: 0, routes: [{ name: "AuthStack" }] })
+            }} style={styles.logoutBtnStyle}>
                 <Text style={styles.logoutTxt}>{'Log Out'}</Text>
                 <Image source={ImagesPath.logout_icon} style={styles.logoutBtn} />
             </TouchableOpacity>

@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TextInput, TextInputProps, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { Image, Platform, StyleSheet, Text, TextInput, TextInputProps, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
 import React from 'react'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { globalStyles } from '../styles/globalStyles'
@@ -16,12 +16,12 @@ interface CustomTextInputWithImageProps {
 }
 const CustomTextInputWithImage = (props: CustomTextInputWithImageProps & TextInputProps) => {
     return (
-        <View style={[globalStyles.rowView, props.mainContainerStyle]}>
+        <View style={[globalStyles.rowView, props.mainContainerStyle,]}>
             <View style={[styles.textInputContainer, props.container]}>
                 <View style={styles.titleContainer}>
                     <Text style={styles.titleTxtStyle}>{props.title}</Text>
                 </View>
-                <View style={[globalStyles.rowView, { paddingHorizontal: wp(2.5) }]}>
+                <View style={[globalStyles.rowView, { paddingHorizontal: wp(2.5), alignItems: "center", height: Platform.OS == "ios" ? wp(10) : wp(12.3), }]}>
                     <TextInput
                         {...props}
                         style={[styles.textInputStyle, props.style]}
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.SMALL_14,
         width: '100%',
-        height: 40,
+        // height: 40,
         borderBottomLeftRadius: wp(1.5),
         borderBottomRightRadius: wp(1.5),
         color: colors.light_brown
@@ -69,11 +69,11 @@ const styles = StyleSheet.create({
         borderColor: colors.bottom_tab_bg,
         borderStyle: "dashed",
         borderWidth: wp(0.5),
-        paddingHorizontal: wp(5),
-        paddingVertical: wp(5),
+        paddingHorizontal: wp(6.5),
+        paddingVertical: wp(6.5),
         borderRadius: wp(2),
         marginLeft: wp(3),
-        marginTop: wp(-0.5)
+        // marginTop: wp(-0.5)
     },
     mapPinIcon: {
         width: wp(10),

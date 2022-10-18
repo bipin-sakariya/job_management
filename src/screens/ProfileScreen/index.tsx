@@ -12,9 +12,13 @@ const ProfileScreen = () => {
     return (
         <View style={globalStyles.container}>
             <Header
+                headerLeftStyle={{
+                    width: '50%',
+                    paddingLeft: wp(3)
+                }}
                 headerLeftComponent={
                     <TouchableOpacity
-                        style={[globalStyles.rowView, { width: wp(40) }]}
+                        style={[globalStyles.rowView]}
                         onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
                         <Text style={globalStyles.headerTitle}>Profile</Text>
@@ -38,11 +42,11 @@ const ProfileScreen = () => {
                     container={{ marginBottom: wp(5) }}
                     value={'0123456789'}
                 />
-                <TouchableOpacity onPress={()=> navigation.navigate('ResetPasswordScreen')} style={styles.btnView}>
+                <TouchableOpacity onPress={() => navigation.navigate('ResetPasswordScreen')} style={styles.btnView}>
                     <Text style={styles.btnTxtStyle}>Reset Password</Text>
                     <Image source={ImagesPath.left_arrow_icon} style={[globalStyles.backArrowStyle, { transform: [{ rotate: '180deg' }] }]} />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=> navigation.navigate('EditProfileScreen')} style={styles.btnView}>
+                <TouchableOpacity onPress={() => navigation.navigate('EditProfileScreen')} style={styles.btnView}>
                     <Text style={styles.btnTxtStyle}>Edit your Profile</Text>
                     <Image source={ImagesPath.left_arrow_icon} style={[globalStyles.backArrowStyle, { transform: [{ rotate: '180deg' }] }]} />
                 </TouchableOpacity>

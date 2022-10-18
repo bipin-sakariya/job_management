@@ -108,7 +108,7 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         position: "absolute",
         bottom: 0,
-        right: 0,
+        right: wp(2),
     },
     roundImageStyle: {
         width: wp(15),
@@ -119,5 +119,11 @@ export const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
         color: colors.gray_14
-    }
+    },
+    bottomTxtStyle: {
+        paddingVertical: wp(2),
+        fontFamily: fonts.FONT_POP_MEDIUM,
+        fontSize: FontSizes.MEDIUM_16,
+        color: colors.light_brown
+    },
 })

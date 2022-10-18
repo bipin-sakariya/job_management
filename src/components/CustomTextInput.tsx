@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInputProps, View, ViewStyle } from 'react-native';
+import { Platform, StyleSheet, Text, TextInputProps, View, ViewStyle } from 'react-native';
 import React from 'react';
 import { TextInput } from 'react-native-gesture-handler';
 import FontSizes from '../styles/FontSizes';
@@ -20,7 +20,7 @@ const CustomTextInput = (props: CustomTextInputProps & TextInputProps) => {
             <View style={styles.titleContainer}>
                 <Text style={styles.titleTxtStyle}>{props.title}</Text>
             </View>
-            <View style={[globalStyles.rowView, { paddingHorizontal: wp(2.5) }]}>
+            <View style={[globalStyles.rowView, { paddingHorizontal: wp(2.5), alignItems: "center", height: Platform.OS == "ios" ? wp(10) : wp(12), }]}>
                 <TextInput
                     {...props}
                     style={[styles.textInputStyle, props.style, { width: props.icon ? '94%' : '100%' }]}
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.SMALL_14,
         width: '100%',
-        height: 40,
+        // height: 40,
         borderBottomLeftRadius: wp(1.5),
         borderBottomRightRadius: wp(1.5),
         color: colors.light_brown

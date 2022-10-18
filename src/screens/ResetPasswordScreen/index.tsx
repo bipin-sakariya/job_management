@@ -12,9 +12,13 @@ const ResetPasswordScreen = () => {
     return (
         <View style={globalStyles.container}>
             <Header
+                headerLeftStyle={{
+                    width: '60%',
+                    paddingLeft: wp(3)
+                }}
                 headerLeftComponent={
                     <TouchableOpacity
-                        style={[globalStyles.rowView, { width: wp(50) }]}
+                        style={[globalStyles.rowView]}
                         onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
                         <Text style={globalStyles.headerTitle}>Reset Password</Text>

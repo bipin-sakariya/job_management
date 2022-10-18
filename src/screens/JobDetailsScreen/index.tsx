@@ -7,17 +7,10 @@ import CustomDetailsComponent from "../../components/CustomDetailsComponent";
 import { globalStyles } from "../../styles/globalStyles";
 import { ImagesPath } from "../../utils/ImagePaths";
 import { styles } from "./styles";
-import Carousel, { Pagination } from 'react-native-snap-carousel';
 import CustomBlackButton from "../../components/CustomBlackButton";
-import Video from 'react-native-video';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { RootState, useAppSelector } from "../../redux/Store";
-import fonts from "../../styles/Fonts";
-import FontSizes from "../../styles/FontSizes";
-import CustomSwitchComponent from "../../components/CustomSwitchComponent";
 import { strings } from "../../languages/localizedStrings";
-import { BlurView } from "@react-native-community/blur";
-import CustomModal from "../../components/CustomModal";
 import useCustomNavigation from "../../hooks/useCustomNavigation";
 import CustomCarouselImageAndVideo from "../../components/CustomCarouselImageAndVideo";
 import CustomTextInputWithImage from "../../components/CustomTextInputWithImage";
@@ -26,14 +19,20 @@ import CustomJobAddedByComponent from "../../components/CustomJobAddedByComponen
 import TableHeaderView from "../../components/TableHeaderView";
 import TableDetailsComponent from "../../components/TableDetailsComponent";
 
+interface JobDetailsScreenRouteProps {
+    description: string
+    km: string
+    status: string
+    title: string
+}
+
 const JobDetailsScreen = () => {
+
     const navigation = useCustomNavigation('JobDetailsScreen')
     const route: any = useRoute()
     const refRBSheet = useRef<RBSheet | null>(null);
-    const [isurgent, setIsUrgent] = useState(false)
-    const [isnotification, setIsNotification] = useState(false)
-    const [isModelVisible, setIsModelVisible] = useState(false)
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
+
     const result = [
         {
             id: 1,
@@ -190,49 +189,55 @@ const JobDetailsScreen = () => {
         },
 
     ]
+
+    let data: JobDetailsScreenRouteProps = route.params.params
+
     const renderItem = ({ item, index }: any) => {
         return (
             <TableDetailsComponent item={item} />
         )
     }
+
     return (
         <View style={globalStyles.container} >
             <Header
+                headerLeftStyle={{
+                    paddingLeft: wp(3)
+                }}
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
-                        <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={styles.JobTxt}>{strings.Job}</Text>
+                        <Image source={ImagesPath.left_arrow_icon} style={[globalStyles.headerIcon]} />
+                        <Text style={globalStyles.headerTitle}>{strings.Job}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
-                    userData?.role != strings.Inspector &&
-                    <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
-                        <Image source={ImagesPath.menu_dots_icon} style={globalStyles.headerIcon} />
-                    </TouchableOpacity>
+                    <>
+                        {
+                            userData?.role != strings.Inspector && data.status == strings.JobOpen || data.status == strings.JobReturn || data.status == strings.JobTransfer ?
+                                <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
+                                    <Image source={ImagesPath.menu_dots_icon} style={globalStyles.headerIcon} />
+                                </TouchableOpacity>
+                                : null
+                        }
+                        {
+                            userData?.role == strings.Inspector &&
+                            <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
+                                <Image source={ImagesPath.share_network_icon} style={globalStyles.headerIcon} />
+                            </TouchableOpacity>
+                        }
+                    </>
                 } />
-            <Container style={[globalStyles.container, { paddingHorizontal: wp(4) }]}>
-                <CustomModal visible={isModelVisible} onRequestClose={() => { setIsModelVisible(false) }} children={
-                    <View style={styles.modalInnerView}>
-                        <Image source={ImagesPath.check_circle_icon} style={globalStyles.modalImageStyle} />
-                        <Text style={{
-                            fontFamily: fonts.FONT_POP_REGULAR,
-                            fontSize: FontSizes.MEDIUM_16,
-                            color: colors.black
-                        }}>{strings.NewJobAddedSuccessfully}</Text>
-                        <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginTop: wp(2) }} onPress={() => { setIsModelVisible(false) }} title={strings.Okay} />
-                    </View>
-                } />
+            <Container style={[{ marginHorizontal: wp(4) }]}>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <View style={styles.warningView}>
-                        <View style={globalStyles.rowView}>
-                            <Image source={ImagesPath.warning_icon} style={styles.imageStyle} />
-                            <Text style={styles.jobReturnTxt}>Job is Return</Text>
-                        </View>
-                        <Text style={styles.reasonTxt}>Reason of job return Lorem Ipsum is simply dummy text of the printing and industry.</Text>
-                    </View>
                     {
-                        userData?.role == strings.Inspector &&
-                        <CustomSubTitleWithImageComponent disabled title={strings.Fillfromtocreatejob} image={ImagesPath.list_bullet_image_icon} />
+                        data.status == strings.JobReturn ?
+                            <View style={styles.warningView}>
+                                <View style={globalStyles.rowView}>
+                                    <Image source={ImagesPath.warning_icon} style={styles.imageStyle} />
+                                    <Text style={styles.jobReturnTxt}>{strings.JobisReturn}</Text>
+                                </View>
+                                <Text style={styles.reasonTxt}>{strings.Reasonofjobreturn}</Text>
+                            </View> : null
                     }
                     <View style={[globalStyles.rowView, { justifyContent: "space-between" }]}>
                         <View style={[globalStyles.rowView, { justifyContent: "space-around", alignItems: "center" }]}>
@@ -240,91 +245,67 @@ const JobDetailsScreen = () => {
                             <Text numberOfLines={1} style={styles.jobTitle}>{route.params?.params.title}</Text>
                         </View>
                         {
-                            route.params?.params.status &&
-                            <TouchableOpacity style={styles.statusBut}>
-                                <Text numberOfLines={1} style={styles.statusBtnTxt}>{route.params?.params.status}</Text>
-                            </TouchableOpacity>
+                            data.status ?
+                                <TouchableOpacity style={styles.statusBut}>
+                                    <Text numberOfLines={1} style={styles.statusBtnTxt}>{route.params?.params.status}</Text>
+                                </TouchableOpacity> : null
                         }
                     </View>
                     <View style={{ paddingVertical: wp(5) }}>
                         <CustomTextInput
                             title={strings.JobId}
-                            container={{ marginBottom: wp(1) }}
+                            container={{ marginBottom: wp(5) }}
                             value={"#123"}
                             // editable={isEdit}
                             onChangeText={(text) => { }}
                         />
+                        {
+                            data.status == strings.JobReturn || data.status == strings.JobTransfer ?
+                                <CustomTextInput
+                                    title={strings.RelatedJobID}
+                                    container={{ marginBottom: wp(5) }}
+                                    value={"#123"}
+                                    // editable={isEdit}
+                                    onChangeText={(text) => { }}
+                                /> : null
+                        }
                         <CustomTextInputWithImage
                             title="9 Oxfort street"
                             value='9 Oxfort street'
-                            container={{ marginVertical: wp(5), width: wp(67) }} />
-                        {
-                            userData?.role == strings.Inspector &&
-                            <CustomTextInput
-                                title={strings.Addressinformation}
-                                numberOfLines={2}
-                                value={"Just behind new yellow house"}
-                                // editable={isEdit}
-                                onChangeText={(text) => { }}
-                            />
-                        }
-                        {userData?.role == strings.Inspector &&
-                            <Text style={{ marginVertical: wp(1), marginBottom: wp(3), alignSelf: 'flex-end', color: '#B7B7B7', fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_10 }}>Additional Address Information</Text>
-                        }
+                            mainContainerStyle={{ marginBottom: wp(5), flex: 1, }}
+                            container={{ width: wp(64) }} />
                         <CustomDetailsComponent
                             title={strings.Description}
                             bottomComponent={
                                 <Text numberOfLines={3} style={styles.bottomTxtStyle}>Lorem Ipsum is simply dummy text of the printing and,typesetting industry has been the industry's standard dummy text....</Text>
                             }
                         />
-                        {
-                            userData?.role == strings.Inspector ?
-                                <>
-                                    <CustomDashedComponent
-                                        viewStyle={{ paddingVertical: wp(5), marginTop: wp(5) }}
-                                        image={ImagesPath.add_icon}
-                                        onPress={() => { }}
-                                        title={strings.AddPhotosandAttachments}
-                                    />
-                                    <CustomSwitchComponent container={{
-                                        marginVertical: wp(5)
-                                    }}
-                                        title={strings.Priority}
-                                        subTitle="Urgent Job"
-                                        value={isurgent}
-                                        onPress={() => setIsUrgent(!isurgent)} />
-                                    <CustomSwitchComponent
-                                        title={strings.FinishNotification}
-                                        subTitle='Finish Notification'
-                                        value={isnotification}
-                                        onPress={() => setIsNotification(!isnotification)}
-                                    />
-                                </>
-                                :
-                                <>
-                                    <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={result} />
-                                    <CustomDetailsComponent
-                                        title={strings.Attachment}
-                                        detailsContainerStyle={{ marginVertical: wp(4) }}
-                                        bottomComponent={
-                                            <FlatList data={[{}, {}]} numColumns={2} renderItem={() => {
-                                                return (
-                                                    <View style={[globalStyles.rowView, styles.mainDocView]}>
-                                                        <View style={[globalStyles.centerView, styles.docPdfViewStyle]}>
-                                                            <Text style={styles.docTypeTxt}>DOC</Text>
-                                                        </View>
-                                                        <View style={{ marginHorizontal: wp(1), width: wp("27%") }}>
-                                                            <Text numberOfLines={1} style={styles.docFileNameTxt}>Doc_Name.pdf</Text>
-                                                            <Text numberOfLines={1} style={styles.docFileSizeTxt}>12 mb</Text>
-                                                        </View>
+                        <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={result} />
+                        <CustomDetailsComponent
+                            title={strings.Attachment}
+                            detailsContainerStyle={{ marginVertical: wp(4) }}
+                            bottomComponent={
+                                <FlatList data={[{}, {}]} numColumns={2} renderItem={() => {
+                                    return (
+                                        <View style={[globalStyles.rowView, styles.mainDocView]}>
+                                            <View style={[globalStyles.centerView, styles.docPdfViewStyle]}>
+                                                <Text style={styles.docTypeTxt}>DOC</Text>
+                                            </View>
+                                            <View style={{ marginHorizontal: wp(1), width: wp("27%") }}>
+                                                <Text numberOfLines={1} style={styles.docFileNameTxt}>Doc_Name.pdf</Text>
+                                                <Text numberOfLines={1} style={styles.docFileSizeTxt}>12 mb</Text>
+                                            </View>
 
-                                                    </View>
-                                                )
-                                            }} />
-                                        }
-                                    />
+                                        </View>
+                                    )
+                                }} />
+                            }
+                        />
+                        {
+                            data.status == strings.JobClose || data.status == strings.JobPartial ?
+                                <>
                                     <CustomDetailsComponent
-                                        title={strings.JobAddedby}
+                                        title={strings.Transferto}
                                         detailsContainerStyle={{ marginBottom: wp(4) }}
                                         bottomComponent={
                                             <>
@@ -335,7 +316,7 @@ const JobDetailsScreen = () => {
                                     />
                                     <View style={[styles.sammedView, { height: wp(100) }]}>
                                         <View style={styles.formHeaderView}>
-                                            <Text style={[styles.noNameTxt]}>Forms</Text>
+                                            <Text style={[styles.noNameTxt]}>{strings.Forms}</Text>
                                         </View>
                                         <FlatList
                                             showsVerticalScrollIndicator={false}
@@ -347,48 +328,65 @@ const JobDetailsScreen = () => {
                                             }}
                                             ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}
                                         />
+                                        {
+                                            userData?.role == strings.GroupManager && data.status == strings.JobClose ?
+                                                <TouchableOpacity style={[globalStyles.rowView, styles.addFormView]}>
+                                                    <Image source={ImagesPath.add_form_icon} style={[globalStyles.headerIcon, { marginHorizontal: wp(1) }]} />
+                                                    <Text style={styles.addFormTxt}>{strings.AddForm}</Text>
+                                                </TouchableOpacity> : null
+                                        }
                                     </View>
-
                                     <CustomDetailsComponent
-                                        title={'Notes :'}
+                                        title={strings.Notes}
                                         detailsContainerStyle={{ marginBottom: wp(4) }}
                                         bottomComponent={
                                             <Text numberOfLines={3} style={styles.bottomTxtStyle}>Lorem Ipsum is simply dummy text of the printing and,typesetting industry has been the industry's standard dummy text....</Text>
                                         }
                                     />
-                                    <CustomDetailsComponent
-                                        title={strings.JobAddedby}
-                                        bottomComponent={
-                                            <CustomJobAddedByComponent date="16 may 2022" image={ImagesPath.image_white_border} role='Inspector' userName="Oscar Fields" />
-                                        }
-                                    />
-                                    <CustomDetailsComponent
-                                        title={strings.JobAddedby}
-                                        detailsContainerStyle={{ marginTop: wp(4) }}
-                                        bottomComponent={
-                                            <CustomJobAddedByComponent date="16 may 2022" image={ImagesPath.image_white_border} role='Inspector' userName="Oscar Fields" />
-                                        }
-                                    />
-                                    <CustomDetailsComponent
-                                        title={strings.FurtherInspection}
-                                        detailsContainerStyle={{ marginVertical: wp(4) }}
-                                        bottomComponent={
-                                            <Text numberOfLines={1} style={styles.bottomTxtStyle}>Yes</Text>
-                                        }
-                                    />
                                 </>
+                                : null
                         }
-                        <CustomBlackButton
-                            title={userData?.role == strings.Inspector ? strings.CreateJob : strings.Close}
-                            onPress={() => {
-                                if (userData?.role == strings.Inspector) {
-                                    setIsModelVisible(true)
-                                } else {
-                                    navigation.navigate("CloseJobScreen")
-                                }
-                            }}
-                            image={userData?.role == strings.Inspector ? ImagesPath.plus_white_circle_icon : ImagesPath.check_circle}
+
+                        <CustomDetailsComponent
+                            title={strings.JobAddedby}
+                            bottomComponent={
+                                <CustomJobAddedByComponent date="16 may 2022" image={ImagesPath.image_white_border} role='Inspector' userName="Oscar Fields" />
+                            }
                         />
+                        {
+                            data.status == strings.JobClose || data.status == strings.JobPartial ?
+                                <CustomDetailsComponent
+                                    title={strings.JobClosedby}
+                                    detailsContainerStyle={{ marginTop: wp(4) }}
+                                    bottomComponent={
+                                        <CustomJobAddedByComponent date="16 may 2022" image={ImagesPath.image_white_border} role='Inspector' userName="Oscar Fields" />
+                                    }
+                                />
+                                : null
+                        }
+                        {
+                            data.status == strings.JobOpen || data.status == strings.JobReturn || data.status == strings.JobTransfer ?
+                                <CustomDetailsComponent
+                                    title={data.status == strings.JobTransfer ? strings.Transferto : strings.FurtherInspection}
+                                    detailsContainerStyle={{ marginVertical: wp(4) }}
+                                    bottomComponent={
+                                        <Text numberOfLines={1} style={styles.bottomTxtStyle}>{data.status == strings.JobTransfer ? 'P.Maintanence' : 'Yes'}</Text>
+                                    }
+                                />
+                                : null
+                        }
+                        {
+                            userData?.role != strings.Inspector && data.status != strings.JobClose || userData?.role == strings.Inspector && data.status == strings.JobPartial ?
+                                // data.status != strings.JobClose || userData?.role == strings.Inspector && data.status == strings.JobPartial ?
+                                <CustomBlackButton
+                                    title={strings.Close}
+                                    onPress={() => {
+                                        navigation.navigate("CloseJobScreen")
+                                    }}
+                                    image={ImagesPath.check_circle}
+                                />
+                                : null
+                        }
                     </View>
                     <BottomSheet
                         ref={refRBSheet}

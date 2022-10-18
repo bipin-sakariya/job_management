@@ -114,7 +114,6 @@ const MapScreen = () => {
                     </View> :
                     <CustomJobBottomListSheet
                         onClose={() => {
-                            console.log("this is call");
                             isFocused && setIsVisibleCarousel(true)
                         }}
                         ref={refJobListSheet}

@@ -193,5 +193,18 @@ export const styles = StyleSheet.create({
         marginVertical: wp(2),
         marginHorizontal: wp(3)
     },
-
+    addFormView: {
+        alignItems: 'center',
+        marginHorizontal: wp(2),
+        marginVertical: wp(2),
+        borderRadius: wp(1),
+        justifyContent: "center",
+        paddingVertical: wp(2),
+        backgroundColor: colors.gray_13
+    },
+    addFormTxt: {
+        fontFamily: fonts.FONT_POP_REGULAR,
+        fontSize: FontSizes.EXTRA_SMALL_12,
+        color: colors.gray_14
+    }
 })

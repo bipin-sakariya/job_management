@@ -33,7 +33,7 @@ const UserListComponent = ({ item, type }: { item: itemPropsType, type?: string 
             <View style={globalStyles.rowView}>
                 <Image source={ImagesPath.placeholder_img} style={styles.itemImgStyle} />
                 <View style={{ paddingHorizontal: wp(2) }}>
-                    <Text onPress={() => navigation.navigate('UserGroupDetailScreen', { type: type })} style={styles.itemTitle}>{item.name}</Text>
+                    <Text onPress={() => navigation.navigate('UserGroupProfileScreen', { type: type })} style={styles.itemTitle}>{item.name}</Text>
                     <Text style={styles.descriptionTxt}>{item.role}</Text>
                 </View>
             </View>

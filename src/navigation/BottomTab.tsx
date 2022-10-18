@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, StyleSheet, Image, Text } from 'react-native';
+import { View, StyleSheet, Image, Text, Platform } from 'react-native';
 import { BottomStackParamList } from '../types/RootStackTypes';
 import MapScreen from '../screens/MapScreen';
 import JobsScreen from '../screens/JobsScreen';
@@ -11,11 +11,13 @@ import { colors } from '../styles/Colors';
 import fonts from '../styles/Fonts';
 import FontSizes from '../styles/FontSizes';
 import { strings } from '../languages/localizedStrings';
+import { isNotch } from '../utils/screenUtils';
 
 const Tab = createBottomTabNavigator<BottomStackParamList>();
 
 const BottomTab = () => {
 
+    let notch = isNotch
     return (
         <Tab.Navigator
             screenOptions={{
@@ -24,7 +26,7 @@ const BottomTab = () => {
                     backgroundColor: colors.bottom_tab_bg,
                     borderTopLeftRadius: 25,
                     borderTopRightRadius: 25,
-                    height: hp(14),
+                    height: Platform.OS == "ios" ? hp(14) : hp(12),
                     position: 'absolute',
                 }
             }}

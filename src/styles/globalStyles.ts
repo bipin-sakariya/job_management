@@ -17,7 +17,8 @@ export const globalStyles = StyleSheet.create({
     headerTitle: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.SEMI_LARGE_20,
-        color: colors.black
+        color: colors.black,
+        marginHorizontal: wp(2)
     },
     rowView: {
         flexDirection: 'row',
@@ -46,10 +47,9 @@ export const globalStyles = StyleSheet.create({
         resizeMode: 'cover',
     },
     modalView: {
-        // flex: 1,
-        justifyContent: 'center',
-        alignItems: "center",
-        alignSelf: 'center'
+        position: 'absolute',
+        height: '100%',
+        width: '100%'
     },
     modalImageStyle: {
         height: wp(10),

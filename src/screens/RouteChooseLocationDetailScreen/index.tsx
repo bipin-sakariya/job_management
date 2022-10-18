@@ -29,7 +29,7 @@ const RouteChooseLocationDetailScreen = () => {
     return (
         <View style={globalStyles.container}>
             <Header
-                headerLeftStyle={{ width: "40%" }}
+                headerLeftStyle={{ width: "40%", paddingLeft: wp(3) }}
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />

@@ -26,13 +26,17 @@ const CreateFormScreen = () => {
     return (
         <View style={globalStyles.container}>
             <Header
+                headerLeftStyle={{
+                    width: "50%",
+                    paddingLeft: wp(3)
+                }}
                 headerLeftComponent={
-                    <TouchableOpacity style={[globalStyles.rowView, { width: wp(40) }]} onPress={() => navigation.goBack()}>
+                    <TouchableOpacity style={[globalStyles.rowView]} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={styles.billSectionTxt}>Create Form</Text>
+                        <Text style={globalStyles.headerTitle}>Create Form</Text>
                     </TouchableOpacity>
                 } />
-            <Container style={{ paddingHorizontal: wp(5) }}>
+            <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomSubTitleWithImageComponent disabled viewStyle={{ marginTop: wp(2) }} title='Create Form' image={ImagesPath.receipt_icon} />
                 <CustomTextInput
                     title='Form Name'

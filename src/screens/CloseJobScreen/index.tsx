@@ -1,7 +1,7 @@
 import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomBlackButton, CustomDashedComponent, CustomModal, CustomOneItemSelect, CustomSubTitleWithImageComponent, CustomTextInput, Header } from '../../components'
+import { Container, CustomBlackButton, CustomDashedComponent, CustomDetailsComponent, CustomModal, CustomOneItemSelect, CustomSubTitleWithImageComponent, CustomTextInput, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { strings } from '../../languages/localizedStrings'
@@ -184,7 +184,8 @@ const CloseJobScreen = () => {
         <View style={globalStyles.container}>
             <Header
                 headerLeftStyle={{
-                    width: "50%"
+                    width: "50%",
+                    paddingLeft: wp(3)
                 }}
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
@@ -193,7 +194,7 @@ const CloseJobScreen = () => {
                     </TouchableOpacity>
                 }
             />
-            <Container style={{ paddingHorizontal: wp(5) }}>
+            <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomModal visible={isModelVisible} onRequestClose={() => { setIsModelVisible(false) }} children={
                     <View style={styles.modalView}>
                         <Image source={ImagesPath.check_circle_icon} style={[globalStyles.modalImageStyle]} />
@@ -212,17 +213,15 @@ const CloseJobScreen = () => {
                         value={'123'}
                     />
                     <CustomTextInputWithImage
-                        title='9 Oxfort street'
-                        value={'123'}
-                        container={{ width: wp(65) }}
-                        mainContainerStyle={{ marginBottom: wp(5) }}
-                    />
-                    <CustomTextInput
+                        title="9 Oxfort street"
+                        value='9 Oxfort street'
+                        mainContainerStyle={{ marginBottom: wp(5), flex: 1, }}
+                        container={{ width: wp(64) }} />
+                    <CustomDetailsComponent
                         title={strings.Description}
-                        multiline
-                        numberOfLines={2}
-                        style={{ height: wp(20) }}
-                        value={'Lorem Ipsum is simply dummy text of the printing and,typesetting industry has been the industrys standard dummy text....'}
+                        bottomComponent={
+                            <Text numberOfLines={3} style={styles.bottomTxtStyle}>Lorem Ipsum is simply dummy text of the printing and,typesetting industry has been the industry's standard dummy text....</Text>
+                        }
                     />
                     <CustomCarouselImageAndVideo
                         viewStyle={{ width: wp(90) }}

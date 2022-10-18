@@ -24,4 +24,11 @@ export const styles = StyleSheet.create({
         position: 'absolute',
         bottom: wp(5)
     },
+    mapdirectionIcon: {
+        height: wp(22),
+        width: wp(10),
+        resizeMode: "contain",
+        marginVertical: wp(4),
+        marginHorizontal: wp(2)
+    }
 })

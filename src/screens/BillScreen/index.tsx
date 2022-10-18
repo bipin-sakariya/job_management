@@ -91,10 +91,13 @@ const BillListScreen = () => {
     return (
         <View style={globalStyles.container}>
             <Header
+                headerLeftStyle={{
+                    paddingLeft: wp(3)
+                }}
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={styles.JobTxt}>{strings.Bills}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.Bills}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={

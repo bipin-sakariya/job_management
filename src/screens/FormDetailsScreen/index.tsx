@@ -103,18 +103,19 @@ const FormDetailsScreen = () => {
     }
     return (
         <View style={globalStyles.container}>
-            <Header headerLeftComponent={
-                <TouchableOpacity style={[globalStyles.rowView,]} onPress={() => navigation.goBack()}>
-                    <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                    <Text style={styles.billSectionTxt}>From Name</Text>
-                </TouchableOpacity>
-            }
+            <Header
+                headerLeftComponent={
+                    <TouchableOpacity style={[globalStyles.rowView,]} onPress={() => navigation.goBack()}>
+                        <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
+                        <Text style={globalStyles.headerTitle}>From Name</Text>
+                    </TouchableOpacity>
+                }
                 headerRightComponent={
                     <TouchableOpacity style={[globalStyles.rowView,]} ref={menuRef} onPress={() => setVisible(true)}>
                         <Image source={ImagesPath.menu_dots_icon} style={globalStyles.threeDotMenuIcon} />
                     </TouchableOpacity>
                 }
-                headerLeftStyle={{ width: wp("40%") }} />
+                headerLeftStyle={{ width: wp("50%"), paddingLeft: wp(3) }} />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomTextInput
                     title='Form Name'

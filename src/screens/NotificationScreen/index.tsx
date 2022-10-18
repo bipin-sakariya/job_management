@@ -3,6 +3,7 @@ import React from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Container, Header, JobListComponent } from "../../components";
+import { strings } from "../../languages/localizedStrings";
 import { globalStyles } from "../../styles/globalStyles";
 import { ImagesPath } from "../../utils/ImagePaths";
 import { styles } from "./styles";
@@ -38,10 +39,14 @@ const NotificationScreen = () => {
     return (
         <View style={globalStyles.container}>
             <Header
+                headerLeftStyle={{
+                    width: "50%",
+                    paddingLeft: wp(3)
+                }}
                 headerLeftComponent={
-                    <TouchableOpacity style={[globalStyles.rowView, { width: wp(40) }]} onPress={() => { navigation.goBack() }}>
-                        <Image source={ImagesPath.left_arrow_icon} style={styles.leftArrowIcon} />
-                        <Text style={styles.notificationTxt}>Notifications</Text>
+                    <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { navigation.goBack() }}>
+                        <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
+                        <Text style={globalStyles.headerTitle}>{strings.Notifications}</Text>
                     </TouchableOpacity>
                 }
             />

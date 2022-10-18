@@ -28,6 +28,9 @@ import JobDuplicateListScreen from '../screens/JobDuplicateListScreen';
 import RouteScreen from '../screens/RouteScreen';
 import RouteChooseLocationDetailScreen from '../screens/RouteChooseLocationDetailScreen';
 import RouteMapViewScreen from '../screens/RouteMapViewScreen';
+import CreateNewJobScreen from '../screens/CreateNewJobScreen';
+import JobsScreen from '../screens/JobsScreen';
+import UserGroupProfileScreen from '../screens/UserGroupProfileScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -65,6 +68,10 @@ const AppNavigation = () => {
                 <Stack.Screen name={'RouteScreen'} component={RouteScreen} />
                 <Stack.Screen name={'RouteMapViewScreen'} component={RouteMapViewScreen} />
                 <Stack.Screen name={'RouteChooseLocationDetailScreen'} component={RouteChooseLocationDetailScreen} />
+                <Stack.Screen name={'CreateNewJobScreen'} component={CreateNewJobScreen} />
+                <Stack.Screen name={'JobsScreen'} component={JobsScreen} />
+                <Stack.Screen name={'UserGroupProfileScreen'} component={UserGroupProfileScreen} />
+
             </Stack.Navigator>
         </NavigationContainer>
     );

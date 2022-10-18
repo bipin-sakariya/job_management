@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
     },
     textInputStyle: {
         height: 55,
+        flex: 1,
         paddingHorizontal: wp(2.5),
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,

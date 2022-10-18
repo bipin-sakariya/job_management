@@ -29,7 +29,7 @@ const RouteMapViewScreen = () => {
         { time: '16:30', title: 'Event 5', description: 'Event 5 Description' }
     ]
 
-    const renderDetail = ({ rowData, sectionID, rowID }: any) => {
+    const renderDetail = (rowData: any, sectionID: number, rowID: number) => {
         return (
             <View style={styles.mainTimeLineView}>
                 <View style={[globalStyles.rowView, { marginBottom: data.length <= 2 ? wp(1) : wp(3), flex: 1, }]}>
@@ -62,8 +62,13 @@ const RouteMapViewScreen = () => {
                         </View>
                     </View>
                 </View>
-                <Text numberOfLines={1} style={styles.commonDarkTxt}>300 M  Distance</Text>
-                <Text numberOfLines={1} style={styles.commonLightTxt}>8 min Drive</Text>
+                {
+                    data.length <= 2 && sectionID != 1 &&
+                    <>
+                        <Text numberOfLines={1} style={styles.commonDarkTxt}>300 M  Distance</Text>
+                        <Text numberOfLines={1} style={styles.commonLightTxt}>8 min Drive</Text>
+                    </>
+                }
             </View>
         )
     }
@@ -71,7 +76,7 @@ const RouteMapViewScreen = () => {
         <View style={globalStyles.container}>
             <Header
                 containerStyle={{ backgroundColor: colors.white }}
-                headerLeftStyle={{ width: "40%" }}
+                headerLeftStyle={{ width: "40%", paddingLeft: wp(3) }}
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
@@ -103,10 +108,15 @@ const RouteMapViewScreen = () => {
                             dashLine={true}
                             columnFormat={'single-column-left'}
                             renderCircle={(rowData: any, sectionID: number, rowID: number) => {
-                                console.log({ DATA: rowData, sectionID, rowID })
                                 return (
-                                    <View style={styles.boxView} >
-                                        <Text style={{ color: '#737373' }}>{sectionID}</Text>
+                                    <View style={[styles.boxView, { borderWidth: data.length <= 2 ? 0 : wp(0.3), }]} >
+                                        {
+                                            data.length <= 2
+                                                ?
+                                                <Image source={sectionID == 0 ? ImagesPath.check_circle_fill_icon : ImagesPath.map_pin_fill_icon} style={{ height: wp(8), width: wp(8), backgroundColor: colors.white_5, resizeMode: 'contain' }} />
+                                                :
+                                                <Text style={{ color: '#737373' }}>{sectionID}</Text>
+                                        }
                                     </View>
                                 )
                             }}

@@ -13,6 +13,9 @@ const EditProfileScreen = () => {
     return (
         <View style={globalStyles.container}>
             <Header
+                headerLeftStyle={{
+                    paddingLeft: wp(3)
+                }}
                 headerLeftComponent={
                     <TouchableOpacity
                         style={[globalStyles.rowView, { width: wp(50) }]}

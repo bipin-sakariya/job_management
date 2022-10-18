@@ -68,7 +68,6 @@ const CustomDropdown = ({
                     horizontalOffset: number,
                     verticalOffset: number,
                 ) => {
-                    console.log({ verticalOffset })
                     setOffsetData({
                         ...offsetData,
                         horizontal: horizontalOffset,

@@ -23,6 +23,10 @@ const IndoxScreen = () => {
     return (
         <View style={globalStyles.container}>
             <Header
+                headerLeftStyle={{
+                    width: '50%',
+                    paddingLeft: wp(3)
+                }}
                 headerLeftComponent={
                     <Text style={globalStyles.headerTitle}>Inbox</Text>
                 }
@@ -37,7 +41,7 @@ const IndoxScreen = () => {
                     contentContainerStyle={{ paddingBottom: wp(30) }}
                     data={data}
                     renderItem={({ item, index }) => (
-                        <InboxListComponent item={item}/>
+                        <InboxListComponent item={item} />
                     )}
                 />
             </Container>

@@ -33,8 +33,12 @@ const UsersScreen = () => {
     return (
         <View style={globalStyles.container}>
             <Header
+                headerLeftStyle={{
+                    width: '50%',
+                    paddingLeft: wp(3)
+                }}
                 headerLeftComponent={
-                    <TouchableOpacity style={[globalStyles.rowView, { width: wp(40) }]} onPress={() => { navigation.goBack() }}>
+                    <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
                         <Text style={globalStyles.headerTitle}>{type == 'users' ? 'Users' : 'Groups'}</Text>
                     </TouchableOpacity>
@@ -44,7 +48,9 @@ const UsersScreen = () => {
                         <TouchableOpacity style={{ marginRight: wp(3) }}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { }}>
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate('UserGroupDetailScreen', { type: type })
+                        }}>
                             <Image source={ImagesPath.add_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                     </View>

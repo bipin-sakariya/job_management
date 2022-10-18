@@ -47,6 +47,7 @@ const CustomCarouselImageAndVideo = (props: CustomCarouselImageAndVideoProps) =>
                 itemWidth={wp(100)}
                 renderItem={renderItem}
                 layout={'default'}
+                // autoplay
                 onSnapToItem={(index: number) => setActiveSlide(index)}
             />
             <Pagination

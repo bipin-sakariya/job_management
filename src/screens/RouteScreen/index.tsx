@@ -1,4 +1,4 @@
-import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomBlackButton, CustomDashedComponent, CustomJobListComponent, CustomSubTitleWithImageComponent, Header } from '../../components'
@@ -29,7 +29,7 @@ const RouteScreen = () => {
     return (
         <View style={globalStyles.container}>
             <Header
-                headerLeftStyle={{ width: "40%" }}
+                headerLeftStyle={{ width: "40%", paddingLeft: wp(3) }}
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
@@ -39,7 +39,7 @@ const RouteScreen = () => {
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <View style={[globalStyles.rowView, { alignItems: "flex-start", marginTop: wp(3) }]}>
-                    <Image source={ImagesPath.map_direction_icon} style={{ height: wp(22), width: wp(10), resizeMode: "contain", marginVertical: wp(4), marginHorizontal: wp(2) }} />
+                    <Image source={ImagesPath.map_direction_icon} style={styles.mapdirectionIcon} />
                     <View style={{ flex: 1 }}>
                         <TextInput
                             style={styles.textInputStyle}
@@ -60,7 +60,7 @@ const RouteScreen = () => {
                 </View>
                 <CustomSubTitleWithImageComponent disabled title={strings.Recent} image={ImagesPath.clock_counter_clockwise_icon} />
                 <FlatList showsVerticalScrollIndicator={false} data={JobData} renderItem={renderItem} contentContainerStyle={{ paddingBottom: wp(20) }} />
-                <CustomBlackButton title={strings.Done} image={ImagesPath.route_icon} buttonStyle={styles.boxShadowStyle} onPress={() => {
+                <CustomBlackButton title={strings.Done} image={ImagesPath.route_icon} buttonStyle={{ ...styles.boxShadowStyle, bottom: Platform.OS == "ios" ? wp(5) : 0 }} onPress={() => {
                     // navigation.navigate("RouteChooseLocationDetailScreen")
                     navigation.navigate("RouteMapViewScreen")
 

@@ -139,7 +139,6 @@ const ChatScreen = () => {
     }
 
     const renderComposer = (props: any) => {
-        console.log("🚀 ~ file: index.tsx ~ line 158 ~ renderComposer ~ props", props)
         return (
             <View style={{ flex: 1 }}>
                 <CustomChatLinkView props={props} keyBoardVisible={true} viewStyle={{
@@ -185,7 +184,7 @@ const ChatScreen = () => {
                         <Text style={styles.titleTxt}>Bill name</Text>
                     </TouchableOpacity>
                 }
-                headerLeftStyle={{ width: "100%" }}
+                headerLeftStyle={{ width: "50%", paddingLeft: wp(3) }}
             />
             <View style={{ flex: 1 }}>
                 <GiftedChat
@@ -196,7 +195,6 @@ const ChatScreen = () => {
                     renderBubble={renderBubble}
                     // renderComposer={renderComposer}
                     // renderInputToolbar={(props: any) => {
-                    //     console.log("🚀 ~ file: index.tsx ~ line 270 ~ ChatScreen ~ props", props)
                     //     return (
                     //         <View style={[globalStyles.rowView, { flex: 1, backgroundColor: colors.white, alignItems: "center", justifyContent: "center" }]}>
                     //             <View style={{ backgroundColor: colors.white, marginHorizontal: wp(4) }}>

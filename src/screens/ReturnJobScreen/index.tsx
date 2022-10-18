@@ -19,7 +19,8 @@ const ReturnJobScreen = () => {
         <View style={globalStyles.container}>
             <Header
                 headerLeftStyle={{
-                    width: wp(50)
+                    width: '50%',
+                    paddingLeft: wp(3)
                 }}
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
@@ -28,7 +29,7 @@ const ReturnJobScreen = () => {
                     </TouchableOpacity>
                 }
             />
-            <Container style={{ paddingHorizontal: wp(5) }}>
+            <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomModal
                     visible={isModelVisible} onRequestClose={() => { setIsModelVisible(false) }}
                     children={

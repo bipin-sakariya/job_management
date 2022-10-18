@@ -1,4 +1,4 @@
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, Header } from '../../components'
@@ -40,7 +40,8 @@ const TransferJobScreen = () => {
         <View style={globalStyles.container}>
             <Header
                 headerLeftStyle={{
-                    width: wp(50),
+                    width: "50%",
+                    paddingLeft: wp(3)
                 }}
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => navigation.goBack()}>
@@ -54,7 +55,7 @@ const TransferJobScreen = () => {
                     </TouchableOpacity>
                 }
             />
-            <Container style={{ paddingHorizontal: wp(5) }}>
+            <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomModal
                     visible={isModelVisible} onRequestClose={() => { setIsModelVisible(false) }}
                     children={

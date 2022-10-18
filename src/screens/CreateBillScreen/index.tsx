@@ -16,14 +16,18 @@ const BillCreateScreen = () => {
     return (
         <View style={globalStyles.container}>
             <Header
+                headerLeftStyle={{
+                    width: '50%',
+                    paddingLeft: wp(3)
+                }}
                 headerLeftComponent={
-                    <TouchableOpacity style={[globalStyles.rowView, { width: wp(40) }]} onPress={() => navigation.goBack()}>
+                    <TouchableOpacity style={globalStyles.rowView} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={styles.billSectionTxt}>{strings.BillSection}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.BillSection}</Text>
                     </TouchableOpacity>
                 }
             />
-            <Container style={{ paddingHorizontal: wp(5) }}>
+            <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomSubTitleWithImageComponent disabled title={strings.CreateMaterialBillSection} image={ImagesPath.receipt_icon} />
                 <CustomDashedComponent
                     image={ImagesPath.add_icon}
