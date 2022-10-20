@@ -62,43 +62,6 @@ export const styles = StyleSheet.create({
         marginLeft: wp(3),
         marginTop: wp(-0.5)
     },
-    mainDocView: {
-        backgroundColor: "#D9D9D9",
-        marginHorizontal: wp(1),
-        padding: wp(1),
-        marginVertical: wp(2),
-        borderRadius: wp(2),
-        paddingVertical: wp(2)
-    },
-    docStyle: {
-        backgroundColor: colors.doc_bg_color_light_gray,
-        alignItems: "center",
-        justifyContent: "space-around",
-        paddingVertical: wp(2),
-        borderRadius: wp(2),
-    },
-    docPdfViewStyle: {
-        width: wp(10),
-        height: wp(10),
-        backgroundColor: colors.doc_bg_color_dark_gray,
-        borderRadius: wp(2),
-        marginLeft: wp(1)
-    },
-    docTypeTxt: {
-        fontFamily: fonts.FONT_POP_BOLD,
-        fontSize: FontSizes.EXTRA_SMALL_10,
-        color: colors.black_1
-    },
-    docFileNameTxt: {
-        fontFamily: fonts.FONT_POP_MEDIUM,
-        fontSize: FontSizes.EXTRA_SMALL_12,
-        color: colors.light_brown
-    },
-    docFileSizeTxt: {
-        fontFamily: fonts.FONT_POP_MEDIUM,
-        fontSize: FontSizes.EXTRA_SMALL_10,
-        color: colors.light_brown
-    },
     imageView: {
         height: wp(50),
         borderRadius: wp(3),
@@ -206,5 +169,12 @@ export const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
         color: colors.gray_14
+    },
+    deleteBtnTxt: {
+        backgroundColor: colors.white_5,
+        borderColor: colors.black,
+        borderWidth: wp(0.2),
+        paddingHorizontal: wp(9),
+        borderRadius: wp(2)
     }
 })

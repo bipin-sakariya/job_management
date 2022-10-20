@@ -85,7 +85,12 @@ const JobsScreen = () => {
                         {
                             userData?.role != strings.GroupManager &&
                             <TouchableOpacity onPress={() => {
-                                navigation.navigate(userData?.role == strings.Admin ? "NotificationScreen" : 'CreateNewJobScreen')
+                                if (userData?.role == strings.Admin) {
+
+                                    navigation.navigate("NotificationScreen")
+                                } else {
+                                    navigation.navigate('CreateNewJobScreen', { type: strings.newJob })
+                                }
                             }}>
                                 <Image source={userData?.role == strings.Admin ? ImagesPath.notification_icon : ImagesPath.add_icon} style={globalStyles.headerIcon} />
                             </TouchableOpacity>

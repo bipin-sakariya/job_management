@@ -19,8 +19,8 @@ const AdminDrawerBtn = [
 const InspectorDrawerBtn = [
     { btnTitle: 'Group', image: ImagesPath.group_icon, route: 'UsersGroupsScreen' },
     { btnTitle: 'Add New Job', image: ImagesPath.add_icon, route: 'ReportGeneratorScreen' },
-    { btnTitle: 'Return Job list', image: ImagesPath.arrow_counter_clockwise_icon, route: 'BillListScreen' },
-    { btnTitle: 'Added Job History', image: ImagesPath.clock_counter_clockwise_icon, route: 'FormScreen' },
+    { btnTitle: 'Return Job list', image: ImagesPath.arrow_counter_clockwise_icon, route: 'ReturnAndAddJobHistoryScreen' },
+    { btnTitle: 'Added Job History', image: ImagesPath.clock_counter_clockwise_icon, route: 'ReturnAndAddJobHistoryScreen' },
 ]
 const GroupManagerDrawerBtn = [
     { btnTitle: 'Group', image: ImagesPath.group_icon, route: 'UsersGroupsScreen' },
@@ -30,11 +30,11 @@ const GroupManagerDrawerBtn = [
 
 const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponentProps) => {
 
-    const { userData } = useAppSelector((state: RootState) => state.userDetails)
+    const { userData } = useAppSelector((state) => state.userDetails)
     const dispatch = useDispatch()
     const drawerBtn = userData?.role == strings.Admin ? AdminDrawerBtn : userData?.role == strings.Inspector ? InspectorDrawerBtn : GroupManagerDrawerBtn
     return (
-        <View style={globalStyles.container}>
+        <View style={[globalStyles.container, { direction: 'ltr' }]}>
             <View style={styles.topView} >
                 <Image source={ImagesPath.user_placeholder_img} style={styles.userPlaceholderStyle} />
             </View>
@@ -58,6 +58,10 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
                                 navigation.navigate(i.route, { type: 'users' })
                             } else if (i.btnTitle == 'Group') {
                                 navigation.navigate(i.route, { type: 'groups' })
+                            } else if (i.btnTitle == 'Return Job list') {
+                                navigation.navigate(i.route, { type: strings.returnjob })
+                            } else if (i.btnTitle == 'Added Job History') {
+                                navigation.navigate(i.route, { type: strings.addedjob })
                             } else {
                                 navigation.navigate(i.route)
                             }

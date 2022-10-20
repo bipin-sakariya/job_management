@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
         borderColor: colors.bottom_tab_bg,
         borderStyle: "dashed",
         borderWidth: wp(0.5),
-        paddingHorizontal: wp(6.5),
-        paddingVertical: wp(6.5),
+        paddingHorizontal: wp(5),
+        paddingVertical: wp(5),
         borderRadius: wp(2),
         marginLeft: wp(3),
         // marginTop: wp(-0.5)

@@ -1,4 +1,17 @@
 export const colors = {
+    primary_color: '#5AADDE',
+    dark_blue1_color: '#19253B',
+    dark_blue2_color: '#32425E',
+    dark_blue3_color: '#455269',
+    light_blue_color: '#EEF8FD',
+    gray_color: '#DEDEDE',
+    dark_gray: '#7D7D7D',
+    gray_light_color: '#FAFAFA',
+    white_color: '#FFFFFF',
+    balck_color: '#000000',
+    text_input_border_color: '#D7E7EF',
+    dark_blue4_color: '#19253A',
+
     bottom_tab_btn: '#7F7F7F',
     bottom_tab_btn_blur: '#8C8C8C',
     bottom_tab_bg: '#999999',

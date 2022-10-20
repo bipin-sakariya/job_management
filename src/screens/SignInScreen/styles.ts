@@ -8,14 +8,16 @@ import { RFValue } from 'react-native-responsive-fontsize';
 
 export const styles = StyleSheet.create({
     appLogo: {
-        height: wp(14),
+        height: wp(30),
         width: wp(50),
         resizeMode: 'contain',
+        marginLeft: wp(-6),
     },
     titleTxt: {
         fontSize: RFValue(34),
         fontFamily: fonts.FONT_POP_SEMI_BOLD,
         width: wp(94),
+        // writingDirection: 'rtl'
     },
     iconStyle: {
         height: wp(5),

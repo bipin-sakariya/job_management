@@ -1,4 +1,4 @@
-import { Alert, Image, StyleSheet, Text, View } from 'react-native';
+import { Alert, I18nManager, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { ImagesPath } from '../../utils/ImagePaths';
@@ -18,30 +18,37 @@ const SignInScreen = () => {
     const dispatch = useDispatch()
     const [userName, setUserName] = useState("")
     const [password, setPassword] = useState("")
+    const [secureText, setSecureText] = useState(true)
 
     return (
         <View style={[globalStyles.container, { paddingHorizontal: wp(5), justifyContent: 'center' }]}>
-            <Image source={ImagesPath.app_icon} style={styles.appLogo} />
-            <View style={{ paddingTop: wp(4), paddingBottom: wp(8) }}>
-                <Text style={styles.titleTxt}>{`Welcome to`}</Text>
-                <Text style={styles.titleTxt}>{`Job Management!`}</Text>
+            <Image source={ImagesPath.logo_of_job_managment} style={styles.appLogo} />
+            <View style={{ paddingTop: wp(4), paddingBottom: wp(8), }}>
+                <Text style={styles.titleTxt}>{strings.Welcometo}</Text>
+                <Text style={styles.titleTxt}>{strings.JobManagement}</Text>
             </View>
             <CustomTextInput
-                title='User Name'
-                placeholder='User Name'
+                title={strings.UserName}
+                placeholder={strings.UserName}
                 onChangeText={(text) => { setUserName(text) }}
                 container={{ marginBottom: wp(5) }}
             />
             <CustomTextInput
-                title='Password'
-                placeholder='Password'
+                title={strings.Password}
+                placeholder={strings.Password}
                 onChangeText={(text) => { setPassword(text) }}
-                secureTextEntry
-                icon={<Image source={ImagesPath.close_eye_icon} style={styles.iconStyle} />}
+                secureTextEntry={secureText}
+                icon={
+                    <TouchableOpacity onPress={() => setSecureText(!secureText)}>
+                        <Image source={ImagesPath.close_eye_icon} style={styles.iconStyle} />
+                    </TouchableOpacity>
+                }
             />
             <CustomBlackButton
-                title="Sign In"
+                title={strings.Signin}
                 onPress={() => {
+                    // I18nManager.forceRTL(false)
+                    // strings.setLanguage('hebrew');
                     if (userName && password) {
                         let data = {
                             email: userName,

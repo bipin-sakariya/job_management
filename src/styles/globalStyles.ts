@@ -7,7 +7,7 @@ import FontSizes from './FontSizes'
 export const globalStyles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.white
+        backgroundColor: colors.white_color
     },
     headerIcon: {
         height: wp(6),
@@ -35,7 +35,10 @@ export const globalStyles = StyleSheet.create({
         marginRight: wp(1)
     },
     rtlStyle: {
-        writingDirection: I18nManager.getConstants().isRTL ? "rtl" : "ltr"
+        writingDirection: I18nManager.getConstants().isRTL ? "rtl" : "ltr",
+    },
+    rtlDirection: {
+        direction: I18nManager.getConstants().isRTL ? "rtl" : "ltr"
     },
     spaceAroundView: {
         justifyContent: "space-around",

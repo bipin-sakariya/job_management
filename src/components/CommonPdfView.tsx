@@ -1,0 +1,78 @@
+import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native'
+import React from 'react'
+import { globalStyles } from '../styles/globalStyles'
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import { colors } from '../styles/Colors'
+import FontSizes from '../styles/FontSizes'
+import fonts from '../styles/Fonts'
+
+interface CommonPdfViewProps {
+    item: itemDetails
+    mainView?: ViewStyle
+    imageViewStyle?: ViewStyle
+    detailsViewStyle?: ViewStyle
+    docTxtStyle?: TextStyle
+    titleTxtstyle?: TextStyle
+    mbTxtstyle?: TextStyle
+}
+
+interface itemDetails {
+    type: string
+    title: string
+    mb: string
+}
+const CommonPdfView = (props: CommonPdfViewProps) => {
+    return (
+        <View style={[globalStyles.rowView, styles.mainDocView, props.mainView]}>
+            <View style={[globalStyles.centerView, styles.docPdfViewStyle, props.imageViewStyle]}>
+                <Text style={[styles.docTypeTxt, props.docTxtStyle]}>{props.item.type}</Text>
+            </View>
+            <View style={[props.detailsViewStyle, { marginHorizontal: wp(1), width: wp("27%") }]}>
+                <Text numberOfLines={1} style={[styles.docFileNameTxt, props.titleTxtstyle]}>{props.item.title}</Text>
+                <Text numberOfLines={1} style={[styles.docFileSizeTxt, props.mbTxtstyle]}>{props.item.mb}</Text>
+            </View>
+        </View>
+    )
+}
+
+export default CommonPdfView
+
+const styles = StyleSheet.create({
+    mainDocView: {
+        backgroundColor: "#D9D9D9",
+        marginHorizontal: wp(1),
+        padding: wp(1),
+        marginVertical: wp(2),
+        borderRadius: wp(2),
+        paddingVertical: wp(2)
+    },
+    docStyle: {
+        backgroundColor: colors.doc_bg_color_light_gray,
+        alignItems: "center",
+        justifyContent: "space-around",
+        paddingVertical: wp(2),
+        borderRadius: wp(2),
+    },
+    docPdfViewStyle: {
+        width: wp(10),
+        height: wp(10),
+        backgroundColor: colors.doc_bg_color_dark_gray,
+        borderRadius: wp(2),
+        marginLeft: wp(1)
+    },
+    docTypeTxt: {
+        fontFamily: fonts.FONT_POP_BOLD,
+        fontSize: FontSizes.EXTRA_SMALL_10,
+        color: colors.black_1
+    },
+    docFileNameTxt: {
+        fontFamily: fonts.FONT_POP_MEDIUM,
+        fontSize: FontSizes.EXTRA_SMALL_12,
+        color: colors.light_brown
+    },
+    docFileSizeTxt: {
+        fontFamily: fonts.FONT_POP_MEDIUM,
+        fontSize: FontSizes.EXTRA_SMALL_10,
+        color: colors.light_brown
+    },
+})

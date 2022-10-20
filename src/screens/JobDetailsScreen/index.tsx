@@ -18,6 +18,8 @@ import { colors } from "../../styles/Colors";
 import CustomJobAddedByComponent from "../../components/CustomJobAddedByComponent";
 import TableHeaderView from "../../components/TableHeaderView";
 import TableDetailsComponent from "../../components/TableDetailsComponent";
+import { RootRouteProps } from "../../types/RootStackTypes";
+import CommonPdfView from "../../components/CommonPdfView";
 
 interface JobDetailsScreenRouteProps {
     description: string
@@ -29,7 +31,8 @@ interface JobDetailsScreenRouteProps {
 const JobDetailsScreen = () => {
 
     const navigation = useCustomNavigation('JobDetailsScreen')
-    const route: any = useRoute()
+    const route = useRoute<RootRouteProps<'JobDetailsScreen'>>();
+    console.log("🚀 ~ file: index.tsx ~ line 34 ~ JobDetailsScreen ~ route", route)
     const refRBSheet = useRef<RBSheet | null>(null);
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
 
@@ -189,8 +192,13 @@ const JobDetailsScreen = () => {
         },
 
     ]
+    const pdfData = [
+        { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb" },
+        { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb" },
+    ]
 
     let data: JobDetailsScreenRouteProps = route.params.params
+    let type = route.params.type
 
     const renderItem = ({ item, index }: any) => {
         return (
@@ -213,17 +221,17 @@ const JobDetailsScreen = () => {
                 headerRightComponent={
                     <>
                         {
-                            userData?.role != strings.Inspector && data.status == strings.JobOpen || data.status == strings.JobReturn || data.status == strings.JobTransfer ?
+                            userData?.role != strings.Inspector && (data.status == strings.JobOpen || data.status == strings.JobReturn || data.status == strings.JobTransfer) ?
                                 <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
                                     <Image source={ImagesPath.menu_dots_icon} style={globalStyles.headerIcon} />
                                 </TouchableOpacity>
                                 : null
                         }
                         {
-                            userData?.role == strings.Inspector &&
-                            <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
-                                <Image source={ImagesPath.share_network_icon} style={globalStyles.headerIcon} />
-                            </TouchableOpacity>
+                            userData?.role == strings.Inspector && !type ?
+                                <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
+                                    <Image source={ImagesPath.share_network_icon} style={globalStyles.headerIcon} />
+                                </TouchableOpacity> : null
                         }
                     </>
                 } />
@@ -273,7 +281,7 @@ const JobDetailsScreen = () => {
                             title="9 Oxfort street"
                             value='9 Oxfort street'
                             mainContainerStyle={{ marginBottom: wp(5), flex: 1, }}
-                            container={{ width: wp(64) }} />
+                            container={{ width: wp(68) }} />
                         <CustomDetailsComponent
                             title={strings.Description}
                             bottomComponent={
@@ -285,18 +293,9 @@ const JobDetailsScreen = () => {
                             title={strings.Attachment}
                             detailsContainerStyle={{ marginVertical: wp(4) }}
                             bottomComponent={
-                                <FlatList data={[{}, {}]} numColumns={2} renderItem={() => {
+                                <FlatList data={pdfData} numColumns={2} renderItem={({ item, index }: any) => {
                                     return (
-                                        <View style={[globalStyles.rowView, styles.mainDocView]}>
-                                            <View style={[globalStyles.centerView, styles.docPdfViewStyle]}>
-                                                <Text style={styles.docTypeTxt}>DOC</Text>
-                                            </View>
-                                            <View style={{ marginHorizontal: wp(1), width: wp("27%") }}>
-                                                <Text numberOfLines={1} style={styles.docFileNameTxt}>Doc_Name.pdf</Text>
-                                                <Text numberOfLines={1} style={styles.docFileSizeTxt}>12 mb</Text>
-                                            </View>
-
-                                        </View>
+                                        <CommonPdfView item={item} />
                                     )
                                 }} />
                             }
@@ -365,7 +364,7 @@ const JobDetailsScreen = () => {
                                 : null
                         }
                         {
-                            data.status == strings.JobOpen || data.status == strings.JobReturn || data.status == strings.JobTransfer ?
+                            !type && (data.status == strings.JobOpen || data.status == strings.JobReturn || data.status == strings.JobTransfer) ?
                                 <CustomDetailsComponent
                                     title={data.status == strings.JobTransfer ? strings.Transferto : strings.FurtherInspection}
                                     detailsContainerStyle={{ marginVertical: wp(4) }}
@@ -374,6 +373,13 @@ const JobDetailsScreen = () => {
                                     }
                                 />
                                 : null
+                        }
+                        {
+                            type && userData?.role == strings.Inspector &&
+                            <View style={[globalStyles.rowView, { justifyContent: 'space-between', marginVertical: wp(5) }]}>
+                                <CustomBlackButton title={strings.Delete} image={ImagesPath.trash_icon} textStyle={{ color: colors.black }} buttonStyle={styles.deleteBtnTxt} />
+                                <CustomBlackButton onPress={() => { navigation.navigate("CreateNewJobScreen", { type: strings.returnJob }) }} title={strings.Edit_job} image={ImagesPath.pencil_simple_icon} buttonStyle={{ paddingHorizontal: wp(13), borderRadius: wp(2) }} />
+                            </View>
                         }
                         {
                             userData?.role != strings.Inspector && data.status != strings.JobClose || userData?.role == strings.Inspector && data.status == strings.JobPartial ?

@@ -26,7 +26,7 @@ export type RootStackParamList = {
     IndoxScreen: undefined
     JobDuplicateListScreen: undefined
     NotificationScreen: undefined
-    JobDetailsScreen: { params: any }
+    JobDetailsScreen: { params: any, type?: string }
     UsersGroupsScreen: { type?: string }
     UserGroupDetailScreen: { type?: string },
     ReportGeneratorScreen: undefined
@@ -48,9 +48,10 @@ export type RootStackParamList = {
     RouteScreen: undefined
     RouteChooseLocationDetailScreen: undefined
     RouteMapViewScreen: undefined
-    CreateNewJobScreen: undefined
+    CreateNewJobScreen: { type?: string }
     JobsScreen: undefined
-    UserGroupProfileScreen: { type?: string },
+    UserGroupProfileScreen: { type?: string }
+    ReturnAndAddJobHistoryScreen: { type?: string }
 };
 
 export type AuthStackParamList = {

@@ -1,4 +1,7 @@
 export const eng = {
+    Welcometo: 'Welcome to',
+    JobManagement: 'Job Management!',
+    Signin: 'Sign in',
     Open: 'Open',
     CreateJob: 'Create Job',
     Close: 'Close',
@@ -120,5 +123,15 @@ export const eng = {
     Groupmemeber: 'Group memeber',
     GroupForms: 'Forms',
     Assignedjobs: 'Assigned jobs',
-    ViewallJobs: 'View all Jobs'
+    ViewallJobs: 'View all Jobs',
+    AddedJobHistory: 'Added Job History',
+    returnjob: 'returnjob',
+    addedjob: 'addedjob',
+    RecentallyReturnedJobs: 'Recentally Returned Jobs',
+    ADDNEWJOB: 'ADD NEW JOB',
+    Delete: 'Delete',
+    Edit_job: 'Edit',
+    newJob: "newJob",
+    returnJob: "returnJob",
+    SaveChanges: 'Save Changes',
 }

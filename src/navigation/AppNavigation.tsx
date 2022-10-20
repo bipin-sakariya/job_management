@@ -31,6 +31,7 @@ import RouteMapViewScreen from '../screens/RouteMapViewScreen';
 import CreateNewJobScreen from '../screens/CreateNewJobScreen';
 import JobsScreen from '../screens/JobsScreen';
 import UserGroupProfileScreen from '../screens/UserGroupProfileScreen';
+import ReturnAndAddJobHistoryScreen from '../screens/ReturnAndAddJobHistoryScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -71,7 +72,7 @@ const AppNavigation = () => {
                 <Stack.Screen name={'CreateNewJobScreen'} component={CreateNewJobScreen} />
                 <Stack.Screen name={'JobsScreen'} component={JobsScreen} />
                 <Stack.Screen name={'UserGroupProfileScreen'} component={UserGroupProfileScreen} />
-
+                <Stack.Screen name={'ReturnAndAddJobHistoryScreen'} component={ReturnAndAddJobHistoryScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

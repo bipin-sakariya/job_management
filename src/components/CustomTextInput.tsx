@@ -1,4 +1,4 @@
-import { Platform, StyleSheet, Text, TextInputProps, View, ViewStyle } from 'react-native';
+import { I18nManager, Platform, StyleSheet, Text, TextInputProps, View, ViewStyle } from 'react-native';
 import React from 'react';
 import { TextInput } from 'react-native-gesture-handler';
 import FontSizes from '../styles/FontSizes';
@@ -16,14 +16,14 @@ interface CustomTextInputProps {
 
 const CustomTextInput = (props: CustomTextInputProps & TextInputProps) => {
     return (
-        <View style={[styles.textInputContainer, props.container]}>
+        <View style={[styles.textInputContainer, props.container, globalStyles.rtlDirection]}>
             <View style={styles.titleContainer}>
-                <Text style={styles.titleTxtStyle}>{props.title}</Text>
+                <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{props.title}</Text>
             </View>
-            <View style={[globalStyles.rowView, { paddingHorizontal: wp(2.5), alignItems: "center", height: Platform.OS == "ios" ? wp(10) : wp(12), }]}>
+            <View style={[globalStyles.rowView, globalStyles.rtlDirection, { paddingHorizontal: wp(2.5), alignItems: "center", height: Platform.OS == "ios" ? wp(10) : wp(12), }]}>
                 <TextInput
                     {...props}
-                    style={[styles.textInputStyle, props.style, { width: props.icon ? '94%' : '100%' }]}
+                    style={[styles.textInputStyle, props.style, globalStyles.rtlStyle, { width: props.icon ? '94%' : '100%', textAlign: I18nManager.isRTL ? 'right' : 'left' }]}
                 />
                 {props.icon}
             </View>
@@ -36,19 +36,20 @@ export default CustomTextInput;
 const styles = StyleSheet.create({
     textInputContainer: {
         borderRadius: wp(2),
-        borderColor: '#999999',
+        borderColor: colors.text_input_border_color,
         borderWidth: wp(0.5),
     },
     titleContainer: {
-        backgroundColor: '#BABABA',
+        backgroundColor: colors.light_blue_color,
         borderTopLeftRadius: wp(1.5),
         borderTopRightRadius: wp(1.5)
     },
     titleTxtStyle: {
-        fontFamily: fonts.FONT_POP_MEDIUM,
+        fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.MEDIUM_16,
         paddingVertical: wp(2),
-        paddingHorizontal: wp(2.5)
+        paddingHorizontal: wp(2.5),
+        color: colors.dark_blue4_color,
     },
     textInputStyle: {
         fontFamily: fonts.FONT_POP_MEDIUM,
@@ -57,6 +58,6 @@ const styles = StyleSheet.create({
         // height: 40,
         borderBottomLeftRadius: wp(1.5),
         borderBottomRightRadius: wp(1.5),
-        color: colors.light_brown
+        color: colors.dark_blue2_color
     }
 })

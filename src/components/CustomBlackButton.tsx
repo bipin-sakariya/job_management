@@ -28,7 +28,7 @@ export default CustomBlackButton
 
 const styles = StyleSheet.create({
     blackBtnStyle: {
-        backgroundColor: colors.black,
+        backgroundColor: colors.primary_color,
         justifyContent: 'center',
         alignSelf: "center",
         paddingVertical: wp(2),

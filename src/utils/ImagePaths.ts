@@ -85,5 +85,10 @@ export const ImagesPath = {
     empty_image_white_border_icon: require('../assets/images/emptyImageWhiteBorder.png'),
     map_pin_fill_icon: require('../assets/images/mapPinFill.png'),
     check_circle_fill_icon: require('../assets/images/checkCircleFill.png'),
+    job_list_image_icon: require('../assets/images/jobListImage.png'),
+    trash_icon: require('../assets/images/TrashIcon.png'),
+    pencil_simple_icon: require('../assets/images/pencilSimpleIcon.png'),
+    floppy_disk_icon: require('../assets/images/floppyDisk.png'),
+    logo_of_job_managment: require('../assets/images/logo.png'),
 }
 
