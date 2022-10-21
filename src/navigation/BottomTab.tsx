@@ -23,11 +23,16 @@ const BottomTab = () => {
             screenOptions={{
                 headerShown: false,
                 tabBarStyle: {
-                    backgroundColor: colors.bottom_tab_bg,
+                    backgroundColor: colors.white_color,
                     borderTopLeftRadius: 25,
                     borderTopRightRadius: 25,
                     height: Platform.OS == "ios" ? hp(14) : hp(12),
                     position: 'absolute',
+                    shadowColor: 'rgba(0, 0, 0, 0.2)',
+                    shadowOpacity: 10,
+                    shadowRadius: 10,
+                    shadowOffset: { height: 0, width: 0 },
+                    elevation: 5
                 }
             }}
             initialRouteName={'JobsScreen'}>
@@ -38,9 +43,10 @@ const BottomTab = () => {
                     tabBarLabel: ({ color, focused }) => (
                         <Text
                             style={[styles.labelTxt, {
-                                fontFamily: focused ? fonts.FONT_POP_SEMI_BOLD : fonts.FONT_POP_MEDIUM
+                                fontFamily: focused ? fonts.FONT_POP_SEMI_BOLD : fonts.FONT_POP_MEDIUM,
+                                color: focused ? colors.primary_color : colors.light_blue_Txt_color
                             }]}>
-                            Map
+                            {strings.Map}
                         </Text>
                     ),
                     tabBarIcon: ({ focused }) => (
@@ -56,13 +62,14 @@ const BottomTab = () => {
                     tabBarLabel: ({ color, focused }) => (
                         <Text
                             style={[styles.labelTxt, {
-                                fontFamily: focused ? fonts.FONT_POP_SEMI_BOLD : fonts.FONT_POP_MEDIUM
+                                fontFamily: focused ? fonts.FONT_POP_SEMI_BOLD : fonts.FONT_POP_MEDIUM,
+                                color: focused ? colors.primary_color : colors.light_blue_Txt_color
                             }]}>
                             {strings.Job}
                         </Text>
                     ),
                     tabBarIcon: ({ color, focused }) => (
-                        <View style={[styles.jobIconContainer, { backgroundColor: !focused ? colors.bottom_tab_btn_blur : colors.bottom_tab_btn }]}>
+                        <View style={[styles.jobIconContainer, { backgroundColor: !focused ? colors.primary_color : colors.primary_color }]}>
                             <Image source={focused ? ImagesPath.jobs_solid_icon : ImagesPath.jobs_icon} style={styles.iconStyle} />
                         </View>
                     ),
@@ -74,9 +81,10 @@ const BottomTab = () => {
                     tabBarLabel: ({ color, focused }) => (
                         <Text
                             style={[styles.labelTxt, {
-                                fontFamily: focused ? fonts.FONT_POP_SEMI_BOLD : fonts.FONT_POP_MEDIUM
+                                fontFamily: focused ? fonts.FONT_POP_SEMI_BOLD : fonts.FONT_POP_MEDIUM,
+                                color: focused ? colors.primary_color : colors.light_blue_Txt_color
                             }]}>
-                            Inbox
+                            {strings.Inbox}
                         </Text>
                     ),
                     tabBarIcon: ({ color, focused }) => (

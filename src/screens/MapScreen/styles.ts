@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
         fontSize: FontSizes.MEDIUM_16,
         fontFamily: fonts.FONT_POP_MEDIUM,
         paddingHorizontal: wp(1),
-        color: colors.black
+        color: colors.dark_blue1_color
     },
     downIcon: {
         height: wp(5),
@@ -81,7 +81,7 @@ export const styles = StyleSheet.create({
     routeBut: {
         height: wp(15),
         width: wp(15),
-        backgroundColor: colors.gray_3,
+        backgroundColor: colors.primary_color,
         borderRadius: wp(18),
         marginVertical: wp(2.5),
         marginHorizontal: wp(3),

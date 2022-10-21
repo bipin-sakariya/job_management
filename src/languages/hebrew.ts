@@ -1,4 +1,15 @@
 export const hebrew = {
+    drawer_User: 'מִשׁתַמֵשׁ',
+    drawer_Group: 'קְבוּצָה',
+    drawer_ReportGenerator: 'מחולל דוחות',
+    drawer_BillSection: 'סעיף הצעת חוק',
+    drawer_Form: 'טופס',
+    drawer_AddNewJob: 'הוסף עבודה חדשה',
+    drawer_ReturnJoblist: 'החזר רשימת משרות',
+    drawer_AddedJobHistory: 'נוספה היסטוריית משרות',
+    drawer_TransferJob: 'העברת עבודה',
+    drawer_Formlist: 'העברת עבודה',
+
     Welcometo: 'ברוך הבא ל',
     JobManagement: 'ניהול עבודה!',
     Signin: 'להתחבר',
@@ -102,6 +113,9 @@ export const hebrew = {
     Notifications: 'התראות',
 
     users: 'משתמשים',
+    groups: 'קבוצות',
+    ADDNEWUSER: 'הוסף משתמש חדש',
+    ADDNEWGROUP: 'הוסף קבוצה חדשה',
 
     AddUser: 'הוסף משתמש',
     AddGroup: 'הוסף קבוצה',
@@ -134,6 +148,42 @@ export const hebrew = {
     newJob: "עבודה חדשה",
     returnJob: "החזרת עבודה",
     SaveChanges: 'שמור שינויים',
+
+    Inbox: 'תיבת הדואר הנכנס',
+    Map: 'מַפָּה',
+    Jobs: 'מקומות תעסוקה',
+    Profile: 'פּרוֹפִיל',
+    Changepassword: 'שנה סיסמא',
+    EdityourProfile: 'ערוך את הפרופיל שלך',
+    ResetPassword: 'לאפס את הסיסמה',
+    FillthedeatiltoresetPassword: 'מלא את הפרטים כדי לאפס את הסיסמה',
+    OldPassword: 'סיסמה ישנה',
+    NewPassword: 'סיסמה חדשה',
+    ConfirmNewPassword: 'תאשר סיסמא חדשה',
+    EditYourProfile: 'ערוך את הפרופיל שלך',
+    Save: 'להציל',
+    Forgotpassword: 'שכחת את הסיסמא?',
+    AddedUsers: 'משתמשים שנוספו',
+    AddedGroups: 'נוספו קבוצות',
+    ReportGenerator: 'מחולל דוחות',
+    GenerateReport: 'להפיק דוח',
+    Detailed: 'מְפוֹרָט',
+    Sammedup: 'סאממד',
+    Doneby: 'בוצע ע"י',
+    accountmaterial: 'חומר חשבון',
+    Signabill: 'חתום על שטר',
+    CreateBill: 'צור ביל',
+    Addasignlogo: 'הוסף לוגו שלט',
+    form: 'טופס',
+    FormList: 'רשימת טפסים',
+    CreateForm: 'צור טופס',
+    formname: 'שם טופס',
+    AddBill: 'הוסף את ביל',
+    Enteryouremail: 'הזן את האימייל שלך לתהליך האימות, אנו נשלח לך קישור לאיפוס סיסמה למייל שלך.',
+    Requestaresetlink: 'בקש קישור לאיפוס',
+    Forgot_password: 'שכחת את הסיסמא',
+
+
 
 
 

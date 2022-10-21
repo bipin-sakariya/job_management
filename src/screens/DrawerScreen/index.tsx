@@ -8,24 +8,25 @@ import { RootState, useAppSelector } from '../../redux/Store';
 import { strings } from '../../languages/localizedStrings';
 import { useDispatch } from 'react-redux';
 import { resetUserDataReducer } from '../../redux/slice/authSlices/AuthUserSlice';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 const AdminDrawerBtn = [
-    { btnTitle: 'User', image: ImagesPath.user_icon, route: 'UsersGroupsScreen' },
-    { btnTitle: 'Group', image: ImagesPath.group_icon, route: 'UsersGroupsScreen' },
-    { btnTitle: 'Report Generator', image: ImagesPath.report_icon, route: 'ReportGeneratorScreen' },
-    { btnTitle: 'Bill Section', image: ImagesPath.bill_icon, route: 'BillListScreen' },
-    { btnTitle: 'Form', image: ImagesPath.form_icon, route: 'FormScreen' },
+    { btnTitle: strings.drawer_User, image: ImagesPath.user_icon, route: 'UsersGroupsScreen' },
+    { btnTitle: strings.drawer_Group, image: ImagesPath.group_icon, route: 'UsersGroupsScreen' },
+    { btnTitle: strings.drawer_ReportGenerator, image: ImagesPath.report_icon, route: 'ReportGeneratorScreen' },
+    { btnTitle: strings.drawer_BillSection, image: ImagesPath.bill_icon, route: 'BillListScreen' },
+    { btnTitle: strings.drawer_Form, image: ImagesPath.form_icon, route: 'FormScreen' },
 ]
 const InspectorDrawerBtn = [
-    { btnTitle: 'Group', image: ImagesPath.group_icon, route: 'UsersGroupsScreen' },
-    { btnTitle: 'Add New Job', image: ImagesPath.add_icon, route: 'ReportGeneratorScreen' },
-    { btnTitle: 'Return Job list', image: ImagesPath.arrow_counter_clockwise_icon, route: 'ReturnAndAddJobHistoryScreen' },
-    { btnTitle: 'Added Job History', image: ImagesPath.clock_counter_clockwise_icon, route: 'ReturnAndAddJobHistoryScreen' },
+    { btnTitle: strings.drawer_Group, image: ImagesPath.group_icon, route: 'UsersGroupsScreen' },
+    { btnTitle: strings.drawer_AddNewJob, image: ImagesPath.add_icon, route: 'ReportGeneratorScreen' },
+    { btnTitle: strings.drawer_ReturnJoblist, image: ImagesPath.arrow_counter_clockwise_icon, route: 'ReturnAndAddJobHistoryScreen' },
+    { btnTitle: strings.drawer_AddedJobHistory, image: ImagesPath.clock_counter_clockwise_icon, route: 'ReturnAndAddJobHistoryScreen' },
 ]
 const GroupManagerDrawerBtn = [
-    { btnTitle: 'Group', image: ImagesPath.group_icon, route: 'UsersGroupsScreen' },
-    { btnTitle: 'Transfer Job', image: ImagesPath.report_icon, route: 'ReportGeneratorScreen' },
-    { btnTitle: 'Form list', image: ImagesPath.form_icon, route: 'FormScreen' },
+    { btnTitle: strings.drawer_Group, image: ImagesPath.group_icon, route: 'UsersGroupsScreen' },
+    { btnTitle: strings.drawer_TransferJob, image: ImagesPath.report_icon, route: 'ReportGeneratorScreen' },
+    { btnTitle: strings.drawer_Formlist, image: ImagesPath.form_icon, route: 'FormScreen' },
 ]
 
 const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponentProps) => {
@@ -34,8 +35,9 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
     const dispatch = useDispatch()
     const drawerBtn = userData?.role == strings.Admin ? AdminDrawerBtn : userData?.role == strings.Inspector ? InspectorDrawerBtn : GroupManagerDrawerBtn
     return (
-        <View style={[globalStyles.container, { direction: 'ltr' }]}>
+        <View style={[globalStyles.container,]}>
             <View style={styles.topView} >
+                <Image source={ImagesPath.drawer_Bg} style={styles.drawerBackGroundColor} />
                 <Image source={ImagesPath.user_placeholder_img} style={styles.userPlaceholderStyle} />
             </View>
             <View style={styles.userNameContainer}>
@@ -46,28 +48,28 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
                         navigation.navigate('ProfileScreen')
                     }}
                     style={globalStyles.rowView}>
-                    <Text style={styles.userNameTxt}>Johnny Weis</Text>
+                    <Text style={[styles.userNameTxt, globalStyles.rtlStyle]}>Johnny Weis</Text>
                     <Image source={ImagesPath.pencil_icon} style={styles.penIcon} />
                 </TouchableOpacity>
-                <Text style={styles.roleTxt}>{userData?.role}</Text>
+                <Text style={[styles.roleTxt, globalStyles.rtlStyle]}>{userData?.role}</Text>
                 <View style={styles.btnContainer}>
                     {drawerBtn.map((i) => (
                         <TouchableOpacity onPress={() => {
                             navigation.closeDrawer()
-                            if (i.btnTitle == 'User') {
+                            if (i.btnTitle == strings.drawer_User) {
                                 navigation.navigate(i.route, { type: 'users' })
-                            } else if (i.btnTitle == 'Group') {
+                            } else if (i.btnTitle == strings.drawer_Group) {
                                 navigation.navigate(i.route, { type: 'groups' })
-                            } else if (i.btnTitle == 'Return Job list') {
+                            } else if (i.btnTitle == strings.drawer_ReturnJoblist) {
                                 navigation.navigate(i.route, { type: strings.returnjob })
-                            } else if (i.btnTitle == 'Added Job History') {
+                            } else if (i.btnTitle == strings.drawer_AddedJobHistory) {
                                 navigation.navigate(i.route, { type: strings.addedjob })
                             } else {
                                 navigation.navigate(i.route)
                             }
                         }} style={globalStyles.rowView} >
                             <Image source={i.image} style={styles.btnIconStyle} />
-                            <Text style={styles.btnTxtStyle}>{i.btnTitle}</Text>
+                            <Text style={[styles.btnTxtStyle, globalStyles.rtlStyle]}>{i.btnTitle}</Text>
                         </TouchableOpacity>
                     ))}
                 </View>
@@ -76,7 +78,7 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
                 dispatch(resetUserDataReducer())
                 navigation.reset({ index: 0, routes: [{ name: "AuthStack" }] })
             }} style={styles.logoutBtnStyle}>
-                <Text style={styles.logoutTxt}>{'Log Out'}</Text>
+                <Text style={styles.logoutTxt}>{strings.LogOut}</Text>
                 <Image source={ImagesPath.logout_icon} style={styles.logoutBtn} />
             </TouchableOpacity>
         </View>

@@ -29,26 +29,27 @@ const RouteChooseLocationDetailScreen = () => {
     return (
         <View style={globalStyles.container}>
             <Header
-                headerLeftStyle={{ width: "40%", paddingLeft: wp(3) }}
+                headerLeftStyle={{ width: "50%", paddingLeft: wp(3) }}
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={[globalStyles.headerTitle, { marginHorizontal: wp(2) }]}>{strings.Route}</Text>
+                        <Text style={[globalStyles.headerTitle]}>{strings.Route}</Text>
                     </TouchableOpacity>
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <View style={[globalStyles.rowView, { borderColor: colors.gray_9, borderWidth: wp(0.3), borderRadius: wp(3), paddingVertical: wp(3), marginVertical: wp(3) }]}>
-                    <Image source={ImagesPath.map_pin_dark_line_icon} style={{ width: wp(7), height: wp(7), resizeMode: 'contain', marginHorizontal: wp(2) }} />
+                <View style={[globalStyles.rowView, styles.TxtInputviewStyle]}>
+                    <Image source={ImagesPath.map_pin_dark_line_icon} style={styles.mapPinImageStyle} />
                     <TextInput
-                        style={styles.textInputStyle}
+                        style={[styles.textInputStyle, globalStyles.rtlStyle, { textAlign: "right" }]}
                         placeholder={strings.ChooseStartingLocation}
+                        placeholderTextColor={colors.dark_blue3_color}
                     />
                 </View>
                 <CustomSubTitleWithImageComponent title={strings.YourLocation} image={ImagesPath.cross_hair_icon} titleStyle={styles.commonTxtStyle} />
                 <CustomSubTitleWithImageComponent title={strings.ChoosefromMap} image={ImagesPath.map_pin_darkline_icon} titleStyle={styles.commonTxtStyle} />
                 <View style={{
-                    height: wp(0.5), backgroundColor: "#B3B3B3",
+                    height: wp(0.5), backgroundColor: colors.bottom_sheet_tab,
                     marginTop: wp(2)
                 }} />
                 <CustomSubTitleWithImageComponent viewStyle={{ marginVertical: wp(2) }} disabled title={strings.Recent} image={ImagesPath.clock_counter_clockwise_icon} />

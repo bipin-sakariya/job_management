@@ -7,26 +7,29 @@ import FontSizes from "../../styles/FontSizes";
 export const styles = StyleSheet.create({
     openButton: {
         height: wp(5),
-        backgroundColor: colors.status_btn,
+        backgroundColor: colors.light_blue_color,
         borderRadius: wp(1),
         alignItems: 'center',
         justifyContent: "center",
         paddingHorizontal: wp(1.5),
+        marginHorizontal: wp(1)
     },
     smallBut: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_10,
-        color: colors.white_5
+        color: colors.primary_color
     },
     commonDarkTxt: {
         width: wp(45),
         fontFamily: fonts.FONT_POP_MEDIUM,
-        fontSize: FontSizes.SMALL_14
+        fontSize: FontSizes.SMALL_14,
+        color: colors.dark_blue1_color
     },
     commonLightTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_10,
-        color: '#7C7C7C'
+        color: colors.dark_blue2_color,
+        textAlign: 'left'
     },
     boxView: {
         height: wp(5),

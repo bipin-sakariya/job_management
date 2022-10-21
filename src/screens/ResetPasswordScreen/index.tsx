@@ -5,6 +5,9 @@ import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomT
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { ImagesPath } from '../../utils/ImagePaths';
+import { strings } from '../../languages/localizedStrings';
+import { colors } from '../../styles/Colors';
+import { styles } from './styles';
 
 const ResetPasswordScreen = () => {
     const navigation = useCustomNavigation('ResetPasswordScreen');
@@ -21,33 +24,55 @@ const ResetPasswordScreen = () => {
                         style={[globalStyles.rowView]}
                         onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
-                        <Text style={globalStyles.headerTitle}>Reset Password</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.ResetPassword}</Text>
                     </TouchableOpacity>
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomSubTitleWithImageComponent
                     disabled
-                    title={'Fill the deatil to reset Password'}
+                    titleStyle={{ color: colors.dark_blue1_color }}
+                    title={strings.FillthedeatiltoresetPassword}
                     image={ImagesPath.from_list_icon}
                 />
                 <CustomTextInput
-                    title='Old Password'
+                    title={strings.OldPassword}
+                    placeholder={strings.Password}
                     container={{ marginVertical: wp(5) }}
-                    value={'Stanley Lamb'}
+                    onChangeText={(text) => { }}
+                    secureTextEntry
+                    icon={
+                        <TouchableOpacity onPress={() => { }}>
+                            <Image source={ImagesPath.close_eye_icon} style={styles.iconStyle} />
+                        </TouchableOpacity>
+                    }
                 />
                 <CustomTextInput
-                    title='New Password'
-                    container={{ marginBottom: wp(5) }}
-                    value={'stanleylamb@gmail.com'}
+                    title={strings.NewPassword}
+                    placeholder={strings.Password}
+                    container={{ marginVertical: wp(5) }}
+                    onChangeText={(text) => { }}
+                    secureTextEntry
+                    icon={
+                        <TouchableOpacity onPress={() => { }}>
+                            <Image source={ImagesPath.close_eye_icon} style={styles.iconStyle} />
+                        </TouchableOpacity>
+                    }
                 />
                 <CustomTextInput
-                    title='Confirm New Password'
-                    container={{ marginBottom: wp(5) }}
-                    value={'0123456789'}
+                    title={strings.ConfirmNewPassword}
+                    placeholder={strings.Password}
+                    container={{ marginVertical: wp(5) }}
+                    onChangeText={(text) => { }}
+                    secureTextEntry
+                    icon={
+                        <TouchableOpacity onPress={() => { }}>
+                            <Image source={ImagesPath.close_eye_icon} style={styles.iconStyle} />
+                        </TouchableOpacity>
+                    }
                 />
                 <CustomBlackButton
-                    title={'Reset Password'}
+                    title={strings.ResetPassword}
                     onPress={() => { }}
                 />
             </Container>

@@ -1,14 +1,17 @@
-import { StatusBar, StyleSheet, Text, View } from 'react-native';
+import { I18nManager, StatusBar, StyleSheet, Text, View } from 'react-native';
 import React, { useEffect } from 'react';
 import AppNavigation from './src/navigation/AppNavigation';
 import { Provider } from 'react-redux';
 import { persistor, store } from './src/redux/Store';
 import { PersistGate } from 'redux-persist/integration/react';
 import SplashScreen from 'react-native-splash-screen';
+import { strings } from './src/languages/localizedStrings';
 
 const App = () => {
 
     useEffect(() => {
+        I18nManager.forceRTL(true),
+            strings.setLanguage("hebrew")
         setTimeout(() => {
             SplashScreen.hide();
         }, 500);

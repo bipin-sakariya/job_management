@@ -2,7 +2,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useRef, useState } from "react";
 import { Alert, FlatList, Image, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { BottomSheet, Container, CustomDashedComponent, CustomJobDetailsBottomButton, CustomSubTitleWithImageComponent, CustomTextInput, Header } from "../../components";
+import { BottomSheet, Container, CustomDashedComponent, CustomJobDetailsBottomButton, CustomStatusBtn, CustomSubTitleWithImageComponent, CustomTextInput, Header } from "../../components";
 import CustomDetailsComponent from "../../components/CustomDetailsComponent";
 import { globalStyles } from "../../styles/globalStyles";
 import { ImagesPath } from "../../utils/ImagePaths";
@@ -32,7 +32,6 @@ const JobDetailsScreen = () => {
 
     const navigation = useCustomNavigation('JobDetailsScreen')
     const route = useRoute<RootRouteProps<'JobDetailsScreen'>>();
-    console.log("🚀 ~ file: index.tsx ~ line 34 ~ JobDetailsScreen ~ route", route)
     const refRBSheet = useRef<RBSheet | null>(null);
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
 
@@ -210,11 +209,12 @@ const JobDetailsScreen = () => {
         <View style={globalStyles.container} >
             <Header
                 headerLeftStyle={{
+                    width: "50%",
                     paddingLeft: wp(3)
                 }}
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
-                        <Image source={ImagesPath.left_arrow_icon} style={[globalStyles.headerIcon]} />
+                        <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
                         <Text style={globalStyles.headerTitle}>{strings.Job}</Text>
                     </TouchableOpacity>
                 }
@@ -254,9 +254,7 @@ const JobDetailsScreen = () => {
                         </View>
                         {
                             data.status ?
-                                <TouchableOpacity style={styles.statusBut}>
-                                    <Text numberOfLines={1} style={styles.statusBtnTxt}>{route.params?.params.status}</Text>
-                                </TouchableOpacity> : null
+                                <CustomStatusBtn title={route.params?.params.status} /> : null
                         }
                     </View>
                     <View style={{ paddingVertical: wp(5) }}>
@@ -278,14 +276,15 @@ const JobDetailsScreen = () => {
                                 /> : null
                         }
                         <CustomTextInputWithImage
-                            title="9 Oxfort street"
-                            value='9 Oxfort street'
+                            title="רחוב אוקספורד 9"
+                            value='ממש מאחורי הבית הצהוב החדש'
+                            onChangeText={(text) => { }}
                             mainContainerStyle={{ marginBottom: wp(5), flex: 1, }}
                             container={{ width: wp(68) }} />
                         <CustomDetailsComponent
                             title={strings.Description}
                             bottomComponent={
-                                <Text numberOfLines={3} style={styles.bottomTxtStyle}>Lorem Ipsum is simply dummy text of the printing and,typesetting industry has been the industry's standard dummy text....</Text>
+                                <Text numberOfLines={3} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left", }]}>Lorem Ipsum הוא פשוט טקסט דמה של תעשיית הדפוס, ותעשיית הדפוס הייתה טקסט הדמה הסטנדרטי של התעשייה....</Text>
                             }
                         />
                         <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={result} />
@@ -308,8 +307,8 @@ const JobDetailsScreen = () => {
                                         detailsContainerStyle={{ marginBottom: wp(4) }}
                                         bottomComponent={
                                             <>
-                                                <Text numberOfLines={1} style={styles.commonTxt}>P. Maintanence</Text>
-                                                <Text numberOfLines={1} style={styles.commonTxt}>Paint / Signs</Text>
+                                                <Text numberOfLines={1} style={[styles.commonTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>P. Maintanence</Text>
+                                                <Text numberOfLines={1} style={[styles.commonTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>Paint / Signs</Text>
                                             </>
                                         }
                                     />
@@ -327,19 +326,12 @@ const JobDetailsScreen = () => {
                                             }}
                                             ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}
                                         />
-                                        {
-                                            userData?.role == strings.GroupManager && data.status == strings.JobClose ?
-                                                <TouchableOpacity style={[globalStyles.rowView, styles.addFormView]}>
-                                                    <Image source={ImagesPath.add_form_icon} style={[globalStyles.headerIcon, { marginHorizontal: wp(1) }]} />
-                                                    <Text style={styles.addFormTxt}>{strings.AddForm}</Text>
-                                                </TouchableOpacity> : null
-                                        }
                                     </View>
                                     <CustomDetailsComponent
                                         title={strings.Notes}
                                         detailsContainerStyle={{ marginBottom: wp(4) }}
                                         bottomComponent={
-                                            <Text numberOfLines={3} style={styles.bottomTxtStyle}>Lorem Ipsum is simply dummy text of the printing and,typesetting industry has been the industry's standard dummy text....</Text>
+                                            <Text numberOfLines={3} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left" }]}>Lorem Ipsum הוא פשוט טקסט דמה של תעשיית הדפוס והקביעה. לורם איפסום היה של התעשייה...</Text>
                                         }
                                     />
                                 </>
@@ -369,7 +361,7 @@ const JobDetailsScreen = () => {
                                     title={data.status == strings.JobTransfer ? strings.Transferto : strings.FurtherInspection}
                                     detailsContainerStyle={{ marginVertical: wp(4) }}
                                     bottomComponent={
-                                        <Text numberOfLines={1} style={styles.bottomTxtStyle}>{data.status == strings.JobTransfer ? 'P.Maintanence' : 'Yes'}</Text>
+                                        <Text numberOfLines={1} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left" }]}>{data.status == strings.JobTransfer ? 'P.Maintanence' : 'Yes'}</Text>
                                     }
                                 />
                                 : null
@@ -383,9 +375,9 @@ const JobDetailsScreen = () => {
                         }
                         {
                             userData?.role != strings.Inspector && data.status != strings.JobClose || userData?.role == strings.Inspector && data.status == strings.JobPartial ?
-                                // data.status != strings.JobClose || userData?.role == strings.Inspector && data.status == strings.JobPartial ?
                                 <CustomBlackButton
                                     title={strings.Close}
+                                    buttonStyle={{ paddingHorizontal: wp(10) }}
                                     onPress={() => {
                                         navigation.navigate("CloseJobScreen")
                                     }}

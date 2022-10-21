@@ -33,11 +33,12 @@ const styles = StyleSheet.create({
     commonScammedTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
-        color: colors.light_brown
+        color: colors.dark_blue1_color,
+        ...globalStyles.rtlStyle
     },
     sammedSepratorLine: {
         height: wp(0.2),
-        backgroundColor: colors.white_3,
+        backgroundColor: colors.light_blue_color,
         marginVertical: wp(2),
     },
 })

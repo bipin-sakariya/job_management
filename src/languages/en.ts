@@ -1,4 +1,16 @@
 export const eng = {
+    drawer_User: 'User',
+    drawer_Group: 'Group',
+    drawer_ReportGenerator: 'Report Generator',
+    drawer_BillSection: 'Bill Section',
+    drawer_Form: 'Form',
+    drawer_AddNewJob: 'Add New Job',
+    drawer_ReturnJoblist: 'Return Job list',
+    drawer_AddedJobHistory: 'Added Job History',
+    drawer_TransferJob: 'Transfer Job',
+    drawer_Formlist: 'Form list',
+
+
     Welcometo: 'Welcome to',
     JobManagement: 'Job Management!',
     Signin: 'Sign in',
@@ -102,6 +114,9 @@ export const eng = {
     Notifications: 'Notifications',
 
     users: 'users',
+    groups: 'groups',
+    ADDNEWUSER: 'ADD NEW USER',
+    ADDNEWGROUP: 'ADD NEW GROUP',
 
     AddUser: 'Add User',
     AddGroup: 'Add Group',
@@ -134,4 +149,40 @@ export const eng = {
     newJob: "newJob",
     returnJob: "returnJob",
     SaveChanges: 'Save Changes',
+
+    Inbox: 'Inbox',
+    Map: 'Map',
+    Jobs: 'Jobs',
+    Profile: 'Profile',
+    Changepassword: 'Change password',
+    EdityourProfile: 'Edit your Profile',
+    ResetPassword: 'Reset Password',
+    FillthedeatiltoresetPassword: 'Fill the deatil to reset Password',
+    OldPassword: 'Old Password',
+    NewPassword: 'New Password',
+    ConfirmNewPassword: 'Confirm New Password',
+    EditYourProfile: 'Edit Your Profile',
+    Save: 'Save',
+    Forgotpassword: 'Forgot password?',
+    AddedUsers: 'Added Users',
+    AddedGroups: 'Added Groups',
+    ReportGenerator: 'Report Generator',
+    GenerateReport: 'Generate Report',
+    Detailed: 'Detailed',
+    Sammedup: 'Sammed up',
+    Doneby: 'Done by',
+    accountmaterial: 'account material',
+    Signabill: 'Sign a bill',
+    CreateBill: 'Create Bill',
+    Addasignlogo: 'Add a sign logo',
+    form: 'form',
+    FormList: 'Form List',
+    CreateForm: 'Create Form',
+    formname: 'form name',
+    AddBill: 'Add Bill',
+    Enteryouremail: 'Enter your email for the verification process, we will send you a password reset link to your email.',
+    Requestaresetlink: 'Request a reset link'
+
+
+
 }

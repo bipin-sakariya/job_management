@@ -4,6 +4,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { colors } from '../styles/Colors'
 import fonts from '../styles/Fonts'
 import FontSizes from '../styles/FontSizes'
+import { globalStyles } from '../styles/globalStyles'
 
 interface CustomDetailsComponentprops {
     title: string,
@@ -18,9 +19,9 @@ const CustomDetailsComponent = ({ title, titleTxtStyle, detailsContainerStyle, b
     return (
         <View style={[styles.detailsContainer, detailsContainerStyle]}>
             <View style={[styles.titleView, titleViewStyle]}>
-                <Text numberOfLines={1} style={[styles.titleTxt, titleTxtStyle]}>{title}</Text>
+                <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle, titleTxtStyle]}>{title}</Text>
             </View>
-            <View style={[, styles.bottomView, bottomViewStyle]}>
+            <View style={[styles.bottomView, bottomViewStyle]}>
                 {bottomComponent}
             </View>
         </View>
@@ -34,14 +35,16 @@ const styles = StyleSheet.create({
         paddingVertical: wp(2),
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
+        color: colors.dark_blue1_color,
+        textAlign: 'left'
     },
     detailsContainer: {
         borderRadius: wp(2),
         borderWidth: wp(0.5),
-        borderColor: colors.bottom_tab_bg
+        borderColor: colors.text_input_border_color
     },
     titleView: {
-        backgroundColor: colors.light_gray,
+        backgroundColor: colors.light_blue_color,
         borderTopLeftRadius: wp(1.5),
         borderTopRightRadius: wp(1.5),
         justifyContent: "center",

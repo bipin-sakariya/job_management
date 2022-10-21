@@ -17,9 +17,9 @@ interface CustomSubTitleWithImageComponentProps {
 
 const CustomSubTitleWithImageComponent = (props: CustomSubTitleWithImageComponentProps & TouchableOpacityProps) => {
     return (
-        <TouchableOpacity {...props} style={[globalStyles.rowView, props.viewStyle, { paddingVertical: wp(1.5) }]}>
+        <TouchableOpacity {...props} style={[globalStyles.rowView, props.viewStyle, { paddingVertical: wp(1.5), alignItems: "center" }]}>
             <Image source={props.image} style={[styles.imageStyle, props.imageStyle]} />
-            <Text style={[styles.commonTxt, props.titleStyle]}>{props.title}</Text>
+            <Text style={[styles.commonTxt, globalStyles.rtlStyle, props.titleStyle]}>{props.title}</Text>
         </TouchableOpacity>
     )
 }
@@ -30,12 +30,13 @@ const styles = StyleSheet.create({
     imageStyle: {
         height: wp(5),
         width: wp(5),
-        resizeMode: 'contain'
+        resizeMode: 'contain',
+        tintColor: colors.dark_blue1_color
     },
     commonTxt: {
         marginHorizontal: wp(2),
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
-        color: colors.light_brown
+        color: colors.dark_blue2_color
     },
 })

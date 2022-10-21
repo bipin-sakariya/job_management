@@ -24,25 +24,25 @@ const JobData = [
     {
         data: '16 May 2022',
         jobs: [
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Return' },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Transfer' }
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobReturn },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobTransfer }
         ]
     },
     {
         data: '16 May 2022',
         jobs: [
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Close' },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Partial' },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' }
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobClose },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobPartial },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen }
         ]
     },
     {
         data: '16 May 2022',
         jobs: [
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: 'Open' }
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen }
         ]
     }
 ]
@@ -86,7 +86,6 @@ const JobsScreen = () => {
                             userData?.role != strings.GroupManager &&
                             <TouchableOpacity onPress={() => {
                                 if (userData?.role == strings.Admin) {
-
                                     navigation.navigate("NotificationScreen")
                                 } else {
                                     navigation.navigate('CreateNewJobScreen', { type: strings.newJob })

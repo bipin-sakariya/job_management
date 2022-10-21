@@ -12,13 +12,14 @@ export const globalStyles = StyleSheet.create({
     headerIcon: {
         height: wp(6),
         width: wp(6),
-        resizeMode: 'contain'
+        resizeMode: 'contain',
+        tintColor: colors.dark_blue1_color
     },
     headerTitle: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.SEMI_LARGE_20,
-        color: colors.black,
-        marginHorizontal: wp(2)
+        color: colors.dark_blue1_color,
+        marginHorizontal: wp(2),
     },
     rowView: {
         flexDirection: 'row',
@@ -36,6 +37,7 @@ export const globalStyles = StyleSheet.create({
     },
     rtlStyle: {
         writingDirection: I18nManager.getConstants().isRTL ? "rtl" : "ltr",
+        textAlign: "left"
     },
     rtlDirection: {
         direction: I18nManager.getConstants().isRTL ? "rtl" : "ltr"

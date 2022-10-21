@@ -7,6 +7,8 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import FontSizes from '../styles/FontSizes';
 import CustomDropdown from './CustomDropDown';
 import useCustomNavigation from '../hooks/useCustomNavigation';
+import { strings } from '../languages/localizedStrings';
+import { colors } from '../styles/Colors';
 
 interface itemPropsType {
     name: string
@@ -15,6 +17,7 @@ interface itemPropsType {
 }
 
 const UserListComponent = ({ item, type }: { item: itemPropsType, type?: string }) => {
+    console.log("🚀 ~ file: UserListComponent.tsx ~ line 20 ~ UserListComponent ~ type", type)
     const navigation = useCustomNavigation('UsersGroupsScreen')
     const imageRef = useRef(null);
     const [visible, setVisible] = useState(false);
@@ -24,8 +27,8 @@ const UserListComponent = ({ item, type }: { item: itemPropsType, type?: string 
     }
 
     const optionData = [
-        { title: 'Remove', onPress: onPress, imageSource: ImagesPath.bin_icon },
-        { title: 'edit', onPress: onPress, imageSource: ImagesPath.edit_icon }
+        { title: strings.Remove, onPress: onPress, imageSource: ImagesPath.bin_icon },
+        { title: strings.Edit, onPress: onPress, imageSource: ImagesPath.edit_icon }
     ]
 
     return (
@@ -33,12 +36,12 @@ const UserListComponent = ({ item, type }: { item: itemPropsType, type?: string 
             <View style={globalStyles.rowView}>
                 <Image source={ImagesPath.placeholder_img} style={styles.itemImgStyle} />
                 <View style={{ paddingHorizontal: wp(2) }}>
-                    <Text onPress={() => navigation.navigate('UserGroupProfileScreen', { type: type })} style={styles.itemTitle}>{item.name}</Text>
-                    <Text style={styles.descriptionTxt}>{item.role}</Text>
+                    <Text onPress={() => navigation.navigate('UserGroupProfileScreen', { type: type })} style={[styles.itemTitle, globalStyles.rtlStyle]}>{item.name}</Text>
+                    <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{item.role}</Text>
                 </View>
             </View>
             <View style={globalStyles.rowView}>
-                <Text style={styles.descriptionTxt}>{item.date}</Text>
+                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{item.date}</Text>
                 <TouchableOpacity ref={imageRef} onPress={() => setVisible(true)}>
                     <Image source={ImagesPath.menu_dots_icon} style={styles.menuIconStyle} />
                 </TouchableOpacity>
@@ -68,12 +71,12 @@ const styles = StyleSheet.create({
     itemTitle: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.REGULAR_18,
-        color: '#404040'
+        color: colors.dark_blue2_color
     },
     descriptionTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_10,
-        color: '#727272'
+        color: colors.dark_blue2_color
     },
     menuIconStyle: {
         height: wp(10),

@@ -12,6 +12,7 @@ import { DropdownProps } from '../../types/commanTypes';
 import CustomDropdown from '../../components/CustomDropDown';
 import { strings } from '../../languages/localizedStrings';
 import FontSizes from '../../styles/FontSizes';
+import { colors } from '../../styles/Colors';
 
 const data = [
     { label: 'Item 1', value: '1' },
@@ -71,8 +72,8 @@ const UserGroupDetailScreen = () => {
     }
 
     const optionData = [
-        { title: 'Remove', onPress: onPress, imageSource: ImagesPath.bin_icon },
-        { title: 'edit', onPress: onPress, imageSource: ImagesPath.edit_icon }
+        { title: strings.Remove, onPress: onPress, imageSource: ImagesPath.bin_icon },
+        { title: strings.Edit, onPress: onPress, imageSource: ImagesPath.edit_icon }
     ]
 
     return (
@@ -82,9 +83,9 @@ const UserGroupDetailScreen = () => {
                     paddingLeft: wp(3)
                 }}
                 headerLeftComponent={
-                    <TouchableOpacity style={[globalStyles.rowView, { width: wp(40) }]} onPress={() => { navigation.goBack() }}>
+                    <TouchableOpacity style={[globalStyles.rowView, { width: wp(50) }]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
-                        <Text style={globalStyles.headerTitle}>{type == strings.users ? strings.AddUser : strings.AddGroup}</Text>
+                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{type == 'users' ? strings.AddUser : strings.AddGroup}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
@@ -97,17 +98,17 @@ const UserGroupDetailScreen = () => {
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <CustomSubTitleWithImageComponent
                         disabled
-                        title={type == strings.users ? strings.FillfromtocreateUser : strings.FillfromtoCreateGroup}
+                        title={type == 'users' ? strings.FillfromtocreateUser : strings.FillfromtoCreateGroup}
                         image={ImagesPath.from_list_icon}
                     />
                     <Image source={ImagesPath.add_photo_icon} style={styles.addPhotoStyle} />
                     <CustomTextInput
-                        title={type == strings.users ? strings.UserName : strings.GroupName}
+                        title={type == 'users' ? strings.UserName : strings.GroupName}
                         container={{ marginBottom: wp(5) }}
                         value={'Stanley Lamb'}
                     />
                     {
-                        type == strings.users &&
+                        type == 'users' &&
                         <>
                             <CustomTextInput
                                 title={strings.Email}
@@ -129,7 +130,7 @@ const UserGroupDetailScreen = () => {
                         </>
                     }
                     <DropDownComponent
-                        title={type == strings.users ? strings.Role : strings.Group_Manager}
+                        title={type == 'users' ? strings.Role : strings.Group_Manager}
                         data={data}
                         image={ImagesPath.down_white_arrow}
                         labelField="label"
@@ -140,7 +141,7 @@ const UserGroupDetailScreen = () => {
                         container={{ marginBottom: wp(5) }}
                     />
                     <DropDownComponent
-                        title={type == strings.users ? strings.Permission : strings.Group_Inspector}
+                        title={type == 'users' ? strings.Permission : strings.Group_Inspector}
                         data={data}
                         image={ImagesPath.down_white_arrow}
                         labelField="label"
@@ -151,14 +152,14 @@ const UserGroupDetailScreen = () => {
                         container={{ marginBottom: wp(5) }}
                     />
                     {
-                        type != strings.users &&
+                        type != 'users' &&
                         <>
                             <CustomDetailsComponent
                                 title={strings.Groupmemeber}
                                 detailsContainerStyle={{ marginBottom: wp(5) }}
                                 bottomComponent={
                                     <View style={{ width: "100%", marginVertical: wp(1) }}>
-                                        <Text style={[styles.commonTxtStyle, { fontSize: FontSizes.EXTRA_SMALL_12 }]}>{`Total ${userData.length} people`}</Text>
+                                        <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_12 }]}>{`Total ${userData.length} people`}</Text>
                                         <View style={[globalStyles.rowView, { flexWrap: "wrap", alignItems: "center" }]}>
                                             {userData.map((item, index) => {
                                                 return (
@@ -167,8 +168,8 @@ const UserGroupDetailScreen = () => {
                                                             return _index !== index
                                                         })
                                                         setUserData(tempuserdata)
-                                                    }} style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: "#DEDEDE", borderRadius: wp(2) }]}>
-                                                        <Text style={[styles.commonTxtStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14 }]}>{item.name}</Text>
+                                                    }} style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, borderRadius: wp(2) }]}>
+                                                        <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14, color: colors.dark_blue1_color }]}>{item.name}</Text>
                                                         <Image source={ImagesPath.cross_icon} style={styles.commonIconStyle} />
                                                     </TouchableOpacity>
                                                 )
@@ -180,9 +181,9 @@ const UserGroupDetailScreen = () => {
                                                     name: `Stanley Lamb ${userData.length - 1}`
                                                 })
                                                 setUserData([...userdata])
-                                            }} style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: '#B5B5B5', }]}>
+                                            }} style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, }]}>
                                                 <Image source={ImagesPath.plus_icon} style={styles.commonIconStyle} />
-                                                <Text style={[styles.commonTxtStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14 }]}>{strings.AddUser}</Text>
+                                                <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14 }]}>{strings.AddUser}</Text>
                                             </TouchableOpacity>
                                         </View>
                                     </View>

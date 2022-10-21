@@ -15,7 +15,7 @@ interface TableDetailsComponentProps {
 const TableDetailsComponent = ({ item, type }: TableDetailsComponentProps) => {
     return (
         <View style={[globalStyles.rowView, { paddingHorizontal: type == 'form' ? wp(5) : wp(2), paddingVertical: wp(1) }]}>
-            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(15) }]}>{item.srno}</Text>
+            <Text numberOfLines={1} style={[styles.commonScammedTxt, globalStyles.rtlStyle, { width: wp(15) }]}>{item.srno}</Text>
             <View style={[globalStyles.rowView, { width: wp(35) }]}>
                 {
                     item.imageUrl &&
@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
     commonScammedTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
-        color: colors.light_brown
+        color: colors.dark_blue2_color,
+        ...globalStyles.rtlStyle
     },
     imageViewStyle: {
         width: wp(3),

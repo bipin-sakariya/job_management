@@ -53,29 +53,29 @@ export const styles = StyleSheet.create({
         marginHorizontal: wp(1),
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.SMALL_14,
-        color: colors.gray_3
+        color: colors.dark_blue1_color
     },
     JobsTxt: {
         textAlign: "center",
         marginHorizontal: wp(1),
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.SMALL_14,
-        color: colors.gray_3
+        color: colors.dark_blue2_color
     },
     titleTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        color: colors.gray_3
+        color: colors.dark_blue1_color
     },
     commonTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
-        color: colors.gray_4
+        color: colors.dark_blue2_color
     },
     authorTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.EXTRA_SMALL_12,
-        color: colors.gray_5
+        color: colors.dark_blue1_color
     },
     sepratorLine: {
         height: wp(0.5),
@@ -98,12 +98,12 @@ export const styles = StyleSheet.create({
     },
     sammedSepratorLine: {
         height: wp(0.2),
-        backgroundColor: colors.white_3,
+        backgroundColor: colors.text_input_border_color,
         marginVertical: wp(2),
         marginHorizontal: wp(1)
     },
     sammedView: {
-        borderColor: colors.bottom_tab_bg,
+        borderColor: colors.text_input_border_color,
         borderWidth: wp(0.5),
         borderRadius: wp(2),
         padding: wp(2),

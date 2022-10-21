@@ -4,9 +4,11 @@ import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react
 import RBSheet, { RBSheetProps } from "react-native-raw-bottom-sheet";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import useCustomNavigation from "../hooks/useCustomNavigation";
+import { strings } from "../languages/localizedStrings";
 import { colors } from "../styles/Colors";
 import fonts from "../styles/Fonts";
 import FontSizes from "../styles/FontSizes";
+import { globalStyles } from "../styles/globalStyles";
 import { ImagesPath } from "../utils/ImagePaths";
 import CustomJobListComponent from "./CustomJobListComponent";
 
@@ -56,14 +58,14 @@ const CustomJobBottomListSheet = React.forwardRef((props: CustomJobBottomListShe
                 <View style={styles.sheetHeaderView}>
                     <View style={styles.jobIconView}>
                         <Image source={ImagesPath.suitcase_icon} style={styles.jobIcon} />
-                        <Text style={styles.jobsText}>Jobs</Text>
+                        <Text style={[styles.jobsText, globalStyles.rtlStyle]}>{strings.Jobs}</Text>
                     </View>
                     <TouchableOpacity onPress={() => {
                         ref.current.close()
                         navigation.navigate("RouteScreen")
                     }} style={styles.routeBut}>
                         <Image source={ImagesPath.route_icon} style={styles.routeIcon} />
-                        <Text style={styles.routeTxt}>Route</Text>
+                        <Text style={[styles.routeTxt, globalStyles.rtlStyle]}>{strings.Route}</Text>
                     </TouchableOpacity>
                 </View>
                 <FlatList
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-around",
-        width: wp(20),
+        width: wp(35),
     },
     jobIcon: {
         height: wp(6),
@@ -101,12 +103,12 @@ const styles = StyleSheet.create({
     jobsText: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.SMALL_14,
-        color: "#666666"
+        color: colors.dark_blue1_color
     },
     routeBut: {
         height: wp(10),
         borderRadius: wp(1),
-        backgroundColor: colors.black,
+        backgroundColor: colors.primary_color,
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-around"

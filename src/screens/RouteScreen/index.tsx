@@ -29,7 +29,7 @@ const RouteScreen = () => {
     return (
         <View style={globalStyles.container}>
             <Header
-                headerLeftStyle={{ width: "40%", paddingLeft: wp(3) }}
+                headerLeftStyle={{ width: "50%", paddingLeft: wp(3) }}
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
@@ -42,28 +42,31 @@ const RouteScreen = () => {
                     <Image source={ImagesPath.map_direction_icon} style={styles.mapdirectionIcon} />
                     <View style={{ flex: 1 }}>
                         <TextInput
-                            style={styles.textInputStyle}
+                            style={[styles.textInputStyle, globalStyles.rtlStyle,]}
                             placeholder={strings.ChooseStartingLocation}
+                            placeholderTextColor={colors.dark_blue3_color}
+
                         />
                         <TextInput
                             style={styles.textInputStyle}
                             placeholder={strings.ChooseDestination}
+                            placeholderTextColor={colors.dark_blue3_color}
                         />
                         <CustomDashedComponent
                             title={strings.AddOtherField}
                             image={ImagesPath.plus_circle_white_border_icon}
-                            onPress={() => { }}
-                            viewStyle={{ paddingVertical: wp(3), borderColor: colors.gray_9, marginTop: wp(0) }}
-                            textStyle={{ fontSize: FontSizes.MEDIUM_16, color: colors.gray_9 }}
+                            onPress={() => {
+                                navigation.navigate("RouteChooseLocationDetailScreen")
+                            }}
+                            viewStyle={{ paddingVertical: wp(3), borderColor: colors.bottom_sheet_tab, marginTop: wp(0) }}
+                            textStyle={{ fontSize: FontSizes.MEDIUM_16, color: colors.dark_blue1_color }}
                         />
                     </View>
                 </View>
                 <CustomSubTitleWithImageComponent disabled title={strings.Recent} image={ImagesPath.clock_counter_clockwise_icon} />
                 <FlatList showsVerticalScrollIndicator={false} data={JobData} renderItem={renderItem} contentContainerStyle={{ paddingBottom: wp(20) }} />
-                <CustomBlackButton title={strings.Done} image={ImagesPath.route_icon} buttonStyle={{ ...styles.boxShadowStyle, bottom: Platform.OS == "ios" ? wp(5) : 0 }} onPress={() => {
-                    // navigation.navigate("RouteChooseLocationDetailScreen")
+                <CustomBlackButton title={strings.Done} textStyle={{ marginVertical: wp(1) }} image={ImagesPath.route_icon} buttonStyle={{ ...styles.boxShadowStyle, bottom: Platform.OS == "ios" ? wp(5) : 0 }} onPress={() => {
                     navigation.navigate("RouteMapViewScreen")
-
                 }} />
             </Container>
         </View>

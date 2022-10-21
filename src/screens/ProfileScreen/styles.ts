@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
         ...globalStyles.rowView,
         justifyContent: 'space-between',
         paddingVertical: wp(3),
-        backgroundColor: colors.light_gray,
+        backgroundColor: colors.light_blue_color,
         paddingLeft: wp(2.5),
         borderRadius: wp(2),
         marginBottom: wp(5)
@@ -25,6 +25,7 @@ export const styles = StyleSheet.create({
     btnTxtStyle: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        color: colors.black
+        color: colors.dark_blue1_color,
+        ...globalStyles.rtlStyle
     }
 })

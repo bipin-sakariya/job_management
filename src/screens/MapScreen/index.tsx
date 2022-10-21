@@ -13,14 +13,15 @@ import { colors } from '../../styles/Colors';
 import Carousel from 'react-native-snap-carousel';
 import FontSizes from '../../styles/FontSizes';
 import CustomJobBottomListSheet from '../../components/CustomJobBottomListSheet';
+import { strings } from '../../languages/localizedStrings';
+import useCustomNavigation from '../../hooks/useCustomNavigation';
 
 const data = [
-    { id: 1, title: 'All', selected: true },
-    { id: 2, title: 'P. Maintanence', selected: false },
-    { id: 3, title: 'Paint / Signs', selected: false },
-    { id: 4, title: 'Council', selected: false },
+    { id: 1, title: strings.All, selected: true },
+    { id: 2, title: strings.PMaintanence, selected: false },
+    { id: 3, title: strings.Paint, selected: false },
+    { id: 4, title: strings.Council, selected: false },
 ]
-
 const JobData = [
     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", status: "info" },
     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Return", status: "info" },
@@ -30,7 +31,7 @@ const JobData = [
     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open" }
 ]
 const MapScreen = () => {
-    const navigation: NavigationProp<any, any> = useNavigation();
+    const navigation = useCustomNavigation('MapScreen')
     const refRBSheet = useRef<RBSheet | null>(null);
     const refJobListSheet = useRef<RBSheet | null>(null);
     const [selectedItem, setSelectedItem] = useState<ListDataProps | undefined>(undefined);

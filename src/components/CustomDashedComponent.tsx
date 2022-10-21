@@ -16,8 +16,8 @@ interface CustomDashedComponentProps {
 const CustomDashedComponent = ({ title, image, onPress, viewStyle, imageStyle, textStyle }: CustomDashedComponentProps) => {
     return (
         <TouchableOpacity onPress={onPress} style={[styles.dashedView, viewStyle]}>
-            <Image source={image} style={[globalStyles.headerIcon, imageStyle]} />
-            <Text style={[styles.dashedTxt, textStyle]}>{title}</Text>
+            <Image source={image} style={[globalStyles.headerIcon, imageStyle, { tintColor: colors.dark_blue1_color }]} />
+            <Text style={[styles.dashedTxt, textStyle, globalStyles.rtlStyle]}>{title}</Text>
         </TouchableOpacity>
     )
 }
@@ -26,7 +26,7 @@ export default CustomDashedComponent
 
 const styles = StyleSheet.create({
     dashedView: {
-        borderColor: colors.light_brown,
+        borderColor: colors.gray_color,
         borderWidth: wp(0.3),
         borderRadius: wp(2),
         borderStyle: 'dashed',
@@ -40,6 +40,6 @@ const styles = StyleSheet.create({
         marginHorizontal: wp(2),
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        color: colors.light_brown
+        color: colors.dark_blue1_color
     },
 })

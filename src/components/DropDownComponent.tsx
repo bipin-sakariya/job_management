@@ -25,18 +25,18 @@ const DropDownComponent = (props: DropDownComponentProps & DropdownProps) => {
     return (
         <View style={[styles.textInputContainer, props.container]}>
             <View style={styles.titleContainer}>
-                <Text style={styles.titleTxtStyle}>{props.title}</Text>
+                <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{props.title}</Text>
             </View>
             <Dropdown
                 {...props}
                 data={props.data}
                 style={styles.conatinerStyle}
-                placeholderStyle={[styles.placeHolderTxt, props.placeholderStyle, { color: colors.light_gray }]}
+                placeholderStyle={[styles.placeHolderTxt, globalStyles.rtlStyle, props.placeholderStyle, { color: colors.dark_blue2_color }]}
                 selectedTextStyle={[styles.placeHolderTxt, props.selectedTextStyle]}
                 itemTextStyle={[styles.placeHolderTxt, props.itemTextStyle]}
                 renderRightIcon={() => {
                     return (
-                        <Image source={props.image} style={[globalStyles.headerIcon, props.imageStyle]} />
+                        <Image source={props.image} style={[globalStyles.headerIcon, props.imageStyle, { tintColor: colors.dark_blue1_color }]} />
                     )
                 }}
             />
@@ -49,11 +49,11 @@ export default DropDownComponent;
 const styles = StyleSheet.create({
     textInputContainer: {
         borderRadius: wp(2),
-        borderColor: '#999999',
+        borderColor: colors.text_input_border_color,
         borderWidth: wp(0.5),
     },
     titleContainer: {
-        backgroundColor: '#BABABA',
+        backgroundColor: colors.light_blue_color,
         borderTopLeftRadius: wp(1.5),
         borderTopRightRadius: wp(1.5)
     },
@@ -61,12 +61,14 @@ const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
         paddingVertical: wp(2),
-        paddingHorizontal: wp(2.5)
+        paddingHorizontal: wp(2.5),
+        color: colors.dark_blue1_color
     },
     placeHolderTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.SMALL_14,
-        color: colors.light_brown,
+        color: colors.dark_blue1_color,
+        ...globalStyles.rtlStyle
     },
     conatinerStyle: {
         height: 40,

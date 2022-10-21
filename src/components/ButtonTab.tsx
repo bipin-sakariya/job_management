@@ -28,27 +28,27 @@ const ButtonTab = ({ btnOneTitle, btnTwoTitle, btnOneStyle, btnTwoStyle, btnOneT
             <TouchableOpacity
                 onPress={() => setBtn({ open: true, close: false })}
                 style={[styles.btnStyle, btnOneStyle, {
-                    backgroundColor: btnValue?.open ? '#8C8C8C' : '#CCCCCC',
+                    backgroundColor: btnValue?.open ? colors.primary_color : colors.light_blue_color,
                     borderTopLeftRadius: 10,
                     borderBottomLeftRadius: 10
                 }]}>
                 <Text
                     style={[styles.btnTxtStyle, btnOneTxtStyle, {
                         fontFamily: btnValue?.open ? fonts.FONT_POP_MEDIUM : fonts.FONT_POP_REGULAR,
-                        color: btnValue?.open ? colors.white : colors.black,
+                        color: btnValue?.open ? colors.white_color : colors.dark_blue1_color,
                     }]}>{btnOneTitle}</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => setBtn({ open: false, close: true })}
                 style={[styles.btnStyle, btnTwoStyle, {
-                    backgroundColor: btnValue?.close ? '#8C8C8C' : '#CCCCCC',
+                    backgroundColor: btnValue?.close ? colors.primary_color : colors.light_blue_color,
                     borderTopRightRadius: 10,
                     borderBottomRightRadius: 10
                 }]}>
                 <Text
                     style={[styles.btnTxtStyle, btnTwoTxtStyle, {
                         fontFamily: btnValue?.close ? fonts.FONT_POP_MEDIUM : fonts.FONT_POP_REGULAR,
-                        color: btnValue?.close ? colors.white : colors.black
+                        color: btnValue?.close ? colors.white_color : colors.dark_blue1_color
                     }]}>{btnTwoTitle}</Text>
             </TouchableOpacity>
         </View>

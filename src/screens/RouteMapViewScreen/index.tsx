@@ -1,7 +1,7 @@
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef } from 'react'
 import { customMapStyle, globalStyles } from '../../styles/globalStyles'
-import { BottomSheet, CustomBottomSheet, CustomSubTitleWithImageComponent, Header } from '../../components'
+import { BottomSheet, CustomBottomSheet, CustomStatusBtn, CustomSubTitleWithImageComponent, Header } from '../../components'
 import { colors } from '../../styles/Colors'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
@@ -28,6 +28,8 @@ const RouteMapViewScreen = () => {
         { time: '14:00', title: 'Event 4', description: 'Event 4 Description' },
         { time: '16:30', title: 'Event 5', description: 'Event 5 Description' }
     ]
+    console.log(data.length);
+
 
     const renderDetail = (rowData: any, sectionID: number, rowID: number) => {
         return (
@@ -43,30 +45,28 @@ const RouteMapViewScreen = () => {
                                     rowData?.status &&
                                     <Image source={ImagesPath.infocircle_icon} style={styles.infoImageView} />
                                 }
-                                <Text numberOfLines={1} style={styles.commonDarkTxt}>Your Current location</Text>
+                                <Text numberOfLines={1} style={[styles.commonDarkTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>Your Current location</Text>
                             </View>
-                            <TouchableOpacity onPress={() => { }} style={styles.openButton}>
-                                <Text style={styles.smallBut}>{"button"}</Text>
-                            </TouchableOpacity>
+                            <CustomStatusBtn txtStyle={{ ...styles.smallBut, ...globalStyles.rtlStyle }} style={{ ...styles.openButton }} title='button' />
                         </View>
                         {
                             data.length <= 2 &&
-                            <Text numberOfLines={1} style={[styles.commonLightTxt, { marginHorizontal: wp(3) }]}>13 may 2022</Text>
+                            <Text numberOfLines={1} style={[styles.commonLightTxt, globalStyles.rtlStyle, { marginHorizontal: wp(3) }]}>13 may 2022</Text>
                         }
                         <View style={[globalStyles.rowView, { justifyContent: 'space-between', paddingHorizontal: wp(3) }]}>
-                            <Text numberOfLines={data.length <= 2 ? 2 : 1} style={[styles.commonLightTxt, { width: '60%', color: data.length <= 2 ? colors.black : '#7C7C7C' }]}>13 may2022dsfs dfsdfdsfdsfdsf sfsdfsdfdsfdsf fsdfsf sdfsdfsdfsdfsdfdsfsdf</Text>
-                            <View style={[globalStyles.rowView]}>
+                            <Text numberOfLines={data.length <= 2 ? 2 : 1} style={[styles.commonLightTxt, globalStyles.rtlStyle, { width: '60%', color: colors.dark_blue2_color, fontSize: FontSizes.EXTRA_SMALL_12 }]}>{data.length <= 2 ? "Lorem Ipsum הוא פשוט טקסט דמה של הכתיבה......." : "13 may 2022"}</Text>
+                            <View style={[globalStyles.rowView, { direction: "ltr" }]}>
                                 <Image source={ImagesPath.map_pin_dark_line_icon} style={styles.mapPinStyle} />
-                                <Text numberOfLines={1} style={[styles.commonLightTxt, { maxWidth: wp(25), textAlign: 'justify' }]}>5 km away</Text>
+                                <Text numberOfLines={1} style={[styles.commonLightTxt, globalStyles.rtlStyle, { maxWidth: wp(25) }]}>5 km away</Text>
                             </View>
                         </View>
                     </View>
                 </View>
                 {
-                    data.length <= 2 && sectionID != 1 &&
+                    data.length - 1 != sectionID &&
                     <>
-                        <Text numberOfLines={1} style={styles.commonDarkTxt}>300 M  Distance</Text>
-                        <Text numberOfLines={1} style={styles.commonLightTxt}>8 min Drive</Text>
+                        <Text numberOfLines={1} style={[styles.commonDarkTxt, globalStyles.rtlStyle,]}>300 M  Distance</Text>
+                        <Text numberOfLines={1} style={[styles.commonLightTxt, globalStyles.rtlStyle]}>8 min Drive</Text>
                     </>
                 }
             </View>
@@ -76,11 +76,11 @@ const RouteMapViewScreen = () => {
         <View style={globalStyles.container}>
             <Header
                 containerStyle={{ backgroundColor: colors.white }}
-                headerLeftStyle={{ width: "40%", paddingLeft: wp(3) }}
+                headerLeftStyle={{ width: "50%", paddingLeft: wp(3) }}
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={[globalStyles.headerTitle, { marginHorizontal: wp(2) }]}>{strings.Route}</Text>
+                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle, { marginHorizontal: wp(2) }]}>{strings.Route}</Text>
                     </TouchableOpacity>
                 }
             />
@@ -99,11 +99,10 @@ const RouteMapViewScreen = () => {
                 height={350}
                 children={
                     <View style={{ paddingHorizontal: wp(4), flex: 1 }}>
-                        <CustomSubTitleWithImageComponent disabled title={strings.SeetheDistance} image={ImagesPath.route_drak_line_icon} titleStyle={{ fontSize: FontSizes.MEDIUM_16 }} />
+                        <CustomSubTitleWithImageComponent disabled title={strings.SeetheDistance} image={ImagesPath.route_drak_line_icon} titleStyle={{ fontSize: FontSizes.MEDIUM_16, color: colors.dark_blue2_color }} />
                         <Timeline
                             data={data}
                             circleSize={20}
-                            circleColor='rgb(45,156,219)'
                             showTime={false}
                             dashLine={true}
                             columnFormat={'single-column-left'}
@@ -115,13 +114,12 @@ const RouteMapViewScreen = () => {
                                                 ?
                                                 <Image source={sectionID == 0 ? ImagesPath.check_circle_fill_icon : ImagesPath.map_pin_fill_icon} style={{ height: wp(8), width: wp(8), backgroundColor: colors.white_5, resizeMode: 'contain' }} />
                                                 :
-                                                <Text style={{ color: '#737373' }}>{sectionID}</Text>
+                                                <Text style={{ color: colors.dark_blue1_color }}>{sectionID}</Text>
                                         }
                                     </View>
                                 )
                             }}
                             renderDetail={renderDetail}
-                            descriptionStyle={{ color: 'gray' }}
                             isUsingFlatlist={true}
                         />
                     </View>

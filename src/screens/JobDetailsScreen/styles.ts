@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_SEMI_BOLD,
         fontSize: FontSizes.SEMI_LARGE_20,
         marginHorizontal: wp(2),
-        color: colors.drak_light_brown,
+        color: colors.dark_blue1_color,
         maxWidth: wp(50)
     },
     statusBut: {
@@ -45,7 +45,7 @@ export const styles = StyleSheet.create({
         paddingVertical: wp(2),
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        color: colors.light_brown
+        color: colors.dark_blue2_color,
     },
     mapPinIcon: {
         width: wp(10),
@@ -88,7 +88,8 @@ export const styles = StyleSheet.create({
     bottomBtnView: {
         flex: 1,
         justifyContent: "space-around",
-        alignItems: "center"
+        alignItems: "center",
+        backgroundColor: colors.white_color,
     },
     modalInnerView: {
         width: wp(80),
@@ -102,7 +103,7 @@ export const styles = StyleSheet.create({
     },
     jobReturnTxt: {
         marginHorizontal: wp(2),
-        color: '#666666',
+        color: colors.dark_blue1_color,
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16
     },
@@ -112,7 +113,7 @@ export const styles = StyleSheet.create({
         resizeMode: 'contain'
     },
     warningView: {
-        backgroundColor: "#E7E7E7",
+        backgroundColor: colors.light_blue_color,
         width: '100%',
         borderRadius: wp(2),
         paddingHorizontal: wp(5),
@@ -120,7 +121,7 @@ export const styles = StyleSheet.create({
         marginBottom: wp(3)
     },
     reasonTxt: {
-        color: '#666666',
+        color: colors.dark_blue3_color,
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12
     },
@@ -132,14 +133,14 @@ export const styles = StyleSheet.create({
         maxWidth: wp(95)
     },
     sammedView: {
-        borderColor: colors.bottom_tab_bg,
+        borderColor: colors.text_input_border_color,
         borderWidth: wp(0.5),
         borderRadius: wp(2),
         marginBottom: wp(4)
         // paddingBottom: wp(2)
     },
     formHeaderView: {
-        backgroundColor: colors.light_gray,
+        backgroundColor: colors.light_blue_color,
         paddingVertical: wp(2),
         paddingHorizontal: wp(2),
         borderTopLeftRadius: wp(1.5),
@@ -148,28 +149,15 @@ export const styles = StyleSheet.create({
     noNameTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        color: colors.black_1
+        color: colors.dark_blue1_color
     },
     sammedSepratorLine: {
         height: wp(0.2),
-        backgroundColor: colors.white_3,
+        backgroundColor: colors.light_blue_color,
         marginVertical: wp(2),
         marginHorizontal: wp(3)
     },
-    addFormView: {
-        alignItems: 'center',
-        marginHorizontal: wp(2),
-        marginVertical: wp(2),
-        borderRadius: wp(1),
-        justifyContent: "center",
-        paddingVertical: wp(2),
-        backgroundColor: colors.gray_13
-    },
-    addFormTxt: {
-        fontFamily: fonts.FONT_POP_REGULAR,
-        fontSize: FontSizes.EXTRA_SMALL_12,
-        color: colors.gray_14
-    },
+
     deleteBtnTxt: {
         backgroundColor: colors.white_5,
         borderColor: colors.black,

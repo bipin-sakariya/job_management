@@ -1,7 +1,7 @@
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { globalStyles } from '../../styles/globalStyles';
-import { Container, CustomSubTitleWithImageComponent, Header } from '../../components';
+import { Container, CustomDashedComponent, CustomSubTitleWithImageComponent, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { useRoute } from '@react-navigation/native';
@@ -9,6 +9,8 @@ import { styles } from './styles';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { RootRouteProps } from '../../types/RootStackTypes';
 import UserListComponent from '../../components/UserListComponent';
+import { strings } from '../../languages/localizedStrings';
+import { colors } from '../../styles/Colors';
 
 const users = [
     { name: 'Stanley Lamb', role: 'Role of User', date: '12 May 2022' },
@@ -35,12 +37,12 @@ const UsersScreen = () => {
             <Header
                 headerLeftStyle={{
                     width: '50%',
-                    paddingLeft: wp(3)
+                    paddingRight: wp(3)
                 }}
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
-                        <Text style={globalStyles.headerTitle}>{type == 'users' ? 'Users' : 'Groups'}</Text>
+                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{type == 'users' ? strings.users : strings.groups}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
@@ -57,13 +59,10 @@ const UsersScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <View style={styles.addUserContainer}>
-                    <Image source={ImagesPath.add_icon} style={styles.addBtnStyle} />
-                    <Text style={styles.addNewUserTxt}>{type == 'users' ? 'ADD NEW USER' : 'ADD NEW GROUP'}</Text>
-                </View>
+                <CustomDashedComponent textStyle={{ color: colors.dark_blue1_color }} viewStyle={{ paddingVertical: wp(5), borderColor: colors.gray_color }} title={type == 'users' ? strings.ADDNEWUSER : strings.ADDNEWGROUP} image={ImagesPath.add_icon} onPress={() => { }} />
                 <CustomSubTitleWithImageComponent
                     disabled
-                    title={type == 'users' ? 'Added Users' : 'Added Groups'}
+                    title={type == 'users' ? strings.AddedUsers : strings.AddedGroups}
                     image={ImagesPath.group_icon}
                 />
                 <FlatList

@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { CustomStatusBtn } from ".";
 import { colors } from "../styles/Colors";
 import fonts from "../styles/Fonts";
 import FontSizes from "../styles/FontSizes";
@@ -24,18 +25,16 @@ const CustomJobListComponent = ({ item, type }: CustomJobListComponentProps) => 
                                 <Image source={ImagesPath.infocircle_icon} style={styles.infoCircleIcon} />
                             </TouchableOpacity>
                         }
-                        <Text style={styles.titleTxt}>{item.title}</Text>
+                        <Text style={[styles.titleTxt, globalStyles.rtlStyle]}>{item.title}</Text>
                     </View>
-                    <TouchableOpacity onPress={() => { }} style={styles.openButton}>
-                        <Text style={styles.smallBut}>{item.button}</Text>
-                    </TouchableOpacity>
+                    <CustomStatusBtn title={item.button} />
                 </View>
-                <Text style={[styles.descriptionTxt, { fontSize: FontSizes.SMALL_7 }]}>{item.date}</Text>
+                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_10, textAlign: "left" }]}>{item.date}</Text>
                 <View style={styles.descriptionView}>
-                    <Text numberOfLines={2} style={[styles.descriptionTxt]}>{item.description}</Text>
-                    <View style={[globalStyles.rowView, { justifyContent: "center", alignSelf: "center" }]}>
+                    <Text numberOfLines={2} style={[styles.descriptionTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>{item.description}</Text>
+                    <View style={[globalStyles.rowView, styles.kmViewStyle]}>
                         <Image source={ImagesPath.map_pin_icon} style={styles.mapPinIcon} />
-                        <Text style={styles.distanceTxt}>{item.km}</Text>
+                        <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>{item.km}</Text>
                     </View>
                 </View>
             </View>
@@ -67,20 +66,20 @@ const styles = StyleSheet.create({
     titleTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.SEMI_LARGE_20,
-        color: colors.drak_light_brown,
+        color: colors.dark_blue1_color,
         marginHorizontal: wp(1)
     },
     distanceTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
-        color: colors.bottom_tab_btn,
+        color: colors.dark_blue3_color,
         marginRight: wp(2)
     },
     descriptionTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
-        paddingLeft: wp(2.5),
-        color: colors.gray_12,
+        paddingHorizontal: wp(2.5),
+        color: colors.dark_blue2_color,
         width: wp("32%")
     },
     openButton: {
@@ -114,12 +113,15 @@ const styles = StyleSheet.create({
     descriptionView: {
         flexDirection: "row",
         alignItems: "flex-end",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
     jobContainerBoxShadowStyle: {
-        shadowColor: "rgba(0, 0, 0, 0.5)",
+        shadowColor: "rgba(0, 0, 0, 0.3)",
         shadowOpacity: 2,
         shadowOffset: { height: 0, width: 0 },
         elevation: 5
     },
+    kmViewStyle: {
+        justifyContent: "center", alignSelf: "center", direction: "ltr", maxWidth: wp(25)
+    }
 })

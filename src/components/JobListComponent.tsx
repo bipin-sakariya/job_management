@@ -19,7 +19,7 @@ const JobListComponent = ({ item, index }: any) => {
         <View style={styles.itemContainer}>
             <View style={styles.dateTxtContainer}>
                 <Image source={ImagesPath.calender_icon} style={styles.calenderIconStyle} />
-                <Text style={[styles.dateTxtStyle]}>{item.data}</Text>
+                <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{item.data}</Text>
             </View>
             {item.jobs.map((i: any) => (
                 <CustomeJobListDetailsViewComponent onPress={() => {
@@ -34,7 +34,7 @@ export default JobListComponent
 
 const styles = StyleSheet.create({
     itemContainer: {
-        paddingHorizontal: wp(4)
+        paddingHorizontal: wp(4),
     },
     dateTxtContainer: {
         ...globalStyles.rowView,
@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
         fontSize: FontSizes.MEDIUM_16,
         fontFamily: fonts.FONT_POP_REGULAR,
         paddingHorizontal: wp(2),
-        color: colors.light_brown,
+        color: colors.dark_blue2_color,
     },
 })

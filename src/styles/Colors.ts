@@ -11,11 +11,12 @@ export const colors = {
     balck_color: '#000000',
     text_input_border_color: '#D7E7EF',
     dark_blue4_color: '#19253A',
+    light_blue_Txt_color: '#93A7C9',
+    bottom_sheet_tab: '#DEDEDE',
 
     bottom_tab_btn: '#7F7F7F',
     bottom_tab_btn_blur: '#8C8C8C',
     bottom_tab_bg: '#999999',
-    bottom_tab_title: '#DEDEDE',
     app_bg: '#E8E8E8',
     white: '#FFFFFF',
     black: '#000000',

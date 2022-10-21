@@ -8,6 +8,8 @@ import { ImagesPath } from '../../utils/ImagePaths'
 import { styles } from './styles'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { DropdownProps } from '../../types/commanTypes'
+import { strings } from '../../languages/localizedStrings'
+import { colors } from '../../styles/Colors'
 
 const CreateFormScreen = () => {
     const navigation = useCustomNavigation('CreateFormScreen');
@@ -33,19 +35,19 @@ const CreateFormScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView]} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>Create Form</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.CreateForm}</Text>
                     </TouchableOpacity>
                 } />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <CustomSubTitleWithImageComponent disabled viewStyle={{ marginTop: wp(2) }} title='Create Form' image={ImagesPath.receipt_icon} />
+                <CustomSubTitleWithImageComponent disabled viewStyle={{ marginTop: wp(2) }} title={strings.CreateForm} image={ImagesPath.receipt_icon} />
                 <CustomTextInput
-                    title='Form Name'
+                    title={strings.formname}
                     container={{ marginVertical: wp(5) }}
                     value={'Form name'}
                     onChangeText={(text) => { }}
                 />
                 <DropDownComponent
-                    title='Add Bill'
+                    title={strings.AddBill}
                     data={data}
                     image={ImagesPath.down_white_arrow}
                     labelField="label"
@@ -55,7 +57,8 @@ const CreateFormScreen = () => {
                     placeholder={'Select'}
                     container={{ marginBottom: wp(5) }}
                 />
-                <CustomBlackButton title='Create Form' image={ImagesPath.plus_white_circle_icon} imageStyle={globalStyles.headerIcon} />
+                <CustomBlackButton onPress={() => {
+                }} title={strings.CreateForm} image={ImagesPath.plus_white_circle_icon} imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} />
             </Container>
         </View>
     )

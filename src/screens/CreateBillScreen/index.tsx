@@ -23,7 +23,7 @@ const BillCreateScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{strings.BillSection}</Text>
+                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{strings.BillSection}</Text>
                     </TouchableOpacity>
                 }
             />
@@ -31,12 +31,14 @@ const BillCreateScreen = () => {
                 <CustomSubTitleWithImageComponent disabled title={strings.CreateMaterialBillSection} image={ImagesPath.receipt_icon} />
                 <CustomDashedComponent
                     image={ImagesPath.add_icon}
-                    onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: strings.material }) }}
+                    viewStyle={{ paddingVertical: wp(8) }}
+                    onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: "material" }) }}
                     title={strings.CreateMaterialBill} />
                 <CustomSubTitleWithImageComponent disabled viewStyle={{ marginTop: wp(2) }} title={strings.CreateSignBillsection} image={ImagesPath.receipt_icon} />
                 <CustomDashedComponent
                     image={ImagesPath.add_icon}
-                    onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: strings.sign }) }}
+                    viewStyle={{ paddingVertical: wp(8) }}
+                    onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: "sign" }) }}
                     title={strings.CreateSignBill} />
             </Container>
         </View>

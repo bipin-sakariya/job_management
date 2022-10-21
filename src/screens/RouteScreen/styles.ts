@@ -9,11 +9,13 @@ export const styles = StyleSheet.create({
         paddingVertical: wp(3),
         paddingHorizontal: wp(2),
         marginBottom: wp(3),
-        borderColor: colors.gray_9,
+        borderColor: colors.text_input_border_color,
         borderWidth: wp(0.4),
         borderRadius: wp(2),
+        color: colors.dark_blue3_color,
         fontFamily: fonts.FONT_POP_REGULAR,
-        fontSize: FontSizes.MEDIUM_16
+        fontSize: FontSizes.MEDIUM_16,
+        textAlign: "right"
     },
     boxShadowStyle: {
         shadowColor: "rgba(0, 0, 0, 0.5)",

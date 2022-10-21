@@ -1,6 +1,7 @@
 import React from 'react'
 import RBSheet, { RBSheetProps } from 'react-native-raw-bottom-sheet'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import { colors } from '../styles/Colors'
 
 interface BottomSheetProps {
     children?: any,
@@ -17,16 +18,18 @@ const BottomSheet = React.forwardRef((props: BottomSheetProps & RBSheetProps, re
             closeOnPressMask={true}
             dragFromTopOnly={true}
             height={props.height}
+
             customStyles={{
                 container: {
                     borderTopLeftRadius: props.TopLeftRadius ? props.TopLeftRadius : wp(8),
-                    borderTopRightRadius: props.TopRightRadius ? props.TopRightRadius : wp(8)
+                    borderTopRightRadius: props.TopRightRadius ? props.TopRightRadius : wp(8),
                 },
                 wrapper: {
                     backgroundColor: "transparent",
                 },
                 draggableIcon: {
-                    backgroundColor: "#9E9E9E"
+                    backgroundColor: colors.bottom_sheet_tab,
+                    width: wp(30)
                 }
             }}>
             {props.children}

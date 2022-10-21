@@ -21,7 +21,7 @@ export default CustomStatusBtn
 
 const styles = StyleSheet.create({
     statusBut: {
-        backgroundColor: colors.status_btn,
+        backgroundColor: colors.light_blue_color,
         borderRadius: wp(1)
     },
     statusBtnTxt: {
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         marginHorizontal: wp(2),
         marginVertical: wp(0.5),
-        color: colors.white,
+        color: colors.primary_color,
         maxWidth: wp(20)
     },
 })

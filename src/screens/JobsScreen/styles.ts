@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
         fontSize: FontSizes.MEDIUM_16,
         fontFamily: fonts.FONT_POP_MEDIUM,
         paddingHorizontal: wp(1),
-        color: colors.black
+        color: colors.dark_blue1_color
     },
     downIcon: {
         height: wp(5),

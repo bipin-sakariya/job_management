@@ -15,6 +15,7 @@ import CustomReportDetailsView from '../../components/CustomReportDetailsView'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import TableHeaderView from '../../components/TableHeaderView'
 import TableDetailsComponent from '../../components/TableDetailsComponent'
+import { strings } from '../../languages/localizedStrings'
 
 const ReportGeneratorScreen = () => {
     const navigation = useCustomNavigation('ReportGeneratorScreen');
@@ -32,15 +33,39 @@ const ReportGeneratorScreen = () => {
     const XDate = require("xdate")
 
     useEffect(() => setupMarkedDates(sdate, edate), [range]);
-    LocaleConfig.locales['en'] = {
-        monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        monthNamesShort: ['Jan.', 'Feb.', 'Mar', 'Apr', 'May', 'Jun', 'Jul.', 'Aug', 'Sept.', 'Oct.', 'Nov.', 'Dec.'],
-        dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-        dayNamesShort: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-        today: 'Today\'now'
+    // LocaleConfig.locales['en'] = {
+    //     monthNames: [
+    //         'Janvier',
+    //         'Février',
+    //         'Mars',
+    //         'Avril',
+    //         'Mai',
+    //         'Juin',
+    //         'Juillet',
+    //         'Août',
+    //         'Septembre',
+    //         'Octobre',
+    //         'Novembre',
+    //         'Décembre'
+    //     ],
+    //     // monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    //     monthNamesShort: ['Jan.', 'Feb.', 'Mar', 'Apr', 'May', 'Jun', 'Jul.', 'Aug', 'Sept.', 'Oct.', 'Nov.', 'Dec.'],
+    //     dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    //     dayNamesShort: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+    //     today: 'Today\'now'
+    // };
+
+    LocaleConfig.locales['hebrew'] = {
+        monthNames: ['יָנוּאָר', 'פברואר', 'מרץ', 'אַפּרִיל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'סֶפּטֶמבֶּר', 'אוֹקְטוֹבֶּר', 'נוֹבֶמבֶּר', 'דֵצֶמבֶּר'],
+        monthNamesShort: ['ינואר', 'פברואר', 'לְקַלְקֵל', 'אפריל', 'מאי', 'מאי', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
+        dayNames: ['יוֹם רִאשׁוֹן', 'יוֹם שֵׁנִי', 'יוֹם שְׁלִישִׁי', 'יום רביעי', 'יוֹם חֲמִישִׁי', 'יוֹם שִׁישִׁי', 'יום שבת'],
+        dayNamesShort: ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'],
+        today: 'היום עכשיו'
     };
+
     let date: string = moment().format("YYYY-MM-DD").toString()
     let maxDate = moment().add(10, "year").format("YYYY-MM-DD").toString()
+    LocaleConfig.defaultLocale = 'hebrew';
 
     const data = [
         {
@@ -158,6 +183,7 @@ const ReportGeneratorScreen = () => {
             imageUrl: ''
         },
     ]
+
     const setupMarkedDates = (fromDate: string, toDate: string) => {
         let markedDates: any = {};
         let isNotValid = false;
@@ -168,8 +194,8 @@ const ReportGeneratorScreen = () => {
             setDateArray([toDate]);
             markedDates = {
                 [toDate]: {
-                    color: '#ABABAB',
-                    textColor: '#545454',
+                    color: colors.dark_blue1_color,
+                    textColor: colors.white_color,
                     startingDay: true,
                     endingDay: true,
                 },
@@ -182,8 +208,8 @@ const ReportGeneratorScreen = () => {
                     .toString('yyyy-MM-dd');
                 setDateArray((s: any) => [...s, tempDate]);
                 markedDates[tempDate] = {
-                    color: i === 0 ? "transparent" : i === range ? "transparent" : '#D9D9D9',
-                    textColor: '#545454',
+                    color: i === 0 ? "transparent" : i === range ? "transparent" : colors.white_color,
+                    textColor: i === 0 || i === range ? colors.white_color : '#545454',
                     startingDay: i === 0,
                     endingDay: i === range,
                 }
@@ -215,14 +241,14 @@ const ReportGeneratorScreen = () => {
                     btn.open ?
                         <View style={styles.mainListView}>
                             <View style={[globalStyles.rowView, { justifyContent: "space-between", alignItems: 'center' }]}>
-                                <Text style={styles.titleTxt}>{item.title}</Text>
-                                <Text style={styles.commonTxt}>{item.date}</Text>
+                                <Text style={[styles.titleTxt, globalStyles.rtlStyle]}>{item.title}</Text>
+                                <Text style={[styles.commonTxt, globalStyles.rtlStyle]}>{item.date}</Text>
                             </View>
-                            <Text numberOfLines={1} style={[styles.commonTxt, { marginVertical: wp(1) }]}>{item.description}</Text>
+                            <Text numberOfLines={1} style={[styles.commonTxt, globalStyles.rtlStyle, { marginVertical: wp(1) }]}>{item.description}</Text>
                             <View style={[styles.sepratorLine]} />
                             <View style={[globalStyles.rowView, { justifyContent: 'space-between', marginVertical: wp(0.5) }]}>
-                                <Text style={styles.commonTxt}>Done by</Text>
-                                <Text style={styles.authorTxt}>{item.author}</Text>
+                                <Text style={[styles.commonTxt, globalStyles.rtlStyle, { color: colors.dark_blue1_color }]}>{strings.Doneby}</Text>
+                                <Text style={[styles.authorTxt, globalStyles.rtlStyle]}>{item.author}</Text>
                             </View>
                             <View style={styles.sepratorLine} />
                             {
@@ -249,7 +275,7 @@ const ReportGeneratorScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView, { width: wp(55), }]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>Report Generator</Text>
+                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{strings.ReportGenerator}</Text>
                     </TouchableOpacity>
                 }
             />
@@ -257,22 +283,24 @@ const ReportGeneratorScreen = () => {
                 <ScrollView showsVerticalScrollIndicator={false} >
                     <View style={[globalStyles.rowView]}>
                         <Image source={ImagesPath.note_icon} style={styles.noteIconStyle} />
-                        <Text style={styles.reportTxt}>Generate Report</Text>
+                        <Text style={[styles.reportTxt, globalStyles.rtlStyle]}>{strings.GenerateReport}</Text>
                     </View>
                     <Calendar
                         initialDate={date}
                         minDate={'1990-05-10'}
+                        accessibilityLanguage={"hebrew"}
                         maxDate={maxDate}
-                        monthFormat={'MMM yyyy'}
+                        monthFormat={'MMMM yyyy'}
                         style={styles.calendarStyle}
                         renderArrow={(direction) => <Image
-                            source={direction == "left" ? ImagesPath.left_arrow_cal_icon : ImagesPath.right_arrow_cal_icon}
-                            style={[styles.calendarArrowIcon, { marginLeft: direction == "left" ? wp(20) : 0, marginRight: direction == "right" ? wp(20) : 0 }]} />}
+                            source={direction == "left" ? ImagesPath.right_arrow_cal_icon : ImagesPath.left_arrow_cal_icon}
+                            style={[styles.calendarArrowIcon, { marginLeft: direction == "left" ? wp(20) : 0, marginRight: direction == "right" ? wp(20) : 0, tintColor: colors.primary_color }]} />}
                         renderHeader={(data) => {
                             return (
-                                <Text style={styles.calenderHeaderStyle}>{moment(data[0]).format("MMM YYYY")}</Text>
+                                <Text style={[styles.calenderHeaderStyle, globalStyles.rtlStyle]}>{moment(data[0]).format("MMM YYYY")}</Text>
                             )
                         }}
+                        renders
                         markingType={'period'}
                         onDayPress={(date) => onDayPress(date)}
                         markedDates={{ ...markDates, ...blockedDays }}
@@ -287,18 +315,18 @@ const ReportGeneratorScreen = () => {
                             calendarBackground: colors.calendar_Bg,
                         }}
                     />
-                    <ButtonTab btnOneTitle='Detailed' btnTwoTitle='Sammed up' setBtn={setBtn} btnValue={btn} />
+                    <ButtonTab btnOneTitle={strings.Detailed} btnTwoTitle={strings.Sammedup} setBtn={setBtn} btnValue={btn} />
                     {
                         btn.open ?
                             <>
                                 <View style={[globalStyles.rowView, { justifyContent: "space-between", marginVertical: wp(2) }]}>
                                     <View style={[globalStyles.rowView]}>
-                                        <Image source={ImagesPath.suitcase_icon} style={[styles.iconStyle,]} />
-                                        <Text style={styles.JobsTxt}>Jobs</Text>
+                                        <Image source={ImagesPath.suitcase_icon} style={[styles.iconStyle, { tintColor: colors.dark_blue1_color }]} />
+                                        <Text style={[styles.JobsTxt, globalStyles.rtlStyle]}>{strings.Jobs}</Text>
                                     </View>
                                     <TouchableOpacity style={[globalStyles.rowView]} >
-                                        <Image source={ImagesPath.download_simple_icon} style={styles.iconStyle} />
-                                        <Text style={styles.genrateTxt}>Genrate Report</Text>
+                                        <Image source={ImagesPath.download_simple_icon} style={[styles.iconStyle, { tintColor: colors.dark_blue1_color }]} />
+                                        <Text style={[styles.genrateTxt, globalStyles.rtlStyle]}>{strings.GenerateReport}</Text>
                                     </TouchableOpacity>
                                 </View>
                                 <FlatList scrollEnabled={true} data={data} renderItem={renderItem} ItemSeparatorComponent={() => <View style={styles.lineSeprator} />} />

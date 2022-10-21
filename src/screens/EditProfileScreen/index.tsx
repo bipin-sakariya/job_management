@@ -7,6 +7,7 @@ import { ImagesPath } from '../../utils/ImagePaths';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { styles } from './styles';
 import { colors } from '../../styles/Colors';
+import { strings } from '../../languages/localizedStrings';
 
 const EditProfileScreen = () => {
     const navigation = useCustomNavigation('EditProfileScreen');
@@ -14,36 +15,37 @@ const EditProfileScreen = () => {
         <View style={globalStyles.container}>
             <Header
                 headerLeftStyle={{
-                    paddingLeft: wp(3)
+                    paddingLeft: wp(3),
+                    width: "70%",
                 }}
                 headerLeftComponent={
                     <TouchableOpacity
-                        style={[globalStyles.rowView, { width: wp(50) }]}
+                        style={[globalStyles.rowView]}
                         onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
-                        <Text style={globalStyles.headerTitle}>Edit Your Profile</Text>
+                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{strings.EditYourProfile}</Text>
                     </TouchableOpacity>
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <Image source={ImagesPath.add_photo_icon} style={styles.profilePhoto} />
                 <CustomTextInput
-                    title='User Name'
+                    title={strings.UserName}
                     container={{ marginBottom: wp(5) }}
                     value={'Stanley Lamb'}
                 />
                 <CustomTextInput
-                    title='Email'
+                    title={strings.Email}
                     container={{ marginBottom: wp(5) }}
                     value={'stanleylamb@gmail.com'}
                 />
                 <CustomTextInput
-                    title='Contact no.'
+                    title={strings.Contactno}
                     container={{ marginBottom: wp(5) }}
                     value={'0123456789'}
                 />
                 <CustomBlackButton
-                    title={'Save'}
+                    title={strings.Save}
                     image={ImagesPath.save_icon}
                     imageStyle={{ tintColor: colors.white }}
                     onPress={() => { }}

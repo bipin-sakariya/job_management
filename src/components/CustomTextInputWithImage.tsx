@@ -19,12 +19,12 @@ const CustomTextInputWithImage = (props: CustomTextInputWithImageProps & TextInp
         <View style={[globalStyles.rowView, props.mainContainerStyle,]}>
             <View style={[styles.textInputContainer, props.container]}>
                 <View style={styles.titleContainer}>
-                    <Text style={styles.titleTxtStyle}>{props.title}</Text>
+                    <Text style={[styles.titleTxtStyle, { textAlign: 'left' }]}>{props.title}</Text>
                 </View>
-                <View style={[globalStyles.rowView, { paddingHorizontal: wp(2.5), alignItems: "center", height: Platform.OS == "ios" ? wp(10) : wp(12.3), }]}>
+                <View style={[globalStyles.rowView, styles.textInputViewStyle]}>
                     <TextInput
                         {...props}
-                        style={[styles.textInputStyle, props.style]}
+                        style={[styles.textInputStyle, props.style, globalStyles.rtlStyle, { color: colors.dark_blue2_color, textAlign: "right" }]}
                     />
                 </View>
             </View>
@@ -38,23 +38,28 @@ const CustomTextInputWithImage = (props: CustomTextInputWithImageProps & TextInp
 export default CustomTextInputWithImage
 
 const styles = StyleSheet.create({
-
+    textInputViewStyle: {
+        paddingHorizontal: wp(2.5),
+        alignItems: "center",
+        height: Platform.OS == "ios" ? wp(10) : wp(12.3)
+    },
     textInputContainer: {
         borderRadius: wp(2),
-        borderColor: colors.bottom_tab_bg,
+        borderColor: colors.text_input_border_color,
         borderWidth: wp(0.5),
         width: wp(70)
     },
     titleContainer: {
-        backgroundColor: colors.light_gray,
+        backgroundColor: colors.light_blue_color,
         borderTopLeftRadius: wp(1.5),
         borderTopRightRadius: wp(1.5)
     },
     titleTxtStyle: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        paddingVertical: wp(2),
-        paddingHorizontal: wp(2.5)
+        paddingVertical: wp(1.5),
+        paddingHorizontal: wp(2.5),
+        color: colors.dark_blue1_color
     },
     textInputStyle: {
         fontFamily: fonts.FONT_POP_MEDIUM,
@@ -66,11 +71,11 @@ const styles = StyleSheet.create({
         color: colors.light_brown
     },
     dashedStyle: {
-        borderColor: colors.bottom_tab_bg,
+        borderColor: colors.text_input_border_color,
         borderStyle: "dashed",
         borderWidth: wp(0.5),
         paddingHorizontal: wp(5),
-        paddingVertical: wp(5),
+        paddingVertical: Platform.OS == "ios" ? wp(4.5) : wp(6),
         borderRadius: wp(2),
         marginLeft: wp(3),
         // marginTop: wp(-0.5)

@@ -14,6 +14,12 @@ export const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.SMALL_14,
         marginHorizontal: wp(2),
-        color: colors.light_brown
+        color: colors.dark_blue2_color
     },
+    noteIconStyle: {
+        height: wp(5),
+        width: wp(5),
+        resizeMode: "contain",
+        tintColor: colors.dark_blue1_color
+    }
 })

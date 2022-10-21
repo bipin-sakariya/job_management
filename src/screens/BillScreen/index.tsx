@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, Header } from '../../components'
+import { ButtonTab, Container, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
 import { styles } from './styles'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -9,6 +9,7 @@ import { FlatList } from 'react-native-gesture-handler'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import CustomListView from '../../components/CustomListView'
 import { strings } from '../../languages/localizedStrings'
+import { colors } from '../../styles/Colors'
 
 const BillListScreen = () => {
     const navigation = useCustomNavigation('BillListScreen');
@@ -71,17 +72,20 @@ const BillListScreen = () => {
             date: '12 May 2022',
         },
     ]
-
+    const [btn, setBtn] = useState({
+        open: true,
+        close: false
+    })
     const renderItem = ({ item, index }: any) => {
         return (
-            <CustomListView item={item} onPress={() => {
+            <CustomListView item={item} material={btn.open} onPress={() => {
                 let params = {
                     name: item.title,
                     unit: 'unit',
                     ration: '15',
                     image: '',
                     quantity: '2',
-                    type: 'sing',
+                    type: 'material',
                 }
                 navigation.navigate("BillSectionScreen", params)
             }} />
@@ -112,12 +116,13 @@ const BillListScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
+                <ButtonTab btnOneTitle={strings.accountmaterial} btnTwoTitle={strings.Signabill} setBtn={setBtn} btnValue={btn} />
                 <FlatList showsVerticalScrollIndicator={false} data={bills}
                     ListHeaderComponent={() => {
                         return (
                             <View style={[globalStyles.rowView, { marginBottom: wp(4) }]}>
-                                <Image source={ImagesPath.squre_note_icon} style={{ height: wp(5), width: wp(5) }} />
-                                <Text style={styles.billListTxt}>{strings.BillList}</Text>
+                                <Image source={ImagesPath.squre_note_icon} style={styles.noteIconStyle} />
+                                <Text style={[styles.billListTxt, globalStyles.rtlStyle]}>{strings.BillList}</Text>
                             </View>
                         )
                     }}

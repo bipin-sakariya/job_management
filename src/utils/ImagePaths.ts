@@ -29,6 +29,7 @@ export const ImagesPath = {
     group_icon: require('../assets/images/DrawerIcons/groupIcon.png'),
     report_icon: require('../assets/images/DrawerIcons/reportIcon.png'),
     logout_icon: require('../assets/images/DrawerIcons/logoutIcon.png'),
+    additional_work_icon: require('../assets/images/DrawerIcons/additionalWork.png'),
     add_icon: require('../assets/images/addIcon.png'),
     dots_menu_icon: require('../assets/images/dotsMenuIcon.png'),
     map_pin_line_icon: require('../assets/images/mapPinLine.png'),
@@ -90,5 +91,6 @@ export const ImagesPath = {
     pencil_simple_icon: require('../assets/images/pencilSimpleIcon.png'),
     floppy_disk_icon: require('../assets/images/floppyDisk.png'),
     logo_of_job_managment: require('../assets/images/logo.png'),
+    drawer_Bg: require('../assets/images/DrawerIcons/drawerBg.png'),
 }
 

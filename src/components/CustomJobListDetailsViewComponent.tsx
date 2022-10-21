@@ -1,10 +1,11 @@
-import { Image, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native'
+import { I18nManager, Image, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native'
 import React from 'react'
 import { globalStyles } from '../styles/globalStyles'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { ImagesPath } from '../utils/ImagePaths'
 import fonts from '../styles/Fonts'
 import FontSizes from '../styles/FontSizes'
+import { colors } from '../styles/Colors'
 
 interface CustomeJobListDetailsViewComponentProps {
     item: any
@@ -12,20 +13,22 @@ interface CustomeJobListDetailsViewComponentProps {
 
 const CustomeJobListDetailsViewComponent = (props: CustomeJobListDetailsViewComponentProps & TouchableOpacityProps) => {
     return (
-        <TouchableOpacity {...props} style={[styles.jobContainerStyle, { backgroundColor: props.item.author ? "#F0F0F0" : "#D9D9D9" }]}>
+        <TouchableOpacity {...props} style={[styles.jobContainerStyle, styles.dropDownShadowStyle, { backgroundColor: props.item.author ? colors.white_color : colors.white_color }]}>
             <Image source={ImagesPath.placeholder_img} style={styles.jobImageStyle} />
             <View style={{ flex: 1 }}>
                 <View style={styles.jobTitleContainer}>
                     <Text style={[styles.titleTxt, globalStyles.rtlStyle]}>{props.item.title}</Text>
-                    <Text style={[styles.distanceTxt]}>{props.item.km}</Text>
+                    <View style={[globalStyles.rowView, { direction: I18nManager.isRTL ? 'ltr' : 'rtl' }]}>
+                        <Image source={ImagesPath.map_pin_dark_line_icon} style={{ width: wp(5), height: wp(5), resizeMode: 'contain' }} />
+                        <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>{props.item.km}</Text>
+                    </View>
                 </View>
                 {
                     props.item.author ?
                         <>
-                            <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{props.item.jobstatus}</Text>
-                            <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{props.item.author}</Text>
+                            <Text style={[styles.descriptionTxt, { writingDirection: "ltr", textAlign: 'left' }]}>{props.item.jobstatus}</Text>
+                            <Text style={[styles.descriptionTxt, { writingDirection: "ltr", textAlign: 'left' }]}>{props.item.author}</Text>
                         </> :
-
                         <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{props.item.description}</Text>
                 }
             </View>
@@ -57,17 +60,24 @@ const styles = StyleSheet.create({
     titleTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.SEMI_LARGE_20,
-        color: '#404040'
+        color: colors.dark_blue1_color
     },
     distanceTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
-        color: '#7F7F7F'
+        color: colors.dark_blue3_color
     },
     descriptionTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.SMALL_14,
-        paddingLeft: wp(2.5),
-        color: '#000000'
+        paddingHorizontal: wp(2.5),
+        color: colors.dark_blue2_color
+    },
+    dropDownShadowStyle: {
+        shadowColor: "rgba(0, 0, 0, 0.06)",
+        shadowOpacity: 5,
+        shadowRadius: 6,
+        shadowOffset: { height: 0, width: 0 },
+        elevation: 5
     }
 })

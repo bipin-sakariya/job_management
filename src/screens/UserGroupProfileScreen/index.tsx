@@ -67,9 +67,9 @@ const UserGroupProfileScreen = () => {
     ]
     const [userData, setUserData] = useState<userData[]>(data_user)
     const optionData = [
-        { title: 'Remove', onPress: onPress, imageSource: ImagesPath.bin_icon },
+        { title: strings.Remove, onPress: onPress, imageSource: ImagesPath.bin_icon },
         {
-            title: 'edit', onPress: () => {
+            title: strings.Edit, onPress: () => {
                 setIsEditable(true)
             }, imageSource: ImagesPath.edit_icon
         }
@@ -77,7 +77,7 @@ const UserGroupProfileScreen = () => {
 
     const renderItem = ({ item, index }: any) => {
         return (
-            <AssignedJobsComponent />
+            <AssignedJobsComponent item={item} />
         )
     }
 
@@ -85,12 +85,12 @@ const UserGroupProfileScreen = () => {
         <View style={globalStyles.container}>
             <Header
                 headerLeftStyle={{
-                    paddingLeft: wp(3)
+                    paddingHorizontal: wp(3)
                 }}
                 headerLeftComponent={
-                    <TouchableOpacity style={[globalStyles.rowView, { width: wp(40) }]} onPress={() => { navigation.goBack() }}>
+                    <TouchableOpacity style={[globalStyles.rowView, { width: wp(60) }]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
-                        <Text style={globalStyles.headerTitle}>Stanley Lamb</Text>
+                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>Stanley Lamb</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
@@ -103,12 +103,12 @@ const UserGroupProfileScreen = () => {
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <Image source={ImagesPath.image_for_user_icon} style={styles.addPhotoStyle} />
                     <CustomTextInput
-                        title={type == strings.users ? strings.UserName : strings.GroupName}
+                        title={type == 'users' ? strings.UserName : strings.GroupName}
                         container={{ marginBottom: wp(5) }}
                         value={'Stanley Lamb'}
                     />
                     {
-                        type == strings.users &&
+                        type == 'users' &&
                         <>
                             <CustomTextInput
                                 title={strings.Email}
@@ -132,30 +132,30 @@ const UserGroupProfileScreen = () => {
 
                     }
                     <CustomTextInput
-                        title={type == strings.users ? strings.Role : strings.Group_Manager}
+                        title={type == 'users' ? strings.Role : strings.Group_Manager}
                         container={{ marginBottom: wp(5) }}
                         value={'Inspector'}
                     />
                     <CustomTextInput
-                        title={type == strings.users ? strings.Permission : strings.Group_Inspector}
+                        title={type == 'users' ? strings.Permission : strings.Group_Inspector}
                         container={{ marginBottom: wp(5) }}
                         value={'Inspector'}
                     />
 
                     {
-                        type != strings.users &&
+                        type != 'users' &&
                         <>
                             <CustomDetailsComponent
                                 title={strings.Groupmemeber}
                                 detailsContainerStyle={{ marginBottom: wp(5) }}
                                 bottomComponent={
                                     <View style={{ width: "100%", marginVertical: wp(1) }}>
-                                        <Text style={[styles.commonTxtStyle, { fontSize: FontSizes.EXTRA_SMALL_12 }]}>{`Total ${userData.length} people`}</Text>
+                                        <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_12 }]}>{`Total ${userData.length} people`}</Text>
                                         <View style={[globalStyles.rowView, { flexWrap: "wrap", alignItems: "center" }]}>
                                             {userData.map((item, index) => {
                                                 return (
-                                                    <View style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: "#DEDEDE", borderRadius: wp(2) }]}>
-                                                        <Text style={[styles.commonTxtStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14 }]}>{item.name}</Text>
+                                                    <View style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, borderRadius: wp(2) }]}>
+                                                        <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14, color: colors.dark_blue1_color }]}>{item.name}</Text>
                                                     </View>
                                                 )
                                             })}
@@ -169,8 +169,8 @@ const UserGroupProfileScreen = () => {
                                     <View style={[globalStyles.rowView, { flexWrap: "wrap", alignItems: "center" }]}>
                                         {userData.map((item, index) => {
                                             return (
-                                                <View style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: "#DEDEDE", borderRadius: wp(2) }]}>
-                                                    <Text style={[styles.commonTxtStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14 }]}>{item.name}</Text>
+                                                <View style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, borderRadius: wp(2) }]}>
+                                                    <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14, color: colors.dark_blue1_color }]}>{item.name}</Text>
                                                 </View>
                                             )
                                         })}
@@ -194,8 +194,8 @@ const UserGroupProfileScreen = () => {
                                         {
                                             assignedJobs.length > 2 &&
                                             <TouchableOpacity style={[globalStyles.rowView, styles.viewAllJobs]}>
-                                                <Text>{strings.ViewallJobs}</Text>
-                                                <Image source={ImagesPath.arrow_right_black_border_icon} style={styles.iconStyle} />
+                                                <Text style={styles.viewAllJobsTxt}>{strings.ViewallJobs}</Text>
+                                                <Image source={ImagesPath.arrow_right_black_border_icon} style={[styles.iconStyle, { transform: [{ rotate: '180deg' }] }]} />
                                             </TouchableOpacity>
                                         }
                                     </>

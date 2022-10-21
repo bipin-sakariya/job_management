@@ -4,6 +4,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 import fonts from '../../styles/Fonts';
 import FontSizes from '../../styles/FontSizes';
 import { globalStyles } from '../../styles/globalStyles';
+import { colors } from '../../styles/Colors';
 
 export const styles = StyleSheet.create({
     topView: {
@@ -22,7 +23,7 @@ export const styles = StyleSheet.create({
     userNameTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        color: '#333333',
+        color: colors.dark_blue1_color,
         paddingRight: wp(1.5)
     },
     penIcon: {
@@ -37,7 +38,7 @@ export const styles = StyleSheet.create({
     roleTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
-        color: '#535353',
+        color: colors.dark_blue3_color,
         paddingVertical: wp(1)
     },
     btnContainer: {
@@ -47,9 +48,9 @@ export const styles = StyleSheet.create({
     btnTxtStyle: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.MEDIUM_16,
-        color: '#535353',
+        color: colors.dark_blue1_color,
         paddingVertical: wp(2.5),
-        paddingLeft: wp(2.5)
+        paddingHorizontal: wp(2.5)
     },
     btnIconStyle: {
         height: wp(6),
@@ -59,7 +60,7 @@ export const styles = StyleSheet.create({
     logoutTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        color: '#CCCCCC',
+        color: colors.white_color,
         paddingVertical: wp(2.5),
     },
     logoutBtnStyle: {
@@ -67,7 +68,7 @@ export const styles = StyleSheet.create({
         alignSelf: 'center',
         position: 'absolute',
         bottom: wp(6),
-        backgroundColor: '#262626',
+        backgroundColor: colors.primary_color,
         borderRadius: 10,
         paddingHorizontal: wp(10)
     },
@@ -76,5 +77,10 @@ export const styles = StyleSheet.create({
         width: wp(6),
         marginLeft: wp(2.5),
         resizeMode: 'contain'
+    },
+    drawerBackGroundColor: {
+        height: hp(20),
+        width: "100%",
+        resizeMode: "cover"
     }
 })

@@ -19,11 +19,11 @@ const CustomJobAddedByComponent = ({ image, userName, role, date }: CustomJobAdd
                     <Image source={image} style={styles.jobImage} />
                 </View>
                 <View style={styles.jobDetailsView}>
-                    <Text style={styles.fieldTxt} numberOfLines={1}>{userName}</Text>
-                    <Text style={styles.roleTxt} numberOfLines={1}>{role}</Text>
+                    <Text style={[styles.fieldTxt, globalStyles.rtlStyle, { textAlign: 'left' }]} numberOfLines={1}>{userName}</Text>
+                    <Text style={[styles.roleTxt, globalStyles.rtlStyle, { textAlign: 'left' }]} numberOfLines={1}>{role}</Text>
                 </View>
             </View>
-            <Text style={styles.dateTxt} numberOfLines={2}>{`Job added on\n ${date}`}</Text>
+            <Text style={[styles.dateTxt, globalStyles.rtlStyle, { textAlign: 'left' }]} numberOfLines={2}>{`Job added on\n ${date}`}</Text>
         </View>
     )
 }
@@ -49,22 +49,23 @@ const styles = StyleSheet.create({
     jobImage: {
         height: wp(7),
         width: wp(7),
+        resizeMode: 'contain'
     },
     fieldTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.SMALL_14,
-        color: colors.gray_8,
+        color: colors.dark_blue1_color,
         maxWidth: wp(50)
     },
     roleTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.EXTRA_SMALL_10,
-        color: colors.gray_15
+        color: colors.dark_blue2_color
     },
     dateTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.EXTRA_SMALL_12,
-        color: colors.brown,
+        color: colors.dark_blue2_color,
         maxWidth: wp(40)
     },
 

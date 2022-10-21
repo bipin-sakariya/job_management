@@ -7,6 +7,8 @@ import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { styles } from './styles'
 import CustomListView from '../../components/CustomListView'
+import { strings } from '../../languages/localizedStrings'
+import { colors } from '../../styles/Colors'
 
 const FormScreen = () => {
     const navigation = useCustomNavigation('FormScreen');
@@ -85,11 +87,11 @@ const FormScreen = () => {
     return (
         <View style={globalStyles.container}>
             <Header
-                headerLeftStyle={{ width: '40%', paddingLeft: wp(3) }}
+                headerLeftStyle={{ width: '50%', paddingLeft: wp(3) }}
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>Form</Text>
+                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{strings.form}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
@@ -108,8 +110,8 @@ const FormScreen = () => {
                     ListHeaderComponent={() => {
                         return (
                             <View style={[globalStyles.rowView, { marginBottom: wp(4) }]}>
-                                <Image source={ImagesPath.squre_note_icon} style={{ height: wp(5), width: wp(5) }} />
-                                <Text style={styles.billListTxt}>Form List</Text>
+                                <Image source={ImagesPath.squre_note_icon} style={styles.noteIconStyle} />
+                                <Text style={[styles.billListTxt, globalStyles.rtlStyle]}>{strings.FormList}</Text>
                             </View>
                         )
                     }}

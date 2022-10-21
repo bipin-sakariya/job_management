@@ -3,6 +3,6 @@ import { eng } from './en';
 import { hebrew } from './hebrew';
 
 export let strings = new LocalizedStrings({
-    en: eng,
+    // en: eng,
     hebrew: hebrew,
 });

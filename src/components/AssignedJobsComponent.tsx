@@ -6,8 +6,10 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import fonts from '../styles/Fonts'
 import FontSizes from '../styles/FontSizes'
 import { colors } from '../styles/Colors'
+import CustomStatusBtn from './CustomStatusBtn'
+import { strings } from '../languages/localizedStrings'
 
-const AssignedJobsComponent = () => {
+const AssignedJobsComponent = ({ item }: any) => {
     return (
         <View style={[globalStyles.rowView, styles.mainView]}>
             <Image source={ImagesPath.empty_image_white_border_icon} style={styles.imageStyle} />
@@ -15,13 +17,11 @@ const AssignedJobsComponent = () => {
                 <View style={[globalStyles.rowView, { justifyContent: "space-between", flex: 1 }]}>
                     <View style={globalStyles.rowView}>
                         <Image source={ImagesPath.infocircle_icon} style={styles.infoImageStyle} />
-                        <Text numberOfLines={1} style={styles.titleTxt}>Job Title</Text>
+                        <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle]}>Job Title</Text>
                     </View>
-                    <TouchableOpacity style={styles.BtnStyle}>
-                        <Text numberOfLines={1} style={styles.BtnTxtStyle}>Open</Text>
-                    </TouchableOpacity>
+                    <CustomStatusBtn title={strings.Open} style={{ backgroundColor: colors.dark_blue3_color }} txtStyle={{ color: colors.white_color }} />
                 </View>
-                <Text numberOfLines={1} style={styles.dateTxtStyle}>Assigned on 16 may</Text>
+                <Text numberOfLines={1} style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>Assigned on 16 may</Text>
             </View>
         </View>
     )
@@ -31,7 +31,7 @@ export default AssignedJobsComponent
 
 const styles = StyleSheet.create({
     mainView: {
-        backgroundColor: "#F5F5F5",
+        backgroundColor: colors.gray_light_color,
         paddingVertical: wp(2),
         paddingHorizontal: wp(2),
         borderRadius: wp(2)
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         maxWidth: wp(40),
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        color: '#404040'
+        color: colors.dark_blue1_color
     },
     BtnStyle: {
         backgroundColor: '#8D8D8D',
@@ -74,6 +74,6 @@ const styles = StyleSheet.create({
         maxWidth: wp(60),
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
-        color: '#737373'
+        color: colors.dark_blue2_color
     }
 })

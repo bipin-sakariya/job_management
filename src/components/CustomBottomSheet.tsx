@@ -1,4 +1,4 @@
-import { FlatList, Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import { FlatList, I18nManager, Image, StyleSheet, Text, TextInput, View } from 'react-native';
 import React, { useState } from 'react';
 import RBSheet, { RBSheetProps } from 'react-native-raw-bottom-sheet';
 import fonts from '../styles/Fonts';
@@ -72,7 +72,7 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
                 }}>
                     <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                     <TextInput
-                        style={styles.textInputStyle}
+                        style={[styles.textInputStyle, { textAlign: I18nManager.isRTL ? 'right' : 'left' }]}
                         placeholder={strings.SearchHere}
                         placeholderTextColor={'#666666'}
                     />
@@ -80,6 +80,7 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
                 <FlatList
                     data={data}
                     renderItem={({ item, index }) => {
+                        console.log("🚀 ~ file: CustomBottomSheet.tsx ~ line 83 ~ CustomBottomSheet ~ item", item)
                         return (
                             <TouchableOpacity onPress={() => onSelectes(index)} style={styles.itemContainer}>
                                 <Text style={styles.itemTitleTxt}>{item.title}</Text>

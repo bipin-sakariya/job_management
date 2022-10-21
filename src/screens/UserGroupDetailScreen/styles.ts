@@ -32,12 +32,13 @@ export const styles = StyleSheet.create({
     commonIconStyle: {
         height: wp(5),
         width: wp(5),
-        resizeMode: "contain"
+        resizeMode: "contain",
+        tintColor: colors.dark_blue1_color
     },
     commonTxtStyle: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.MEDIUM_16,
-        color: '#666666'
+        color: colors.dark_blue2_color
     }
 
 })

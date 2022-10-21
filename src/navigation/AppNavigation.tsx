@@ -73,6 +73,7 @@ const AppNavigation = () => {
                 <Stack.Screen name={'JobsScreen'} component={JobsScreen} />
                 <Stack.Screen name={'UserGroupProfileScreen'} component={UserGroupProfileScreen} />
                 <Stack.Screen name={'ReturnAndAddJobHistoryScreen'} component={ReturnAndAddJobHistoryScreen} />
+
             </Stack.Navigator>
         </NavigationContainer>
     );

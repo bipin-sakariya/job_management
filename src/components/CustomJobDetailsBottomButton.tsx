@@ -4,6 +4,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import fonts from '../styles/Fonts'
 import FontSizes from '../styles/FontSizes'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
+import { colors } from '../styles/Colors'
 
 interface CustomJobDetailsBottomButtonProps {
     buttonStyle?: ViewStyle,
@@ -30,10 +31,10 @@ export default CustomJobDetailsBottomButton
 const styles = StyleSheet.create({
     roundButtonStyle: {
         alignItems: "center",
-        justifyContent: "space-around"
+        justifyContent: "space-around",
     },
     roundViewStyle: {
-        backgroundColor: "#E9E9E9",
+        backgroundColor: colors.light_blue_color,
         padding: wp(2),
         borderRadius: wp(10)
     },
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
     roundTextStyle: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
-        color: Colors.black_1,
+        color: colors.dark_blue1_color,
         marginVertical: wp(2)
     },
 })

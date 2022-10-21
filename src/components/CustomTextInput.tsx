@@ -23,7 +23,8 @@ const CustomTextInput = (props: CustomTextInputProps & TextInputProps) => {
             <View style={[globalStyles.rowView, globalStyles.rtlDirection, { paddingHorizontal: wp(2.5), alignItems: "center", height: Platform.OS == "ios" ? wp(10) : wp(12), }]}>
                 <TextInput
                     {...props}
-                    style={[styles.textInputStyle, props.style, globalStyles.rtlStyle, { width: props.icon ? '94%' : '100%', textAlign: I18nManager.isRTL ? 'right' : 'left' }]}
+                    placeholderTextColor={colors.dark_blue2_color}
+                    style={[styles.textInputStyle, props.style, globalStyles.rtlStyle, { width: props.icon ? '94%' : '100%', textAlign: I18nManager.isRTL ? 'right' : 'left', color: colors.dark_blue2_color, }]}
                 />
                 {props.icon}
             </View>
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
         fontSize: FontSizes.MEDIUM_16,
         paddingVertical: wp(2),
         paddingHorizontal: wp(2.5),
-        color: colors.dark_blue4_color,
+        color: colors.dark_blue1_color,
     },
     textInputStyle: {
         fontFamily: fonts.FONT_POP_MEDIUM,
