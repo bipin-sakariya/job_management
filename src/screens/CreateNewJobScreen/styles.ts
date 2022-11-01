@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         paddingHorizontal: wp(2),
         marginVertical: wp(10),
+        // borderColor: colors.text_input_border_color
     },
     bottomTxtStyle: {
         paddingVertical: wp(2),

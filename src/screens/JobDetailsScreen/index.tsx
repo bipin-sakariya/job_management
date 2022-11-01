@@ -20,6 +20,7 @@ import TableHeaderView from "../../components/TableHeaderView";
 import TableDetailsComponent from "../../components/TableDetailsComponent";
 import { RootRouteProps } from "../../types/RootStackTypes";
 import CommonPdfView from "../../components/CommonPdfView";
+import moment from "moment";
 
 interface JobDetailsScreenRouteProps {
     description: string
@@ -236,7 +237,7 @@ const JobDetailsScreen = () => {
                     </>
                 } />
             <Container style={[{ marginHorizontal: wp(4) }]}>
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView >
                     {
                         data.status == strings.JobReturn ?
                             <View style={styles.warningView}>
@@ -247,7 +248,7 @@ const JobDetailsScreen = () => {
                                 <Text style={styles.reasonTxt}>{strings.Reasonofjobreturn}</Text>
                             </View> : null
                     }
-                    <View style={[globalStyles.rowView, { justifyContent: "space-between" }]}>
+                    <View style={[globalStyles.rowView, { justifyContent: "space-between", }]}>
                         <View style={[globalStyles.rowView, { justifyContent: "space-around", alignItems: "center" }]}>
                             <Image source={ImagesPath.infocircle_icon} style={styles.infoCircle} />
                             <Text numberOfLines={1} style={styles.jobTitle}>{route.params?.params.title}</Text>
@@ -341,7 +342,7 @@ const JobDetailsScreen = () => {
                         <CustomDetailsComponent
                             title={strings.JobAddedby}
                             bottomComponent={
-                                <CustomJobAddedByComponent date="16 may 2022" image={ImagesPath.image_white_border} role='Inspector' userName="Oscar Fields" />
+                                <CustomJobAddedByComponent date={moment('16 May 2022').format('ll')} image={ImagesPath.image_white_border} role='Inspector' userName="Oscar Fields" />
                             }
                         />
                         {

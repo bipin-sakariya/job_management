@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
         resizeMode: "contain"
     },
     duplicateFirstView: {
-        backgroundColor: colors.gray_11,
+        backgroundColor: colors.gray_light_color,
         padding: wp(5),
         borderRadius: wp(2)
     }

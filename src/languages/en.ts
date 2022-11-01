@@ -181,8 +181,22 @@ export const eng = {
     formname: 'form name',
     AddBill: 'Add Bill',
     Enteryouremail: 'Enter your email for the verification process, we will send you a password reset link to your email.',
-    Requestaresetlink: 'Request a reset link'
+    Requestaresetlink: 'Request a reset link',
+    increment: '',
+    measurement: 'measurement',
+    auto_fill_detail: 'Fill in the details below',
+    AddDetail: 'Add details',
+    MarkThere: 'Mark there',
+    There: 'There',
+    AsphaltColor: 'Asphalt color',
+    ClosejobModalText: 'Are you sure you want to close 9 Oxford street?',
+    Form_Name: 'Form Name',
 
+    Prepare_bill: 'Prepare your Bill',
+    Thanks: 'Thanks',
+    forgot_sucess_text: 'We have successfully sent your password reset link to your email address Example@gmail.com. Please check your inbox.',
+    forgot_error_text: "We're sorry, your password reset link has not been sent.You will have to click the Resend button to receive the link.",
+    send_again: 'send again',
 
 
 }

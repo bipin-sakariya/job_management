@@ -5,6 +5,7 @@ import { ImagesPath } from '../utils/ImagePaths'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import fonts from '../styles/Fonts'
 import FontSizes from '../styles/FontSizes'
+import { colors } from '../styles/Colors'
 interface CustomChatLinkViewProps {
     props?: any
     keyBoardVisible?: boolean
@@ -60,7 +61,7 @@ export default CustomChatLinkView
 const styles = StyleSheet.create({
     jobTypeMainView: {
         width: "83%",
-        backgroundColor: '#E9E9E9',
+        backgroundColor: colors.light_blue_color,
         padding: wp(2),
         borderRadius: wp(2)
     },
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     jobDetailView: {
-        backgroundColor: "#D9D9D9",
+        backgroundColor: "#FAFDFF",
         padding: wp(2),
         borderRadius: wp(2)
     },

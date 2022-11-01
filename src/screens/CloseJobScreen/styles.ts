@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
         marginHorizontal: wp(2),
     },
     sammedView: {
-        borderColor: colors.bottom_tab_bg,
+        borderColor: colors.text_input_border_color,
         borderWidth: wp(0.5),
         borderRadius: wp(2),
         marginVertical: wp(3),
@@ -24,12 +24,12 @@ export const styles = StyleSheet.create({
     },
     sammedSepratorLine: {
         height: wp(0.2),
-        backgroundColor: colors.white_3,
+        backgroundColor: colors.text_input_border_color,
         marginVertical: wp(2),
         marginHorizontal: wp(3)
     },
     formHeaderView: {
-        backgroundColor: colors.light_gray,
+        backgroundColor: colors.light_blue_color,
         paddingVertical: wp(2),
         paddingHorizontal: wp(2),
         borderTopLeftRadius: wp(1.5),
@@ -41,7 +41,7 @@ export const styles = StyleSheet.create({
         paddingHorizontal: wp(3),
         borderWidth: wp(0.3),
         borderRadius: wp(3),
-        borderColor: colors.gray_9
+        borderColor: colors.text_input_border_color
     },
     roundView: {
         height: wp(6),
@@ -92,7 +92,7 @@ export const styles = StyleSheet.create({
         borderRadius: wp(1),
         justifyContent: "center",
         paddingVertical: wp(2),
-        backgroundColor: colors.gray_13
+        backgroundColor: colors.primary_color
     },
     checkView: {
         backgroundColor: colors.brown,
@@ -108,7 +108,7 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         position: "absolute",
         bottom: 0,
-        right: wp(2),
+        left: wp(2),
     },
     roundImageStyle: {
         width: wp(15),
@@ -118,7 +118,7 @@ export const styles = StyleSheet.create({
     addFormTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
-        color: colors.gray_14
+        color: colors.white
     },
     bottomTxtStyle: {
         paddingVertical: wp(2),

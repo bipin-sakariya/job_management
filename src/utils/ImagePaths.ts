@@ -92,5 +92,13 @@ export const ImagesPath = {
     floppy_disk_icon: require('../assets/images/floppyDisk.png'),
     logo_of_job_managment: require('../assets/images/logo.png'),
     drawer_Bg: require('../assets/images/DrawerIcons/drawerBg.png'),
-}
+    check_box: require('../assets/images/check_box.png'),
+    select_check_box: require('../assets/images/select_check_box.png'),
+    minus: require('../assets/images/minus.png'),
+    plus: require('../assets/images/plus.png'),
+    arrow_icon: require('../assets/images/arrow.png'),
+    Pluscircle_icon: require('../assets/images/plusCircle_icon.png'),
+    check_icon_circle: require('../assets/images/check_icon.png'),
+    information_icon: require('../assets/images/information_icon.png')
 
+}

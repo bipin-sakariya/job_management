@@ -197,10 +197,10 @@ const CloseJobScreen = () => {
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomModal visible={isModelVisible} onRequestClose={() => { setIsModelVisible(false) }} children={
                     <View style={styles.modalView}>
-                        <Image source={ImagesPath.check_circle_icon} style={[globalStyles.modalImageStyle]} />
-                        <Text style={styles.modalTxt}>{strings.Areyousureyou} P.Maintenance?</Text>
+                        <Image source={ImagesPath.check_icon_circle} style={[globalStyles.modalImageStyle]} />
+                        <Text style={styles.modalTxt}>{strings.ClosejobModalText}</Text>
                         <View style={[globalStyles.rowView, { justifyContent: "space-around", width: '100%' }]}>
-                            <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%", backgroundColor: colors.gray_10 }} title={strings.Partial} />
+                            <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.Partial} />
                             <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%" }} title={strings.Close} />
                         </View>
                     </View>
@@ -227,12 +227,12 @@ const CloseJobScreen = () => {
                         viewStyle={{ width: wp(90) }}
                         result={result} children={
                             <TouchableOpacity style={styles.roundBtnView}>
-                                <Image source={ImagesPath.plus_circle_icon} style={styles.roundImageStyle} />
+                                <Image source={ImagesPath.Pluscircle_icon} style={[styles.roundImageStyle]} />
                             </TouchableOpacity>
                         } />
                     <View style={[styles.sammedView, { height: wp(100), marginTop: wp(5) }]}>
                         <View style={styles.formHeaderView}>
-                            <Text style={[styles.noNameTxt]}>Forms</Text>
+                            <Text style={[styles.noNameTxt, globalStyles.rtlStyle]}>{strings.Forms}</Text>
                         </View>
                         <FlatList
                             showsVerticalScrollIndicator={false}
@@ -245,7 +245,7 @@ const CloseJobScreen = () => {
                             ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}
                         />
                         <TouchableOpacity style={[globalStyles.rowView, styles.addFormView]}>
-                            <Image source={ImagesPath.add_form_icon} style={[globalStyles.headerIcon, { marginHorizontal: wp(1) }]} />
+                            <Image source={ImagesPath.add_form_icon} style={[globalStyles.headerIcon, { marginHorizontal: wp(1), tintColor: colors.white }]} />
                             <Text style={styles.addFormTxt}>{strings.AddForm}</Text>
                         </TouchableOpacity>
                     </View>

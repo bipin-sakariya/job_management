@@ -101,19 +101,19 @@ const ChatScreen = () => {
                             {...props}
                             textStyle={{
                                 left: {
-                                    color: colors.chat_left_Txt,
+                                    color: colors.chat_right_Txt,
                                     fontFamily: fonts.FONT_POP_REGULAR,
                                     fontSize: FontSizes.SMALL_14
                                 },
                                 right: {
-                                    color: colors.chat_right_Txt,
+                                    color: colors.white,
                                     fontFamily: fonts.FONT_POP_REGULAR,
                                     fontSize: FontSizes.SMALL_14
                                 },
                             }}
                             wrapperStyle={{
                                 left: {
-                                    backgroundColor: colors.chat_left_bubble,
+                                    backgroundColor: colors.light_blue_color,
                                     paddingVertical: wp(2),
                                     paddingHorizontal: wp(2),
                                     borderRadius: 0,
@@ -122,7 +122,7 @@ const ChatScreen = () => {
                                     borderBottomLeftRadius: wp(3)
                                 },
                                 right: {
-                                    backgroundColor: colors.chat_right_bubble,
+                                    backgroundColor: colors.primary_color,
                                     paddingVertical: wp(2),
                                     paddingHorizontal: wp(2),
                                     borderRadius: 0,

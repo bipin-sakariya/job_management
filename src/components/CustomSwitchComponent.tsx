@@ -15,9 +15,9 @@ interface CustomSwitchComponentProps {
 }
 const CustomSwitchComponent = (props: CustomSwitchComponentProps & TouchableOpacityProps) => {
     return (
-        <View style={[styles.textInputContainer, props.container]}>
+        <View style={[styles.textInputContainer, props.container, globalStyles.rtlDirection]}>
             <View style={styles.titleContainer}>
-                <Text style={styles.titleTxtStyle}>{props.title}</Text>
+                <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{props.title}</Text>
             </View>
             <View style={[globalStyles.rowView, styles.switchMainView]}>
                 <Text style={[styles.textStyle, { marginVertical: wp(3) }]}>{props.subTitle}</Text>
@@ -34,11 +34,11 @@ export default CustomSwitchComponent
 const styles = StyleSheet.create({
     textInputContainer: {
         borderRadius: wp(2),
-        borderColor: '#999999',
+        borderColor: colors.text_input_border_color,
         borderWidth: wp(0.5),
     },
     titleContainer: {
-        backgroundColor: '#BABABA',
+        backgroundColor: colors.light_blue_color,
         borderTopLeftRadius: wp(1.5),
         borderTopRightRadius: wp(1.5)
     },

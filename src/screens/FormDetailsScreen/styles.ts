@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
         marginHorizontal: wp(2),
     },
     sammedView: {
-        borderColor: colors.bottom_tab_bg,
+        borderColor: colors.text_input_border_color,
         borderWidth: wp(0.5),
         borderRadius: wp(2),
         marginVertical: wp(3),
@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
         marginHorizontal: wp(3)
     },
     formHeaderView: {
-        backgroundColor: "#BABABA",
+        backgroundColor: colors.light_blue_color,
         paddingVertical: wp(2),
         paddingHorizontal: wp(2),
         borderTopLeftRadius: wp(1.5),

@@ -1,4 +1,4 @@
-import { Alert, I18nManager, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, I18nManager, Image, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { ImagesPath } from '../../utils/ImagePaths';
@@ -20,8 +20,13 @@ const SignInScreen = () => {
     const dispatch = useDispatch()
     const [userName, setUserName] = useState(strings.Admin)
     const [password, setPassword] = useState("")
+    const [IsSucess, setIsSucess] = useState(false)
     const [secureText, setSecureText] = useState(true)
+    const [isLoading, setIsLoading] = useState(true)
     const refForgetPassRBSheet = useRef<RBSheet | null>(null);
+    const refForgetPassSucessRBSheet = useRef<RBSheet | null>(null);
+    const refForgetPassErrorRBSheet = useRef<RBSheet | null>(null);
+
 
     return (
         <View style={[globalStyles.container, { paddingHorizontal: wp(5), justifyContent: 'center' }]}>
@@ -72,18 +77,43 @@ const SignInScreen = () => {
             <BottomSheet
                 ref={refForgetPassRBSheet}
                 height={375}
-                children={
-                    <View style={styles.forgetPassViewStyle}>
+                children={<>
+
+                    {!IsSucess && isLoading ? <View style={styles.forgetPassViewStyle}>
                         <Text style={[styles.forgetPassTxtStyle, globalStyles.rtlStyle]}>{strings.Forgot_password}</Text>
                         <Text style={[styles.enterEmailTxtStyle, globalStyles.rtlStyle]}>{strings.Enteryouremail}</Text>
                         <CustomTextInput
                             title={strings.JobId}
                             container={{ marginVertical: wp(5), marginTop: wp(8) }}
                             value={'Example@gmail.com'} />
-                        <CustomBlackButton onPress={() => refForgetPassRBSheet.current?.close()} title={strings.Requestaresetlink} buttonStyle={{ paddingHorizontal: wp(23) }} />
-                    </View>
+                        <CustomBlackButton onPress={() => { setIsLoading(false), setTimeout(() => { setIsSucess(!IsSucess), setIsLoading(true) }, 2000) }} title={strings.Requestaresetlink} buttonStyle={{ paddingHorizontal: wp(23) }} />
+                    </View> : <>
+                        {!isLoading ?
+                            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                <ActivityIndicator size='small' />
+                            </View>
+                            : <View style={[styles.forgetPassViewStyle, { alignItems: 'center' }]}>
+                                <Image source={ImagesPath.check_icon_circle} resizeMode={'contain'} style={styles.imageStyle} />
+                                <Text style={[styles.sucessText, globalStyles.rtlStyle]}>{strings.forgot_sucess_text}</Text>
+                                <CustomBlackButton
+                                    onPress={() => setIsSucess(!IsSucess)}
+                                    title={strings.Thanks} buttonStyle={{ paddingHorizontal: wp(36.5), paddingVertical: wp(3.5) }} />
+                            </View>}</>}
+                </>
                 }
             />
+
+            {/* <BottomSheet
+                ref={refForgetPassErrorRBSheet}
+                height={360}
+                children={
+                    <View style={[styles.forgetPassViewStyle, { alignItems: 'center' }]}>
+                        <Image source={ImagesPath.information_icon} resizeMode={'contain'} style={styles.imageStyle} />
+                        <Text style={[styles.sucessText, globalStyles.rtlStyle]}>{strings.forgot_error_text}</Text>
+                        <CustomBlackButton title={strings.send_again} buttonStyle={{ paddingHorizontal: wp(33), paddingVertical: wp(3.5) }} />
+                    </View>
+                }
+            />  */}
         </View>
     )
 }

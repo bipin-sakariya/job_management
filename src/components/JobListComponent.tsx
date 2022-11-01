@@ -11,6 +11,7 @@ import CustomeJobListDetailsViewComponent from './CustomJobListDetailsViewCompon
 import useCustomNavigation from '../hooks/useCustomNavigation';
 import { useAppSelector } from '../redux/Store';
 import { strings } from '../languages/localizedStrings';
+import moment from 'moment';
 
 const JobListComponent = ({ item, index }: any) => {
     const navigation = useCustomNavigation('JobsScreen')
@@ -19,7 +20,7 @@ const JobListComponent = ({ item, index }: any) => {
         <View style={styles.itemContainer}>
             <View style={styles.dateTxtContainer}>
                 <Image source={ImagesPath.calender_icon} style={styles.calenderIconStyle} />
-                <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{item.data}</Text>
+                <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{moment(item.data).format('ll')}</Text>
             </View>
             {item.jobs.map((i: any) => (
                 <CustomeJobListDetailsViewComponent onPress={() => {

@@ -9,6 +9,7 @@ import CustomDropdown from './CustomDropDown';
 import useCustomNavigation from '../hooks/useCustomNavigation';
 import { strings } from '../languages/localizedStrings';
 import { colors } from '../styles/Colors';
+import moment from 'moment';
 
 interface itemPropsType {
     name: string
@@ -41,7 +42,7 @@ const UserListComponent = ({ item, type }: { item: itemPropsType, type?: string 
                 </View>
             </View>
             <View style={globalStyles.rowView}>
-                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{item.date}</Text>
+                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{moment(item.date).format('ll')}</Text>
                 <TouchableOpacity ref={imageRef} onPress={() => setVisible(true)}>
                     <Image source={ImagesPath.menu_dots_icon} style={styles.menuIconStyle} />
                 </TouchableOpacity>

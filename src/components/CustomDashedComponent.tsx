@@ -26,7 +26,7 @@ export default CustomDashedComponent
 
 const styles = StyleSheet.create({
     dashedView: {
-        borderColor: colors.gray_color,
+        borderColor: colors.text_input_border_color,
         borderWidth: wp(0.3),
         borderRadius: wp(2),
         borderStyle: 'dashed',

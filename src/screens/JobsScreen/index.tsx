@@ -12,6 +12,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { RootState, useAppSelector } from '../../redux/Store';
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
+import moment from 'moment';
 
 const data = [
     { id: 1, title: strings.All, selected: true },
@@ -19,6 +20,10 @@ const data = [
     { id: 3, title: strings.Paint, selected: false },
     { id: 4, title: strings.Council, selected: false },
 ]
+// const localization = moment.locale('he');
+
+
+
 
 const JobData = [
     {

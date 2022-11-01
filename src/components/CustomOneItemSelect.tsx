@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp(3),
         borderWidth: wp(0.3),
         borderRadius: wp(3),
-        borderColor: colors.gray_9
+        borderColor: colors.text_input_border_color
     },
     roundView: {
         height: wp(6),

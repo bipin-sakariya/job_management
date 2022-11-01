@@ -35,7 +35,8 @@ export const styles = StyleSheet.create({
     forgetPassViewStyle: {
         flex: 1,
         marginHorizontal: wp(8),
-        marginVertical: wp(3)
+        marginVertical: wp(3),
+
     },
     forgetPassTxtStyle: {
         fontFamily: fonts.FONT_POP_REGULAR,
@@ -46,5 +47,16 @@ export const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
         color: colors.dark_blue2_color
+    },
+    sucessText: {
+        marginVertical: wp(3),
+        fontFamily: fonts.FONT_POP_REGULAR,
+        fontSize: FontSizes.EXTRA_SMALL_12,
+        color: colors.dark_blue3_color,
+    },
+    imageStyle: {
+        width: wp(25),
+        height: wp(25),
+        marginVertical: wp(3)
     }
 })

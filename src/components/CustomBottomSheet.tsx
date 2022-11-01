@@ -63,7 +63,7 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
             }}>
             <View style={{ flex: 1 }}>
                 <View style={{
-                    ...globalStyles.rowView, borderColor: '#E8E8E8',
+                    ...globalStyles.rowView, borderColor: colors.text_input_border_color,
                     borderWidth: 1,
                     borderRadius: 10,
                     marginBottom: wp(4),
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
         marginBottom: wp(4),
         paddingVertical: wp(2.5),
         paddingHorizontal: wp(2.5),
-        borderColor: '#E8E8E8',
+        borderColor: colors.text_input_border_color,
         borderWidth: 1,
         borderRadius: 10
     },

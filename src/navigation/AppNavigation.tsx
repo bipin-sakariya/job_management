@@ -32,6 +32,9 @@ import CreateNewJobScreen from '../screens/CreateNewJobScreen';
 import JobsScreen from '../screens/JobsScreen';
 import UserGroupProfileScreen from '../screens/UserGroupProfileScreen';
 import ReturnAndAddJobHistoryScreen from '../screens/ReturnAndAddJobHistoryScreen';
+import SelectFormScreen from '../screens/SelectFormScreen';
+import FillFormScreen from '../screens/FillFormScreen';
+import SignBillDetailScreen from '../screens/SignBillDetailScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -42,7 +45,7 @@ const AppNavigation = () => {
                 screenOptions={{
                     headerShown: false
                 }}
-                initialRouteName={'AuthStack'}>
+                initialRouteName={'CloseJobScreen'}>
                 <Stack.Screen name={'AuthStack'} component={AuthStack} />
                 <Stack.Screen name={'DrawerScreens'} component={DrawerStack} />
                 <Stack.Screen name={'JobDuplicateListScreen'} component={JobDuplicateListScreen} />
@@ -73,7 +76,9 @@ const AppNavigation = () => {
                 <Stack.Screen name={'JobsScreen'} component={JobsScreen} />
                 <Stack.Screen name={'UserGroupProfileScreen'} component={UserGroupProfileScreen} />
                 <Stack.Screen name={'ReturnAndAddJobHistoryScreen'} component={ReturnAndAddJobHistoryScreen} />
-
+                <Stack.Screen name={'SelectFormScreen'} component={SelectFormScreen} />
+                <Stack.Screen name={'FillFormScreen'} component={FillFormScreen} />
+                <Stack.Screen name={'SignBillDetailScreen'} component={SignBillDetailScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

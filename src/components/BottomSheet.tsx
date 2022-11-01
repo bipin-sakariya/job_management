@@ -26,10 +26,16 @@ const BottomSheet = React.forwardRef((props: BottomSheetProps & RBSheetProps, re
                 },
                 wrapper: {
                     backgroundColor: "transparent",
+                    shadowColor: 'rgba(0, 0, 0, 0.2)',
+                    shadowOpacity: 10,
+                    shadowRadius: 10,
+                    shadowOffset: { height: 0, width: 0 },
+                    elevation: 5
                 },
                 draggableIcon: {
                     backgroundColor: colors.bottom_sheet_tab,
-                    width: wp(30)
+                    width: wp(30),
+
                 }
             }}>
             {props.children}

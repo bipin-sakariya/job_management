@@ -242,7 +242,7 @@ const ReportGeneratorScreen = () => {
                         <View style={styles.mainListView}>
                             <View style={[globalStyles.rowView, { justifyContent: "space-between", alignItems: 'center' }]}>
                                 <Text style={[styles.titleTxt, globalStyles.rtlStyle]}>{item.title}</Text>
-                                <Text style={[styles.commonTxt, globalStyles.rtlStyle]}>{item.date}</Text>
+                                <Text style={[styles.commonTxt, globalStyles.rtlStyle]}>{moment(item.date).format('ll')}</Text>
                             </View>
                             <Text numberOfLines={1} style={[styles.commonTxt, globalStyles.rtlStyle, { marginVertical: wp(1) }]}>{item.description}</Text>
                             <View style={[styles.sepratorLine]} />

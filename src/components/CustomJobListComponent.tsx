@@ -1,3 +1,4 @@
+import moment from "moment";
 import React from "react";
 import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
@@ -29,7 +30,7 @@ const CustomJobListComponent = ({ item, type }: CustomJobListComponentProps) => 
                     </View>
                     <CustomStatusBtn title={item.button} />
                 </View>
-                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_10, textAlign: "left" }]}>{item.date}</Text>
+                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_10, textAlign: "left" }]}>{moment(item.date).format('ll')}</Text>
                 <View style={styles.descriptionView}>
                     <Text numberOfLines={2} style={[styles.descriptionTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>{item.description}</Text>
                     <View style={[globalStyles.rowView, styles.kmViewStyle]}>

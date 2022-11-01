@@ -182,9 +182,18 @@ export const hebrew = {
     Enteryouremail: 'הזן את האימייל שלך לתהליך האימות, אנו נשלח לך קישור לאיפוס סיסמה למייל שלך.',
     Requestaresetlink: 'בקש קישור לאיפוס',
     Forgot_password: 'שכחת את הסיסמא',
-
-
-
-
-
-}
+    increment: '',
+    measurement: 'מדידה',
+    auto_fill_detail: 'מלא את הפרטים למטה',
+    AddDetail: 'הוסף פרטים',
+    MarkThere: 'סימן שם',
+    There: 'שֵׁם',
+    AsphaltColor: 'צבע   אספלט',
+    ClosejobModalText: 'האם אתה בטוח שאתה רוצה לסגור את 9 Oxfort street?',
+    Form_Name: 'שם טופס',
+    Prepare_bill: 'הכן את הצעת החוק שלך',
+    Thanks: 'תודה',
+    forgot_sucess_text: 'שלחנו בהצלחה את הקישור לאיפוס הסיסמה שלך לכתובת הדוא"ל שלך Example@gmail.com. אנא בדוק את תיבת הדואר הנכנס שלך.',
+    forgot_error_text: 'אנו מצטערים, הקישור לאיפוס הסיסמה שלך לא נשלח. תצטרכו ללחוץ על כפתור "שלח מחדש" על מנת לקבל את הקישור.',
+    send_again: 'שלח שוב',
+} 

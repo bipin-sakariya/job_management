@@ -6,6 +6,7 @@ import { ImagesPath } from '../utils/ImagePaths'
 import { colors } from '../styles/Colors'
 import fonts from '../styles/Fonts'
 import FontSizes from '../styles/FontSizes'
+import moment from 'moment'
 
 interface CustomeListViewProps {
     item: any,
@@ -28,7 +29,7 @@ const CustomListView = ({ item, onPress, material }: CustomeListViewProps) => {
                 </Text>
             </View>
             <View style={globalStyles.rowView}>
-                <Text style={[styles.dateTxt, globalStyles.rtlStyle]}>{item.date}</Text>
+                <Text style={[styles.dateTxt, globalStyles.rtlStyle]}>{moment(item.date).format('ll')}</Text>
                 <TouchableOpacity>
                     <Image style={styles.menuImageStyle} source={ImagesPath.menu_dots_icon} />
                 </TouchableOpacity>

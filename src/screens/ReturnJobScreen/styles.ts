@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
         paddingHorizontal: wp(3),
         borderWidth: wp(0.3),
         borderRadius: wp(3),
-        borderColor: colors.gray_9,
+        borderColor: colors.text_input_border_color,
         marginVertical: wp(2)
     },
     roundView: {
@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
     textInputStyle: {
         height: wp(20),
         marginTop: wp(2),
-        borderColor: colors.gray_16,
+        borderColor: colors.text_input_border_color,
         borderWidth: wp(0.3),
         borderRadius: wp(2),
         padding: wp(2),
