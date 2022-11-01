@@ -1,18 +1,14 @@
-import { Alert, I18nManager, Image, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, } from 'react-native';
+import { Alert, Image, Text, TouchableOpacity, View, ActivityIndicator, } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { styles } from './styles';
-import FontSizes from '../../styles/FontSizes';
-import fonts from '../../styles/Fonts';
-import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { BottomSheet, CustomBlackButton, CustomTextInput } from '../../components';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { userDataReducer } from '../../redux/slice/authSlices/AuthUserSlice';
 import { strings } from '../../languages/localizedStrings';
-import { colors } from '../../styles/Colors';
 import RBSheet from 'react-native-raw-bottom-sheet';
 
 const SignInScreen = () => {
@@ -48,7 +44,7 @@ const SignInScreen = () => {
                 secureTextEntry={secureText}
                 icon={
                     <TouchableOpacity onPress={() => setSecureText(!secureText)}>
-                        <Image source={ImagesPath.close_eye_icon} style={styles.iconStyle} />
+                        <Image source={secureText ? ImagesPath.close_eye_icon : ImagesPath.open_eye_icon} style={styles.iconStyle} />
                     </TouchableOpacity>
                 }
             />
@@ -78,31 +74,33 @@ const SignInScreen = () => {
                 ref={refForgetPassRBSheet}
                 height={375}
                 children={<>
-
-                    {!IsSucess && isLoading ? <View style={styles.forgetPassViewStyle}>
-                        <Text style={[styles.forgetPassTxtStyle, globalStyles.rtlStyle]}>{strings.Forgot_password}</Text>
-                        <Text style={[styles.enterEmailTxtStyle, globalStyles.rtlStyle]}>{strings.Enteryouremail}</Text>
-                        <CustomTextInput
-                            title={strings.JobId}
-                            container={{ marginVertical: wp(5), marginTop: wp(8) }}
-                            value={'Example@gmail.com'} />
-                        <CustomBlackButton onPress={() => { setIsLoading(false), setTimeout(() => { setIsSucess(!IsSucess), setIsLoading(true) }, 2000) }} title={strings.Requestaresetlink} buttonStyle={{ paddingHorizontal: wp(23) }} />
-                    </View> : <>
-                        {!isLoading ?
-                            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                <ActivityIndicator size='small' />
-                            </View>
-                            : <View style={[styles.forgetPassViewStyle, { alignItems: 'center' }]}>
-                                <Image source={ImagesPath.check_icon_circle} resizeMode={'contain'} style={styles.imageStyle} />
-                                <Text style={[styles.sucessText, globalStyles.rtlStyle]}>{strings.forgot_sucess_text}</Text>
-                                <CustomBlackButton
-                                    onPress={() => setIsSucess(!IsSucess)}
-                                    title={strings.Thanks} buttonStyle={{ paddingHorizontal: wp(36.5), paddingVertical: wp(3.5) }} />
-                            </View>}</>}
-                </>
-                }
+                    {!IsSucess && isLoading ?
+                        <View style={styles.forgetPassViewStyle}>
+                            <Text style={[styles.forgetPassTxtStyle, globalStyles.rtlStyle]}>{strings.Forgot_password}</Text>
+                            <Text style={[styles.enterEmailTxtStyle, globalStyles.rtlStyle]}>{strings.Enteryouremail}</Text>
+                            <CustomTextInput
+                                title={strings.JobId}
+                                container={{ marginVertical: wp(5), marginTop: wp(8) }}
+                                value={'Example@gmail.com'} />
+                            <CustomBlackButton onPress={() => { setIsLoading(false), setTimeout(() => { setIsSucess(!IsSucess), setIsLoading(true) }, 2000) }} title={strings.Requestaresetlink} buttonStyle={{ paddingHorizontal: wp(23) }} />
+                        </View> :
+                        <>
+                            {!isLoading ?
+                                <View style={styles.loaderContainer}>
+                                    <ActivityIndicator size='small' />
+                                </View> :
+                                <View style={[styles.forgetPassViewStyle, { alignItems: 'center' }]}>
+                                    <Image source={ImagesPath.check_icon_circle} resizeMode={'contain'} style={styles.imageStyle} />
+                                    <Text style={[styles.sucessText, globalStyles.rtlStyle]}>{strings.forgot_sucess_text}</Text>
+                                    <CustomBlackButton
+                                        onPress={() => setIsSucess(!IsSucess)}
+                                        title={strings.Thanks} buttonStyle={{ paddingHorizontal: wp(36.5), paddingVertical: wp(3.5) }} />
+                                </View>
+                            }
+                        </>
+                    }
+                </>}
             />
-
             {/* <BottomSheet
                 ref={refForgetPassErrorRBSheet}
                 height={360}

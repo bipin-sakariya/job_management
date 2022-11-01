@@ -1,4 +1,4 @@
-import { Image, Text, TouchableOpacity, View, ScrollView, TextInput } from 'react-native';
+import { Image, Text, TouchableOpacity, View, ScrollView, TextInput, ImageBackground } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { Container, CustomBlackButton, CustomDetailsComponent, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components';
 import { globalStyles } from '../../styles/globalStyles';
@@ -13,6 +13,7 @@ import CustomDropdown from '../../components/CustomDropDown';
 import { strings } from '../../languages/localizedStrings';
 import FontSizes from '../../styles/FontSizes';
 import { colors } from '../../styles/Colors';
+import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
 
 const data = [
     { label: 'Item 1', value: '1' },
@@ -40,6 +41,8 @@ const UserGroupDetailScreen = () => {
     const [permission, setPermission] = useState<DropdownProps>({ label: '', value: '' })
     const [selectForms, setSelectForms] = useState<DropdownProps>({ label: '', value: '' })
     const [visible, setVisible] = useState(false);
+    const [imageUrl, setImageUrl] = useState<string | undefined>('');
+
     let data_user = [
         {
             id: 1,
@@ -101,7 +104,23 @@ const UserGroupDetailScreen = () => {
                         title={type == 'users' ? strings.FillfromtocreateUser : strings.FillfromtoCreateGroup}
                         image={ImagesPath.from_list_icon}
                     />
-                    <Image source={ImagesPath.add_photo_icon} style={styles.addPhotoStyle} />
+                    <ImageBackground
+                        source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
+                        style={styles.addPhotoStyle}
+                        borderRadius={wp(2)}>
+                        <TouchableOpacity
+                            onPress={async () => {
+                                let option: ImageLibraryOptions = {
+                                    mediaType: 'photo'
+                                }
+                                const { assets } = await launchImageLibrary(option)
+                                setImageUrl(assets && assets.length !== 0 ? assets[0]?.uri : '')
+                            }}
+                            activeOpacity={1}
+                            style={styles.camreaBtnStyle}>
+                            <Image source={ImagesPath.camera_icon} style={styles.cameraIconStyle} />
+                        </TouchableOpacity>
+                    </ImageBackground>
                     <CustomTextInput
                         title={type == 'users' ? strings.UserName : strings.GroupName}
                         container={{ marginBottom: wp(5) }}

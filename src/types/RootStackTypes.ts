@@ -51,7 +51,10 @@ export type RootStackParamList = {
     CreateNewJobScreen: { type?: string }
     JobsScreen: undefined
     UserGroupProfileScreen: { type?: string }
-    ReturnAndAddJobHistoryScreen: { type?: string }
+    ReturnAndAddJobHistoryScreen: { type?: string },
+    SelectFormScreen: undefined,
+    FillFormScreen: undefined,
+    SignBillDetailScreen: undefined
 };
 
 export type AuthStackParamList = {

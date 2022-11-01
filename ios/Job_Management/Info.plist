@@ -58,5 +58,7 @@
 		<string>Poppins-Regular.ttf</string>
 		<string>Poppins-SemiBold.ttf</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Job management requires access to the photo library for posting media.</string>
 </dict>
 </plist>

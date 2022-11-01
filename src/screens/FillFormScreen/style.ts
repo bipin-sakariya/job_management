@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { colors } from "../../styles/Colors";
 import fonts from "../../styles/Fonts";
@@ -23,4 +23,13 @@ export const styles = StyleSheet.create({
         paddingHorizontal: wp(2.5),
         color: colors.dark_blue1_color,
     },
+    btnContainerStyle: {
+        paddingHorizontal: wp(2.5),
+        alignItems: "center",
+        height: Platform.OS == "ios" ? wp(10) : wp(12),
+    },
+    btnIconStyle: {
+        width: wp(7),
+        height: wp(7)
+    }
 }) 

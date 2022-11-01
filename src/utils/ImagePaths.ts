@@ -22,6 +22,7 @@ export const ImagesPath = {
     menu_dots_icon: require('../assets/images/menuDotsIcon.png'),
     app_icon: require('../assets/images/appIcon.png'),
     close_eye_icon: require('../assets/images/closeEyeIcon.png'),
+    open_eye_icon: require('../assets/images/openEyeIcon.png'),
     pencil_icon: require('../assets/images/DrawerIcons/pencilIcon.png'),
     user_icon: require('../assets/images/DrawerIcons/userIcon.png'),
     bill_icon: require('../assets/images/DrawerIcons/billIcon.png'),
@@ -99,6 +100,6 @@ export const ImagesPath = {
     arrow_icon: require('../assets/images/arrow.png'),
     Pluscircle_icon: require('../assets/images/plusCircle_icon.png'),
     check_icon_circle: require('../assets/images/check_icon.png'),
-    information_icon: require('../assets/images/information_icon.png')
-
+    information_icon: require('../assets/images/information_icon.png'),
+    camera_icon: require('../assets/images/camera_icon.png'),
 }

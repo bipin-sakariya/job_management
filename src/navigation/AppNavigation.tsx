@@ -45,7 +45,7 @@ const AppNavigation = () => {
                 screenOptions={{
                     headerShown: false
                 }}
-                initialRouteName={'CloseJobScreen'}>
+                initialRouteName={'AuthStack'}>
                 <Stack.Screen name={'AuthStack'} component={AuthStack} />
                 <Stack.Screen name={'DrawerScreens'} component={DrawerStack} />
                 <Stack.Screen name={'JobDuplicateListScreen'} component={JobDuplicateListScreen} />

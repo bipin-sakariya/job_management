@@ -59,7 +59,15 @@ const UsersScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <CustomDashedComponent textStyle={{ color: colors.dark_blue1_color }} viewStyle={{ paddingVertical: wp(5), borderColor: colors.gray_color }} title={type == 'users' ? strings.ADDNEWUSER : strings.ADDNEWGROUP} image={ImagesPath.add_icon} onPress={() => { }} />
+                <CustomDashedComponent
+                    textStyle={{ color: colors.dark_blue1_color }}
+                    viewStyle={{ paddingVertical: wp(5), borderColor: colors.gray_color }}
+                    title={type == 'users' ? strings.ADDNEWUSER : strings.ADDNEWGROUP}
+                    image={ImagesPath.add_icon}
+                    onPress={() => {
+                        navigation.navigate('UserGroupDetailScreen', { type: type })
+                    }}
+                />
                 <CustomSubTitleWithImageComponent
                     disabled
                     title={type == 'users' ? strings.AddedUsers : strings.AddedGroups}

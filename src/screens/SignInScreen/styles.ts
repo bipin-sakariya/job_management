@@ -58,5 +58,10 @@ export const styles = StyleSheet.create({
         width: wp(25),
         height: wp(25),
         marginVertical: wp(3)
+    },
+    loaderContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })

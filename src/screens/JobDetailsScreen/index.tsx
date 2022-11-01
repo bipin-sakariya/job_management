@@ -236,8 +236,8 @@ const JobDetailsScreen = () => {
                         }
                     </>
                 } />
-            <Container style={[{ marginHorizontal: wp(4) }]}>
-                <ScrollView >
+            <Container>
+                <ScrollView contentContainerStyle={[{ paddingHorizontal: wp(4) }]}>
                     {
                         data.status == strings.JobReturn ?
                             <View style={styles.warningView}>

@@ -1,15 +1,22 @@
-import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
-import { globalStyles } from '../../styles/globalStyles'
-import { Container, Header } from '../../components'
-import { ImagesPath } from '../../utils/ImagePaths'
-import useCustomNavigation from '../../hooks/useCustomNavigation'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { styles } from './styles'
-import { strings } from '../../languages/localizedStrings'
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { globalStyles } from '../../styles/globalStyles';
+import { Container, CustomSubTitleWithImageComponent, Header } from '../../components';
+import { ImagesPath } from '../../utils/ImagePaths';
+import useCustomNavigation from '../../hooks/useCustomNavigation';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { styles } from './styles';
+import { strings } from '../../languages/localizedStrings';
+
+interface formItemProps {
+    id: number,
+    title: string,
+    date: string,
+    isChecked: boolean
+}
 
 const SelectFormScreen = () => {
-    const navigation = useCustomNavigation('FormScreen');
+    const navigation = useCustomNavigation('SelectFormScreen');
     const [form, setForm] = useState([
         {
             id: 1,
@@ -70,14 +77,13 @@ const SelectFormScreen = () => {
             return product;
         });
         setForm(finalData);
-    };
-    const renderItem = ({ item }: any) => {
+    }
+
+    const renderItem = ({ item }: { item: formItemProps }) => {
         return (
             <TouchableOpacity onPress={() => handleChange(item.id)} style={[globalStyles.rowView,]}>
-
-
                 <Image source={item.isChecked ? ImagesPath.select_check_box : ImagesPath.check_box} style={styles.checkIcon} />
-                <TouchableOpacity style={[globalStyles.rowView, styles.listMainView, styles.dropDownShadowStyle]}>
+                <View style={[globalStyles.rowView, styles.listMainView, styles.dropDownShadowStyle]}>
                     <View style={globalStyles.rowView}>
                         <Text style={[styles.titleTxt, globalStyles.rtlStyle, { marginLeft: wp(2) }]}>
                             {item.title}
@@ -86,8 +92,7 @@ const SelectFormScreen = () => {
                     <View style={globalStyles.rowView}>
                         <Text style={[styles.dateTxt, globalStyles.rtlStyle]}>{item.date}</Text>
                     </View>
-                </TouchableOpacity>
-
+                </View>
             </TouchableOpacity >
         )
     }
@@ -110,18 +115,18 @@ const SelectFormScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <FlatList showsVerticalScrollIndicator={false} data={form}
-                    ListHeaderComponent={() => {
+                <CustomSubTitleWithImageComponent
+                    disabled
+                    title={strings.FormList}
+                    image={ImagesPath.squre_note_icon}
+                />
+                <FlatList
+                    showsVerticalScrollIndicator={false}
+                    data={form}
+                    renderItem={renderItem}
+                    ItemSeparatorComponent={() => {
                         return (
-                            <View style={[globalStyles.rowView, { marginBottom: wp(4) }]}>
-                                <Image source={ImagesPath.squre_note_icon} style={styles.noteIconStyle} />
-                                <Text style={[styles.billListTxt, globalStyles.rtlStyle]}>{strings.FormList}</Text>
-                            </View>
-                        )
-                    }}
-                    renderItem={renderItem} ItemSeparatorComponent={() => {
-                        return (
-                            <View style={{ height: wp(3) }} />
+                            <View style={{ height: wp(2.5) }} />
                         )
                     }} />
             </Container>
