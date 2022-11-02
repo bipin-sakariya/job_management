@@ -5,15 +5,19 @@ import { ImagesPath } from '../../utils/ImagePaths';
 import { styles } from './styles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { BottomSheet, CustomBlackButton, CustomTextInput } from '../../components';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { NavigationProp, PrivateValueStore, useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { userDataReducer } from '../../redux/slice/authSlices/AuthUserSlice';
+import { signin, userDataReducer } from '../../redux/slices/AuthUserSlice';
 import { strings } from '../../languages/localizedStrings';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import { AppDispatch } from '../../redux/Store';
+import * as yup from "yup";
+import { Formik } from "formik";
+import { colors } from '../../styles/Colors';
 
 const SignInScreen = () => {
     const navigation: NavigationProp<any, any> = useNavigation()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     const [userName, setUserName] = useState(strings.Admin)
     const [password, setPassword] = useState("")
     const [IsSucess, setIsSucess] = useState(false)
@@ -23,6 +27,31 @@ const SignInScreen = () => {
     const refForgetPassSucessRBSheet = useRef<RBSheet | null>(null);
     const refForgetPassErrorRBSheet = useRef<RBSheet | null>(null);
 
+    const SignInValidationSchema = yup.object().shape({
+        email: yup
+            .string()
+            .email(strings.email_invalid)
+            .required(strings.email_invalid),
+
+        password: yup.string().min(5, strings.enter_max_6_character).required(strings.password_invalid)
+    });
+
+    const login = (values: any) => {
+
+        let data = {
+            email: values.email,
+            password: values.password,
+            // role: 'Group Manager',
+            // role: userName,
+            // role: strings.Inspector,
+        }
+        dispatch(signin(data)).unwrap().then((res) => {
+            console.log({ res });
+            if (res) { navigation.reset({ index: 0, routes: [{ name: "DrawerScreens" }] }) }
+        })
+    }
+
+
 
     return (
         <View style={[globalStyles.container, { paddingHorizontal: wp(5), justifyContent: 'center' }]}>
@@ -31,45 +60,50 @@ const SignInScreen = () => {
                 <Text style={styles.titleTxt}>{strings.Welcometo}</Text>
                 <Text style={styles.titleTxt}>{strings.JobManagement}</Text>
             </View>
-            <CustomTextInput
-                title={strings.UserName}
-                placeholder={strings.UserName}
-                onChangeText={(text) => { setUserName(text) }}
-                container={{ marginBottom: wp(5) }}
-            />
-            <CustomTextInput
-                title={strings.Password}
-                placeholder={strings.Password}
-                onChangeText={(text) => { setPassword(text) }}
-                secureTextEntry={secureText}
-                icon={
-                    <TouchableOpacity onPress={() => setSecureText(!secureText)}>
-                        <Image source={secureText ? ImagesPath.close_eye_icon : ImagesPath.open_eye_icon} style={styles.iconStyle} />
-                    </TouchableOpacity>
-                }
-            />
-            <TouchableOpacity onPress={() => { refForgetPassRBSheet.current?.open() }}>
-                <Text style={styles.forgetPassTxt}>{strings.Forgotpassword}</Text>
-            </TouchableOpacity>
-            <CustomBlackButton
-                title={strings.Signin}
-                onPress={() => {
-                    if (userName && password) {
-                        let data = {
-                            email: userName,
-                            password: password,
-                            // role: 'Group Manager',
-                            role: userName,
-                            // role: strings.Inspector,
+            <Formik
+                validationSchema={SignInValidationSchema}
+                initialValues={{ email: '', password: '' }}
+                enableReinitialize={true}
+                onSubmit={(values) => { login(values) }}
+            >{({
+                handleChange,
+                handleSubmit,
+                values,
+                errors,
+                touched,
+            }) => (
+                <>
+                    <CustomTextInput
+                        title={strings.UserName}
+                        placeholder={strings.UserName}
+                        onChangeText={handleChange("email")}
+                        value={values.email}
+                        container={{ marginBottom: wp(5) }}
+                    />
+                    {touched.email && errors.email && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors.email}</Text>}
+                    <CustomTextInput
+                        title={strings.Password}
+                        placeholder={strings.Password}
+                        onChangeText={handleChange("password")}
+                        value={values.password}
+                        secureTextEntry={secureText}
+                        icon={
+                            <TouchableOpacity onPress={() => setSecureText(!secureText)}>
+                                <Image source={secureText ? ImagesPath.close_eye_icon : ImagesPath.open_eye_icon} style={styles.iconStyle} />
+                            </TouchableOpacity>
                         }
-                        dispatch(userDataReducer(data))
-                        navigation.reset({ index: 0, routes: [{ name: "DrawerScreens" }] })
-                    } else {
-                        Alert.alert("Enter valid details")
-                    }
-                }}
-                buttonStyle={{ marginVertical: wp(10) }}
-            />
+                    />
+                    {touched.password && errors.password && <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors.password}</Text>}
+                    <TouchableOpacity onPress={() => { refForgetPassRBSheet.current?.open() }}>
+                        <Text style={styles.forgetPassTxt}>{strings.Forgotpassword}</Text>
+                    </TouchableOpacity>
+                    <CustomBlackButton
+                        title={strings.Signin}
+                        onPress={() => handleSubmit()}
+                        buttonStyle={{ marginVertical: wp(10) }}
+                    />
+                </>)}
+            </Formik>
             <BottomSheet
                 ref={refForgetPassRBSheet}
                 height={375}

@@ -198,5 +198,9 @@ export const eng = {
     forgot_error_text: "We're sorry, your password reset link has not been sent.You will have to click the Resend button to receive the link.",
     send_again: 'send again',
 
+    email_invalid: 'Email is invalid',
+    password_invalid: 'Password is invalid',
+    enter_max_6_character: 'Please enter more 6 character',
+
 
 }

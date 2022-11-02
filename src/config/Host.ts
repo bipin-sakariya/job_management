@@ -1,1 +1,1 @@
-export const APP_URL = "https://api.heysociety.app/"
+export const APP_URL = "https://bochan-dj.herokuapp.com/api/"

@@ -25,6 +25,8 @@ const CustomTextInput = (props: CustomTextInputProps & TextInputProps) => {
                     {...props}
                     placeholderTextColor={colors.dark_blue2_color}
                     style={[styles.textInputStyle, props.style, globalStyles.rtlStyle, { width: props.icon ? '94%' : '100%', textAlign: I18nManager.isRTL ? 'right' : 'left', color: colors.dark_blue2_color, }]}
+                    autoCapitalize={'none'}
+                    autoCorrect={false}
                 />
                 {props.icon}
             </View>

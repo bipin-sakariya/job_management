@@ -4,7 +4,7 @@ import logger from 'redux-logger';
 import { persistStore, persistReducer } from 'redux-persist'
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
 import storage from 'redux-persist/lib/storage';
-import AuthUserSlice from './slice/authSlices/AuthUserSlice';
+import AuthUserSlice from './slices/AuthUserSlice';
 
 const persistConfig = {
     key: "root",

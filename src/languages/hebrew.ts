@@ -196,4 +196,8 @@ export const hebrew = {
     forgot_sucess_text: 'שלחנו בהצלחה את הקישור לאיפוס הסיסמה שלך לכתובת הדוא"ל שלך Example@gmail.com. אנא בדוק את תיבת הדואר הנכנס שלך.',
     forgot_error_text: 'אנו מצטערים, הקישור לאיפוס הסיסמה שלך לא נשלח. תצטרכו ללחוץ על כפתור "שלח מחדש" על מנת לקבל את הקישור.',
     send_again: 'שלח שוב',
+
+    email_invalid: 'אימייל לא תקין',
+    password_invalid: 'הסיסמה לא חוקית',
+    enter_max_6_character: 'נא להזין עוד 6 תווים',
 } 
