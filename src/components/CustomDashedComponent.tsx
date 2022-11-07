@@ -5,6 +5,7 @@ import { colors } from '../styles/Colors'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import fonts from '../styles/Fonts'
 import FontSizes from '../styles/FontSizes'
+
 interface CustomDashedComponentProps {
     title: string
     image: ImageSourcePropType

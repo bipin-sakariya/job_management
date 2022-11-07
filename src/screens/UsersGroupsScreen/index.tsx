@@ -1,5 +1,5 @@
-import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomDashedComponent, CustomSubTitleWithImageComponent, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
@@ -11,6 +11,10 @@ import { RootRouteProps } from '../../types/RootStackTypes';
 import UserListComponent from '../../components/UserListComponent';
 import { strings } from '../../languages/localizedStrings';
 import { colors } from '../../styles/Colors';
+import { useDispatch } from 'react-redux';
+import { getListOfUsers } from '../../redux/slices/AdminSlice/userListSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import CustomActivityIndicator from '../../components/CustomActivityIndicator';
 
 const users = [
     { name: 'Stanley Lamb', role: 'Role of User', date: '12 May 2022' },
@@ -31,9 +35,21 @@ const groups = [
 const UsersScreen = () => {
     const navigation = useCustomNavigation('UsersGroupsScreen')
     const route = useRoute<RootRouteProps<'UsersGroupsScreen'>>();
+    const dispatch = useAppDispatch()
     const { type } = route.params
+    const [userList, setUserList] = useState([])
+    const { isLoading } = useAppSelector(state => state.userList)
+    useEffect(() => {
+        dispatch(getListOfUsers()).unwrap().then((res) => {
+            console.log("🚀 ~ file: index.tsx ~ line 47 ~ dispatch ~ res", res)
+            setUserList(res)
+        })
+    }, [])
+    console.log({ userList });
+
     return (
         <View style={globalStyles.container}>
+            {isLoading && <CustomActivityIndicator size={'small'} />}
             <Header
                 headerLeftStyle={{
                     width: '50%',
@@ -47,14 +63,15 @@ const UsersScreen = () => {
                 }
                 headerRightComponent={
                     <View style={globalStyles.rowView}>
-                        <TouchableOpacity style={{ marginRight: wp(3) }}>
-                            <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => {
+                        <TouchableOpacity style={{ marginRight: wp(3) }} onPress={() => {
                             navigation.navigate('UserGroupDetailScreen', { type: type })
                         }}>
                             <Image source={ImagesPath.add_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
+                        <TouchableOpacity >
+                            <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
+                        </TouchableOpacity>
+
                     </View>
                 }
             />
@@ -74,7 +91,7 @@ const UsersScreen = () => {
                     image={ImagesPath.group_icon}
                 />
                 <FlatList
-                    data={type == 'users' ? users : groups}
+                    data={type == 'users' ? userList : groups}
                     renderItem={({ item, index }) => {
                         return (
                             <UserListComponent item={item} type={type} />

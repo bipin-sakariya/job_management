@@ -11,7 +11,6 @@ import CustomBottomSheet, { ListDataProps } from '../../components/CustomBottomS
 import MapView from 'react-native-maps';
 import { colors } from '../../styles/Colors';
 import Carousel from 'react-native-snap-carousel';
-import FontSizes from '../../styles/FontSizes';
 import CustomJobBottomListSheet from '../../components/CustomJobBottomListSheet';
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
@@ -44,7 +43,7 @@ const MapScreen = () => {
         } else {
             setIsVisibleCarousel(false)
         }
-    }, [isFocused])
+    }, [navigation, isFocused])
 
     useEffect(() => {
         return () => setIsVisibleCarousel(false)

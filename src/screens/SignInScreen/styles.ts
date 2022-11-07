@@ -15,6 +15,7 @@ export const styles = StyleSheet.create({
         marginLeft: wp(-6),
     },
     titleTxt: {
+        color: '#19253A',
         fontSize: RFValue(34),
         fontFamily: fonts.FONT_POP_SEMI_BOLD,
         width: wp(94),
@@ -63,5 +64,14 @@ export const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    indicatorStyle: {
+        position: "absolute",
+        alignSelf: "center",
+        justifyContent: "center",
+        height: "100%",
+        backgroundColor: "white",
+        width: '100%',
+        zIndex: 1
     }
 })

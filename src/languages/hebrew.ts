@@ -200,4 +200,9 @@ export const hebrew = {
     email_invalid: 'אימייל לא תקין',
     password_invalid: 'הסיסמה לא חוקית',
     enter_max_6_character: 'נא להזין עוד 6 תווים',
+    Email_new: 'אימייל',
+    Username_invalid: '',
+    Contectno_invalid: '',
+    role_required: '',
+    Permission_required: '',
 } 

@@ -20,10 +20,6 @@ const data = [
     { id: 3, title: strings.Paint, selected: false },
     { id: 4, title: strings.Council, selected: false },
 ]
-// const localization = moment.locale('he');
-
-
-
 
 const JobData = [
     {
@@ -105,6 +101,7 @@ const JobsScreen = () => {
             <Container>
                 <ButtonTab btnOneTitle={strings.Open} btnTwoTitle={strings.Close} setBtn={setBtn} btnValue={btn} />
                 <FlatList
+                    showsVerticalScrollIndicator={false}
                     style={{ marginBottom: Platform.OS == "ios" ? wp(28) : wp(22) }}
                     data={JobData}
                     renderItem={({ item, index }) => (

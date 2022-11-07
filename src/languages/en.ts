@@ -201,6 +201,6 @@ export const eng = {
     email_invalid: 'Email is invalid',
     password_invalid: 'Password is invalid',
     enter_max_6_character: 'Please enter more 6 character',
-
+    Email_new: 'Email',
 
 }

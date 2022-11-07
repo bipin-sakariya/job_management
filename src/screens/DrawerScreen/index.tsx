@@ -7,7 +7,7 @@ import { ImagesPath } from '../../utils/ImagePaths';
 import { RootState, useAppSelector } from '../../redux/Store';
 import { strings } from '../../languages/localizedStrings';
 import { useDispatch } from 'react-redux';
-import { resetUserDataReducer } from '../../redux/slice/authSlices/AuthUserSlice';
+import { resetUserDataReducer } from '../../redux/slices/AuthUserSlice';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 const AdminDrawerBtn = [
@@ -33,7 +33,7 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
 
     const { userData } = useAppSelector((state) => state.userDetails)
     const dispatch = useDispatch()
-    const drawerBtn = userData?.role == strings.Admin ? AdminDrawerBtn : userData?.role == strings.Inspector ? InspectorDrawerBtn : GroupManagerDrawerBtn
+    const drawerBtn = userData?.role == strings.Admin ? AdminDrawerBtn : userData?.role == strings.Inspector ? InspectorDrawerBtn : AdminDrawerBtn
     return (
         <View style={[globalStyles.container,]}>
             <View style={styles.topView} >

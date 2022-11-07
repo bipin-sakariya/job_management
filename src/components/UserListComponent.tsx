@@ -12,9 +12,11 @@ import { colors } from '../styles/Colors';
 import moment from 'moment';
 
 interface itemPropsType {
-    name: string
-    role: string
-    date: string
+    profile_image: string,
+    user_name: string,
+    email: string,
+    phone: string,
+    role: any,
 }
 
 const UserListComponent = ({ item, type }: { item: itemPropsType, type?: string }) => {
@@ -37,12 +39,12 @@ const UserListComponent = ({ item, type }: { item: itemPropsType, type?: string 
             <View style={globalStyles.rowView}>
                 <Image source={ImagesPath.placeholder_img} style={styles.itemImgStyle} />
                 <View style={{ paddingHorizontal: wp(2) }}>
-                    <Text onPress={() => navigation.navigate('UserGroupProfileScreen', { type: type })} style={[styles.itemTitle, globalStyles.rtlStyle]}>{item.name}</Text>
-                    <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{item.role}</Text>
+                    <Text onPress={() => navigation.navigate('UserGroupProfileScreen', { type: type })} style={[styles.itemTitle, globalStyles.rtlStyle]}>{item?.user_name ?? 'user'}</Text>
+                    <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{item.role?.title}</Text>
                 </View>
             </View>
             <View style={globalStyles.rowView}>
-                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{moment(item.date).format('ll')}</Text>
+                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{moment('12 May 2022').format('ll')}</Text>
                 <TouchableOpacity ref={imageRef} onPress={() => setVisible(true)}>
                     <Image source={ImagesPath.menu_dots_icon} style={styles.menuIconStyle} />
                 </TouchableOpacity>

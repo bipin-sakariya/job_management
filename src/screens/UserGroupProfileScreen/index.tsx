@@ -120,13 +120,13 @@ const UserGroupProfileScreen = () => {
                                 container={{ marginBottom: wp(5) }}
                                 value={'4563123123'}
                             />
-                            <CustomTextInput
+                            {/* <CustomTextInput
                                 title={strings.Password}
                                 secureTextEntry
                                 icon={<Image source={ImagesPath.close_eye_icon} style={styles.iconStyle} />}
                                 container={{ marginBottom: wp(5) }}
                                 value={'Stanley Lamb'}
-                            />
+                            /> */}
 
                         </>
 

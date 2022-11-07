@@ -13,6 +13,7 @@ interface CustomJobListComponentProps {
     item: any,
     type?: string
 }
+
 const CustomJobListComponent = ({ item, type }: CustomJobListComponentProps) => {
     return (
         <View style={[styles.jobContainerStyle, type == "carousel" ? styles.jobContainerBoxShadowStyle : null,]}>
