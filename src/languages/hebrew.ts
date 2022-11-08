@@ -201,8 +201,19 @@ export const hebrew = {
     password_invalid: 'הסיסמה לא חוקית',
     enter_max_6_character: 'נא להזין עוד 6 תווים',
     Email_new: 'אימייל',
-    Username_invalid: '',
-    Contectno_invalid: '',
-    role_required: '',
-    Permission_required: '',
+    Username_invalid: 'שם משתמש לא חוקי',
+    Contectno_invalid: 'התחבר ללא פסול',
+    role_required: 'תפקיד נדרש',
+    Permission_required: 'נדרש אישור',
+    Groupname_required: 'נדרש שם קבוצה',
+    groupmanger_required: 'נדרש מנהל קבוצה',
+    inspector_required: 'נדרש מפקח',
+    groupMember_required: 'דרוש חבר בקבוצה',
+    forms_required: 'נדרשים טפסים',
+
+    Enter_user_name: 'הכנס שם משתמש',
+    Enter_group_name: 'הזן את שם הקבוצה',
+    Enter_email_address: 'הזן כתובת אימייל',
+    Enter_contect_no: 'הזן מספר איש קשר'
+
 } 

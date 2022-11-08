@@ -10,41 +10,48 @@ import useCustomNavigation from '../hooks/useCustomNavigation';
 import { strings } from '../languages/localizedStrings';
 import { colors } from '../styles/Colors';
 import moment from 'moment';
+import { useAppDispatch } from '../hooks/reduxHooks';
+import { deleteUser } from '../redux/slices/AdminSlice/userListSlice';
 
 interface itemPropsType {
     profile_image: string,
     user_name: string,
     email: string,
     phone: string,
-    role: any,
+    role: { id: number, title: string },
+    date_joined: string
 }
 
 const UserListComponent = ({ item, type }: { item: itemPropsType, type?: string }) => {
-    console.log("🚀 ~ file: UserListComponent.tsx ~ line 20 ~ UserListComponent ~ type", type)
     const navigation = useCustomNavigation('UsersGroupsScreen')
     const imageRef = useRef(null);
     const [visible, setVisible] = useState(false);
-
+    const dispatch = useAppDispatch()
     const onPress = () => {
         console.log("Remove")
     }
+    const deleteUserData = () => {
+        //user unique id
+        // let params = 12
+        // dispatch(deleteUser(params)).unwrap().then((res) => { }).catch((error) => { })
+    }
 
     const optionData = [
-        { title: strings.Remove, onPress: onPress, imageSource: ImagesPath.bin_icon },
+        { title: strings.Remove, onPress: () => deleteUserData(), imageSource: ImagesPath.bin_icon },
         { title: strings.Edit, onPress: onPress, imageSource: ImagesPath.edit_icon }
     ]
 
     return (
         <View style={styles.itemContainer}>
             <View style={globalStyles.rowView}>
-                <Image source={ImagesPath.placeholder_img} style={styles.itemImgStyle} />
+                <Image source={item.profile_image ? item.profile_image : ImagesPath.placeholder_img} style={styles.itemImgStyle} />
                 <View style={{ paddingHorizontal: wp(2) }}>
                     <Text onPress={() => navigation.navigate('UserGroupProfileScreen', { type: type })} style={[styles.itemTitle, globalStyles.rtlStyle]}>{item?.user_name ?? 'user'}</Text>
                     <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{item.role?.title}</Text>
                 </View>
             </View>
             <View style={globalStyles.rowView}>
-                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{moment('12 May 2022').format('ll')}</Text>
+                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{moment(item.date_joined).format('ll')}</Text>
                 <TouchableOpacity ref={imageRef} onPress={() => setVisible(true)}>
                     <Image source={ImagesPath.menu_dots_icon} style={styles.menuIconStyle} />
                 </TouchableOpacity>

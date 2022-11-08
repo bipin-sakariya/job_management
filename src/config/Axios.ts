@@ -1,6 +1,7 @@
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { Alert } from 'react-native';
 import { store } from '../redux/Store';
 // import { StorageKeys } from '../Utils/StorageKeys';
 import { ApiConstants } from './ApiConstants';
@@ -27,8 +28,15 @@ axiosClient.interceptors.request.use(async (config) => {
 				Authorization: `Bearer ${token}`
 			}
 		}
-		// if (config.method == "post") {
-		// }else if(config.method == "")
+		if (config.method == "post") {
+			config.headers = {
+				'Content-Type': 'multipart/form-data',
+				Accept: 'application/json',
+				Authorization: `Bearer ${token}`,
+			};
+		} else if (config.method == "put") {
+			// Alert.alert("nothing")
+		}
 	} catch (e) {
 		console.error({ e });
 	}

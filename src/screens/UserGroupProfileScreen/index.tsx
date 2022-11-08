@@ -103,6 +103,7 @@ const UserGroupProfileScreen = () => {
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <Image source={ImagesPath.image_for_user_icon} style={styles.addPhotoStyle} />
                     <CustomTextInput
+                        editable
                         title={type == 'users' ? strings.UserName : strings.GroupName}
                         container={{ marginBottom: wp(5) }}
                         value={'Stanley Lamb'}
@@ -111,32 +112,27 @@ const UserGroupProfileScreen = () => {
                         type == 'users' &&
                         <>
                             <CustomTextInput
+                                editable
                                 title={strings.Email}
                                 container={{ marginBottom: wp(5) }}
                                 value={'stanleylamb@gmail.com'}
                             />
                             <CustomTextInput
+                                editable
                                 title={strings.Contactno}
                                 container={{ marginBottom: wp(5) }}
                                 value={'4563123123'}
                             />
-                            {/* <CustomTextInput
-                                title={strings.Password}
-                                secureTextEntry
-                                icon={<Image source={ImagesPath.close_eye_icon} style={styles.iconStyle} />}
-                                container={{ marginBottom: wp(5) }}
-                                value={'Stanley Lamb'}
-                            /> */}
-
                         </>
-
                     }
                     <CustomTextInput
+                        editable
                         title={type == 'users' ? strings.Role : strings.Group_Manager}
                         container={{ marginBottom: wp(5) }}
                         value={'Inspector'}
                     />
                     <CustomTextInput
+                        editable
                         title={type == 'users' ? strings.Permission : strings.Group_Inspector}
                         container={{ marginBottom: wp(5) }}
                         value={'Inspector'}

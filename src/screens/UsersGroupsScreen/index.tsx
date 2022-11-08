@@ -16,14 +16,6 @@ import { getListOfUsers } from '../../redux/slices/AdminSlice/userListSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import CustomActivityIndicator from '../../components/CustomActivityIndicator';
 
-const users = [
-    { name: 'Stanley Lamb', role: 'Role of User', date: '12 May 2022' },
-    { name: 'Stanley Lamb', role: 'Role of User', date: '12 May 2022' },
-    { name: 'Stanley Lamb', role: 'Role of User', date: '12 May 2022' },
-    { name: 'Stanley Lamb', role: 'Role of User', date: '12 May 2022' },
-    { name: 'Stanley Lamb', role: 'Role of User', date: '12 May 2022' },
-]
-
 const groups = [
     { name: 'P. Maintanence', role: '10 members in group', date: '12 May 2022' },
     { name: 'P. Maintanence', role: '12 members in group', date: '12 May 2022' },
