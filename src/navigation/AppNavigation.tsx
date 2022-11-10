@@ -35,17 +35,19 @@ import ReturnAndAddJobHistoryScreen from '../screens/ReturnAndAddJobHistoryScree
 import SelectFormScreen from '../screens/SelectFormScreen';
 import FillFormScreen from '../screens/FillFormScreen';
 import SignBillDetailScreen from '../screens/SignBillDetailScreen';
+import { useAppSelector } from '../hooks/reduxHooks';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 const AppNavigation = () => {
+    const { userData } = useAppSelector(state => state.userDetails)
     return (
         <NavigationContainer>
             <Stack.Navigator
                 screenOptions={{
                     headerShown: false
                 }}
-                initialRouteName={'AuthStack'}>
+                initialRouteName={userData ? 'DrawerScreens' : 'AuthStack'}>
                 <Stack.Screen name={'AuthStack'} component={AuthStack} />
                 <Stack.Screen name={'DrawerScreens'} component={DrawerStack} />
                 <Stack.Screen name={'JobDuplicateListScreen'} component={JobDuplicateListScreen} />

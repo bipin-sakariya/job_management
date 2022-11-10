@@ -53,7 +53,7 @@ export interface apiErrorTypes {
 
 const USER = "USER";
 
-export const userRoleList = createAsyncThunk<userRoleListProps[], "", { rejectValue: apiErrorTypes }>
+export const userRoleList = createAsyncThunk<userRoleListProps[], string, { rejectValue: apiErrorTypes }>
     (USER + "/userRoleList", async (_: any, { rejectWithValue }) => {
         try {
             console.log(ApiConstants.USERROLELIST)

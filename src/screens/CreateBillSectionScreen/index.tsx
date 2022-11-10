@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, TextInput, ScrollView, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, Image, TextInput, ScrollView, Alert, Platform, KeyboardAvoidingView } from 'react-native'
 import React, { useState } from 'react'
 import { RootRouteProps } from '../../types/RootStackTypes';
 import { useRoute } from '@react-navigation/native';
@@ -11,7 +11,6 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { strings } from '../../languages/localizedStrings';
 import { useFormik } from 'formik';
 import * as yup from "yup";
-import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scroll-view';
 import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
 
 interface DropdownProps {
@@ -88,7 +87,7 @@ const CreateBillSectionScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <KeyboardAvoidingScrollView scrollEventThrottle={16}>
+                <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
                     <CustomSubTitleWithImageComponent disabled title={strings.Prepare_bill} image={ImagesPath.receipt_icon} />
                     {
                         type == "sign" &&
@@ -178,7 +177,7 @@ const CreateBillSectionScreen = () => {
                             handleSubmit()
                         }}
                     />
-                </KeyboardAvoidingScrollView>
+                </KeyboardAvoidingView>
             </Container>
         </View>
     )

@@ -1,4 +1,4 @@
-import { Alert, FlatList, Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { AssignedJobsComponent, Container, CustomBlackButton, CustomDetailsComponent, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components'
@@ -17,7 +17,6 @@ import { deleteUser, detailsOfUser, getListOfUsers, resetUserDetails, updateUser
 import { useFormik } from 'formik'
 import * as yup from "yup";
 import { launchImageLibrary } from 'react-native-image-picker'
-import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scroll-view'
 import CustomActivityIndicator from '../../components/CustomActivityIndicator'
 
 const data = [
@@ -237,7 +236,7 @@ const UserGroupProfileScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <KeyboardAvoidingScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
+                <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
                     <ImageBackground
                         source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
                         style={styles.addPhotoStyle}
@@ -379,7 +378,7 @@ const UserGroupProfileScreen = () => {
                             }}
                         />
                     }
-                </KeyboardAvoidingScrollView>
+                </KeyboardAvoidingView>
             </Container>
             <CustomDropdown
                 componentRef={menuRef}

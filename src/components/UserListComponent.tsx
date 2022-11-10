@@ -66,7 +66,7 @@ const UserListComponent = ({ item, type }: { item: itemPropsType, type?: string 
                 </View>
             </View>
             <View style={globalStyles.rowView}>
-                <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { width: wp(17) }]}>{moment(item.date_joined).format('YYYY MMM DD')}</Text>
+                <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { width: wp(25) }]}>{moment(item.date_joined).format('YYYY MMM DD')}</Text>
                 <TouchableOpacity ref={imageRef} onPress={() => setVisible(true)}>
                     <Image source={ImagesPath.menu_dots_icon} style={styles.menuIconStyle} />
                 </TouchableOpacity>
@@ -97,11 +97,11 @@ const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.REGULAR_18,
         color: colors.dark_blue2_color,
-        width: wp(50)
+        width: wp(30)
     },
     descriptionTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
-        fontSize: FontSizes.EXTRA_SMALL_10,
+        fontSize: FontSizes.EXTRA_SMALL_12,
         color: colors.dark_blue2_color,
     },
     menuIconStyle: {

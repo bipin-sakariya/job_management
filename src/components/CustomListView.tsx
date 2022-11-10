@@ -1,4 +1,4 @@
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useRef, useState } from 'react'
 import { globalStyles } from '../styles/globalStyles'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -9,20 +9,53 @@ import FontSizes from '../styles/FontSizes'
 import moment from 'moment'
 import CustomDropdown from './CustomDropDown'
 import { strings } from '../languages/localizedStrings'
+import useCustomNavigation from '../hooks/useCustomNavigation'
 
 interface CustomeListViewProps {
     item: any,
     onPress: () => void
-    material?: boolean
+    material?: boolean,
+    isFrom?: boolean
 }
 
-const CustomListView = ({ item, onPress, material }: CustomeListViewProps) => {
+const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProps) => {
     const imageRef = useRef(null);
     const [visible, setVisible] = useState(false);
+    const navigation = useCustomNavigation('BillListScreen');
 
     const optionData = [
-        { title: strings.Remove, onPress: () => { }, imageSource: ImagesPath.bin_icon },
-        { title: strings.Edit, onPress: () => { }, imageSource: ImagesPath.edit_icon }
+        {
+            title: strings.Remove, onPress: () => {
+                if (isFrom) {
+                    //form data
+                    setVisible(false)
+                } else {
+                    //billdata
+                    setVisible(false)
+                }
+            }, imageSource: ImagesPath.bin_icon
+        },
+        {
+            title: strings.Edit, onPress: () => {
+                if (isFrom) {
+                    setVisible(false)
+                    // navigation.navigate("BillSectionScreen",)
+                } else {
+                    let params = {
+                        name: item.title,
+                        unit: 'unit',
+                        ration: '15',
+                        image: '',
+                        quantity: '2',
+                        type: material ? 'material' : 'sign',
+                        isEdit: true
+                    }
+                    setVisible(false)
+                    navigation.navigate("BillSectionScreen", params)
+                }
+            },
+            imageSource: ImagesPath.edit_icon
+        }
     ]
 
     return (
@@ -35,12 +68,12 @@ const CustomListView = ({ item, onPress, material }: CustomeListViewProps) => {
                             <Image source={ImagesPath.image_white_border} style={styles.iamgeStyle} />
                         </View>
                     }
-                    <Text style={[styles.titleTxt, globalStyles.rtlStyle, { marginLeft: wp(2) }]}>
+                    <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle, { marginLeft: wp(2), width: wp(32) }]}>
                         {item.title}
                     </Text>
                 </View>
                 <View style={globalStyles.rowView}>
-                    <Text style={[styles.dateTxt, globalStyles.rtlStyle]}>{moment(item.date).format('ll')}</Text>
+                    <Text numberOfLines={1} style={[styles.dateTxt, globalStyles.rtlStyle, { width: wp(22) }]}>{moment(item.date).format('YYYY MMM DD')}</Text>
                     <TouchableOpacity ref={imageRef} onPress={() => setVisible(true)}>
                         <Image style={styles.menuImageStyle} source={ImagesPath.menu_dots_icon} />
                     </TouchableOpacity>
@@ -88,9 +121,8 @@ const styles = StyleSheet.create({
     },
     dateTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
-        fontSize: FontSizes.SMALL_14,
-        marginHorizontal: wp(2),
-        color: colors.dark_blue2_color
+        fontSize: FontSizes.EXTRA_SMALL_12,
+        color: colors.dark_blue2_color,
     },
     iamgeStyle: {
         height: wp(5),

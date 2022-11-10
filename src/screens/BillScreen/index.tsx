@@ -17,59 +17,59 @@ const BillListScreen = () => {
         {
             iamgeUrl: 'dsdfsd',
             title: 'Bill name',
-            date: '12 May 2022',
+            date: '2022-11-08T12:44:46.142691Z',
         },
         {
             iamgeUrl: 'sdfsdf',
             title: 'Bill name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            title: 'Bill name',
-            date: '12 May 2022',
+            date: '2022-11-08T12:44:46.142691Z',
         },
         {
             iamgeUrl: 'sfsdf',
             title: 'Bill name',
-            date: '12 May 2022',
+            date: '2022-11-08T12:44:46.142691Z',
         },
         {
-            iamgeUrl: '',
+            iamgeUrl: 'sfsdf',
             title: 'Bill name',
-            date: '12 May 2022',
+            date: '2022-11-08T12:44:46.142691Z',
+        },
+        {
+            iamgeUrl: 'sfsdf',
+            title: 'Bill name',
+            date: '2022-11-08T12:44:46.142691Z',
         },
         {
             iamgeUrl: 'sdfsf',
             title: 'Bill name',
-            date: '12 May 2022',
+            date: '2022-11-08T12:44:46.142691Z',
         },
 
         {
-            iamgeUrl: '',
+            iamgeUrl: 'sfsdf',
             title: 'Bill name',
-            date: '12 May 2022',
+            date: '2022-11-08T12:44:46.142691Z',
         },
         {
-            iamgeUrl: '',
+            iamgeUrl: 'sfsdf',
             title: 'Bill name',
-            date: '12 May 2022',
+            date: '2022-11-08T12:44:46.142691Z',
         },
 
         {
-            iamgeUrl: '',
+            iamgeUrl: 'sfsdf',
             title: 'Bill name',
-            date: '12 May 2022',
+            date: '2022-11-08T12:44:46.142691Z',
         },
         {
-            iamgeUrl: '',
+            iamgeUrl: 'sfsdf',
             title: 'Bill name',
-            date: '12 May 2022',
+            date: '2022-11-08T12:44:46.142691Z',
         },
         {
-            iamgeUrl: '',
+            iamgeUrl: 'sfsdf',
             title: 'Bill name',
-            date: '12 May 2022',
+            date: '2022-11-08T12:44:46.142691Z',
         },
     ]
     const [btn, setBtn] = useState({
@@ -85,7 +85,7 @@ const BillListScreen = () => {
                     ration: '15',
                     image: '',
                     quantity: '2',
-                    type: 'sign',
+                    type: btn.open ? 'material' : 'sign',
                 }
                 navigation.navigate("BillSectionScreen", params)
             }} />

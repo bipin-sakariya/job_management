@@ -1,4 +1,4 @@
-import { Image, Text, TouchableOpacity, View, ScrollView, TextInput, ImageBackground, Alert, KeyboardAvoidingView } from 'react-native';
+import { Image, Text, TouchableOpacity, View, ScrollView, TextInput, ImageBackground, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Container, CustomBlackButton, CustomDetailsComponent, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components';
 import { globalStyles } from '../../styles/globalStyles';
@@ -20,7 +20,6 @@ import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { createUser, detailsOfUser, resetUserDetails, updateUser } from '../../redux/slices/AdminSlice/userListSlice';
 import moment from 'moment';
 import CustomActivityIndicator from '../../components/CustomActivityIndicator';
-import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scroll-view';
 
 interface userData {
     id: number,
@@ -184,7 +183,7 @@ const UserGroupDetailScreen = () => {
             />
             {isLoading && <CustomActivityIndicator size={"small"} />}
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <KeyboardAvoidingScrollView scrollEventThrottle={16}>
+                <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
                     <CustomSubTitleWithImageComponent
                         disabled
                         title={type == 'users' ? strings.FillfromtocreateUser : strings.FillfromtoCreateGroup}
@@ -255,8 +254,8 @@ const UserGroupDetailScreen = () => {
                         title={type == 'users' ? strings.Role : strings.Group_Manager}
                         data={userRoleList}
                         image={ImagesPath.down_white_arrow}
-                        labelField="label"
-                        valueField="value"
+                        labelField="title"
+                        valueField="id"
                         onChange={(item) => {
                             setRoleRequired(false)
                             setRole(item)
@@ -270,8 +269,8 @@ const UserGroupDetailScreen = () => {
                         title={type == 'users' ? strings.Permission : strings.Group_Inspector}
                         data={userRoleList}
                         image={ImagesPath.down_white_arrow}
-                        labelField="label"
-                        valueField="value"
+                        labelField="title"
+                        valueField="id"
                         onChange={(item) => {
                             setPermissionRequired(false)
                             setPermission(item)
@@ -322,8 +321,8 @@ const UserGroupDetailScreen = () => {
                                 title={strings.GroupForms}
                                 data={userRoleList}
                                 image={ImagesPath.down_white_arrow}
-                                labelField="label"
-                                valueField="value"
+                                labelField="title"
+                                valueField="id"
                                 onChange={(item) => setSelectForms(item)}
                                 value={selectForms.value}
                                 placeholder={strings.GivePermission}
@@ -346,7 +345,7 @@ const UserGroupDetailScreen = () => {
                             }
                         }}
                     />
-                </KeyboardAvoidingScrollView>
+                </KeyboardAvoidingView>
             </Container>
         </View>
     )

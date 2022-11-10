@@ -1,5 +1,5 @@
-import { Alert, Image, Text, TouchableOpacity, View, ActivityIndicator, Modal, } from 'react-native';
-import React, { useRef, useState } from 'react';
+import { Alert, Image, Text, TouchableOpacity, View, ActivityIndicator, Modal, KeyboardAvoidingView, Platform, } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { styles } from './styles';
@@ -15,7 +15,6 @@ import * as yup from "yup";
 import { Formik, useFormik } from "formik";
 import { colors } from '../../styles/Colors';
 import CustomActivityIndicator from '../../components/CustomActivityIndicator';
-import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scroll-view';
 
 const SignInScreen = () => {
     const navigation: NavigationProp<any, any> = useNavigation()
@@ -31,14 +30,16 @@ const SignInScreen = () => {
     const SignInValidationSchema = yup.object().shape({
         email: yup
             .string()
+            .trim()
             .email(strings.email_invalid)
             .required(strings.email_invalid),
-        password: yup.string().min(5, strings.enter_max_6_character).required(strings.password_invalid)
+        password: yup.string().trim().min(5, strings.enter_max_6_character).required(strings.password_invalid)
     });
 
     const ForgetPassEmailValidationSchema = yup.object().shape({
         email: yup
             .string()
+            .trim()
             .email(strings.email_invalid)
             .required(strings.email_invalid),
     });
@@ -65,9 +66,6 @@ const SignInScreen = () => {
             setIsLoading(false)
             console.log({ error: error });
             setIsError(true)
-            setTimeout(() => {
-                setIsError(false)
-            }, 2000);
         })
     }
 
@@ -87,68 +85,65 @@ const SignInScreen = () => {
         })
     }
 
+    const { values, errors, touched, handleSubmit, handleChange, } =
+        useFormik({
+            enableReinitialize: true,
+            initialValues: { email: '', password: '' },
+            validationSchema: SignInValidationSchema,
+            onSubmit: values => {
+                login(values)
+            }
+        })
+
+    useEffect(() => {
+        setIsError(false)
+    }, [values])
 
     return (
         <>
             {isLoading && <CustomActivityIndicator size={'small'} />}
             <View style={[globalStyles.container, { paddingHorizontal: wp(5), justifyContent: 'center' }]}>
-                <KeyboardAvoidingScrollView scrollEventThrottle={16}>
+                <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
                     <Image source={ImagesPath.logo_of_job_managment} style={styles.appLogo} />
                     <View style={[{ paddingTop: wp(4), paddingBottom: wp(8), }]}>
                         <Text style={styles.titleTxt}>{strings.Welcometo}</Text>
                         <Text style={styles.titleTxt}>{strings.JobManagement}</Text>
                     </View>
-                    <Formik
-                        validationSchema={SignInValidationSchema}
-                        initialValues={{ email: '', password: '' }}
-                        enableReinitialize={true}
-                        onSubmit={(values) => { login(values) }}
-                    >{({
-                        handleChange,
-                        handleSubmit,
-                        values,
-                        errors,
-                        touched,
-                    }) => (
-                        <>
-                            <CustomTextInput
-                                title={strings.UserName}
-                                placeholder={strings.UserName}
-                                onChangeText={handleChange("email")}
-                                value={values.email}
-                                container={{ marginBottom: wp(5) }}
-                            />
-                            {touched.email && errors.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors.email}</Text> : null}
-                            <CustomTextInput
-                                title={strings.Password}
-                                placeholder={strings.Password}
-                                onChangeText={handleChange("password")}
-                                value={values.password}
-                                secureTextEntry={secureText}
-                                icon={
-                                    <TouchableOpacity onPress={() => setSecureText(!secureText)}>
-                                        <Image source={secureText ? ImagesPath.close_eye_icon : ImagesPath.open_eye_icon} style={styles.iconStyle} />
-                                    </TouchableOpacity>
-                                }
-                            />
-                            {touched.password && errors.password && <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors.password}</Text>}
-                            {
-                                isError ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error}</Text> : null
-                            }
-                            <TouchableOpacity onPress={() => {
-
-                                refForgetPassRBSheet.current?.open()
-                            }}>
-                                <Text style={styles.forgetPassTxt}>{strings.Forgotpassword}</Text>
+                    <CustomTextInput
+                        title={strings.UserName}
+                        placeholder={strings.UserName}
+                        onChangeText={handleChange("email")}
+                        value={values.email}
+                        container={{ marginBottom: wp(5) }}
+                    />
+                    {touched.email && errors.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors.email}</Text> : null}
+                    <CustomTextInput
+                        title={strings.Password}
+                        placeholder={strings.Password}
+                        onChangeText={handleChange("password")}
+                        value={values.password}
+                        secureTextEntry={secureText}
+                        icon={
+                            <TouchableOpacity onPress={() => setSecureText(!secureText)}>
+                                <Image source={secureText ? ImagesPath.close_eye_icon : ImagesPath.open_eye_icon} style={styles.iconStyle} />
                             </TouchableOpacity>
-                            <CustomBlackButton
-                                title={strings.Signin}
-                                onPress={() => handleSubmit()}
-                                buttonStyle={{ marginVertical: wp(10) }}
-                            />
-                        </>
-                    )}
-                    </Formik>
+                        }
+                    />
+                    {touched.password && errors.password ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors.password}</Text> : null}
+                    {
+                        isError ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error}</Text> : null
+                    }
+                    <TouchableOpacity onPress={() => {
+
+                        refForgetPassRBSheet.current?.open()
+                    }}>
+                        <Text style={styles.forgetPassTxt}>{strings.Forgotpassword}</Text>
+                    </TouchableOpacity>
+                    <CustomBlackButton
+                        title={strings.Signin}
+                        onPress={() => handleSubmit()}
+                        buttonStyle={{ marginVertical: wp(10) }}
+                    />
                     <BottomSheet
                         onClose={() => {
                             setIsSucess(false)
@@ -218,7 +213,7 @@ const SignInScreen = () => {
                             </View>
                         }
                     />
-                </KeyboardAvoidingScrollView>
+                </KeyboardAvoidingView>
 
             </View>
         </>

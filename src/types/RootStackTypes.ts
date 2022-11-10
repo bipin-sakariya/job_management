@@ -17,6 +17,7 @@ interface BillSectionScreenProps {
     imageUrl?: string,
     quantity?: string,
     type: string,
+    isEdit?: boolean
 }
 
 export type RootStackParamList = {

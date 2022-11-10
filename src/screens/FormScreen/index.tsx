@@ -71,15 +71,7 @@ const FormScreen = () => {
     ]
     const renderItem = ({ item, index }: any) => {
         return (
-            <CustomListView item={item} onPress={() => {
-                let params = {
-                    name: item.title,
-                    unit: 'unit',
-                    ration: '15',
-                    image: '',
-                    quantity: '2',
-                    type: 'sing',
-                }
+            <CustomListView item={item} isFrom onPress={() => {
                 navigation.navigate("FormDetailsScreen")
             }} />
         )

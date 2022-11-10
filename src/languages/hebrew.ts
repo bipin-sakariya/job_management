@@ -228,6 +228,7 @@ export const hebrew = {
     Quantity_required: 'נדרשת כמות',
     Typecount_required: 'נדרשת ספירת סוגים',
     EnterQuantity: 'הזן כמות',
-    Pleaseentersignlogo: 'נא להזין את לוגו השלט'
-
+    Pleaseentersignlogo: 'נא להזין את לוגו השלט',
+    UpdateBill: 'עדכן את ביל',
+    Fromname_required: 'שם נדרש'
 } 

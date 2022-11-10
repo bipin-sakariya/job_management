@@ -20,4 +20,15 @@ export const styles = StyleSheet.create({
         width: wp(4),
         resizeMode: 'cover',
     },
+    cameraIconStyle: {
+        height: wp(8),
+        width: wp(8),
+        resizeMode: 'contain',
+    },
+    camreaBtnStyle: {
+        alignSelf: 'center',
+        position: 'absolute',
+        right: wp(-3.5),
+        bottom: wp(2.5)
+    }
 })

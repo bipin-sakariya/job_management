@@ -56,7 +56,7 @@ public class MainActivity extends ReactActivity {
     protected void onCreate(Bundle savedInstanceState) {
      SplashScreen.show(this);
       I18nUtil sharedI18nUtilInstance = I18nUtil.getInstance();
-      sharedI18nUtilInstance.allowRTL(getApplicationContext(), true);
+      sharedI18nUtilInstance.allowRTL(getApplicationContext(), false);
       super.onCreate(savedInstanceState);
     }
   }
