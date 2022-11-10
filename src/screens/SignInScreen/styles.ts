@@ -1,11 +1,12 @@
 
-import { I18nManager, StyleSheet, Text, View } from 'react-native';
+import { I18nManager, Platform, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import fonts from '../../styles/Fonts';
 import FontSizes from '../../styles/FontSizes';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { colors } from '../../styles/Colors';
+import { globalStyles } from '../../styles/globalStyles';
 
 export const styles = StyleSheet.create({
     appLogo: {
@@ -13,13 +14,14 @@ export const styles = StyleSheet.create({
         width: wp(50),
         resizeMode: 'contain',
         marginLeft: wp(-6),
+        marginTop: Platform.OS == "ios" ? wp(10) : wp(20)
     },
     titleTxt: {
-        color: '#19253A',
-        fontSize: RFValue(34),
-        fontFamily: fonts.FONT_POP_SEMI_BOLD,
+        color: colors.dark_blue4_color,
+        fontSize: FontSizes.EXTRA_LARGE_34,
+        fontFamily: fonts.FONT_POP_REGULAR,
         width: wp(94),
-        writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr'
+        ...globalStyles.rtlStyle
     },
     iconStyle: {
         height: wp(5),
@@ -41,7 +43,7 @@ export const styles = StyleSheet.create({
     },
     forgetPassTxtStyle: {
         fontFamily: fonts.FONT_POP_REGULAR,
-        fontSize: FontSizes.LARGE_22,
+        fontSize: FontSizes.EXTRA_LARGE_24,
         color: colors.dark_blue1_color
     },
     enterEmailTxtStyle: {
@@ -52,7 +54,7 @@ export const styles = StyleSheet.create({
     sucessText: {
         marginVertical: wp(3),
         fontFamily: fonts.FONT_POP_REGULAR,
-        fontSize: FontSizes.EXTRA_SMALL_12,
+        fontSize: Platform.OS == "ios" ? FontSizes.EXTRA_SMALL_12 : RFValue(13),
         color: colors.dark_blue3_color,
     },
     imageStyle: {

@@ -50,7 +50,7 @@ export type RootStackParamList = {
     RouteMapViewScreen: undefined
     CreateNewJobScreen: { type?: string }
     JobsScreen: undefined
-    UserGroupProfileScreen: { type?: string }
+    UserGroupProfileScreen: { type?: string, userId: number, isEdit?: boolean }
     ReturnAndAddJobHistoryScreen: { type?: string },
     SelectFormScreen: undefined,
     FillFormScreen: undefined,

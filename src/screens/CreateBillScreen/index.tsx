@@ -10,6 +10,7 @@ import { colors } from '../../styles/Colors'
 import CustomSubTitleWithImageComponent from '../../components/CustomSubTitleWithImageComponent'
 import CustomDashedComponent from '../../components/CustomDashedComponent'
 import { strings } from '../../languages/localizedStrings'
+import FontSizes from '../../styles/FontSizes'
 
 const BillCreateScreen = () => {
     const navigation = useCustomNavigation('BillCreateScreen');
@@ -32,12 +33,16 @@ const BillCreateScreen = () => {
                 <CustomDashedComponent
                     image={ImagesPath.add_icon}
                     viewStyle={{ paddingVertical: wp(8) }}
+                    imageStyle={styles.iconStyle}
+                    textStyle={{ fontSize: FontSizes.EXTRA_LARGE_24 }}
                     onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: "material" }) }}
                     title={strings.CreateMaterialBill} />
                 <CustomSubTitleWithImageComponent disabled viewStyle={{ marginTop: wp(2) }} title={strings.CreateSignBillsection} image={ImagesPath.receipt_icon} />
                 <CustomDashedComponent
                     image={ImagesPath.add_icon}
                     viewStyle={{ paddingVertical: wp(8) }}
+                    imageStyle={styles.iconStyle}
+                    textStyle={{ fontSize: FontSizes.EXTRA_LARGE_24 }}
                     onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: "sign" }) }}
                     title={strings.CreateSignBill} />
             </Container>

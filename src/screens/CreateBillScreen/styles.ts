@@ -38,4 +38,9 @@ export const styles = StyleSheet.create({
         width: wp(5),
         resizeMode: 'contain'
     },
+    iconStyle: {
+        width: wp(8),
+        height: wp(8),
+        resizeMode: 'contain'
+    }
 })

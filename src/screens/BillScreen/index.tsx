@@ -85,7 +85,7 @@ const BillListScreen = () => {
                     ration: '15',
                     image: '',
                     quantity: '2',
-                    type: 'material',
+                    type: 'sign',
                 }
                 navigation.navigate("BillSectionScreen", params)
             }} />
@@ -117,7 +117,7 @@ const BillListScreen = () => {
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <ButtonTab btnOneTitle={strings.accountmaterial} btnTwoTitle={strings.Signabill} setBtn={setBtn} btnValue={btn} />
-                <FlatList showsVerticalScrollIndicator={false} data={bills}
+                <FlatList contentContainerStyle={{ paddingBottom: wp(10) }} showsVerticalScrollIndicator={false} data={bills}
                     ListHeaderComponent={() => {
                         return (
                             <View style={[globalStyles.rowView, { marginBottom: wp(4) }]}>

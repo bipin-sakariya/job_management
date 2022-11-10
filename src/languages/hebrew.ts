@@ -32,6 +32,7 @@ export const hebrew = {
     Quantity: 'כַּמוּת',
     TypeCounting: 'סוג ספירת',
     JumpingRation: 'מנת קפיצה',
+    Jumpdish: 'מנת קפיצה',
 
     BillSection: 'סעיף הצעת חוק',
     CreateMaterialBillSection: 'צור סעיף חשבון חומר',
@@ -119,11 +120,11 @@ export const hebrew = {
 
     AddUser: 'הוסף משתמש',
     AddGroup: 'הוסף קבוצה',
-    FillfromtocreateUser: 'מלא מ כדי ליצור משתמש',
+    FillfromtocreateUser: 'מלא טופס כדי ליצור משתמש',
     FillfromtoCreateGroup: 'מלא מ כדי ליצור קבוצה',
     UserName: 'שם משתמש',
     Email: 'אימייל',
-    Contactno: 'מס איש קשר.',
+    Contactno: 'מס\' איש קשר',
     Password: 'סיסמה',
     Role: 'תַפְקִיד',
     SelectRoleforUser: 'בחר תפקיד עבור משתמש',
@@ -173,7 +174,7 @@ export const hebrew = {
     accountmaterial: 'חומר חשבון',
     Signabill: 'חתום על שטר',
     CreateBill: 'צור ביל',
-    Addasignlogo: 'הוסף לוגו שלט',
+    Addasignlogo: 'הוסף לוגו של השלט',
     form: 'טופס',
     FormList: 'רשימת טפסים',
     CreateForm: 'צור טופס',
@@ -214,6 +215,19 @@ export const hebrew = {
     Enter_user_name: 'הכנס שם משתמש',
     Enter_group_name: 'הזן את שם הקבוצה',
     Enter_email_address: 'הזן כתובת אימייל',
-    Enter_contect_no: 'הזן מספר איש קשר'
+    Enter_contect_no: 'הזן מספר איש קשר',
+
+    Update_user: 'עדכן משתמש',
+    Update_group: 'עדכן את הקבוצה',
+    Billname: "שם ביל",
+    SignName: 'סימן שם',
+    choose: "בחר",
+    Billname_required: 'נדרש שם חשבון',
+    Signname_required: 'נדרש שם סימן',
+    Jumpingration_required: 'נדרשת קפיצה',
+    Quantity_required: 'נדרשת כמות',
+    Typecount_required: 'נדרשת ספירת סוגים',
+    EnterQuantity: 'הזן כמות',
+    Pleaseentersignlogo: 'נא להזין את לוגו השלט'
 
 } 

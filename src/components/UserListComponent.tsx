@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { globalStyles } from '../styles/globalStyles';
 import { ImagesPath } from '../utils/ImagePaths';
@@ -11,9 +11,10 @@ import { strings } from '../languages/localizedStrings';
 import { colors } from '../styles/Colors';
 import moment from 'moment';
 import { useAppDispatch } from '../hooks/reduxHooks';
-import { deleteUser } from '../redux/slices/AdminSlice/userListSlice';
+import { deleteUser, getListOfUsers } from '../redux/slices/AdminSlice/userListSlice';
 
 interface itemPropsType {
+    id: number
     profile_image: string,
     user_name: string,
     email: string,
@@ -27,18 +28,32 @@ const UserListComponent = ({ item, type }: { item: itemPropsType, type?: string 
     const imageRef = useRef(null);
     const [visible, setVisible] = useState(false);
     const dispatch = useAppDispatch()
-    const onPress = () => {
-        console.log("Remove")
-    }
     const deleteUserData = () => {
-        //user unique id
-        // let params = 12
-        // dispatch(deleteUser(params)).unwrap().then((res) => { }).catch((error) => { })
+        console.log({ item });
+        let params = {
+            id: item.id
+        }
+        setVisible(false)
+        dispatch(deleteUser(params)).unwrap().then((res) => {
+            console.log("🚀 ~ file: UserListComponent.tsx ~ line 36 ~ dispatch ~ res", res)
+            dispatch(getListOfUsers("")).unwrap().then((response) => {
+                console.log("🚀 ~ file: UserListComponent.tsx ~ line 51 ~ dispatch ~ response", response)
+            }).catch((error) => {
+                console.log("🚀 ~ file: UserListComponent.tsx ~ line 46 ~ dispatch ~ error", error)
+            })
+        }).catch((error) => {
+            console.log("🚀 ~ file: UserListComponent.tsx ~ line 39 ~ dispatch ~ error", error)
+        })
     }
 
     const optionData = [
         { title: strings.Remove, onPress: () => deleteUserData(), imageSource: ImagesPath.bin_icon },
-        { title: strings.Edit, onPress: onPress, imageSource: ImagesPath.edit_icon }
+        {
+            title: strings.Edit, onPress: () => {
+                setVisible(false)
+                navigation.navigate("UserGroupProfileScreen", { type: type, userId: item.id, isEdit: true })
+            }, imageSource: ImagesPath.edit_icon
+        }
     ]
 
     return (
@@ -46,12 +61,12 @@ const UserListComponent = ({ item, type }: { item: itemPropsType, type?: string 
             <View style={globalStyles.rowView}>
                 <Image source={item.profile_image ? item.profile_image : ImagesPath.placeholder_img} style={styles.itemImgStyle} />
                 <View style={{ paddingHorizontal: wp(2) }}>
-                    <Text onPress={() => navigation.navigate('UserGroupProfileScreen', { type: type })} style={[styles.itemTitle, globalStyles.rtlStyle]}>{item?.user_name ?? 'user'}</Text>
-                    <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{item.role?.title}</Text>
+                    <Text numberOfLines={1} onPress={() => navigation.navigate('UserGroupProfileScreen', { type: type, userId: item.id })} style={[styles.itemTitle, globalStyles.rtlStyle]}>{item?.user_name ?? 'user'}</Text>
+                    <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { maxWidth: wp(40) }]}>{item.role?.title}</Text>
                 </View>
             </View>
             <View style={globalStyles.rowView}>
-                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{moment(item.date_joined).format('ll')}</Text>
+                <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { width: wp(17) }]}>{moment(item.date_joined).format('YYYY MMM DD')}</Text>
                 <TouchableOpacity ref={imageRef} onPress={() => setVisible(true)}>
                     <Image source={ImagesPath.menu_dots_icon} style={styles.menuIconStyle} />
                 </TouchableOpacity>
@@ -81,12 +96,13 @@ const styles = StyleSheet.create({
     itemTitle: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.REGULAR_18,
-        color: colors.dark_blue2_color
+        color: colors.dark_blue2_color,
+        width: wp(50)
     },
     descriptionTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_10,
-        color: colors.dark_blue2_color
+        color: colors.dark_blue2_color,
     },
     menuIconStyle: {
         height: wp(10),

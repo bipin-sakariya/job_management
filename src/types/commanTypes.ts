@@ -1,4 +1,4 @@
 export interface DropdownProps {
     label: string,
-    value: string
+    value: number
 }

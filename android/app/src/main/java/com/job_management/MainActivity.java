@@ -1,6 +1,7 @@
 package com.job_management;
 
 import android.os.Bundle;
+import com.facebook.react.modules.i18nmanager.I18nUtil;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
@@ -54,6 +55,8 @@ public class MainActivity extends ReactActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
      SplashScreen.show(this);
+      I18nUtil sharedI18nUtilInstance = I18nUtil.getInstance();
+      sharedI18nUtilInstance.allowRTL(getApplicationContext(), true);
       super.onCreate(savedInstanceState);
     }
   }

@@ -10,26 +10,25 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { styles } from './styles';
 import CustomDropdown from '../../components/CustomDropDown';
 import { strings } from '../../languages/localizedStrings';
+import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scroll-view';
+import { colors } from '../../styles/Colors';
 interface DropdownProps {
     label: string,
-    value: string
+    value: number
 }
 
 const BillSectionScreen = () => {
     const navigation = useCustomNavigation('BillSectionScreen')
     const route = useRoute<RootRouteProps<'BillSectionScreen'>>();
-    let params = route.params
+    let { type, name, ration, unit, imageUrl, quantity } = route.params
 
     const [visible, setVisible] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-    const [countingValue, setCountingValue] = useState<DropdownProps>({ label: '', value: '' })
+    const [countingValue, setCountingValue] = useState<DropdownProps>({ label: '', value: 0 })
     const menuRef = useRef(null);
-    const onPress = () => {
-        console.log("onPress")
-    }
 
     const optionData = [
-        { title: strings.Remove, onPress: onPress, imageSource: ImagesPath.bin_icon },
+        { title: strings.Remove, onPress: () => deleteBill(), imageSource: ImagesPath.bin_icon },
         {
             title: strings.Edit, onPress: () => {
                 setIsEdit(true)
@@ -37,16 +36,21 @@ const BillSectionScreen = () => {
         }
     ]
 
+    const deleteBill = () => {
+        //delete bill 
+    }
+
     const data = [
-        { label: 'Item 1', value: '1' },
-        { label: 'Item 2', value: '2' },
-        { label: 'Item 3', value: '3' },
-        { label: 'Item 4', value: '4' },
-        { label: 'Item 5', value: '5' },
-        { label: 'Item 6', value: '6' },
-        { label: 'Item 7', value: '7' },
-        { label: 'Item 8', value: '8' },
+        { label: '1', value: 1 },
+        { label: '2', value: 2 },
+        { label: '3', value: 3 },
+        { label: '4', value: 4 },
+        { label: '5', value: 5 },
+        { label: '6', value: 6 },
+        { label: '7', value: 7 },
+        { label: '8', value: 8 },
     ];
+
     return (
         <View style={globalStyles.container}>
             <Header
@@ -67,50 +71,51 @@ const BillSectionScreen = () => {
                 }}
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <ScrollView>
-                    {params.type == "sign" &&
-                        <Image source={params.imageUrl ? params.imageUrl : ImagesPath.add_photo} style={styles.addPhotoStyle} />
+                <KeyboardAvoidingScrollView scrollEventThrottle={16}>
+                    {type == "sign" &&
+                        <Image source={imageUrl ? imageUrl : ImagesPath.add_photo} style={styles.addPhotoStyle} />
                     }
                     <CustomTextInput
                         title={strings.Name}
                         container={{ marginVertical: wp(5) }}
-                        value={params.name}
-                        editable={isEdit}
+                        value={name}
+                        editable={false}
                         onChangeText={(text) => { }}
                     />
                     {
-                        params.type == "sign" &&
+                        type == "sign" &&
                         <CustomTextInput
                             title={strings.Quantity}
                             container={{ marginBottom: wp(5) }}
-                            value={params.quantity}
-                            editable={isEdit}
+                            value={quantity}
+                            editable={false}
                             onChange={(text) => { }}
                         />
                     }
                     <DropDownComponent
                         title={strings.TypeCounting}
                         data={data}
+                        disable={true}
                         image={ImagesPath.down_white_arrow}
+                        imageStyle={{ tintColor: colors.white_color }}
                         labelField="label"
                         valueField="value"
                         onChange={(item) => setCountingValue(item)}
                         value={countingValue.value}
-                        placeholder={'Select'}
+                        placeholder={strings.choose}
                         container={{ marginBottom: wp(5) }}
                     />
                     {
-                        params.type != "sign" &&
+                        type != "sign" &&
                         <CustomTextInput
                             title={strings.JumpingRation}
                             container={{ marginBottom: wp(5) }}
-                            value={params.ration}
-                            editable={isEdit}
+                            value={ration}
+                            editable={false}
                             onChange={(text) => { }}
                         />
                     }
-
-                </ScrollView>
+                </KeyboardAvoidingScrollView>
             </Container>
             <CustomDropdown
                 componentRef={menuRef}

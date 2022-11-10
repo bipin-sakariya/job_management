@@ -8,13 +8,8 @@ import fonts from '../styles/Fonts'
 import FontSizes from '../styles/FontSizes'
 import { colors } from '../styles/Colors'
 import { DropdownProps } from 'react-native-element-dropdown/lib/typescript/components/Dropdown/model'
-interface ButtonTypeProps {
-    label: string,
-    value: string
-}
 
 interface DropDownComponentProps {
-    data: ButtonTypeProps[],
     image?: ImageSourcePropType,
     imageStyle?: ImageStyle,
     title?: string,
@@ -36,7 +31,7 @@ const DropDownComponent = (props: DropDownComponentProps & DropdownProps) => {
                 itemTextStyle={[styles.placeHolderTxt, props.itemTextStyle]}
                 renderRightIcon={() => {
                     return (
-                        <Image source={props.image} style={[globalStyles.headerIcon, props.imageStyle, { tintColor: colors.dark_blue1_color }]} />
+                        <Image source={props.image} style={[globalStyles.headerIcon, { tintColor: colors.dark_blue1_color, ...props.imageStyle }]} />
                     )
                 }}
             />

@@ -1,10 +1,10 @@
 import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomDashedComponent, CustomSubTitleWithImageComponent, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { useRoute } from '@react-navigation/native';
+import { useIsFocused, useRoute } from '@react-navigation/native';
 import { styles } from './styles';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { RootRouteProps } from '../../types/RootStackTypes';
@@ -29,15 +29,16 @@ const UsersScreen = () => {
     const route = useRoute<RootRouteProps<'UsersGroupsScreen'>>();
     const dispatch = useAppDispatch()
     const { type } = route.params
-    const [userList, setUserList] = useState([])
-    const { isLoading } = useAppSelector(state => state.userList)
+    const { isLoading, userListData } = useAppSelector(state => state.userList)
+
+    const isFoucs = useIsFocused()
     useEffect(() => {
-        dispatch(getListOfUsers()).unwrap().then((res) => {
-            console.log("🚀 ~ file: index.tsx ~ line 47 ~ dispatch ~ res", res)
-            setUserList(res)
+        dispatch(getListOfUsers("")).unwrap().then((res) => {
+            console.log("🚀 ~ file: index.tsx ~ line 41 ~ dispatch ~ res", res)
+        }).catch((error) => {
+            console.log("🚀 ~ file: index.tsx ~ line 38 ~ dispatch ~ error", error)
         })
-    }, [])
-    console.log({ userList });
+    }, [isFoucs])
 
     return (
         <View style={globalStyles.container}>
@@ -83,7 +84,7 @@ const UsersScreen = () => {
                     image={ImagesPath.group_icon}
                 />
                 <FlatList
-                    data={type == 'users' ? userList : groups}
+                    data={type == 'users' ? userListData : groups}
                     renderItem={({ item, index }) => {
                         return (
                             <UserListComponent item={item} type={type} />

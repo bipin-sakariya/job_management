@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
         paddingVertical: wp(8),
         justifyContent: 'center',
         alignItems: "center",
+        alignContent: 'center',
         flexDirection: 'row',
         marginVertical: wp(2)
     },

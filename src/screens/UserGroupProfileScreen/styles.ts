@@ -46,5 +46,16 @@ export const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.REGULAR_18,
         color: colors.dark_blue1_color
+    },
+    cameraIconStyle: {
+        height: wp(8),
+        width: wp(8),
+        resizeMode: 'contain',
+    },
+    camreaBtnStyle: {
+        alignSelf: 'center',
+        position: 'absolute',
+        right: wp(-3.5),
+        bottom: wp(2.5)
     }
 })

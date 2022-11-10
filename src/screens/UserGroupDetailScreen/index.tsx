@@ -1,4 +1,4 @@
-import { Image, Text, TouchableOpacity, View, ScrollView, TextInput, ImageBackground, Alert } from 'react-native';
+import { Image, Text, TouchableOpacity, View, ScrollView, TextInput, ImageBackground, Alert, KeyboardAvoidingView } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { Container, CustomBlackButton, CustomDetailsComponent, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components';
 import { globalStyles } from '../../styles/globalStyles';
@@ -17,20 +17,10 @@ import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-pick
 import { Formik, useFormik } from 'formik';
 import * as yup from "yup";
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { createUsers } from '../../redux/slices/AdminSlice/userListSlice';
+import { createUser, detailsOfUser, resetUserDetails, updateUser } from '../../redux/slices/AdminSlice/userListSlice';
 import moment from 'moment';
 import CustomActivityIndicator from '../../components/CustomActivityIndicator';
-
-const data = [
-    { label: 'Item 1', value: '1' },
-    { label: 'Item 2', value: '2' },
-    { label: 'Item 3', value: '3' },
-    { label: 'Item 4', value: '4' },
-    { label: 'Item 5', value: '5' },
-    { label: 'Item 6', value: '6' },
-    { label: 'Item 7', value: '7' },
-    { label: 'Item 8', value: '8' },
-];
+import { KeyboardAvoidingScrollView } from 'react-native-keyboard-avoiding-scroll-view';
 
 interface userData {
     id: number,
@@ -43,9 +33,9 @@ const UserGroupDetailScreen = () => {
     const { type } = route.params;
 
     const menuRef = useRef(null);
-    const [role, setRole] = useState<DropdownProps>({ label: '', value: '' })
-    const [permission, setPermission] = useState<DropdownProps>({ label: '', value: '' })
-    const [selectForms, setSelectForms] = useState<DropdownProps>({ label: '', value: '' })
+    const [role, setRole] = useState<DropdownProps>({ label: '', value: 0 })
+    const [permission, setPermission] = useState<DropdownProps>({ label: '', value: 0 })
+    const [selectForms, setSelectForms] = useState<DropdownProps>({ label: '', value: 0 })
     const [visible, setVisible] = useState(false);
     const [imageUrl, setImageUrl] = useState<string | undefined>('');
     const [roleRequired, setRoleRequired] = useState(false)
@@ -56,7 +46,7 @@ const UserGroupDetailScreen = () => {
         user_name: ""
     })
     const dispatch = useAppDispatch()
-    const { isLoading } = useAppSelector(state => state.userList)
+    const { isLoading, userDetails, userRoleList } = useAppSelector(state => state.userList)
     let data_user = [
         {
             id: 1,
@@ -84,14 +74,6 @@ const UserGroupDetailScreen = () => {
         },
     ]
     const [userData, setUserData] = useState<userData[]>(data_user)
-    const onPress = () => {
-        console.log("Remove")
-    }
-
-    const optionData = [
-        { title: strings.Remove, onPress: onPress, imageSource: ImagesPath.bin_icon },
-        { title: strings.Edit, onPress: onPress, imageSource: ImagesPath.edit_icon }
-    ]
 
     const CreateUserValidationSchema = yup.object().shape({
         userName: yup
@@ -116,54 +98,54 @@ const UserGroupDetailScreen = () => {
         forms: yup.string().required(strings.forms_required)
     });
 
-    let createUserinitialValues = {
-        userName: '',
-        email: '',
-        contactNo: '',
-    }
-
-    let createGroupinitialValues = {
-        groupName: '',
-        groupManager: '',
-        inspector: '',
-        groupMamber: '',
-        forms: ''
-
-    }
-
-    const createUser = (values: any) => {
-        console.log("🚀 ~ file: index.tsx ~ line 121 ~ createUser ~ values", values)
+    const userCreate = (values: any) => {
         if (!role.value) {
             setRoleRequired(true)
         } else if (!permission.value) {
             setPermissionRequired(true)
         } else {
-            if (role.value && permission.value && values) {
-                var data = new FormData()
-                data.append("profile_image", imageUrl)
-                data.append("user_name", values.userName)
-                data.append("email", values.email)
-                data.append("phone", `+972${values.contactNo}`)
-                data.append("role", parseInt(role.value))
-                data.append("date_joined", moment().format("DD-MM-YYYY"))
-                console.log("🚀 ~ file: index.tsx ~ line 138 ~ createUser ~ data", data)
-                dispatch(createUsers(data)).unwrap().then((res) => {
-                    console.log({ res: res });
-                    navigation.goBack()
-                }).catch((e) => {
-                    console.log({ error: e });
-                    setError(e.data)
-                })
+            var data = new FormData()
+            let images = {
+                uri: imageUrl,
+                name: "photo.jpg",
+                type: "image/jpeg"
             }
+            data.append("profile_image", images ? images : '')
+            data.append("user_name", values.userName)
+            data.append("email", values.email)
+            data.append("phone", `+972${values.contactNo}`)
+            data.append("role", parseInt(role.value.toString()))
+            let params = {
+                data: data,
+            }
+            dispatch(createUser(params)).unwrap().then((res) => {
+                console.log({ res: res });
+                navigation.goBack()
+            }).catch((e) => {
+                console.log({ error: e });
+                setError(e.data)
+            })
         }
     }
 
     const { values, errors, touched, handleSubmit, handleChange, } =
         useFormik({
-            initialValues: type == "users" ? createUserinitialValues : createGroupinitialValues,
+            enableReinitialize: true,
+            initialValues: type == "users" ? {
+                userName: userDetails?.user_name ? userDetails.user_name : '',
+                email: userDetails?.email ? userDetails.email : '',
+                contactNo: userDetails?.phone ? userDetails.phone.split("+972")[1] : '',
+            } : {
+                groupName: '',
+                groupManager: '',
+                inspector: '',
+                groupMamber: '',
+                forms: ''
+
+            },
             validationSchema: type == 'users' ? CreateUserValidationSchema : CreateGroupValidationSchema,
             onSubmit: values => {
-                type == 'users' ? createUser(values) : Alert.alert("dsf")
+                type == 'users' ? userCreate(values) : Alert.alert("group create")
             }
         })
 
@@ -173,16 +155,14 @@ const UserGroupDetailScreen = () => {
     }, [values.email])
 
     useEffect(() => {
-        console.log('EMAIL==>', { userName: values.userName })
+        console.log('userName==>', { userName: values.userName })
         setError({ ...error, user_name: "" })
     }, [values.userName])
 
     useEffect(() => {
-        console.log('EMAIL==>', { contactNo: values.contactNo })
+        console.log('contactNo==>', { contactNo: values.contactNo })
         setError({ ...error, phone: "" })
     }, [values.contactNo])
-
-
 
     return (
         <View style={globalStyles.container}>
@@ -204,22 +184,7 @@ const UserGroupDetailScreen = () => {
             />
             {isLoading && <CustomActivityIndicator size={"small"} />}
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <ScrollView showsVerticalScrollIndicator={false}>
-                    {/* <Formik
-                        validationSchema={type == 'users' ? CreateUserValidationSchema : CreateGroupValidationSchema}
-                        initialValues={type == "users" ? createUserinitialValues : createGroupinitialValues}
-                        enableReinitialize={true}
-                        onSubmit={(values) => {
-                            type == 'users' ? createUser(values) : Alert.alert("dsf")
-                        }}
-                    >{({
-                        handleChange,
-                        handleSubmit,
-                        values,
-                        errors,
-                        touched,
-                    }) => (
-                        <> */}
+                <KeyboardAvoidingScrollView scrollEventThrottle={16}>
                     <CustomSubTitleWithImageComponent
                         disabled
                         title={type == 'users' ? strings.FillfromtocreateUser : strings.FillfromtoCreateGroup}
@@ -231,11 +196,24 @@ const UserGroupDetailScreen = () => {
                         borderRadius={wp(2)}>
                         <TouchableOpacity
                             onPress={async () => {
-                                let option: ImageLibraryOptions = {
-                                    mediaType: 'photo'
-                                }
-                                const { assets } = await launchImageLibrary(option)
-                                setImageUrl(assets && assets.length !== 0 ? assets[0]?.uri : '')
+                                // let option: ImageLibraryOptions = {
+                                //     mediaType: 'photo'
+                                // }
+                                let options: any = {
+                                    title: "Select Image",
+                                    customButtons: [
+                                        { name: "customOptionKey", title: "Choose Photo from Custom Option" },
+                                    ],
+                                    storageOptions: {
+                                        skipBackup: true,
+                                        path: "images",
+                                    },
+                                };
+                                // // const { assets } = await launchImageLibrary(option)
+                                // console.log("🚀 ~ file: index.tsx ~ line 256 ~ onPress={ ~ assets", assets)
+
+                                const result: any = await launchImageLibrary(options);
+                                setImageUrl(result ? result?.assets[0].uri : '')
                             }}
 
                             activeOpacity={1}
@@ -250,8 +228,7 @@ const UserGroupDetailScreen = () => {
                         onChangeText={type == "users" ? handleChange("userName") : handleChange("groupName")}
                         value={type == "users" ? values.userName : values.groupName}
                     />
-
-                    {(touched.userName && errors.userName) || error?.user_name && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors.userName ? errors.userName : error?.email}</Text>}
+                    {(touched?.userName && errors?.userName) || error?.user_name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.userName ? errors.userName : error?.email}</Text> : null}
                     {
                         type == 'users' &&
                         <>
@@ -262,7 +239,7 @@ const UserGroupDetailScreen = () => {
                                 onChangeText={handleChange("email")}
                                 value={values.email}
                             />
-                            {(touched.email && errors.email) || error?.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors.email ? errors.email : error?.email}</Text> : null}
+                            {(touched?.email && errors?.email) || error?.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.email ? errors?.email : error?.email}</Text> : null}
                             <CustomTextInput
                                 title={strings.Contactno}
                                 container={{ marginBottom: wp(5) }}
@@ -270,13 +247,13 @@ const UserGroupDetailScreen = () => {
                                 onChangeText={handleChange("contactNo")}
                                 value={values.contactNo}
                             />
-                            {(touched.contactNo && errors.contactNo) || error?.phone && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error?.phone ? error.phone : errors.contactNo}</Text>}
+                            {(touched?.contactNo && errors?.contactNo) || error?.phone ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error?.phone ? error.phone : errors.contactNo}</Text> : null}
 
                         </>
                     }
                     <DropDownComponent
                         title={type == 'users' ? strings.Role : strings.Group_Manager}
-                        data={data}
+                        data={userRoleList}
                         image={ImagesPath.down_white_arrow}
                         labelField="label"
                         valueField="value"
@@ -288,10 +265,10 @@ const UserGroupDetailScreen = () => {
                         placeholder={strings.SelectRoleforUser}
                         container={{ marginBottom: wp(5) }}
                     />
-                    {roleRequired && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text>}
+                    {roleRequired ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text> : null}
                     <DropDownComponent
                         title={type == 'users' ? strings.Permission : strings.Group_Inspector}
-                        data={data}
+                        data={userRoleList}
                         image={ImagesPath.down_white_arrow}
                         labelField="label"
                         valueField="value"
@@ -303,7 +280,7 @@ const UserGroupDetailScreen = () => {
                         placeholder={strings.GivePermission}
                         container={{ marginBottom: wp(5) }}
                     />
-                    {permissionRequired && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text>}
+                    {permissionRequired ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text> : null}
                     {
                         type != 'users' &&
                         <>
@@ -343,7 +320,7 @@ const UserGroupDetailScreen = () => {
                                 } />
                             <DropDownComponent
                                 title={strings.GroupForms}
-                                data={data}
+                                data={userRoleList}
                                 image={ImagesPath.down_white_arrow}
                                 labelField="label"
                                 valueField="value"
@@ -359,28 +336,18 @@ const UserGroupDetailScreen = () => {
                         image={ImagesPath.plus_white_circle_icon}
                         onPress={() => {
                             if (type == 'users') {
-                                handleSubmit()
                                 if (!role.value) {
                                     setRoleRequired(true)
                                 }
                                 if (!permission.value) {
                                     setPermissionRequired(true)
                                 }
+                                handleSubmit()
                             }
                         }}
                     />
-                    {/* </>
-                    )}
-                    </Formik> */}
-                </ScrollView>
+                </KeyboardAvoidingScrollView>
             </Container>
-            {/* <CustomDropdown
-                componentRef={menuRef}
-                dropdownData={optionData}
-                isVisible={visible}
-                setIsVisible={setVisible}
-                modalStyle={{ right: 0 }}
-            /> */}
         </View>
     )
 }

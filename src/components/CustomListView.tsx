@@ -1,5 +1,5 @@
 import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { globalStyles } from '../styles/globalStyles'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { ImagesPath } from '../utils/ImagePaths'
@@ -7,6 +7,8 @@ import { colors } from '../styles/Colors'
 import fonts from '../styles/Fonts'
 import FontSizes from '../styles/FontSizes'
 import moment from 'moment'
+import CustomDropdown from './CustomDropDown'
+import { strings } from '../languages/localizedStrings'
 
 interface CustomeListViewProps {
     item: any,
@@ -15,26 +17,42 @@ interface CustomeListViewProps {
 }
 
 const CustomListView = ({ item, onPress, material }: CustomeListViewProps) => {
+    const imageRef = useRef(null);
+    const [visible, setVisible] = useState(false);
+
+    const optionData = [
+        { title: strings.Remove, onPress: () => { }, imageSource: ImagesPath.bin_icon },
+        { title: strings.Edit, onPress: () => { }, imageSource: ImagesPath.edit_icon }
+    ]
+
     return (
-        <TouchableOpacity onPress={onPress} style={[globalStyles.rowView, styles.listMainView, styles.dropDownShadowStyle]}>
-            <View style={globalStyles.rowView}>
-                {
-                    item.iamgeUrl && material &&
-                    <View style={[globalStyles.centerView, styles.imageView]}>
-                        <Image source={ImagesPath.image_white_border} style={styles.iamgeStyle} />
-                    </View>
-                }
-                <Text style={[styles.titleTxt, globalStyles.rtlStyle, { marginLeft: wp(2) }]}>
-                    {item.title}
-                </Text>
-            </View>
-            <View style={globalStyles.rowView}>
-                <Text style={[styles.dateTxt, globalStyles.rtlStyle]}>{moment(item.date).format('ll')}</Text>
-                <TouchableOpacity>
-                    <Image style={styles.menuImageStyle} source={ImagesPath.menu_dots_icon} />
-                </TouchableOpacity>
-            </View>
-        </TouchableOpacity>
+        <>
+            <TouchableOpacity onPress={onPress} style={[globalStyles.rowView, styles.listMainView, styles.dropDownShadowStyle]}>
+                <View style={globalStyles.rowView}>
+                    {
+                        item.iamgeUrl && !material &&
+                        <View style={[globalStyles.centerView, styles.imageView]}>
+                            <Image source={ImagesPath.image_white_border} style={styles.iamgeStyle} />
+                        </View>
+                    }
+                    <Text style={[styles.titleTxt, globalStyles.rtlStyle, { marginLeft: wp(2) }]}>
+                        {item.title}
+                    </Text>
+                </View>
+                <View style={globalStyles.rowView}>
+                    <Text style={[styles.dateTxt, globalStyles.rtlStyle]}>{moment(item.date).format('ll')}</Text>
+                    <TouchableOpacity ref={imageRef} onPress={() => setVisible(true)}>
+                        <Image style={styles.menuImageStyle} source={ImagesPath.menu_dots_icon} />
+                    </TouchableOpacity>
+                </View>
+            </TouchableOpacity>
+            <CustomDropdown
+                componentRef={imageRef}
+                dropdownData={optionData}
+                isVisible={visible}
+                setIsVisible={setVisible}
+            />
+        </>
     )
 }
 
