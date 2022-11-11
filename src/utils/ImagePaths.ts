@@ -102,4 +102,6 @@ export const ImagesPath = {
     check_icon_circle: require('../assets/images/check_icon.png'),
     information_icon: require('../assets/images/information_icon.png'),
     camera_icon: require('../assets/images/camera_icon.png'),
+    check_box_border_icon: require('../assets/images/checkBoxBorder.png'),
+    check_box_fill_icon: require('../assets/images/checkBoxFill.png'),
 }

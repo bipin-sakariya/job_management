@@ -14,19 +14,18 @@ interface TableDetailsComponentProps {
 
 const TableDetailsComponent = ({ item, type }: TableDetailsComponentProps) => {
     return (
-        <View style={[globalStyles.rowView, { paddingHorizontal: type == 'form' ? wp(5) : wp(2), paddingVertical: wp(1) }]}>
+        <View style={[globalStyles.rowView, { paddingVertical: wp(1), justifyContent: 'space-around' }]}>
             <Text numberOfLines={1} style={[styles.commonScammedTxt, globalStyles.rtlStyle, { width: wp(15) }]}>{item.srno}</Text>
             <View style={[globalStyles.rowView, { width: wp(35) }]}>
-                {
+                {/* {
                     item.imageUrl &&
                     <View style={[globalStyles.centerView, styles.imageView]}>
                         <Image source={ImagesPath.image_white_border} style={styles.imageViewStyle} />
                     </View>
-                }
+                } */}
                 <Text numberOfLines={1} style={styles.commonScammedTxt}>{item.name}</Text>
             </View>
             <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.qty}</Text>
-            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.unit}</Text>
             <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(12) }]}>{item.parameter}</Text>
         </View>
     )

@@ -230,5 +230,12 @@ export const hebrew = {
     EnterQuantity: 'הזן כמות',
     Pleaseentersignlogo: 'נא להזין את לוגו השלט',
     UpdateBill: 'עדכן את ביל',
-    Fromname_required: 'שם נדרש'
+    Fromname_required: 'שם נדרש',
+    Searchhere: 'חפש כאן',
+    Bill_required: 'נדרש חיוב',
+    Differentsignshavebeenassignedtothisform: 'לטופס זה הוקצו שלטים שונים',
+    Unit: 'יחידה',
+    QTY: 'כמות',
+    Srno: 'סרנו.'
+
 } 

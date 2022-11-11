@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, FlatList, Image, Platform, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components'
@@ -6,25 +6,34 @@ import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { ImagesPath } from '../../utils/ImagePaths'
 import { styles } from './styles'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { DropdownProps } from '../../types/commanTypes'
 import { strings } from '../../languages/localizedStrings'
 import { colors } from '../../styles/Colors'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
+import CustomDropdown from '../../components/CustomDropDown'
+import fonts from '../../styles/Fonts'
+import FontSizes from '../../styles/FontSizes'
+import ReactNativeModal from 'react-native-modal'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+const { height: deviceHeight } = Dimensions.get('window');
 const CreateFormScreen = () => {
     const navigation = useCustomNavigation('CreateFormScreen');
     const [countingValue, setCountingValue] = useState<DropdownProps>({ label: '', value: 0 })
     const componentRef = useRef(null)
+    const [isVisible, setIsVisible] = useState(true)
+    const [isBillError, setIsBillError] = useState(false)
+
     const data = [
-        { label: 'Item 1', value: 1 },
-        { label: 'Item 2', value: 2 },
-        { label: 'Item 3', value: 3 },
-        { label: 'Item 4', value: 4 },
-        { label: 'Item 5', value: 5 },
-        { label: 'Item 6', value: 6 },
-        { label: 'Item 7', value: 7 },
-        { label: 'Item 8', value: 8 },
+        { id: 1, selected: false, label: 'Item 1', value: 1 },
+        { id: 2, selected: false, label: 'Item 2', value: 2 },
+        { id: 3, selected: false, label: 'Item 3', value: 3 },
+        { id: 4, selected: false, label: 'Item 4', value: 4 },
+        { id: 5, selected: false, label: 'Item 5', value: 5 },
+        { id: 6, selected: false, label: 'Item 6', value: 6 },
+        { id: 7, selected: false, label: 'Item 7', value: 7 },
+        { id: 8, selected: false, label: 'Item 8', value: 8 },
     ];
 
     const CreateFormValidationSchema = yup.object().shape({
@@ -37,6 +46,14 @@ const CreateFormScreen = () => {
 
     }
 
+    const [offsetData, setOffsetData] = useState({
+        horizontal: 0,
+        vertical: 0,
+        modalHeight: 0,
+    });
+
+    const { bottom: safeAreaBottom } = useSafeAreaInsets();
+
     const { values, errors, touched, handleSubmit, handleChange, } =
         useFormik({
             enableReinitialize: true,
@@ -48,15 +65,9 @@ const CreateFormScreen = () => {
                 createForm(values)
             }
         })
-    // const [offsetData, setOffsetData] = useState({
-    //     horizontal: 0,
-    //     vertical: 0,
-    //     modalHeight: 0,
-    //     x: 0,
-    //     y: 0,
-    //     width: 0,
-    //     height: 0
-    // });
+
+
+
     // const onGet = () => {
     //     componentRef?.current?.measure(
     //         (
@@ -81,10 +92,49 @@ const CreateFormScreen = () => {
     //         },
     //     );
     // }
-    // useEffect(() => {
-    //     console.log({ offsetData });
 
-    // }, [offsetData])
+    useEffect(() => {
+        console.log({ offsetData });
+
+    }, [offsetData])
+
+    const renderItem = ({ item, index }: any) => {
+        return (
+            <View style={[globalStyles.rowView, { height: wp(8), marginHorizontal: wp(2.5), justifyContent: 'space-between' }]}>
+                <Text style={{ maxWidth: wp(75), fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_12 }}>Form Name</Text>
+                <Image source={item.selected ? ImagesPath.check_box_fill_icon : ImagesPath.check_box_border_icon} style={[{
+                    height: wp(6),
+                    width: wp(6),
+                    resizeMode: 'contain',
+                }]} />
+            </View>
+        )
+    }
+
+
+
+    // useEffect(() => {
+    //     if (isVisible) {
+    //         componentRef?.current?.measure(
+    //             (
+    //                 x: number,
+    //                 y: number,
+    //                 width: number,
+    //                 height: number,
+    //                 horizontalOffset: number,
+    //                 verticalOffset: number,
+    //             ) => {
+    //                 setOffsetData({
+    //                     ...offsetData,
+    //                     horizontal: horizontalOffset,
+    //                     vertical: verticalOffset,
+    //                 });
+    //             },
+    //         );
+    //     }
+    // }, [isVisible]);
+
+
     return (
         <View style={globalStyles.container}>
             <Header
@@ -107,18 +157,34 @@ const CreateFormScreen = () => {
                     onChangeText={handleChange('formName')}
                 />
                 {touched?.formName && errors?.formName ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.formName}</Text> : null}
-                {/* <View style={[styles.textInputContainer,]}>
+                {/* <View ref={componentRef} style={[styles.textInputContainer,]}>
                     <View style={styles.titleContainer}>
                         <Text numberOfLines={1} style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{"props.title"}</Text>
                     </View>
-                    <View style={[globalStyles.rowView, { height: 40, backgroundColor: 'red', justifyContent: 'space-between' }]}>
-                        <Text>sdfsd</Text>
-                        <TouchableOpacity onPress={() => onGet()} style={{ backgroundColor: 'blue', marginHorizontal: wp(2) }}>
-                            <Image source={ImagesPath.down_white_arrow} style={[globalStyles.headerIcon, { backgroundColor: 'green', }]} />
+                    <View style={[globalStyles.rowView, { justifyContent: 'space-between', backgroundColor: 'red', marginVertical: wp(2), marginHorizontal: wp(2) }]}>
+                        <View>
+                            <Text>sdfsd</Text>
+                        </View>
+                        <TouchableOpacity onPress={() => setIsVisible(true)} style={{ backgroundColor: 'blue', }}>
+                            <Image source={ImagesPath.down_white_arrow} style={[globalStyles.headerIcon, { backgroundColor: 'green', transform: [{ rotate: '180deg' }] }]} />
                         </TouchableOpacity>
                     </View>
-                </View>
-                <View ref={componentRef} style={{ height: 40, width: 50, backgroundColor: 'red', position: 'absolute', top: 20 }}></View> */}
+                </View> */}
+                {/* {
+                    isVisible ?
+                        <View style={{ maxHeight: wp(80), backgroundColor: "white", borderColor: colors.text_input_border_color, borderWidth: wp(0.5), borderRadius: wp(2), top: wp(-0.5) }}>
+                            <View style={[globalStyles.rowView, { alignItems: 'center', alignContent: 'center', padding: wp(2), marginVertical: wp(2), marginHorizontal: wp(2), borderColor: colors.text_input_border_color, borderWidth: wp(0.5), borderRadius: wp(2) }]}>
+                                <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
+                                <TextInput style={{ maxWidth: wp(75), marginHorizontal: wp(2), fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.MEDIUM_16 }} placeholder={strings.Searchhere} placeholderTextColor={colors.dark_blue3_color} />
+                            </View>
+                            <FlatList data={data} renderItem={renderItem} ItemSeparatorComponent={() => {
+                                return (
+                                    <View style={{ height: wp(1) }} />
+                                )
+                            }} />
+                        </View>
+                        : null
+                } */}
                 <DropDownComponent
                     title={strings.AddBill}
                     data={data}
@@ -126,18 +192,23 @@ const CreateFormScreen = () => {
                     labelField="label"
                     valueField="value"
                     onChange={(item) => {
-
+                        setIsBillError(false)
                         setCountingValue(item)
                     }}
                     value={countingValue.value}
                     placeholder={strings.choose}
                     container={{ marginBottom: wp(5) }}
                 />
-                {touched?.formName && errors?.formName ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.formName}</Text> : null}
+                {isBillError ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Bill_required}</Text> : null}
 
-                <CustomBlackButton onPress={() => { }} title={strings.CreateForm} image={ImagesPath.plus_white_circle_icon} imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} />
-            </Container>
-        </View>
+                <CustomBlackButton onPress={() => {
+                    if (!countingValue.value) {
+                        setIsBillError(true)
+                    }
+                    handleSubmit()
+                }} title={strings.CreateForm} image={ImagesPath.plus_white_circle_icon} imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} />
+            </Container >
+        </View >
     )
 }
 

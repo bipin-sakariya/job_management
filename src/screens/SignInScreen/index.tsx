@@ -1,4 +1,4 @@
-import { Alert, Image, Text, TouchableOpacity, View, ActivityIndicator, Modal, KeyboardAvoidingView, Platform, } from 'react-native';
+import { Alert, Image, Text, TouchableOpacity, View, ActivityIndicator, Modal, KeyboardAvoidingView, Platform, ScrollView, } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { ImagesPath } from '../../utils/ImagePaths';
@@ -103,7 +103,7 @@ const SignInScreen = () => {
         <>
             {isLoading && <CustomActivityIndicator size={'small'} />}
             <View style={[globalStyles.container, { paddingHorizontal: wp(5), justifyContent: 'center' }]}>
-                <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
+                <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'padding'}>
                     <Image source={ImagesPath.logo_of_job_managment} style={styles.appLogo} />
                     <View style={[{ paddingTop: wp(4), paddingBottom: wp(8), }]}>
                         <Text style={styles.titleTxt}>{strings.Welcometo}</Text>

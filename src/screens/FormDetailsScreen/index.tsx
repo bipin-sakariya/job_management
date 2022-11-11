@@ -10,6 +10,9 @@ import CustomDropdown from '../../components/CustomDropDown'
 import TableHeaderView from '../../components/TableHeaderView'
 import TableDetailsComponent from '../../components/TableDetailsComponent'
 import { strings } from '../../languages/localizedStrings'
+import fonts from '../../styles/Fonts'
+import FontSizes from '../../styles/FontSizes'
+import { colors } from '../../styles/Colors'
 
 const FormDetailsScreen = () => {
     const navigation = useCustomNavigation('FormDetailsScreen');
@@ -121,7 +124,7 @@ const FormDetailsScreen = () => {
                 <CustomTextInput
                     title={strings.Form_Name}
                     container={{ marginVertical: wp(5) }}
-                    value={'Form name 1'}
+                    value={strings.Form_Name}
                     editable={isEdit}
                     onChange={(text) => { }}
                 />
@@ -129,7 +132,7 @@ const FormDetailsScreen = () => {
                     <View style={styles.formHeaderView}>
                         <Text style={[styles.noNameTxt, globalStyles.rtlStyle]}>{strings.Edit}</Text>
                     </View>
-                    <FlatList data={FormData} renderItem={renderItem}
+                    <FlatList style={{ maxHeight: wp(80) }} data={FormData} renderItem={renderItem}
                         ListHeaderComponent={() => {
                             return (
                                 <TableHeaderView type={"form"} />
@@ -137,6 +140,7 @@ const FormDetailsScreen = () => {
                         }}
                         ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}
                     />
+                    <Text style={[globalStyles.rtlStyle, { fontFamily: fonts.FONT_POP_SEMI_BOLD, fontSize: FontSizes.EXTRA_SMALL_12, color: colors.dark_blue2_color, marginHorizontal: wp(2), marginBottom: wp(2) }]}>{strings.Differentsignshavebeenassignedtothisform}</Text>
                 </View>
             </Container>
             <CustomDropdown

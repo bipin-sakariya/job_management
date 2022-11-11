@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
     },
     sammedSepratorLine: {
         height: wp(0.2),
-        backgroundColor: colors.white_3,
+        backgroundColor: colors.text_input_border_color,
         marginVertical: wp(2),
         marginHorizontal: wp(3)
     },
