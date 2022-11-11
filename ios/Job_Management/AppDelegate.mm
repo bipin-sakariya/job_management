@@ -1,4 +1,5 @@
 #import "AppDelegate.h"
+#import <React/RCTI18nUtil.h>
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
@@ -61,6 +62,8 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  [[RCTI18nUtil sharedInstance] allowRTL:YES];
+  [[RCTI18nUtil sharedInstance] forceRTL:YES];
   [RNSplashScreen show];
   return YES;
 }
