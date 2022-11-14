@@ -1,4 +1,4 @@
-import { Dimensions, FlatList, Image, Platform, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, Dimensions, FlatList, Image, Platform, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components'
@@ -12,11 +12,6 @@ import { strings } from '../../languages/localizedStrings'
 import { colors } from '../../styles/Colors'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
-import CustomDropdown from '../../components/CustomDropDown'
-import fonts from '../../styles/Fonts'
-import FontSizes from '../../styles/FontSizes'
-import ReactNativeModal from 'react-native-modal'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 const { height: deviceHeight } = Dimensions.get('window');
 const CreateFormScreen = () => {
     const navigation = useCustomNavigation('CreateFormScreen');
@@ -46,14 +41,6 @@ const CreateFormScreen = () => {
 
     }
 
-    const [offsetData, setOffsetData] = useState({
-        horizontal: 0,
-        vertical: 0,
-        modalHeight: 0,
-    });
-
-    const { bottom: safeAreaBottom } = useSafeAreaInsets();
-
     const { values, errors, touched, handleSubmit, handleChange, } =
         useFormik({
             enableReinitialize: true,
@@ -66,52 +53,12 @@ const CreateFormScreen = () => {
             }
         })
 
-
-
-    // const onGet = () => {
-    //     componentRef?.current?.measure(
-    //         (
-    //             x: number,
-    //             y: number,
-    //             width: number,
-    //             height: number,
-    //             horizontalOffset: number,
-    //             verticalOffset: number,
-    //         ) => {
-    //             setOffsetData(prevOffsetData => {
-    //                 return {
-    //                     ...prevOffsetData,
-    //                     horizontal: horizontalOffset,
-    //                     vertical: verticalOffset,
-    //                     height: height,
-    //                     width: width,
-    //                     x: x,
-    //                     y: y
-    //                 };
-    //             });
-    //         },
-    //     );
-    // }
-
-    useEffect(() => {
-        console.log({ offsetData });
-
-    }, [offsetData])
-
-    const renderItem = ({ item, index }: any) => {
-        return (
-            <View style={[globalStyles.rowView, { height: wp(8), marginHorizontal: wp(2.5), justifyContent: 'space-between' }]}>
-                <Text style={{ maxWidth: wp(75), fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_12 }}>Form Name</Text>
-                <Image source={item.selected ? ImagesPath.check_box_fill_icon : ImagesPath.check_box_border_icon} style={[{
-                    height: wp(6),
-                    width: wp(6),
-                    resizeMode: 'contain',
-                }]} />
-            </View>
-        )
-    }
-
-
+    // const [offsetData, setOffsetData] = useState({
+    //     horizontal: 0,
+    //     vertical: 0,
+    //     modalHeight: 0,
+    // });
+    // const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
     // useEffect(() => {
     //     if (isVisible) {
@@ -134,6 +81,38 @@ const CreateFormScreen = () => {
     //     }
     // }, [isVisible]);
 
+    // useEffect(() => {
+    //     console.log({ offsetData: offsetData });
+
+    // }, [offsetData])
+
+    // const renderItem = ({ item, index }: any) => {
+    //     return (
+    //         <View style={[globalStyles.rowView, { height: wp(8), marginHorizontal: wp(2.5), justifyContent: 'space-between' }]}>
+    //             <Text style={{ maxWidth: wp(75), fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_12 }}>Form Name</Text>
+    //             <Image source={item.selected ? ImagesPath.check_box_fill_icon : ImagesPath.check_box_border_icon} style={[{
+    //                 height: wp(6),
+    //                 width: wp(6),
+    //                 resizeMode: 'contain',
+    //             }]} />
+    //         </View>
+    //     )
+    // }
+
+    // const modalPositionHandler = async () => {
+    //     const { modalHeight, vertical } = offsetData;
+    //     console.log("🚀 ~ file: index.tsx ~ line 110 ~ modalPositionHandler ~ offsetData", offsetData)
+    //     console.log("🚀 ~ file: index.tsx ~ line 112 ~ modalPositionHandler ~ deviceHeight", deviceHeight)
+    //     if (vertical + modalHeight + hp(10) > deviceHeight) {
+    //         return await deviceHeight - modalHeight;
+    //     } else {
+    //         return await Platform.OS == 'android' ? vertical - hp(4) : vertical + hp(7.5);
+    //     }
+    // };
+
+    // if (!offsetData.horizontal && !offsetData.vertical) {
+    //     return null;
+    // }
 
     return (
         <View style={globalStyles.container}>
@@ -170,6 +149,36 @@ const CreateFormScreen = () => {
                         </TouchableOpacity>
                     </View>
                 </View> */}
+
+                {/* <ReactNativeModal
+                    onLayout={e =>
+                        setOffsetData({
+                            ...offsetData,
+                            modalHeight: e.nativeEvent.layout.height,
+                        })
+                    }
+                    animationIn={'fadeIn'}
+                    animationOut={'fadeOut'}
+                    style={[
+                        styles.modalStyle,
+                        {
+                            // top: modalPositionHandler(),
+                            top: Platform.OS == 'ios' ? wp(12) : wp(27)
+                        },
+                    ]}
+                    isVisible={isVisible}
+                    backdropOpacity={0}
+                    onBackdropPress={() => {
+                        setIsVisible(false);
+                    }}>
+                    <View style={styles.container}>
+                        <FlatList
+                            data={data}
+                            renderItem={({ item }) => <View style={{ height: 20, backgroundColor: 'red' }}></View>}
+                            ItemSeparatorComponent={() => <View style={styles.separator} />}
+                        />
+                    </View>
+                </ReactNativeModal> */}
                 {/* {
                     isVisible ?
                         <View style={{ maxHeight: wp(80), backgroundColor: "white", borderColor: colors.text_input_border_color, borderWidth: wp(0.5), borderRadius: wp(2), top: wp(-0.5) }}>
