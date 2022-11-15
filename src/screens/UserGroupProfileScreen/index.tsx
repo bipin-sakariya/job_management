@@ -18,6 +18,7 @@ import { useFormik } from 'formik'
 import * as yup from "yup";
 import { launchImageLibrary } from 'react-native-image-picker'
 import CustomActivityIndicator from '../../components/CustomActivityIndicator'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const data = [
     { label: 'Item 1', value: '1' },
@@ -45,7 +46,7 @@ const UserGroupProfileScreen = () => {
     const dispatch = useAppDispatch()
     const isFoucs = useIsFocused()
     const { userDetails, isLoading } = useAppSelector(state => state.userList)
-    const [imageUrl, setImageUrl] = useState<string | undefined>('');
+    const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
     const [error, setError] = useState({
         phone: "",
         email: "",
@@ -53,20 +54,21 @@ const UserGroupProfileScreen = () => {
     })
 
     useEffect(() => {
-        console.log({ userId });
-        let params = {
-            id: userId
+        if (isFoucs) {
+            console.log({ userId });
+            let params = {
+                id: userId
+            }
+            userDetail(params)
+            return () => {
+                dispatch(resetUserDetails())
+            }
         }
-        userDetail(params)
-        return () => {
-            dispatch(resetUserDetails())
-        }
-    }, [navigation, isFoucs])
+    }, [isFoucs])
 
 
     const userDetail = (params: any) => {
         dispatch(detailsOfUser(params)).unwrap().then((res) => {
-            console.log({ resss: res });
             setImageUrl(res.profile_image)
         }).catch((error) => {
             console.log({ error });
@@ -107,7 +109,6 @@ const UserGroupProfileScreen = () => {
         }
         setVisible(false)
         dispatch(deleteUser(params)).unwrap().then((res) => {
-            dispatch(getListOfUsers("")).unwrap().then((response) => { }).catch((error) => { })
             navigation.goBack()
         }).catch((error) => {
             Alert.alert("some thing went wrong")
@@ -166,7 +167,7 @@ const UserGroupProfileScreen = () => {
         dispatch(updateUser(params)).unwrap().then((res) => {
             console.log({ res: res });
             setIsEditable(false)
-            userDetail(params)
+            navigation.goBack()
         }).catch((e) => {
             console.log({ error: e });
             setError(e.data)
@@ -236,7 +237,7 @@ const UserGroupProfileScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
+                <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
                     <ImageBackground
                         source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
                         style={styles.addPhotoStyle}
@@ -378,7 +379,7 @@ const UserGroupProfileScreen = () => {
                             }}
                         />
                     }
-                </KeyboardAvoidingView>
+                </KeyboardAwareScrollView>
             </Container>
             <CustomDropdown
                 componentRef={menuRef}

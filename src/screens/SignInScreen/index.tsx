@@ -60,6 +60,7 @@ const SignInScreen = () => {
                 dispatch(userDataReducer(userData))
                 setIsLoading(false)
                 navigation.reset({ index: 0, routes: [{ name: "DrawerScreens" }] })
+                setIsError(false)
             }
         }).catch((error) => {
             setIsLoading(false)

@@ -4,12 +4,21 @@ import { ApiConstants } from "../../../config/ApiConstants";
 import { axiosClient } from "../../../config/Axios";
 
 export interface userData {
-    id: number,
-    profile_image: string,
-    user_name: string,
-    email: string,
-    phone: string,
-    role: string,
+    id: number
+    profile_image: string
+    user_name: string
+    email: string
+    phone: string
+    role: { id: number, title: string }
+    is_active: boolean
+    date_joined: string
+}
+
+interface userDataListProps {
+    count: number
+    next: string | null
+    previous: number | null
+    results: userData[]
 }
 
 interface userDetails {
@@ -21,9 +30,15 @@ interface userDetails {
     role: { id: number, title: string }
 }
 
+
 export interface userRoleListProps {
-    id: number,
-    title: string
+    count: number
+    next: string | null
+    previous: number | null
+    results: [{
+        id: number,
+        title: string
+    }]
 }
 interface paramsTypes {
     id?: number
@@ -34,7 +49,10 @@ interface initialState {
     error: object | string | undefined
     userListData: userData[] | [],
     userDetails?: userDetails,
-    userRoleList?: userRoleListProps[]
+    userRoleList?: [{
+        id: number,
+        title: string
+    }]
 }
 
 const initialState: initialState = {
@@ -42,7 +60,7 @@ const initialState: initialState = {
     error: '',
     userListData: [],
     userDetails: undefined,
-    userRoleList: []
+    userRoleList: undefined
 }
 
 export interface apiErrorTypes {
@@ -53,7 +71,7 @@ export interface apiErrorTypes {
 
 const USER = "USER";
 
-export const userRoleList = createAsyncThunk<userRoleListProps[], string, { rejectValue: apiErrorTypes }>
+export const userRoleList = createAsyncThunk<userRoleListProps, string, { rejectValue: apiErrorTypes }>
     (USER + "/userRoleList", async (_: any, { rejectWithValue }) => {
         try {
             console.log(ApiConstants.USERROLELIST)
@@ -67,10 +85,9 @@ export const userRoleList = createAsyncThunk<userRoleListProps[], string, { reje
         }
     })
 
-export const getListOfUsers = createAsyncThunk<userData[], string, { rejectValue: apiErrorTypes }>
-    (USER + "/getListOfUsers", async (_: any, { rejectWithValue }) => {
+export const getListOfUsers = createAsyncThunk<userDataListProps, string, { rejectValue: apiErrorTypes }>
+    (USER + "/getListOfUsers", async (_, { rejectWithValue }) => {
         try {
-            console.log(ApiConstants.USERDETAIL)
             const response = await axiosClient.get(ApiConstants.USERDETAIL)
             return response.data
         } catch (e: any) {
@@ -81,10 +98,10 @@ export const getListOfUsers = createAsyncThunk<userData[], string, { rejectValue
         }
     })
 
-export const createUser = createAsyncThunk<string[], paramsTypes, { rejectValue: apiErrorTypes }>(USER + "/createUser", async (params, { rejectWithValue }) => {
+export const createUser = createAsyncThunk<string[], FormData, { rejectValue: apiErrorTypes }>(USER + "/createUser", async (params, { rejectWithValue }) => {
     try {
         console.log(ApiConstants.USERSCREATE, params)
-        const response = await axiosClient.post(ApiConstants.USERSCREATE, params.data)
+        const response = await axiosClient.post(ApiConstants.USERSCREATE, params)
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {
@@ -148,7 +165,7 @@ const userListSlice = createSlice({
         });
         builder.addCase(userRoleList.fulfilled, (state, action) => {
             state.isLoading = false
-            state.userRoleList = action.payload
+            state.userRoleList = action.payload.results
             state.error = ''
         });
         builder.addCase(userRoleList.rejected, (state, action) => {
@@ -162,7 +179,7 @@ const userListSlice = createSlice({
         });
         builder.addCase(getListOfUsers.fulfilled, (state, action) => {
             state.isLoading = false
-            state.userListData = action.payload
+            state.userListData = action.payload.results
             state.error = ''
         });
         builder.addCase(getListOfUsers.rejected, (state, action) => {
@@ -204,6 +221,7 @@ const userListSlice = createSlice({
         });
         builder.addCase(deleteUser.fulfilled, (state, action) => {
             state.isLoading = false
+            state.userListData = state.userListData.filter(i => i.id !== action.meta.arg.id)
             // state.userListData = action.payload
             state.error = ''
         });

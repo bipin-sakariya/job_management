@@ -12,6 +12,8 @@ import { colors } from '../styles/Colors';
 import moment from 'moment';
 import { useAppDispatch } from '../hooks/reduxHooks';
 import { deleteUser, getListOfUsers } from '../redux/slices/AdminSlice/userListSlice';
+import 'moment/locale/he';
+import { convertDate } from '../utils/screenUtils';
 
 interface itemPropsType {
     id: number
@@ -36,11 +38,6 @@ const UserListComponent = ({ item, type }: { item: itemPropsType, type?: string 
         setVisible(false)
         dispatch(deleteUser(params)).unwrap().then((res) => {
             console.log("🚀 ~ file: UserListComponent.tsx ~ line 36 ~ dispatch ~ res", res)
-            dispatch(getListOfUsers("")).unwrap().then((response) => {
-                console.log("🚀 ~ file: UserListComponent.tsx ~ line 51 ~ dispatch ~ response", response)
-            }).catch((error) => {
-                console.log("🚀 ~ file: UserListComponent.tsx ~ line 46 ~ dispatch ~ error", error)
-            })
         }).catch((error) => {
             console.log("🚀 ~ file: UserListComponent.tsx ~ line 39 ~ dispatch ~ error", error)
         })
@@ -59,14 +56,15 @@ const UserListComponent = ({ item, type }: { item: itemPropsType, type?: string 
     return (
         <View style={styles.itemContainer}>
             <View style={globalStyles.rowView}>
-                <Image source={item.profile_image ? item.profile_image : ImagesPath.placeholder_img} style={styles.itemImgStyle} />
+                <Image source={item.profile_image ? { uri: item.profile_image } : ImagesPath.placeholder_img} style={styles.itemImgStyle} />
                 <View style={{ paddingHorizontal: wp(2) }}>
                     <Text numberOfLines={1} onPress={() => navigation.navigate('UserGroupProfileScreen', { type: type, userId: item.id })} style={[styles.itemTitle, globalStyles.rtlStyle]}>{item?.user_name ?? 'user'}</Text>
                     <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { maxWidth: wp(40) }]}>{item.role?.title}</Text>
                 </View>
             </View>
             <View style={globalStyles.rowView}>
-                <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { width: wp(25) }]}>{moment(item.date_joined).format('YYYY MMM DD')}</Text>
+                <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { width: wp(25) }]}>{convertDate(item.date_joined)}</Text>
+                {/* <Text>{convertDate(item.date_joined)}</Text> */}
                 <TouchableOpacity ref={imageRef} onPress={() => setVisible(true)}>
                     <Image source={ImagesPath.menu_dots_icon} style={styles.menuIconStyle} />
                 </TouchableOpacity>
@@ -91,7 +89,9 @@ const styles = StyleSheet.create({
     itemImgStyle: {
         height: wp(14),
         width: wp(14),
-        resizeMode: 'contain'
+        resizeMode: 'contain',
+        borderRadius: 10,
+        backgroundColor: colors.gray_7
     },
     itemTitle: {
         fontFamily: fonts.FONT_POP_MEDIUM,

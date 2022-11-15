@@ -96,7 +96,8 @@ const BillListScreen = () => {
         <View style={globalStyles.container}>
             <Header
                 headerLeftStyle={{
-                    paddingLeft: wp(3)
+                    paddingLeft: wp(3),
+                    width: wp(35),
                 }}
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => navigation.goBack()}>

@@ -1,4 +1,6 @@
 import { Dimensions, PixelRatio, Platform, StatusBar } from 'react-native';
+import 'moment/locale/he'
+import moment from 'moment';
 
 export const pixelRatio = PixelRatio.get();
 export const defaultPixel = 2; // provided in design 2px
@@ -100,3 +102,8 @@ export const handleHeight = (value: number): number => {
 };
 
 export const isAndroid = (): boolean => Platform.OS === 'android';
+
+export const convertDate = (date: string) => {
+  moment.locale('he')
+  return moment(date).format('DD MMM YYYY')
+}

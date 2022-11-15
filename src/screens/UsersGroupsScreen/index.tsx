@@ -11,33 +11,32 @@ import { RootRouteProps } from '../../types/RootStackTypes';
 import UserListComponent from '../../components/UserListComponent';
 import { strings } from '../../languages/localizedStrings';
 import { colors } from '../../styles/Colors';
-import { useDispatch } from 'react-redux';
 import { getListOfUsers } from '../../redux/slices/AdminSlice/userListSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import CustomActivityIndicator from '../../components/CustomActivityIndicator';
 
 const groups = [
-    { name: 'P. Maintanence', role: '10 members in group', date: '12 May 2022' },
-    { name: 'P. Maintanence', role: '12 members in group', date: '12 May 2022' },
-    { name: 'P. Maintanence', role: '14 members in group', date: '12 May 2022' },
-    { name: 'P. Maintanence', role: '16 members in group', date: '12 May 2022' },
-    { name: 'P. Maintanence', role: '18 members in group', date: '12 May 2022' },
+    { id: 10, is_active: true, phone: '+97223456787', name: 'P. Maintanence', user_name: 'divyesh10', profile_image: "https://bochan-dj.herokuapp.com/media/User/21/photo.jpg", role: { id: 1, title: 'Admin' }, date: '12 May 2022', email: 'divyesh10@gmail.com', date_joined: '2022-11-09T12:33:38.417751Z' },
+    { id: 10, is_active: true, phone: '+97223456787', name: 'P. Maintanence', user_name: 'divyesh10', profile_image: "https://bochan-dj.herokuapp.com/media/User/21/photo.jpg", role: { id: 1, title: 'Admin' }, date: '12 May 2022', email: 'divyesh10@gmail.com', date_joined: '2022-11-09T12:33:38.417751Z' },
 ]
 
 const UsersScreen = () => {
-    const navigation = useCustomNavigation('UsersGroupsScreen')
+    const navigation = useCustomNavigation('UsersGroupsScreen');
     const route = useRoute<RootRouteProps<'UsersGroupsScreen'>>();
-    const dispatch = useAppDispatch()
-    const { type } = route.params
-    const { isLoading, userListData } = useAppSelector(state => state.userList)
+    const dispatch = useAppDispatch();
+    const { type } = route.params;
+    const { isLoading, userListData } = useAppSelector(state => state.userList);
 
-    const isFoucs = useIsFocused()
+    const isFoucs = useIsFocused();
+
     useEffect(() => {
-        dispatch(getListOfUsers("")).unwrap().then((res) => {
-            console.log("🚀 ~ file: index.tsx ~ line 41 ~ dispatch ~ res", res)
-        }).catch((error) => {
-            console.log("🚀 ~ file: index.tsx ~ line 38 ~ dispatch ~ error", error)
-        })
+        if (isFoucs) {
+            dispatch(getListOfUsers("")).unwrap().then((res) => {
+                console.log("🚀 ~ file: index.tsx ~ line 41 ~ dispatch ~ res", res)
+            }).catch((error) => {
+                console.log("🚀 ~ file: index.tsx ~ line 38 ~ dispatch ~ error", error)
+            })
+        }
     }, [isFoucs])
 
     return (
@@ -56,15 +55,16 @@ const UsersScreen = () => {
                 }
                 headerRightComponent={
                     <View style={globalStyles.rowView}>
-                        <TouchableOpacity style={{ marginRight: wp(3) }} onPress={() => {
-                            navigation.navigate('UserGroupDetailScreen', { type: type })
-                        }}>
+                        <TouchableOpacity
+                            style={{ marginRight: wp(3) }}
+                            onPress={() => {
+                                navigation.navigate('UserGroupDetailScreen', { type: type })
+                            }}>
                             <Image source={ImagesPath.add_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                         <TouchableOpacity >
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
-
                     </View>
                 }
             />

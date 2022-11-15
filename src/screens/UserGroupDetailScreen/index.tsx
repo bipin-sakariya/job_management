@@ -20,6 +20,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { createUser, detailsOfUser, resetUserDetails, updateUser } from '../../redux/slices/AdminSlice/userListSlice';
 import moment from 'moment';
 import CustomActivityIndicator from '../../components/CustomActivityIndicator';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 interface userData {
     id: number,
@@ -32,9 +33,9 @@ const UserGroupDetailScreen = () => {
     const { type } = route.params;
 
     const menuRef = useRef(null);
-    const [role, setRole] = useState<DropdownProps>({ label: '', value: 0 })
-    const [permission, setPermission] = useState<DropdownProps>({ label: '', value: 0 })
-    const [selectForms, setSelectForms] = useState<DropdownProps>({ label: '', value: 0 })
+    const [role, setRole] = useState<DropdownProps>({ title: '', id: 0 })
+    const [permission, setPermission] = useState<DropdownProps>({ title: '', id: 0 })
+    const [selectForms, setSelectForms] = useState<DropdownProps>({ title: '', id: 0 })
     const [visible, setVisible] = useState(false);
     const [imageUrl, setImageUrl] = useState<string | undefined>('');
     const [roleRequired, setRoleRequired] = useState(false)
@@ -98,10 +99,12 @@ const UserGroupDetailScreen = () => {
     });
 
     const userCreate = (values: any) => {
-        if (!role.value) {
+        if (!role.id) {1
             setRoleRequired(true)
-        } else if (!permission.value) {
+        } else if (!permission.id) {
             setPermissionRequired(true)
+        } else if(!imageUrl) {
+            Alert.alert('Alert','Please select your profile picture.')
         } else {
             var data = new FormData()
             let images = {
@@ -109,15 +112,17 @@ const UserGroupDetailScreen = () => {
                 name: "photo.jpg",
                 type: "image/jpeg"
             }
-            data.append("profile_image", images ? images : '')
+            if (imageUrl) {
+                data.append("profile_image", images ? images : '')
+            }
             data.append("user_name", values.userName)
             data.append("email", values.email)
             data.append("phone", `+972${values.contactNo}`)
-            data.append("role", parseInt(role.value.toString()))
-            let params = {
-                data: data,
-            }
-            dispatch(createUser(params)).unwrap().then((res) => {
+            data.append("role", parseInt(role.id.toString()))
+            // let params = {
+            //     data: JSON.stringify(data),
+            // }
+            dispatch(createUser(data)).unwrap().then((res) => {
                 console.log({ res: res });
                 navigation.goBack()
             }).catch((e) => {
@@ -183,12 +188,12 @@ const UserGroupDetailScreen = () => {
             />
             {isLoading && <CustomActivityIndicator size={"small"} />}
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-                    <CustomSubTitleWithImageComponent
-                        disabled
-                        title={type == 'users' ? strings.FillfromtocreateUser : strings.FillfromtoCreateGroup}
-                        image={ImagesPath.from_list_icon}
-                    />
+                <CustomSubTitleWithImageComponent
+                    disabled
+                    title={type == 'users' ? strings.FillfromtocreateUser : strings.FillfromtoCreateGroup}
+                    image={ImagesPath.from_list_icon}
+                />
+                <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
                     <ImageBackground
                         source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
                         style={styles.addPhotoStyle}
@@ -250,7 +255,7 @@ const UserGroupDetailScreen = () => {
 
                         </>
                     }
-                    <DropDownComponent
+                    {userRoleList && <DropDownComponent
                         title={type == 'users' ? strings.Role : strings.Group_Manager}
                         data={userRoleList}
                         image={ImagesPath.down_white_arrow}
@@ -260,25 +265,26 @@ const UserGroupDetailScreen = () => {
                             setRoleRequired(false)
                             setRole(item)
                         }}
-                        value={role.value}
+                        value={role.id}
                         placeholder={strings.SelectRoleforUser}
                         container={{ marginBottom: wp(5) }}
-                    />
+                    />}
                     {roleRequired ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text> : null}
-                    <DropDownComponent
+                    {userRoleList && <DropDownComponent
                         title={type == 'users' ? strings.Permission : strings.Group_Inspector}
                         data={userRoleList}
                         image={ImagesPath.down_white_arrow}
                         labelField="title"
                         valueField="id"
                         onChange={(item) => {
+                            console.log({ item })
                             setPermissionRequired(false)
                             setPermission(item)
                         }}
-                        value={permission.value}
+                        value={permission.id}
                         placeholder={strings.GivePermission}
                         container={{ marginBottom: wp(5) }}
-                    />
+                    />}
                     {permissionRequired ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text> : null}
                     {
                         type != 'users' &&
@@ -317,17 +323,17 @@ const UserGroupDetailScreen = () => {
                                         </View>
                                     </View>
                                 } />
-                            <DropDownComponent
+                            {userRoleList && <DropDownComponent
                                 title={strings.GroupForms}
                                 data={userRoleList}
                                 image={ImagesPath.down_white_arrow}
                                 labelField="title"
                                 valueField="id"
                                 onChange={(item) => setSelectForms(item)}
-                                value={selectForms.value}
+                                value={selectForms.id}
                                 placeholder={strings.GivePermission}
-                                container={{ marginBottom: wp(5) }}
-                            />
+                            // container={{ marginBottom: wp(5) }}
+                            />}
                         </>
                     }
                     <CustomBlackButton
@@ -335,17 +341,17 @@ const UserGroupDetailScreen = () => {
                         image={ImagesPath.plus_white_circle_icon}
                         onPress={() => {
                             if (type == 'users') {
-                                if (!role.value) {
+                                if (!role.id) {
                                     setRoleRequired(true)
                                 }
-                                if (!permission.value) {
+                                if (!permission.id) {
                                     setPermissionRequired(true)
                                 }
                                 handleSubmit()
                             }
                         }}
                     />
-                </KeyboardAvoidingView>
+                </KeyboardAwareScrollView>
             </Container>
         </View>
     )
