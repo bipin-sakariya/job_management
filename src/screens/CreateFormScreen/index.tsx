@@ -1,7 +1,7 @@
-import { Alert, Dimensions, FlatList, Image, Platform, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Alert, Dimensions, FlatList, Image, Platform, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components'
+import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, Header, MultileSelectDropDown } from '../../components'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { ImagesPath } from '../../utils/ImagePaths'
@@ -12,12 +12,14 @@ import { strings } from '../../languages/localizedStrings'
 import { colors } from '../../styles/Colors'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
+
 const { height: deviceHeight } = Dimensions.get('window');
+
 const CreateFormScreen = () => {
     const navigation = useCustomNavigation('CreateFormScreen');
     const [countingValue, setCountingValue] = useState<DropdownProps>({ label: '', value: 0 })
     const componentRef = useRef(null)
-    const [isVisible, setIsVisible] = useState(true)
+    const [isVisible, setIsVisible] = useState(false)
     const [isBillError, setIsBillError] = useState(false)
 
     const data = [
@@ -115,28 +117,31 @@ const CreateFormScreen = () => {
     // }
 
     return (
-        <View style={globalStyles.container}>
-            <Header
-                headerLeftStyle={{
-                    width: "50%",
-                    paddingLeft: wp(3)
-                }}
-                headerLeftComponent={
-                    <TouchableOpacity style={[globalStyles.rowView]} onPress={() => navigation.goBack()}>
-                        <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle, { width: wp(50), }]}>{strings.CreateForm}</Text>
-                    </TouchableOpacity>
-                } />
-            <Container style={{ paddingHorizontal: wp(4) }}>
-                <CustomSubTitleWithImageComponent disabled viewStyle={{ marginTop: wp(2) }} title={strings.CreateForm} image={ImagesPath.receipt_icon} />
-                <CustomTextInput
-                    title={strings.formname}
-                    container={{ marginVertical: wp(5) }}
-                    value={strings.formname}
-                    onChangeText={handleChange('formName')}
-                />
-                {touched?.formName && errors?.formName ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.formName}</Text> : null}
-                {/* <View ref={componentRef} style={[styles.textInputContainer,]}>
+        <TouchableWithoutFeedback onPress={() => {
+            setIsVisible(false)
+        }}>
+            <View style={globalStyles.container}>
+                <Header
+                    headerLeftStyle={{
+                        width: "50%",
+                        paddingLeft: wp(3)
+                    }}
+                    headerLeftComponent={
+                        <TouchableOpacity style={[globalStyles.rowView]} onPress={() => navigation.goBack()}>
+                            <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
+                            <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle, { width: wp(50), }]}>{strings.CreateForm}</Text>
+                        </TouchableOpacity>
+                    } />
+                <Container style={{ paddingHorizontal: wp(4) }}>
+                    <CustomSubTitleWithImageComponent disabled viewStyle={{ marginTop: wp(2) }} title={strings.CreateForm} image={ImagesPath.receipt_icon} />
+                    <CustomTextInput
+                        title={strings.formname}
+                        container={{ marginVertical: wp(5) }}
+                        value={strings.formname}
+                        onChangeText={handleChange('formName')}
+                    />
+                    {touched?.formName && errors?.formName ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.formName}</Text> : null}
+                    {/* <View ref={componentRef} style={[styles.textInputContainer,]}>
                     <View style={styles.titleContainer}>
                         <Text numberOfLines={1} style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{"props.title"}</Text>
                     </View>
@@ -150,7 +155,7 @@ const CreateFormScreen = () => {
                     </View>
                 </View> */}
 
-                {/* <ReactNativeModal
+                    {/* <ReactNativeModal
                     onLayout={e =>
                         setOffsetData({
                             ...offsetData,
@@ -179,7 +184,7 @@ const CreateFormScreen = () => {
                         />
                     </View>
                 </ReactNativeModal> */}
-                {/* {
+                    {/* {
                     isVisible ?
                         <View style={{ maxHeight: wp(80), backgroundColor: "white", borderColor: colors.text_input_border_color, borderWidth: wp(0.5), borderRadius: wp(2), top: wp(-0.5) }}>
                             <View style={[globalStyles.rowView, { alignItems: 'center', alignContent: 'center', padding: wp(2), marginVertical: wp(2), marginHorizontal: wp(2), borderColor: colors.text_input_border_color, borderWidth: wp(0.5), borderRadius: wp(2) }]}>
@@ -194,30 +199,31 @@ const CreateFormScreen = () => {
                         </View>
                         : null
                 } */}
-                <DropDownComponent
-                    title={strings.AddBill}
-                    data={data}
-                    image={ImagesPath.down_white_arrow}
-                    labelField="label"
-                    valueField="value"
-                    onChange={(item) => {
-                        setIsBillError(false)
-                        setCountingValue(item)
-                    }}
-                    value={countingValue.value}
-                    placeholder={strings.choose}
-                    container={{ marginBottom: wp(5) }}
-                />
-                {isBillError ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Bill_required}</Text> : null}
+                    <MultileSelectDropDown
+                        isVisible={isVisible}
+                        setIsVisible={setIsVisible}
+                        title={strings.AddBill}
+                        data={[
+                            { name: 'Form 1', selected: false },
+                            { name: 'Form Name 2', selected: false },
+                            { name: 'Form 3', selected: false },
+                            { name: 'Form Name 4', selected: false },
+                            { name: 'Form 5', selected: false },
+                            { name: 'Form Name 6', selected: false },
+                            { name: 'Form 7', selected: false },
+                        ]}
+                    />
+                    {isBillError ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Bill_required}</Text> : null}
 
-                <CustomBlackButton onPress={() => {
-                    if (!countingValue.value) {
-                        setIsBillError(true)
-                    }
-                    handleSubmit()
-                }} title={strings.CreateForm} image={ImagesPath.plus_white_circle_icon} imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} />
-            </Container >
-        </View >
+                    <CustomBlackButton onPress={() => {
+                        if (!countingValue.value) {
+                            setIsBillError(true)
+                        }
+                        handleSubmit()
+                    }} title={strings.CreateForm} image={ImagesPath.plus_white_circle_icon} imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} />
+                </Container >
+            </View>
+        </TouchableWithoutFeedback >
     )
 }
 

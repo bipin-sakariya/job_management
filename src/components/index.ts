@@ -26,6 +26,7 @@ import CustomTextInputWithImage from './CustomTextInputWithImage';
 import CustomCarouselImageAndVideo from './CustomCarouselImageAndVideo';
 import AssignedJobsComponent from './AssignedJobsComponent';
 import CustomStatusBtn from './CustomStatusBtn';
+import MultileSelectDropDown from './MultileSelectDropDown'
 
 export {
     Header,
@@ -55,5 +56,6 @@ export {
     CustomTextInputWithImage,
     CustomCarouselImageAndVideo,
     AssignedJobsComponent,
-    CustomStatusBtn
+    CustomStatusBtn,
+    MultileSelectDropDown
 }

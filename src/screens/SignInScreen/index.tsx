@@ -51,7 +51,6 @@ const SignInScreen = () => {
             password: values.password,
         }
         dispatch(signin(data)).unwrap().then((res) => {
-            console.log({ res });
             if (res) {
                 let userData = {
                     email: values.email,
@@ -100,123 +99,119 @@ const SignInScreen = () => {
     }, [values])
 
     return (
-        <>
-            {isLoading && <CustomActivityIndicator size={'small'} />}
-            <View style={[globalStyles.container, { paddingHorizontal: wp(5), justifyContent: 'center' }]}>
-                <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'padding'}>
-                    <Image source={ImagesPath.logo_of_job_managment} style={styles.appLogo} />
-                    <View style={[{ paddingTop: wp(4), paddingBottom: wp(8), }]}>
-                        <Text style={styles.titleTxt}>{strings.Welcometo}</Text>
-                        <Text style={styles.titleTxt}>{strings.JobManagement}</Text>
-                    </View>
-                    <CustomTextInput
-                        title={strings.UserName}
-                        placeholder={strings.UserName}
-                        onChangeText={handleChange("email")}
-                        value={values.email}
-                        container={{ marginBottom: wp(5) }}
-                    />
-                    {touched.email && errors.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors.email}</Text> : null}
-                    <CustomTextInput
-                        title={strings.Password}
-                        placeholder={strings.Password}
-                        onChangeText={handleChange("password")}
-                        value={values.password}
-                        secureTextEntry={secureText}
-                        icon={
-                            <TouchableOpacity onPress={() => setSecureText(!secureText)}>
-                                <Image source={secureText ? ImagesPath.close_eye_icon : ImagesPath.open_eye_icon} style={styles.iconStyle} />
-                            </TouchableOpacity>
-                        }
-                    />
-                    {touched.password && errors.password ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors.password}</Text> : null}
-                    {
-                        isError ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error}</Text> : null
+        <View style={[globalStyles.container, { paddingHorizontal: wp(5), justifyContent: 'center' }]}>
+            <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'padding'}>
+                <Image source={ImagesPath.logo_of_job_managment} style={styles.appLogo} />
+                <View style={[{ paddingTop: wp(4), paddingBottom: wp(8), }]}>
+                    <Text style={styles.titleTxt}>{strings.Welcometo}</Text>
+                    <Text style={styles.titleTxt}>{strings.JobManagement}</Text>
+                </View>
+                <CustomTextInput
+                    title={strings.UserName}
+                    placeholder={strings.UserName}
+                    onChangeText={handleChange("email")}
+                    value={values.email}
+                    container={{ marginBottom: wp(5) }}
+                />
+                {touched.email && errors.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors.email}</Text> : null}
+                <CustomTextInput
+                    title={strings.Password}
+                    placeholder={strings.Password}
+                    onChangeText={handleChange("password")}
+                    value={values.password}
+                    secureTextEntry={secureText}
+                    icon={
+                        <TouchableOpacity onPress={() => setSecureText(!secureText)}>
+                            <Image source={secureText ? ImagesPath.close_eye_icon : ImagesPath.open_eye_icon} style={styles.iconStyle} />
+                        </TouchableOpacity>
                     }
-                    <TouchableOpacity onPress={() => {
+                />
+                {touched.password && errors.password ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors.password}</Text> : null}
+                {isError ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error}</Text> : null}
+                <TouchableOpacity onPress={() => {
 
-                        refForgetPassRBSheet.current?.open()
-                    }}>
-                        <Text style={styles.forgetPassTxt}>{strings.Forgotpassword}</Text>
-                    </TouchableOpacity>
-                    <CustomBlackButton
-                        title={strings.Signin}
-                        onPress={() => handleSubmit()}
-                        buttonStyle={{ marginVertical: wp(10) }}
-                    />
-                    <BottomSheet
-                        onClose={() => {
-                            setIsSucess(false)
-                        }}
-                        ref={refForgetPassRBSheet}
-                        height={375}
-                        children={<>
-                            {loading && <ActivityIndicator style={styles.indicatorStyle} />}
-                            {!IsSucess ?
-                                <View style={styles.forgetPassViewStyle}>
-                                    <Text style={[styles.forgetPassTxtStyle, globalStyles.rtlStyle]}>{strings.Forgot_password}</Text>
-                                    <Text style={[styles.enterEmailTxtStyle, globalStyles.rtlStyle]}>{strings.Enteryouremail}</Text>
-                                    <Formik
-                                        validationSchema={ForgetPassEmailValidationSchema}
-                                        initialValues={{ email: '' }}
-                                        enableReinitialize={true}
-                                        onSubmit={(values) => { forgetPassword(values) }}>
-                                        {({
-                                            handleChange,
-                                            handleSubmit,
-                                            values,
-                                            errors,
-                                            touched,
-                                        }) => (
-                                            <>
-                                                <CustomTextInput
-                                                    title={strings.Email_new}
-                                                    container={{ marginVertical: wp(5), marginTop: wp(8) }}
-                                                    placeholder={strings.Email_new}
-                                                    value={values.email}
-                                                    onChangeText={handleChange("email")} />
-                                                {touched.email && errors.email && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors.email}</Text>}
-                                                <CustomBlackButton
-                                                    onPress={() => { handleSubmit() }
-                                                    } title={strings.Requestaresetlink} buttonStyle={{ paddingHorizontal: wp(23) }} />
-                                            </>
-                                        )}
-                                    </Formik>
+                    refForgetPassRBSheet.current?.open()
+                }}>
+                    <Text style={styles.forgetPassTxt}>{strings.Forgotpassword}</Text>
+                </TouchableOpacity>
+                <CustomBlackButton
+                    title={strings.Signin}
+                    onPress={() => handleSubmit()}
+                    buttonStyle={{ marginVertical: wp(10) }}
+                />
+                <BottomSheet
+                    onClose={() => {
+                        setIsSucess(false)
+                    }}
+                    ref={refForgetPassRBSheet}
+                    height={375}
+                    children={<>
+                        {loading && <ActivityIndicator style={styles.indicatorStyle} />}
+                        {!IsSucess ?
+                            <View style={styles.forgetPassViewStyle}>
+                                <Text style={[styles.forgetPassTxtStyle, globalStyles.rtlStyle]}>{strings.Forgot_password}</Text>
+                                <Text style={[styles.enterEmailTxtStyle, globalStyles.rtlStyle]}>{strings.Enteryouremail}</Text>
+                                <Formik
+                                    validationSchema={ForgetPassEmailValidationSchema}
+                                    initialValues={{ email: '' }}
+                                    enableReinitialize={true}
+                                    onSubmit={(values) => { forgetPassword(values) }}>
+                                    {({
+                                        handleChange,
+                                        handleSubmit,
+                                        values,
+                                        errors,
+                                        touched,
+                                    }) => (
+                                        <>
+                                            <CustomTextInput
+                                                title={strings.Email_new}
+                                                container={{ marginVertical: wp(5), marginTop: wp(8) }}
+                                                placeholder={strings.Email_new}
+                                                value={values.email}
+                                                onChangeText={handleChange("email")} />
+                                            {touched.email && errors.email && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors.email}</Text>}
+                                            <CustomBlackButton
+                                                onPress={() => { handleSubmit() }}
+                                                title={strings.Requestaresetlink}
+                                                buttonStyle={{ paddingHorizontal: wp(23) }} />
+                                        </>
+                                    )}
+                                </Formik>
 
-                                </View> :
-                                <>
-                                    <View style={[styles.forgetPassViewStyle, { alignItems: 'center' }]}>
-                                        <Image source={!isError ? ImagesPath.check_icon_circle : ImagesPath.information_icon} resizeMode={'contain'} style={styles.imageStyle} />
-                                        {!isError ? <Text style={[styles.sucessText, globalStyles.rtlStyle]}>{strings.forgot_sucess_text}</Text> :
-                                            <Text style={[styles.sucessText, globalStyles.rtlStyle]}>{strings.forgot_error_text}</Text>
-                                        }
-                                        <CustomBlackButton
-                                            onPress={() => {
-                                                setIsError(false),
-                                                    setIsSucess(false),
-                                                    refForgetPassRBSheet.current?.close()
-                                            }}
-                                            title={!isError ? strings.Thanks : strings.send_again} buttonStyle={{ paddingHorizontal: isError ? wp(33) : wp(36.5), paddingVertical: wp(3.5) }} />
-                                    </View>
-                                </>
-                            }
-                        </>}
-                    />
-                    <BottomSheet
-                        ref={refForgetPassErrorRBSheet}
-                        height={360}
-                        children={
-                            <View style={[styles.forgetPassViewStyle, { alignItems: 'center' }]}>
-                                <Image source={ImagesPath.information_icon} resizeMode={'contain'} style={styles.imageStyle} />
-                                <Text style={[styles.sucessText, globalStyles.rtlStyle]}>{strings.forgot_error_text}</Text>
-                                <CustomBlackButton title={strings.send_again} buttonStyle={{ paddingHorizontal: wp(33), paddingVertical: wp(3.5) }} />
-                            </View>
+                            </View> :
+                            <>
+                                <View style={[styles.forgetPassViewStyle, { alignItems: 'center' }]}>
+                                    <Image source={!isError ? ImagesPath.check_icon_circle : ImagesPath.information_icon} resizeMode={'contain'} style={styles.imageStyle} />
+                                    {!isError ? <Text style={[styles.sucessText, globalStyles.rtlStyle]}>{strings.forgot_sucess_text}</Text> :
+                                        <Text style={[styles.sucessText, globalStyles.rtlStyle]}>{strings.forgot_error_text}</Text>
+                                    }
+                                    <CustomBlackButton
+                                        onPress={() => {
+                                            setIsError(false);
+                                            setIsSucess(false);
+                                            refForgetPassRBSheet.current?.close()
+                                        }}
+                                        title={!isError ? strings.Thanks : strings.send_again} buttonStyle={{ paddingHorizontal: isError ? wp(33) : wp(36.5), paddingVertical: wp(3.5) }} />
+                                </View>
+                            </>
                         }
-                    />
-                </KeyboardAvoidingView>
-
-            </View>
-        </>
+                    </>}
+                />
+                <BottomSheet
+                    ref={refForgetPassErrorRBSheet}
+                    height={360}
+                    children={
+                        <View style={[styles.forgetPassViewStyle, { alignItems: 'center' }]}>
+                            <Image source={ImagesPath.information_icon} resizeMode={'contain'} style={styles.imageStyle} />
+                            <Text style={[styles.sucessText, globalStyles.rtlStyle]}>{strings.forgot_error_text}</Text>
+                            <CustomBlackButton title={strings.send_again} buttonStyle={{ paddingHorizontal: wp(33), paddingVertical: wp(3.5) }} />
+                        </View>
+                    }
+                />
+            </KeyboardAvoidingView>
+            {isLoading && <CustomActivityIndicator size={'small'} />}
+        </View>
     )
 }
 
