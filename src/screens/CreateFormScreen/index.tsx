@@ -221,9 +221,9 @@ const CreateFormScreen = () => {
                         }
                         handleSubmit()
                     }} title={strings.CreateForm} image={ImagesPath.plus_white_circle_icon} imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} />
-                </Container >
+                </Container>
             </View>
-        </TouchableWithoutFeedback >
+        </TouchableWithoutFeedback>
     )
 }
 

@@ -78,8 +78,8 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
                 dispatch(resetUserDataReducer())
                 navigation.reset({ index: 0, routes: [{ name: "AuthStack" }] })
             }} style={styles.logoutBtnStyle}>
-                <Text style={styles.logoutTxt}>{strings.LogOut}</Text>
                 <Image source={ImagesPath.logout_icon} style={styles.logoutBtn} />
+                <Text style={styles.logoutTxt}>{strings.LogOut}</Text>
             </TouchableOpacity>
         </View>
     )

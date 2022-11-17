@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
         fontSize: FontSizes.REGULAR_18
     },
     separator: {
-        height: hp(1),
+        height: hp(2),
     },
     imageStyle: {
         height: wp(5),

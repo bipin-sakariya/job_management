@@ -1,11 +1,11 @@
-import { Alert, Image, Text, TouchableOpacity, View, ActivityIndicator, Modal, KeyboardAvoidingView, Platform, ScrollView, } from 'react-native';
+import { Image, Text, TouchableOpacity, View, ActivityIndicator, KeyboardAvoidingView, Platform, } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { styles } from './styles';
-import { heightPercentageToDP, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { BottomSheet, CustomBlackButton, CustomModal, CustomTextInput } from '../../components';
-import { NavigationProp, PrivateValueStore, useNavigation } from '@react-navigation/native';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { BottomSheet, CustomBlackButton, CustomTextInput } from '../../components';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { resetPassword, signin, userDataReducer } from '../../redux/slices/AuthUserSlice';
 import { strings } from '../../languages/localizedStrings';
@@ -13,17 +13,17 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import { AppDispatch, useAppSelector } from '../../redux/Store';
 import * as yup from "yup";
 import { Formik, useFormik } from "formik";
-import { colors } from '../../styles/Colors';
 import CustomActivityIndicator from '../../components/CustomActivityIndicator';
 
 const SignInScreen = () => {
     const navigation: NavigationProp<any, any> = useNavigation()
     const dispatch = useDispatch<AppDispatch>()
+    const refForgetPassRBSheet = useRef<RBSheet | null>(null);
+    const refForgetPassErrorRBSheet = useRef<RBSheet | null>(null);
+
     const [IsSucess, setIsSucess] = useState(false)
     const [secureText, setSecureText] = useState(true)
     const [isError, setIsError] = useState(false)
-    const refForgetPassRBSheet = useRef<RBSheet | null>(null);
-    const refForgetPassErrorRBSheet = useRef<RBSheet | null>(null);
     const [isLoading, setIsLoading] = useState(false)
 
     const { isLoading: loading, error } = useAppSelector(state => state.userDetails)
@@ -113,6 +113,7 @@ const SignInScreen = () => {
                     onChangeText={handleChange("email")}
                     value={values.email}
                     container={{ marginBottom: wp(5) }}
+                    keyboardType={'email-address'}
                 />
                 {touched.email && errors.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors.email}</Text> : null}
                 <CustomTextInput

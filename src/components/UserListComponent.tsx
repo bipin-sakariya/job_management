@@ -28,8 +28,10 @@ interface itemPropsType {
 const UserListComponent = ({ item, type }: { item: itemPropsType, type?: string }) => {
     const navigation = useCustomNavigation('UsersGroupsScreen')
     const imageRef = useRef(null);
-    const [visible, setVisible] = useState(false);
     const dispatch = useAppDispatch()
+
+    const [visible, setVisible] = useState(false);
+
     const deleteUserData = () => {
         console.log({ item });
         let params = {
@@ -44,26 +46,34 @@ const UserListComponent = ({ item, type }: { item: itemPropsType, type?: string 
     }
 
     const optionData = [
-        { title: strings.Remove, onPress: () => deleteUserData(), imageSource: ImagesPath.bin_icon },
         {
-            title: strings.Edit, onPress: () => {
+            title: strings.Remove,
+            onPress: () => deleteUserData(),
+            imageSource: ImagesPath.bin_icon
+        },
+        {
+            title: strings.Edit,
+            onPress: () => {
                 setVisible(false)
                 navigation.navigate("UserGroupProfileScreen", { type: type, userId: item.id, isEdit: true })
-            }, imageSource: ImagesPath.edit_icon
+            },
+            imageSource: ImagesPath.edit_icon
         }
     ]
 
     return (
         <View style={styles.itemContainer}>
-            <View style={globalStyles.rowView}>
+            <TouchableOpacity
+                onPress={() => navigation.navigate('UserGroupProfileScreen', { type: type, userId: item.id })}
+                style={globalStyles.rowView}>
                 <Image source={item.profile_image ? { uri: item.profile_image } : ImagesPath.placeholder_img} style={styles.itemImgStyle} />
                 <View style={{ paddingHorizontal: wp(2) }}>
-                    <Text numberOfLines={1} onPress={() => navigation.navigate('UserGroupProfileScreen', { type: type, userId: item.id })} style={[styles.itemTitle, globalStyles.rtlStyle]}>{item?.user_name ?? 'user'}</Text>
+                    <Text numberOfLines={1} style={[styles.itemTitle, globalStyles.rtlStyle]}>{item?.user_name ?? 'user'}</Text>
                     <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { maxWidth: wp(40) }]}>{item.role?.title}</Text>
                 </View>
-            </View>
+            </TouchableOpacity>
             <View style={globalStyles.rowView}>
-                <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { width: wp(25) }]}>{convertDate(item.date_joined)}</Text>
+                <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { width: wp(25), textAlign: 'right' }]}>{convertDate(item.date_joined)}</Text>
                 {/* <Text>{convertDate(item.date_joined)}</Text> */}
                 <TouchableOpacity ref={imageRef} onPress={() => setVisible(true)}>
                     <Image source={ImagesPath.menu_dots_icon} style={styles.menuIconStyle} />

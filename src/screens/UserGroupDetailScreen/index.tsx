@@ -1,6 +1,6 @@
-import { Image, Text, TouchableOpacity, View, ScrollView, TextInput, ImageBackground, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import { Image, Text, TouchableOpacity, View, ImageBackground, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import { Container, CustomBlackButton, CustomDetailsComponent, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components';
+import { Container, CustomBlackButton, CustomDetailsComponent, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header, MultileSelectDropDown } from '../../components';
 import { globalStyles } from '../../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../../utils/ImagePaths';
@@ -9,16 +9,14 @@ import { RootRouteProps } from '../../types/RootStackTypes';
 import { useRoute } from '@react-navigation/native';
 import { styles } from './styles';
 import { DropdownProps } from '../../types/commanTypes';
-import CustomDropdown from '../../components/CustomDropDown';
 import { strings } from '../../languages/localizedStrings';
 import FontSizes from '../../styles/FontSizes';
 import { colors } from '../../styles/Colors';
-import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
-import { Formik, useFormik } from 'formik';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { useFormik } from 'formik';
 import * as yup from "yup";
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { createUser, detailsOfUser, resetUserDetails, updateUser } from '../../redux/slices/AdminSlice/userListSlice';
-import moment from 'moment';
+import { createUser } from '../../redux/slices/AdminSlice/userListSlice';
 import CustomActivityIndicator from '../../components/CustomActivityIndicator';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
@@ -31,8 +29,9 @@ const UserGroupDetailScreen = () => {
     const navigation = useCustomNavigation('UserGroupDetailScreen');
     const route = useRoute<RootRouteProps<'UserGroupDetailScreen'>>();
     const { type } = route.params;
-
     const menuRef = useRef(null);
+    const dispatch = useAppDispatch()
+
     const [role, setRole] = useState<DropdownProps>({ title: '', id: 0 })
     const [permission, setPermission] = useState<DropdownProps>({ title: '', id: 0 })
     const [selectForms, setSelectForms] = useState<DropdownProps>({ title: '', id: 0 })
@@ -45,8 +44,9 @@ const UserGroupDetailScreen = () => {
         email: "",
         user_name: ""
     })
-    const dispatch = useAppDispatch()
-    const { isLoading, userDetails, userRoleList } = useAppSelector(state => state.userList)
+
+    const { isLoading, userDetails, userRoleList } = useAppSelector(state => state.userList);
+
     let data_user = [
         {
             id: 1,
@@ -99,12 +99,12 @@ const UserGroupDetailScreen = () => {
     });
 
     const userCreate = (values: any) => {
-        if (!role.id) {1
+        if (!role.id) {
             setRoleRequired(true)
         } else if (!permission.id) {
             setPermissionRequired(true)
-        } else if(!imageUrl) {
-            Alert.alert('Alert','Please select your profile picture.')
+        } else if (!imageUrl) {
+            Alert.alert('Alert', 'Please select your profile picture.')
         } else {
             var data = new FormData()
             let images = {
@@ -180,11 +180,11 @@ const UserGroupDetailScreen = () => {
                         <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{type == 'users' ? strings.AddUser : strings.AddGroup}</Text>
                     </TouchableOpacity>
                 }
-                headerRightComponent={
-                    type !== 'users' && <TouchableOpacity ref={menuRef} onPress={() => setVisible(true)}>
-                        <Image source={ImagesPath.menu_dots_icon} style={styles.headerMenu} />
-                    </TouchableOpacity>
-                }
+            // headerRightComponent={
+            //     type !== 'users' && (<TouchableOpacity ref={menuRef} onPress={() => setVisible(true)}>
+            //         <Image source={ImagesPath.menu_dots_icon} style={styles.headerMenu} />
+            //     </TouchableOpacity>)
+            // }
             />
             {isLoading && <CustomActivityIndicator size={"small"} />}
             <Container style={{ paddingHorizontal: wp(4) }}>
@@ -287,42 +287,13 @@ const UserGroupDetailScreen = () => {
                     />}
                     {permissionRequired ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text> : null}
                     {
-                        type != 'users' &&
                         <>
-                            <CustomDetailsComponent
+                            <MultileSelectDropDown
+                                setIsVisible={setVisible}
+                                isVisible={visible}
+                                data={[{ name: 'abc', selected: false }, { name: 'def', selected: false }, { name: 'ghi', selected: false }]}
                                 title={strings.Groupmemeber}
-                                detailsContainerStyle={{ marginBottom: wp(5) }}
-                                bottomComponent={
-                                    <View style={{ width: "100%", marginVertical: wp(1) }}>
-                                        <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_12 }]}>{`Total ${userData.length} people`}</Text>
-                                        <View style={[globalStyles.rowView, { flexWrap: "wrap", alignItems: "center" }]}>
-                                            {userData.map((item, index) => {
-                                                return (
-                                                    <TouchableOpacity onPress={() => {
-                                                        const tempuserdata = userData.filter((x, _index) => {
-                                                            return _index !== index
-                                                        })
-                                                        setUserData(tempuserdata)
-                                                    }} style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, borderRadius: wp(2) }]}>
-                                                        <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14, color: colors.dark_blue1_color }]}>{item.name}</Text>
-                                                        <Image source={ImagesPath.cross_icon} style={styles.commonIconStyle} />
-                                                    </TouchableOpacity>
-                                                )
-                                            })}
-                                            <TouchableOpacity onPress={() => {
-                                                let userdata = userData
-                                                userdata.push({
-                                                    id: userData.length - 1,
-                                                    name: `Stanley Lamb ${userData.length - 1}`
-                                                })
-                                                setUserData([...userdata])
-                                            }} style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, }]}>
-                                                <Image source={ImagesPath.plus_icon} style={styles.commonIconStyle} />
-                                                <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14 }]}>{strings.AddUser}</Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                } />
+                            />
                             {userRoleList && <DropDownComponent
                                 title={strings.GroupForms}
                                 data={userRoleList}
@@ -332,9 +303,58 @@ const UserGroupDetailScreen = () => {
                                 onChange={(item) => setSelectForms(item)}
                                 value={selectForms.id}
                                 placeholder={strings.GivePermission}
-                            // container={{ marginBottom: wp(5) }}
-                            />}
-                        </>
+                                container={{ marginTop: wp(5) }}
+                            />}</>
+
+
+                        // type != 'users' &&
+                        // <>
+                        //     <CustomDetailsComponent
+                        //         title={strings.Groupmemeber}
+                        //         detailsContainerStyle={{ marginBottom: wp(5) }}
+                        //         bottomComponent={
+                        //             <View style={{ width: "100%", marginVertical: wp(1) }}>
+                        //                 <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_12 }]}>{`Total ${userData.length} people`}</Text>
+                        //                 <View style={[globalStyles.rowView, { flexWrap: "wrap", alignItems: "center" }]}>
+                        //                     {userData.map((item, index) => {
+                        //                         return (
+                        //                             <TouchableOpacity onPress={() => {
+                        //                                 const tempuserdata = userData.filter((x, _index) => {
+                        //                                     return _index !== index
+                        //                                 })
+                        //                                 setUserData(tempuserdata)
+                        //                             }} style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, borderRadius: wp(2) }]}>
+                        //                                 <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14, color: colors.dark_blue1_color }]}>{item.name}</Text>
+                        //                                 <Image source={ImagesPath.cross_icon} style={styles.commonIconStyle} />
+                        //                             </TouchableOpacity>
+                        //                         )
+                        //                     })}
+                        //                     <TouchableOpacity onPress={() => {
+                        //                         let userdata = userData
+                        //                         userdata.push({
+                        //                             id: userData.length - 1,
+                        //                             name: `Stanley Lamb ${userData.length - 1}`
+                        //                         })
+                        //                         setUserData([...userdata])
+                        //                     }} style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, }]}>
+                        //                         <Image source={ImagesPath.plus_icon} style={styles.commonIconStyle} />
+                        //                         <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14 }]}>{strings.AddUser}</Text>
+                        //                     </TouchableOpacity>
+                        //                 </View>
+                        //             </View>
+                        //         } />
+                        //     {userRoleList && <DropDownComponent
+                        //         title={strings.GroupForms}
+                        //         data={userRoleList}
+                        //         image={ImagesPath.down_white_arrow}
+                        //         labelField="title"
+                        //         valueField="id"
+                        //         onChange={(item) => setSelectForms(item)}
+                        //         value={selectForms.id}
+                        //         placeholder={strings.GivePermission}
+                        //     // container={{ marginBottom: wp(5) }}
+                        //     />}
+                        // </>
                     }
                     <CustomBlackButton
                         title={type == 'users' ? strings.CreateUser : strings.CreateGroup}

@@ -1,9 +1,9 @@
-import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import React, { SetStateAction, useEffect, useState } from 'react';
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomDashedComponent, CustomSubTitleWithImageComponent, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { useIsFocused, useRoute } from '@react-navigation/native';
 import { styles } from './styles';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
@@ -14,6 +14,7 @@ import { colors } from '../../styles/Colors';
 import { getListOfUsers } from '../../redux/slices/AdminSlice/userListSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import CustomActivityIndicator from '../../components/CustomActivityIndicator';
+import FontSizes from '../../styles/FontSizes'
 
 const groups = [
     { id: 10, is_active: true, phone: '+97223456787', name: 'P. Maintanence', user_name: 'divyesh10', profile_image: "https://bochan-dj.herokuapp.com/media/User/21/photo.jpg", role: { id: 1, title: 'Admin' }, date: '12 May 2022', email: 'divyesh10@gmail.com', date_joined: '2022-11-09T12:33:38.417751Z' },
@@ -62,7 +63,7 @@ const UsersScreen = () => {
                             }}>
                             <Image source={ImagesPath.add_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
-                        <TouchableOpacity >
+                        <TouchableOpacity>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                     </View>
@@ -70,8 +71,9 @@ const UsersScreen = () => {
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomDashedComponent
-                    textStyle={{ color: colors.dark_blue1_color }}
+                    textStyle={{ color: colors.dark_blue1_color, fontSize: FontSizes.EXTRA_LARGE_24 }}
                     viewStyle={{ paddingVertical: wp(5), borderColor: colors.gray_color }}
+                    imageStyle={{ height: wp(10), width: wp(10), tintColor: colors.dark_blue1_color }}
                     title={type == 'users' ? strings.ADDNEWUSER : strings.ADDNEWGROUP}
                     image={ImagesPath.add_icon}
                     onPress={() => {
@@ -82,6 +84,8 @@ const UsersScreen = () => {
                     disabled
                     title={type == 'users' ? strings.AddedUsers : strings.AddedGroups}
                     image={ImagesPath.group_icon}
+                    viewStyle={{ marginBottom: hp(1) }}
+                    titleStyle={{ fontSize: FontSizes.MEDIUM_16 }}
                 />
                 <FlatList
                     data={type == 'users' ? userListData : groups}

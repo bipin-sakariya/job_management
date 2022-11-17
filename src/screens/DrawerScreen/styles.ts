@@ -75,7 +75,7 @@ export const styles = StyleSheet.create({
     logoutBtn: {
         height: wp(6),
         width: wp(6),
-        marginLeft: wp(2.5),
+        marginRight: wp(1),
         resizeMode: 'contain'
     },
     drawerBackGroundColor: {

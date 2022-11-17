@@ -45,7 +45,8 @@ const AppNavigation = () => {
         <NavigationContainer>
             <Stack.Navigator
                 screenOptions={{
-                    headerShown: false
+                    headerShown: false,
+                    gestureDirection:'horizontal-inverted'
                 }}
                 initialRouteName={userData ? 'DrawerScreens' : 'AuthStack'}>
                 <Stack.Screen name={'AuthStack'} component={AuthStack} />
