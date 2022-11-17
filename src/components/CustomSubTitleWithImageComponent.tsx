@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     commonTxt: {
         marginHorizontal: wp(2),
         fontFamily: fonts.FONT_POP_REGULAR,
-        fontSize: FontSizes.EXTRA_SMALL_12,
+        fontSize: FontSizes.SMALL_14,
         color: colors.dark_blue2_color
     },
 })

@@ -16,12 +16,14 @@ const AdminDrawerBtn = [
     { btnTitle: strings.drawer_ReportGenerator, image: ImagesPath.report_icon, route: 'ReportGeneratorScreen' },
     { btnTitle: strings.drawer_BillSection, image: ImagesPath.bill_icon, route: 'BillListScreen' },
     { btnTitle: strings.drawer_Form, image: ImagesPath.form_icon, route: 'FormScreen' },
+    { btnTitle: strings.drawer_AddJob, image: ImagesPath.add_icon, route: 'ReturnAndAddJobHistoryScreen' },
+    { btnTitle: strings.drawer_ReturnJoblist, image: ImagesPath.arrow_counter_clockwise_black_icon, route: 'ReturnAndAddJobHistoryScreen' },
 ]
 const InspectorDrawerBtn = [
     { btnTitle: strings.drawer_Group, image: ImagesPath.group_icon, route: 'UsersGroupsScreen' },
     { btnTitle: strings.drawer_AddNewJob, image: ImagesPath.add_icon, route: 'ReportGeneratorScreen' },
     { btnTitle: strings.drawer_ReturnJoblist, image: ImagesPath.arrow_counter_clockwise_icon, route: 'ReturnAndAddJobHistoryScreen' },
-    { btnTitle: strings.drawer_AddedJobHistory, image: ImagesPath.clock_counter_clockwise_icon, route: 'ReturnAndAddJobHistoryScreen' },
+    // { btnTitle: strings.drawer_AddedJobHistory, image: ImagesPath.clock_counter_clockwise_icon, route: 'ReturnAndAddJobHistoryScreen' },
 ]
 const GroupManagerDrawerBtn = [
     { btnTitle: strings.drawer_Group, image: ImagesPath.group_icon, route: 'UsersGroupsScreen' },
@@ -61,9 +63,9 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
                             } else if (i.btnTitle == strings.drawer_Group) {
                                 navigation.navigate(i.route, { type: 'groups' })
                             } else if (i.btnTitle == strings.drawer_ReturnJoblist) {
-                                navigation.navigate(i.route, { type: strings.returnjob })
-                            } else if (i.btnTitle == strings.drawer_AddedJobHistory) {
-                                navigation.navigate(i.route, { type: strings.addedjob })
+                                navigation.navigate(i.route, { type: 'returnJob' })
+                            } else if (i.btnTitle == strings.drawer_AddJob) {
+                                navigation.navigate(i.route, { type: 'addJob' })
                             } else {
                                 navigation.navigate(i.route)
                             }

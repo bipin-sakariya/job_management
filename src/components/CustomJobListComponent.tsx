@@ -17,7 +17,7 @@ interface CustomJobListComponentProps {
 const CustomJobListComponent = ({ item, type }: CustomJobListComponentProps) => {
     return (
         <View style={[styles.jobContainerStyle, type == "carousel" ? styles.jobContainerBoxShadowStyle : null,]}>
-            <Image source={ImagesPath.placeholder_img} style={styles.jobImageStyle} />
+            <Image source={item.image ? item.image : ImagesPath.placeholder_img} style={styles.jobImageStyle} />
             <View style={{ flex: 1 }}>
                 <View style={styles.jobTitleContainer}>
                     <View style={styles.jobStatusViewStyle}>
@@ -35,8 +35,8 @@ const CustomJobListComponent = ({ item, type }: CustomJobListComponentProps) => 
                 <View style={styles.descriptionView}>
                     <Text numberOfLines={2} style={[styles.descriptionTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>{item.description}</Text>
                     <View style={[globalStyles.rowView, styles.kmViewStyle]}>
-                        <Image source={ImagesPath.map_pin_icon} style={styles.mapPinIcon} />
                         <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>{item.km}</Text>
+                        <Image source={ImagesPath.map_pin_icon} style={styles.mapPinIcon} />
                     </View>
                 </View>
             </View>
@@ -75,14 +75,13 @@ const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
         color: colors.dark_blue3_color,
-        marginRight: wp(2)
     },
     descriptionTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
         paddingHorizontal: wp(2.5),
         color: colors.dark_blue2_color,
-        width: wp("32%")
+        width: wp("45%")
     },
     openButton: {
         height: wp(5),
@@ -124,6 +123,6 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     kmViewStyle: {
-        justifyContent: "center", alignSelf: "center", direction: "ltr", maxWidth: wp(25)
+        justifyContent: "center", alignSelf: "center", direction: "rtl", maxWidth: wp(25)
     }
 })

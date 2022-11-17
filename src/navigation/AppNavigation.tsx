@@ -36,6 +36,7 @@ import SelectFormScreen from '../screens/SelectFormScreen';
 import FillFormScreen from '../screens/FillFormScreen';
 import SignBillDetailScreen from '../screens/SignBillDetailScreen';
 import { useAppSelector } from '../hooks/reduxHooks';
+import AddNewJobScreen from '../screens/AddNewJobScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -46,7 +47,7 @@ const AppNavigation = () => {
             <Stack.Navigator
                 screenOptions={{
                     headerShown: false,
-                    gestureDirection:'horizontal-inverted'
+                    gestureDirection: 'horizontal-inverted'
                 }}
                 initialRouteName={userData ? 'DrawerScreens' : 'AuthStack'}>
                 <Stack.Screen name={'AuthStack'} component={AuthStack} />
@@ -82,6 +83,8 @@ const AppNavigation = () => {
                 <Stack.Screen name={'SelectFormScreen'} component={SelectFormScreen} />
                 <Stack.Screen name={'FillFormScreen'} component={FillFormScreen} />
                 <Stack.Screen name={'SignBillDetailScreen'} component={SignBillDetailScreen} />
+                <Stack.Screen name={'AddNewJobScreen'} component={AddNewJobScreen} />
+
             </Stack.Navigator>
         </NavigationContainer>
     );

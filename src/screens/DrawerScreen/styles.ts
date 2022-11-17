@@ -55,7 +55,8 @@ export const styles = StyleSheet.create({
     btnIconStyle: {
         height: wp(6),
         width: wp(6),
-        resizeMode: 'contain'
+        resizeMode: 'contain',
+        tintColor: colors.dark_blue1_color
     },
     logoutTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,

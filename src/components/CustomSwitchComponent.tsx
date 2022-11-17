@@ -20,9 +20,9 @@ const CustomSwitchComponent = (props: CustomSwitchComponentProps & TouchableOpac
                 <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{props.title}</Text>
             </View>
             <View style={[globalStyles.rowView, styles.switchMainView]}>
-                <Text style={[styles.textStyle, { marginVertical: wp(3) }]}>{props.subTitle}</Text>
+                <Text style={[styles.textStyle, globalStyles.rtlStyle, { marginVertical: wp(2) }]}>{props.subTitle}</Text>
                 <TouchableOpacity onPress={props.onPress} style={styles.switchView}>
-                    <View style={[styles.switchRound, { alignSelf: props.value ? "flex-end" : 'flex-start' }]} />
+                    <View style={[styles.switchRound, { alignSelf: props.value ? 'flex-start' : "flex-end" }]} />
                 </TouchableOpacity>
             </View>
         </View>
@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
     },
     textStyle: {
         fontFamily: fonts.FONT_POP_MEDIUM,
-        fontSize: FontSizes.SMALL_14,
-        color: colors.light_brown
+        fontSize: FontSizes.MEDIUM_16,
+        color: colors.dark_blue2_color
     },
     switchMainView: {
         paddingHorizontal: wp(2.5),

@@ -32,7 +32,7 @@ export default CustomDetailsComponent
 
 const styles = StyleSheet.create({
     titleTxt: {
-        paddingVertical: wp(2),
+        paddingVertical: wp(3),
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
         color: colors.dark_blue1_color,

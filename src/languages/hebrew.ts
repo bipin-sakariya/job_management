@@ -5,10 +5,11 @@ export const hebrew = {
     drawer_BillSection: 'סעיף הצעת חוק',
     drawer_Form: 'טופס',
     drawer_AddNewJob: 'הוסף עבודה חדשה',
-    drawer_ReturnJoblist: 'החזר רשימת משרות',
+    drawer_ReturnJoblist: ' החזר רשימת משרות',
     drawer_AddedJobHistory: 'נוספה היסטוריית משרות',
     drawer_TransferJob: 'העברת עבודה',
     drawer_Formlist: 'העברת עבודה',
+    drawer_AddJob: 'הוסף עבודה',
 
     Welcometo: 'ברוך הבא ל',
     JobManagement: 'ניהול עבודה!',
@@ -48,7 +49,7 @@ export const hebrew = {
     JobId: 'זיהוי עבודה',
     EnterAddress: 'הכנס כתובת',
     Addressinformation: 'כתובת מידע',
-    Description: 'תיאור :',
+    Description: 'תיאור',
     AddPhotosandAttachments: 'הוסף תמונות וקבצים מצורפים',
     Priority: 'עדיפות',
     FinishNotification: 'סיום הודעה',
@@ -236,6 +237,17 @@ export const hebrew = {
     Differentsignshavebeenassignedtothisform: 'לטופס זה הוקצו שלטים שונים',
     Unit: 'יחידה',
     QTY: 'כמות',
-    Srno: 'סרנו.'
+    Srno: 'סרנו.',
+    meters: 'מטרים',
+    units: 'יחידות',
+    SQM: 'מ"ר',
+    tons: 'טונות',
+    CBM: 'ג ב מ',
+    AddedJobs: 'נוספו משרות',
+    Address: 'כתובת',
+    Additionaladdressinformation: 'מידע כתובת נוסף',
+    Addimagesandattachments: 'הוסף תמונות וקבצים מצורפים',
+    UrgentJob: 'עבודה דחופה',
 
-} 
+
+}
