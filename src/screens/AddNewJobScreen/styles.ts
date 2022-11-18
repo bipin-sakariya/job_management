@@ -7,7 +7,7 @@ import FontSizes from "../../styles/FontSizes";
 export const styles = StyleSheet.create({
     bottomTxtStyle: {
         paddingVertical: wp(2),
-        fontFamily: fonts.FONT_POP_MEDIUM,
+        fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.MEDIUM_16,
         color: colors.dark_blue2_color,
     },

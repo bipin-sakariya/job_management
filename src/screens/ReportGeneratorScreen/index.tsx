@@ -31,7 +31,7 @@ const ReportGeneratorScreen = () => {
     const [sdate, setSdate] = useState('');
     const [edate, setEdate] = useState(' ');
     const XDate = require("xdate")
-
+    const [page, setPage] = useState(1)
     useEffect(() => setupMarkedDates(sdate, edate), [range]);
     // LocaleConfig.locales['en'] = {
     //     monthNames: [
@@ -315,7 +315,7 @@ const ReportGeneratorScreen = () => {
                             calendarBackground: colors.calendar_Bg,
                         }}
                     />
-                    <ButtonTab btnOneTitle={strings.Detailed} btnTwoTitle={strings.Sammedup} setBtn={setBtn} btnValue={btn} />
+                    <ButtonTab btnOneTitle={strings.Detailed} btnTwoTitle={strings.Sammedup} setBtn={setBtn} btnValue={btn} onReset={setPage} />
                     {
                         btn.open ?
                             <>

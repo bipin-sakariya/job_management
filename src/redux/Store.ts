@@ -6,6 +6,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import storage from 'redux-persist/lib/storage';
 import AuthUserSlice from './slices/AuthUserSlice';
 import userListSlice from './slices/AdminSlice/userListSlice';
+import billListSlice from './slices/AdminSlice/billListSlice';
 
 const persistConfig = {
     key: "root",
@@ -14,7 +15,8 @@ const persistConfig = {
 
 const reducers = combineReducers({
     userDetails: AuthUserSlice,
-    userList: userListSlice
+    userList: userListSlice,
+    billList: billListSlice
 })
 
 

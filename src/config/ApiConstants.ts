@@ -8,4 +8,9 @@ export const ApiConstants = {
 	USERSCREATE: APP_URL + 'users/',
 	USERSDELETE: APP_URL + 'users/',
 	USERSUPDATE: APP_URL + 'users/',
+	BILLLIST: APP_URL + 'users/bill/',
+	BILLCREATE: APP_URL + 'users/bill/',
+	BILLDELETE: APP_URL + 'users/bill/',
+	BILLDETALIS: APP_URL + 'users/bill/',
+
 };

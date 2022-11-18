@@ -52,6 +52,7 @@ const JobsScreen = () => {
     const navigation = useCustomNavigation('JobsScreen')
     const refRBSheet = useRef<RBSheet | null>(null);
     const [selectedItem, setSelectedItem] = useState<ListDataProps | undefined>(undefined);
+    const [page, setPage] = useState(1)
     const [btn, setBtn] = useState({
         open: true,
         close: false
@@ -99,7 +100,7 @@ const JobsScreen = () => {
                 }
             />
             <Container>
-                <ButtonTab btnOneTitle={strings.Open} btnTwoTitle={strings.Close} setBtn={setBtn} btnValue={btn} />
+                <ButtonTab btnOneTitle={strings.Open} btnTwoTitle={strings.Close} setBtn={setBtn} btnValue={btn} onReset={setPage} />
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     style={{ marginBottom: Platform.OS == "ios" ? wp(28) : wp(22) }}

@@ -10,9 +10,11 @@ import moment from 'moment'
 import CustomDropdown from './CustomDropDown'
 import { strings } from '../languages/localizedStrings'
 import useCustomNavigation from '../hooks/useCustomNavigation'
+import { billData, billDelete } from '../redux/slices/AdminSlice/billListSlice'
+import { useAppDispatch } from '../hooks/reduxHooks'
 
 interface CustomeListViewProps {
-    item: any,
+    item: billData,
     onPress: () => void
     material?: boolean,
     isFrom?: boolean
@@ -22,6 +24,13 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
     const imageRef = useRef(null);
     const [visible, setVisible] = useState(false);
     const navigation = useCustomNavigation('BillListScreen');
+    const dispatch = useAppDispatch()
+    let data = {
+        id: item.id,
+        iamgeUrl: item.image,
+        title: item.name,
+        date: item.created_at,
+    }
 
     const optionData = [
         {
@@ -31,6 +40,11 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
                     setVisible(false)
                 } else {
                     //billdata
+                    console.log({ item });
+                    let params = {
+                        id: data.id
+                    }
+                    dispatch(billDelete(params)).unwrap()
                     setVisible(false)
                 }
             }, imageSource: ImagesPath.bin_icon
@@ -42,7 +56,8 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
                     // navigation.navigate("BillSectionScreen",)
                 } else {
                     let params = {
-                        name: item.title,
+                        id: data.id,
+                        name: data.title,
                         unit: 'unit',
                         ration: '15',
                         image: '',
@@ -63,17 +78,15 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
             <TouchableOpacity onPress={onPress} style={[globalStyles.rowView, styles.listMainView, styles.dropDownShadowStyle]}>
                 <View style={globalStyles.rowView}>
                     {
-                        item.iamgeUrl && !material &&
-                        <View style={[globalStyles.centerView, styles.imageView]}>
-                            <Image source={ImagesPath.image_white_border} style={styles.iamgeStyle} />
-                        </View>
+                        data.iamgeUrl && !material &&
+                        <Image source={data.iamgeUrl ? { uri: data.iamgeUrl } : ImagesPath.image_white_border} style={[styles.imageView, { backgroundColor: data.iamgeUrl ? colors.white_color : colors.gray_7, }]} />
                     }
                     <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle, { marginLeft: wp(2), width: wp(32) }]}>
-                        {item.title}
+                        {data.title}
                     </Text>
                 </View>
                 <View style={globalStyles.rowView}>
-                    <Text numberOfLines={1} style={[styles.dateTxt, globalStyles.rtlStyle, { width: wp(22) }]}>{moment(item.date).format('YYYY MMM DD')}</Text>
+                    <Text numberOfLines={1} style={[styles.dateTxt, globalStyles.rtlStyle, { width: wp(22) }]}>{moment(data.date).format('YYYY MMM DD')}</Text>
                     <TouchableOpacity ref={imageRef} onPress={() => setVisible(true)}>
                         <Image style={styles.menuImageStyle} source={ImagesPath.menu_dots_icon} />
                     </TouchableOpacity>
@@ -110,7 +123,6 @@ const styles = StyleSheet.create({
     imageView: {
         height: wp(10),
         width: wp(10),
-        backgroundColor: colors.gray_7,
         borderRadius: wp(1)
     },
     titleTxt: {

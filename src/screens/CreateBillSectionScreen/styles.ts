@@ -17,4 +17,22 @@ export const styles = StyleSheet.create({
         fontSize: FontSizes.MEDIUM_16,
         color: colors.light_brown
     },
+    addPhotoStyle: {
+        height: wp(24),
+        width: wp(24),
+        resizeMode: 'contain',
+        marginVertical: wp(4),
+        alignSelf: 'center'
+    },
+    cameraIconStyle: {
+        height: wp(8),
+        width: wp(8),
+        resizeMode: 'contain',
+    },
+    camreaBtnStyle: {
+        alignSelf: 'center',
+        position: 'absolute',
+        right: wp(-3.5),
+        bottom: wp(2.5)
+    }
 })

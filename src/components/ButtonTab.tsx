@@ -19,14 +19,18 @@ interface ButtonTabProps {
     btnOneTxtStyle?: TextStyle
     btnTwoTxtStyle?: TextStyle
     setBtn: Dispatch<SetStateAction<ButtonTypeProps>>,
-    btnValue?: ButtonTypeProps
+    btnValue?: ButtonTypeProps,
+    onReset: Dispatch<SetStateAction<number>>
 }
-const ButtonTab = ({ btnOneTitle, btnTwoTitle, btnOneStyle, btnTwoStyle, btnOneTxtStyle, btnTwoTxtStyle, btnValue, setBtn }: ButtonTabProps) => {
+const ButtonTab = ({ btnOneTitle, btnTwoTitle, btnOneStyle, btnTwoStyle, btnOneTxtStyle, btnTwoTxtStyle, btnValue, setBtn, onReset }: ButtonTabProps) => {
 
     return (
         <View style={styles.buttonContainer}>
             <TouchableOpacity
-                onPress={() => setBtn({ open: true, close: false })}
+                onPress={() => {
+                    setBtn({ open: true, close: false })
+                    onReset(1)
+                }}
                 style={[styles.btnStyle, btnOneStyle, {
                     backgroundColor: btnValue?.open ? colors.primary_color : colors.light_blue_color,
                     borderTopLeftRadius: 10,
@@ -39,7 +43,10 @@ const ButtonTab = ({ btnOneTitle, btnTwoTitle, btnOneStyle, btnTwoStyle, btnOneT
                     }]}>{btnOneTitle}</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={() => setBtn({ open: false, close: true })}
+                onPress={() => {
+                    setBtn({ open: false, close: true }),
+                    onReset(1)
+                }}
                 style={[styles.btnStyle, btnTwoStyle, {
                     backgroundColor: btnValue?.close ? colors.primary_color : colors.light_blue_color,
                     borderTopRightRadius: 10,

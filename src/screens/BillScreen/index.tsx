@@ -1,5 +1,5 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { ButtonTab, Container, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
@@ -10,9 +10,23 @@ import useCustomNavigation from '../../hooks/useCustomNavigation'
 import CustomListView from '../../components/CustomListView'
 import { strings } from '../../languages/localizedStrings'
 import { colors } from '../../styles/Colors'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
+import { billList } from '../../redux/slices/AdminSlice/billListSlice'
+import { useIsFocused } from '@react-navigation/native'
+import CustomActivityIndicator from '../../components/CustomActivityIndicator'
+
+interface billListParams {
+    page?: number,
+    search?: string,
+    type?: string
+}
 
 const BillListScreen = () => {
     const navigation = useCustomNavigation('BillListScreen');
+    const dispatch = useAppDispatch()
+    const isFocus = useIsFocused()
+    const [page, setPage] = useState(1)
+    const { billListData, isLoading } = useAppSelector(state => state.billList)
     const bills = [
         {
             iamgeUrl: 'dsdfsd',
@@ -76,10 +90,37 @@ const BillListScreen = () => {
         open: true,
         close: false
     })
+
+    useEffect(() => {
+        console.log("🚀 ~ file: index.tsx ~ line 95 ~ useEffect ~ isFocus", isFocus)
+        if (isFocus && btn) {
+            let params = {
+                page: page,
+                bill_type: btn.open ? 'Material' : 'Sign'
+            }
+            billListApiCall(params)
+        }
+        return () => {
+            setPage(1)
+        }
+    }, [isFocus, btn])
+
+    const billListApiCall = (params: billListParams) => {
+        dispatch(billList(params)).unwrap().then((res) => {
+            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+            setPage(page + 1)
+        }).catch((error) => {
+            console.log({ error });
+
+        })
+    }
+
+
     const renderItem = ({ item, index }: any) => {
         return (
             <CustomListView item={item} material={btn.open} onPress={() => {
                 let params = {
+                    id: item.id,
                     name: item.title,
                     unit: 'unit',
                     ration: '15',
@@ -94,6 +135,7 @@ const BillListScreen = () => {
 
     return (
         <View style={globalStyles.container}>
+            {isLoading && <CustomActivityIndicator size={'small'} />}
             <Header
                 headerLeftStyle={{
                     paddingLeft: wp(3),
@@ -117,8 +159,8 @@ const BillListScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <ButtonTab btnOneTitle={strings.accountmaterial} btnTwoTitle={strings.Signabill} setBtn={setBtn} btnValue={btn} />
-                <FlatList contentContainerStyle={{ paddingBottom: wp(10) }} showsVerticalScrollIndicator={false} data={bills}
+                <ButtonTab btnOneTitle={strings.accountmaterial} btnTwoTitle={strings.Signabill} setBtn={setBtn} onReset={setPage} btnValue={btn} />
+                <FlatList contentContainerStyle={{ paddingBottom: wp(10) }} showsVerticalScrollIndicator={false} data={billListData?.results}
                     ListHeaderComponent={() => {
                         return (
                             <View style={[globalStyles.rowView, { marginBottom: wp(4) }]}>
@@ -126,6 +168,15 @@ const BillListScreen = () => {
                                 <Text style={[styles.billListTxt, globalStyles.rtlStyle]}>{strings.BillList}</Text>
                             </View>
                         )
+                    }}
+                    onEndReached={() => {
+                        if (billListData.next) {
+                            let param = {
+                                page: page,
+                                bill_type: btn.open ? 'Material' : 'Sign'
+                            }
+                            billListApiCall(param)
+                        }
                     }}
                     renderItem={renderItem} ItemSeparatorComponent={() => {
                         return (

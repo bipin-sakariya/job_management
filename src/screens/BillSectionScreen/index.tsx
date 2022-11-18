@@ -1,7 +1,7 @@
 import { Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import useCustomNavigation from '../../hooks/useCustomNavigation';
-import { useRoute } from '@react-navigation/native';
+import { useIsFocused, useRoute } from '@react-navigation/native';
 import { RootRouteProps } from '../../types/RootStackTypes';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomBlackButton, CustomTextInput, DropDownComponent, Header } from '../../components';
@@ -14,6 +14,8 @@ import { colors } from '../../styles/Colors';
 import { useFormik } from 'formik';
 import * as yup from 'yup'
 import { launchImageLibrary } from 'react-native-image-picker';
+import { useAppDispatch } from '../../hooks/reduxHooks';
+import { billDelete } from '../../redux/slices/AdminSlice/billListSlice';
 interface DropdownProps {
     label: string,
     value: number
@@ -22,8 +24,8 @@ interface DropdownProps {
 const BillSectionScreen = () => {
     const navigation = useCustomNavigation('BillSectionScreen')
     const route = useRoute<RootRouteProps<'BillSectionScreen'>>();
-    let { type, name, ration, unit, imageUrl: img, quantity, isEdit } = route.params
-    console.log("🚀 ~ file: index.tsx ~ line 27 ~ BillSectionScreen ~ isEdit", isEdit)
+    let { id, type, name, ration, unit, imageUrl: img, quantity, isEdit } = route.params
+    console.log("🚀 ~ file: index.tsx ~ line 28 ~ BillSectionScreen ~ id", id)
 
     const [visible, setVisible] = useState(false);
     const [isEditable, setIsEditEditable] = useState(isEdit ? isEdit : false);
@@ -31,6 +33,13 @@ const BillSectionScreen = () => {
     const menuRef = useRef(null);
     const [imageUrl, setImageUrl] = useState<string | undefined>('');
     const [typeCountError, setTypeCountError] = useState(false)
+    const dispatch = useAppDispatch()
+    const isFocus = useIsFocused()
+    useEffect(() => {
+        // if (isFocus) {
+
+        // }
+    }, [isFocus])
 
     const optionData = [
         { title: strings.Remove, onPress: () => deleteBill(), imageSource: ImagesPath.bin_icon },
@@ -44,8 +53,13 @@ const BillSectionScreen = () => {
 
     const deleteBill = () => {
         //delete bill 
-        setVisible(false)
-        navigation.goBack()
+        let params = {
+            id: id
+        }
+        dispatch(billDelete(params)).unwrap().then(() => {
+            setVisible(false)
+            navigation.goBack()
+        })
     }
 
     const CreateMaterialValidationSchema = yup.object().shape({
@@ -191,6 +205,9 @@ const BillSectionScreen = () => {
                                 onPress={() => {
                                     handleSubmit()
                                     if (!countingValue.value) {
+                                        setTypeCountError(true)
+                                    }
+                                    if (!imageUrl && type == "Sign") {
                                         setTypeCountError(true)
                                     }
                                 }}

@@ -249,5 +249,8 @@ export const hebrew = {
     Addimagesandattachments: 'הוסף תמונות וקבצים מצורפים',
     UrgentJob: 'עבודה דחופה',
 
-
+    jobid_required: 'נדרש מזהה משרה',
+    address_required: 'כתובת נדרשת',
+    addressInformation_required: 'נדרש מידע כתובת',
+    description_required: 'נדרש תיאור',
 }
