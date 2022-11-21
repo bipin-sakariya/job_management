@@ -1,4 +1,4 @@
-import { Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { useIsFocused, useRoute } from '@react-navigation/native';
@@ -11,34 +11,57 @@ import { styles } from './styles';
 import CustomDropdown from '../../components/CustomDropDown';
 import { strings } from '../../languages/localizedStrings';
 import { colors } from '../../styles/Colors';
-import { useFormik } from 'formik';
+import { isEmptyArray, useFormik } from 'formik';
 import * as yup from 'yup'
 import { launchImageLibrary } from 'react-native-image-picker';
-import { useAppDispatch } from '../../hooks/reduxHooks';
-import { billDelete } from '../../redux/slices/AdminSlice/billListSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { billDelete, billDetail, billUpdate, resetBillDetails } from '../../redux/slices/AdminSlice/billListSlice';
+import CustomActivityIndicator from '../../components/CustomActivityIndicator';
 interface DropdownProps {
     label: string,
-    value: number
+    value: string
 }
 
 const BillSectionScreen = () => {
     const navigation = useCustomNavigation('BillSectionScreen')
     const route = useRoute<RootRouteProps<'BillSectionScreen'>>();
-    let { id, type, name, ration, unit, imageUrl: img, quantity, isEdit } = route.params
-    console.log("🚀 ~ file: index.tsx ~ line 28 ~ BillSectionScreen ~ id", id)
+    let { id, type, isEdit } = route.params
 
     const [visible, setVisible] = useState(false);
     const [isEditable, setIsEditEditable] = useState(isEdit ? isEdit : false);
-    const [countingValue, setCountingValue] = useState<DropdownProps>({ label: '', value: 0 })
     const menuRef = useRef(null);
-    const [imageUrl, setImageUrl] = useState<string | undefined>('');
     const [typeCountError, setTypeCountError] = useState(false)
     const dispatch = useAppDispatch()
     const isFocus = useIsFocused()
-    useEffect(() => {
-        // if (isFocus) {
+    const { billDetails, isLoading } = useAppSelector(state => state.billList)
+    const [imageUrl, setImageUrl] = useState<string | undefined>('');
+    const [countingValue, setCountingValue] = useState<DropdownProps>({ label: billDetails.type_counting ? billDetails.type_counting : '', value: billDetails.type_counting ? billDetails.type_counting : '' })
+    const [error, setError] = useState({
+        name: "",
+        jumping_ration: "",
+        type_counting: '',
+        type: '',
+        image: '',
+        quantity: '',
+        detail: ''
+    })
 
-        // }
+
+    useEffect(() => {
+        if (isFocus) {
+            let params = {
+                id: id
+            }
+            dispatch(billDetail(params)).unwrap().then((res) => {
+                console.log({ res });
+                setImageUrl(res.image)
+            }).catch((error) => {
+                console.log({ error });
+            })
+        }
+        return () => {
+            dispatch(resetBillDetails())
+        }
     }, [isFocus])
 
     const optionData = [
@@ -69,35 +92,108 @@ const BillSectionScreen = () => {
         ration_qunt: yup
             .string()
             .required(type == "material" ? strings.Jumpingration_required : strings.Quantity_required),
+        // imageUrl: yup.string().required(strings.Sign_image_required)
     });
+
+    // const data = [
+    //     { label: strings.meters, value: strings.meters },
+    //     { label: strings.units, value: strings.units },
+    //     { label: strings.SQM, value: strings.SQM },
+    //     { label: strings.tons, value: strings.tons },
+    //     { label: strings.CBM, value: strings.CBM },
+    // ];
+
     const data = [
-        { label: strings.meters, value: strings.meters },
-        { label: strings.units, value: strings.units },
-        { label: strings.SQM, value: strings.SQM },
-        { label: strings.tons, value: strings.tons },
-        { label: strings.CBM, value: strings.CBM },
+        { label: strings.meters, value: 'Meters' },
+        { label: strings.units, value: 'Units' },
+        { label: strings.SQM, value: 'SQM' },
+        { label: strings.tons, value: 'Tons' },
+        { label: strings.CBM, value: 'CBM' },
     ];
+
+    const updateBill = (values: any) => {
+        if (!countingValue.value) {
+            setTypeCountError(true)
+        } else {
+            var data = new FormData()
+            let images = {
+                uri: imageUrl,
+                name: "photo.jpg",
+                type: "image/jpeg"
+            }
+            if (values.name != billDetails.name) {
+                data.append("name", values.name)
+            }
+            if (countingValue.value != billDetails.type_counting) {
+                data.append("type_counting", countingValue.value)
+            }
+            if (imageUrl && images.uri != billDetails.image) {
+                data.append("image", images ? images : '')
+            }
+            if (type == 'material' && parseFloat(values.ration_qunt) != billDetails.jumping_ration) {
+                data.append("quantity", values.ration_qunt)
+            }
+            if (type == 'sign' && parseFloat(values.ration_qunt) != billDetails.quantity) {
+                data.append("quantity", values.ration_qunt)
+            }
+            console.log("🚀 ~ file: index.tsx ~ line 139 ~ updateBill ~ data", data)
+            if (isEmptyArray(data)) {
+                let params = {
+                    data: data,
+                    id: id
+                }
+                dispatch(billUpdate(params)).unwrap().then((res) => {
+                    navigation.goBack()
+                }).catch((e) => {
+                    setError(e.data)
+                })
+            } else {
+                Alert.alert("Please enter data")
+            }
+        }
+    }
+
 
     const { values, errors, touched, handleSubmit, handleChange, } =
         useFormik({
             enableReinitialize: true,
             initialValues: {
-                name: '',
-                ration_qunt: '',
+                name: billDetails.name ? billDetails.name : '',
+                ration_qunt: type == 'material' ? billDetails.jumping_ration ? billDetails.jumping_ration.toString() : '' : billDetails.quantity ? billDetails.quantity.toString() : '',
+                // imageUrl: billDetails.image ? billDetails.image : ''
             },
             validationSchema: CreateMaterialValidationSchema,
             onSubmit: values => {
-                // login(values)
+                console.log("sdhfhsdfh", values);
+                updateBill(values)
             }
         })
 
+    useEffect(() => {
+        setError({ ...error, detail: "" })
+    }, [values])
+
+    useEffect(() => {
+        setError({ ...error, name: "" })
+    }, [values.name])
+
+    useEffect(() => {
+        if (error.jumping_ration) {
+            setError({ ...error, jumping_ration: "" })
+        }
+        if (error.quantity) {
+            setError({ ...error, quantity: '' })
+        }
+    }, [values.ration_qunt])
+
     return (
         <View style={globalStyles.container}>
+            {isLoading && <CustomActivityIndicator size={'small'} />}
             <Header
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView,]} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text numberOfLines={1} style={globalStyles.headerTitle}>{strings.BillName}</Text>
+                        <Text numberOfLines={1} style={[globalStyles.headerTitle, { marginHorizontal: 0 }]}>{billDetails.name}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
@@ -133,6 +229,9 @@ const BillSectionScreen = () => {
                                             };
                                             const result: any = await launchImageLibrary(options);
                                             setImageUrl(result ? result?.assets[0].uri : '')
+                                            if (result?.assets[0].uri) {
+                                                setError({ ...error, image: '', detail: '' })
+                                            }
                                         }}
                                         activeOpacity={1}
                                         style={styles.camreaBtnStyle}>
@@ -143,6 +242,8 @@ const BillSectionScreen = () => {
                         </ImageBackground>
                         // <Image source={imageUrl ? imageUrl : ImagesPath.add_photo} style={styles.addPhotoStyle} />
                     }
+                    {error.image ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.image}</Text> : null}
+
                     <CustomTextInput
                         title={strings.Name}
                         container={{ marginVertical: wp(5) }}
@@ -151,7 +252,7 @@ const BillSectionScreen = () => {
                         editable={isEditable}
                         onChangeText={handleChange('name')}
                     />
-                    {touched.name && errors.name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors.name}</Text> : null}
+                    {(touched.name && errors.name) || error.name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.name ? error.name : errors.name}</Text> : null}
                     {
                         type == "sign" ?
                             <>
@@ -161,9 +262,9 @@ const BillSectionScreen = () => {
                                     value={values.ration_qunt}
                                     placeholder='2'
                                     editable={isEditable}
-                                    onChange={handleChange('ration_qunt')}
+                                    onChangeText={handleChange('ration_qunt')}
                                 />
-                                {touched.ration_qunt && errors.ration_qunt ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors.ration_qunt}</Text> : null}
+                                {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
                             </> : null
                     }
                     <DropDownComponent
@@ -175,6 +276,7 @@ const BillSectionScreen = () => {
                         labelField="label"
                         valueField="value"
                         onChange={(item) => {
+                            setError({ ...error, detail: "", type_counting: "" })
                             setTypeCountError(false)
                             setCountingValue(item)
                         }}
@@ -182,7 +284,7 @@ const BillSectionScreen = () => {
                         placeholder={strings.choose}
                         container={{ marginBottom: wp(5) }}
                     />
-                    {typeCountError ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Typecount_required}</Text> : null}
+                    {typeCountError || error.type_counting ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.type_counting ? error.type_counting : strings.Typecount_required}</Text> : null}
                     {
                         type != "sign" ?
                             <>
@@ -192,24 +294,22 @@ const BillSectionScreen = () => {
                                     value={values.ration_qunt}
                                     editable={isEditable}
                                     placeholder='1.5141'
-                                    onChange={handleChange("ration_qunt")}
+                                    onChangeText={handleChange("ration_qunt")}
                                 />
-                                {touched.ration_qunt && errors.ration_qunt ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors.ration_qunt}</Text> : null}
+                                {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}
                             </> : null
                     }
+                    {error.detail ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.detail}</Text> : null}
                     {
                         isEditable ?
                             <CustomBlackButton
                                 title={strings.UpdateBill}
                                 image={ImagesPath.plus_white_circle_icon}
                                 onPress={() => {
-                                    handleSubmit()
                                     if (!countingValue.value) {
                                         setTypeCountError(true)
                                     }
-                                    if (!imageUrl && type == "Sign") {
-                                        setTypeCountError(true)
-                                    }
+                                    handleSubmit()
                                 }}
                             />
                             : null

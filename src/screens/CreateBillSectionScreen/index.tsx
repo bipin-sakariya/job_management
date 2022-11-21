@@ -37,7 +37,6 @@ const CreateBillSectionScreen = () => {
         type: '',
         image: '',
         quantity: ''
-
     })
 
     const data = [
@@ -75,7 +74,7 @@ const CreateBillSectionScreen = () => {
             if (imageUrl) {
                 data.append("image", images ? images : '')
             }
-            data.append(type == 'material' ? "jumping_ration" : "quantity", values.ration_qunt)
+            data.append(type == 'material' ? "jumping_ration" : "quantity", parseFloat(values.ration_qunt))
             data.append("type", type == 'material' ? "Material" : 'Sign')
             console.log("🚀 ~ file: index.tsx ~ line 73 ~ createbills ~ data", data)
             dispatch(billCreate(data)).unwrap().then((res) => {

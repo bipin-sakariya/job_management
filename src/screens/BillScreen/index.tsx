@@ -121,11 +121,6 @@ const BillListScreen = () => {
             <CustomListView item={item} material={btn.open} onPress={() => {
                 let params = {
                     id: item.id,
-                    name: item.title,
-                    unit: 'unit',
-                    ration: '15',
-                    image: '',
-                    quantity: '2',
                     type: btn.open ? 'material' : 'sign',
                 }
                 navigation.navigate("BillSectionScreen", params)

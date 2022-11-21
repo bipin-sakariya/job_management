@@ -230,7 +230,7 @@ export const hebrew = {
     Typecount_required: 'נדרשת ספירת סוגים',
     EnterQuantity: 'הזן כמות',
     Pleaseentersignlogo: 'נא להזין את לוגו השלט',
-    UpdateBill: 'עדכן את ביל',
+    UpdateBill: 'עדכון חשבון',
     Fromname_required: 'שם נדרש',
     Searchhere: 'חפש כאן',
     Bill_required: 'נדרש חיוב',
@@ -253,4 +253,5 @@ export const hebrew = {
     address_required: 'כתובת נדרשת',
     addressInformation_required: 'נדרש מידע כתובת',
     description_required: 'נדרש תיאור',
+    Sign_image_required: 'נדרשת תמונת סימן'
 }

@@ -12,5 +12,5 @@ export const ApiConstants = {
 	BILLCREATE: APP_URL + 'users/bill/',
 	BILLDELETE: APP_URL + 'users/bill/',
 	BILLDETALIS: APP_URL + 'users/bill/',
-
+	BILLUPDATE: APP_URL + 'users/bill/',
 };

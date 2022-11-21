@@ -57,11 +57,6 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
                 } else {
                     let params = {
                         id: data.id,
-                        name: data.title,
-                        unit: 'unit',
-                        ration: '15',
-                        image: '',
-                        quantity: '2',
                         type: material ? 'material' : 'sign',
                         isEdit: true
                     }

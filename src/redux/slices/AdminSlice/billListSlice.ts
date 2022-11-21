@@ -111,8 +111,8 @@ export const billDelete = createAsyncThunk<string, paramsTypes, { rejectValue: a
     }
 })
 
-export const billDetails = createAsyncThunk<billData, paramsTypes, { rejectValue: apiErrorTypes }>
-    (BILL + "/billDetails", async (params, { rejectWithValue }) => {
+export const billDetail = createAsyncThunk<billData, paramsTypes, { rejectValue: apiErrorTypes }>
+    (BILL + "/billDetail", async (params, { rejectWithValue }) => {
         try {
             console.log(ApiConstants.BILLDELETE, params)
             const response = await axiosClient.get(ApiConstants.BILLDELETE + params.id + '/')
@@ -125,10 +125,36 @@ export const billDetails = createAsyncThunk<billData, paramsTypes, { rejectValue
         }
     })
 
+export const billUpdate = createAsyncThunk<billData, paramsTypes, { rejectValue: apiErrorTypes }>(BILL + "/billUpdate", async (params, { rejectWithValue }) => {
+    try {
+        console.log(ApiConstants.BILLUPDATE, params)
+        const response = await axiosClient.patch(ApiConstants.BILLUPDATE + params.id + '/', params.data)
+        return response.data
+    } catch (e: any) {
+        if (e.code === "ERR_NETWORK") {
+            Alert.alert(e.message)
+        }
+        return rejectWithValue(e?.response)
+    }
+})
+
 const billListSlice = createSlice({
     name: BILL,
     initialState,
     reducers: {
+        resetBillDetails: (state,) => {
+            state.billDetails = {
+                id: 0,
+                created_at: '',
+                updated_at: '',
+                name: '',
+                type_counting: '',
+                jumping_ration: 0,
+                quantity: 0,
+                image: '',
+                type: ''
+            }
+        }
     },
     extraReducers(builder) {
         builder.addCase(billList.pending, state => {
@@ -154,7 +180,6 @@ const billListSlice = createSlice({
             state.error = ''
         });
         builder.addCase(billCreate.fulfilled, (state, action) => {
-            console.log("🚀 ~ file: billListSlice.ts ~ line 139 ~ builder.addCase ~ action", action)
             state.isLoading = false
             state.error = ''
         });
@@ -168,7 +193,6 @@ const billListSlice = createSlice({
             state.error = ''
         });
         builder.addCase(billDelete.fulfilled, (state, action) => {
-            console.log("🚀 ~ file: billListSlice.ts ~ line 139 ~ builder.addCase ~ action", action)
             state.isLoading = false
             state.billListData = { ...state.billListData, results: state.billListData.results.filter(i => i.id !== action.meta.arg.id) }
             state.error = ''
@@ -178,21 +202,34 @@ const billListSlice = createSlice({
             state.error = ''
         });
 
-        builder.addCase(billDetails.pending, state => {
+        builder.addCase(billDetail.pending, state => {
             state.isLoading = true
             state.error = ''
         });
-        builder.addCase(billDetails.fulfilled, (state, action) => {
-            console.log("🚀 ~ file: billListSlice.ts ~ line 139 ~ builder.addCase ~ action", action)
+        builder.addCase(billDetail.fulfilled, (state, action) => {
             state.isLoading = false
             state.billDetails = action.payload
             state.error = ''
         });
-        builder.addCase(billDetails.rejected, (state, action) => {
+        builder.addCase(billDetail.rejected, (state, action) => {
             state.isLoading = false
             state.error = ''
         });
 
+        builder.addCase(billUpdate.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(billUpdate.fulfilled, (state, action) => {
+            state.isLoading = false
+            state.error = ''
+        });
+        builder.addCase(billUpdate.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = ''
+        });
     }
 })
+
+export const { resetBillDetails } = billListSlice.actions
 export default billListSlice.reducer

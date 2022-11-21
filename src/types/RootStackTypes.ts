@@ -12,11 +12,6 @@ export type DrawerStackParamList = {
 
 interface BillSectionScreenProps {
     id: number,
-    name: string,
-    unit: string,
-    ration: string,
-    imageUrl?: string,
-    quantity?: string,
     type: string,
     isEdit?: boolean
 }
