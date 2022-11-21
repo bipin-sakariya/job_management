@@ -10,10 +10,10 @@ import { useDispatch } from 'react-redux';
 import { resetPassword, signin, userDataReducer } from '../../redux/slices/AuthUserSlice';
 import { strings } from '../../languages/localizedStrings';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import { AppDispatch, useAppSelector } from '../../redux/Store';
 import * as yup from "yup";
 import { Formik, useFormik } from "formik";
 import CustomActivityIndicator from '../../components/CustomActivityIndicator';
+import { AppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 
 const SignInScreen = () => {
     const navigation: NavigationProp<any, any> = useNavigation()

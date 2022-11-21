@@ -9,7 +9,6 @@ import { ImagesPath } from "../../utils/ImagePaths";
 import { styles } from "./styles";
 import CustomBlackButton from "../../components/CustomBlackButton";
 import RBSheet from "react-native-raw-bottom-sheet";
-import { RootState, useAppSelector } from "../../redux/Store";
 import { strings } from "../../languages/localizedStrings";
 import useCustomNavigation from "../../hooks/useCustomNavigation";
 import CustomCarouselImageAndVideo from "../../components/CustomCarouselImageAndVideo";
@@ -21,6 +20,7 @@ import TableDetailsComponent from "../../components/TableDetailsComponent";
 import { RootRouteProps } from "../../types/RootStackTypes";
 import CommonPdfView from "../../components/CommonPdfView";
 import moment from "moment";
+import { RootState, useAppSelector } from "../../hooks/reduxHooks";
 
 interface JobDetailsScreenRouteProps {
     description: string

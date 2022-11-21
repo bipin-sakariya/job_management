@@ -17,7 +17,6 @@ const Tab = createBottomTabNavigator<BottomStackParamList>();
 
 const BottomTab = () => {
 
-    let notch = isNotch
     return (
         <Tab.Navigator
             screenOptions={{
@@ -126,6 +125,5 @@ const styles = StyleSheet.create({
     labelTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.EXTRA_SMALL_10,
-        color: colors.bottom_tab_title
     }
 })

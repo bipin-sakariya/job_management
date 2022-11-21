@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { globalStyles } from '../styles/globalStyles';
 import { ImagesPath } from '../utils/ImagePaths';
@@ -9,11 +9,8 @@ import CustomDropdown from './CustomDropDown';
 import useCustomNavigation from '../hooks/useCustomNavigation';
 import { strings } from '../languages/localizedStrings';
 import { colors } from '../styles/Colors';
-import moment from 'moment';
-import { useAppDispatch } from '../hooks/reduxHooks';
-import { deleteUser, getListOfUsers } from '../redux/slices/AdminSlice/userListSlice';
-import 'moment/locale/he';
 import { convertDate } from '../utils/screenUtils';
+import { useAppDispatch } from '../hooks/reduxHooks';
 
 interface itemPropsType {
     id: number
@@ -25,33 +22,28 @@ interface itemPropsType {
     date_joined: string
 }
 
-const UserListComponent = ({ item }: { item: itemPropsType }) => {
-    const navigation = useCustomNavigation('UserListScreen')
+const GroupListComponent = ({ item }: { item: itemPropsType }) => {
+    const navigation = useCustomNavigation('GroupListScreen')
     const imageRef = useRef(null);
     const dispatch = useAppDispatch()
 
     const [visible, setVisible] = useState(false);
 
-    const deleteUserData = () => {
+    const deleteGroupData = () => {
         setVisible(false)
-        dispatch(deleteUser(item.id)).unwrap().then((res) => {
-            console.log("🚀 ~ file: UserListComponent.tsx ~ line 36 ~ dispatch ~ res", res)
-        }).catch((error) => {
-            console.log("🚀 ~ file: UserListComponent.tsx ~ line 39 ~ dispatch ~ error", error)
-        })
     }
 
     const optionData = [
         {
             title: strings.Remove,
-            onPress: () => deleteUserData(),
+            onPress: () => deleteGroupData(),
             imageSource: ImagesPath.bin_icon
         },
         {
             title: strings.Edit,
             onPress: () => {
                 setVisible(false)
-                navigation.navigate("UserDetailScreen", { userId: item.id, isEdit: true })
+                // navigation.navigate("UserGroupProfileScreen", { type: type, userId: item.id, isEdit: true })
             },
             imageSource: ImagesPath.edit_icon
         }
@@ -60,7 +52,9 @@ const UserListComponent = ({ item }: { item: itemPropsType }) => {
     return (
         <View style={styles.itemContainer}>
             <TouchableOpacity
-                onPress={() => navigation.navigate('UserDetailScreen', { userId: item.id })}
+                onPress={() => {
+                    navigation.navigate('GroupDetailScreen')
+                }}
                 style={globalStyles.rowView}>
                 <Image source={item.profile_image ? { uri: item.profile_image } : ImagesPath.placeholder_img} style={styles.itemImgStyle} />
                 <View style={{ paddingHorizontal: wp(2) }}>
@@ -70,7 +64,6 @@ const UserListComponent = ({ item }: { item: itemPropsType }) => {
             </TouchableOpacity>
             <View style={globalStyles.rowView}>
                 <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { width: wp(25), textAlign: 'right' }]}>{convertDate(item.date_joined)}</Text>
-                {/* <Text>{convertDate(item.date_joined)}</Text> */}
                 <TouchableOpacity ref={imageRef} onPress={() => setVisible(true)}>
                     <Image source={ImagesPath.menu_dots_icon} style={styles.menuIconStyle} />
                 </TouchableOpacity>
@@ -85,7 +78,7 @@ const UserListComponent = ({ item }: { item: itemPropsType }) => {
     )
 }
 
-export default UserListComponent;
+export default GroupListComponent;
 
 const styles = StyleSheet.create({
     itemContainer: {

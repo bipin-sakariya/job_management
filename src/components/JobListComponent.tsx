@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -6,12 +6,10 @@ import { ImagesPath } from '../utils/ImagePaths';
 import FontSizes from '../styles/FontSizes';
 import fonts from '../styles/Fonts';
 import { colors } from '../styles/Colors';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 import CustomeJobListDetailsViewComponent from './CustomJobListDetailsViewComponent';
 import useCustomNavigation from '../hooks/useCustomNavigation';
-import { useAppSelector } from '../redux/Store';
-import { strings } from '../languages/localizedStrings';
 import moment from 'moment';
+import { useAppSelector } from '../hooks/reduxHooks';
 
 const JobListComponent = ({ item, index }: any) => {
     const navigation = useCustomNavigation('JobsScreen')

@@ -5,10 +5,8 @@ import { RootStackParamList } from '../types/RootStackTypes';
 import DrawerStack from './DrawerStack';
 import NotificationScreen from '../screens/NotificationScreen';
 import AuthStack from './AuthStack';
-import UsersGroupsScreen from '../screens/UsersGroupsScreen';
 import JobDetailsScreen from '../screens/JobDetailsScreen';
 import ReportGeneratorScreen from '../screens/ReportGeneratorScreen';
-import UserGroupDetailScreen from '../screens/UserGroupDetailScreen';
 import BillListScreen from '../screens/BillScreen';
 import BillCreateScreen from '../screens/CreateBillScreen';
 import CreateBillSectionScreen from '../screens/CreateBillSectionScreen';
@@ -30,13 +28,18 @@ import RouteChooseLocationDetailScreen from '../screens/RouteChooseLocationDetai
 import RouteMapViewScreen from '../screens/RouteMapViewScreen';
 import CreateNewJobScreen from '../screens/CreateNewJobScreen';
 import JobsScreen from '../screens/JobsScreen';
-import UserGroupProfileScreen from '../screens/UserGroupProfileScreen';
 import ReturnAndAddJobHistoryScreen from '../screens/ReturnAndAddJobHistoryScreen';
 import SelectFormScreen from '../screens/SelectFormScreen';
 import FillFormScreen from '../screens/FillFormScreen';
 import SignBillDetailScreen from '../screens/SignBillDetailScreen';
 import { useAppSelector } from '../hooks/reduxHooks';
 import AddNewJobScreen from '../screens/AddNewJobScreen';
+import GroupListScreen from '../screens/GroupListScreen';
+import CreateGroupScreen from '../screens/CreateGroupScreen';
+import GroupDetailScreen from '../screens/GroupDetailScreen';
+import UserListScreen from '../screens/UserListScreen';
+import CreateUserScreen from '../screens/CreateUserScreen';
+import UserDetailScreen from '../screens/UserDetailScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -54,8 +57,6 @@ const AppNavigation = () => {
                 <Stack.Screen name={'DrawerScreens'} component={DrawerStack} />
                 <Stack.Screen name={'JobDuplicateListScreen'} component={JobDuplicateListScreen} />
                 <Stack.Screen name={'NotificationScreen'} component={NotificationScreen} />
-                <Stack.Screen name={'UsersGroupsScreen'} component={UsersGroupsScreen} />
-                <Stack.Screen name={'UserGroupDetailScreen'} component={UserGroupDetailScreen} />
                 <Stack.Screen name={'JobDetailsScreen'} component={JobDetailsScreen} />
                 <Stack.Screen name={'ReportGeneratorScreen'} component={ReportGeneratorScreen} />
                 <Stack.Screen name={'BillListScreen'} component={BillListScreen} />
@@ -78,13 +79,17 @@ const AppNavigation = () => {
                 <Stack.Screen name={'RouteChooseLocationDetailScreen'} component={RouteChooseLocationDetailScreen} />
                 <Stack.Screen name={'CreateNewJobScreen'} component={CreateNewJobScreen} />
                 <Stack.Screen name={'JobsScreen'} component={JobsScreen} />
-                <Stack.Screen name={'UserGroupProfileScreen'} component={UserGroupProfileScreen} />
                 <Stack.Screen name={'ReturnAndAddJobHistoryScreen'} component={ReturnAndAddJobHistoryScreen} />
                 <Stack.Screen name={'SelectFormScreen'} component={SelectFormScreen} />
                 <Stack.Screen name={'FillFormScreen'} component={FillFormScreen} />
                 <Stack.Screen name={'SignBillDetailScreen'} component={SignBillDetailScreen} />
                 <Stack.Screen name={'AddNewJobScreen'} component={AddNewJobScreen} />
-
+                <Stack.Screen name={'GroupListScreen'} component={GroupListScreen} />
+                <Stack.Screen name={'CreateGroupScreen'} component={CreateGroupScreen} />
+                <Stack.Screen name={'GroupDetailScreen'} component={GroupDetailScreen} />
+                <Stack.Screen name={'UserListScreen'} component={UserListScreen} />
+                <Stack.Screen name={'CreateUserScreen'} component={CreateUserScreen} />
+                <Stack.Screen name={'UserDetailScreen'} component={UserDetailScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

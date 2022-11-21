@@ -111,10 +111,10 @@ export const createUser = createAsyncThunk<string[], FormData, { rejectValue: ap
     }
 })
 
-export const detailsOfUser = createAsyncThunk<userDetails, paramsTypes, { rejectValue: apiErrorTypes }>(USER + "/detailsOfUser", async (params, { rejectWithValue }) => {
+export const detailsOfUser = createAsyncThunk<userDetails, number, { rejectValue: apiErrorTypes }>(USER + "/detailsOfUser", async (id, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.USERSCREATE, params)
-        const response = await axiosClient.get(ApiConstants.USERSCREATE + params.id + "/")
+        console.log(ApiConstants.USERSCREATE, id)
+        const response = await axiosClient.get(ApiConstants.USERSCREATE + id + "/")
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {
@@ -124,10 +124,10 @@ export const detailsOfUser = createAsyncThunk<userDetails, paramsTypes, { reject
     }
 })
 
-export const deleteUser = createAsyncThunk<string, paramsTypes, { rejectValue: apiErrorTypes }>(USER + "/deleteUser", async (params, { rejectWithValue }) => {
+export const deleteUser = createAsyncThunk<string, number, { rejectValue: apiErrorTypes }>(USER + "/deleteUser", async (id, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.USERSDELETE, params)
-        const response = await axiosClient.delete(ApiConstants.USERSDELETE + params.id + '/')
+        console.log(ApiConstants.USERSDELETE, id)
+        const response = await axiosClient.delete(ApiConstants.USERSDELETE + id + '/')
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {
@@ -221,7 +221,7 @@ const userListSlice = createSlice({
         });
         builder.addCase(deleteUser.fulfilled, (state, action) => {
             state.isLoading = false
-            state.userListData = state.userListData.filter(i => i.id !== action.meta.arg.id)
+            state.userListData = state.userListData.filter(i => i.id !== action.meta.arg)
             // state.userListData = action.payload
             state.error = ''
         });

@@ -4,15 +4,15 @@ import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { globalStyles } from '../../styles/globalStyles';
 import { styles } from './styles';
 import { ImagesPath } from '../../utils/ImagePaths';
-import { RootState, useAppSelector } from '../../redux/Store';
 import { strings } from '../../languages/localizedStrings';
 import { useDispatch } from 'react-redux';
 import { resetUserDataReducer } from '../../redux/slices/AuthUserSlice';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { useAppSelector } from '../../hooks/reduxHooks';
 
 const AdminDrawerBtn = [
-    { btnTitle: strings.drawer_User, image: ImagesPath.user_icon, route: 'UsersGroupsScreen' },
-    { btnTitle: strings.drawer_Group, image: ImagesPath.group_icon, route: 'UsersGroupsScreen' },
+    { btnTitle: strings.drawer_User, image: ImagesPath.user_icon, route: 'UserListScreen' },
+    { btnTitle: strings.drawer_Group, image: ImagesPath.group_icon, route: 'GroupListScreen' },
     { btnTitle: strings.drawer_ReportGenerator, image: ImagesPath.report_icon, route: 'ReportGeneratorScreen' },
     { btnTitle: strings.drawer_BillSection, image: ImagesPath.bill_icon, route: 'BillListScreen' },
     { btnTitle: strings.drawer_Form, image: ImagesPath.form_icon, route: 'FormScreen' },

@@ -9,10 +9,10 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { ListDataProps } from '../../components/CustomBottomSheet';
 import { FlatList } from 'react-native-gesture-handler';
-import { RootState, useAppSelector } from '../../redux/Store';
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import moment from 'moment';
+import { RootState, useAppSelector } from '../../hooks/reduxHooks';
 
 const data = [
     { id: 1, title: strings.All, selected: true },

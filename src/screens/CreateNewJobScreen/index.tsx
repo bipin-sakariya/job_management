@@ -7,7 +7,6 @@ import { styles } from './styles'
 import { strings } from '../../languages/localizedStrings'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
-import { useAppSelector } from '../../redux/Store'
 import RBSheet from 'react-native-raw-bottom-sheet'
 import fonts from '../../styles/Fonts'
 import FontSizes from '../../styles/FontSizes'
@@ -15,6 +14,7 @@ import { colors } from '../../styles/Colors'
 import { RootRouteProps } from '../../types/RootStackTypes'
 import { useRoute } from '@react-navigation/native'
 import CommonPdfView from '../../components/CommonPdfView'
+import { useAppSelector } from '../../hooks/reduxHooks'
 
 const CreateNewJobScreen = () => {
     const navigation = useCustomNavigation('CreateNewJobScreen')

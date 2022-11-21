@@ -17,11 +17,12 @@ interface DataTypes {
 }
 
 interface DropDownComponentProps {
-    title?: string,
+    title?: string
     container?: ViewStyle
     isVisible: boolean
     setIsVisible: Dispatch<SetStateAction<boolean>>
     data: DataTypes[]
+    disabled?: boolean
 }
 
 const MultileSelectDropDown = (props: DropDownComponentProps) => {
@@ -60,10 +61,10 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                 <View style={styles.titleContainer}>
                     <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{props.title}</Text>
                 </View>
-                <TouchableOpacity activeOpacity={1} onPress={() => props.setIsVisible(!props.isVisible)}>
+                <TouchableOpacity disabled={props.disabled} activeOpacity={1} onPress={() => props.setIsVisible(!props.isVisible)}>
                     <View style={[globalStyles.rowView, { justifyContent: 'space-between', paddingHorizontal: wp(2), paddingTop: wp(2) }]}>
                         <Text style={[globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_12, color: colors.dark_blue2_color }]}>{`סך הכל ${tempSelectedItem.length} אנשים`}</Text>
-                        <Image source={ImagesPath.left_arrow_icon} style={[globalStyles.backArrowStyle, { transform: [{ rotate: props.isVisible ? '270deg' : '90deg' }], marginRight: 0 }]} />
+                        {!props.disabled && <Image source={ImagesPath.left_arrow_icon} style={[globalStyles.backArrowStyle, { transform: [{ rotate: props.isVisible ? '270deg' : '90deg' }], marginRight: 0 }]} />}
                     </View>
                     {tempSelectedItem.length !== 0 ?
                         <View style={[globalStyles.rowView, {}]}>
@@ -71,9 +72,9 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                                 {tempSelectedItem.map((item, index) => (
                                     <View style={styles.itemContainer}>
                                         <Text style={styles.selectedTxtStyle}>{item.name}</Text>
-                                        <TouchableOpacity onPress={() => removeSelectedItem(item)}>
+                                        {!props.disabled && <TouchableOpacity onPress={() => removeSelectedItem(item)}>
                                             <Image source={ImagesPath.cross_icon} style={styles.closeIcon} />
-                                        </TouchableOpacity>
+                                        </TouchableOpacity>}
                                     </View>
                                 ))}
                             </View>
