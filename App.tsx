@@ -1,4 +1,4 @@
-import { I18nManager, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { I18nManager, StatusBar, StyleSheet } from 'react-native';
 import React, { useEffect } from 'react';
 import AppNavigation from './src/navigation/AppNavigation';
 import { Provider } from 'react-redux';

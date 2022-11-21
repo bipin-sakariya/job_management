@@ -131,7 +131,6 @@ const SignInScreen = () => {
                 {touched.password && errors.password ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors.password}</Text> : null}
                 {isError ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error}</Text> : null}
                 <TouchableOpacity onPress={() => {
-
                     refForgetPassRBSheet.current?.open()
                 }}>
                     <Text style={styles.forgetPassTxt}>{strings.Forgotpassword}</Text>

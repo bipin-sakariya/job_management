@@ -261,7 +261,6 @@ const ReportGeneratorScreen = () => {
                         </View> :
                         <TableDetailsComponent type='report' item={item} />
                 }
-
             </>
         )
     }

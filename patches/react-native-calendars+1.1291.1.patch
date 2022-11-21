@@ -1,0 +1,89 @@
+diff --git a/node_modules/react-native-calendars/src/calendar/day/period/index.js b/node_modules/react-native-calendars/src/calendar/day/period/index.js
+index f27db0e..7be14a5 100644
+--- a/node_modules/react-native-calendars/src/calendar/day/period/index.js
++++ b/node_modules/react-native-calendars/src/calendar/day/period/index.js
+@@ -4,6 +4,8 @@ import { TouchableWithoutFeedback, TouchableOpacity, Text, View } from 'react-na
+ import { xdateToData } from '../../../interface';
+ import styleConstructor from './style';
+ import Dot from '../dot';
++import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
++import { colors } from '../../../../../../src/styles/Colors'
+ const PeriodDay = (props) => {
+     const { theme, marking, date, onPress, onLongPress, state, accessibilityLabel, testID, children } = props;
+     const dateData = date ? xdateToData(date) : undefined;
+@@ -108,9 +110,16 @@ const PeriodDay = (props) => {
+     const renderFillers = () => {
+         if (marking) {
+             return (<View style={[style.current.fillers, fillerStyles.fillerStyle]}>
+-          <View style={[style.current.leftFiller, fillerStyles.leftFillerStyle]}/>
+-          <View style={[style.current.rightFiller, fillerStyles.rightFillerStyle]}/>
+-        </View>);
++                <View style={[style.current.leftFiller, fillerStyles.leftFillerStyle]} />
++                {marking.startingDay && marking.color != colors.dark_blue1_color ? <View style={{ backgroundColor: colors.white_color, marginLeft: wp(3.6), borderTopLeftRadius: wp(5), borderBottomLeftRadius: wp(5) }}>
++                    <View style={[style.current.dayStyles, style.current.roundBorder, { left: wp(-1.5) }]} />
++                </View> : null}
++                <View style={[style.current.rightFiller, fillerStyles.rightFillerStyle]} />
++                {marking.endingDay && marking.color != colors.dark_blue1_color ?
++                    <View style={{ backgroundColor: colors.white_color, marginRight: wp(3.8), borderBottomRightRadius: wp(5), borderTopRightRadius: wp(5) }}>
++                        <View style={[style.current.dayStyles, style.current.roundBorder, { left: wp(2) }]} />
++                    </View> : null}
++            </View>);
+         }
+     };
+     const _onPress = useCallback(() => {
+@@ -121,17 +130,17 @@ const PeriodDay = (props) => {
+     }, [onLongPress]);
+     const Component = marking ? TouchableWithoutFeedback : TouchableOpacity;
+     return (<Component testID={testID} onPress={_onPress} onLongPress={_onLongPress} disabled={marking?.disableTouchEvent} accessible accessibilityRole={marking?.disableTouchEvent ? undefined : 'button'} accessibilityLabel={accessibilityLabel}>
+-      <View style={style.current.wrapper}>
+-        {renderFillers()}
+-        <View style={containerStyle}>
+-          <Text allowFontScaling={false} style={textStyle}>
+-            {String(children)}
+-          </Text>
+-          <View style={style.current.dotContainer}>
+-            <Dot theme={theme} color={marking?.dotColor} marked={marking?.marked}/>
+-          </View>
++        <View style={style.current.wrapper}>
++            {renderFillers()}
++            <View style={containerStyle}>
++                <Text allowFontScaling={false} style={textStyle}>
++                    {String(children)}
++                </Text>
++                <View style={style.current.dotContainer}>
++                    <Dot theme={theme} color={marking?.dotColor} marked={marking?.marked} />
++                </View>
++            </View>
+         </View>
+-      </View>
+     </Component>);
+ };
+ export default PeriodDay;
+diff --git a/node_modules/react-native-calendars/src/calendar/day/period/style.js b/node_modules/react-native-calendars/src/calendar/day/period/style.js
+index bbbdc78..76d0b1d 100644
+--- a/node_modules/react-native-calendars/src/calendar/day/period/style.js
++++ b/node_modules/react-native-calendars/src/calendar/day/period/style.js
+@@ -1,4 +1,6 @@
+ import { StyleSheet } from 'react-native';
++import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
++import { colors } from '../../../../../../src/styles/Colors';
+ import * as defaultStyle from '../../../style';
+ const FILLER_HEIGHT = 34;
+ export default function styleConstructor(theme = {}) {
+@@ -59,6 +61,16 @@ export default function styleConstructor(theme = {}) {
+         inactiveText: {
+             color: appStyle.textInactiveColor
+         },
++        dayStyles: {
++            width: wp(9),
++            height: wp(9),
++            borderRadius: wp(9),
++        },
++        roundBorder: {
++            backgroundColor: colors.dark_blue1_color,
++            borderWidth: wp(0.5),
++            // borderColor: colors.calendar_round_border,
++        },
+         // @ts-expect-error
+         ...(theme['stylesheet.day.period'] || {})
+     });

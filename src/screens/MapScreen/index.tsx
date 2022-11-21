@@ -33,8 +33,9 @@ const MapScreen = () => {
     const navigation = useCustomNavigation('MapScreen')
     const refRBSheet = useRef<RBSheet | null>(null);
     const refJobListSheet = useRef<RBSheet | null>(null);
-    const [selectedItem, setSelectedItem] = useState<ListDataProps | undefined>(undefined);
     const isFocused = useIsFocused()
+    
+    const [selectedItem, setSelectedItem] = useState<ListDataProps | undefined>(undefined);
     const [isVisibleCarousel, setIsVisibleCarousel] = useState(false)
 
     useEffect(() => {

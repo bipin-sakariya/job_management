@@ -304,8 +304,8 @@ const UserGroupDetailScreen = () => {
                                 value={selectForms.id}
                                 placeholder={strings.GivePermission}
                                 container={{ marginTop: wp(5) }}
-                            />}</>
-
+                            />}
+                        </>
 
                         // type != 'users' &&
                         // <>
