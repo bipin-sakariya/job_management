@@ -45,6 +45,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 const AppNavigation = () => {
     const { userData } = useAppSelector(state => state.userDetails)
+    
     return (
         <NavigationContainer>
             <Stack.Navigator

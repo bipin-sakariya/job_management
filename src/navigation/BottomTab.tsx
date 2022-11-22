@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { View, StyleSheet, Image, Text, Platform } from 'react-native';
+import { View, StyleSheet, Image, Text, Platform, Dimensions } from 'react-native';
 import { BottomStackParamList } from '../types/RootStackTypes';
 import MapScreen from '../screens/MapScreen';
 import JobsScreen from '../screens/JobsScreen';
@@ -11,9 +11,9 @@ import { colors } from '../styles/Colors';
 import fonts from '../styles/Fonts';
 import FontSizes from '../styles/FontSizes';
 import { strings } from '../languages/localizedStrings';
-import { isNotch } from '../utils/screenUtils';
 
 const Tab = createBottomTabNavigator<BottomStackParamList>();
+const { height } = Dimensions.get('screen');
 
 const BottomTab = () => {
 
@@ -100,14 +100,14 @@ export default BottomTab;
 
 const styles = StyleSheet.create({
     jobIconContainer: {
-        height: wp(20),
-        width: wp(20),
-        borderRadius: wp(10),
+        height: wp(21.5),
+        width: wp(21.5),
+        borderRadius: wp(15),
         backgroundColor: colors.bottom_tab_btn,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: 6,
+        bottom: Platform.OS == 'android' ? height / wp(20) : height / wp(10),
         shadowColor: "#0000001f",
         shadowOffset: {
             width: 0,

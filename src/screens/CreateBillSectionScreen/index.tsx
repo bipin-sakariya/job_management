@@ -14,6 +14,8 @@ import * as yup from "yup";
 import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { billCreate } from '../../redux/slices/AdminSlice/billListSlice';
+import { colors } from '../../styles/Colors'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 interface DropdownProps {
     label: string,
@@ -58,28 +60,36 @@ const CreateBillSectionScreen = () => {
 
     const createbills = (values: any) => {
         console.log("🚀 ~ file: index.tsx ~ line 47 ~ createbills ~ values", values)
+
         if (!countingValue.value) {
             setCountingError(true)
-        } else if (!imageUrl && type == "sign") {
+        }
+        else if (!imageUrl && type == "sign") {
             Alert.alert('Alert', 'Please select your profile picture.')
-        } else {
+        }
+        else {
             var data = new FormData()
             let images = {
                 uri: imageUrl,
                 name: "photo.jpg",
                 type: "image/jpeg"
             }
+            console.log({ imageUrl });
+
             data.append("name", values.name)
             data.append("type_counting", countingValue.value)
+
             if (imageUrl) {
                 data.append("image", images ? images : '')
             }
             data.append(type == 'material' ? "jumping_ration" : "quantity", parseFloat(values.ration_qunt))
             data.append("type", type == 'material' ? "Material" : 'Sign')
+
             console.log("🚀 ~ file: index.tsx ~ line 73 ~ createbills ~ data", data)
+
             dispatch(billCreate(data)).unwrap().then((res) => {
                 console.log({ res: res });
-                navigation.goBack()
+                navigation.navigate('BillListScreen', { billType: type })
             }).catch((e) => {
                 console.log({ error: e });
                 setError(e.data)
@@ -128,7 +138,7 @@ const CreateBillSectionScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
+                <KeyboardAwareScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}>
                     <CustomSubTitleWithImageComponent disabled title={strings.Prepare_bill} image={ImagesPath.receipt_icon} />
                     {
                         type == "sign" ?
@@ -182,7 +192,8 @@ const CreateBillSectionScreen = () => {
                             </>
                             : null
                     }
-                    {imageError || error.image ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.image ? error.image : strings.Pleaseentersignlogo}</Text> : null}
+                    {imageError || error.image
+                        ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.image ? error.image : strings.Pleaseentersignlogo}</Text> : null}
                     <CustomTextInput
                         title={strings.Name}
                         container={{ marginVertical: wp(5), marginTop: wp(3) }}
@@ -215,9 +226,12 @@ const CreateBillSectionScreen = () => {
 
                                 <CustomTextInput
                                     title={strings.Jumpdish}
-                                    placeholder='1.5'
+                                    value={values.ration_qunt}
+                                    placeholder={'1.5'}
                                     container={{ marginBottom: wp(5) }}
                                     onChangeText={handleChange("ration_qunt")}
+                                    placeholderTextColor={colors.light_brown}
+                                    keyboardType={'decimal-pad'}
                                 />
                                 {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}
                             </>
@@ -228,6 +242,7 @@ const CreateBillSectionScreen = () => {
                                     placeholder={strings.EnterQuantity}
                                     container={{ marginBottom: wp(5) }}
                                     onChangeText={handleChange("ration_qunt")}
+                                    keyboardType={'number-pad'}
                                 />
                                 {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
 
@@ -265,7 +280,7 @@ const CreateBillSectionScreen = () => {
                             handleSubmit()
                         }}
                     />
-                </KeyboardAvoidingView>
+                </KeyboardAwareScrollView>
             </Container>
         </View>
     )

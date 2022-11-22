@@ -26,16 +26,15 @@ const BillSectionScreen = () => {
     const navigation = useCustomNavigation('BillSectionScreen')
     const route = useRoute<RootRouteProps<'BillSectionScreen'>>();
     let { id, type, isEdit } = route.params
+    const menuRef = useRef(null);
+    const dispatch = useAppDispatch()
+    const isFocus = useIsFocused()
 
     const [visible, setVisible] = useState(false);
     const [isEditable, setIsEditEditable] = useState(isEdit ? isEdit : false);
-    const menuRef = useRef(null);
     const [typeCountError, setTypeCountError] = useState(false)
-    const dispatch = useAppDispatch()
-    const isFocus = useIsFocused()
-    const { billDetails, isLoading } = useAppSelector(state => state.billList)
     const [imageUrl, setImageUrl] = useState<string | undefined>('');
-    const [countingValue, setCountingValue] = useState<DropdownProps>({ label: billDetails.type_counting ? billDetails.type_counting : '', value: billDetails.type_counting ? billDetails.type_counting : '' })
+
     const [error, setError] = useState({
         name: "",
         jumping_ration: "",
@@ -45,6 +44,22 @@ const BillSectionScreen = () => {
         quantity: '',
         detail: ''
     })
+
+    const { billDetails, isLoading } = useAppSelector(state => state.billList)
+    const [countingValue, setCountingValue] = useState<DropdownProps>({
+        label: billDetails.type_counting ? billDetails.type_counting : '',
+        value: billDetails.type_counting ? billDetails.type_counting : ''
+    })
+    console.log({ billDetails, countingValue: billDetails.type_counting });
+
+    useEffect(() => {
+        if (billDetails) {
+            setCountingValue({
+                label: billDetails.type_counting ? billDetails.type_counting : '',
+                value: billDetails.type_counting ? billDetails.type_counting : ''
+            })
+        }
+    }, [billDetails])
 
 
     useEffect(() => {
@@ -112,6 +127,8 @@ const BillSectionScreen = () => {
     ];
 
     const updateBill = (values: any) => {
+        console.log({ values, type, float: values.ration_qunt, billDetails });
+
         if (!countingValue.value) {
             setTypeCountError(true)
         } else {
@@ -131,13 +148,13 @@ const BillSectionScreen = () => {
                 data.append("image", images ? images : '')
             }
             if (type == 'material' && parseFloat(values.ration_qunt) != billDetails.jumping_ration) {
-                data.append("quantity", values.ration_qunt)
+                data.append("jumping_ration", parseFloat(values.ration_qunt))
             }
             if (type == 'sign' && parseFloat(values.ration_qunt) != billDetails.quantity) {
-                data.append("quantity", values.ration_qunt)
+                data.append("quantity", parseFloat(values.ration_qunt))
             }
-            console.log("🚀 ~ file: index.tsx ~ line 139 ~ updateBill ~ data", data)
-            if (isEmptyArray(data)) {
+            console.log("🚀 ~ file: index.tsx ~ line 139 ~ updateBill ~ data", data, isEmptyArray(data))
+            if (!isEmptyArray(data)) {
                 let params = {
                     data: data,
                     id: id
@@ -293,7 +310,7 @@ const BillSectionScreen = () => {
                                     container={{ marginBottom: wp(5) }}
                                     value={values.ration_qunt}
                                     editable={isEditable}
-                                    placeholder='1.5141'
+                                    placeholder='1.5'
                                     onChangeText={handleChange("ration_qunt")}
                                 />
                                 {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}

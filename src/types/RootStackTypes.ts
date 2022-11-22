@@ -25,7 +25,7 @@ export type RootStackParamList = {
     NotificationScreen: undefined
     JobDetailsScreen: { params: any, type?: string }
     ReportGeneratorScreen: undefined
-    BillListScreen: undefined
+    BillListScreen: { billType?: string }
     BillCreateScreen: undefined
     CreateBillSectionScreen: { type?: string }
     BillSectionScreen: BillSectionScreenProps
@@ -55,7 +55,7 @@ export type RootStackParamList = {
     UserDetailScreen: { userId: number, isEdit?: boolean }
     GroupListScreen: undefined,
     CreateGroupScreen: undefined,
-    GroupDetailScreen: undefined
+    GroupDetailScreen: undefined,
 };
 
 export type AuthStackParamList = {

@@ -12,8 +12,9 @@ import { strings } from '../../languages/localizedStrings'
 import { colors } from '../../styles/Colors'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { billList } from '../../redux/slices/AdminSlice/billListSlice'
-import { useIsFocused } from '@react-navigation/native'
+import { useIsFocused, useRoute } from '@react-navigation/native'
 import CustomActivityIndicator from '../../components/CustomActivityIndicator'
+import { RootRouteProps } from '../../types/RootStackTypes'
 
 interface billListParams {
     page?: number,
@@ -25,71 +26,21 @@ const BillListScreen = () => {
     const navigation = useCustomNavigation('BillListScreen');
     const dispatch = useAppDispatch()
     const isFocus = useIsFocused()
+    const route = useRoute<RootRouteProps<'BillListScreen'>>()
+
     const [page, setPage] = useState(1)
+    const [btn, setBtn] = useState({ open: true, close: false })
     const { billListData, isLoading } = useAppSelector(state => state.billList)
-    const bills = [
-        {
-            iamgeUrl: 'dsdfsd',
-            title: 'Bill name',
-            date: '2022-11-08T12:44:46.142691Z',
-        },
-        {
-            iamgeUrl: 'sdfsdf',
-            title: 'Bill name',
-            date: '2022-11-08T12:44:46.142691Z',
-        },
-        {
-            iamgeUrl: 'sfsdf',
-            title: 'Bill name',
-            date: '2022-11-08T12:44:46.142691Z',
-        },
-        {
-            iamgeUrl: 'sfsdf',
-            title: 'Bill name',
-            date: '2022-11-08T12:44:46.142691Z',
-        },
-        {
-            iamgeUrl: 'sfsdf',
-            title: 'Bill name',
-            date: '2022-11-08T12:44:46.142691Z',
-        },
-        {
-            iamgeUrl: 'sdfsf',
-            title: 'Bill name',
-            date: '2022-11-08T12:44:46.142691Z',
-        },
 
-        {
-            iamgeUrl: 'sfsdf',
-            title: 'Bill name',
-            date: '2022-11-08T12:44:46.142691Z',
-        },
-        {
-            iamgeUrl: 'sfsdf',
-            title: 'Bill name',
-            date: '2022-11-08T12:44:46.142691Z',
-        },
-
-        {
-            iamgeUrl: 'sfsdf',
-            title: 'Bill name',
-            date: '2022-11-08T12:44:46.142691Z',
-        },
-        {
-            iamgeUrl: 'sfsdf',
-            title: 'Bill name',
-            date: '2022-11-08T12:44:46.142691Z',
-        },
-        {
-            iamgeUrl: 'sfsdf',
-            title: 'Bill name',
-            date: '2022-11-08T12:44:46.142691Z',
-        },
-    ]
-    const [btn, setBtn] = useState({
-        open: true,
-        close: false
-    })
+    useEffect(() => {
+        console.log({ route });
+        if (route.params?.billType == 'Material') {
+            setBtn({ open: true, close: false })
+        }
+        else if (route.params?.billType == 'Sign'){
+            setBtn({ open: false, close: true })
+        }
+    }, [route])
 
     useEffect(() => {
         console.log("🚀 ~ file: index.tsx ~ line 95 ~ useEffect ~ isFocus", isFocus)
@@ -111,10 +62,8 @@ const BillListScreen = () => {
             setPage(page + 1)
         }).catch((error) => {
             console.log({ error });
-
         })
     }
-
 
     const renderItem = ({ item, index }: any) => {
         return (
@@ -155,7 +104,11 @@ const BillListScreen = () => {
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <ButtonTab btnOneTitle={strings.accountmaterial} btnTwoTitle={strings.Signabill} setBtn={setBtn} onReset={setPage} btnValue={btn} />
-                <FlatList contentContainerStyle={{ paddingBottom: wp(10) }} showsVerticalScrollIndicator={false} data={billListData?.results}
+                <FlatList
+                    data={billListData?.results}
+                    renderItem={renderItem}
+                    contentContainerStyle={{ paddingBottom: wp(10) }}
+                    showsVerticalScrollIndicator={false}
                     ListHeaderComponent={() => {
                         return (
                             <View style={[globalStyles.rowView, { marginBottom: wp(4) }]}>
@@ -173,7 +126,7 @@ const BillListScreen = () => {
                             billListApiCall(param)
                         }
                     }}
-                    renderItem={renderItem} ItemSeparatorComponent={() => {
+                    ItemSeparatorComponent={() => {
                         return (
                             <View style={{ height: wp(3) }} />
                         )
