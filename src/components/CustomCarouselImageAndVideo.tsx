@@ -1,67 +1,64 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
-import React, { Children, useState } from 'react'
+import { Image, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
+import React, { useState } from 'react';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import Video from 'react-native-video';
 import { globalStyles } from '../styles/globalStyles';
 import { colors } from '../styles/Colors';
-import ImageViewer from 'react-native-image-zoom-viewer';
 import Modal from 'react-native-modal';
 import { ImagesPath } from '../utils/ImagePaths';
+import CustomCarouselZoomImageViewer from './CustomCarouselZoomImageViewer';
 
+interface ItemProps {
+    id: number
+    imgUrl: string
+    mediaType: string
+
+}
 interface CustomCarouselImageAndVideoProps {
-    result: any
+    result: ItemProps[]
     viewStyle?: ViewStyle
-    videoStyle?: any
+    videoStyle?: ViewStyle
     children?: any
 }
 
 const CustomCarouselImageAndVideo = (props: CustomCarouselImageAndVideoProps) => {
-    console.log(props)
     const [activeSlide, setActiveSlide] = useState<number>(0)
     const [visible, setIsVisible] = useState<boolean>(false);
-    const [imageLink, setImageLink] = useState([{ uri: '' }])
-    const renderItem = ({ item, index }: any) => {
+
+    console.log({ item: props })
+
+    const renderItem = ({ item, index }: { item: ItemProps, index: number }) => {
         return (
-            <View style={[styles.imageMainView, props.viewStyle]}>
+            <TouchableOpacity style={[styles.imageMainView, props.viewStyle]} onPress={() => setIsVisible(true)}>
                 {item.mediaType == "image"
                     ?
-                    <TouchableOpacity
-                        onPress={() => {
-                            setIsVisible(true)
-                        }}
+                    <View
                         style={[globalStyles.container, styles.imageView]}>
                         <Image source={{ uri: item.imgUrl }} resizeMode={'contain'} onError={() => { }} style={[globalStyles.container, styles.imageView]} />
-                    </TouchableOpacity>
+                    </View>
                     :
                     <Video
                         source={{ uri: item.imgUrl }}
-                        onBuffer={(data: any) => {
-                            console.log({ data: data });
-                        }}
-                        onError={(err: any) => {
-                            console.log({ err: err });
-                        }}
                         paused={!(index == activeSlide)}
                         resizeMode={'cover'}
                         repeat={true}
                         style={[styles.backgroundVideo, props.videoStyle]}
                     />
                 }
-                <Modal isVisible={visible} style={{ margin: 0 }}>
+                <Modal
+                    isVisible={visible}
+                    style={{ margin: 0, backgroundColor: colors.white }}>
                     <>
                         <TouchableOpacity
-                            onPress={()=> setIsVisible(false)}
+                            onPress={() => setIsVisible(false)}
                             style={styles.closeBtnStyle}>
                             <Image source={ImagesPath.cross_icon} style={styles.closeIcon} />
                         </TouchableOpacity>
-                        <ImageViewer
-                            imageUrls={[{ url: item.imgUrl, }]}
-                            renderIndicator={() => <></>}
-                        />
+                        <CustomCarouselZoomImageViewer result={props.result} />
                     </>
                 </Modal>
-            </View>
+            </TouchableOpacity>
         )
     }
     return (
@@ -72,7 +69,6 @@ const CustomCarouselImageAndVideo = (props: CustomCarouselImageAndVideoProps) =>
                 itemWidth={wp(100)}
                 renderItem={renderItem}
                 layout={'default'}
-                // autoplay
                 onSnapToItem={(index: number) => setActiveSlide(index)}
             />
             <Pagination
@@ -90,7 +86,7 @@ const CustomCarouselImageAndVideo = (props: CustomCarouselImageAndVideoProps) =>
     )
 }
 
-export default CustomCarouselImageAndVideo
+export default CustomCarouselImageAndVideo;
 
 const styles = StyleSheet.create({
     backgroundVideo: {
@@ -131,12 +127,16 @@ const styles = StyleSheet.create({
         height: wp(6),
         width: wp(6),
         resizeMode: "contain",
-        tintColor: colors.white
+        tintColor: colors.black
     },
     closeBtnStyle: {
         position: 'absolute',
         top: wp(10),
         right: wp(5),
         zIndex: 10
-    }
+    },
+    modal: {
+        justifyContent: 'center',
+        borderRadius: 10,
+    },
 })
