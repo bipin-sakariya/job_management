@@ -40,11 +40,7 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
                     setVisible(false)
                 } else {
                     //billdata
-                    console.log({ item });
-                    let params = {
-                        id: data.id
-                    }
-                    dispatch(billDelete(params)).unwrap()
+                    dispatch(billDelete(item.id)).unwrap()
                     setVisible(false)
                 }
             }, imageSource: ImagesPath.bin_icon

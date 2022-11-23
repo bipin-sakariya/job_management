@@ -3,6 +3,7 @@ import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { colors } from "../../styles/Colors";
 import fonts from "../../styles/Fonts";
 import FontSizes from "../../styles/FontSizes";
+import { globalStyles } from "../../styles/globalStyles";
 
 export const styles = StyleSheet.create({
     leftArrowIcon: {
@@ -123,7 +124,8 @@ export const styles = StyleSheet.create({
     reasonTxt: {
         color: colors.dark_blue3_color,
         fontFamily: fonts.FONT_POP_REGULAR,
-        fontSize: FontSizes.EXTRA_SMALL_12
+        fontSize: FontSizes.EXTRA_SMALL_12,
+        ...globalStyles.rtlStyle
     },
     commonTxt: {
         color: '#5B5B5B',

@@ -1,24 +1,16 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useRef, useState } from "react";
-import { Alert, FlatList, Image, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useRoute } from "@react-navigation/native";
+import React, { useRef } from "react";
+import { Alert, FlatList, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { BottomSheet, Container, CustomDashedComponent, CustomJobDetailsBottomButton, CustomStatusBtn, CustomSubTitleWithImageComponent, CustomTextInput, Header } from "../../components";
-import CustomDetailsComponent from "../../components/CustomDetailsComponent";
+import { BottomSheet, CommonPdfView, Container, CustomBlackButton, CustomCarouselImageAndVideo, CustomDetailsComponent, CustomJobAddedByComponent, CustomJobDetailsBottomButton, CustomStatusBtn, CustomTextInput, CustomTextInputWithImage, Header, TableDetailsComponent, TableHeaderView } from "../../components";
 import { globalStyles } from "../../styles/globalStyles";
 import { ImagesPath } from "../../utils/ImagePaths";
 import { styles } from "./styles";
-import CustomBlackButton from "../../components/CustomBlackButton";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { strings } from "../../languages/localizedStrings";
 import useCustomNavigation from "../../hooks/useCustomNavigation";
-import CustomCarouselImageAndVideo from "../../components/CustomCarouselImageAndVideo";
-import CustomTextInputWithImage from "../../components/CustomTextInputWithImage";
 import { colors } from "../../styles/Colors";
-import CustomJobAddedByComponent from "../../components/CustomJobAddedByComponent";
-import TableHeaderView from "../../components/TableHeaderView";
-import TableDetailsComponent from "../../components/TableDetailsComponent";
 import { RootRouteProps } from "../../types/RootStackTypes";
-import CommonPdfView from "../../components/CommonPdfView";
 import moment from "moment";
 import { RootState, useAppSelector } from "../../hooks/reduxHooks";
 

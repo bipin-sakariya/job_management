@@ -88,7 +88,7 @@ export const userRoleList = createAsyncThunk<userRoleListProps, string, { reject
 export const getListOfUsers = createAsyncThunk<userDataListProps, string, { rejectValue: apiErrorTypes }>
     (USER + "/getListOfUsers", async (_, { rejectWithValue }) => {
         try {
-            const response = await axiosClient.get(ApiConstants.USERDETAIL)
+            const response = await axiosClient.get(ApiConstants.USER)
             return response.data
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -100,8 +100,8 @@ export const getListOfUsers = createAsyncThunk<userDataListProps, string, { reje
 
 export const createUser = createAsyncThunk<string[], FormData, { rejectValue: apiErrorTypes }>(USER + "/createUser", async (params, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.USERSCREATE, params)
-        const response = await axiosClient.post(ApiConstants.USERSCREATE, params)
+        console.log(ApiConstants.USER, params)
+        const response = await axiosClient.post(ApiConstants.USER, params)
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {
@@ -113,8 +113,8 @@ export const createUser = createAsyncThunk<string[], FormData, { rejectValue: ap
 
 export const detailsOfUser = createAsyncThunk<userDetails, number, { rejectValue: apiErrorTypes }>(USER + "/detailsOfUser", async (id, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.USERSCREATE, id)
-        const response = await axiosClient.get(ApiConstants.USERSCREATE + id + "/")
+        console.log(ApiConstants.USER, id)
+        const response = await axiosClient.get(ApiConstants.USER + id + "/")
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {
@@ -126,8 +126,8 @@ export const detailsOfUser = createAsyncThunk<userDetails, number, { rejectValue
 
 export const deleteUser = createAsyncThunk<string, number, { rejectValue: apiErrorTypes }>(USER + "/deleteUser", async (id, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.USERSDELETE, id)
-        const response = await axiosClient.delete(ApiConstants.USERSDELETE + id + '/')
+        console.log(ApiConstants.USER, id)
+        const response = await axiosClient.delete(ApiConstants.USER + id + '/')
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {
@@ -139,8 +139,8 @@ export const deleteUser = createAsyncThunk<string, number, { rejectValue: apiErr
 
 export const updateUser = createAsyncThunk<string, paramsTypes, { rejectValue: apiErrorTypes }>(USER + "/updateUser", async (params, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.USERSDELETE, params)
-        const response = await axiosClient.put(ApiConstants.USERSUPDATE + params.id + '/', params.data)
+        console.log(ApiConstants.USER, params)
+        const response = await axiosClient.put(ApiConstants.USER + params.id + '/', params.data)
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {

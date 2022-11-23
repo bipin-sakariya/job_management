@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, Image, TextInput, ScrollView, Alert, Platform, KeyboardAvoidingView, ImageBackground } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Text, TouchableOpacity, Image, Alert, ImageBackground } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { RootRouteProps } from '../../types/RootStackTypes';
 import { useRoute } from '@react-navigation/native';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
@@ -12,14 +12,19 @@ import { strings } from '../../languages/localizedStrings';
 import { useFormik } from 'formik';
 import * as yup from "yup";
 import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
-import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { useAppDispatch } from '../../hooks/reduxHooks';
 import { billCreate } from '../../redux/slices/AdminSlice/billListSlice';
-import { colors } from '../../styles/Colors'
+import { colors } from '../../styles/Colors';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 interface DropdownProps {
     label: string,
     value: number
+}
+
+interface ValuesProps {
+    name: string;
+    ration_qunt: string;
 }
 
 const CreateBillSectionScreen = () => {
@@ -58,7 +63,7 @@ const CreateBillSectionScreen = () => {
             .required(type == "material" ? strings.Jumpingration_required : strings.Quantity_required),
     });
 
-    const createbills = (values: any) => {
+    const createbills = (values: ValuesProps) => {
         console.log("🚀 ~ file: index.tsx ~ line 47 ~ createbills ~ values", values)
 
         if (!countingValue.value) {
@@ -122,11 +127,6 @@ const CreateBillSectionScreen = () => {
         }
     }, [values.ration_qunt])
 
-    // useEffect(() => {
-    //     console.log('contactNo==>', { contactNo: values.contactNo })
-    //     setError({ ...error, phone: "" })
-    // }, [values.contactNo])
-
     return (
         <View style={globalStyles.container}>
             <Header
@@ -140,60 +140,45 @@ const CreateBillSectionScreen = () => {
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}>
                     <CustomSubTitleWithImageComponent disabled title={strings.Prepare_bill} image={ImagesPath.receipt_icon} />
-                    {
-                        type == "sign" ?
-                            <>
-                                {imageUrl && <ImageBackground
-                                    source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
-                                    style={styles.addPhotoStyle}
-                                    borderRadius={wp(2)}>
-                                    <TouchableOpacity
-                                        onPress={async () => {
-                                            // let option: ImageLibraryOptions = {
-                                            //     mediaType: 'photo'
-                                            // }
-                                            let options: any = {
-                                                title: "Select Image",
-                                                customButtons: [
-                                                    { name: "customOptionKey", title: "Choose Photo from Custom Option" },
-                                                ],
-                                                storageOptions: {
-                                                    skipBackup: true,
-                                                    path: "images",
-                                                },
-                                            };
-                                            // // const { assets } = await launchImageLibrary(option)
-                                            // console.log("🚀 ~ file: index.tsx ~ line 256 ~ onPress={ ~ assets", assets)
+                    {type == "sign" ?
+                        <>
+                            {imageUrl && <ImageBackground
+                                source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
+                                style={styles.addPhotoStyle}
+                                borderRadius={wp(2)}>
+                                <TouchableOpacity
+                                    onPress={async () => {
+                                        let option: ImageLibraryOptions = {
+                                            mediaType: 'photo'
+                                        }
+                                        const result = await launchImageLibrary(option);
+                                        setImageUrl(result?.assets ? result?.assets[0].uri : '')
+                                        if (result.assets && result.assets[0]?.uri) {
+                                            setImageError(false)
+                                            setError({ ...error, image: '' })
+                                        }
+                                    }}
 
-                                            const result: any = await launchImageLibrary(options);
-                                            setImageUrl(result ? result?.assets[0].uri : '')
-                                            if (result.assets && result.assets[0]?.uri) {
-                                                setImageError(false)
-                                                setError({ ...error, image: '' })
-                                            }
-                                        }}
-
-                                        activeOpacity={1}
-                                        style={styles.camreaBtnStyle}>
-                                        <Image source={ImagesPath.camera_icon} style={styles.cameraIconStyle} />
-                                    </TouchableOpacity>
-                                </ImageBackground>}
-                                {!imageUrl && <CustomDashedComponent viewStyle={{ paddingVertical: wp(5) }} image={ImagesPath.add_icon} onPress={async () => {
-                                    let option: ImageLibraryOptions = {
-                                        mediaType: 'photo'
-                                    }
-                                    const { assets } = await launchImageLibrary(option)
-                                    setImageUrl(assets && assets.length !== 0 ? assets[0]?.uri : '')
-                                    if (assets && assets[0]?.uri) {
-                                        setImageError(false)
-                                        setError({ ...error, image: '' })
-                                    }
-                                }} title={strings.Addasignlogo} />}
-                            </>
-                            : null
+                                    activeOpacity={1}
+                                    style={styles.camreaBtnStyle}>
+                                    <Image source={ImagesPath.camera_icon} style={styles.cameraIconStyle} />
+                                </TouchableOpacity>
+                            </ImageBackground>}
+                            {!imageUrl && <CustomDashedComponent viewStyle={{ paddingVertical: wp(5) }} image={ImagesPath.add_icon} onPress={async () => {
+                                let option: ImageLibraryOptions = {
+                                    mediaType: 'photo'
+                                }
+                                const { assets } = await launchImageLibrary(option)
+                                setImageUrl(assets && assets.length !== 0 ? assets[0]?.uri : '')
+                                if (assets && assets[0]?.uri) {
+                                    setImageError(false)
+                                    setError({ ...error, image: '' })
+                                }
+                            }} title={strings.Addasignlogo} />}
+                        </>
+                        : null
                     }
-                    {imageError || error.image
-                        ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.image ? error.image : strings.Pleaseentersignlogo}</Text> : null}
+                    {imageError || error.image ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.image ? error.image : strings.Pleaseentersignlogo}</Text> : null}
                     <CustomTextInput
                         title={strings.Name}
                         container={{ marginVertical: wp(5), marginTop: wp(3) }}
@@ -201,71 +186,70 @@ const CreateBillSectionScreen = () => {
                         onChangeText={handleChange("name")}
                     />
                     {(touched.name && errors.name) || error.name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.name ? error.name : errors.name}</Text> : null}
-                    {
-                        type == "material" ?
-                            <>
-                                <DropDownComponent
-                                    title={strings.TypeCounting}
-                                    data={data}
-                                    image={ImagesPath.down_white_arrow}
-                                    labelField="label"
-                                    valueField="value"
-                                    onChange={(item) => {
-                                        setError({
-                                            ...error,
-                                            type_counting: ''
-                                        })
-                                        setCountingError(false)
-                                        setCountingValue(item)
-                                    }}
-                                    value={countingValue.value}
-                                    placeholder={strings.choose}
-                                    container={{ marginBottom: wp(5) }}
-                                />
-                                {countingError || error.type ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.type ? error.type : strings.Typecount_required}</Text> : null}
+                    {type == "material" ?
+                        <>
+                            <DropDownComponent
+                                title={strings.TypeCounting}
+                                data={data}
+                                image={ImagesPath.down_white_arrow}
+                                labelField="label"
+                                valueField="value"
+                                onChange={(item) => {
+                                    setError({
+                                        ...error,
+                                        type_counting: ''
+                                    })
+                                    setCountingError(false)
+                                    setCountingValue(item)
+                                }}
+                                value={countingValue.value}
+                                placeholder={strings.choose}
+                                container={{ marginBottom: wp(5) }}
+                            />
+                            {countingError || error.type ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.type ? error.type : strings.Typecount_required}</Text> : null}
 
-                                <CustomTextInput
-                                    title={strings.Jumpdish}
-                                    value={values.ration_qunt}
-                                    placeholder={'1.5'}
-                                    container={{ marginBottom: wp(5) }}
-                                    onChangeText={handleChange("ration_qunt")}
-                                    placeholderTextColor={colors.light_brown}
-                                    keyboardType={'decimal-pad'}
-                                />
-                                {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}
-                            </>
-                            :
-                            <>
-                                <CustomTextInput
-                                    title={strings.Quantity}
-                                    placeholder={strings.EnterQuantity}
-                                    container={{ marginBottom: wp(5) }}
-                                    onChangeText={handleChange("ration_qunt")}
-                                    keyboardType={'number-pad'}
-                                />
-                                {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
+                            <CustomTextInput
+                                title={strings.Jumpdish}
+                                value={values.ration_qunt}
+                                placeholder={'1.5'}
+                                container={{ marginBottom: wp(5) }}
+                                onChangeText={handleChange("ration_qunt")}
+                                placeholderTextColor={colors.light_brown}
+                                keyboardType={'decimal-pad'}
+                            />
+                            {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}
+                        </>
+                        :
+                        <>
+                            <CustomTextInput
+                                title={strings.Quantity}
+                                placeholder={strings.EnterQuantity}
+                                container={{ marginBottom: wp(5) }}
+                                onChangeText={handleChange("ration_qunt")}
+                                keyboardType={'number-pad'}
+                            />
+                            {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
 
-                                <DropDownComponent
-                                    title={strings.TypeCounting}
-                                    data={data}
-                                    image={ImagesPath.down_white_arrow}
-                                    labelField="label"
-                                    valueField="value"
-                                    onChange={(item) => {
-                                        setError({
-                                            ...error,
-                                            type_counting: ''
-                                        })
-                                        setCountingError(false)
-                                        setCountingValue(item)
-                                    }}
-                                    value={countingValue.value}
-                                    placeholder={strings.choose}
-                                    container={{ marginBottom: wp(5) }}
-                                />
-                                {countingError || error.type_counting ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.type_counting ? error.type_counting : strings.Typecount_required}</Text> : null}
-                            </>
+                            <DropDownComponent
+                                title={strings.TypeCounting}
+                                data={data}
+                                image={ImagesPath.down_white_arrow}
+                                labelField="label"
+                                valueField="value"
+                                onChange={(item) => {
+                                    setError({
+                                        ...error,
+                                        type_counting: ''
+                                    })
+                                    setCountingError(false)
+                                    setCountingValue(item)
+                                }}
+                                value={countingValue.value}
+                                placeholder={strings.choose}
+                                container={{ marginBottom: wp(5) }}
+                            />
+                            {countingError || error.type_counting ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.type_counting ? error.type_counting : strings.Typecount_required}</Text> : null}
+                        </>
                     }
                     <CustomBlackButton
                         title={strings.CreateBill}

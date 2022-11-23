@@ -1,15 +1,14 @@
-import { FlatList, Image, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomBlackButton, CustomDashedComponent, CustomJobListComponent, CustomSubTitleWithImageComponent, Header } from '../../components'
-import { ImagesPath } from '../../utils/ImagePaths'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import useCustomNavigation from '../../hooks/useCustomNavigation'
-import { strings } from '../../languages/localizedStrings'
-import Timeline from 'react-native-timeline-flatlist'
-import { colors } from '../../styles/Colors'
-import { styles } from './styles'
-import FontSizes from '../../styles/FontSizes'
+import { FlatList, Image, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { globalStyles } from '../../styles/globalStyles';
+import { Container, CustomBlackButton, CustomDashedComponent, CustomJobListComponent, CustomSubTitleWithImageComponent, Header } from '../../components';
+import { ImagesPath } from '../../utils/ImagePaths';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import useCustomNavigation from '../../hooks/useCustomNavigation';
+import { strings } from '../../languages/localizedStrings';
+import { colors } from '../../styles/Colors';
+import { styles } from './styles';
+import FontSizes from '../../styles/FontSizes';
 
 const RouteScreen = () => {
     const navigation = useCustomNavigation('RouteScreen');
@@ -45,7 +44,6 @@ const RouteScreen = () => {
                             style={[styles.textInputStyle, globalStyles.rtlStyle,]}
                             placeholder={strings.ChooseStartingLocation}
                             placeholderTextColor={colors.dark_blue3_color}
-
                         />
                         <TextInput
                             style={styles.textInputStyle}
@@ -65,9 +63,15 @@ const RouteScreen = () => {
                 </View>
                 <CustomSubTitleWithImageComponent disabled title={strings.Recent} image={ImagesPath.clock_counter_clockwise_icon} />
                 <FlatList showsVerticalScrollIndicator={false} data={JobData} renderItem={renderItem} contentContainerStyle={{ paddingBottom: wp(20) }} />
-                <CustomBlackButton title={strings.Done} textStyle={{ marginVertical: wp(1) }} image={ImagesPath.route_icon} buttonStyle={{ ...styles.boxShadowStyle, bottom: Platform.OS == "ios" ? wp(5) : 0 }} onPress={() => {
-                    navigation.navigate("RouteMapViewScreen")
-                }} />
+                <CustomBlackButton
+                    title={strings.Done}
+                    textStyle={{ marginVertical: wp(1) }}
+                    image={ImagesPath.route_icon}
+                    buttonStyle={{ ...styles.boxShadowStyle, bottom: Platform.OS == "ios" ? wp(5) : 0 }}
+                    onPress={() => {
+                        navigation.navigate("RouteMapViewScreen")
+                    }}
+                />
             </Container>
         </View>
     )

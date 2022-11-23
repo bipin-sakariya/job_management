@@ -14,7 +14,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { styles } from './styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
 
 const UserValidationSchema = yup.object().shape({
     userName: yup.string().required(strings.Username_invalid),
@@ -60,7 +60,12 @@ const UserDetailScreen = () => {
         })
     }
 
-    const updateUserData = (values: any) => {
+    const updateUserData = (values: {
+        userName: string;
+        email: string;
+        contactNo: string;
+        role: string;
+    }) => {
         var data = new FormData()
         let images = {
             uri: imageUrl,
@@ -149,18 +154,11 @@ const UserDetailScreen = () => {
                             isEditable ?
                                 <TouchableOpacity
                                     onPress={async () => {
-                                        let options: any = {
-                                            title: "Select Image",
-                                            customButtons: [
-                                                { name: "customOptionKey", title: "Choose Photo from Custom Option" },
-                                            ],
-                                            storageOptions: {
-                                                skipBackup: true,
-                                                path: "images",
-                                            },
-                                        };
-                                        const result: any = await launchImageLibrary(options);
-                                        setImageUrl(result ? result?.assets[0].uri : '')
+                                        let option: ImageLibraryOptions = {
+                                            mediaType: 'photo'
+                                        }
+                                        const result = await launchImageLibrary(option);
+                                        setImageUrl(result?.assets ? result?.assets[0].uri : '')
                                     }}
                                     activeOpacity={1}
                                     style={styles.camreaBtnStyle}>

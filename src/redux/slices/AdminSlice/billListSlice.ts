@@ -71,8 +71,8 @@ export const billList = createAsyncThunk
     (BILL + "/billList", async (params: paramsTypes, { rejectWithValue }) => {
         try {
             console.log("🚀 ~ file: billListSlice.ts ~ line 60 ~ params", params)
-            console.log(ApiConstants.BILLLIST)
-            const response = await axiosClient.get(ApiConstants.BILLLIST + `?page=${params.page}&bill_type=${params.bill_type}`)
+            console.log(ApiConstants.BILL)
+            const response = await axiosClient.get(ApiConstants.BILL + `?page=${params.page}&bill_type=${params.bill_type}`)
             console.log("🚀 ~ file: billListSlice.ts ~ line 69 ~ response", response)
             return response;
         } catch (e: any) {
@@ -86,8 +86,8 @@ export const billList = createAsyncThunk
 export const billCreate = createAsyncThunk<string[], FormData, { rejectValue: apiErrorTypes }>
     (BILL + "/billCreate", async (params, { rejectWithValue }) => {
         try {
-            console.log(ApiConstants.BILLCREATE)
-            const response = await axiosClient.post(ApiConstants.BILLCREATE, params)
+            console.log(ApiConstants.BILL)
+            const response = await axiosClient.post(ApiConstants.BILL, params)
             console.log("🚀 ~ file: billListSlice.ts ~ line 69 ~ response", response)
             return response.data
         } catch (e: any) {
@@ -98,10 +98,10 @@ export const billCreate = createAsyncThunk<string[], FormData, { rejectValue: ap
         }
     })
 
-export const billDelete = createAsyncThunk<string, paramsTypes, { rejectValue: apiErrorTypes }>(BILL + "/billDelete", async (params, { rejectWithValue }) => {
+export const billDelete = createAsyncThunk<string, number, { rejectValue: apiErrorTypes }>(BILL + "/billDelete", async (id, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.BILLDELETE, params)
-        const response = await axiosClient.delete(ApiConstants.BILLDELETE + params.id + '/')
+        console.log(ApiConstants.BILL, id)
+        const response = await axiosClient.delete(ApiConstants.BILL + id + '/')
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {
@@ -111,24 +111,23 @@ export const billDelete = createAsyncThunk<string, paramsTypes, { rejectValue: a
     }
 })
 
-export const billDetail = createAsyncThunk<billData, paramsTypes, { rejectValue: apiErrorTypes }>
-    (BILL + "/billDetail", async (params, { rejectWithValue }) => {
-        try {
-            console.log(ApiConstants.BILLDELETE, params)
-            const response = await axiosClient.get(ApiConstants.BILLDELETE + params.id + '/')
-            return response.data
-        } catch (e: any) {
-            if (e.code === "ERR_NETWORK") {
-                Alert.alert(e.message)
-            }
-            return rejectWithValue(e?.response)
+export const billDetail = createAsyncThunk<billData, number, { rejectValue: apiErrorTypes }>(BILL + "/billDetail", async (id, { rejectWithValue }) => {
+    try {
+        console.log(ApiConstants.BILL, id)
+        const response = await axiosClient.get(ApiConstants.BILL + id + '/')
+        return response.data
+    } catch (e: any) {
+        if (e.code === "ERR_NETWORK") {
+            Alert.alert(e.message)
         }
-    })
+        return rejectWithValue(e?.response)
+    }
+})
 
 export const billUpdate = createAsyncThunk<billData, paramsTypes, { rejectValue: apiErrorTypes }>(BILL + "/billUpdate", async (params, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.BILLUPDATE, params)
-        const response = await axiosClient.patch(ApiConstants.BILLUPDATE + params.id + '/', params.data)
+        console.log(ApiConstants.BILL, params)
+        const response = await axiosClient.patch(ApiConstants.BILL + params.id + '/', params.data)
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {
@@ -194,7 +193,7 @@ const billListSlice = createSlice({
         });
         builder.addCase(billDelete.fulfilled, (state, action) => {
             state.isLoading = false
-            state.billListData = { ...state.billListData, results: state.billListData.results.filter(i => i.id !== action.meta.arg.id) }
+            state.billListData = { ...state.billListData, results: state.billListData.results.filter(i => i.id !== action.meta.arg) }
             state.error = ''
         });
         builder.addCase(billDelete.rejected, (state, action) => {

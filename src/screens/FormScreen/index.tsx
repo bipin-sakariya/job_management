@@ -1,14 +1,12 @@
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, Header } from '../../components'
+import { Container, CustomListView, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { styles } from './styles'
-import CustomListView from '../../components/CustomListView'
 import { strings } from '../../languages/localizedStrings'
-import { colors } from '../../styles/Colors'
 
 const FormScreen = () => {
     const navigation = useCustomNavigation('FormScreen');
@@ -71,9 +69,13 @@ const FormScreen = () => {
     ]
     const renderItem = ({ item, index }: any) => {
         return (
-            <CustomListView item={item} isFrom onPress={() => {
-                navigation.navigate("FormDetailsScreen")
-            }} />
+            <CustomListView
+                item={item}
+                isFrom
+                onPress={() => {
+                    navigation.navigate("FormDetailsScreen")
+                }}
+            />
         )
     }
     return (
@@ -98,7 +100,9 @@ const FormScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <FlatList showsVerticalScrollIndicator={false} data={form}
+                <FlatList
+                    showsVerticalScrollIndicator={false}
+                    data={form}
                     ListHeaderComponent={() => {
                         return (
                             <View style={[globalStyles.rowView, { marginBottom: wp(4) }]}>
@@ -107,11 +111,13 @@ const FormScreen = () => {
                             </View>
                         )
                     }}
-                    renderItem={renderItem} ItemSeparatorComponent={() => {
+                    renderItem={renderItem}
+                    ItemSeparatorComponent={() => {
                         return (
                             <View style={{ height: wp(3) }} />
                         )
-                    }} />
+                    }}
+                />
             </Container>
         </View>
     )

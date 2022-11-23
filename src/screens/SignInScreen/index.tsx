@@ -3,21 +3,21 @@ import React, { useEffect, useRef, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { styles } from './styles';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { BottomSheet, CustomBlackButton, CustomTextInput } from '../../components';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
 import { resetPassword, signin, userDataReducer } from '../../redux/slices/AuthUserSlice';
 import { strings } from '../../languages/localizedStrings';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import * as yup from "yup";
 import { Formik, useFormik } from "formik";
 import CustomActivityIndicator from '../../components/CustomActivityIndicator';
-import { AppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import useCustomNavigation from '../../hooks/useCustomNavigation';
 
 const SignInScreen = () => {
-    const navigation: NavigationProp<any, any> = useNavigation()
-    const dispatch = useDispatch<AppDispatch>()
+    const navigation = useCustomNavigation('AuthStack')
+    const dispatch = useAppDispatch();
+
     const refForgetPassRBSheet = useRef<RBSheet | null>(null);
     const refForgetPassErrorRBSheet = useRef<RBSheet | null>(null);
 
@@ -27,24 +27,20 @@ const SignInScreen = () => {
     const [isLoading, setIsLoading] = useState(false)
 
     const { isLoading: loading, error } = useAppSelector(state => state.userDetails)
+
     const SignInValidationSchema = yup.object().shape({
-        email: yup
-            .string()
-            .trim()
-            .email(strings.email_invalid)
-            .required(strings.email_invalid),
+        email: yup.string().trim().email(strings.email_invalid).required(strings.email_invalid),
         password: yup.string().trim().min(5, strings.enter_max_6_character).required(strings.password_invalid)
     });
 
     const ForgetPassEmailValidationSchema = yup.object().shape({
-        email: yup
-            .string()
-            .trim()
-            .email(strings.email_invalid)
-            .required(strings.email_invalid),
+        email: yup.string().trim().email(strings.email_invalid).required(strings.email_invalid),
     });
 
-    const login = (values: any) => {
+    const login = (values: {
+        email: string;
+        password: string;
+    }) => {
         setIsLoading(true)
         let data = {
             email: values.email,
@@ -69,7 +65,9 @@ const SignInScreen = () => {
         })
     }
 
-    const forgetPassword = (values: any) => {
+    const forgetPassword = (values: {
+        email: string;
+    }) => {
         let param = {
             email: values.email
         }

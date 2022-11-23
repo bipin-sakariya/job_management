@@ -7,7 +7,7 @@ import { ImagesPath } from '../../utils/ImagePaths';
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
 import { styles } from './styles';
 import { useFormik } from 'formik';
 import * as yup from "yup";
@@ -63,7 +63,19 @@ const CreateUserScreen = () => {
             }
         })
 
-    const userCreate = (values: any) => {
+    const userCreate = (values: {
+        userName: string;
+        email: string;
+        contactNo: string;
+        role: {
+            title: string;
+            id: number;
+        };
+        permission: {
+            title: string;
+            id: number;
+        };
+    }) => {
         if (!imageUrl) {
             Alert.alert('Alert', 'Please select your profile picture.')
         } else {
@@ -117,20 +129,12 @@ const CreateUserScreen = () => {
                         borderRadius={wp(2)}>
                         <TouchableOpacity
                             onPress={async () => {
-                                let options: any = {
-                                    title: "Select Image",
-                                    customButtons: [
-                                        { name: "customOptionKey", title: "Choose Photo from Custom Option" },
-                                    ],
-                                    storageOptions: {
-                                        skipBackup: true,
-                                        path: "images",
-                                    },
-                                };
-                                const result: any = await launchImageLibrary(options);
-                                setImageUrl(result ? result?.assets[0].uri : '')
+                                let options: ImageLibraryOptions = {
+                                    mediaType: 'photo'
+                                }
+                                const result = await launchImageLibrary(options);
+                                setImageUrl(result?.assets ? result?.assets[0].uri : '')
                             }}
-
                             activeOpacity={1}
                             style={styles.camreaBtnStyle}>
                             <Image source={ImagesPath.camera_icon} style={styles.cameraIconStyle} />

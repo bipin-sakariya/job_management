@@ -1,14 +1,13 @@
-import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomBlackButton, CustomDetailsComponent, CustomSubTitleWithImageComponent, CustomTextInput, Header } from '../../components'
+import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
 import { styles } from './styles'
 import { strings } from '../../languages/localizedStrings'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import CustomCarouselImageAndVideo from '../../components/CustomCarouselImageAndVideo'
-import { colors } from '../../styles/Colors'
 import CustomTextInputWithImage from '../../components/CustomTextInputWithImage'
 
 const DuplicateScreen = () => {
@@ -36,6 +35,7 @@ const DuplicateScreen = () => {
         }
 
     ]
+
     return (
         <View style={globalStyles.container}>
             <Header

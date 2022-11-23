@@ -1,22 +1,21 @@
-import { Alert, Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, ImageBackground, KeyboardAvoidingView, Platform, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { useIsFocused, useRoute } from '@react-navigation/native';
 import { RootRouteProps } from '../../types/RootStackTypes';
 import { globalStyles } from '../../styles/globalStyles';
-import { Container, CustomBlackButton, CustomTextInput, DropDownComponent, Header } from '../../components';
+import { Container, CustomActivityIndicator, CustomBlackButton, CustomDropdown, CustomTextInput, DropDownComponent, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { styles } from './styles';
-import CustomDropdown from '../../components/CustomDropDown';
 import { strings } from '../../languages/localizedStrings';
 import { colors } from '../../styles/Colors';
 import { isEmptyArray, useFormik } from 'formik';
-import * as yup from 'yup'
-import { launchImageLibrary } from 'react-native-image-picker';
+import * as yup from 'yup';
+import { ImageLibraryOptions, launchImageLibrary  } from 'react-native-image-picker';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { billDelete, billDetail, billUpdate, resetBillDetails } from '../../redux/slices/AdminSlice/billListSlice';
-import CustomActivityIndicator from '../../components/CustomActivityIndicator';
+
 interface DropdownProps {
     label: string,
     value: string
@@ -64,10 +63,7 @@ const BillSectionScreen = () => {
 
     useEffect(() => {
         if (isFocus) {
-            let params = {
-                id: id
-            }
-            dispatch(billDetail(params)).unwrap().then((res) => {
+            dispatch(billDetail(id)).unwrap().then((res) => {
                 console.log({ res });
                 setImageUrl(res.image)
             }).catch((error) => {
@@ -91,32 +87,17 @@ const BillSectionScreen = () => {
 
     const deleteBill = () => {
         //delete bill 
-        let params = {
-            id: id
-        }
-        dispatch(billDelete(params)).unwrap().then(() => {
+        dispatch(billDelete(id)).unwrap().then(() => {
             setVisible(false)
             navigation.goBack()
         })
     }
 
     const CreateMaterialValidationSchema = yup.object().shape({
-        name: yup
-            .string()
-            .required(type == "material" ? strings.Billname_required : strings.Signname_required),
-        ration_qunt: yup
-            .string()
-            .required(type == "material" ? strings.Jumpingration_required : strings.Quantity_required),
+        name: yup.string().required(type == "material" ? strings.Billname_required : strings.Signname_required),
+        ration_qunt: yup.string().required(type == "material" ? strings.Jumpingration_required : strings.Quantity_required),
         // imageUrl: yup.string().required(strings.Sign_image_required)
     });
-
-    // const data = [
-    //     { label: strings.meters, value: strings.meters },
-    //     { label: strings.units, value: strings.units },
-    //     { label: strings.SQM, value: strings.SQM },
-    //     { label: strings.tons, value: strings.tons },
-    //     { label: strings.CBM, value: strings.CBM },
-    // ];
 
     const data = [
         { label: strings.meters, value: 'Meters' },
@@ -126,7 +107,7 @@ const BillSectionScreen = () => {
         { label: strings.CBM, value: 'CBM' },
     ];
 
-    const updateBill = (values: any) => {
+    const updateBill = (values: { name: string, ration_qunt: string }) => {
         console.log({ values, type, float: values.ration_qunt, billDetails });
 
         if (!countingValue.value) {
@@ -230,37 +211,25 @@ const BillSectionScreen = () => {
                             source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
                             style={styles.addPhotoStyle}
                             borderRadius={wp(2)}>
-                            {
-                                isEditable ?
-                                    <TouchableOpacity
-                                        onPress={async () => {
-                                            let options: any = {
-                                                title: "Select Image",
-                                                customButtons: [
-                                                    { name: "customOptionKey", title: "Choose Photo from Custom Option" },
-                                                ],
-                                                storageOptions: {
-                                                    skipBackup: true,
-                                                    path: "images",
-                                                },
-                                            };
-                                            const result: any = await launchImageLibrary(options);
-                                            setImageUrl(result ? result?.assets[0].uri : '')
-                                            if (result?.assets[0].uri) {
-                                                setError({ ...error, image: '', detail: '' })
-                                            }
-                                        }}
-                                        activeOpacity={1}
-                                        style={styles.camreaBtnStyle}>
-                                        <Image source={ImagesPath.camera_icon} style={styles.cameraIconStyle} />
-                                    </TouchableOpacity>
-                                    : null
-                            }
+                            {isEditable ? <TouchableOpacity
+                                onPress={async () => {
+                                    let option: ImageLibraryOptions = {
+                                        mediaType: 'photo'
+                                    }
+                                    const result = await launchImageLibrary(option);
+                                    setImageUrl(result?.assets ? result?.assets[0].uri : '')
+                                    if (result?.assets && result?.assets[0].uri) {
+                                        setError({ ...error, image: '', detail: '' })
+                                    }
+                                }}
+                                activeOpacity={1}
+                                style={styles.camreaBtnStyle}>
+                                <Image source={ImagesPath.camera_icon} style={styles.cameraIconStyle} />
+                            </TouchableOpacity> : null}
                         </ImageBackground>
                         // <Image source={imageUrl ? imageUrl : ImagesPath.add_photo} style={styles.addPhotoStyle} />
                     }
                     {error.image ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.image}</Text> : null}
-
                     <CustomTextInput
                         title={strings.Name}
                         container={{ marginVertical: wp(5) }}
@@ -270,20 +239,17 @@ const BillSectionScreen = () => {
                         onChangeText={handleChange('name')}
                     />
                     {(touched.name && errors.name) || error.name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.name ? error.name : errors.name}</Text> : null}
-                    {
-                        type == "sign" ?
-                            <>
-                                <CustomTextInput
-                                    title={strings.Quantity}
-                                    container={{ marginBottom: wp(5) }}
-                                    value={values.ration_qunt}
-                                    placeholder='2'
-                                    editable={isEditable}
-                                    onChangeText={handleChange('ration_qunt')}
-                                />
-                                {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
-                            </> : null
-                    }
+                    {type == "sign" && <>
+                        <CustomTextInput
+                            title={strings.Quantity}
+                            container={{ marginBottom: wp(5) }}
+                            value={values.ration_qunt}
+                            placeholder='2'
+                            editable={isEditable}
+                            onChangeText={handleChange('ration_qunt')}
+                        />
+                        {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
+                    </>}
                     <DropDownComponent
                         title={strings.TypeCounting}
                         data={data}
@@ -302,35 +268,28 @@ const BillSectionScreen = () => {
                         container={{ marginBottom: wp(5) }}
                     />
                     {typeCountError || error.type_counting ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.type_counting ? error.type_counting : strings.Typecount_required}</Text> : null}
-                    {
-                        type != "sign" ?
-                            <>
-                                <CustomTextInput
-                                    title={strings.JumpingRation}
-                                    container={{ marginBottom: wp(5) }}
-                                    value={values.ration_qunt}
-                                    editable={isEditable}
-                                    placeholder='1.5'
-                                    onChangeText={handleChange("ration_qunt")}
-                                />
-                                {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}
-                            </> : null
-                    }
+                    {type != "sign" && <>
+                        <CustomTextInput
+                            title={strings.JumpingRation}
+                            container={{ marginBottom: wp(5) }}
+                            value={values.ration_qunt}
+                            editable={isEditable}
+                            placeholder='1.5141'
+                            onChangeText={handleChange("ration_qunt")}
+                        />
+                        {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}
+                    </>}
                     {error.detail ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.detail}</Text> : null}
-                    {
-                        isEditable ?
-                            <CustomBlackButton
-                                title={strings.UpdateBill}
-                                image={ImagesPath.plus_white_circle_icon}
-                                onPress={() => {
-                                    if (!countingValue.value) {
-                                        setTypeCountError(true)
-                                    }
-                                    handleSubmit()
-                                }}
-                            />
-                            : null
-                    }
+                    {isEditable && <CustomBlackButton
+                        title={strings.UpdateBill}
+                        image={ImagesPath.plus_white_circle_icon}
+                        onPress={() => {
+                            if (!countingValue.value) {
+                                setTypeCountError(true)
+                            }
+                            handleSubmit()
+                        }}
+                    />}
                 </KeyboardAvoidingView>
             </Container>
             <CustomDropdown

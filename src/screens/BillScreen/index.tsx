@@ -1,20 +1,16 @@
-import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { globalStyles } from '../../styles/globalStyles'
-import { ButtonTab, Container, Header } from '../../components'
-import { ImagesPath } from '../../utils/ImagePaths'
-import { styles } from './styles'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { FlatList } from 'react-native-gesture-handler'
-import useCustomNavigation from '../../hooks/useCustomNavigation'
-import CustomListView from '../../components/CustomListView'
-import { strings } from '../../languages/localizedStrings'
-import { colors } from '../../styles/Colors'
-import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
-import { billList } from '../../redux/slices/AdminSlice/billListSlice'
-import { useIsFocused, useRoute } from '@react-navigation/native'
-import CustomActivityIndicator from '../../components/CustomActivityIndicator'
-import { RootRouteProps } from '../../types/RootStackTypes'
+import { Image, Text, TouchableOpacity, View, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { globalStyles } from '../../styles/globalStyles';
+import { ButtonTab, Container, CustomActivityIndicator, CustomListView, Header } from '../../components';
+import { ImagesPath } from '../../utils/ImagePaths';
+import { styles } from './styles';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import useCustomNavigation from '../../hooks/useCustomNavigation';
+import { strings } from '../../languages/localizedStrings';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { billData, billList } from '../../redux/slices/AdminSlice/billListSlice';
+import { useIsFocused, useRoute } from '@react-navigation/native';
+import { RootRouteProps } from '../../types/RootStackTypes';
 
 interface billListParams {
     page?: number,
@@ -33,14 +29,16 @@ const BillListScreen = () => {
     const { billListData, isLoading } = useAppSelector(state => state.billList)
 
     useEffect(() => {
-        console.log({ route });
-        if (route.params?.billType == 'Material') {
-            setBtn({ open: true, close: false })
+        if (isFocus) {
+            if (route.params?.billType == 'material') {
+                setBtn({ open: true, close: false })
+            }
+            else if (route.params?.billType == 'sign') {
+                setBtn({ open: false, close: true })
+            }
+
         }
-        else if (route.params?.billType == 'Sign'){
-            setBtn({ open: false, close: true })
-        }
-    }, [route])
+    }, [isFocus])
 
     useEffect(() => {
         console.log("🚀 ~ file: index.tsx ~ line 95 ~ useEffect ~ isFocus", isFocus)
@@ -65,15 +63,19 @@ const BillListScreen = () => {
         })
     }
 
-    const renderItem = ({ item, index }: any) => {
+    const renderItem = ({ item, index }: { item: billData, index: number }) => {
         return (
-            <CustomListView item={item} material={btn.open} onPress={() => {
-                let params = {
-                    id: item.id,
-                    type: btn.open ? 'material' : 'sign',
-                }
-                navigation.navigate("BillSectionScreen", params)
-            }} />
+            <CustomListView
+                item={item}
+                material={btn.open}
+                onPress={() => {
+                    let params = {
+                        id: item.id,
+                        type: btn.open ? 'material' : 'sign',
+                    }
+                    navigation.navigate("BillSectionScreen", params)
+                }}
+            />
         )
     }
 
@@ -130,7 +132,8 @@ const BillListScreen = () => {
                         return (
                             <View style={{ height: wp(3) }} />
                         )
-                    }} />
+                    }}
+                />
             </Container>
         </View>
     )

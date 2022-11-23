@@ -1,7 +1,7 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, Text, TouchableOpacity, View } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, Header } from '../../components'
+import { Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { styles } from './styles'
@@ -17,6 +17,7 @@ interface UserProps {
     name: string
     avatar: string
 }
+
 interface ChatProps {
     _id: number
     text: string
@@ -24,6 +25,7 @@ interface ChatProps {
     type?: string
     user: UserProps
 }
+
 const ChatScreen = () => {
     const navigation = useCustomNavigation('ChatScreen')
     const [messages, setMessages] = useState<Array<ChatProps>>([])

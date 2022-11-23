@@ -21,7 +21,7 @@ interface CustomBottomSheetProps {
     onSelectedTab: (item: ListDataProps) => void
 }
 
-const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSheetProps, ref: any) => {
+const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSheetProps, ref: React.LegacyRef<RBSheet>) => {
     const [data, setData] = useState(props.data)
 
     const onSelectes = (selected: number) => {
