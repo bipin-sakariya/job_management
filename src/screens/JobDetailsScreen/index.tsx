@@ -1,8 +1,8 @@
 import { useRoute } from "@react-navigation/native";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Alert, FlatList, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { BottomSheet, CommonPdfView, Container, CustomBlackButton, CustomCarouselImageAndVideo, CustomDetailsComponent, CustomJobAddedByComponent, CustomJobDetailsBottomButton, CustomStatusBtn, CustomTextInput, CustomTextInputWithImage, Header, TableDetailsComponent, TableHeaderView } from "../../components";
+import { BottomSheet, CommonPdfView, Container, CustomActivityIndicator, CustomBlackButton, CustomCarouselImageAndVideo, CustomDetailsComponent, CustomJobAddedByComponent, CustomJobDetailsBottomButton, CustomStatusBtn, CustomTextInput, CustomTextInputWithImage, Header, TableDetailsComponent, TableHeaderView } from "../../components";
 import { globalStyles } from "../../styles/globalStyles";
 import { ImagesPath } from "../../utils/ImagePaths";
 import { styles } from "./styles";
@@ -13,6 +13,8 @@ import { colors } from "../../styles/Colors";
 import { RootRouteProps } from "../../types/RootStackTypes";
 import moment from "moment";
 import { RootState, useAppSelector } from "../../hooks/reduxHooks";
+import FileViewer from "react-native-file-viewer";
+import RNFS from "react-native-fs";
 
 interface JobDetailsScreenRouteProps {
     description: string
@@ -27,6 +29,8 @@ const JobDetailsScreen = () => {
     const route = useRoute<RootRouteProps<'JobDetailsScreen'>>();
     const refRBSheet = useRef<RBSheet | null>(null);
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
+
+    const [loading, setLoading] = useState(false);
 
     const result = [
         {
@@ -185,8 +189,8 @@ const JobDetailsScreen = () => {
 
     ]
     const pdfData = [
-        { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb" },
-        { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb" },
+        { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb", url: "https://www.math.hawaii.edu/~pavel/gcd.pdf" },
+        { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb", url: "https://www.math.hawaii.edu/~pavel/gcd.pdf" },
     ]
 
     let data: JobDetailsScreenRouteProps = route.params.params
@@ -200,6 +204,7 @@ const JobDetailsScreen = () => {
 
     return (
         <View style={globalStyles.container} >
+            {loading && <CustomActivityIndicator size={'small'} />}
             <Header
                 headerLeftStyle={{
                     width: "50%",
@@ -258,15 +263,14 @@ const JobDetailsScreen = () => {
                             // editable={isEdit}
                             onChangeText={(text) => { }}
                         />
-                        {
-                            data.status == strings.JobReturn || data.status == strings.JobTransfer ?
-                                <CustomTextInput
-                                    title={strings.RelatedJobID}
-                                    container={{ marginBottom: wp(5) }}
-                                    value={"#123"}
-                                    // editable={isEdit}
-                                    onChangeText={(text) => { }}
-                                /> : null
+                        {data.status == strings.JobReturn || data.status == strings.JobTransfer ?
+                            <CustomTextInput
+                                title={strings.RelatedJobID}
+                                container={{ marginBottom: wp(5) }}
+                                value={"#123"}
+                                // editable={isEdit}
+                                onChangeText={(text) => { }}
+                            /> : null
                         }
                         <CustomTextInputWithImage
                             title="רחוב אוקספורד 9"
@@ -287,48 +291,65 @@ const JobDetailsScreen = () => {
                             bottomComponent={
                                 <FlatList data={pdfData} numColumns={2} renderItem={({ item, index }: any) => {
                                     return (
-                                        <CommonPdfView item={item} />
+                                        <CommonPdfView
+                                            item={item}
+                                            onPress={() => {
+                                                setLoading(true)
+                                                const pdfName = item.url.split(/[#?]/)[0].split('/').pop().split('.')[0];
+                                                const extension = item.url.split(/[#?]/)[0].split(".").pop().trim();;
+                                                const localFile = `${RNFS.DocumentDirectoryPath}/${pdfName}.${extension}`;
+                                                const options = {
+                                                    fromUrl: item.url,
+                                                    toFile: localFile,
+                                                };
+                                                RNFS.downloadFile(options).promise.then(() =>
+                                                    FileViewer.open(localFile)).then(() => {
+                                                        setLoading(false)
+                                                    }).catch((error) => {
+                                                        setLoading(false)
+                                                    });
+                                            }}
+                                        />
                                     )
                                 }} />
                             }
                         />
-                        {
-                            data.status == strings.JobClose || data.status == strings.JobPartial ?
-                                <>
-                                    <CustomDetailsComponent
-                                        title={strings.Transferto}
-                                        detailsContainerStyle={{ marginBottom: wp(4) }}
-                                        bottomComponent={
-                                            <>
-                                                <Text numberOfLines={1} style={[styles.commonTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>P. Maintanence</Text>
-                                                <Text numberOfLines={1} style={[styles.commonTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>Paint / Signs</Text>
-                                            </>
-                                        }
-                                    />
-                                    <View style={[styles.sammedView, { height: wp(100) }]}>
-                                        <View style={styles.formHeaderView}>
-                                            <Text style={[styles.noNameTxt]}>{strings.Forms}</Text>
-                                        </View>
-                                        <FlatList
-                                            showsVerticalScrollIndicator={false}
-                                            data={FormData} renderItem={renderItem}
-                                            ListHeaderComponent={() => {
-                                                return (
-                                                    <TableHeaderView />
-                                                )
-                                            }}
-                                            ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}
-                                        />
+                        {data.status == strings.JobClose || data.status == strings.JobPartial ?
+                            <>
+                                <CustomDetailsComponent
+                                    title={strings.Transferto}
+                                    detailsContainerStyle={{ marginBottom: wp(4) }}
+                                    bottomComponent={
+                                        <>
+                                            <Text numberOfLines={1} style={[styles.commonTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>P. Maintanence</Text>
+                                            <Text numberOfLines={1} style={[styles.commonTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>Paint / Signs</Text>
+                                        </>
+                                    }
+                                />
+                                <View style={[styles.sammedView, { height: wp(100) }]}>
+                                    <View style={styles.formHeaderView}>
+                                        <Text style={[styles.noNameTxt]}>{strings.Forms}</Text>
                                     </View>
-                                    <CustomDetailsComponent
-                                        title={strings.Notes}
-                                        detailsContainerStyle={{ marginBottom: wp(4) }}
-                                        bottomComponent={
-                                            <Text numberOfLines={3} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left" }]}>Lorem Ipsum הוא פשוט טקסט דמה של תעשיית הדפוס והקביעה. לורם איפסום היה של התעשייה...</Text>
-                                        }
+                                    <FlatList
+                                        showsVerticalScrollIndicator={false}
+                                        data={FormData} renderItem={renderItem}
+                                        ListHeaderComponent={() => {
+                                            return (
+                                                <TableHeaderView />
+                                            )
+                                        }}
+                                        ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}
                                     />
-                                </>
-                                : null
+                                </View>
+                                <CustomDetailsComponent
+                                    title={strings.Notes}
+                                    detailsContainerStyle={{ marginBottom: wp(4) }}
+                                    bottomComponent={
+                                        <Text numberOfLines={3} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left" }]}>Lorem Ipsum הוא פשוט טקסט דמה של תעשיית הדפוס והקביעה. לורם איפסום היה של התעשייה...</Text>
+                                    }
+                                />
+                            </>
+                            : null
                         }
 
                         <CustomDetailsComponent
@@ -337,46 +358,42 @@ const JobDetailsScreen = () => {
                                 <CustomJobAddedByComponent date={moment('16 May 2022').format('ll')} image={ImagesPath.image_white_border} role='Inspector' userName="Oscar Fields" />
                             }
                         />
-                        {
-                            data.status == strings.JobClose || data.status == strings.JobPartial ?
-                                <CustomDetailsComponent
-                                    title={strings.JobClosedby}
-                                    detailsContainerStyle={{ marginTop: wp(4) }}
-                                    bottomComponent={
-                                        <CustomJobAddedByComponent date="16 may 2022" image={ImagesPath.image_white_border} role='Inspector' userName="Oscar Fields" />
-                                    }
-                                />
-                                : null
+                        {data.status == strings.JobClose || data.status == strings.JobPartial ?
+                            <CustomDetailsComponent
+                                title={strings.JobClosedby}
+                                detailsContainerStyle={{ marginTop: wp(4) }}
+                                bottomComponent={
+                                    <CustomJobAddedByComponent date="16 may 2022" image={ImagesPath.image_white_border} role='Inspector' userName="Oscar Fields" />
+                                }
+                            />
+                            : null
                         }
-                        {
-                            !type && (data.status == strings.JobOpen || data.status == strings.JobReturn || data.status == strings.JobTransfer) ?
-                                <CustomDetailsComponent
-                                    title={data.status == strings.JobTransfer ? strings.Transferto : strings.FurtherInspection}
-                                    detailsContainerStyle={{ marginVertical: wp(4) }}
-                                    bottomComponent={
-                                        <Text numberOfLines={1} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left" }]}>{data.status == strings.JobTransfer ? 'P.Maintanence' : 'Yes'}</Text>
-                                    }
-                                />
-                                : null
+                        {!type && (data.status == strings.JobOpen || data.status == strings.JobReturn || data.status == strings.JobTransfer) ?
+                            <CustomDetailsComponent
+                                title={data.status == strings.JobTransfer ? strings.Transferto : strings.FurtherInspection}
+                                detailsContainerStyle={{ marginVertical: wp(4) }}
+                                bottomComponent={
+                                    <Text numberOfLines={1} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left" }]}>{data.status == strings.JobTransfer ? 'P.Maintanence' : 'Yes'}</Text>
+                                }
+                            />
+                            : null
                         }
-                        {
-                            type && userData?.role == strings.Inspector &&
+                        {type && userData?.role == strings.Inspector &&
                             <View style={[globalStyles.rowView, { justifyContent: 'space-between', marginVertical: wp(5) }]}>
                                 <CustomBlackButton title={strings.Delete} image={ImagesPath.trash_icon} textStyle={{ color: colors.black }} buttonStyle={styles.deleteBtnTxt} />
                                 <CustomBlackButton onPress={() => { navigation.navigate("CreateNewJobScreen", { type: strings.returnJob }) }} title={strings.Edit_job} image={ImagesPath.pencil_simple_icon} buttonStyle={{ paddingHorizontal: wp(13), borderRadius: wp(2) }} />
                             </View>
                         }
-                        {
-                            userData?.role != strings.Inspector && data.status != strings.JobClose || userData?.role == strings.Inspector && data.status == strings.JobPartial ?
-                                <CustomBlackButton
-                                    title={strings.Close}
-                                    buttonStyle={{ paddingHorizontal: wp(10) }}
-                                    onPress={() => {
-                                        navigation.navigate("CloseJobScreen")
-                                    }}
-                                    image={ImagesPath.check_circle}
-                                />
-                                : null
+                        {userData?.role != strings.Inspector && data.status != strings.JobClose || userData?.role == strings.Inspector && data.status == strings.JobPartial ?
+                            <CustomBlackButton
+                                title={strings.Close}
+                                buttonStyle={{ paddingHorizontal: wp(10) }}
+                                onPress={() => {
+                                    navigation.navigate("CloseJobScreen")
+                                }}
+                                image={ImagesPath.check_circle}
+                            />
+                            : null
                         }
                     </View>
                     <BottomSheet
@@ -399,7 +416,9 @@ const JobDetailsScreen = () => {
                                     refRBSheet.current?.close()
                                 }} />
                             </View>
-                        } height={200} />
+                        }
+                        height={200}
+                    />
                 </ScrollView>
             </Container>
         </View >

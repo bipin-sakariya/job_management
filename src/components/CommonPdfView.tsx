@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native'
+import { StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
 import React from 'react'
 import { globalStyles } from '../styles/globalStyles'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -13,7 +13,8 @@ interface CommonPdfViewProps {
     detailsViewStyle?: ViewStyle
     docTxtStyle?: TextStyle
     titleTxtstyle?: TextStyle
-    mbTxtstyle?: TextStyle
+    mbTxtstyle?: TextStyle,
+    onPress?: () => void
 }
 
 interface itemDetails {
@@ -23,7 +24,7 @@ interface itemDetails {
 }
 const CommonPdfView = (props: CommonPdfViewProps) => {
     return (
-        <View style={[globalStyles.rowView, styles.mainDocView, props.mainView]}>
+        <TouchableOpacity onPress={props.onPress} style={[globalStyles.rowView, styles.mainDocView, props.mainView]}>
             <View style={[globalStyles.centerView, styles.docPdfViewStyle, props.imageViewStyle]}>
                 <Text style={[styles.docTypeTxt, props.docTxtStyle, {}]}>{props.item.type}</Text>
             </View>
@@ -31,7 +32,7 @@ const CommonPdfView = (props: CommonPdfViewProps) => {
                 <Text numberOfLines={1} style={[styles.docFileNameTxt, globalStyles.rtlStyle, props.titleTxtstyle,]}>{props.item.title}</Text>
                 <Text numberOfLines={1} style={[styles.docFileSizeTxt, globalStyles.rtlStyle, props.mbTxtstyle]}>{props.item.mb}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 
