@@ -203,4 +203,6 @@ export const eng = {
     enter_max_6_character: 'Please enter more 6 character',
     Email_new: 'Email',
 
+    Place: 'Place',
+    current_loaction: 'Current Location',
 }

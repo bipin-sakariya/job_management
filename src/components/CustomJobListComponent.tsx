@@ -1,6 +1,6 @@
 import moment from "moment";
 import React from "react";
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { CustomStatusBtn } from ".";
 import { colors } from "../styles/Colors";
@@ -14,33 +14,33 @@ interface CustomJobListComponentProps {
     type?: string
 }
 
-const CustomJobListComponent = ({ item, type }: CustomJobListComponentProps) => {
+const CustomJobListComponent = (props: CustomJobListComponentProps & TouchableOpacityProps) => {
     return (
-        <View style={[styles.jobContainerStyle, type == "carousel" ? styles.jobContainerBoxShadowStyle : null,]}>
-            <Image source={item.image ? item.image : ImagesPath.placeholder_img} style={styles.jobImageStyle} />
+        <TouchableOpacity {...props} style={[styles.jobContainerStyle, props.type == "carousel" ? styles.jobContainerBoxShadowStyle : null]}>
+            <Image source={props.item.image ? props.item.image : ImagesPath.placeholder_img} style={styles.jobImageStyle} />
             <View style={{ flex: 1 }}>
                 <View style={styles.jobTitleContainer}>
                     <View style={styles.jobStatusViewStyle}>
                         {
-                            item.status &&
+                            props.item.status &&
                             <TouchableOpacity onPress={() => { }}>
                                 <Image source={ImagesPath.infocircle_icon} style={styles.infoCircleIcon} />
                             </TouchableOpacity>
                         }
-                        <Text style={[styles.titleTxt, globalStyles.rtlStyle]}>{item.title}</Text>
+                        <Text style={[styles.titleTxt, globalStyles.rtlStyle]}>{props.item.title}</Text>
                     </View>
-                    <CustomStatusBtn title={item.button} />
+                    <CustomStatusBtn title={props.item.button} />
                 </View>
-                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_10, textAlign: "left" }]}>{moment(item.date).format('ll')}</Text>
+                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_10, textAlign: "left" }]}>{moment(props.item.date).format('ll')}</Text>
                 <View style={styles.descriptionView}>
-                    <Text numberOfLines={2} style={[styles.descriptionTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>{item.description}</Text>
+                    <Text numberOfLines={2} style={[styles.descriptionTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>{props.item.description}</Text>
                     <View style={[globalStyles.rowView, styles.kmViewStyle]}>
-                        <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>{item.km}</Text>
+                        <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>{props.item.km}</Text>
                         <Image source={ImagesPath.map_pin_icon} style={styles.mapPinIcon} />
                     </View>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 

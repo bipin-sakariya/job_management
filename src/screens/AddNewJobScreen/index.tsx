@@ -1,7 +1,7 @@
-import { Alert, Image, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, Image, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomBlackButton, CustomDashedComponent, CustomDetailsComponent, CustomSubTitleWithImageComponent, CustomSwitchComponent, CustomTextInput, CustomTextInputWithImage, Header } from '../../components'
+import { Container, CustomBlackButton, CustomCarouselImageAndVideo, CustomDashedComponent, CustomDetailsComponent, CustomModal, CustomSubTitleWithImageComponent, CustomSwitchComponent, CustomTextInput, CustomTextInputWithImage, Header } from '../../components'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
@@ -13,11 +13,32 @@ import { styles } from './styles'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import DocumentPicker from 'react-native-document-picker';
+import CommonPdfView from '../../components/CommonPdfView'
+import FileViewer from "react-native-file-viewer";
+import RNFS from "react-native-fs";
+
+interface imageList {
+    id: number
+    imgUrl: string
+    mediaType: string
+}
+interface docList {
+    path: string,
+    type: string | undefined
+    mb: number | null
+    title: string | null
+
+}
 
 const AddNewJobScreen = () => {
     const navigation = useCustomNavigation('AddNewJobScreen');
     const [isUrgentJob, setIsUrgentJob] = useState(false)
     const [isFinishNotification, setIsFinishNotification] = useState(false)
+    const [isModelVisible, setIsModelVisible] = useState(false)
+    // const [imageUrl, setImageUrl] = useState('')
+    const [imageList, setImageList] = useState<imageList[]>([])
+    const [docList, setDocList] = useState<docList[] | []>([])
+
 
     const CreateJobValidationSchema = yup.object().shape({
         jobID: yup
@@ -38,45 +59,39 @@ const AddNewJobScreen = () => {
             }
         })
 
-    // const selectOneFile = async () => {
-    //     //Opening Document Picker for selection of one file
-    //     try {
-    //         const res = await DocumentPicker.pick({
-    //             type: [DocumentPicker.types.images, DocumentPicker.types.pdf,],
-    //             // type: [DocumentPicker.types.allFiles],
-    //             presentationStyle: 'fullScreen',
-    //             mode: 'import',
-    //             allowMultiSelection: true,
-    //             copyTo: 'cachesDirectory'
-    //         })
-    //         // const res = await DocumentPicker.pick({
-    //         //     type: [DocumentPicker.types.allFiles],
-    //         //     // DocumentPicker.types.allFiles
-    //         //     // DocumentPicker.types.images
-    //         //     // DocumentPicker.types.pdf
-    //         // });
-    //         console.log("🚀 ~ file: index.tsx ~ line 53 ~ selectOneFile ~ res", res)
-    //         //Printing the log realted to the file
-    //         console.log('res : ' + JSON.stringify(res));
-    //         console.log('URI : ' + res.uri);
-    //         console.log('Type : ' + res.type);
-    //         console.log('File Name : ' + res.name);
-    //         console.log('File Size : ' + res.size);
-    //         //Setting the state to show single file attributes
-    //         // setSingleFile(res);
-    //     } catch (err) {
-    //         console.log("🚀 ~ file: index.tsx ~ line 63 ~ selectOneFile ~ err", err)
-    //         //Handling any exception (If any)
-    //         if (DocumentPicker.isCancel(err)) {
-    //             //If user canceled the document selection
-    //             Alert.alert('Canceled from single doc picker');
-    //         } else {
-    //             //For Unknown Error
-    //             Alert.alert('Unknown Error: ' + JSON.stringify(err));
-    //             throw err;
-    //         }
-    //     }
-    // };
+    const selectOneFile = async () => {
+        //Opening Document Picker for selection of one file
+        try {
+            const res = await DocumentPicker.pick({
+                // type: [DocumentPicker.types.images, DocumentPicker.types.pdf, DocumentPicker.types.video],
+                type: [DocumentPicker.types.allFiles],
+                presentationStyle: 'fullScreen',
+                mode: 'import',
+                allowMultiSelection: true,
+                copyTo: 'cachesDirectory'
+            })
+            let ImageTempArray = [...imageList]
+            let DocTempArray = [...docList]
+            if (res[0]?.type?.split("/")[0] == 'application') {
+                DocTempArray.push({ path: res[0].uri, type: res[0]?.type?.split("/")[1], mb: res[0].size, title: res[0].name })
+            }
+            else {
+                ImageTempArray.push({ imgUrl: res[0].uri, mediaType: res[0]?.type?.split("/")[0] == 'image' ? 'image' : 'video', id: Math.random() })
+            }
+
+            console.log(ImageTempArray)
+            setImageList(ImageTempArray)
+            console.log({ DocTempArray })
+            setDocList(DocTempArray)
+        } catch (err) {
+            console.log("🚀 ~ file: index.tsx ~ line 63 ~ selectOneFile ~ err", err)
+            if (DocumentPicker.isCancel(err)) {
+            } else {
+                Alert.alert('Unknown Error: ' + JSON.stringify(err));
+                throw err;
+            }
+        }
+    };
     return (
         <View style={globalStyles.container}>
             <Header
@@ -110,6 +125,7 @@ const AddNewJobScreen = () => {
                         mainContainerStyle={{ marginTop: wp(5), flex: 1, }}
                         mapStyle={{ paddingVertical: Platform.OS == "ios" ? wp(4.2) : wp(5.5) }}
                         container={{ width: wp(68) }}
+                        onPress={()=> navigation.navigate('CreateJobMapScreen')}
                     />
                     <CustomTextInput
                         title={strings.Addressinformation}
@@ -134,10 +150,43 @@ const AddNewJobScreen = () => {
                             />
                         }
                     />
+                    {imageList && imageList.length != 0 && <CustomCarouselImageAndVideo
+                        viewStyle={{ width: wp(90) }}
+                        result={imageList} />}
+                    {docList.length != 0 &&
+                        <CustomDetailsComponent
+                            title={strings.Attachment}
+                            detailsContainerStyle={{ marginVertical: wp(4) }}
+                            bottomComponent={
+                                <FlatList
+                                    numColumns={2}
+                                    data={docList} renderItem={({ item, index }: any) => {
+                                        return (
+                                            <CommonPdfView
+                                                onPress={() => {
+                                                    const pdfName = item.url.split(/[#?]/)[0].split('/').pop().split('.')[0];
+                                                    const extension = item.url.split(/[#?]/)[0].split(".").pop().trim();;
+                                                    const localFile = `${RNFS.DocumentDirectoryPath}/${pdfName}.${extension}`;
+                                                    const options = {
+                                                        fromUrl: item.url,
+                                                        toFile: localFile,
+                                                    };
+                                                    RNFS.downloadFile(options).promise.then(() =>
+                                                        FileViewer.open(localFile)).then(() => {
+                                                            
+                                                        }).catch((error) => {
+                                                            
+                                                        });
+                                                }}
+                                                item={item} />
+                                        )
+                                    }} />
+                            }
+                        />}
                     <CustomDashedComponent
                         image={ImagesPath.add_icon}
-                        onPress={() => { }}
-                        // onPress={() => selectOneFile()}
+                        // onPress={() => { }}
+                        onPress={() => selectOneFile()}
                         title={strings.Addimagesandattachments}
                         viewStyle={{ marginTop: wp(5), paddingVertical: wp(5) }} />
                     <CustomSwitchComponent
@@ -156,6 +205,18 @@ const AddNewJobScreen = () => {
                         title={strings.CreateJob}
                         image={ImagesPath.add_icon}
                         imageStyle={{ tintColor: colors.white_color }}
+                        onPress={() => setIsModelVisible(true)}
+                    />
+                    <CustomModal
+                        visible={isModelVisible}
+                        onRequestClose={() => { setIsModelVisible(false) }}
+                        children={
+                            <View style={styles.modalInnerView}>
+                                <Image source={ImagesPath.check_icon_circle} style={globalStyles.modalImageStyle} />
+                                <Text style={styles.modalDescriptionTxt}>{strings.NewJobAddedSuccessfully}</Text>
+                                <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginVertical: wp(2.5) }} onPress={() => { setIsModelVisible(false) }} title={strings.Okay} />
+                            </View>
+                        }
                     />
                 </ScrollView>
             </Container>

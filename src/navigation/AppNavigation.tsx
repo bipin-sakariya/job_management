@@ -40,6 +40,7 @@ import GroupDetailScreen from '../screens/GroupDetailScreen';
 import UserListScreen from '../screens/UserListScreen';
 import CreateUserScreen from '../screens/CreateUserScreen';
 import UserDetailScreen from '../screens/UserDetailScreen';
+import CreateJobMapScreen from '../screens/CreateJobMapScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -91,6 +92,7 @@ const AppNavigation = () => {
                 <Stack.Screen name={'UserListScreen'} component={UserListScreen} />
                 <Stack.Screen name={'CreateUserScreen'} component={CreateUserScreen} />
                 <Stack.Screen name={'UserDetailScreen'} component={UserDetailScreen} />
+                <Stack.Screen name={'CreateJobMapScreen'} component={CreateJobMapScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

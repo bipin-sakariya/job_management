@@ -13,6 +13,7 @@ import { styles } from './styles'
 import FontSizes from '../../styles/FontSizes'
 import { colors } from '../../styles/Colors'
 import moment from 'moment'
+import { convertDate } from '../../utils/screenUtils'
 
 const data = [
     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: 'לִפְתוֹחַ', image: ImagesPath.demo1 },
@@ -37,7 +38,9 @@ const ReturnAndAddJobHistoryScreen = () => {
 
     const renderItem = ({ item, index }: any) => {
         return (
-            <View style={[styles.containerShadow, styles.recentallyView]}>
+            <TouchableOpacity
+                onPress={() => navigation.navigate('JobDetailsScreen', { params: item, type: "returnJob" })}
+                style={[styles.containerShadow, styles.recentallyView]}>
                 <View style={styles.imageViewStyle}>
                     <Image source={item.image ? item.image : ImagesPath.job_list_image_icon} style={styles.imageStyle} />
                 </View>
@@ -48,7 +51,7 @@ const ReturnAndAddJobHistoryScreen = () => {
                     }} title={item.status} />
                 </View>
                 <Text numberOfLines={2} style={[styles.desTxt, globalStyles.rtlStyle,]}>{item.description}</Text>
-            </View>
+            </TouchableOpacity>
         )
     }
 
@@ -96,7 +99,7 @@ const ReturnAndAddJobHistoryScreen = () => {
                     </View>
                     <CustomSubTitleWithImageComponent
                         viewStyle={{ paddingHorizontal: wp(4) }}
-                        title={moment('2022-11-08T12:44:46.142691Z').format('YYYY MMM DD')}
+                        title={convertDate('2022-11-08T12:44:46.142691Z')}
                         image={ImagesPath.calender_icon}
                     />
                     <View style={styles.jobListViewStyle}>
@@ -106,7 +109,10 @@ const ReturnAndAddJobHistoryScreen = () => {
                             ItemSeparatorComponent={() => <View style={{ height: wp(3) }} />}
                             renderItem={({ item, index }: any) => {
                                 return (
-                                    <CustomJobListComponent item={item} />
+                                    <CustomJobListComponent
+                                        item={item}
+                                        onPress={() => navigation.navigate('JobDetailsScreen', { params: item, type: "returnJob" })}
+                                    />
                                 )
                             }} />
                     </View>

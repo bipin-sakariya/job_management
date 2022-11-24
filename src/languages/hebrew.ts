@@ -253,5 +253,8 @@ export const hebrew = {
     address_required: 'כתובת נדרשת',
     addressInformation_required: 'נדרש מידע כתובת',
     description_required: 'נדרש תיאור',
-    Sign_image_required: 'נדרשת תמונת סימן'
+    Sign_image_required: 'נדרשת תמונת סימן',
+
+    Place: 'מקום',
+    current_loaction: 'מיקום נוכחי'
 }

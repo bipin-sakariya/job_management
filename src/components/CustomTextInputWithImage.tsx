@@ -1,4 +1,4 @@
-import { Image, Platform, StyleSheet, Text, TextInput, TextInputProps, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { Image, Platform, StyleSheet, Text, TextInput, TextInputProps, TextStyle, TouchableOpacity, TouchableOpacityProps, View, ViewStyle } from 'react-native'
 import React from 'react'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { globalStyles } from '../styles/globalStyles'
@@ -14,7 +14,7 @@ interface CustomTextInputWithImageProps {
     mapStyle?: ViewStyle
     mainContainerStyle?: ViewStyle
 }
-const CustomTextInputWithImage = (props: CustomTextInputWithImageProps & TextInputProps) => {
+const CustomTextInputWithImage = (props: CustomTextInputWithImageProps & TextInputProps & TouchableOpacityProps) => {
     return (
         <View style={[globalStyles.rowView, props.mainContainerStyle,]}>
             <View style={[styles.textInputContainer, props.container]}>
@@ -28,7 +28,7 @@ const CustomTextInputWithImage = (props: CustomTextInputWithImageProps & TextInp
                     />
                 </View>
             </View>
-            <TouchableOpacity style={[styles.dashedStyle, props.mapStyle]}>
+            <TouchableOpacity {...props} style={[styles.dashedStyle, props.mapStyle]}>
                 <Image source={ImagesPath.map_pin_line_icon} style={styles.mapPinIcon} />
             </TouchableOpacity>
         </View>
