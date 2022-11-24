@@ -17,21 +17,11 @@ const { height: deviceHeight } = Dimensions.get('window');
 
 const CreateFormScreen = () => {
     const navigation = useCustomNavigation('CreateFormScreen');
-    const [countingValue, setCountingValue] = useState<DropdownProps>({ label: '', value: 0 })
     const componentRef = useRef(null)
+
+    const [countingValue, setCountingValue] = useState(0)
     const [isVisible, setIsVisible] = useState(false)
     const [isBillError, setIsBillError] = useState(false)
-
-    const data = [
-        { id: 1, selected: false, label: 'Item 1', value: 1 },
-        { id: 2, selected: false, label: 'Item 2', value: 2 },
-        { id: 3, selected: false, label: 'Item 3', value: 3 },
-        { id: 4, selected: false, label: 'Item 4', value: 4 },
-        { id: 5, selected: false, label: 'Item 5', value: 5 },
-        { id: 6, selected: false, label: 'Item 6', value: 6 },
-        { id: 7, selected: false, label: 'Item 7', value: 7 },
-        { id: 8, selected: false, label: 'Item 8', value: 8 },
-    ];
 
     const CreateFormValidationSchema = yup.object().shape({
         formName: yup
@@ -40,7 +30,7 @@ const CreateFormScreen = () => {
     });
 
     const createForm = (values: any) => {
-
+        navigation.goBack()
     }
 
     const { values, errors, touched, handleSubmit, handleChange, } =
@@ -137,8 +127,9 @@ const CreateFormScreen = () => {
                     <CustomTextInput
                         title={strings.formname}
                         container={{ marginVertical: wp(5) }}
-                        value={strings.formname}
+                        placeholder={strings.formname}
                         onChangeText={handleChange('formName')}
+                        value={values.formName}
                     />
                     {touched?.formName && errors?.formName ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.formName}</Text> : null}
                     {/* <View ref={componentRef} style={[styles.textInputContainer,]}>
@@ -212,11 +203,12 @@ const CreateFormScreen = () => {
                             { name: 'Form Name 6', selected: false },
                             { name: 'Form 7', selected: false },
                         ]}
+                        onCount={(count) => { setCountingValue(count) }}
                     />
                     {isBillError ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Bill_required}</Text> : null}
 
                     <CustomBlackButton onPress={() => {
-                        if (!countingValue.value) {
+                        if (countingValue == 0) {
                             setIsBillError(true)
                         }
                         handleSubmit()

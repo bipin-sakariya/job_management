@@ -17,7 +17,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
 
 const UserValidationSchema = yup.object().shape({
-    userName: yup.string().required(strings.Username_invalid),
+    userName: yup.string().required(strings.Username_required),
     email: yup.string().email(strings.email_invalid).required(strings.email_invalid),
     contactNo: yup.string().min(8, strings.Contectno_invalid).required(strings.Contectno_invalid),
     role: yup.string().required(strings.role_required),
@@ -146,27 +146,28 @@ const UserDetailScreen = () => {
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-                    <ImageBackground
-                        source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
-                        style={styles.addPhotoStyle}
-                        borderRadius={wp(2)}>
-                        {
-                            isEditable ?
-                                <TouchableOpacity
-                                    onPress={async () => {
-                                        let option: ImageLibraryOptions = {
-                                            mediaType: 'photo'
-                                        }
-                                        const result = await launchImageLibrary(option);
-                                        setImageUrl(result?.assets ? result?.assets[0].uri : '')
-                                    }}
-                                    activeOpacity={1}
-                                    style={styles.camreaBtnStyle}>
+                    <TouchableOpacity
+                        onPress={async () => {
+                            let option: ImageLibraryOptions = {
+                                mediaType: 'photo'
+                            }
+                            const result: any = await launchImageLibrary(option);
+                            setImageUrl(result ? result?.assets[0].uri : '')
+                        }}
+                        disabled={isEditable ? false : true}
+                        activeOpacity={1}>
+                        <ImageBackground
+                            source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
+                            style={styles.addPhotoStyle}
+                            borderRadius={wp(2)}>
+                            {isEditable ?
+                                <View style={styles.camreaBtnStyle}>
                                     <Image source={ImagesPath.camera_icon} style={styles.cameraIconStyle} />
-                                </TouchableOpacity>
+                                </View>
                                 : null
-                        }
-                    </ImageBackground>
+                            }
+                        </ImageBackground>
+                    </TouchableOpacity>
                     <CustomTextInput
                         editable={isEditable}
                         title={strings.UserName}

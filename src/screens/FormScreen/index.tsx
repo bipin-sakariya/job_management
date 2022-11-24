@@ -13,57 +13,57 @@ const FormScreen = () => {
     const form = [
         {
             iamgeUrl: '',
-            title: 'Form Name',
+            name: 'Form Name',
             date: '12 May 2022',
         },
         {
             iamgeUrl: '',
-            title: 'Form Name',
+            name: 'Form Name',
             date: '12 May 2022',
         },
         {
             iamgeUrl: '',
-            title: 'Form Name',
+            name: 'Form Name',
             date: '12 May 2022',
         },
         {
             iamgeUrl: '',
-            title: 'Form Name',
+            name: 'Form Name',
             date: '12 May 2022',
         },
         {
             iamgeUrl: '',
-            title: 'Form Name',
+            name: 'Form Name',
             date: '12 May 2022',
         },
         {
             iamgeUrl: '',
-            title: 'Form Name',
+            name: 'Form Name',
             date: '12 May 2022',
         },
         {
             iamgeUrl: '',
-            title: 'Form Name',
+            name: 'Form Name',
             date: '12 May 2022',
         },
         {
             iamgeUrl: '',
-            title: 'Form Name',
+            name: 'Form Name',
             date: '12 May 2022',
         },
         {
             iamgeUrl: '',
-            title: 'Form Name',
+            name: 'Form Name',
             date: '12 May 2022',
         },
         {
             iamgeUrl: '',
-            title: 'Form Name',
+            name: 'Form Name',
             date: '12 May 2022',
         },
         {
             iamgeUrl: '',
-            title: 'Form Name',
+            name: 'Form Name',
             date: '12 May 2022',
         },
     ]

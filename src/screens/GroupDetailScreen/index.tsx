@@ -7,7 +7,7 @@ import { ImagesPath } from '../../utils/ImagePaths';
 import { styles } from './styles';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
 import { strings } from '../../languages/localizedStrings';
 import { useFormik } from 'formik';
 import * as yup from "yup";
@@ -51,6 +51,7 @@ const data_user = [
 
 const GroupDetailScreen = () => {
     const navigation = useCustomNavigation('GroupDetailScreen');
+    const menuRef = useRef(null);
 
     const optionData = [
         { title: strings.Remove, onPress: () => { }, imageSource: ImagesPath.bin_icon },
@@ -67,7 +68,6 @@ const GroupDetailScreen = () => {
     const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
     const [visible, setVisible] = useState(false);
     const [modalShow, setModalShow] = useState(false);
-    const menuRef = useRef(null);
 
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
@@ -91,6 +91,7 @@ const GroupDetailScreen = () => {
             <AssignedJobsComponent item={item} />
         )
     }
+
     return (
         <View style={globalStyles.container}>
             <Header
@@ -111,34 +112,28 @@ const GroupDetailScreen = () => {
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-                    <ImageBackground
-                        source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
-                        style={styles.addPhotoStyle}
-                        borderRadius={wp(2)}>
-                        {
-                            isEditable ?
-                                <TouchableOpacity
-                                    onPress={async () => {
-                                        let options: any = {
-                                            title: "Select Image",
-                                            customButtons: [
-                                                { name: "customOptionKey", title: "Choose Photo from Custom Option" },
-                                            ],
-                                            storageOptions: {
-                                                skipBackup: true,
-                                                path: "images",
-                                            },
-                                        };
-                                        const result: any = await launchImageLibrary(options);
-                                        setImageUrl(result ? result?.assets[0].uri : '')
-                                    }}
-                                    activeOpacity={1}
-                                    style={styles.camreaBtnStyle}>
+                    <TouchableOpacity
+                        onPress={async () => {
+                            let option: ImageLibraryOptions = {
+                                mediaType: 'photo'
+                            }
+                            const result: any = await launchImageLibrary(option);
+                            setImageUrl(result ? result?.assets[0].uri : '')
+                        }}
+                        disabled={isEditable ? false : true}
+                        activeOpacity={1}>
+                        <ImageBackground
+                            source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
+                            style={styles.addPhotoStyle}
+                            borderRadius={wp(2)}>
+                            {isEditable ?
+                                <View style={styles.camreaBtnStyle}>
                                     <Image source={ImagesPath.camera_icon} style={styles.cameraIconStyle} />
-                                </TouchableOpacity>
+                                </View>
                                 : null
-                        }
-                    </ImageBackground>
+                            }
+                        </ImageBackground>
+                    </TouchableOpacity>
                     <CustomTextInput
                         editable={isEditable}
                         title={strings.GroupName}
@@ -210,8 +205,7 @@ const GroupDetailScreen = () => {
                                         )
                                     }}
                                 />
-                                {
-                                    assignedJobs.length > 2 &&
+                                {assignedJobs.length > 2 &&
                                     <TouchableOpacity style={[globalStyles.rowView, styles.viewAllJobs]}>
                                         <Text style={styles.viewAllJobsTxt}>{strings.ViewallJobs}</Text>
                                         <Image source={ImagesPath.arrow_right_black_border_icon} style={[styles.iconStyle, { transform: [{ rotate: '180deg' }] }]} />

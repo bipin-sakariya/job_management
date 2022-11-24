@@ -8,7 +8,7 @@ import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { styles } from './styles';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
 import * as Yup from "yup";
 import { useFormik } from 'formik';
 
@@ -89,30 +89,24 @@ const CreateGroupScreen = () => {
                     image={ImagesPath.from_list_icon}
                 />
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-                    <ImageBackground
-                        source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
-                        style={styles.addPhotoStyle}
-                        borderRadius={wp(2)}>
-                        <TouchableOpacity
-                            onPress={async () => {
-                                let options: any = {
-                                    title: "Select Image",
-                                    customButtons: [
-                                        { name: "customOptionKey", title: "Choose Photo from Custom Option" },
-                                    ],
-                                    storageOptions: {
-                                        skipBackup: true,
-                                        path: "images",
-                                    },
-                                };
-                                const result: any = await launchImageLibrary(options);
-                                setImageUrl(result ? result?.assets[0].uri : '')
-                            }}
-                            activeOpacity={1}
-                            style={styles.camreaBtnStyle}>
-                            <Image source={ImagesPath.camera_icon} style={styles.cameraIconStyle} />
-                        </TouchableOpacity>
-                    </ImageBackground>
+                    <TouchableOpacity
+                        onPress={async () => {
+                            let option: ImageLibraryOptions = {
+                                mediaType: 'photo'
+                            }
+                            const result: any = await launchImageLibrary(option);
+                            setImageUrl(result ? result?.assets[0].uri : '')
+                        }}
+                        activeOpacity={1}>
+                        <ImageBackground
+                            source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
+                            style={styles.addPhotoStyle}
+                            borderRadius={wp(2)}>
+                            <View style={styles.camreaBtnStyle}>
+                                <Image source={ImagesPath.camera_icon} style={styles.cameraIconStyle} />
+                            </View>
+                        </ImageBackground>
+                    </TouchableOpacity>
                     <CustomTextInput
                         title={strings.GroupName}
                         placeholder={strings.Enter_group_name}

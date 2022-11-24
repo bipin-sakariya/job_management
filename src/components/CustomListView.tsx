@@ -25,6 +25,7 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
     const [visible, setVisible] = useState(false);
     const navigation = useCustomNavigation('BillListScreen');
     const dispatch = useAppDispatch()
+    
     let data = {
         id: item.id,
         iamgeUrl: item.image,

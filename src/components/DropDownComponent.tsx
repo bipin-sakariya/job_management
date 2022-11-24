@@ -1,4 +1,4 @@
-import { Image, ImageSourcePropType, ImageStyle, StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native'
+import { Image, ImageSourcePropType, ImageStyle, Keyboard, StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native'
 import React, { Dispatch, SetStateAction } from 'react'
 import { Dropdown } from 'react-native-element-dropdown'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -34,6 +34,7 @@ const DropDownComponent = (props: DropDownComponentProps & DropdownProps) => {
                         <Image source={props.image} style={[globalStyles.headerIcon, { tintColor: colors.dark_blue1_color, ...props.imageStyle }]} />
                     )
                 }}
+                onFocus={() => Keyboard.dismiss()}
             />
         </View>
     )

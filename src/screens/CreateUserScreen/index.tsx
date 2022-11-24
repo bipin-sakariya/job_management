@@ -1,8 +1,8 @@
-import { Alert, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomActivityIndicator, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { heightPercentageToDP, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
@@ -25,9 +25,9 @@ const permissionSchema = yup.object().shape({
 })
 
 const CreateUserValidationSchema = yup.object().shape({
-    userName: yup.string().required(strings.Username_invalid),
-    email: yup.string().email(strings.email_invalid).required(strings.email_invalid),
-    contactNo: yup.string().min(8, strings.Contectno_invalid).required(strings.Contectno_invalid),
+    userName: yup.string().required(strings.Username_required),
+    email: yup.string().email(strings.email_invalid).required(strings.email_required),
+    contactNo: yup.string().min(8, strings.Contectno_invalid).required(strings.contactNo_required),
     role: roleSchema,
     permission: permissionSchema
 });
@@ -122,24 +122,25 @@ const CreateUserScreen = () => {
                     title={strings.FillfromtocreateUser}
                     image={ImagesPath.from_list_icon}
                 />
-                <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-                    <ImageBackground
-                        source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
-                        style={styles.addPhotoStyle}
-                        borderRadius={wp(2)}>
-                        <TouchableOpacity
-                            onPress={async () => {
-                                let options: ImageLibraryOptions = {
-                                    mediaType: 'photo'
-                                }
-                                const result = await launchImageLibrary(options);
-                                setImageUrl(result?.assets ? result?.assets[0].uri : '')
-                            }}
-                            activeOpacity={1}
-                            style={styles.camreaBtnStyle}>
-                            <Image source={ImagesPath.camera_icon} style={styles.cameraIconStyle} />
-                        </TouchableOpacity>
-                    </ImageBackground>
+                <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: heightPercentageToDP(20) }} keyboardShouldPersistTaps={'handled'}>
+                    <TouchableOpacity
+                        onPress={async () => {
+                            let options: ImageLibraryOptions = {
+                                mediaType: 'photo'
+                            }
+                            const result = await launchImageLibrary(options);
+                            setImageUrl(result?.assets ? result?.assets[0].uri : '')
+                        }}
+                        activeOpacity={1}>
+                        <ImageBackground
+                            source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
+                            style={styles.addPhotoStyle}
+                            borderRadius={wp(2)}>
+                            <View style={styles.camreaBtnStyle}>
+                                <Image source={ImagesPath.camera_icon} style={styles.cameraIconStyle} />
+                            </View>
+                        </ImageBackground>
+                    </TouchableOpacity>
                     <CustomTextInput
                         title={strings.UserName}
                         placeholder={strings.Enter_user_name}
@@ -154,6 +155,7 @@ const CreateUserScreen = () => {
                         placeholder={strings.Enter_email_address}
                         onChangeText={handleChange("email")}
                         value={values.email}
+                        keyboardType={'email-address'}
                     />
                     {(touched?.email && errors?.email) || error?.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.email ? errors?.email : error?.email}</Text> : null}
                     <CustomTextInput
@@ -162,6 +164,7 @@ const CreateUserScreen = () => {
                         placeholder={strings.Enter_contect_no}
                         onChangeText={handleChange("contactNo")}
                         value={values.contactNo}
+                        keyboardType={'number-pad'}
                     />
                     {(touched?.contactNo && errors?.contactNo) || error?.phone ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error?.phone ? error.phone : errors.contactNo}</Text> : null}
                     {userRoleList && <DropDownComponent
@@ -184,7 +187,9 @@ const CreateUserScreen = () => {
                         image={ImagesPath.down_white_arrow}
                         labelField="title"
                         valueField="id"
-                        onChange={(item) => setFieldValue('permission', item)}
+                        onChange={(item) => {
+                            setFieldValue('permission', item)
+                        }}
                         value={values.permission.id}
                         placeholder={strings.GivePermission}
                         container={{ marginBottom: wp(5) }}

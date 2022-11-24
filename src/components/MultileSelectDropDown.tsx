@@ -23,6 +23,7 @@ interface DropDownComponentProps {
     setIsVisible: Dispatch<SetStateAction<boolean>>
     data: DataTypes[]
     disabled?: boolean
+    onCount?: (count: number) => void
 }
 
 const MultileSelectDropDown = (props: DropDownComponentProps) => {
@@ -40,6 +41,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
             }
             return _listItem
         })
+        props.onCount && props.onCount(newList.filter(i => i.selected == true).length)
         setList(newList)
     }
 
@@ -50,6 +52,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
         if (index >= 0) {
             listOfItem[index].selected = listOfItem[index].selected ? false : true
         }
+        props.onCount && props.onCount(listOfItem.filter(i => i.selected == true).length)
         setList(listOfItem)
     }
 
