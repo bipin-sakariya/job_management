@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, Theme } from '@react-navigation/native';
 import { RootStackParamList } from '../types/RootStackTypes';
 import DrawerStack from './DrawerStack';
 import NotificationScreen from '../screens/NotificationScreen';
@@ -41,18 +41,31 @@ import UserListScreen from '../screens/UserListScreen';
 import CreateUserScreen from '../screens/CreateUserScreen';
 import UserDetailScreen from '../screens/UserDetailScreen';
 import CreateJobMapScreen from '../screens/CreateJobMapScreen';
+import { colors } from '../styles/Colors';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 const AppNavigation = () => {
     const { userData } = useAppSelector(state => state.userDetails)
-    
+
+    const navTheme: Theme = {
+        dark: false,
+        colors: {
+            background: colors.white,
+            primary: colors.white,
+            card: colors.white,
+            text: colors.white,
+            border: colors.white,
+            notification: colors.white,
+        },
+    };
+
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={navTheme}>
             <Stack.Navigator
                 screenOptions={{
                     headerShown: false,
-                    gestureDirection: 'horizontal-inverted'
+                    gestureDirection: 'horizontal-inverted',
                 }}
                 initialRouteName={userData ? 'DrawerScreens' : 'AuthStack'}>
                 <Stack.Screen name={'AuthStack'} component={AuthStack} />

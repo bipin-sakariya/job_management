@@ -103,7 +103,6 @@ const JobsScreen = () => {
                 <ButtonTab btnOneTitle={strings.Open} btnTwoTitle={strings.Close} setBtn={setBtn} btnValue={btn} onReset={setPage} />
                 <FlatList
                     showsVerticalScrollIndicator={false}
-                    style={{ marginBottom: Platform.OS == "ios" ? wp(28) : wp(22) }}
                     data={JobData}
                     renderItem={({ item, index }) => (
                         <JobListComponent item={item} index={index} />

@@ -34,7 +34,7 @@ const MapScreen = () => {
     const refRBSheet = useRef<RBSheet | null>(null);
     const refJobListSheet = useRef<RBSheet | null>(null);
     const isFocused = useIsFocused()
-    
+
     const [selectedItem, setSelectedItem] = useState<ListDataProps | undefined>(undefined);
     const [isVisibleCarousel, setIsVisibleCarousel] = useState(false)
 
@@ -100,28 +100,26 @@ const MapScreen = () => {
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421
                 }} />
-            {
-                isVisibleCarousel ?
-                    <View style={[styles.carouselStyle, { bottom: Platform.OS == 'ios' ? wp(35) : wp(30) }]}>
-                        <TouchableOpacity style={[styles.routeBut, styles.routeButShadow,]}>
-                            <Image source={ImagesPath.route_icon} style={styles.pathIconStyle} />
-                        </TouchableOpacity>
-                        <Carousel
-                            data={JobData}
-                            sliderWidth={wp("100%")}
-                            itemWidth={wp("83%")}
-                            renderItem={renderItem}
-                        />
-                    </View> :
-                    <CustomJobBottomListSheet
-                        onClose={() => {
-                            isFocused && setIsVisibleCarousel(true)
-                        }}
-                        ref={refJobListSheet}
+            {isVisibleCarousel ?
+                <View style={[styles.carouselStyle, { bottom: wp(5) }]}>
+                    <TouchableOpacity style={[styles.routeBut, styles.routeButShadow,]}>
+                        <Image source={ImagesPath.route_icon} style={styles.pathIconStyle} />
+                    </TouchableOpacity>
+                    <Carousel
                         data={JobData}
+                        sliderWidth={wp("100%")}
+                        itemWidth={wp("83%")}
+                        renderItem={renderItem}
                     />
+                </View> :
+                <CustomJobBottomListSheet
+                    onClose={() => {
+                        isFocused && setIsVisibleCarousel(true)
+                    }}
+                    ref={refJobListSheet}
+                    data={JobData}
+                />
             }
-
         </View>
     )
 }

@@ -21,9 +21,12 @@ const JobListComponent = ({ item, index }: any) => {
                 <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{moment(item.data).format('ll')}</Text>
             </View>
             {item.jobs.map((i: any) => (
-                <CustomeJobListDetailsViewComponent onPress={() => {
-                    navigation.navigate("JobDetailsScreen", { params: i })
-                }} item={i} />
+                <CustomeJobListDetailsViewComponent
+                    onPress={() => {
+                        navigation.navigate("JobDetailsScreen", { params: i })
+                    }}
+                    item={i}
+                />
             ))}
         </View>
     )

@@ -25,14 +25,14 @@ const BottomTab = () => {
                     backgroundColor: colors.white_color,
                     borderTopLeftRadius: 25,
                     borderTopRightRadius: 25,
-                    height: Platform.OS == "ios" ? hp(14) : hp(12),
-                    position: 'absolute',
-                    shadowColor: 'rgba(0, 0, 0, 0.2)',
-                    shadowOpacity: 10,
+                    height: Platform.OS == "ios" ? hp(14) : hp(12.5),
+                    shadowColor: '#000',
+                    shadowOpacity: 0.15,
                     shadowRadius: 10,
-                    shadowOffset: { height: 0, width: 0 },
-                    elevation: 5
-                }
+                    shadowOffset: { height: 2.5, width: 0 },
+                    elevation: 8,
+                    borderTopWidth: 0,
+                },
             }}
             initialRouteName={'JobsScreen'}>
             <Tab.Screen
@@ -100,14 +100,14 @@ export default BottomTab;
 
 const styles = StyleSheet.create({
     jobIconContainer: {
-        height: wp(21.5),
-        width: wp(21.5),
-        borderRadius: wp(15),
+        height: wp(20),
+        width: wp(20),
+        borderRadius: wp(10),
         backgroundColor: colors.bottom_tab_btn,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: Platform.OS == 'android' ? height / wp(20) : height / wp(10),
+        bottom: Platform.OS == 'android' ? height / 80 : height / 60,
         shadowColor: "#0000001f",
         shadowOffset: {
             width: 0,
@@ -125,5 +125,6 @@ const styles = StyleSheet.create({
     labelTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.EXTRA_SMALL_10,
+        bottom: Platform.OS == 'ios' ? 0 : 5
     }
 })
