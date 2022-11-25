@@ -51,6 +51,7 @@ const JobData = [
 const JobsScreen = () => {
     const navigation = useCustomNavigation('JobsScreen')
     const refRBSheet = useRef<RBSheet | null>(null);
+
     const [selectedItem, setSelectedItem] = useState<ListDataProps | undefined>(undefined);
     const [page, setPage] = useState(1)
     const [btn, setBtn] = useState({

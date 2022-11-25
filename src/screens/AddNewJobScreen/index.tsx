@@ -240,7 +240,6 @@ const AddNewJobScreen = () => {
                         mapStyle={{ paddingVertical: Platform.OS == "ios" ? wp(4.2) : wp(5.5) }}
                         container={{ width: wp(68) }}
                         onPress={() => navigation.navigate('CreateJobMapScreen')}
-
                     />
                     {(touched?.address && errors?.address) || error?.address ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors?.address ? errors.address : error?.address}</Text> : null}
                     <CustomTextInput
@@ -279,7 +278,8 @@ const AddNewJobScreen = () => {
                             bottomComponent={
                                 <FlatList
                                     numColumns={2}
-                                    data={docList} renderItem={({ item, index }: any) => {
+                                    data={docList}
+                                    renderItem={({ item, index }: any) => {
                                         return (
                                             <CommonPdfView
                                                 onPress={() => {
@@ -290,8 +290,8 @@ const AddNewJobScreen = () => {
                                                         fromUrl: item.path,
                                                         toFile: localFile,
                                                     };
-                                                    RNFS.downloadFile(options).promise.then((res) =>
-                                                        FileViewer.open(localFile)).then((res) => {
+                                                    RNFS.downloadFile(options).promise.then(() =>
+                                                        FileViewer.open(localFile)).then(() => {
                                                         }).catch((error) => {
                                                         });
                                                 }}

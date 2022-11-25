@@ -12,7 +12,7 @@ import { strings } from '../../languages/localizedStrings';
 import { colors } from '../../styles/Colors';
 import { isEmptyArray, useFormik } from 'formik';
 import * as yup from 'yup';
-import { ImageLibraryOptions, launchImageLibrary  } from 'react-native-image-picker';
+import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { billDelete, billDetail, billUpdate, resetBillDetails } from '../../redux/slices/AdminSlice/billListSlice';
 
@@ -207,26 +207,28 @@ const BillSectionScreen = () => {
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
                     {type == "sign" &&
-                        <ImageBackground
-                            source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
-                            style={styles.addPhotoStyle}
-                            borderRadius={wp(2)}>
-                            {isEditable ? <TouchableOpacity
-                                onPress={async () => {
-                                    let option: ImageLibraryOptions = {
-                                        mediaType: 'photo'
-                                    }
-                                    const result = await launchImageLibrary(option);
-                                    setImageUrl(result?.assets ? result?.assets[0].uri : '')
-                                    if (result?.assets && result?.assets[0].uri) {
-                                        setError({ ...error, image: '', detail: '' })
-                                    }
-                                }}
-                                activeOpacity={1}
-                                style={styles.camreaBtnStyle}>
-                                <Image source={ImagesPath.camera_icon} style={styles.cameraIconStyle} />
-                            </TouchableOpacity> : null}
-                        </ImageBackground>
+                        <TouchableOpacity
+                            onPress={async () => {
+                                let option: ImageLibraryOptions = {
+                                    mediaType: 'photo'
+                                }
+                                const result = await launchImageLibrary(option);
+                                setImageUrl(result?.assets ? result?.assets[0].uri : '')
+                                if (result?.assets && result?.assets[0].uri) {
+                                    setError({ ...error, image: '', detail: '' })
+                                }
+                            }}
+                            activeOpacity={1}
+                            disabled={isEditable ? false : true}>
+                            <ImageBackground
+                                source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
+                                style={styles.addPhotoStyle}
+                                borderRadius={wp(2)}>
+                                {isEditable ? <View style={styles.camreaBtnStyle}>
+                                    <Image source={ImagesPath.camera_icon} style={styles.cameraIconStyle} />
+                                </View> : null}
+                            </ImageBackground>
+                        </TouchableOpacity>
                         // <Image source={imageUrl ? imageUrl : ImagesPath.add_photo} style={styles.addPhotoStyle} />
                     }
                     {error.image ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.image}</Text> : null}
@@ -247,6 +249,7 @@ const BillSectionScreen = () => {
                             placeholder='2'
                             editable={isEditable}
                             onChangeText={handleChange('ration_qunt')}
+                            keyboardType={'number-pad'}
                         />
                         {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
                     </>}
@@ -274,8 +277,9 @@ const BillSectionScreen = () => {
                             container={{ marginBottom: wp(5) }}
                             value={values.ration_qunt}
                             editable={isEditable}
-                            placeholder='1.5141'
+                            placeholder={strings.JumpingRation}
                             onChangeText={handleChange("ration_qunt")}
+                            keyboardType={'decimal-pad'}
                         />
                         {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}
                     </>}

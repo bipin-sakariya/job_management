@@ -22,25 +22,31 @@ const BillListScreen = () => {
     const navigation = useCustomNavigation('BillListScreen');
     const dispatch = useAppDispatch()
     const isFocus = useIsFocused()
-    const route = useRoute<RootRouteProps<'BillListScreen'>>()
+    const route = useRoute<RootRouteProps<'BillListScreen'>>();
+
+    console.log({ route });
+
 
     const [page, setPage] = useState(1)
     const [btn, setBtn] = useState({ open: true, close: false })
     const { billListData, isLoading } = useAppSelector(state => state.billList)
 
     useEffect(() => {
-        if (isFocus) {
+        console.log({ route1: route });
+
+        if (isFocus && route.params) {
             if (route.params?.billType == 'material') {
                 setBtn({ open: true, close: false })
             }
             else if (route.params?.billType == 'sign') {
                 setBtn({ open: false, close: true })
             }
-
         }
-    }, [isFocus])
+    }, [isFocus, route])
 
     useEffect(() => {
+        console.log({ route2: route });
+
         console.log("🚀 ~ file: index.tsx ~ line 95 ~ useEffect ~ isFocus", isFocus)
         if (isFocus && btn) {
             let params = {
