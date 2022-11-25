@@ -211,7 +211,7 @@ const CreateBillSectionScreen = () => {
                             <CustomTextInput
                                 title={strings.Jumpdish}
                                 value={values.ration_qunt}
-                                placeholder={'1.5'}
+                                placeholder={strings.Jumpdish}
                                 container={{ marginBottom: wp(5) }}
                                 onChangeText={handleChange("ration_qunt")}
                                 placeholderTextColor={colors.light_brown}

@@ -34,6 +34,8 @@ import CustomJobAddedByComponent from './CustomJobAddedByComponent';
 import TableHeaderView from './TableHeaderView';
 import TableDetailsComponent from './TableDetailsComponent';
 import CommonPdfView from './CommonPdfView';
+import CommonEmptyListComponent from './CommonEmptyListComponent';
+
 
 export {
     Header,
@@ -72,4 +74,5 @@ export {
     TableHeaderView,
     TableDetailsComponent,
     CommonPdfView,
+    CommonEmptyListComponent
 }

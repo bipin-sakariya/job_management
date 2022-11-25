@@ -111,7 +111,7 @@ const ReturnAndAddJobHistoryScreen = () => {
                                 return (
                                     <CustomJobListComponent
                                         item={item}
-                                        onPress={() => navigation.navigate('JobDetailsScreen', { params: item, type: "returnJob" })}
+                                        onPress={() => navigation.navigate('JobDetailsScreen', { params: item, type: strings.JobOpen })}
                                     />
                                 )
                             }} />

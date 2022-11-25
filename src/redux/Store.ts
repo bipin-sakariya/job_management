@@ -7,6 +7,7 @@ import storage from 'redux-persist/lib/storage';
 import AuthUserSlice from './slices/AuthUserSlice';
 import userListSlice from './slices/AdminSlice/userListSlice';
 import billListSlice from './slices/AdminSlice/billListSlice';
+import jobListSlice from './slices/AdminSlice/jobListSlice';
 
 const persistConfig = {
     key: "root",
@@ -16,7 +17,9 @@ const persistConfig = {
 const reducers = combineReducers({
     userDetails: AuthUserSlice,
     userList: userListSlice,
-    billList: billListSlice
+    billList: billListSlice,
+    jobList: jobListSlice
+
 })
 
 

@@ -1,10 +1,10 @@
 import { Image, Text, TouchableOpacity, View, FlatList } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
-import { ButtonTab, Container, CustomActivityIndicator, CustomListView, Header } from '../../components';
+import { ButtonTab, CommonEmptyListComponent, Container, CustomActivityIndicator, CustomListView, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { styles } from './styles';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { strings } from '../../languages/localizedStrings';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
@@ -119,6 +119,7 @@ const BillListScreen = () => {
                             </View>
                         )
                     }}
+                    ListEmptyComponent={() => <CommonEmptyListComponent Txt={strings.Billdatanotfound} />}
                     onEndReached={() => {
                         if (billListData.next) {
                             let param = {
