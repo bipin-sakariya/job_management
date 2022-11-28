@@ -401,18 +401,18 @@ const JobDetailsScreen = () => {
                         children={
                             <View style={[globalStyles.rowView, styles.bottomBtnView]}>
                                 <CustomJobDetailsBottomButton image={ImagesPath.right_arrow_icon} buttonText={strings.TransferJob} onPress={() => {
-                                    // navigation.navigate("TransferJobScreen")
+                                    navigation.navigate("TransferJobScreen")
                                     refRBSheet.current?.close()
                                 }} />
                                 {
                                     userData?.role != strings.GroupManager &&
                                     <CustomJobDetailsBottomButton image={ImagesPath.round_arrow_icon} buttonText={strings.ReturnJob} onPress={() => {
-                                        // navigation.navigate("ReturnJobScreen")
+                                        navigation.navigate("ReturnJobScreen")
                                         refRBSheet.current?.close()
                                     }} />
                                 }
                                 <CustomJobDetailsBottomButton image={ImagesPath.share_icon} buttonText={strings.Askaboutjobs} onPress={() => {
-                                    // navigation.navigate('DuplicateScreen')
+                                    navigation.navigate('DuplicateScreen')
                                     refRBSheet.current?.close()
                                 }} />
                             </View>

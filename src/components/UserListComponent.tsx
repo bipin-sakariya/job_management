@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { globalStyles } from '../styles/globalStyles';
 import { ImagesPath } from '../utils/ImagePaths';
@@ -9,11 +9,10 @@ import CustomDropdown from './CustomDropDown';
 import useCustomNavigation from '../hooks/useCustomNavigation';
 import { strings } from '../languages/localizedStrings';
 import { colors } from '../styles/Colors';
-import moment from 'moment';
 import { useAppDispatch } from '../hooks/reduxHooks';
-import { deleteUser, getListOfUsers } from '../redux/slices/AdminSlice/userListSlice';
-import 'moment/locale/he';
+import { deleteUser } from '../redux/slices/AdminSlice/userListSlice';
 import { convertDate } from '../utils/screenUtils';
+import FastImage from 'react-native-fast-image';
 
 interface itemPropsType {
     id: number
@@ -62,7 +61,8 @@ const UserListComponent = ({ item }: { item: itemPropsType }) => {
             <TouchableOpacity
                 onPress={() => navigation.navigate('UserDetailScreen', { userId: item.id })}
                 style={globalStyles.rowView}>
-                <Image source={item.profile_image ? { uri: item.profile_image } : ImagesPath.placeholder_img} style={styles.itemImgStyle} />
+                {/* <Image source={item.profile_image ? { uri: item.profile_image } : ImagesPath.placeholder_img} style={styles.itemImgStyle} /> */}
+                <FastImage source={item.profile_image ? { uri: item.profile_image } : ImagesPath.placeholder_img} resizeMode={'stretch'} style={styles.itemImgStyle} />
                 <View style={{ paddingHorizontal: wp(2) }}>
                     <Text numberOfLines={1} style={[styles.itemTitle, globalStyles.rtlStyle]}>{item?.user_name ?? 'user'}</Text>
                     <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { maxWidth: wp(40) }]}>{item.role?.title}</Text>

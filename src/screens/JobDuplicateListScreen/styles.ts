@@ -6,9 +6,9 @@ import FontSizes from "../../styles/FontSizes";
 
 export const styles = StyleSheet.create({
     jobMainView: {
+        flex: 1,
         flexDirection: "row",
         alignItems: "center",
-        paddingHorizontal: wp(5),
     },
     leftArrowIcon: {
         height: wp(5),
@@ -33,5 +33,20 @@ export const styles = StyleSheet.create({
         width: wp(3),
         resizeMode: "contain",
     },
-
+    roundView: {
+        height: wp(6),
+        width: wp(6),
+        borderRadius: wp(6),
+        borderColor: colors.brown,
+        borderWidth: wp(0.4),
+        alignItems: 'center',
+        justifyContent: "center"
+    },
+    roundFillView: {
+        height: wp(5.5),
+        width: wp(5.5),
+        borderRadius: wp(5),
+        borderColor: colors.white_5,
+        borderWidth: wp(0.5),
+    },
 })

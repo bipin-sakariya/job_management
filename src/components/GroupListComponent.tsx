@@ -11,6 +11,7 @@ import { strings } from '../languages/localizedStrings';
 import { colors } from '../styles/Colors';
 import { convertDate } from '../utils/screenUtils';
 import { useAppDispatch } from '../hooks/reduxHooks';
+import FastImage from 'react-native-fast-image';
 
 interface itemPropsType {
     id: number
@@ -56,7 +57,7 @@ const GroupListComponent = ({ item }: { item: itemPropsType }) => {
                     navigation.navigate('GroupDetailScreen')
                 }}
                 style={globalStyles.rowView}>
-                <Image source={item.profile_image ? { uri: item.profile_image } : ImagesPath.placeholder_img} style={styles.itemImgStyle} />
+                <FastImage source={item.profile_image ? { uri: item.profile_image } : ImagesPath.placeholder_img} resizeMode={'stretch'} style={styles.itemImgStyle} />
                 <View style={{ paddingHorizontal: wp(2) }}>
                     <Text numberOfLines={1} style={[styles.itemTitle, globalStyles.rtlStyle]}>{item?.user_name ?? 'user'}</Text>
                     <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { maxWidth: wp(40) }]}>{item.role?.title}</Text>
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     itemImgStyle: {
         height: wp(14),
         width: wp(14),
-        resizeMode: 'contain',
+        // resizeMode: 'contain',
         borderRadius: 10,
         backgroundColor: colors.gray_7
     },

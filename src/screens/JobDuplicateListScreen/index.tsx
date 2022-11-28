@@ -5,6 +5,7 @@ import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Container, Header } from "../../components";
 import CustomJobListComponent from "../../components/CustomJobListComponent";
 import useCustomNavigation from "../../hooks/useCustomNavigation";
+import { strings } from "../../languages/localizedStrings";
 import { colors } from "../../styles/Colors";
 import fonts from "../../styles/Fonts";
 import FontSizes from "../../styles/FontSizes";
@@ -19,7 +20,8 @@ interface JobDataProps {
     km: string,
     date: string,
     button: string,
-    selected: boolean
+    selected: boolean,
+    status?: string
 }
 
 const JobDuplicateListScreen = () => {
@@ -27,28 +29,28 @@ const JobDuplicateListScreen = () => {
     const navigation = useCustomNavigation('JobDuplicateListScreen');
 
     const JobData: JobDataProps[] = [
-        { id: 1, title: 'Job Title1', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", selected: false },
-        { id: 2, title: 'Job Title2', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Return", selected: false },
-        { id: 3, title: 'Job Title3', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Transfer", selected: false },
-        { id: 4, title: 'Job Title4', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '20 km away', date: "16 may 2022", button: "Open", selected: false },
-        { id: 5, title: 'Job Title5', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", selected: false },
-        { id: 6, title: 'Job Title6', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", selected: false },
-        { id: 7, title: 'Job Title7', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", selected: false },
-        { id: 8, title: 'Job Title8', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Return", selected: false },
-        { id: 9, title: 'Job Title9', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Transfer", selected: false },
-        { id: 10, title: 'Job Title10', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '20 km away', date: "16 may 2022", button: "Open", selected: false },
-        { id: 11, title: 'Job Title11', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", selected: false },
-        { id: 12, title: 'Job Title12', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", selected: false },
+        { id: 1, title: 'Job Title1', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false, status: 'hjb' },
+        { id: 2, title: 'Job Title2', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false, status: 'hjb' },
+        { id: 3, title: 'Job Title3', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
+        { id: 4, title: 'Job Title4', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
+        { id: 5, title: 'Job Title5', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false, status: 'hjb' },
+        { id: 6, title: 'Job Title6', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false, status: 'hjb' },
+        { id: 7, title: 'Job Title7', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
+        { id: 8, title: 'Job Title8', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
+        { id: 9, title: 'Job Title9', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
+       
     ]
     const [jobData, setJobData] = useState(JobData)
 
     const renderItem = ({ item, index }: any) => {
         return (
             <View style={styles.jobMainView}>
-                <TouchableOpacity onPress={() => { setSelected(item, index) }} style={[styles.selectBoxView, { backgroundColor: item.selected ? colors.brown : colors.white, }]}>
-                    {item.selected && <Image source={ImagesPath.right_icon} style={styles.rightIcon} />}
+                <TouchableOpacity onPress={() => { setSelected(item, index) }} style={{ marginLeft: wp(3.5) }}>
+                    <View style={styles.roundView} >
+                        <View style={[styles.roundFillView, { backgroundColor: item.selected ? colors.brown : colors.white_5, }]} />
+                    </View>
                 </TouchableOpacity>
-                <CustomJobListComponent item={item} />
+                <CustomJobListComponent item={item} listStyle={{ flex: 1, }} textStyle={{ flex: 1 }} />
             </View>
         )
     }
@@ -65,6 +67,7 @@ const JobDuplicateListScreen = () => {
                 emptyJobList.push(data)
             }
         })
+        navigation.navigate('DuplicateScreen')
         setJobData(emptyJobList)
     }
 
@@ -74,7 +77,7 @@ const JobDuplicateListScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
-                        <Text style={globalStyles.headerTitle}>Route</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.Duplicate}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
@@ -90,6 +93,7 @@ const JobDuplicateListScreen = () => {
             />
             <Container>
                 <FlatList
+                    showsVerticalScrollIndicator={false}
                     data={jobData}
                     renderItem={renderItem}
                 />
