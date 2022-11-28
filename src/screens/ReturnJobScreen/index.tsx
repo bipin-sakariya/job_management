@@ -53,16 +53,18 @@ const ReturnJobScreen = () => {
                             <View style={[styles.roundFillView, { backgroundColor: !isDuplicate ? colors.brown : colors.white_5, }]} />
                         </View>
                     </TouchableOpacity>
-                    <TextInput
-                        placeholder={strings.WriteResoneofreturnjob}
-                        multiline
-                        editable={!isDuplicate}
-                        onChangeText={(text) => { }}
-                        placeholderTextColor={colors.doc_bg_color_dark_gray}
-                        style={[styles.textInputStyle, styles.textInputFontStyle]}
-                    />
+                    <View style={globalStyles.rtlDirection}>
+                        <TextInput
+                            placeholder={strings.WriteResoneofreturnjob}
+                            multiline
+                            editable={!isDuplicate}
+                            onChangeText={(text) => { }}
+                            placeholderTextColor={colors.doc_bg_color_dark_gray}
+                            style={[styles.textInputStyle, styles.textInputFontStyle, { textAlign: 'right' }]}
+                        />
+                    </View>
                 </View>
-                <CustomBlackButton onPress={() => { setIsModelVisible(true) }} buttonStyle={{ width: '50%' }} title={strings.Return} image={ImagesPath.arrow_counter_clockwise_white_icon} />
+                <CustomBlackButton onPress={() => { navigation.navigate('JobDuplicateListScreen') }} buttonStyle={{ width: '50%' }} title={strings.Return} image={ImagesPath.arrow_counter_clockwise_white_icon} />
             </Container>
         </View >
     )

@@ -1,22 +1,27 @@
+import { useRoute } from "@react-navigation/native";
 import moment from "moment";
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from "react-native";
+import { Image, StyleSheet, Text, TextProps, TouchableOpacity, TouchableOpacityProps, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { CustomStatusBtn } from ".";
+import useCustomNavigation from "../hooks/useCustomNavigation";
 import { colors } from "../styles/Colors";
 import fonts from "../styles/Fonts";
 import FontSizes from "../styles/FontSizes";
 import { globalStyles } from "../styles/globalStyles";
+import { RootRouteProps } from "../types/RootStackTypes";
 import { ImagesPath } from "../utils/ImagePaths";
 
 interface CustomJobListComponentProps {
     item: any,
     type?: string
+    listStyle?: TouchableOpacityProps['style']
+    textStyle?: TextProps['style']
 }
 
 const CustomJobListComponent = (props: CustomJobListComponentProps & TouchableOpacityProps) => {
     return (
-        <TouchableOpacity {...props} style={[styles.jobContainerStyle, props.type == "carousel" ? styles.jobContainerBoxShadowStyle : null]}>
+        <TouchableOpacity {...props} style={[props.listStyle, styles.jobContainerStyle, props.type == "carousel" ? styles.jobContainerBoxShadowStyle : null]}>
             <Image source={props.item.image ? props.item.image : ImagesPath.placeholder_img} style={styles.jobImageStyle} />
             <View style={{ flex: 1 }}>
                 <View style={styles.jobTitleContainer}>
@@ -33,10 +38,10 @@ const CustomJobListComponent = (props: CustomJobListComponentProps & TouchableOp
                 </View>
                 <Text style={[styles.descriptionTxt, globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_10, textAlign: "left" }]}>{moment(props.item.date).format('ll')}</Text>
                 <View style={styles.descriptionView}>
-                    <Text numberOfLines={2} style={[styles.descriptionTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>{props.item.description}</Text>
-                    <View style={[globalStyles.rowView, styles.kmViewStyle]}>
-                        <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>{props.item.km}</Text>
+                    <Text numberOfLines={2} style={[props.textStyle, styles.descriptionTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>{props.item.description}</Text>
+                    <View style={[globalStyles.rowView, styles.kmViewStyle, globalStyles.rtlDirection]}>
                         <Image source={ImagesPath.map_pin_icon} style={styles.mapPinIcon} />
+                        <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>{props.item.km}</Text>
                     </View>
                 </View>
             </View>
@@ -123,6 +128,6 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     kmViewStyle: {
-        justifyContent: "center", alignSelf: "center", direction: "rtl", maxWidth: wp(25)
+        justifyContent: "center", alignSelf: "center", direction: "rtl", maxWidth: wp(25), flex: 1
     }
 })

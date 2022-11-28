@@ -35,7 +35,7 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
 
     const { userData } = useAppSelector((state) => state.userDetails)
     const dispatch = useDispatch()
-    const drawerBtn = userData?.role == strings.Admin ? AdminDrawerBtn : userData?.role == strings.Inspector ? InspectorDrawerBtn : AdminDrawerBtn
+    const drawerBtn = userData?.role == strings.Admin ? AdminDrawerBtn : userData?.role == strings.Inspector ? InspectorDrawerBtn : GroupManagerDrawerBtn
     return (
         <View style={[globalStyles.container,]}>
             <View style={styles.topView} >

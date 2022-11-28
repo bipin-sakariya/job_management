@@ -50,7 +50,7 @@ const SignInScreen = () => {
             if (res) {
                 let userData = {
                     email: values.email,
-                    role: res.role == "Admin" ? strings.Admin : res.role == "Group Manager" ? strings.GroupManager : strings.Inspector,
+                    role: res.role == strings.Admin ? strings.Admin : res.role == strings.GroupManager ? strings.GroupManager : strings.Inspector,
                     accesToken: res.access
                 }
                 dispatch(userDataReducer(userData))
