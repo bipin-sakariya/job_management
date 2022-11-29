@@ -1,5 +1,5 @@
 import { Alert, Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header, MultileSelectDropDown } from '../../components';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -11,6 +11,9 @@ import { styles } from './styles';
 import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
 import * as Yup from "yup";
 import { useFormik } from 'formik';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { useIsFocused } from '@react-navigation/native';
+import { getListOfUsers } from '../../redux/slices/AdminSlice/userListSlice';
 
 const CreateGroupValidationSchema = Yup.object().shape({
     groupName: Yup.string().required(strings.Groupname_required),
@@ -51,14 +54,46 @@ const CreateGroupScreen = () => {
     const navigation = useCustomNavigation('CreateGroupScreen');
     const [imageUrl, setImageUrl] = useState<string | undefined>('');
     const [visible, setVisible] = useState(false);
+    const dispatch = useAppDispatch();
+    const { isLoading, userListData, userInsepectorList, userGroupManagerList } = useAppSelector(state => state.userList);
+
+    const isFoucs = useIsFocused();
+    console.log({ userListData })
+    useEffect(() => {
+        if (isFoucs) {
+            dispatch(getListOfUsers("")).unwrap().then((res) => {
+                console.log("🚀 ~ file: index.tsx ~ line 41 ~ dispatch ~ res", res)
+            }).catch((error) => {
+                console.log("🚀 ~ file: index.tsx ~ line 38 ~ dispatch ~ error", error)
+            })
+        }
+    }, [isFoucs])
 
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
             enableReinitialize: true,
             initialValues: {
                 groupName: '',
-                groupManager: { name: '', id: '' },
-                inspector: { name: '', id: '' },
+                groupManager: {
+                    id: 0,
+                    user_name: '',
+                    profile_image: '',
+                    email: '',
+                    phone: '',
+                    date_joined: '',
+                    role: '',
+                    is_active: false
+                },
+                inspector: {
+                    id: 0,
+                    user_name: '',
+                    profile_image: '',
+                    email: '',
+                    phone: '',
+                    date_joined: '',
+                    role: '',
+                    is_active: false
+                },
                 groupMamber: '',
                 forms: { name: '', id: '' },
 
@@ -117,9 +152,9 @@ const CreateGroupScreen = () => {
                     {(touched?.groupName) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.groupName}</Text>}
                     <DropDownComponent
                         title={strings.Group_Manager}
-                        data={data_user}
+                        data={userGroupManagerList}
                         image={ImagesPath.down_white_arrow}
-                        labelField="name"
+                        labelField="user_name"
                         valueField="id"
                         onChange={(item) => setFieldValue('groupManager', item)}
                         value={values.groupManager.id}
@@ -129,9 +164,9 @@ const CreateGroupScreen = () => {
                     {(touched?.groupManager) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text>}
                     <DropDownComponent
                         title={strings.Group_Inspector}
-                        data={data_user}
+                        data={userInsepectorList}
                         image={ImagesPath.down_white_arrow}
-                        labelField="name"
+                        labelField="user_name"
                         valueField="id"
                         onChange={(item) => setFieldValue('inspector', item)}
                         value={values.inspector.id}

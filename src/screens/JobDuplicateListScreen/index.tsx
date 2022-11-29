@@ -38,22 +38,22 @@ const JobDuplicateListScreen = () => {
         { id: 7, title: 'Job Title7', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
         { id: 8, title: 'Job Title8', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
         { id: 9, title: 'Job Title9', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
-       
+
     ]
     const [jobData, setJobData] = useState(JobData)
+    const [isIndex, setIsIndex] = useState(0)
 
     const renderItem = ({ item, index }: any) => {
         { console.log(item.status) }
         return (
-            <View style={styles.jobMainView}>
+            <TouchableOpacity style={styles.jobMainView}>
                 <TouchableOpacity onPress={() => { setSelected(item, index) }} style={{ marginLeft: wp(3.5) }}>
-
                     <View style={styles.roundView} >
-                        <View style={[styles.roundFillView, { backgroundColor: item.selected ? colors.brown : colors.white_5, }]} />
+                        <View style={[styles.roundFillView, { backgroundColor: item.selected ? colors.fillColor : colors.white_5, }]} />
                     </View>
                 </TouchableOpacity>
                 <CustomJobListComponent item={item} listStyle={{ flex: 1, }} textStyle={{ flex: 1 }} />
-            </View>
+            </TouchableOpacity>
         )
     }
 
@@ -66,14 +66,18 @@ const JobDuplicateListScreen = () => {
                     selected: !data.selected,
 
                 })
+                setIsIndex(item.id)
             } else {
-                emptyJobList.push(data)
+                emptyJobList.push({
+                    ...data,
+                    selected: false
+                })
             }
         })
-        navigation.navigate('DuplicateScreen')
+        // navigation.navigate('DuplicateScreen')
         setJobData(emptyJobList)
     }
-
+    console.log({ isIndex })
     return (
         <View style={globalStyles.container}>
             <Header
@@ -88,7 +92,7 @@ const JobDuplicateListScreen = () => {
                         <TouchableOpacity onPress={() => { }} style={{ marginRight: wp(3) }}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { }}>
+                        <TouchableOpacity onPress={() => { navigation.navigate('DuplicateScreen', { params: isIndex }) }}>
                             <Text style={{ fontFamily: fonts.FONT_POP_MEDIUM, fontSize: FontSizes.REGULAR_18 }}>Done</Text>
                         </TouchableOpacity>
                     </View>

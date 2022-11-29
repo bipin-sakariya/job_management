@@ -61,4 +61,5 @@ export const colors = {
     chat_left_Txt: '#FFFFFF',
     chat_right_Txt: '#444444',
     white_5: '#FFFFFF',
+    fillColor: '#455269',
 }

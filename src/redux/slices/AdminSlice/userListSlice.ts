@@ -40,6 +40,22 @@ export interface userRoleListProps {
         title: string
     }]
 }
+export interface inspectorListProps {
+    count: number
+    next: string | null
+    previous: number | null
+    results: [{
+        id: number,
+        user_name: string,
+        profile_image: string,
+        email: string,
+        phone: string,
+        date_joined: string,
+        role: string,
+        is_active: boolean
+    }]
+}
+
 interface paramsTypes {
     id?: number
     data?: FormData
@@ -53,6 +69,26 @@ interface initialState {
         id: number,
         title: string
     }]
+    userInsepectorList?: [{
+        id: number,
+        user_name: string,
+        profile_image: string,
+        email: string,
+        phone: string,
+        date_joined: string,
+        role: string,
+        is_active: boolean
+    }]
+    userGroupManagerList?: [{
+        id: number,
+        user_name: string,
+        profile_image: string,
+        email: string,
+        phone: string,
+        date_joined: string,
+        role: string,
+        is_active: boolean
+    }]
 }
 
 const initialState: initialState = {
@@ -60,7 +96,9 @@ const initialState: initialState = {
     error: '',
     userListData: [],
     userDetails: undefined,
-    userRoleList: undefined
+    userRoleList: undefined,
+    userInsepectorList: undefined,
+    userGroupManagerList: undefined
 }
 
 export interface apiErrorTypes {
@@ -149,6 +187,35 @@ export const updateUser = createAsyncThunk<string, paramsTypes, { rejectValue: a
         return rejectWithValue(e?.response)
     }
 })
+
+export const inspectorList = createAsyncThunk<inspectorListProps, string, { rejectValue: apiErrorTypes }>
+    (USER + "/inspectorList", async (_: any, { rejectWithValue }) => {
+        try {
+            console.log(ApiConstants.USERINSPECTORLIST)
+            const response = await axiosClient.get(ApiConstants.USERINSPECTORLIST)
+            return response.data
+        } catch (e: any) {
+            if (e.code === "ERR_NETWORK") {
+                Alert.alert(e.message)
+            }
+            return rejectWithValue(e?.response)
+        }
+    })
+
+export const groupManagerList = createAsyncThunk<inspectorListProps, string, { rejectValue: apiErrorTypes }>
+    (USER + "/groupmanagerList", async (_: any, { rejectWithValue }) => {
+        try {
+            console.log(ApiConstants.USERGROUPMANAGERLIST)
+            const response = await axiosClient.get(ApiConstants.USERGROUPMANAGERLIST)
+            return response.data
+        } catch (e: any) {
+            if (e.code === "ERR_NETWORK") {
+                Alert.alert(e.message)
+            }
+            return rejectWithValue(e?.response)
+        }
+    })
+
 
 const userListSlice = createSlice({
     name: USER,
@@ -242,6 +309,32 @@ const userListSlice = createSlice({
         builder.addCase(updateUser.rejected, (state, action) => {
             state.isLoading = false
             state.error = action.payload?.data
+        });
+        builder.addCase(inspectorList.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(inspectorList.fulfilled, (state, action) => {
+            state.isLoading = false
+            state.userInsepectorList = action.payload.results
+            state.error = ''
+        });
+        builder.addCase(inspectorList.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = ''
+        });
+        builder.addCase(groupManagerList.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(groupManagerList.fulfilled, (state, action) => {
+            state.isLoading = false
+            state.userGroupManagerList = action.payload.results
+            state.error = ''
+        });
+        builder.addCase(groupManagerList.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = ''
         });
     },
 })

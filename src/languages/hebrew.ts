@@ -200,13 +200,13 @@ export const hebrew = {
     send_again: 'שלח שוב',
 
     email_invalid: 'אימייל לא תקין',
-    email_required:'נא להזין את מזהה האימייל',
+    email_required: 'נא להזין את מזהה האימייל',
     password_invalid: 'הסיסמה לא חוקית',
     enter_max_6_character: 'נא להזין עוד 6 תווים',
     Email_new: 'אימייל',
     Username_required: 'נא להזין את שם המשתמש',
     Contectno_invalid: 'התחבר ללא פסול',
-    contactNo_required:'נא להזין את מספר איש הקשר.',
+    contactNo_required: 'נא להזין את מספר איש הקשר.',
     role_required: 'תפקיד נדרש',
     Permission_required: 'נדרש אישור',
     Groupname_required: 'נדרש שם קבוצה',
@@ -258,5 +258,14 @@ export const hebrew = {
     Sign_image_required: 'נדרשת תמונת סימן',
 
     Place: 'מקום',
-    current_loaction: 'מיקום נוכחי'
+    current_loaction: 'מיקום נוכחי',
+    Assignedon: 'הוקצה ב-',
+    Billdatanotfound: 'נתוני חיוב לא נמצאו',
+    Image_required: 'נדרשת תמונה',
+    Attachments_required: 'נדרשים קבצים מצורפים',
+    ImageandAttachments_required: 'נדרשים תמונה וקובץ מצורף',
+
+    members_in_group: 'חברים_בקבוצה',
+    originalJob: 'עבודה מקורית',
+    add_mark: 'הוסף סימן'
 }

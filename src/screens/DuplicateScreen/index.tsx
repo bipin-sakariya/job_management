@@ -51,7 +51,7 @@ const DuplicateScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false}>
                     <CustomSubTitleWithImageComponent disabled title={strings.DuplicateJob} image={ImagesPath.files_icon} />
                     <View style={styles.duplicateFirstView}>
                         <CustomTextInput
@@ -67,7 +67,8 @@ const DuplicateScreen = () => {
                             }} />
                         <CustomCarouselImageAndVideo result={result} viewStyle={{ width: '81%', }} />
                     </View>
-                    <View style={[styles.duplicateFirstView, { marginTop: wp(5) }]}>
+                    <CustomSubTitleWithImageComponent disabled title={strings.originalJob} image={ImagesPath.files_icon} />
+                    <View style={[styles.duplicateFirstView, {}]}>
                         <CustomTextInput
                             title={strings.JobId}
                             container={{ marginBottom: wp(4) }}

@@ -13,6 +13,7 @@ interface CustomTextInputWithImageProps {
     container?: ViewStyle,
     mapStyle?: ViewStyle
     mainContainerStyle?: ViewStyle
+    onpress?: () => void
 }
 const CustomTextInputWithImage = (props: CustomTextInputWithImageProps & TextInputProps & TouchableOpacityProps) => {
     return (

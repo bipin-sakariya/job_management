@@ -7,12 +7,12 @@ import { globalStyles } from "../../styles/globalStyles";
 import { ImagesPath } from "../../utils/ImagePaths";
 import { styles } from "./styles";
 import RBSheet from "react-native-raw-bottom-sheet";
+import { RootState, useAppSelector } from "../../hooks/reduxHooks";
 import { strings } from "../../languages/localizedStrings";
 import useCustomNavigation from "../../hooks/useCustomNavigation";
 import { colors } from "../../styles/Colors";
 import { RootRouteProps } from "../../types/RootStackTypes";
 import moment from "moment";
-import { RootState, useAppSelector } from "../../hooks/reduxHooks";
 import FileViewer from "react-native-file-viewer";
 import RNFS from "react-native-fs";
 
@@ -96,7 +96,6 @@ const JobDetailsScreen = () => {
             parameter: "Meter",
             imageUrl: 'dssdfsdfsf'
         },
-
         {
             srno: "01",
             name: "Asphalt Paint",
@@ -195,6 +194,7 @@ const JobDetailsScreen = () => {
 
     let data: JobDetailsScreenRouteProps = route.params.params
     let type = route.params.type
+    console.log('juhuh', route.params)
 
     const renderItem = ({ item, index }: any) => {
         return (
@@ -234,7 +234,7 @@ const JobDetailsScreen = () => {
                     </>
                 } />
             <Container>
-                <ScrollView contentContainerStyle={[{ paddingHorizontal: wp(4) }]}>
+                <ScrollView contentContainerStyle={[{ paddingHorizontal: wp(4) }]} showsVerticalScrollIndicator={false}>
                     {
                         data.status == strings.JobReturn ?
                             <View style={styles.warningView}>
@@ -277,7 +277,9 @@ const JobDetailsScreen = () => {
                             value='ממש מאחורי הבית הצהוב החדש'
                             onChangeText={(text) => { }}
                             mainContainerStyle={{ marginBottom: wp(5), flex: 1, }}
-                            container={{ width: wp(68) }} />
+                            container={{ width: wp(68) }}
+                            onpress={() => navigation.navigate('CreateJobMapScreen')}
+                        />
                         <CustomDetailsComponent
                             title={strings.Description}
                             bottomComponent={
@@ -389,7 +391,7 @@ const JobDetailsScreen = () => {
                                 title={strings.Close}
                                 buttonStyle={{ paddingHorizontal: wp(10) }}
                                 onPress={() => {
-                                    navigation.navigate("CloseJobScreen")
+                                    // navigation.navigate("CloseJobScreen")
                                 }}
                                 image={ImagesPath.check_circle}
                             />
@@ -406,13 +408,13 @@ const JobDetailsScreen = () => {
                                 }} />
                                 {
                                     userData?.role != strings.GroupManager &&
-                                    < CustomJobDetailsBottomButton image={ImagesPath.round_arrow_icon} buttonText={strings.ReturnJob} onPress={() => {
+                                    <CustomJobDetailsBottomButton image={ImagesPath.round_arrow_icon} buttonText={strings.ReturnJob} onPress={() => {
                                         navigation.navigate("ReturnJobScreen")
                                         refRBSheet.current?.close()
                                     }} />
                                 }
                                 <CustomJobDetailsBottomButton image={ImagesPath.share_icon} buttonText={strings.Askaboutjobs} onPress={() => {
-                                    navigation.navigate('DuplicateScreen')
+                                    navigation.navigate('JobDuplicateListScreen')
                                     refRBSheet.current?.close()
                                 }} />
                             </View>

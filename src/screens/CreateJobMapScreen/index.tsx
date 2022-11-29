@@ -60,18 +60,18 @@ const CreateJobMapScreen = () => {
         }
     }
 
-    // useEffect(() => {
-    //     if (route.params.isEditing) {
-    //         checkLocationPermission()
-    //     } else {
-    //         setTapLoaction({
-    //             latitude: route.params.jobLocation.latitude,
-    //             longitude: route.params.jobLocation.longitude,
-    //             latitudeDelta: 0.0922,
-    //             longitudeDelta: 0.0421,
-    //         })
-    //     }
-    // }, [])
+    useEffect(() => {
+            checkLocationPermission()
+        // if (route.params.isEditing) {
+        // } else {
+        //     setTapLoaction({
+        //         latitude: route.params.jobLocation.latitude,
+        //         longitude: route.params.jobLocation.longitude,
+        //         latitudeDelta: 0.0922,
+        //         longitudeDelta: 0.0421,
+        //     })
+        // }
+    }, [])
 
     useEffect(() => {
         if (currentLoaction && loaction) {
@@ -95,18 +95,13 @@ const CreateJobMapScreen = () => {
                     </TouchableOpacity>
                 }
             />
-            <MapView
+           {loaction && <MapView
                 ref={mapRef}
                 style={{ flex: 1 }}
                 provider={'google'}
                 customMapStyle={customMapStyle}
                 showsUserLocation={currentLoaction}
-                initialRegion={{
-                    latitude: 42.882004,
-                    longitude: 74.582748,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421
-                }}
+                initialRegion={loaction}
                 onPress={(e: any) => {
                     // if (route.params.isEditing) {
                     //     if (ChoosefromMap) {
@@ -129,27 +124,27 @@ const CreateJobMapScreen = () => {
                     coordinate={tapLoaction}>
                     <Image source={ImagesPath.map_pin_line_icon} style={{ width: wp(10), height: wp(10) }}></Image>
                 </Marker>}
-            </MapView>
+            </MapView>}
             <View style={[globalStyles.rowView, { justifyContent: 'space-around', position: 'absolute', bottom: 20, width: wp(100) }]}>
                 {/* {route.params.isEditing && */}
-                    <>
-                        <CustomBlackButton
-                            title={strings.ChoosefromMap}
-                            buttonStyle={{ width: wp(45) }}
-                            imageStyle={{ tintColor: colors.white }}
-                            textStyle={{ color: colors.white }}
-                            onPress={() => setChooseFromMap(true)}
-                            image={ImagesPath.map_pin_line_icon}
-                        />
-                        <CustomBlackButton
-                            title={strings.current_loaction}
-                            buttonStyle={{ width: wp(45), backgroundColor: colors.light_blue_color }}
-                            imageStyle={{ tintColor: colors.primary_color }}
-                            textStyle={{ color: colors.primary_color }}
-                            onPress={() => setCurruntLocation(true)}
-                            image={ImagesPath.cross_hair_icon}
-                        />
-                    </>
+                <>
+                    <CustomBlackButton
+                        title={strings.ChoosefromMap}
+                        buttonStyle={{ width: wp(45) }}
+                        imageStyle={{ tintColor: colors.white }}
+                        textStyle={{ color: colors.white }}
+                        onPress={() => setChooseFromMap(true)}
+                        image={ImagesPath.map_pin_line_icon}
+                    />
+                    <CustomBlackButton
+                        title={strings.current_loaction}
+                        buttonStyle={{ width: wp(45), backgroundColor: colors.light_blue_color }}
+                        imageStyle={{ tintColor: colors.primary_color }}
+                        textStyle={{ color: colors.primary_color }}
+                        onPress={() => setCurruntLocation(true)}
+                        image={ImagesPath.cross_hair_icon}
+                    />
+                </>
                 {/* } */}
             </View>
         </View>

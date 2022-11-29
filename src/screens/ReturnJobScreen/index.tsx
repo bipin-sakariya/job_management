@@ -1,15 +1,13 @@
-import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
-import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, Header } from '../../components'
-import { ImagesPath } from '../../utils/ImagePaths'
-import { strings } from '../../languages/localizedStrings'
-import useCustomNavigation from '../../hooks/useCustomNavigation'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { styles } from './styles'
-import { colors } from '../../styles/Colors'
-import fonts from '../../styles/Fonts'
-import FontSizes from '../../styles/FontSizes'
+import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { globalStyles } from '../../styles/globalStyles';
+import { Container, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, Header } from '../../components';
+import { ImagesPath } from '../../utils/ImagePaths';
+import { strings } from '../../languages/localizedStrings';
+import useCustomNavigation from '../../hooks/useCustomNavigation';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { styles } from './styles';
+import { colors } from '../../styles/Colors';
 
 const ReturnJobScreen = () => {
     const navigation = useCustomNavigation('ReturnJobScreen');
@@ -43,14 +41,14 @@ const ReturnJobScreen = () => {
                 <TouchableOpacity onPress={() => { setIsDuplicate(true) }} style={[globalStyles.rowView, styles.jobListMainView]}>
                     <Text style={styles.jobNameTxt}>{strings.Duplicate}</Text>
                     <View style={styles.roundView} >
-                        <View style={[styles.roundFillView, { backgroundColor: isDuplicate ? colors.brown : colors.white_5, }]} />
+                        <View style={[styles.roundFillView, { backgroundColor: isDuplicate ? colors.fillColor : colors.white_5, }]} />
                     </View>
                 </TouchableOpacity>
                 <View style={[styles.jobListMainView]}>
                     <TouchableOpacity onPress={() => { setIsDuplicate(false) }} style={[globalStyles.rowView, { justifyContent: 'space-between' }]}>
                         <Text style={styles.jobNameTxt}>{strings.WrongInformation}</Text>
                         <View style={styles.roundView} >
-                            <View style={[styles.roundFillView, { backgroundColor: !isDuplicate ? colors.brown : colors.white_5, }]} />
+                            <View style={[styles.roundFillView, { backgroundColor: !isDuplicate ? colors.fillColor : colors.white_5, }]} />
                         </View>
                     </TouchableOpacity>
                     <View style={globalStyles.rtlDirection}>
@@ -70,4 +68,4 @@ const ReturnJobScreen = () => {
     )
 }
 
-export default ReturnJobScreen
+export default ReturnJobScreen;

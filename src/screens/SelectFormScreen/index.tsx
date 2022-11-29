@@ -7,6 +7,8 @@ import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { styles } from './styles';
 import { strings } from '../../languages/localizedStrings';
+import fonts from '../../styles/Fonts';
+import FontSizes from '../../styles/FontSizes';
 
 interface formItemProps {
     id: number,
@@ -109,7 +111,10 @@ const SelectFormScreen = () => {
                 headerRightComponent={
                     <View style={globalStyles.rowView}>
                         <TouchableOpacity >
-                            <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
+                            <Image source={ImagesPath.search_icon} style={[globalStyles.headerIcon,]} />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => { navigation.goBack() }}>
+                            <Text style={{ fontFamily: fonts.FONT_POP_MEDIUM, fontSize: FontSizes.REGULAR_18, marginHorizontal: wp(3) }}>{strings.Done}</Text>
                         </TouchableOpacity>
                     </View>
                 }

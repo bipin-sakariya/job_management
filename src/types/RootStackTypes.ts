@@ -21,9 +21,11 @@ export type RootStackParamList = {
     DrawerScreens: DrawerStackParamList
     MapScreen: undefined
     IndoxScreen: undefined
-    JobDuplicateListScreen: undefined
+    JobDuplicateListScreen: {
+        params?: any,
+    }
     NotificationScreen: undefined
-    JobDetailsScreen: { params: any, type?: string }
+    JobDetailsScreen: { params?: any, type?: string }
     ReportGeneratorScreen: undefined
     BillListScreen: { billType?: string }
     BillCreateScreen: undefined
@@ -38,14 +40,17 @@ export type RootStackParamList = {
     ChatScreen: undefined
     TransferJobScreen: undefined
     ReturnJobScreen: undefined
-    DuplicateScreen: undefined
+    DuplicateScreen: {
+        params?: any,
+    }
     CloseJobScreen: undefined
     RouteScreen: undefined
     RouteChooseLocationDetailScreen: undefined
     RouteMapViewScreen: undefined
     CreateNewJobScreen: { type?: string }
     JobsScreen: undefined
-    ReturnAndAddJobHistoryScreen: { type?: string },
+    ReturnAndAddJobHistoryScreen: { type?: string }
+    CustomJobListComponent: { type?: string },
     SelectFormScreen: undefined,
     FillFormScreen: undefined,
     SignBillDetailScreen: undefined,
@@ -55,7 +60,7 @@ export type RootStackParamList = {
     UserDetailScreen: { userId: number, isEdit?: boolean }
     GroupListScreen: undefined,
     CreateGroupScreen: undefined,
-    GroupDetailScreen: undefined,
+    GroupDetailScreen: { params: any },
     CreateJobMapScreen: undefined
 };
 

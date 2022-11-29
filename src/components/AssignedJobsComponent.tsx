@@ -8,6 +8,7 @@ import FontSizes from '../styles/FontSizes'
 import { colors } from '../styles/Colors'
 import CustomStatusBtn from './CustomStatusBtn'
 import { strings } from '../languages/localizedStrings'
+import { convertDate } from '../utils/screenUtils'
 
 const AssignedJobsComponent = ({ item }: any) => {
     return (
@@ -21,7 +22,7 @@ const AssignedJobsComponent = ({ item }: any) => {
                     </View>
                     <CustomStatusBtn title={strings.Open} style={{ backgroundColor: colors.dark_blue3_color }} txtStyle={{ color: colors.white_color }} />
                 </View>
-                <Text numberOfLines={1} style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>Assigned on 16 may</Text>
+                <Text numberOfLines={1} style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{strings.Assignedon} {convertDate('2022-11-25T05:10:46.091815Z')}</Text>
             </View>
         </View>
     )
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     dateTxtStyle: {
         maxWidth: wp(60),
         fontFamily: fonts.FONT_POP_REGULAR,
-        fontSize: FontSizes.EXTRA_SMALL_12,
+        fontSize: FontSizes.EXTRA_SMALL_10,
         color: colors.dark_blue2_color
     }
 })

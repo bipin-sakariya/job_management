@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
         textAlign: "center"
     },
     noBtnTxt: {
-        color: colors.black,
+        color: colors.primary_color,
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.MEDIUM_16
     }

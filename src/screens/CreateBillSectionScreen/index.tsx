@@ -31,6 +31,7 @@ const CreateBillSectionScreen = () => {
     const navigation = useCustomNavigation('CreateBillSectionScreen')
     const route = useRoute<RootRouteProps<'CreateBillSectionScreen'>>();
     let { type } = route.params
+    console.log(route.params)
     const [countingValue, setCountingValue] = useState<DropdownProps>({ label: '', value: 0 })
     const [countingError, setCountingError] = useState(false)
     const [imageUrl, setImageUrl] = useState<string | undefined>('');
@@ -211,7 +212,7 @@ const CreateBillSectionScreen = () => {
                             <CustomTextInput
                                 title={strings.Jumpdish}
                                 value={values.ration_qunt}
-                                placeholder={'1.5'}
+                                placeholder={strings.Jumpdish}
                                 container={{ marginBottom: wp(5) }}
                                 onChangeText={handleChange("ration_qunt")}
                                 placeholderTextColor={colors.light_brown}

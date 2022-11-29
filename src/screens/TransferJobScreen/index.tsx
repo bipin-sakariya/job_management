@@ -60,10 +60,10 @@ const TransferJobScreen = () => {
                     visible={isModelVisible} onRequestClose={() => { setIsModelVisible(false) }}
                     children={
                         <View style={styles.modalView}>
-                            <Image source={ImagesPath.arrow_bend_up_right_white_bg_icon} style={[globalStyles.modalImageStyle]} />
+                            <Image source={ImagesPath.colorLeftArrow} style={[globalStyles.modalImageStyle]} />
                             <Text style={styles.modalTxt}>{strings.Areyousureyou} P.Maintenance?</Text>
                             <View style={[globalStyles.rowView, { justifyContent: "space-around", width: '100%' }]}>
-                                <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%", backgroundColor: colors.gray_10 }} title={strings.No} />
+                                <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.No} />
                                 <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%" }} title={strings.Yes} />
                             </View>
                         </View>

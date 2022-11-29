@@ -9,10 +9,6 @@ export const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         alignItems: "center",
-        // alignSelf: 'center',
-        // paddingHorizontal: wp(8),
-        // width: wp(80),
-        // justifyContent: 'space-ar'
     },
     leftArrowIcon: {
         height: wp(5),
