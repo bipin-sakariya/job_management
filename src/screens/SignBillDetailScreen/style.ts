@@ -34,7 +34,28 @@ export const styles = StyleSheet.create({
         height: Platform.OS == "ios" ? wp(10) : wp(12),
     },
     btnIconStyle: {
-        width: wp(7), 
+        width: wp(7),
         height: wp(7)
-    }
+    },
+    modalView: {
+        width: wp(85),
+        height: wp(60),
+        backgroundColor: 'white',
+        borderRadius: wp(3),
+        justifyContent: 'space-around',
+        alignItems: "center",
+        paddingHorizontal: wp(6),
+        marginVertical: wp(10),
+    },
+    modalTxt: {
+        fontFamily: fonts.FONT_POP_REGULAR,
+        fontSize: FontSizes.MEDIUM_16,
+        color: colors.black,
+        textAlign: "center"
+    },
+    noBtnTxt: {
+        color: colors.black,
+        fontFamily: fonts.FONT_POP_REGULAR,
+        fontSize: FontSizes.MEDIUM_16
+    },
 }) 

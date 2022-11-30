@@ -1,6 +1,5 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Container, Header } from "../../components";
 import CustomJobListComponent from "../../components/CustomJobListComponent";
@@ -38,20 +37,25 @@ const JobDuplicateListScreen = () => {
         { id: 7, title: 'Job Title7', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
         { id: 8, title: 'Job Title8', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
         { id: 9, title: 'Job Title9', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
-       
+
     ]
     const [jobData, setJobData] = useState(JobData)
+    const [isIndex, setIsIndex] = useState(0)
 
     const renderItem = ({ item, index }: any) => {
         return (
-            <View style={styles.jobMainView}>
-                <TouchableOpacity onPress={() => { setSelected(item, index) }} style={{ marginLeft: wp(3.5) }}>
+            <TouchableOpacity onPress={() => { setSelected(item, index) }} style={styles.jobMainView}>
+                <View style={{ marginLeft: wp(3.5) }}>
                     <View style={styles.roundView} >
                         <View style={[styles.roundFillView, { backgroundColor: item.selected ? colors.brown : colors.white_5, }]} />
                     </View>
-                </TouchableOpacity>
-                <CustomJobListComponent item={item} listStyle={{ flex: 1, }} textStyle={{ flex: 1 }} />
-            </View>
+                </View>
+                <CustomJobListComponent
+                    item={item}
+                    listStyle={{ flex: 1, }}
+                    textStyle={{ flex: 1 }}
+                    onPress={() => { setSelected(item, index) }} />
+            </TouchableOpacity>
         )
     }
 
@@ -63,11 +67,15 @@ const JobDuplicateListScreen = () => {
                     ...data,
                     selected: !data.selected
                 })
+                setIsIndex(item.id)
             } else {
-                emptyJobList.push(data)
+                emptyJobList.push({
+                    ...data,
+                    selected: false
+                })
             }
         })
-        navigation.navigate('DuplicateScreen')
+        // navigation.navigate('DuplicateScreen')
         setJobData(emptyJobList)
     }
 
@@ -85,8 +93,8 @@ const JobDuplicateListScreen = () => {
                         <TouchableOpacity onPress={() => { }} style={{ marginRight: wp(3) }}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { }}>
-                            <Text style={{ fontFamily: fonts.FONT_POP_MEDIUM, fontSize: FontSizes.REGULAR_18 }}>Done</Text>
+                        <TouchableOpacity onPress={() => { navigation.navigate('DuplicateScreen', { params: isIndex }) }}>
+                            <Text style={{ fontFamily: fonts.FONT_POP_MEDIUM, fontSize: FontSizes.REGULAR_18 }}>{strings.Done}</Text>
                         </TouchableOpacity>
                     </View>
                 }

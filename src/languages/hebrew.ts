@@ -264,5 +264,9 @@ export const hebrew = {
     Image_required: 'נדרשת תמונה',
     Attachments_required: 'נדרשים קבצים מצורפים',
     ImageandAttachments_required: 'נדרשים תמונה וקובץ מצורף',
+    job_added_on: 'העבודה הוסיפה',
+    originalJob: 'עבודה מקורית',
 
+    members_in_group: 'חברים_בקבוצה',
+    add_mark: 'הוסף סימן'
 }

@@ -5,6 +5,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { colors } from '../styles/Colors'
 import fonts from '../styles/Fonts'
 import FontSizes from '../styles/FontSizes'
+import { strings } from '../languages/localizedStrings'
 interface CustomJobAddedByComponentProps {
     image?: ImageSourcePropType,
     userName?: string,
@@ -23,7 +24,7 @@ const CustomJobAddedByComponent = ({ image, userName, role, date }: CustomJobAdd
                     <Text style={[styles.roleTxt, globalStyles.rtlStyle, { textAlign: 'left' }]} numberOfLines={1}>{role}</Text>
                 </View>
             </View>
-            <Text style={[styles.dateTxt, globalStyles.rtlStyle, { textAlign: 'left' }]} numberOfLines={2}>{`Job added on\n ${date}`}</Text>
+            <Text style={[styles.dateTxt, globalStyles.rtlStyle, { textAlign: 'left' }]} numberOfLines={2}>{`${strings.job_added_on}\n${date}`}</Text>
         </View>
     )
 }

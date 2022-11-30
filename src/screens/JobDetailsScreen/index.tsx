@@ -389,7 +389,7 @@ const JobDetailsScreen = () => {
                                 title={strings.Close}
                                 buttonStyle={{ paddingHorizontal: wp(10) }}
                                 onPress={() => {
-                                    // navigation.navigate("CloseJobScreen")
+                                    navigation.navigate("CloseJobScreen")
                                 }}
                                 image={ImagesPath.check_circle}
                             />

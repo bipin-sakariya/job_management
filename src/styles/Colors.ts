@@ -22,6 +22,7 @@ export const colors = {
     white: '#FFFFFF',
     black: '#000000',
     light_dark_blue: '#798bb6',
+
     light_blue: '#cfe1fe',
     light_purple: '#c1cfe0',
     brown: '#737373',
@@ -61,4 +62,5 @@ export const colors = {
     chat_left_Txt: '#FFFFFF',
     chat_right_Txt: '#444444',
     white_5: '#FFFFFF',
+    fillColor: '#455269',
 }

@@ -1,18 +1,41 @@
-import { Image, Text, View } from 'react-native';
+import { Alert, Image, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
-import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components';
+import { Container, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { strings } from '../../languages/localizedStrings';
 import { styles } from './style';
+import { RootRouteProps } from '../../types/RootStackTypes';
+import { useRoute } from '@react-navigation/native';
+import * as yup from "yup";
+import { useFormik } from 'formik';
+import { colors } from '../../styles/Colors';
 
 const SignBillDetailScreen = () => {
     const navigation = useCustomNavigation('SignBillDetailScreen');
     const [count, setCount] = useState(0)
+    const route = useRoute<RootRouteProps<'CreateBillSectionScreen'>>();
+    const [isModelVisible, setIsModelVisible] = useState(false)
 
+    let { type } = route.params
+    console.log({ type })
+    const data = [
+        { label: strings.meters, value: 'Meters' },
+        { label: strings.units, value: 'Units' },
+        { label: strings.SQM, value: 'SQM' },
+        { label: strings.tons, value: 'Tons' },
+        { label: strings.CBM, value: 'CBM' },
+    ];
+
+    const CreateGroupValidationSchema = yup.object().shape({
+        name: yup.string()
+            .required(type == "material" ? strings.Billname_required : strings.Signname_required),
+        ration_qunt: yup.string()
+            .required(type == "material" ? strings.Jumpingration_required : strings.Quantity_required),
+    });
     const Increment = () => {
         setCount(count + 1)
     }
@@ -24,7 +47,19 @@ const SignBillDetailScreen = () => {
             setCount(count - 1)
         }
     }
+    const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
+        useFormik({
+            enableReinitialize: true,
+            initialValues: {
+                name: '',
+                ration_qunt: '',
 
+            },
+            validationSchema: CreateGroupValidationSchema,
+            onSubmit: values => {
+                Alert.alert("group create")
+            }
+        })
     return (
         <View style={globalStyles.container}>
             <Header
@@ -39,22 +74,46 @@ const SignBillDetailScreen = () => {
                     </TouchableOpacity>
                 } />
             <Container style={{ paddingHorizontal: wp(4) }}>
+                <CustomModal visible={isModelVisible} onRequestClose={() => { setIsModelVisible(false) }} children={
+                    <View style={styles.modalView}>
+                        <Image source={ImagesPath.check_icon_circle} style={[globalStyles.modalImageStyle]} />
+                        <Text style={styles.modalTxt}>{strings.ClosejobModalText}</Text>
+                        <View style={[globalStyles.rowView, { justifyContent: "space-around", width: '100%' }]}>
+                            <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.Partial} />
+                            <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%" }} title={strings.Close} />
+                        </View>
+                    </View>
+                } />
                 <CustomSubTitleWithImageComponent
                     disabled
                     title={strings.auto_fill_detail}
                     image={ImagesPath.receipt_icon} />
-                <Image
+                {type == 'sign' && <Image
                     source={ImagesPath.arrow_icon}
                     resizeMode={'contain'}
                     style={styles.arrowIconStyle}
-                />
+                />}
                 <CustomTextInput
                     title={strings.There}
                     container={{ marginVertical: wp(4) }}
                     placeholder={'סימן שם'}
                     onChangeText={(text) => { }}
                 />
-                <View style={[styles.textInputContainer, globalStyles.rtlDirection]}>
+                {type == 'material' &&
+                    <View style={{}}><DropDownComponent
+                        title={strings.TypeCounting}
+                        data={data}
+                        image={ImagesPath.down_white_arrow}
+                        labelField="label"
+                        valueField="value"
+                        onChange={(item) => setFieldValue('name', item)}
+                        value={values.name}
+                        placeholder={strings.choose}
+                        container={{ marginBottom: wp(5) }}
+                    />
+                    </View>
+                }
+                {type == 'sign' && <View style={[styles.textInputContainer, globalStyles.rtlDirection]}>
                     <View style={styles.titleContainer}>
                         <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{strings.Quantity}</Text>
                     </View>
@@ -67,16 +126,38 @@ const SignBillDetailScreen = () => {
                             <Image source={ImagesPath.minus} resizeMode={'contain'} style={styles.btnIconStyle} />
                         </TouchableOpacity>
                     </View>
-                </View>
-                <CustomTextInput
-                    title={strings.TypeCounting}
-                    container={{ marginVertical: wp(4) }}
-                    placeholder={'Unit'}
-                    onChangeText={(text) => { }}
-                />
+                </View>}
+                {type == 'sign' &&
+                    <View style={{ marginVertical: wp(5) }}><DropDownComponent
+                        title={strings.TypeCounting}
+                        data={data}
+                        image={ImagesPath.down_white_arrow}
+                        labelField="label"
+                        valueField="value"
+                        onChange={(item) => setFieldValue('name', item)}
+                        value={values.name}
+                        placeholder={strings.choose}
+                        container={{ marginBottom: wp(5) }}
+                    />
+                    </View>
+                }
+                {type == 'material' && <View style={[styles.textInputContainer, globalStyles.rtlDirection]}>
+                    <View style={styles.titleContainer}>
+                        <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{strings.measurement}</Text>
+                    </View>
+                    <View style={[globalStyles.rowView, globalStyles.rtlDirection, styles.btnContainerStyle]}>
+                        <TouchableOpacity onPress={() => Increment()}>
+                            <Image source={ImagesPath.plus} resizeMode={'contain'} style={styles.btnIconStyle} />
+                        </TouchableOpacity>
+                        <Text style={{ width: wp(10), textAlign: 'center' }}>{count}</Text>
+                        <TouchableOpacity onPress={() => Decrement()}>
+                            <Image source={ImagesPath.minus} resizeMode={'contain'} style={styles.btnIconStyle} />
+                        </TouchableOpacity>
+                    </View>
+                </View>}
                 <CustomBlackButton
                     onPress={() => {
-
+                        setIsModelVisible(true)
                     }}
                     title={strings.AddDetail}
                 />

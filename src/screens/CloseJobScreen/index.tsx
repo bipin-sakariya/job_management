@@ -1,7 +1,7 @@
-import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { FlatList, I18nManager, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomBlackButton, CustomDashedComponent, CustomDetailsComponent, CustomModal, CustomOneItemSelect, CustomSubTitleWithImageComponent, CustomTextInput, Header } from '../../components'
+import { BottomSheet, Container, CustomBlackButton, CustomDashedComponent, CustomDetailsComponent, CustomModal, CustomOneItemSelect, CustomSubTitleWithImageComponent, CustomTextInput, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { strings } from '../../languages/localizedStrings'
@@ -11,14 +11,60 @@ import CustomCarouselImageAndVideo from '../../components/CustomCarouselImageAnd
 import { styles } from './styles'
 import TableHeaderView from '../../components/TableHeaderView'
 import TableDetailsComponent from '../../components/TableDetailsComponent'
-import fonts from '../../styles/Fonts'
-import FontSizes from '../../styles/FontSizes'
 import { colors } from '../../styles/Colors'
+import RBSheet from 'react-native-raw-bottom-sheet'
+import { watchPosition } from 'react-native-geolocation-service'
 
+interface SignDataProps {
+    id: number,
+    name: string,
+    image: any,
+    selected: boolean,
+
+}
 const CloseJobScreen = () => {
     const navigation = useCustomNavigation('CloseJobScreen')
     const [isSelected, setIsSelected] = useState(false)
     const [isModelVisible, setIsModelVisible] = useState(false)
+    const [isSign, setISSign] = useState('sign')
+    const refRBSheet = useRef<RBSheet | null>(null);
+    const [searchTxt, setSearchTxt] = useState('');
+    const [searchData, setSearchData] = useState<SignDataProps[]>([])
+
+    const SignData: SignDataProps[] = [
+        {
+            id: 1,
+            name: 'sign name',
+            image: ImagesPath.signImage,
+            selected: false
+        },
+        {
+            id: 2,
+            name: 'sign name',
+            image: ImagesPath.signImage,
+            selected: false
+        },
+        {
+            id: 3,
+            name: 'sign name',
+            image: ImagesPath.signImage,
+            selected: false
+        },
+        {
+            id: 4,
+            name: 'form',
+            image: ImagesPath.signImage,
+            selected: false
+        },
+        {
+            id: 5,
+            name: 'bill',
+            image: ImagesPath.signImage,
+            selected: false
+        },
+    ]
+    const [signData, setSignData] = useState(SignData)
+
     const result = [
         {
             id: 1,
@@ -175,6 +221,25 @@ const CloseJobScreen = () => {
         },
 
     ]
+
+
+    const setSelected = (item: SignDataProps, index: number) => {
+        let emptySignList: Array<any> = []
+        console.log({ item })
+        signData.map((data) => {
+            if (data.id == item.id) {
+                emptySignList.push({
+                    ...data,
+                    selected: !data.selected,
+
+                })
+            } else {
+                emptySignList.push(data)
+            }
+        })
+        setSignData(emptySignList)
+    }
+
     const renderItem = ({ item, index }: any) => {
         return (
             <TableDetailsComponent item={item} />
@@ -244,14 +309,21 @@ const CloseJobScreen = () => {
                             }}
                             ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}
                         />
-                        <TouchableOpacity style={[globalStyles.rowView, styles.addFormView]}>
+                        {isSign == 'sign' && <TouchableOpacity onPress={() => { refRBSheet.current?.open() }}
+                            style={[globalStyles.rowView, styles.addFormView, { backgroundColor: colors.light_blue_color }]}>
+                            <Image source={ImagesPath.add_form_icon} style={[globalStyles.headerIcon, { marginHorizontal: wp(1), tintColor: colors.primary_color }]} />
+                            <Text style={[styles.addFormTxt, { color: colors.primary_color }]}>{strings.AddForm}</Text>
+                        </TouchableOpacity>}
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('SelectFormScreen')}
+                            style={[globalStyles.rowView, styles.addFormView]}>
                             <Image source={ImagesPath.add_form_icon} style={[globalStyles.headerIcon, { marginHorizontal: wp(1), tintColor: colors.white }]} />
-                            <Text style={styles.addFormTxt}>{strings.AddForm}</Text>
+                            <Text style={[styles.addFormTxt]}>{strings.AddForm}</Text>
                         </TouchableOpacity>
                     </View>
                     <CustomDashedComponent
                         image={ImagesPath.add_icon}
-                        onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: strings.material }) }}
+                        onPress={() => { navigation.navigate('SignBillDetailScreen', { type: 'sign' }) }}
                         title={strings.AddField}
                         viewStyle={{ paddingVertical: wp(5), marginBottom: wp(5) }}
                     />
@@ -268,6 +340,53 @@ const CloseJobScreen = () => {
                     </TouchableOpacity>
                     <CustomBlackButton onPress={() => setIsModelVisible(true)} title={strings.ChangeJobStatus} buttonStyle={{ marginVertical: wp(10) }} />
                 </ScrollView>
+                <BottomSheet
+                    ref={refRBSheet}
+                    children={
+                        <>
+                            <View style={[globalStyles.rowView, globalStyles.rtlDirection, styles.textInputContainer, { paddingHorizontal: wp(2), marginHorizontal: wp(4), marginTop: wp(5) }]}>
+                                <Image source={ImagesPath.search_icon} style={{ height: wp(6), width: wp(6), resizeMode: 'contain' }} />
+                                <TextInput
+                                    style={[globalStyles.rtlStyle, { color: '#455269', height: 40, marginHorizontal: wp(1.5), width: '80%', textAlign: I18nManager.isRTL ? 'right' : 'left', }]}
+                                    placeholder={'חפש כאן'}
+                                    placeholderTextColor={'#455269'}
+                                    onChangeText={(txt) => {
+                                        const searchData = signData.filter((i) => i.name.includes(txt.toLowerCase()))
+                                        setSearchData(searchData)
+                                        setSearchTxt(txt)
+                                    }}
+                                />
+                            </View>
+                            <FlatList
+                                style={{ maxHeight: wp(50) }}
+                                showsVerticalScrollIndicator={false}
+                                data={searchTxt ? searchData : signData}
+                                // extraData={list}
+                                renderItem={({ item, index }) => (
+                                    <TouchableOpacity
+                                        onPress={() => { setSelected(item, index) }}
+                                        style={[globalStyles.rowView, { justifyContent: 'space-between', paddingHorizontal: wp(2.5), paddingVertical: wp(3.5), marginHorizontal: wp(2.5) }]}>
+                                        <View style={globalStyles.rowView}>
+                                            <Image source={item.image} resizeMode={'contain'} style={{ width: wp(5), height: wp(5) }} />
+                                            <Text style={[styles.itemListTxt, { marginHorizontal: wp(2) }]}>{item.name}</Text>
+                                        </View>
+                                        {item.selected ?
+                                            <Image source={ImagesPath.check_box_fill_icon} style={styles.checkBoxIcon} /> :
+                                            <Image source={ImagesPath.check_box_border_icon} style={styles.checkBoxIcon1} />
+                                        }
+                                    </TouchableOpacity>
+                                )}
+                                ItemSeparatorComponent={() => <View style={{ height: wp(0.1), backgroundColor: colors.text_input_border_color, marginHorizontal: wp(2.5) }} />}
+                            />
+                            <TouchableOpacity onPress={() => { refRBSheet.current?.close() }}
+                                style={[globalStyles.rowView, styles.addFormView, { marginHorizontal: wp(4.5) }]}>
+                                <Image source={ImagesPath.add_form_icon} style={[globalStyles.headerIcon, { marginHorizontal: wp(1), tintColor: colors.white }]} />
+                                <Text style={[styles.addFormTxt]}>{strings.add_mark}</Text>
+                            </TouchableOpacity>
+                        </>
+                    }
+                    height={360}
+                />
             </Container>
         </View>
     )

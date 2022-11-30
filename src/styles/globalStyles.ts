@@ -57,8 +57,8 @@ export const globalStyles = StyleSheet.create({
         width: '100%'
     },
     modalImageStyle: {
-        height: wp(10),
-        width: wp(10),
+        height: wp(12),
+        width: wp(12),
         resizeMode: 'contain',
         marginTop: wp(2)
     }

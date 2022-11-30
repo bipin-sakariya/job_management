@@ -109,5 +109,7 @@ export const ImagesPath = {
     demo3: require('../assets/images/DemoImages/demo3.png'),
     demo4: require('../assets/images/DemoImages/demo4.png'),
     demo5: require('../assets/images/DemoImages/demo5.png'),
+    signImage: require('../assets/images/signImage.png'),
+    colorLeftArrow: require('../assets/images/colorLeftArrow.png')
 
 }

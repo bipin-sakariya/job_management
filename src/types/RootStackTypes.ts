@@ -38,7 +38,7 @@ export type RootStackParamList = {
     ChatScreen: undefined
     TransferJobScreen: undefined
     ReturnJobScreen: undefined
-    DuplicateScreen: undefined
+    DuplicateScreen?: { params?: any }
     CloseJobScreen: undefined
     RouteScreen: undefined
     RouteChooseLocationDetailScreen: undefined
@@ -48,7 +48,7 @@ export type RootStackParamList = {
     ReturnAndAddJobHistoryScreen: { type?: string },
     SelectFormScreen: undefined,
     FillFormScreen: undefined,
-    SignBillDetailScreen: undefined,
+    SignBillDetailScreen: { type: string },
     AddNewJobScreen: undefined,
     UserListScreen: undefined,
     CreateUserScreen: undefined,

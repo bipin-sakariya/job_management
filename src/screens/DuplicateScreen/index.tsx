@@ -6,7 +6,7 @@ import { ImagesPath } from '../../utils/ImagePaths'
 import { styles } from './styles'
 import { strings } from '../../languages/localizedStrings'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import CustomCarouselImageAndVideo from '../../components/CustomCarouselImageAndVideo'
 import CustomTextInputWithImage from '../../components/CustomTextInputWithImage'
 
@@ -51,8 +51,8 @@ const DuplicateScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <ScrollView>
-                    <CustomSubTitleWithImageComponent disabled title={strings.DuplicateJob} image={ImagesPath.files_icon} />
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <CustomSubTitleWithImageComponent disabled title={strings.DuplicateJob} image={ImagesPath.files_icon} viewStyle={{ marginBottom: hp(0.5) }} />
                     <View style={styles.duplicateFirstView}>
                         <CustomTextInput
                             title={strings.JobId}
@@ -67,7 +67,8 @@ const DuplicateScreen = () => {
                             }} />
                         <CustomCarouselImageAndVideo result={result} viewStyle={{ width: '81%', }} />
                     </View>
-                    <View style={[styles.duplicateFirstView, { marginTop: wp(5) }]}>
+                    <CustomSubTitleWithImageComponent disabled title={strings.originalJob} image={ImagesPath.files_icon} viewStyle={{ marginVertical: hp(1) }} />
+                    <View style={[styles.duplicateFirstView, {}]}>
                         <CustomTextInput
                             title={strings.JobId}
                             container={{ marginBottom: wp(4) }}

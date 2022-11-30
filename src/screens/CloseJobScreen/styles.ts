@@ -126,4 +126,22 @@ export const styles = StyleSheet.create({
         fontSize: FontSizes.MEDIUM_16,
         color: colors.light_brown
     },
+    textInputContainer: {
+        borderRadius: wp(2),
+        borderColor: colors.text_input_border_color,
+        borderWidth: wp(0.5),
+    },
+    itemListTxt: {
+        fontFamily: fonts.FONT_POP_REGULAR,
+        fontSize: FontSizes.SMALL_14,
+        color: colors.dark_blue2_color,
+    },
+    checkBoxIcon: {
+        height: wp(6),
+        width: wp(6)
+    },
+    checkBoxIcon1: {
+        height: wp(5),
+        width: wp(5)
+    }
 })

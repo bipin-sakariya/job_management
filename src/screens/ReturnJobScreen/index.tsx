@@ -64,7 +64,7 @@ const ReturnJobScreen = () => {
                 </View>
                 <CustomBlackButton onPress={() => { navigation.navigate('JobDuplicateListScreen') }} buttonStyle={{ width: '50%' }} title={strings.Return} image={ImagesPath.arrow_counter_clockwise_white_icon} />
             </Container>
-        </View >
+        </View>
     )
 }
 

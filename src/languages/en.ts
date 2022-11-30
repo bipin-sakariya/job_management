@@ -205,4 +205,8 @@ export const eng = {
 
     Place: 'Place',
     current_loaction: 'Current Location',
+    job_added_on: 'Job added on',
+    originalJob: 'Original Job',
+    members_in_group: 'members_in_group',
+    add_mark: 'Add a mark'
 }
