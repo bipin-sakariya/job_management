@@ -220,7 +220,7 @@ const AddNewJobScreen = () => {
                 }
             />
             <Container>
-                <ScrollView contentContainerStyle={[{ paddingHorizontal: wp(4), paddingBottom: wp(5) }]}>
+                <ScrollView contentContainerStyle={[{ paddingHorizontal: wp(4), paddingBottom: wp(5) }]} showsVerticalScrollIndicator={false}>
                     <CustomSubTitleWithImageComponent title={strings.Fillfromtocreatejob} image={ImagesPath.list_bullet_image_icon} />
                     <CustomTextInput
                         title={strings.JobId}
@@ -297,7 +297,8 @@ const AddNewJobScreen = () => {
                                                 }}
                                                 item={item} />
                                         )
-                                    }} />
+                                    }}
+                                    showsVerticalScrollIndicator={false} />
                             }
                         />}
                     <CustomDashedComponent

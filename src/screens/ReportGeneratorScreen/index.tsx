@@ -332,13 +332,18 @@ const ReportGeneratorScreen = () => {
                             </>
                             :
                             <View style={[styles.sammedView, { flexShrink: 1 }]}>
-                                <FlatList nestedScrollEnabled scrollEnabled={true} data={SammedData} renderItem={renderItem}
+                                <FlatList
+                                    data={SammedData}
+                                    renderItem={renderItem}
+                                    nestedScrollEnabled
+                                    scrollEnabled={true}
                                     ListHeaderComponent={() => {
                                         return (
                                             <TableHeaderView type='report' />
                                         )
                                     }}
                                     ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}
+                                    showsVerticalScrollIndicator={false}
                                 />
                             </View>
                     }

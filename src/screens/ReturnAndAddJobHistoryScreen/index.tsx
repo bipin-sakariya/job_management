@@ -75,7 +75,7 @@ const ReturnAndAddJobHistoryScreen = () => {
                 }
             />
             <Container>
-                <ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false}>
                     {type == "addJob" ?
                         <CustomDashedComponent
                             title={strings.ADDNEWJOB}
@@ -97,8 +97,8 @@ const ReturnAndAddJobHistoryScreen = () => {
                     <View style={{ marginLeft: wp(2) }}>
                         <FlatList
                             data={data}
-                            showsHorizontalScrollIndicator={false}
                             renderItem={renderItem}
+                            showsHorizontalScrollIndicator={false}
                             horizontal
                             ItemSeparatorComponent={() => <View style={{ width: wp(3) }} />}
                         />
@@ -109,10 +109,8 @@ const ReturnAndAddJobHistoryScreen = () => {
                         image={ImagesPath.calender_icon}
                     />
                     <View style={styles.jobListViewStyle}>
-                        <FlatList data={JobData}
-                            showsVerticalScrollIndicator={false}
-                            style={{ marginTop: wp(2), }}
-                            ItemSeparatorComponent={() => <View style={{ height: wp(3) }} />}
+                        <FlatList
+                            data={JobData}
                             renderItem={({ item, index }: any) => {
                                 return (
                                     <CustomJobListComponent
@@ -120,7 +118,11 @@ const ReturnAndAddJobHistoryScreen = () => {
                                         onPress={() => navigation.navigate('JobDetailsScreen', { params: item, type: strings.JobOpen })}
                                     />
                                 )
-                            }} />
+                            }}
+                            showsVerticalScrollIndicator={false}
+                            style={{ marginTop: wp(2), }}
+                            ItemSeparatorComponent={() => <View style={{ height: wp(3) }} />}
+                        />
                     </View>
                 </ScrollView>
             </Container>

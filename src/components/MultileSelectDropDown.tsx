@@ -115,8 +115,6 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                     </KeyboardAvoidingView>
 
                     <FlatList
-                        style={{ maxHeight: wp(50) }}
-                        showsVerticalScrollIndicator={false}
                         data={searchTxt ? searchData : list}
                         extraData={list}
                         renderItem={({ item, index }) => (
@@ -130,6 +128,8 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                                 }
                             </TouchableOpacity>
                         )}
+                        style={{ maxHeight: wp(50) }}
+                        showsVerticalScrollIndicator={false}
                         ItemSeparatorComponent={() => <View style={{ height: wp(0.1), backgroundColor: colors.text_input_border_color, marginHorizontal: wp(2.5) }} />}
                     />
                 </View>

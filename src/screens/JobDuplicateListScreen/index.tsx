@@ -101,9 +101,9 @@ const JobDuplicateListScreen = () => {
             />
             <Container>
                 <FlatList
-                    showsVerticalScrollIndicator={false}
                     data={jobData}
                     renderItem={renderItem}
+                    showsVerticalScrollIndicator={false}
                 />
             </Container>
         </View>

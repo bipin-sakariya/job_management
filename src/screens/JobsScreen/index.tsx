@@ -103,11 +103,11 @@ const JobsScreen = () => {
             <Container>
                 <ButtonTab btnOneTitle={strings.Open} btnTwoTitle={strings.Close} setBtn={setBtn} btnValue={btn} onReset={setPage} />
                 <FlatList
-                    showsVerticalScrollIndicator={false}
                     data={JobData}
                     renderItem={({ item, index }) => (
                         <JobListComponent item={item} index={index} />
                     )}
+                    showsVerticalScrollIndicator={false}
                 />
             </Container>
             <CustomBottomSheet

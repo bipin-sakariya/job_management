@@ -86,6 +86,7 @@ const UserListScreen = () => {
                         )
                     }}
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
+                    showsVerticalScrollIndicator={false}
                 />
             </Container>
         </View>

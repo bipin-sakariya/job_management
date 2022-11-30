@@ -88,6 +88,7 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
                             </TouchableOpacity>
                         )
                     }}
+                    showsVerticalScrollIndicator={false}
                 />
             </View>
         </RBSheet>

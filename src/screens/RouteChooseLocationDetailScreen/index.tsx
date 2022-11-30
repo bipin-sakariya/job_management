@@ -53,7 +53,11 @@ const RouteChooseLocationDetailScreen = () => {
                     marginTop: wp(2)
                 }} />
                 <CustomSubTitleWithImageComponent viewStyle={{ marginVertical: wp(2) }} disabled title={strings.Recent} image={ImagesPath.clock_counter_clockwise_icon} />
-                <FlatList showsVerticalScrollIndicator={false} data={JobData} renderItem={renderItem} />
+                <FlatList
+                    data={JobData}
+                    renderItem={renderItem}
+                    showsVerticalScrollIndicator={false}
+                />
             </Container>
         </View>
     )

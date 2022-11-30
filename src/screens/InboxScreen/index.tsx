@@ -38,11 +38,12 @@ const IndoxScreen = () => {
             />
             <Container>
                 <FlatList
-                    contentContainerStyle={{ paddingBottom: wp(30) }}
                     data={data}
                     renderItem={({ item, index }) => (
                         <InboxListComponent item={item} />
                     )}
+                    contentContainerStyle={{ paddingBottom: wp(30) }}
+                    showsVerticalScrollIndicator={false}
                 />
             </Container>
         </View>

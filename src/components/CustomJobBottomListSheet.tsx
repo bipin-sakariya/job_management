@@ -72,7 +72,8 @@ const CustomJobBottomListSheet = React.forwardRef((props: CustomJobBottomListShe
                     data={props.data}
                     style={{ marginTop: wp(2) }}
                     contentContainerStyle={{ marginHorizontal: wp(0.5) }}
-                    renderItem={renderItem} />
+                    renderItem={renderItem}
+                    showsVerticalScrollIndicator={false} />
             </>
         </RBSheet>
     )

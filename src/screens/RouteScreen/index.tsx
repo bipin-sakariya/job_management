@@ -62,7 +62,11 @@ const RouteScreen = () => {
                     </View>
                 </View>
                 <CustomSubTitleWithImageComponent disabled title={strings.Recent} image={ImagesPath.clock_counter_clockwise_icon} />
-                <FlatList showsVerticalScrollIndicator={false} data={JobData} renderItem={renderItem} contentContainerStyle={{ paddingBottom: wp(20) }} />
+                <FlatList
+                    data={JobData}
+                    renderItem={renderItem}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingBottom: wp(20) }} />
                 <CustomBlackButton
                     title={strings.Done}
                     textStyle={{ marginVertical: wp(1) }}

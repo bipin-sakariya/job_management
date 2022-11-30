@@ -132,13 +132,17 @@ const FormDetailsScreen = () => {
                     <View style={styles.formHeaderView}>
                         <Text style={[styles.noNameTxt, globalStyles.rtlStyle]}>{strings.Edit}</Text>
                     </View>
-                    <FlatList style={{ maxHeight: wp(80) }} data={FormData} renderItem={renderItem}
+                    <FlatList
+                        data={FormData}
+                        renderItem={renderItem}
+                        style={{ maxHeight: wp(80) }}
                         ListHeaderComponent={() => {
                             return (
                                 <TableHeaderView type={"form"} />
                             )
                         }}
                         ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}
+                        showsVerticalScrollIndicator={false}
                     />
                     <Text style={[globalStyles.rtlStyle, { fontFamily: fonts.FONT_POP_SEMI_BOLD, fontSize: FontSizes.EXTRA_SMALL_12, color: colors.dark_blue2_color, marginHorizontal: wp(2), marginBottom: wp(2) }]}>{strings.Differentsignshavebeenassignedtothisform}</Text>
                 </View>

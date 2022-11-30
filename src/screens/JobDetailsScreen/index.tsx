@@ -234,7 +234,7 @@ const JobDetailsScreen = () => {
                     </>
                 } />
             <Container>
-                <ScrollView contentContainerStyle={[{ paddingHorizontal: wp(4) }]}>
+                <ScrollView contentContainerStyle={[{ paddingHorizontal: wp(4) }]} showsVerticalScrollIndicator={false}>
                     {
                         data.status == strings.JobReturn ?
                             <View style={styles.warningView}>
@@ -289,29 +289,33 @@ const JobDetailsScreen = () => {
                             title={strings.Attachment}
                             detailsContainerStyle={{ marginVertical: wp(4) }}
                             bottomComponent={
-                                <FlatList data={pdfData} numColumns={2} renderItem={({ item, index }: any) => {
-                                    return (
-                                        <CommonPdfView
-                                            item={item}
-                                            onPress={() => {
-                                                setLoading(true)
-                                                const pdfName = item.url.split(/[#?]/)[0].split('/').pop().split('.')[0];
-                                                const extension = item.url.split(/[#?]/)[0].split(".").pop().trim();;
-                                                const localFile = `${RNFS.DocumentDirectoryPath}/${pdfName}.${extension}`;
-                                                const options = {
-                                                    fromUrl: item.url,
-                                                    toFile: localFile,
-                                                };
-                                                RNFS.downloadFile(options).promise.then(() =>
-                                                    FileViewer.open(localFile)).then(() => {
-                                                        setLoading(false)
-                                                    }).catch((error) => {
-                                                        setLoading(false)
-                                                    });
-                                            }}
-                                        />
-                                    )
-                                }} />
+                                <FlatList
+                                    data={pdfData}
+                                    numColumns={2}
+                                    renderItem={({ item, index }: any) => {
+                                        return (
+                                            <CommonPdfView
+                                                item={item}
+                                                onPress={() => {
+                                                    setLoading(true)
+                                                    const pdfName = item.url.split(/[#?]/)[0].split('/').pop().split('.')[0];
+                                                    const extension = item.url.split(/[#?]/)[0].split(".").pop().trim();;
+                                                    const localFile = `${RNFS.DocumentDirectoryPath}/${pdfName}.${extension}`;
+                                                    const options = {
+                                                        fromUrl: item.url,
+                                                        toFile: localFile,
+                                                    };
+                                                    RNFS.downloadFile(options).promise.then(() =>
+                                                        FileViewer.open(localFile)).then(() => {
+                                                            setLoading(false)
+                                                        }).catch((error) => {
+                                                            setLoading(false)
+                                                        });
+                                                }}
+                                            />
+                                        )
+                                    }}
+                                    showsVerticalScrollIndicator={false} />
                             }
                         />
                         {data.status == strings.JobClose || data.status == strings.JobPartial ?
@@ -331,8 +335,9 @@ const JobDetailsScreen = () => {
                                         <Text style={[styles.noNameTxt]}>{strings.Forms}</Text>
                                     </View>
                                     <FlatList
+                                        data={FormData}
+                                        renderItem={renderItem}
                                         showsVerticalScrollIndicator={false}
-                                        data={FormData} renderItem={renderItem}
                                         ListHeaderComponent={() => {
                                             return (
                                                 <TableHeaderView />

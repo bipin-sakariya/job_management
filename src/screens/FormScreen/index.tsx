@@ -101,8 +101,9 @@ const FormScreen = () => {
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <FlatList
-                    showsVerticalScrollIndicator={false}
                     data={form}
+                    renderItem={renderItem}
+                    showsVerticalScrollIndicator={false}
                     ListHeaderComponent={() => {
                         return (
                             <View style={[globalStyles.rowView, { marginBottom: wp(4) }]}>
@@ -111,7 +112,6 @@ const FormScreen = () => {
                             </View>
                         )
                     }}
-                    renderItem={renderItem}
                     ItemSeparatorComponent={() => {
                         return (
                             <View style={{ height: wp(3) }} />

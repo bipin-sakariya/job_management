@@ -78,6 +78,7 @@ const GroupListScreen = () => {
                         )
                     }}
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
+                    showsVerticalScrollIndicator={false}
                 />
             </Container>
         </View>

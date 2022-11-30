@@ -119,6 +119,7 @@ const CustomDropdown = ({
                     data={dropdownData}
                     renderItem={({ item }) => <RenderDropdownItem {...item} />}
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
+                    showsVerticalScrollIndicator={false}
                 />
             </View>
         </ReactNativeModal>

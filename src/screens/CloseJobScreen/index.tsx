@@ -300,8 +300,9 @@ const CloseJobScreen = () => {
                             <Text style={[styles.noNameTxt, globalStyles.rtlStyle]}>{strings.Forms}</Text>
                         </View>
                         <FlatList
+                            data={FormData}
+                            renderItem={renderItem}
                             showsVerticalScrollIndicator={false}
-                            data={FormData} renderItem={renderItem}
                             ListHeaderComponent={() => {
                                 return (
                                     <TableHeaderView />
@@ -358,10 +359,7 @@ const CloseJobScreen = () => {
                                 />
                             </View>
                             <FlatList
-                                style={{ maxHeight: wp(50) }}
-                                showsVerticalScrollIndicator={false}
                                 data={searchTxt ? searchData : signData}
-                                // extraData={list}
                                 renderItem={({ item, index }) => (
                                     <TouchableOpacity
                                         onPress={() => { setSelected(item, index) }}
@@ -376,6 +374,9 @@ const CloseJobScreen = () => {
                                         }
                                     </TouchableOpacity>
                                 )}
+                                style={{ maxHeight: wp(50) }}
+                                showsVerticalScrollIndicator={false}
+                                // extraData={list}
                                 ItemSeparatorComponent={() => <View style={{ height: wp(0.1), backgroundColor: colors.text_input_border_color, marginHorizontal: wp(2.5) }} />}
                             />
                             <TouchableOpacity onPress={() => { refRBSheet.current?.close() }}

@@ -204,6 +204,7 @@ const GroupDetailScreen = () => {
                                             <View style={{ height: wp(2), backgroundColor: colors.white_5 }} />
                                         )
                                     }}
+                                    showsVerticalScrollIndicator={false}
                                 />
                                 {assignedJobs.length > 2 &&
                                     <TouchableOpacity style={[globalStyles.rowView, styles.viewAllJobs]}>

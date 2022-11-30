@@ -55,7 +55,8 @@ const NotificationScreen = () => {
                     data={JobData}
                     renderItem={({ item, index }) => (
                         <JobListComponent item={item} index={index} />
-                    )} />
+                    )}
+                    showsVerticalScrollIndicator={false} />
             </Container>
         </View>
     )

@@ -126,9 +126,9 @@ const SelectFormScreen = () => {
                     image={ImagesPath.squre_note_icon}
                 />
                 <FlatList
-                    showsVerticalScrollIndicator={false}
                     data={form}
                     renderItem={renderItem}
+                    showsVerticalScrollIndicator={false}
                     ItemSeparatorComponent={() => {
                         return (
                             <View style={{ height: wp(2.5) }} />

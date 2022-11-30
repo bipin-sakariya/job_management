@@ -130,11 +130,15 @@ const CreateNewJobScreen = () => {
                                         title={strings.Attachment}
                                         detailsContainerStyle={{ marginVertical: wp(4) }}
                                         bottomComponent={
-                                            <FlatList data={pdfData} numColumns={2} renderItem={({ item, index }: any) => {
-                                                return (
-                                                    <CommonPdfView item={item} />
-                                                )
-                                            }} />
+                                            <FlatList
+                                                data={pdfData}
+                                                numColumns={2}
+                                                renderItem={({ item, index }: any) => {
+                                                    return (
+                                                        <CommonPdfView item={item} />
+                                                    )
+                                                }}
+                                                showsVerticalScrollIndicator={false} />
                                         }
                                     />
                                 </> : null
