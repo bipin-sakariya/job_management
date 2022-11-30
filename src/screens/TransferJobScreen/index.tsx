@@ -70,9 +70,9 @@ const TransferJobScreen = () => {
                     } />
                 <CustomSubTitleWithImageComponent disabled title={strings.Transferjobto} image={ImagesPath.arrow_bend_right_icon} />
                 <FlatList
-                    showsVerticalScrollIndicator={false}
                     data={jobData}
                     renderItem={renderItem}
+                    showsVerticalScrollIndicator={false}
                     style={{ marginTop: wp(3) }}
                     contentContainerStyle={{ paddingBottom: wp(20) }}
                     ItemSeparatorComponent={() => <View style={{ height: wp(4), backgroundColor: colors.white_5 }} />
