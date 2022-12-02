@@ -12,7 +12,6 @@ import CustomStatusBtn from '../../components/CustomStatusBtn'
 import { styles } from './styles'
 import FontSizes from '../../styles/FontSizes'
 import { colors } from '../../styles/Colors'
-import moment from 'moment'
 import { convertDate } from '../../utils/screenUtils'
 
 const data = [
@@ -36,6 +35,7 @@ const ReturnAndAddJobHistoryScreen = () => {
     const route = useRoute<RootRouteProps<'ReturnAndAddJobHistoryScreen'>>();
     const { type } = route.params
 
+
     const renderItem = ({ item, index }: any) => {
         return (
             <TouchableOpacity
@@ -46,9 +46,10 @@ const ReturnAndAddJobHistoryScreen = () => {
                 </View>
                 <View style={[globalStyles.rowView, { justifyContent: 'space-between', marginBottom: wp(1) }]}>
                     <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle,]}>{item.title}</Text>
-                    <CustomStatusBtn onPress={() => {
-                        navigation.navigate("JobDetailsScreen", { params: item, type: "returnJob" })
-                    }} title={item.status} />
+                    <CustomStatusBtn
+                        onPress={() => {
+                            navigation.navigate("JobDetailsScreen", { params: item, type: "returnJob" })
+                        }} title={item.status} />
                 </View>
                 <Text numberOfLines={2} style={[styles.desTxt, globalStyles.rtlStyle,]}>{item.description}</Text>
             </TouchableOpacity>

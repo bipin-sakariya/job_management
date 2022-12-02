@@ -85,7 +85,7 @@ const DuplicateScreen = () => {
                     <CustomBlackButton buttonStyle={{
                         marginVertical: wp(10)
                     }} image={ImagesPath.arrow_counter_clockwise_white_icon} title={strings.ReturntoInspector} />
-                </ScrollView>
+                </ScrollView >
             </Container >
         </View >
     )

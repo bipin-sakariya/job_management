@@ -37,7 +37,7 @@ export const globalStyles = StyleSheet.create({
     },
     rtlStyle: {
         writingDirection: I18nManager.getConstants().isRTL ? "rtl" : "ltr",
-        textAlign: "left"
+        textAlign: "left",
     },
     rtlDirection: {
         direction: I18nManager.getConstants().isRTL ? "rtl" : "ltr"

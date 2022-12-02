@@ -7,12 +7,12 @@ import { globalStyles } from "../../styles/globalStyles";
 import { ImagesPath } from "../../utils/ImagePaths";
 import { styles } from "./styles";
 import RBSheet from "react-native-raw-bottom-sheet";
+import { RootState, useAppSelector } from "../../hooks/reduxHooks";
 import { strings } from "../../languages/localizedStrings";
 import useCustomNavigation from "../../hooks/useCustomNavigation";
 import { colors } from "../../styles/Colors";
 import { RootRouteProps } from "../../types/RootStackTypes";
 import moment from "moment";
-import { RootState, useAppSelector } from "../../hooks/reduxHooks";
 import FileViewer from "react-native-file-viewer";
 import RNFS from "react-native-fs";
 
@@ -59,15 +59,95 @@ const JobDetailsScreen = () => {
         {
             srno: "01",
             name: "Asphalt Paint",
-            qty: "",
+            quantity: "",
             unit: "15",
-            parameter: "Meter",
+            type_counting: "Meter",
             imageUrl: ''
         },
         {
             srno: "01",
             name: "Asphalt Paint",
-            qty: "1",
+            quantity: "1",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "1",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "1",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "1",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "1",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "1",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "1",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "",
             unit: "15",
             parameter: "Meter",
             imageUrl: 'dssdfsdfsf'
@@ -75,115 +155,34 @@ const JobDetailsScreen = () => {
         {
             srno: "01",
             name: "Asphalt Paint",
-            qty: "1",
+            quantity: "1",
             unit: "15",
-            parameter: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: 'dssdfsdfsf'
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "1",
-            unit: "15",
-            parameter: "Meter",
+            type_counting: "Meter",
             imageUrl: 'dssdfsdfsf'
         },
 
         {
             srno: "01",
             name: "Asphalt Paint",
-            qty: "1",
+            quantity: "1",
             unit: "15",
-            parameter: "Meter",
+            type_counting: "Meter",
             imageUrl: ''
         },
         {
             srno: "01",
             name: "Asphalt Paint",
-            qty: "",
+            quantity: "",
             unit: "15",
-            parameter: "Meter",
+            type_counting: "Meter",
             imageUrl: ''
         },
         {
             srno: "01",
             name: "Asphalt Paint",
-            qty: "1",
+            quantity: "1",
             unit: "15",
-            parameter: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "1",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: 'dssdfsdfsf'
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "1",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: 'dssdfsdfsf'
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "1",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: 'dssdfsdfsf'
-        },
-
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "1",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "1",
-            unit: "15",
-            parameter: "Meter",
+            type_counting: "Meter",
             imageUrl: ''
         },
 
@@ -195,6 +194,7 @@ const JobDetailsScreen = () => {
 
     let data: JobDetailsScreenRouteProps = route.params.params
     let type = route.params.type
+    console.log('juhuh', route.params)
 
     const renderItem = ({ item, index }: any) => {
         return (
@@ -277,7 +277,9 @@ const JobDetailsScreen = () => {
                             value='ממש מאחורי הבית הצהוב החדש'
                             onChangeText={(text) => { }}
                             mainContainerStyle={{ marginBottom: wp(5), flex: 1, }}
-                            container={{ width: wp(68) }} />
+                            container={{ width: wp(68) }}
+                            onpress={() => navigation.navigate('CreateJobMapScreen')}
+                        />
                         <CustomDetailsComponent
                             title={strings.Description}
                             bottomComponent={
@@ -417,7 +419,7 @@ const JobDetailsScreen = () => {
                                     }} />
                                 }
                                 <CustomJobDetailsBottomButton image={ImagesPath.share_icon} buttonText={strings.Askaboutjobs} onPress={() => {
-                                    navigation.navigate('DuplicateScreen')
+                                    navigation.navigate('JobDuplicateListScreen')
                                     refRBSheet.current?.close()
                                 }} />
                             </View>

@@ -43,6 +43,7 @@ const JobDuplicateListScreen = () => {
     const [isIndex, setIsIndex] = useState(0)
 
     const renderItem = ({ item, index }: any) => {
+        { console.log(item.status) }
         return (
             <TouchableOpacity onPress={() => { setSelected(item, index) }} style={styles.jobMainView}>
                 <View style={{ marginLeft: wp(3.5) }}>
@@ -65,7 +66,8 @@ const JobDuplicateListScreen = () => {
             if (data.id == item.id) {
                 emptyJobList.push({
                     ...data,
-                    selected: !data.selected
+                    selected: !data.selected,
+
                 })
                 setIsIndex(item.id)
             } else {
@@ -78,7 +80,7 @@ const JobDuplicateListScreen = () => {
         // navigation.navigate('DuplicateScreen')
         setJobData(emptyJobList)
     }
-
+    console.log({ isIndex })
     return (
         <View style={globalStyles.container}>
             <Header
@@ -101,6 +103,7 @@ const JobDuplicateListScreen = () => {
             />
             <Container>
                 <FlatList
+                    showsVerticalScrollIndicator={false}
                     data={jobData}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}

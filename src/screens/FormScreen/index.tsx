@@ -1,5 +1,5 @@
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomListView, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
@@ -7,8 +7,46 @@ import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { styles } from './styles'
 import { strings } from '../../languages/localizedStrings'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
+import { formList } from '../../redux/slices/AdminSlice/formListSlice'
+import { useIsFocused } from '@react-navigation/native'
 
+interface formListParams {
+    page?: number,
+    search?: string,
+}
 const FormScreen = () => {
+
+    const dispatch = useAppDispatch();
+    const [page, setPage] = useState(1)
+    const isFocus = useIsFocused();
+    const { formListData, isLoading } = useAppSelector(state => state.formList)
+    console.log({ formListData });
+
+
+    useEffect(() => {
+        console.log("🚀 ~ file: index.tsx ~ line 95 ~ useEffect ~ isFocus", isFocus)
+        if (isFocus) {
+            let params = {
+                page: page,
+            }
+            formListApiCall(params)
+        }
+        return () => {
+            setPage(1)
+        }
+    }, [isFocus])
+
+    const formListApiCall = (params: formListParams) => {
+        dispatch(formList(params)).unwrap().then((res) => {
+            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+            setPage(page + 1)
+        }).catch((error) => {
+            console.log({ error });
+        })
+    }
+
+
     const navigation = useCustomNavigation('FormScreen');
     const form = [
         {
@@ -73,7 +111,7 @@ const FormScreen = () => {
                 item={item}
                 isFrom
                 onPress={() => {
-                    navigation.navigate("FormDetailsScreen")
+                    navigation.navigate("FormDetailsScreen", { id: item.id })
                 }}
             />
         )
@@ -101,7 +139,7 @@ const FormScreen = () => {
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <FlatList
-                    data={form}
+                    data={formListData.results}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}
                     ListHeaderComponent={() => {

@@ -1,5 +1,5 @@
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomDashedComponent, CustomSubTitleWithImageComponent, GroupListComponent, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
@@ -11,7 +11,13 @@ import { RootRouteProps } from '../../types/RootStackTypes';
 import { strings } from '../../languages/localizedStrings';
 import { colors } from '../../styles/Colors';
 import FontSizes from '../../styles/FontSizes';
-import { useAppDispatch } from '../../hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { groupDelete, groupList } from '../../redux/slices/AdminSlice/groupListSlice';
+
+interface groupListParams {
+    page?: number,
+    search?: string,
+}
 
 const groups = [
     { id: 10, is_active: true, phone: '+97223456787', name: 'P. Maintanence', user_name: 'divyesh10', profile_image: "https://bochan-dj.herokuapp.com/media/User/21/photo.jpg", role: { id: 1, title: 'Admin' }, date: '12 May 2022', email: 'divyesh10@gmail.com', date_joined: '2022-11-09T12:33:38.417751Z' },
@@ -22,6 +28,26 @@ const GroupListScreen = () => {
     const navigation = useCustomNavigation('GroupListScreen');
     const route = useRoute<RootRouteProps<'GroupListScreen'>>();
     const dispatch = useAppDispatch();
+    const [page, setPage] = useState(1)
+    const { groupListData, isLoading } = useAppSelector(state => state.groupList)
+    console.log({ groupListData })
+
+    useEffect(() => {
+        let params = {
+            page: page,
+        }
+        groupListApiCall(params)
+
+    }, [])
+
+    const groupListApiCall = (params: groupListParams) => {
+        dispatch(groupList(params)).unwrap().then((res) => {
+            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+            setPage(page + 1)
+        }).catch((error) => {
+            console.log({ error });
+        })
+    }
 
     return (
         <View style={globalStyles.container}>
@@ -46,7 +72,7 @@ const GroupListScreen = () => {
                             }}>
                             <Image source={ImagesPath.add_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => { }}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                     </View>
@@ -71,7 +97,7 @@ const GroupListScreen = () => {
                     titleStyle={{ fontSize: FontSizes.MEDIUM_16 }}
                 />
                 <FlatList
-                    data={groups}
+                    data={groupListData?.results}
                     renderItem={({ item, index }) => {
                         return (
                             <GroupListComponent item={item} />

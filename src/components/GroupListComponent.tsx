@@ -12,32 +12,36 @@ import { colors } from '../styles/Colors';
 import { convertDate } from '../utils/screenUtils';
 import { useAppDispatch } from '../hooks/reduxHooks';
 import FastImage from 'react-native-fast-image';
+import { GroupData, groupDelete } from '../redux/slices/AdminSlice/groupListSlice';
 
 interface itemPropsType {
-    id: number
-    profile_image: string,
-    user_name: string,
-    email: string,
-    phone: string,
-    role: { id: number, title: string },
-    date_joined: string
+    item: GroupData,
+    // id: number
+    // profile_image: string,
+    // user_name: string,
+    // email: string,
+    // phone: string,
+    // role: { id: number, title: string },
+    // date_joined: string
 }
 
-const GroupListComponent = ({ item }: { item: itemPropsType }) => {
+const GroupListComponent = ({ item }: itemPropsType) => {
     const navigation = useCustomNavigation('GroupListScreen')
     const imageRef = useRef(null);
     const dispatch = useAppDispatch()
 
     const [visible, setVisible] = useState(false);
 
-    const deleteGroupData = () => {
+    const deleteGroupData = (id: number) => {
         setVisible(false)
+        dispatch(groupDelete(id)).unwrap().then(() => {
+        })
     }
 
     const optionData = [
         {
             title: strings.Remove,
-            onPress: () => deleteGroupData(),
+            onPress: () => deleteGroupData(item.id),
             imageSource: ImagesPath.bin_icon
         },
         {
@@ -54,17 +58,17 @@ const GroupListComponent = ({ item }: { item: itemPropsType }) => {
         <View style={styles.itemContainer}>
             <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate('GroupDetailScreen')
+                    navigation.navigate('GroupDetailScreen', { params: item })
                 }}
                 style={globalStyles.rowView}>
-                <FastImage source={item.profile_image ? { uri: item.profile_image } : ImagesPath.placeholder_img} resizeMode={'stretch'} style={styles.itemImgStyle} />
+                <FastImage source={item.image ? { uri: item.image } : ImagesPath.placeholder_img} resizeMode={'stretch'} style={styles.itemImgStyle} />
                 <View style={{ paddingHorizontal: wp(2) }}>
-                    <Text numberOfLines={1} style={[styles.itemTitle, globalStyles.rtlStyle]}>{item?.user_name ?? 'user'}</Text>
-                    <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { maxWidth: wp(40) }]}>{item.role?.title}</Text>
+                    <Text numberOfLines={1} style={[styles.itemTitle, globalStyles.rtlStyle]}>{item?.name ?? 'user'}</Text>
+                    <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { maxWidth: wp(40) }]}>{item.total_member_in_group} {strings.members_in_group}</Text>
                 </View>
             </TouchableOpacity>
             <View style={globalStyles.rowView}>
-                <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { width: wp(25), textAlign: 'right' }]}>{convertDate(item.date_joined)}</Text>
+                <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { width: wp(25), textAlign: 'right' }]}>{convertDate(item.created_at)}</Text>
                 <TouchableOpacity ref={imageRef} onPress={() => setVisible(true)}>
                     <Image source={ImagesPath.menu_dots_icon} style={styles.menuIconStyle} />
                 </TouchableOpacity>

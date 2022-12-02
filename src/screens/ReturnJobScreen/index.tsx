@@ -41,14 +41,14 @@ const ReturnJobScreen = () => {
                 <TouchableOpacity onPress={() => { setIsDuplicate(true) }} style={[globalStyles.rowView, styles.jobListMainView]}>
                     <Text style={styles.jobNameTxt}>{strings.Duplicate}</Text>
                     <View style={styles.roundView} >
-                        <View style={[styles.roundFillView, { backgroundColor: isDuplicate ? colors.brown : colors.white_5, }]} />
+                        <View style={[styles.roundFillView, { backgroundColor: isDuplicate ? colors.fillColor : colors.white_5, }]} />
                     </View>
                 </TouchableOpacity>
                 <View style={[styles.jobListMainView]}>
                     <TouchableOpacity onPress={() => { setIsDuplicate(false) }} style={[globalStyles.rowView, { justifyContent: 'space-between' }]}>
                         <Text style={styles.jobNameTxt}>{strings.WrongInformation}</Text>
                         <View style={styles.roundView} >
-                            <View style={[styles.roundFillView, { backgroundColor: !isDuplicate ? colors.brown : colors.white_5, }]} />
+                            <View style={[styles.roundFillView, { backgroundColor: !isDuplicate ? colors.fillColor : colors.white_5, }]} />
                         </View>
                     </TouchableOpacity>
                     <View style={globalStyles.rtlDirection}>

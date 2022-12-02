@@ -1,12 +1,15 @@
+import { useRoute } from "@react-navigation/native";
 import moment from "moment";
 import React from "react";
 import { Image, StyleSheet, Text, TextProps, TouchableOpacity, TouchableOpacityProps, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { CustomStatusBtn } from ".";
+import useCustomNavigation from "../hooks/useCustomNavigation";
 import { colors } from "../styles/Colors";
 import fonts from "../styles/Fonts";
 import FontSizes from "../styles/FontSizes";
 import { globalStyles } from "../styles/globalStyles";
+import { RootRouteProps } from "../types/RootStackTypes";
 import { ImagesPath } from "../utils/ImagePaths";
 
 interface CustomJobListComponentProps {

@@ -31,6 +31,7 @@ const CreateBillSectionScreen = () => {
     const navigation = useCustomNavigation('CreateBillSectionScreen')
     const route = useRoute<RootRouteProps<'CreateBillSectionScreen'>>();
     let { type } = route.params
+    console.log(route.params)
     const [countingValue, setCountingValue] = useState<DropdownProps>({ label: '', value: 0 })
     const [countingError, setCountingError] = useState(false)
     const [imageUrl, setImageUrl] = useState<string | undefined>('');

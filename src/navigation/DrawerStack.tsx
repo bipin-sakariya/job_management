@@ -6,7 +6,7 @@ import { DrawerStackParamList } from '../types/RootStackTypes';
 import DrawerScreen from '../screens/DrawerScreen';
 import { useAppDispatch } from '../hooks/reduxHooks';
 import { useIsFocused } from '@react-navigation/native';
-import { userRoleList } from '../redux/slices/AdminSlice/userListSlice';
+import { roleList, userRoleList } from '../redux/slices/AdminSlice/userListSlice';
 
 const Drawer = createDrawerNavigator<DrawerStackParamList>();
 
