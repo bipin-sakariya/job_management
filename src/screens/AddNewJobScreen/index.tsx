@@ -63,12 +63,6 @@ const AddNewJobScreen = () => {
         attachments: ''
     })
 
-    useEffect(() => {
-        console.log({ imageList: imageList });
-        console.log({ error: error });
-
-
-    }, [imageList, error])
     const createJob = (values: {
         jobID: string;
         address: string;

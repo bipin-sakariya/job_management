@@ -41,9 +41,9 @@ const ReturnAndAddJobHistoryScreen = () => {
             <TouchableOpacity
                 onPress={() => navigation.navigate('JobDetailsScreen', { params: item, type: "returnJob" })}
                 style={[styles.containerShadow, styles.recentallyView]}>
-                <View style={styles.imageViewStyle}>
-                    <Image source={item.image ? item.image : ImagesPath.job_list_image_icon} style={styles.imageStyle} />
-                </View>
+                <Image
+                    source={item.image ? item.image : ImagesPath.job_list_image_icon}
+                    style={styles.imageStyle} />
                 <View style={[globalStyles.rowView, { justifyContent: 'space-between', marginBottom: wp(1) }]}>
                     <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle,]}>{item.title}</Text>
                     <CustomStatusBtn

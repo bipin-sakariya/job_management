@@ -7,24 +7,18 @@ import FontSizes from "../../styles/FontSizes";
 export const styles = StyleSheet.create({
     recentallyView: {
         backgroundColor: colors.white_color,
-        height: Platform.OS == "ios" ? hp(27.5) : hp(34.5),
+        // height: Platform.OS == "ios" ? hp(27.5) : hp(34.5),
         padding: wp(4),
         borderRadius: wp(3),
         marginHorizontal: wp(2),
         marginVertical: wp(2)
     },
-    imageViewStyle: {
-        width: wp(50),
-        backgroundColor: '#9E9E9E',
-        height: wp(30),
-        alignItems: "center",
-        justifyContent: 'center',
-        borderRadius: wp(4),
-        marginBottom: wp(2)
-    },
     imageStyle: {
         width: wp(50),
-        resizeMode: 'contain'
+        height: hp(17),
+        resizeMode: 'contain',
+        borderRadius: wp(4),
+        marginBottom: hp(1)
     },
     titleTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,

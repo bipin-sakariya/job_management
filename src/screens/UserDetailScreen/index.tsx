@@ -19,7 +19,7 @@ import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-pick
 const UserValidationSchema = yup.object().shape({
     userName: yup.string().required(strings.Username_required),
     email: yup.string().email(strings.email_invalid).required(strings.email_invalid),
-    contactNo: yup.string().min(8, strings.Contectno_invalid).required(strings.Contectno_invalid),
+    contactNo: yup.string().length(8, strings.Contectno_invalid).required(strings.Contectno_invalid),
     role: yup.string().required(strings.role_required),
 });
 
@@ -32,16 +32,15 @@ const UserDetailScreen = () => {
     const menuRef = useRef(null);
 
     const [visible, setVisible] = useState(false);
-    const { userDetails, isLoading } = useAppSelector(state => state.userList);
     const [isEditable, setIsEditable] = useState(isEdit ? isEdit : false);
     const [error, setError] = useState({
         phone: "",
         email: "",
         user_name: ""
     });
-    console.log({ userDetails })
-
     const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
+
+    const { userDetails, isLoading } = useAppSelector(state => state.userList);
 
     useEffect(() => {
         if (isFoucs) {
@@ -104,7 +103,6 @@ const UserDetailScreen = () => {
                 updateUserData(values)
             }
         })
-
 
     const deleteUserData = () => {
         setVisible(false)
@@ -174,6 +172,7 @@ const UserDetailScreen = () => {
                         container={{ marginBottom: wp(5) }}
                         value={values.userName}
                         onChangeText={handleChange('userName')}
+                        placeholder={isEditable ? strings.UserName : ''}
                     />
                     {(touched?.userName && errors?.userName) || error?.user_name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.userName ? errors.userName : error?.email}</Text> : null}
                     <CustomTextInput
@@ -182,6 +181,8 @@ const UserDetailScreen = () => {
                         container={{ marginBottom: wp(5) }}
                         value={values.email}
                         onChangeText={handleChange('email')}
+                        placeholder={isEditable ? strings.Email : ''}
+                        keyboardType={'email-address'}
                     />
                     {(touched?.email && errors?.email) || error?.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.email ? errors?.email : error?.email}</Text> : null}
                     <CustomTextInput
@@ -190,6 +191,8 @@ const UserDetailScreen = () => {
                         container={{ marginBottom: wp(5) }}
                         value={values.contactNo}
                         onChangeText={handleChange('contactNo')}
+                        placeholder={isEditable ? strings.Contactno : ''}
+                        keyboardType={'number-pad'}
                     />
                     {(touched?.contactNo && errors?.contactNo) || error?.phone ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error?.phone ? error.phone : errors.contactNo}</Text> : null}
                     <CustomTextInput

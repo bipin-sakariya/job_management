@@ -15,10 +15,10 @@ import { colors } from '../../styles/Colors';
 import FontSizes from '../../styles/FontSizes';
 import { groupDelete, groupDetail, groupUpdate } from '../../redux/slices/AdminSlice/groupListSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { useIsFocused, useRoute } from '@react-navigation/core';
 import { RootRouteProps } from '../../types/RootStackTypes';
 import { DropdownProps } from '../../types/commanTypes';
 import { roleList } from '../../redux/slices/AdminSlice/userListSlice';
+import { useIsFocused, useRoute } from '@react-navigation/native';
 
 const CreateGroupValidationSchema = yup.object().shape({
     groupName: yup.string().required(strings.Groupname_required),

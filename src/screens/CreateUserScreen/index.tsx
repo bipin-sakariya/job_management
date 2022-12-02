@@ -27,7 +27,7 @@ const permissionSchema = yup.object().shape({
 const CreateUserValidationSchema = yup.object().shape({
     userName: yup.string().required(strings.Username_required),
     email: yup.string().email(strings.email_invalid).required(strings.email_required),
-    contactNo: yup.string().min(8, strings.Contectno_invalid).required(strings.contactNo_required),
+    contactNo: yup.string().length(8, strings.Contectno_invalid).required(strings.contactNo_required),
     role: roleSchema,
     permission: permissionSchema
 });
@@ -92,6 +92,7 @@ const CreateUserScreen = () => {
             data.append("email", values.email)
             data.append("phone", `+972${values.contactNo}`)
             data.append("role", parseInt(values.role.id.toString()))
+            
             dispatch(createUser(data)).unwrap().then((res) => {
                 console.log({ res: res });
                 navigation.goBack()
