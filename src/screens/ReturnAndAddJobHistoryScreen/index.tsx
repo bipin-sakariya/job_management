@@ -12,7 +12,6 @@ import CustomStatusBtn from '../../components/CustomStatusBtn'
 import { styles } from './styles'
 import FontSizes from '../../styles/FontSizes'
 import { colors } from '../../styles/Colors'
-import moment from 'moment'
 import { convertDate } from '../../utils/screenUtils'
 
 const data = [
@@ -29,7 +28,7 @@ const JobData = [
     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '15 ק"מ משם', date: "16 may 2022", button: "לְהַעֲבִיר", status: 'לִפְתוֹחַ', image: ImagesPath.demo5 },
     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '20 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", status: 'לִפְתוֹחַ', image: ImagesPath.demo3 },
     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", status: 'לִפְתוֹחַ', image: ImagesPath.demo4 },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", image: ImagesPath.demo5 }
+    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", status: 'לִפְתוֹחַ', image: ImagesPath.demo5 }
 ]
 const ReturnAndAddJobHistoryScreen = () => {
     const navigation = useCustomNavigation('ReturnAndAddJobHistoryScreen');

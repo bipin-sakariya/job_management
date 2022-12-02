@@ -13,14 +13,27 @@ import * as Yup from "yup";
 import { useFormik } from 'formik';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { useIsFocused } from '@react-navigation/native';
-import { getListOfUsers } from '../../redux/slices/AdminSlice/userListSlice';
+import { getListOfUsers, inspectorListProps, roleList } from '../../redux/slices/AdminSlice/userListSlice';
+import { formList } from '../../redux/slices/AdminSlice/formListSlice';
+import { createGroup } from '../../redux/slices/AdminSlice/groupListSlice';
+
+interface DataTypes {
+    user_name: string
+    date_joined?: string
+    email?: string
+    id?: number
+    is_active?: boolean
+    phone?: string
+    profile_image?: string,
+    role?: { id: number, title: string }
+}
 
 const CreateGroupValidationSchema = Yup.object().shape({
     groupName: Yup.string().required(strings.Groupname_required),
-    groupManager: Yup.string().required(strings.groupmanger_required),
-    inspector: Yup.string().trim().required(strings.Contectno_invalid),
-    groupMamber: Yup.string().trim().required(strings.groupMember_required),
-    forms: Yup.string().required(strings.forms_required)
+    groupManager: Yup.object().required(strings.groupmanger_required),
+    inspector: Yup.object().required(strings.Contectno_invalid),
+    member: Yup.array().required(strings.groupMember_required),
+    forms: Yup.object().required(strings.forms_required)
 });
 
 const data_user = [
@@ -54,11 +67,32 @@ const CreateGroupScreen = () => {
     const navigation = useCustomNavigation('CreateGroupScreen');
     const [imageUrl, setImageUrl] = useState<string | undefined>('');
     const [visible, setVisible] = useState(false);
+    const [isInspector, setIsInspector] = useState([])
+    const [isManager, setIsManager] = useState([])
+    const [isUser, setIsUser] = useState([])
     const dispatch = useAppDispatch();
-    const { isLoading, userListData, userInsepectorList, userGroupManagerList } = useAppSelector(state => state.userList);
+    const [page, setPage] = useState(1)
+    const [finalArray, setFinalArray] = useState([])
+    const { isLoading, userListData, } = useAppSelector(state => state.userList);
+    const { formListData } = useAppSelector(state => state.formList);
+    const [error, setError] = useState({
+        groupName: '',
+        image: '',
+        groupManager: {
+            id: null
+        },
+        inspector: {
+            id: null
+        },
+    })
+    const [selectedMemberData, setSelectedMemberData] = useState<DataTypes[]>()
 
+    useEffect(() => {
+        console.log({ selectedMemberData });
+
+    }, [selectedMemberData])
     const isFoucs = useIsFocused();
-    console.log({ userListData })
+    console.log({ formListData })
     useEffect(() => {
         if (isFoucs) {
             dispatch(getListOfUsers("")).unwrap().then((res) => {
@@ -66,46 +100,138 @@ const CreateGroupScreen = () => {
             }).catch((error) => {
                 console.log("🚀 ~ file: index.tsx ~ line 38 ~ dispatch ~ error", error)
             })
+
+            let params = {
+                role: strings.Inspector
+            }
+            dispatch(roleList(params)).unwrap().then((res) => {
+                console.log({ res });
+                setIsInspector(res.results)
+                console.log("🚀 ~ file: DrawerStack.tsx ~ line 21 ~ dispatch ~ res", res)
+            }).catch((error) => {
+                console.log("🚀 ~ file: DrawerStack.tsx ~ line 20 ~ dispatch ~ error", error)
+            })
+            let param = {
+                role: strings.GroupManager
+            }
+            dispatch(roleList(param)).unwrap().then((res) => {
+                console.log({ res });
+                setIsManager(res.results)
+                console.log("🚀 ~ file: DrawerStack.tsx ~ line 21 ~ dispatch ~ res", res)
+            }).catch((error) => {
+                console.log("🚀 ~ file: DrawerStack.tsx ~ line 20 ~ dispatch ~ error", error)
+            })
+            let role = {
+                role: ''
+            }
+            dispatch(roleList(role)).unwrap().then((res) => {
+                console.log({ res });
+                setIsUser(res.results)
+                console.log("🚀 ~ file: DrawerStack.tsx ~ line 21 ~ dispatch ~ res", res)
+            }).catch((error) => {
+                console.log("🚀 ~ file: DrawerStack.tsx ~ line 20 ~ dispatch ~ error", error)
+            })
         }
+        let params = {
+            page: page,
+        }
+        dispatch(formList(params)).unwrap().then((res) => {
+            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+            setPage(page + 1)
+        }).catch((error) => {
+            console.log({ error });
+        })
+
     }, [isFoucs])
+
+
 
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
             enableReinitialize: true,
             initialValues: {
                 groupName: '',
+                image: '',
                 groupManager: {
-                    id: 0,
-                    user_name: '',
-                    profile_image: '',
-                    email: '',
-                    phone: '',
-                    date_joined: '',
-                    role: '',
-                    is_active: false
+                    id: null
                 },
                 inspector: {
-                    id: 0,
-                    user_name: '',
-                    profile_image: '',
-                    email: '',
-                    phone: '',
-                    date_joined: '',
-                    role: '',
-                    is_active: false
+                    id: null
                 },
-                groupMamber: '',
-                forms: { name: '', id: '' },
+                member: [],
+                forms: { id: null }
 
             },
             validationSchema: CreateGroupValidationSchema,
             onSubmit: values => {
-                Alert.alert("group create")
+                // console.log({ values })
+                groupCreate(values)
+                // alert('hjgjhgjguighjh')
             }
         })
+    useEffect(() => {
+        let data: any = []
+        selectedMemberData?.map((item) => {
+            data.push(item.id)
+        })
+        setFinalArray(data)
+    }, [selectedMemberData])
+    console.log({ finalArray: finalArray })
+
+    useEffect(() => {
+        console.log(isUser);
+
+    }, [isUser])
+
+    const groupCreate = (values: {
+        groupName: string;
+        image: string,
+        groupManager: {
+            id: number;
+        };
+        inspector: {
+            id: number;
+        };
+        member: [];
+        forms: { id: number }
+    }
+
+    ) => {
+        if (!imageUrl) {
+            Alert.alert('Alert', 'Please select your profile picture.')
+        } else {
+            let data = new FormData()
+            let images = {
+                uri: imageUrl,
+                name: "photo.jpg",
+                type: "image/jpeg"
+            }
+            console.log({ images })
+            if (imageUrl) {
+                data.append("image", images ? images : '')
+            }
+            data.append("name", values.groupName)
+            data.append("manager", values.groupManager.id)
+            data.append("inspector", values.inspector.id)
+            finalArray.map((_member) => {
+                // data.append()
+                data.append("member", _member)
+            })
+            data.append("form", values.forms.id)
+            dispatch(createGroup(data)).unwrap().then((res) => {
+                console.log({ res: res });
+                navigation.goBack()
+            }).catch((e) => {
+                console.log({ error: e });
+                setError(e.data)
+            })
+        }
+    }
+
 
     return (
         <View style={globalStyles.container}>
+            {/* {console.log("FORMIK ------", { error: errors, values: values })} */}
             <Header
                 headerLeftStyle={{
                     paddingLeft: wp(3)
@@ -131,6 +257,7 @@ const CreateGroupScreen = () => {
                             }
                             const result: any = await launchImageLibrary(option);
                             setImageUrl(result ? result?.assets[0].uri : '')
+                            setFieldValue('image', result ? result?.assets[0].uri : '')
                         }}
                         activeOpacity={1}>
                         <ImageBackground
@@ -152,7 +279,7 @@ const CreateGroupScreen = () => {
                     {(touched?.groupName) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.groupName}</Text>}
                     <DropDownComponent
                         title={strings.Group_Manager}
-                        data={userGroupManagerList}
+                        data={isManager}
                         image={ImagesPath.down_white_arrow}
                         labelField="user_name"
                         valueField="id"
@@ -161,10 +288,10 @@ const CreateGroupScreen = () => {
                         placeholder={strings.SelectRoleforUser}
                         container={{ marginBottom: wp(5) }}
                     />
-                    {(touched?.groupManager) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text>}
+                    {/* {(touched?.groupManager) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text>} */}
                     <DropDownComponent
                         title={strings.Group_Inspector}
-                        data={userInsepectorList}
+                        data={isInspector}
                         image={ImagesPath.down_white_arrow}
                         labelField="user_name"
                         valueField="id"
@@ -172,17 +299,23 @@ const CreateGroupScreen = () => {
                         value={values.inspector.id}
                         placeholder={strings.GivePermission}
                         container={{ marginBottom: wp(5) }}
+
                     />
-                    {(touched?.inspector) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text>}
+                    {/* {(touched?.inspector) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text>} */}
                     <MultileSelectDropDown
                         setIsVisible={setVisible}
                         isVisible={visible}
-                        data={[{ name: 'abc', selected: false }, { name: 'def', selected: false }, { name: 'ghi', selected: false }]}
+                        data={isUser}
                         title={strings.Groupmemeber}
+                        setSelectedMembers={(data: DataTypes[]) => {
+                            setSelectedMemberData(data)
+                            // setFieldValue('member', data)
+                        }}
+                    // setData={setSelectedMemberData}
                     />
                     <DropDownComponent
                         title={strings.GroupForms}
-                        data={data_user}
+                        data={formListData.results}
                         image={ImagesPath.down_white_arrow}
                         labelField="name"
                         valueField="id"
@@ -194,9 +327,7 @@ const CreateGroupScreen = () => {
                     <CustomBlackButton
                         title={strings.CreateGroup}
                         image={ImagesPath.plus_white_circle_icon}
-                        onPress={() => {
-
-                        }}
+                        onPress={handleSubmit}
                     />
                 </KeyboardAwareScrollView>
             </Container>

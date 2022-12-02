@@ -12,7 +12,9 @@ export interface GroupData {
         user_name: string
     },
     member_details: string,
-    form_details: [],
+    form_details: [{
+
+    }],
     total_member_in_group: string,
     assign_jobs: string,
     created_at: string,
@@ -57,7 +59,7 @@ const initialState: InitialState = {
         manager_details: { user_name: '' },
         inspector_details: { user_name: '' },
         member_details: '',
-        form_details: [],
+        form_details: [{}],
         total_member_in_group: '',
         assign_jobs: '',
         created_at: '',
@@ -130,6 +132,18 @@ export const groupDetail = createAsyncThunk<GroupData, number, { rejectValue: ap
         return rejectWithValue(e?.response)
     }
 })
+export const createGroup = createAsyncThunk<string[], FormData, { rejectValue: apiErrorTypes }>(GROUP + "/createGroup", async (params, { rejectWithValue }) => {
+    try {
+        console.log(ApiConstants.GROUPLIST, params)
+        const response = await axiosClient.post(ApiConstants.GROUPLIST, params)
+        return response.data
+    } catch (e: any) {
+        if (e.code === "ERR_NETWORK") {
+            Alert.alert(e.message)
+        }
+        return rejectWithValue(e?.response)
+    }
+})
 
 
 const groupListSlice = createSlice({
@@ -142,7 +156,7 @@ const groupListSlice = createSlice({
                 manager_details: { user_name: '' },
                 inspector_details: { user_name: '' },
                 member_details: '',
-                form_details: [],
+                form_details: {},
                 total_member_in_group: '',
                 assign_jobs: '',
                 created_at: '',
@@ -210,6 +224,20 @@ const groupListSlice = createSlice({
             state.isLoading = false
             state.error = ''
         });
+        builder.addCase(createGroup.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(createGroup.fulfilled, (state, action) => {
+            state.isLoading = false
+            // state.userListData = action.payload
+            state.error = ''
+        });
+        builder.addCase(createGroup.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = action?.payload?.data
+        });
+
 
     }
 })

@@ -9,13 +9,15 @@ import { colors } from '../styles/Colors'
 
 interface TableDetailsComponentProps {
     item: any,
-    type?: string
+    type?: string,
+    index?: number
 }
 
-const TableDetailsComponent = ({ item, type }: TableDetailsComponentProps) => {
+const TableDetailsComponent = ({ item, type, index }: TableDetailsComponentProps) => {
     return (
+
         <View style={[globalStyles.rowView, { paddingVertical: wp(1), justifyContent: 'space-around' }]}>
-            <Text numberOfLines={1} style={[styles.commonScammedTxt, globalStyles.rtlStyle, { width: wp(15) }]}>{item.srno}</Text>
+            <Text numberOfLines={1} style={[styles.commonScammedTxt, globalStyles.rtlStyle, { width: wp(15) }]}>{index + 1}</Text>
             <View style={[globalStyles.rowView, { width: wp(35) }]}>
                 {/* {
                     item.imageUrl &&
@@ -25,8 +27,8 @@ const TableDetailsComponent = ({ item, type }: TableDetailsComponentProps) => {
                 } */}
                 <Text numberOfLines={1} style={styles.commonScammedTxt}>{item.name}</Text>
             </View>
-            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.qty}</Text>
-            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(12) }]}>{item.parameter}</Text>
+            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.quantity}</Text>
+            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(12) }]}>{item.type_counting}</Text>
         </View>
     )
 }

@@ -9,6 +9,7 @@ import userListSlice from './slices/AdminSlice/userListSlice';
 import billListSlice from './slices/AdminSlice/billListSlice';
 import jobListSlice from './slices/AdminSlice/jobListSlice';
 import groupListSlice from './slices/AdminSlice/groupListSlice';
+import formListSlice from './slices/AdminSlice/formListSlice';
 
 const persistConfig = {
     key: "root",
@@ -20,7 +21,8 @@ const reducers = combineReducers({
     userList: userListSlice,
     billList: billListSlice,
     jobList: jobListSlice,
-    groupList: groupListSlice
+    groupList: groupListSlice,
+    formList: formListSlice
 })
 
 

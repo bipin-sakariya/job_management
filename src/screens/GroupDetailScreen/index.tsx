@@ -13,11 +13,12 @@ import { useFormik } from 'formik';
 import * as yup from "yup";
 import { colors } from '../../styles/Colors';
 import FontSizes from '../../styles/FontSizes';
-import { groupDelete, groupDetail } from '../../redux/slices/AdminSlice/groupListSlice';
+import { groupDelete, groupDetail, groupUpdate } from '../../redux/slices/AdminSlice/groupListSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { useIsFocused, useRoute } from '@react-navigation/core';
 import { RootRouteProps } from '../../types/RootStackTypes';
 import { DropdownProps } from '../../types/commanTypes';
+import { roleList } from '../../redux/slices/AdminSlice/userListSlice';
 
 const CreateGroupValidationSchema = yup.object().shape({
     groupName: yup.string().required(strings.Groupname_required),
@@ -60,8 +61,13 @@ const GroupDetailScreen = () => {
     const route = useRoute<RootRouteProps<'GroupDetailScreen'>>()
     const isFocused = useIsFocused()
     const { groupDetails, isLoading } = useAppSelector(state => state.groupList)
-    const { userGroupManagerList, userInsepectorList } = useAppSelector(state => state.userList)
-    console.log({ userGroupManagerList })
+    const [isInspector, setIsInspector] = useState([])
+    const [isManager, setIsManager] = useState([])
+    const [isUser, setIsUser] = useState([])
+    const [isMember, setIsMember] = useState([])
+    const [list, isList] = useState([])
+
+
 
     useEffect(() => {
         if (isFocused) {
@@ -71,10 +77,63 @@ const GroupDetailScreen = () => {
             }).catch((error) => {
                 console.log({ error });
             })
+            let params = {
+                role: strings.Inspector
+            }
+            dispatch(roleList(params)).unwrap().then((res) => {
+                console.log({ res });
+                setIsInspector(res.results)
+                console.log("🚀 ~ file: DrawerStack.tsx ~ line 21 ~ dispatch ~ res", res)
+            }).catch((error) => {
+                console.log("🚀 ~ file: DrawerStack.tsx ~ line 20 ~ dispatch ~ error", error)
+            })
+            let param = {
+                role: strings.GroupManager
+            }
+            dispatch(roleList(param)).unwrap().then((res) => {
+                console.log({ res });
+                setIsManager(res.results)
+                console.log("🚀 ~ file: DrawerStack.tsx ~ line 21 ~ dispatch ~ res", res)
+            }).catch((error) => {
+                console.log("🚀 ~ file: DrawerStack.tsx ~ line 20 ~ dispatch ~ error", error)
+            })
+            let role = {
+                role: ''
+            }
+            dispatch(roleList(role)).unwrap().then((res) => {
+                console.log({ res });
+                setIsUser(res.results)
+                console.log("🚀 ~ file: DrawerStack.tsx ~ line 21 ~ dispatch ~ res", res)
+            }).catch((error) => {
+                console.log("🚀 ~ file: DrawerStack.tsx ~ line 20 ~ dispatch ~ error", error)
+            })
         }
     }, [isFocused])
     console.log(route.params.params)
+    useEffect(() => {
+        const findData = isUser.map((i) => {
+            return {
+                ...i,
+                selected: false
+            }
+        })
+        isList(findData)
+        if (groupDetails.member_details) {
+            const finalData = groupDetails.member_details.map((i) => {
+                return {
+                    ...i,
+                    selected: true
+                }
+            })
+            console.log({ finalData })
+            setIsMember(finalData)
+        }
 
+
+
+    }, [isUser])
+    console.log({ isUser })
+    console.log({ isMember })
     const deleteGroupData = (id: number) => {
 
         dispatch(groupDelete(id)).unwrap().then(() => {
@@ -86,6 +145,7 @@ const GroupDetailScreen = () => {
         {
             title: strings.Edit, onPress: () => {
                 setIsEditable(true)
+                createForm(values)
                 setVisible(false)
             }, imageSource: ImagesPath.edit_icon
         }
@@ -96,6 +156,8 @@ const GroupDetailScreen = () => {
     const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
     const [visible, setVisible] = useState(false);
     const [modalShow, setModalShow] = useState(false);
+    const [selectedMemberData, setSelectedMemberData] = useState()
+    const [finalArray, setFinalArray] = useState()
     // const [countingValue, setCountingValue] = useState<DropdownProps>({
     //     label: groupDetails.inspector_details?.user_name ?? '',
     //     value: groupDetails.inspector_details?.user_name ?? ''
@@ -131,6 +193,35 @@ const GroupDetailScreen = () => {
                 Alert.alert("dsf")
             }
         })
+
+
+    useEffect(() => {
+        let data: any = []
+        selectedMemberData?.map((item) => {
+            data.push(item.id)
+        })
+        setFinalArray(data)
+    }, [selectedMemberData])
+
+    const createForm = (values: any) => {
+        let params = {
+            id: route.params.id,
+            name: values.groupName,
+            groupManager: values.groupManager.id,
+            inspector: values.inspector.id,
+            groupMamber: finalArray,
+            forms: groupDetails?.form_details
+        }
+        console.log({ params })
+        dispatch(groupUpdate(params)).unwrap().then((res) => {
+
+            navigation.goBack()
+            // navigation.navigate('FormScreen')
+        }).catch((e) => {
+            console.log({ error: e });
+
+        })
+    }
 
     const renderItem = ({ item, index }: any) => {
         return (
@@ -191,13 +282,13 @@ const GroupDetailScreen = () => {
                     <DropDownComponent
                         disable={!isEditable}
                         title={strings.Group_Manager}
-                        data={!isEditable ? [groupDetails?.manager_details] : userGroupManagerList}
+                        data={!isEditable ? [groupDetails?.manager_details] : isManager}
                         image={!isEditable ? '' : ImagesPath.down_white_arrow}
                         labelField={"user_name"}
                         valueField="id"
                         onChange={(item) => setFieldValue('groupManager', item)}
                         value={values.groupManager.id}
-                        placeholder={strings.SelectRoleforUser}
+                        placeholder={groupDetails.manager_details?.user_name ? groupDetails.manager_details?.user_name : strings.SelectRoleforUser}
                         container={{ marginBottom: wp(5) }}
                     />
                     {/* {console.log({ countingValue })} */}
@@ -205,13 +296,13 @@ const GroupDetailScreen = () => {
                     <DropDownComponent
                         disable={!isEditable}
                         title={strings.Group_Inspector}
-                        data={!isEditable ? [groupDetails?.inspector_details] : userInsepectorList}
+                        data={!isEditable ? [groupDetails?.inspector_details] : isInspector}
                         image={!isEditable ? '' : ImagesPath.down_white_arrow}
                         labelField="user_name"
                         valueField="id"
                         onChange={(item) => setFieldValue('inspector', item)}
                         value={values.inspector.id}
-                        placeholder={strings.GivePermission}
+                        placeholder={groupDetails.inspector_details?.user_name ? groupDetails.inspector_details?.user_name : strings.GivePermission}
                         container={{ marginBottom: wp(5) }}
                     />
                     {(touched?.inspector) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text>}
@@ -219,8 +310,9 @@ const GroupDetailScreen = () => {
                         disabled={!isEditable}
                         setIsVisible={setModalShow}
                         isVisible={modalShow}
-                        data={[{ name: 'abc', selected: true }, { name: 'def', selected: true }, { name: 'ghi', selected: false }]}
+                        data={!isEditable ? isMember : list}
                         title={strings.Groupmemeber}
+                        setSelectedMembers={(data) => { setSelectedMemberData(data) }}
                     />
                     <CustomDetailsComponent
                         title={strings.GroupForms}
@@ -230,7 +322,7 @@ const GroupDetailScreen = () => {
                                 {groupDetails?.form_details?.map((item, index) => {
                                     return (
                                         <View style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, borderRadius: wp(2) }]}>
-                                            <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14, color: colors.dark_blue1_color }]}>{item.name}</Text>
+                                            <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14, color: colors.dark_blue1_color }]}>{item?.name}</Text>
                                         </View>
                                     )
                                 })}

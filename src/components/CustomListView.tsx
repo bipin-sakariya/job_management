@@ -12,6 +12,7 @@ import { strings } from '../languages/localizedStrings'
 import useCustomNavigation from '../hooks/useCustomNavigation'
 import { billData, billDelete } from '../redux/slices/AdminSlice/billListSlice'
 import { useAppDispatch } from '../hooks/reduxHooks'
+import { formDelete } from '../redux/slices/AdminSlice/formListSlice'
 
 interface CustomeListViewProps {
     item: billData,
@@ -25,7 +26,7 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
     const [visible, setVisible] = useState(false);
     const navigation = useCustomNavigation('BillListScreen');
     const dispatch = useAppDispatch()
-    
+
     let data = {
         id: item.id,
         iamgeUrl: item.image,
@@ -38,6 +39,7 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
             title: strings.Remove, onPress: () => {
                 if (isFrom) {
                     //form data
+                    dispatch(formDelete(item.id))
                     setVisible(false)
                 } else {
                     //billdata
@@ -49,6 +51,13 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
         {
             title: strings.Edit, onPress: () => {
                 if (isFrom) {
+                    let params = {
+                        id: data.id,
+                        type: material ? 'material' : 'sign',
+                        isEdit: true
+                    }
+                    setVisible(false)
+                    navigation.navigate("FormDetailsScreen", params)
                     setVisible(false)
                     // navigation.navigate("BillSectionScreen",)
                 } else {

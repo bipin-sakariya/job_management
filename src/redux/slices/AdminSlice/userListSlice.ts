@@ -55,10 +55,10 @@ export interface inspectorListProps {
         is_active: boolean
     }]
 }
-
 interface paramsTypes {
     id?: number
-    data?: FormData
+    data?: FormData,
+    role?: string
 }
 interface initialState {
     isLoading: boolean
@@ -69,17 +69,7 @@ interface initialState {
         id: number,
         title: string
     }]
-    userInsepectorList?: [{
-        id: number,
-        user_name: string,
-        profile_image: string,
-        email: string,
-        phone: string,
-        date_joined: string,
-        role: string,
-        is_active: boolean
-    }]
-    userGroupManagerList?: [{
+    userGroupRoleList?: [{
         id: number,
         user_name: string,
         profile_image: string,
@@ -97,8 +87,8 @@ const initialState: initialState = {
     userListData: [],
     userDetails: undefined,
     userRoleList: undefined,
-    userInsepectorList: undefined,
-    userGroupManagerList: undefined
+    userGroupRoleList: undefined,
+
 }
 
 export interface apiErrorTypes {
@@ -188,25 +178,38 @@ export const updateUser = createAsyncThunk<string, paramsTypes, { rejectValue: a
     }
 })
 
-export const inspectorList = createAsyncThunk<inspectorListProps, string, { rejectValue: apiErrorTypes }>
-    (USER + "/inspectorList", async (_: any, { rejectWithValue }) => {
-        try {
-            console.log(ApiConstants.USERINSPECTORLIST)
-            const response = await axiosClient.get(ApiConstants.USERINSPECTORLIST)
-            return response.data
-        } catch (e: any) {
-            if (e.code === "ERR_NETWORK") {
-                Alert.alert(e.message)
-            }
-            return rejectWithValue(e?.response)
-        }
-    })
+// export const inspectorList = createAsyncThunk<inspectorListProps, string, { rejectValue: apiErrorTypes }>
+//     (USER + "/inspectorList", async (_: any, { rejectWithValue }) => {
+//         try {
+//             console.log(ApiConstants.USERINSPECTORLIST)
+//             const response = await axiosClient.get(ApiConstants.USERINSPECTORLIST)
+//             return response.data
+//         } catch (e: any) {
+//             if (e.code === "ERR_NETWORK") {
+//                 Alert.alert(e.message)
+//             }
+//             return rejectWithValue(e?.response)
+//         }
+//     })
 
-export const groupManagerList = createAsyncThunk<inspectorListProps, string, { rejectValue: apiErrorTypes }>
-    (USER + "/groupmanagerList", async (_: any, { rejectWithValue }) => {
+// export const groupManagerList = createAsyncThunk<inspectorListProps, string, { rejectValue: apiErrorTypes }>
+//     (USER + "/groupmanagerList", async (_: any, { rejectWithValue }) => {
+//         try {
+//             console.log(ApiConstants.USERGROUPMANAGERLIST)
+//             const response = await axiosClient.get(ApiConstants.USERGROUPMANAGERLIST)
+//             return response.data
+//         } catch (e: any) {
+//             if (e.code === "ERR_NETWORK") {
+//                 Alert.alert(e.message)
+//             }
+//             return rejectWithValue(e?.response)
+//         }
+//     })
+export const roleList = createAsyncThunk<inspectorListProps, paramsTypes, { rejectValue: apiErrorTypes }>
+    (USER + "/roleList", async (params, { rejectWithValue }) => {
         try {
-            console.log(ApiConstants.USERGROUPMANAGERLIST)
-            const response = await axiosClient.get(ApiConstants.USERGROUPMANAGERLIST)
+            console.log("USERGROUPROLELIST", ApiConstants.USERGROUPROLELIST, params)
+            const response = await axiosClient.get(ApiConstants.USERGROUPROLELIST + `?role=${params.role}`)
             return response.data
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -310,29 +313,15 @@ const userListSlice = createSlice({
             state.isLoading = false
             state.error = action.payload?.data
         });
-        builder.addCase(inspectorList.pending, state => {
+        builder.addCase(roleList.pending, state => {
             state.isLoading = true
             state.error = ''
         });
-        builder.addCase(inspectorList.fulfilled, (state, action) => {
-            state.isLoading = false
-            state.userInsepectorList = action.payload.results
-            state.error = ''
-        });
-        builder.addCase(inspectorList.rejected, (state, action) => {
+        builder.addCase(roleList.fulfilled, (state, action) => {
             state.isLoading = false
             state.error = ''
         });
-        builder.addCase(groupManagerList.pending, state => {
-            state.isLoading = true
-            state.error = ''
-        });
-        builder.addCase(groupManagerList.fulfilled, (state, action) => {
-            state.isLoading = false
-            state.userGroupManagerList = action.payload.results
-            state.error = ''
-        });
-        builder.addCase(groupManagerList.rejected, (state, action) => {
+        builder.addCase(roleList.rejected, (state, action) => {
             state.isLoading = false
             state.error = ''
         });

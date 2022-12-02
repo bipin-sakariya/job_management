@@ -61,7 +61,7 @@ const GroupListComponent = ({ item }: itemPropsType) => {
                     navigation.navigate('GroupDetailScreen', { params: item })
                 }}
                 style={globalStyles.rowView}>
-                <FastImage source={item.profile_image ? { uri: item.profile_image } : ImagesPath.placeholder_img} resizeMode={'stretch'} style={styles.itemImgStyle} />
+                <FastImage source={item.image ? { uri: item.image } : ImagesPath.placeholder_img} resizeMode={'stretch'} style={styles.itemImgStyle} />
                 <View style={{ paddingHorizontal: wp(2) }}>
                     <Text numberOfLines={1} style={[styles.itemTitle, globalStyles.rtlStyle]}>{item?.name ?? 'user'}</Text>
                     <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { maxWidth: wp(40) }]}>{item.total_member_in_group} {strings.members_in_group}</Text>

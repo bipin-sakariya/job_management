@@ -8,6 +8,6 @@ export const ApiConstants = {
 	BILL: APP_URL + 'bills/',
 	JOB: APP_URL + 'job/',
 	GROUPLIST: APP_URL + 'groups/',
-	USERINSPECTORLIST: APP_URL + 'users/inspector/',
-	USERGROUPMANAGERLIST: APP_URL + 'users/group_manager/',
+	USERGROUPROLELIST: APP_URL + 'users/group/',
+	FORMS: APP_URL + 'forms/',
 };

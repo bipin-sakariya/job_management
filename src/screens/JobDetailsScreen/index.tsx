@@ -59,15 +59,95 @@ const JobDetailsScreen = () => {
         {
             srno: "01",
             name: "Asphalt Paint",
-            qty: "",
+            quantity: "",
             unit: "15",
-            parameter: "Meter",
+            type_counting: "Meter",
             imageUrl: ''
         },
         {
             srno: "01",
             name: "Asphalt Paint",
-            qty: "1",
+            quantity: "1",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "1",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "1",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "1",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "1",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "1",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "1",
+            unit: "15",
+            type_counting: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            quantity: "",
             unit: "15",
             parameter: "Meter",
             imageUrl: 'dssdfsdfsf'
@@ -75,114 +155,34 @@ const JobDetailsScreen = () => {
         {
             srno: "01",
             name: "Asphalt Paint",
-            qty: "1",
+            quantity: "1",
             unit: "15",
-            parameter: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: 'dssdfsdfsf'
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "1",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: 'dssdfsdfsf'
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "1",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "1",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "1",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: 'dssdfsdfsf'
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "1",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: 'dssdfsdfsf'
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            qty: "1",
-            unit: "15",
-            parameter: "Meter",
+            type_counting: "Meter",
             imageUrl: 'dssdfsdfsf'
         },
 
         {
             srno: "01",
             name: "Asphalt Paint",
-            qty: "1",
+            quantity: "1",
             unit: "15",
-            parameter: "Meter",
+            type_counting: "Meter",
             imageUrl: ''
         },
         {
             srno: "01",
             name: "Asphalt Paint",
-            qty: "",
+            quantity: "",
             unit: "15",
-            parameter: "Meter",
+            type_counting: "Meter",
             imageUrl: ''
         },
         {
             srno: "01",
             name: "Asphalt Paint",
-            qty: "1",
+            quantity: "1",
             unit: "15",
-            parameter: "Meter",
+            type_counting: "Meter",
             imageUrl: ''
         },
 
@@ -391,7 +391,7 @@ const JobDetailsScreen = () => {
                                 title={strings.Close}
                                 buttonStyle={{ paddingHorizontal: wp(10) }}
                                 onPress={() => {
-                                    // navigation.navigate("CloseJobScreen")
+                                    navigation.navigate("CloseJobScreen")
                                 }}
                                 image={ImagesPath.check_circle}
                             />
