@@ -54,7 +54,8 @@ export const globalStyles = StyleSheet.create({
     modalView: {
         position: 'absolute',
         height: '100%',
-        width: '100%'
+        width: '100%',
+        alignSelf: 'center'
     },
     modalImageStyle: {
         height: wp(12),
