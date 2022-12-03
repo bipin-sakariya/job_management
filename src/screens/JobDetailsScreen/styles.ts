@@ -161,9 +161,7 @@ export const styles = StyleSheet.create({
     },
 
     deleteBtnTxt: {
-        backgroundColor: colors.white_5,
-        borderColor: colors.black,
-        borderWidth: wp(0.2),
+        backgroundColor: colors.light_blue_color,
         paddingHorizontal: wp(9),
         borderRadius: wp(2)
     }

@@ -1,6 +1,6 @@
 import { useRoute } from "@react-navigation/native";
 import React, { useRef, useState } from "react";
-import { Alert, FlatList, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { BottomSheet, CommonPdfView, Container, CustomActivityIndicator, CustomBlackButton, CustomCarouselImageAndVideo, CustomDetailsComponent, CustomJobAddedByComponent, CustomJobDetailsBottomButton, CustomStatusBtn, CustomTextInput, CustomTextInputWithImage, Header, TableDetailsComponent, TableHeaderView } from "../../components";
 import { globalStyles } from "../../styles/globalStyles";
@@ -219,7 +219,7 @@ const JobDetailsScreen = () => {
                 headerRightComponent={
                     <>
                         {
-                            userData?.role != strings.Inspector && (data.status == strings.JobOpen || data.status == strings.JobReturn || data.status == strings.JobTransfer) ?
+                            userData?.role != strings.Inspector && (data.status == strings.JobOpen || data.status == strings.JobTransfer) ?
                                 <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
                                     <Image source={ImagesPath.menu_dots_icon} style={globalStyles.headerIcon} />
                                 </TouchableOpacity>
@@ -385,13 +385,24 @@ const JobDetailsScreen = () => {
                             />
                             : null
                         }
-                        {type && userData?.role == strings.Inspector &&
+                        {(type && (userData?.role == strings.Inspector || userData?.role == strings.Admin) && data.status == strings.JobReturn) &&
                             <View style={[globalStyles.rowView, { justifyContent: 'space-between', marginVertical: wp(5) }]}>
-                                <CustomBlackButton title={strings.Delete} image={ImagesPath.trash_icon} textStyle={{ color: colors.black }} buttonStyle={styles.deleteBtnTxt} />
-                                <CustomBlackButton onPress={() => { navigation.navigate("CreateNewJobScreen", { type: strings.returnJob }) }} title={strings.Edit_job} image={ImagesPath.pencil_simple_icon} buttonStyle={{ paddingHorizontal: wp(13), borderRadius: wp(2) }} />
+                                <CustomBlackButton
+                                    title={strings.Delete}
+                                    image={ImagesPath.trash_icon}
+                                    imageStyle={{ tintColor: colors.primary_color }}
+                                    textStyle={{ color: colors.primary_color }}
+                                    buttonStyle={styles.deleteBtnTxt} />
+                                <CustomBlackButton
+                                    onPress={() => { navigation.navigate("CreateNewJobScreen", { type: strings.returnJob }) }}
+                                    title={strings.Edit_job}
+                                    image={ImagesPath.pencil_simple_icon}
+                                    buttonStyle={{ paddingHorizontal: wp(13), borderRadius: wp(2) }} />
                             </View>
                         }
-                        {userData?.role != strings.Inspector && data.status != strings.JobClose || userData?.role == strings.Inspector && data.status == strings.JobPartial ?
+                        {((userData?.role == strings.Admin || userData?.role == strings.Group_Manager) && (data.status == strings.JobOpen || data.status == strings.JobPartial)
+                            || (userData?.role == strings.Admin && data.status == strings.JobTransfer))
+                            ?
                             <CustomBlackButton
                                 title={strings.Close}
                                 buttonStyle={{ paddingHorizontal: wp(10) }}
@@ -412,7 +423,7 @@ const JobDetailsScreen = () => {
                                     refRBSheet.current?.close()
                                 }} />
                                 {
-                                    userData?.role != strings.GroupManager &&
+                                    userData?.role != strings.Group_Manager &&
                                     <CustomJobDetailsBottomButton image={ImagesPath.round_arrow_icon} buttonText={strings.ReturnJob} onPress={() => {
                                         navigation.navigate("ReturnJobScreen")
                                         refRBSheet.current?.close()

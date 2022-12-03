@@ -25,25 +25,25 @@ const JobData = [
     {
         data: '16 May 2022',
         jobs: [
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobReturn },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobTransfer }
+            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
+            { title: 'Job Return', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobReturn },
+            { title: 'Job Transfer', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobTransfer }
         ]
     },
     {
         data: '16 May 2022',
         jobs: [
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobClose },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobPartial },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen }
+            { title: 'Job Close', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobClose },
+            { title: 'Job Partial', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobPartial },
+            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen }
         ]
     },
     {
         data: '16 May 2022',
         jobs: [
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
-            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen }
+            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
+            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
+            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen }
         ]
     }
 ]
@@ -54,10 +54,8 @@ const JobsScreen = () => {
 
     const [selectedItem, setSelectedItem] = useState<ListDataProps | undefined>(undefined);
     const [page, setPage] = useState(1)
-    const [btn, setBtn] = useState({
-        open: true,
-        close: false
-    })
+    const [btn, setBtn] = useState({ open: true, close: false })
+
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
     useEffect(() => {
         let defaultSelected = data.find((i) => i.selected == true)
@@ -86,7 +84,7 @@ const JobsScreen = () => {
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                         {
-                            userData?.role != strings.GroupManager &&
+                            userData?.role != strings.Group_Manager &&
                             <TouchableOpacity onPress={() => {
                                 if (userData?.role == strings.Admin) {
                                     navigation.navigate("NotificationScreen")

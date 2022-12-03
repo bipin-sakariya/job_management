@@ -88,7 +88,7 @@ const GroupDetailScreen = () => {
                 console.log("🚀 ~ file: DrawerStack.tsx ~ line 20 ~ dispatch ~ error", error)
             })
             let param = {
-                role: strings.GroupManager
+                role: strings.Group_Manager
             }
             dispatch(roleList(param)).unwrap().then((res) => {
                 console.log({ res });
@@ -297,7 +297,7 @@ const GroupDetailScreen = () => {
                     {(touched?.groupManager) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text>}
                     <DropDownComponent
                         disable={!isEditable}
-                        title={strings.Group_Inspector}
+                        title={strings.Inspector}
                         data={!isEditable ? [groupDetails?.inspector_details] : isInspector}
                         image={!isEditable ? '' : ImagesPath.down_white_arrow}
                         labelField="user_name"

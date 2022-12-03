@@ -72,7 +72,7 @@ const ResetPasswordScreen = () => {
                     }
                 />
                 <CustomBlackButton
-                    title={strings.ResetPassword}
+                    title={strings.Changepassword}
                     onPress={() => { }}
                 />
             </Container>

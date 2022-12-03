@@ -61,7 +61,6 @@ export const eng = {
 
     Inspector: 'Inspector',
     Admin: 'Admin',
-    GroupManager: 'Group Manager',
 
     Transferjobto: 'Transfer job to',
     ResoneofReturnjob: 'Resone of Return job',
@@ -134,7 +133,6 @@ export const eng = {
     CreateGroup: 'Create Group',
     GroupName: 'Group Name',
     Group_Manager: 'Group Manager',
-    Group_Inspector: 'Inspector',
     Groupmemeber: 'Group memeber',
     GroupForms: 'Forms',
     Assignedjobs: 'Assigned jobs',
@@ -213,4 +211,5 @@ export const eng = {
     select: 'Select',
     Total: 'Total',
     Search_here: 'Search here',
+    date: 'Date'
 }

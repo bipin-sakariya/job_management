@@ -21,7 +21,7 @@ export type RootStackParamList = {
     DrawerScreens: DrawerStackParamList
     MapScreen: undefined
     IndoxScreen: undefined
-    JobDuplicateListScreen: {
+    JobDuplicateListScreen?: {
         params?: any,
     }
     NotificationScreen: undefined

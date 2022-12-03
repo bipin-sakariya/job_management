@@ -22,6 +22,7 @@ const CreateNewJobScreen = () => {
     const { type } = route.params
     const { userData } = useAppSelector(state => state.userDetails)
     const refRBSheet = useRef<RBSheet | null>(null)
+
     const [isModelVisible, setIsModelVisible] = useState(false)
     const [isurgent, setIsUrgent] = useState(false)
     const [isnotification, setIsNotification] = useState(false)
@@ -69,13 +70,13 @@ const CreateNewJobScreen = () => {
                 headerRightComponent={
                     <>
                         {
-                            userData?.role != strings.Inspector &&
+                            (userData?.role == strings.Group_Manager) &&
                             <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
                                 <Image source={ImagesPath.menu_dots_icon} style={globalStyles.headerIcon} />
                             </TouchableOpacity>
                         }
                         {
-                            type == strings.returnJob && userData?.role == strings.Inspector ?
+                            type == strings.returnJob && (userData?.role == strings.Admin || userData?.role == strings.Inspector) ?
                                 <TouchableOpacity onPress={() => { }} >
                                     <Text style={globalStyles.headerTitle}>{strings.Done}</Text>
                                 </TouchableOpacity> : null

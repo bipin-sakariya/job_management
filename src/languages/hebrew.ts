@@ -62,7 +62,6 @@ export const hebrew = {
 
     Inspector: 'מְפַקֵחַ',
     Admin: 'מנהל מערכת',
-    GroupManager: 'מנהל קבוצה',
 
     Transferjobto: 'העברת עבודה ל',
     ResoneofReturnjob: 'רזון של משרת החזרה',
@@ -125,7 +124,7 @@ export const hebrew = {
     FillfromtoCreateGroup: 'מלא מ כדי ליצור קבוצה',
     UserName: 'שם משתמש',
     Email: 'אימייל',
-    Contactno: 'מס\' איש קשר',
+    Contactno: 'מס\' איש קשר.',
     Password: 'סיסמה',
     Role: 'תַפְקִיד',
     SelectRoleforUser: 'בחר תפקיד עבור משתמש',
@@ -135,7 +134,6 @@ export const hebrew = {
     CreateGroup: 'צור קבוצה',
     GroupName: 'שם קבוצה',
     Group_Manager: 'מנהל קבוצה',
-    Group_Inspector: 'מְפַקֵחַ',
     Groupmemeber: 'חברי קבוצה',
     GroupForms: 'טפסים',
     Assignedjobs: 'משרות שהוקצו',
@@ -270,4 +268,5 @@ export const hebrew = {
     people: 'אנשים',
     select: 'בחר',
     Total: 'סך הכל',
+    date: 'תַאֲרִיך',
 }

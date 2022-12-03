@@ -19,7 +19,7 @@ const CustomBlackButton = ({ title, onPress, image, buttonStyle, imageStyle, tex
     return (
         <TouchableOpacity onPress={onPress} style={[globalStyles.rowView, styles.blackBtnStyle, buttonStyle]}>
             {image && <Image source={image} style={[imageStyle, styles.imageView]} />}
-            <Text style={[styles.btnTextStyle, textStyle,]}>{title}</Text>
+            <Text style={[styles.btnTextStyle, textStyle]}>{title}</Text>
         </TouchableOpacity>
     )
 }

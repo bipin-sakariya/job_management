@@ -6,6 +6,7 @@ import { ImagesPath } from '../utils/ImagePaths'
 import fonts from '../styles/Fonts'
 import FontSizes from '../styles/FontSizes'
 import { colors } from '../styles/Colors'
+import { strings } from '../languages/localizedStrings'
 
 interface CustomeJobListDetailsViewComponentProps {
     item: any
@@ -19,12 +20,13 @@ const CustomeJobListDetailsViewComponent = (props: CustomeJobListDetailsViewComp
                 <View style={styles.jobTitleContainer}>
                     <Text style={[styles.titleTxt, globalStyles.rtlStyle]}>{props.item.title}</Text>
                     <View style={[globalStyles.rowView, { direction: I18nManager.isRTL ? 'ltr' : 'rtl' }]}>
-                        <Image source={ImagesPath.map_pin_dark_line_icon} style={{ width: wp(5), height: wp(5), resizeMode: 'contain' }} />
+                        {props.item.jobstatus != strings.JobAddedby && props.item.jobstatus != strings.JobClosedby &&
+                            <Image source={ImagesPath.map_pin_dark_line_icon} style={{ width: wp(5), height: wp(5), resizeMode: 'contain' }} />
+                        }
                         <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>{props.item.km}</Text>
                     </View>
                 </View>
-                {
-                    props.item.author ?
+                {props.item.author ?
                         <>
                             <Text style={[styles.descriptionTxt, { writingDirection: "ltr", textAlign: 'left' }]}>{props.item.jobstatus}</Text>
                             <Text style={[styles.descriptionTxt, { writingDirection: "ltr", textAlign: 'left' }]}>{props.item.author}</Text>

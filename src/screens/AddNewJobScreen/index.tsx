@@ -348,17 +348,18 @@ const AddNewJobScreen = () => {
                             </View>
                         }
                     />
-                    <CustomModal visible={isModelVisible} onRequestClose={() => { setIsModelVisible(false) }} children={
-                        <View style={styles.modalInnerView}>
-                            <Image source={ImagesPath.check_icon_circle} style={globalStyles.modalImageStyle} />
-                            <Text style={{
-                                fontFamily: fonts.FONT_POP_REGULAR,
-                                fontSize: FontSizes.MEDIUM_16,
-                                color: colors.black
-                            }}>{strings.NewJobAddedSuccessfully}</Text>
-                            <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginTop: wp(2) }} onPress={() => { setIsModelVisible(false) }} title={strings.Okay} />
-                        </View>
-                    } />
+                    <CustomModal visible={isModelVisible} onRequestClose={() => { setIsModelVisible(false) }}
+                        children={
+                            <View style={styles.modalInnerView}>
+                                <Image source={ImagesPath.check_icon_circle} style={globalStyles.modalImageStyle} />
+                                <Text style={{
+                                    fontFamily: fonts.FONT_POP_REGULAR,
+                                    fontSize: FontSizes.MEDIUM_16,
+                                    color: colors.black
+                                }}>{strings.NewJobAddedSuccessfully}</Text>
+                                <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginTop: wp(2) }} onPress={() => { setIsModelVisible(false) }} title={strings.Okay} />
+                            </View>
+                        } />
                 </ScrollView>
             </Container>
         </View>

@@ -28,7 +28,12 @@ const EditProfileScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <Image source={ImagesPath.add_photo_icon} style={styles.profilePhoto} />
+                <TouchableOpacity onPress={() => { }} style={styles.profilePhoto}>
+                    <Image source={ImagesPath.add_photo_icon} style={[styles.profilePhoto, {
+                        resizeMode: 'contain',
+                        marginVertical: 0
+                    }]} />
+                </TouchableOpacity>
                 <CustomTextInput
                     title={strings.UserName}
                     container={{ marginBottom: wp(5) }}
