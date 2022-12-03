@@ -4,7 +4,7 @@ import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomDashedComponent, CustomSubTitleWithImageComponent, GroupListComponent, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { useRoute } from '@react-navigation/native';
+import { useIsFocused, useRoute } from '@react-navigation/native';
 import { styles } from './styles';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { RootRouteProps } from '../../types/RootStackTypes';
@@ -28,17 +28,28 @@ const GroupListScreen = () => {
     const navigation = useCustomNavigation('GroupListScreen');
     const route = useRoute<RootRouteProps<'GroupListScreen'>>();
     const dispatch = useAppDispatch();
+    const isFocus = useIsFocused()
+
+
     const [page, setPage] = useState(1)
+
     const { groupListData, isLoading } = useAppSelector(state => state.groupList)
     console.log({ groupListData })
 
     useEffect(() => {
-        let params = {
-            page: page,
+        if (isFocus) {
+            let params = {
+                page: page,
+            }
+            groupListApiCall(params)
         }
-        groupListApiCall(params)
+        return () => {
+            setPage(1)
+        }
+    }, [isFocus])
 
-    }, [])
+    console.log({ page });
+
 
     const groupListApiCall = (params: groupListParams) => {
         dispatch(groupList(params)).unwrap().then((res) => {

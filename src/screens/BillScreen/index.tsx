@@ -45,9 +45,6 @@ const BillListScreen = () => {
     }, [isFocus, route])
 
     useEffect(() => {
-        console.log({ route2: route });
-
-        console.log("🚀 ~ file: index.tsx ~ line 95 ~ useEffect ~ isFocus", isFocus)
         if (isFocus && btn) {
             let params = {
                 page: page,

@@ -2,7 +2,7 @@ import { Alert, Image, ImageBackground, Text, TouchableOpacity, View } from 'rea
 import React, { useEffect, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header, MultileSelectDropDown } from '../../components';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
@@ -30,51 +30,30 @@ interface DataTypes {
 
 const CreateGroupValidationSchema = Yup.object().shape({
     groupName: Yup.string().required(strings.Groupname_required),
-    groupManager: Yup.object().required(strings.groupmanger_required),
-    inspector: Yup.object().required(strings.Contectno_invalid),
+    groupManager: Yup.object().shape({
+        id: Yup.number().required(strings.groupmanger_required)
+    }),
+    inspector: Yup.object().shape({
+        id: Yup.number().required(strings.inspector_required)
+    }),
     member: Yup.array().required(strings.groupMember_required),
-    forms: Yup.object().required(strings.forms_required)
+    forms: Yup.array().required(strings.forms_required)
 });
-
-const data_user = [
-    {
-        id: 1,
-        name: 'Stanley Lamb 1'
-    },
-    {
-        id: 2,
-        name: 'Robert Kramer 2'
-    },
-    {
-        id: 3,
-        name: 'Tiffany Rivas 3'
-    },
-    {
-        id: 4,
-        name: 'Linda Mark 4'
-    },
-    {
-        id: 5,
-        name: 'Tiffany Rivas 5'
-    },
-    {
-        id: 6,
-        name: 'Tiffany Rivads fdsfsfs'
-    },
-]
 
 const CreateGroupScreen = () => {
     const navigation = useCustomNavigation('CreateGroupScreen');
+    const dispatch = useAppDispatch();
+    const isFoucs = useIsFocused();
+
     const [imageUrl, setImageUrl] = useState<string | undefined>('');
     const [visible, setVisible] = useState(false);
+    const [formListVisible, setFormListVisible] = useState(false);
     const [isInspector, setIsInspector] = useState([])
     const [isManager, setIsManager] = useState([])
     const [isUser, setIsUser] = useState([])
-    const dispatch = useAppDispatch();
     const [page, setPage] = useState(1)
     const [finalArray, setFinalArray] = useState([])
-    const { isLoading, userListData, } = useAppSelector(state => state.userList);
-    const { formListData } = useAppSelector(state => state.formList);
+    const [finalFormsArray, setFinalFormsArray] = useState([])
     const [error, setError] = useState({
         groupName: '',
         image: '',
@@ -86,13 +65,14 @@ const CreateGroupScreen = () => {
         },
     })
     const [selectedMemberData, setSelectedMemberData] = useState<DataTypes[]>()
+    const [formsList, setFormList] = useState([])
+    const [selectedFormsList, setSelectedFormList] = useState([])
+    const [selectedFormsData, setSelectedFormsData] = useState<DataTypes[]>()
 
-    useEffect(() => {
-        console.log({ selectedMemberData });
 
-    }, [selectedMemberData])
-    const isFoucs = useIsFocused();
-    console.log({ formListData })
+    const { isLoading, userListData, } = useAppSelector(state => state.userList);
+    const { formListData, formDetails } = useAppSelector(state => state.formList);
+
     useEffect(() => {
         if (isFoucs) {
             dispatch(getListOfUsers("")).unwrap().then((res) => {
@@ -159,12 +139,11 @@ const CreateGroupScreen = () => {
                     id: null
                 },
                 member: [],
-                forms: { id: null }
-
+                forms: []
             },
             validationSchema: CreateGroupValidationSchema,
-            onSubmit: values => {
-                // console.log({ values })
+            onSubmit: (values) => {
+                console.log({ values, touched, error })
                 groupCreate(values)
                 // alert('hjgjhgjguighjh')
             }
@@ -176,12 +155,17 @@ const CreateGroupScreen = () => {
         })
         setFinalArray(data)
     }, [selectedMemberData])
-    console.log({ finalArray: finalArray })
 
     useEffect(() => {
-        console.log(isUser);
+        let data: any = []
+        selectedFormsData?.map((item) => {
+            data.push(item.id)
+        })
+        setFinalFormsArray(data)
+    }, [selectedFormsData])
 
-    }, [isUser])
+    console.log({ finalArray, finalFormsArray });
+
 
     const groupCreate = (values: {
         groupName: string;
@@ -193,10 +177,8 @@ const CreateGroupScreen = () => {
             id: number;
         };
         member: [];
-        forms: { id: number }
-    }
-
-    ) => {
+        forms: []
+    }) => {
         if (!imageUrl) {
             Alert.alert('Alert', 'Please select your profile picture.')
         } else {
@@ -217,7 +199,10 @@ const CreateGroupScreen = () => {
                 // data.append()
                 data.append("member", _member)
             })
-            data.append("form", values.forms.id)
+            finalFormsArray.map((_form) => {
+                data.append("form", _form)
+            })
+            // data.append("form", values.forms.id)
             dispatch(createGroup(data)).unwrap().then((res) => {
                 console.log({ res: res });
                 navigation.goBack()
@@ -227,6 +212,33 @@ const CreateGroupScreen = () => {
             })
         }
     }
+
+    console.log({ imageUrl });
+
+
+    useEffect(() => {
+        const findData: any = formListData.results.map((i) => {
+            return {
+                ...i,
+                user_name: i.name,
+                selected: false,
+            }
+        })
+        setFormList(findData)
+
+        if (formDetails.bill) {
+            const finalData: any = formDetails?.bill?.map((i: any) => {
+                return {
+                    ...i,
+                    user_name: i.name,
+                    selected: true,
+
+                }
+            })
+            console.log({ finalData })
+            setSelectedFormList(finalData)
+        }
+    }, [formListData])
 
 
     return (
@@ -276,7 +288,8 @@ const CreateGroupScreen = () => {
                         onChangeText={handleChange("groupName")}
                         value={values.groupName}
                     />
-                    {(touched?.groupName) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.groupName}</Text>}
+                    {console.log({ values })}
+                    {(touched.groupName && errors?.groupName) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.groupName}</Text>}
                     <DropDownComponent
                         title={strings.Group_Manager}
                         data={isManager}
@@ -288,7 +301,7 @@ const CreateGroupScreen = () => {
                         placeholder={strings.SelectRoleforUser}
                         container={{ marginBottom: wp(5) }}
                     />
-                    {/* {(touched?.groupManager) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text>} */}
+                    {(touched?.groupManager) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text>}
                     <DropDownComponent
                         title={strings.Group_Inspector}
                         data={isInspector}
@@ -301,7 +314,7 @@ const CreateGroupScreen = () => {
                         container={{ marginBottom: wp(5) }}
 
                     />
-                    {/* {(touched?.inspector) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text>} */}
+                    {(touched?.inspector) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text>}
                     <MultileSelectDropDown
                         setIsVisible={setVisible}
                         isVisible={visible}
@@ -309,11 +322,25 @@ const CreateGroupScreen = () => {
                         title={strings.Groupmemeber}
                         setSelectedMembers={(data: DataTypes[]) => {
                             setSelectedMemberData(data)
-                            // setFieldValue('member', data)
+                            setFieldValue('member', data)
                         }}
-                    // setData={setSelectedMemberData}
+                        countTitle={strings.people}
                     />
-                    <DropDownComponent
+
+                    {/* form list  */}
+                    <MultileSelectDropDown
+                        setIsVisible={setFormListVisible}
+                        isVisible={formListVisible}
+                        data={formsList}
+                        title={strings.Forms}
+                        setSelectedMembers={(data: DataTypes[]) => {
+                            setSelectedFormsData(data)
+                            setFieldValue('forms', data)
+                        }}
+                        container={{ marginTop: hp(2.5) }}
+                        countTitle={strings.Forms}
+                    />
+                    {/* <DropDownComponent
                         title={strings.GroupForms}
                         data={formListData.results}
                         image={ImagesPath.down_white_arrow}
@@ -323,7 +350,7 @@ const CreateGroupScreen = () => {
                         value={values.forms.id}
                         placeholder={strings.GivePermission}
                         container={{ marginTop: wp(5) }}
-                    />
+                    /> */}
                     <CustomBlackButton
                         title={strings.CreateGroup}
                         image={ImagesPath.plus_white_circle_icon}

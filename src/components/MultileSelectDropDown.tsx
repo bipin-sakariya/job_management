@@ -1,6 +1,5 @@
-import { FlatList, I18nManager, Image, ImageSourcePropType, ImageStyle, KeyboardAvoidingView, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { FlatList, I18nManager, Image, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { Dropdown } from 'react-native-element-dropdown'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { globalStyles } from '../styles/globalStyles'
 import { ImagesPath } from '../utils/ImagePaths'
@@ -8,9 +7,9 @@ import fonts from '../styles/Fonts'
 import FontSizes from '../styles/FontSizes'
 import { colors } from '../styles/Colors'
 import { TextInput } from 'react-native-gesture-handler'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { inspectorListProps, roleList } from '../redux/slices/AdminSlice/userListSlice'
-import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks'
+import { roleList } from '../redux/slices/AdminSlice/userListSlice'
+import { useAppDispatch } from '../hooks/reduxHooks'
+import { strings } from '../languages/localizedStrings'
 
 // We can chanage data type as per the component use in future.
 interface DataTypes {
@@ -34,54 +33,33 @@ interface DropDownComponentProps {
     disabled?: boolean
     onCount?: (count: number) => void
     setSelectedMembers?: (data: DataTypes[]) => void
-    // setData: Dispatch<SetStateAction<DataTypes[] | undefined>>
+    countTitle?: string
 }
 
 const MultileSelectDropDown = (props: DropDownComponentProps) => {
+    const dispatch = useAppDispatch()
+
     const [list, setList] = useState(props.data)
     const [searchTxt, setSearchTxt] = useState('');
     const [searchData, setSearchData] = useState<DataTypes[]>([])
-    const [select, setSelect] = useState({});
-    const [isUser, setIsUser] = useState<inspectorListProps[] | undefined>()
-    const [isMember, setIsMember] = useState([])
-    const dispatch = useAppDispatch()
-    const { groupDetails, isLoading } = useAppSelector(state => state.groupList)
-    console.log({ data: props.data });
 
+    console.log({ data: props.data });
 
     useEffect(() => {
         let role = {
             role: ''
         }
         dispatch(roleList(role)).unwrap().then((res) => {
-            console.log({ res });
-            setIsUser(res.results)
-            console.log("🚀 ~ file: DrawerStack.tsx ~ line 21 ~ dispatch ~ res", res)
         }).catch((error) => {
             console.log("🚀 ~ file: DrawerStack.tsx ~ line 20 ~ dispatch ~ error", error)
         })
     }, [props.data])
-
-
-    // useEffect(() => {
-    //     // const findData = isUser.map((i) => {
-    //     //     return {
-    //     //         ...i,
-    //     //         selected: false
-    //     //     }
-    //     // })
-    //     // isList(findData)
-
-    // }, [isUser])
-
-    console.log({ isUser })
 
     useEffect(() => {
         if (props.data.length != 0) {
             setList(props.data)
         }
     }, [props.data])
-
 
     const removeSelectedItem = (removeItem: any) => {
         const newList = list.map((_listItem) => {
@@ -94,7 +72,6 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
 
             return _listItem
         })
-        console.log({ newList });
 
         props.onCount && props.onCount(newList.filter(i => i.selected == true).length)
         props.setSelectedMembers && props.setSelectedMembers(newList.filter(i => i.selected))
@@ -122,8 +99,15 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                 </View>
                 <TouchableOpacity disabled={props.disabled} activeOpacity={1} onPress={() => props.setIsVisible(!props.isVisible)}>
                     <View style={[globalStyles.rowView, { justifyContent: 'space-between', paddingHorizontal: wp(2), paddingTop: wp(2) }]}>
-                        <Text style={[globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_12, color: colors.dark_blue2_color }]}>{`סך הכל ${tempSelectedItem.length} אנשים`}</Text>
-                        {!props.disabled && <Image source={ImagesPath.left_arrow_icon} style={[globalStyles.backArrowStyle, { transform: [{ rotate: props.isVisible ? '270deg' : '90deg' }], marginRight: 0 }]} />}
+                        <Text
+                            style={[globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_12, color: colors.dark_blue2_color }]}>
+                            {props.isVisible ? `${strings.Total} ${tempSelectedItem.length} ${props?.countTitle}` : `${strings.select} ${props?.countTitle}`}
+                        </Text>
+                        {!props.disabled &&
+                            <Image
+                                source={ImagesPath.left_arrow_icon}
+                                style={[globalStyles.backArrowStyle, { transform: [{ rotate: props.isVisible ? '270deg' : '90deg' }], marginRight: 0 }]}
+                            />}
                     </View>
                     {tempSelectedItem.length !== 0 ?
                         <View style={[globalStyles.rowView, {}]}>
@@ -143,22 +127,14 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                 </TouchableOpacity>
             </View>
             {props.isVisible &&
-                <View style={[styles.modalContainer, {
-                    borderRightColor: colors.text_input_border_color,
-                    borderLeftColor: colors.text_input_border_color,
-                    borderBottomColor: colors.text_input_border_color,
-                    borderRightWidth: wp(0.5),
-                    borderLeftWidth: wp(0.5),
-                    borderBottomWidth: wp(0.5),
-                    borderRadius: wp(2),
-                }]}>
+                <View style={[styles.modalContainer, styles.borderList]}>
                     <KeyboardAvoidingView behavior='padding'>
 
                         <View style={[globalStyles.rowView, globalStyles.rtlDirection, styles.textInputContainer, { paddingHorizontal: wp(2.5), marginBottom: wp(2.5) }]}>
                             <Image source={ImagesPath.search_icon} style={{ height: wp(6), width: wp(6), resizeMode: 'contain' }} />
                             <TextInput
                                 style={[globalStyles.rtlStyle, { height: 40, marginHorizontal: wp(1.5), width: '90%', textAlign: I18nManager.isRTL ? 'right' : 'left', }]}
-                                placeholder={'חפש כאן'}
+                                placeholder={strings.SearchHere}
                                 value={searchTxt}
                                 onChangeText={(txt) => {
                                     const searchData = props.data.filter((i) => i.user_name.includes(txt.toLowerCase()))
@@ -248,5 +224,14 @@ const styles = StyleSheet.create({
     checkBoxIcon1: {
         height: wp(5),
         width: wp(5)
+    },
+    borderList: {
+        borderRightColor: colors.text_input_border_color,
+        borderLeftColor: colors.text_input_border_color,
+        borderBottomColor: colors.text_input_border_color,
+        borderRightWidth: wp(0.5),
+        borderLeftWidth: wp(0.5),
+        borderBottomWidth: wp(0.5),
+        borderRadius: wp(2),
     }
 })

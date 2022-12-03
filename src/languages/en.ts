@@ -208,5 +208,9 @@ export const eng = {
     job_added_on: 'Job added on',
     originalJob: 'Original Job',
     members_in_group: 'members_in_group',
-    add_mark: 'Add a mark'
+    add_mark: 'Add a mark',
+    people: 'people',
+    select: 'Select',
+    Total: 'Total',
+    Search_here: 'Search here',
 }

@@ -234,7 +234,6 @@ export const hebrew = {
     Pleaseentersignlogo: 'נא להזין את לוגו השלט',
     UpdateBill: 'עדכון חשבון',
     Fromname_required: 'שם נדרש',
-    Searchhere: 'חפש כאן',
     Bill_required: 'נדרש חיוב',
     Differentsignshavebeenassignedtothisform: 'לטופס זה הוקצו שלטים שונים',
     Unit: 'יחידה',
@@ -267,5 +266,8 @@ export const hebrew = {
     job_added_on: 'העבודה הוסיפה',
     originalJob: 'עבודה מקורית',
     members_in_group: 'חברים_בקבוצה',
-    add_mark: 'הוסף סימן'
+    add_mark: 'הוסף סימן',
+    people: 'אנשים',
+    select: 'בחר',
+    Total: 'סך הכל',
 }

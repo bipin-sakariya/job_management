@@ -2,7 +2,7 @@ import { Alert, FlatList, Image, ImageBackground, Text, TouchableOpacity, View }
 import React, { useEffect, useRef, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { AssignedJobsComponent, Container, CustomBlackButton, CustomDetailsComponent, CustomDropdown, CustomTextInput, DropDownComponent, Header, MultileSelectDropDown } from '../../components';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { heightPercentageToDP, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { styles } from './styles';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
@@ -24,7 +24,7 @@ const CreateGroupValidationSchema = yup.object().shape({
     groupName: yup.string().required(strings.Groupname_required),
     groupManager: yup.string().required(strings.groupmanger_required),
     inspector: yup.string().trim().required(strings.Contectno_invalid),
-    groupMamber: yup.string().trim().required(strings.groupMember_required),
+    groupMember: yup.string().trim().required(strings.groupMember_required),
     forms: yup.string().required(strings.forms_required)
 });
 
@@ -60,14 +60,14 @@ const GroupDetailScreen = () => {
     const dispatch = useAppDispatch()
     const route = useRoute<RootRouteProps<'GroupDetailScreen'>>()
     const isFocused = useIsFocused()
-    const { groupDetails, isLoading } = useAppSelector(state => state.groupList)
+
     const [isInspector, setIsInspector] = useState([])
     const [isManager, setIsManager] = useState([])
     const [isUser, setIsUser] = useState([])
     const [isMember, setIsMember] = useState([])
     const [list, isList] = useState([])
 
-
+    const { groupDetails, isLoading } = useAppSelector(state => state.groupList)
 
     useEffect(() => {
         if (isFocused) {
@@ -111,7 +111,7 @@ const GroupDetailScreen = () => {
     }, [isFocused])
     console.log(route.params.params)
     useEffect(() => {
-        const findData = isUser.map((i) => {
+        const findData = isUser.map((i: any) => {
             return {
                 ...i,
                 selected: false
@@ -119,7 +119,7 @@ const GroupDetailScreen = () => {
         })
         isList(findData)
         if (groupDetails.member_details) {
-            const finalData = groupDetails.member_details.map((i) => {
+            const finalData = groupDetails.member_details.map((i: any) => {
                 return {
                     ...i,
                     selected: true
@@ -158,6 +158,9 @@ const GroupDetailScreen = () => {
     const [modalShow, setModalShow] = useState(false);
     const [selectedMemberData, setSelectedMemberData] = useState()
     const [finalArray, setFinalArray] = useState()
+
+    const { formListData } = useAppSelector(state => state.formList);
+
     // const [countingValue, setCountingValue] = useState<DropdownProps>({
     //     label: groupDetails.inspector_details?.user_name ?? '',
     //     value: groupDetails.inspector_details?.user_name ?? ''
@@ -184,9 +187,8 @@ const GroupDetailScreen = () => {
                     id: !isEditable ? groupDetails.inspector : 1,
                     name: groupDetails.inspector_details?.user_name ? groupDetails.inspector_details?.user_name : '',
                 },
-                groupMamber: '',
-                forms: ''
-
+                groupMember: '',
+                forms: { id: null }
             },
             validationSchema: CreateGroupValidationSchema,
             onSubmit: values => {
@@ -209,7 +211,7 @@ const GroupDetailScreen = () => {
             name: values.groupName,
             groupManager: values.groupManager.id,
             inspector: values.inspector.id,
-            groupMamber: finalArray,
+            groupMember: finalArray,
             forms: groupDetails?.form_details
         }
         console.log({ params })
@@ -238,7 +240,7 @@ const GroupDetailScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView, { width: wp(60) }]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
-                        <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>P. תחזוקה</Text>
+                        <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{groupDetails.name}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
@@ -276,7 +278,7 @@ const GroupDetailScreen = () => {
                         title={strings.GroupName}
                         container={{ marginBottom: wp(5) }}
                         value={values.groupName}
-                        onChangeText={handleChange('userName')}
+                        onChangeText={handleChange('groupName')}
                     />
                     {(touched?.groupName && errors?.groupName) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.groupName ? errors.groupName : ''}</Text> : null}
                     <DropDownComponent
@@ -314,7 +316,33 @@ const GroupDetailScreen = () => {
                         title={strings.Groupmemeber}
                         setSelectedMembers={(data) => { setSelectedMemberData(data) }}
                     />
-                    <CustomDetailsComponent
+                    {isEditable ?
+                        <MultileSelectDropDown
+                            disabled={!isEditable}
+                            setIsVisible={setModalShow}
+                            isVisible={modalShow}
+                            data={!isEditable ? isMember : list}
+                            title={strings.Groupmemeber}
+                            setSelectedMembers={(data) => { setSelectedMemberData(data) }}
+                            container={{ marginVertical: heightPercentageToDP(2) }}
+                        />
+                        :
+                        <CustomDetailsComponent
+                            title={strings.GroupForms}
+                            detailsContainerStyle={{ marginVertical: wp(5) }}
+                            bottomComponent={
+                                <View style={[globalStyles.rowView, { flexWrap: "wrap", alignItems: "center" }]}>
+                                    {groupDetails?.form_details?.map((item, index) => {
+                                        return (
+                                            <View style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, borderRadius: wp(2) }]}>
+                                                <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14, color: colors.dark_blue1_color }]}>{item?.name}</Text>
+                                            </View>
+                                        )
+                                    })}
+                                </View>
+                            }
+                        />}
+                    {/* <CustomDetailsComponent
                         title={strings.GroupForms}
                         detailsContainerStyle={{ marginVertical: wp(5) }}
                         bottomComponent={
@@ -328,7 +356,7 @@ const GroupDetailScreen = () => {
                                 })}
                             </View>
                         }
-                    />
+                    /> */}
                     <CustomDetailsComponent
                         title={strings.Assignedjobs}
                         detailsContainerStyle={{ marginBottom: wp(5) }}
