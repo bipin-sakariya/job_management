@@ -6,14 +6,25 @@ import { axiosClient } from "../../../config/Axios";
 export interface GroupData {
     id: number,
     manager_details: {
-        user_name: string
+        user_name: string,
+        email: string
+        id: number
+        phone: string
+        profile_image: string
+        role: number
+
     },
     inspector_details: {
         user_name: string
     },
-    member_details: string,
+    member_details: [],
     form_details: [{
-
+        bill: [],
+        created_at: string,
+        id: number,
+        is_sign: boolean,
+        name: string,
+        updated_at: string
     }],
     total_member_in_group: string,
     assign_jobs: string,
@@ -43,6 +54,7 @@ interface paramsTypes {
     id?: number
     data?: FormData,
     page?: undefined | number,
+    search?: string
 }
 
 const initialState: InitialState = {
@@ -56,10 +68,24 @@ const initialState: InitialState = {
     },
     groupDetails: {
         id: 0,
-        manager_details: { user_name: '' },
+        manager_details: {
+            user_name: '',
+            email: '',
+            id: 0,
+            phone: '',
+            profile_image: '',
+            role: 0
+        },
         inspector_details: { user_name: '' },
-        member_details: '',
-        form_details: [{}],
+        member_details: [],
+        form_details: [{
+            bill: [],
+            created_at: '',
+            id: 0,
+            is_sign: false,
+            name: '',
+            updated_at: ''
+        }],
         total_member_in_group: '',
         assign_jobs: '',
         created_at: '',
@@ -84,7 +110,7 @@ export const groupList = createAsyncThunk
         try {
             console.log("🚀 ~ file: groupListSlice.ts ~ line 60 ~ params", params)
             console.log(ApiConstants.GROUPLIST)
-            const response = await axiosClient.get(ApiConstants.GROUPLIST + `?page=${params.page}`)
+            const response = await axiosClient.get(ApiConstants.GROUPLIST + `?page=${params.page}&search=${params.search}`)
             console.log("🚀 ~ file: groupListSlice.ts ~ line 69 ~ response", response)
             return response;
         } catch (e: any) {
@@ -107,10 +133,10 @@ export const groupDelete = createAsyncThunk<string, number, { rejectValue: apiEr
         return rejectWithValue(e?.response)
     }
 })
-export const groupUpdate = createAsyncThunk<GroupData, paramsTypes, { rejectValue: apiErrorTypes }>(GROUP + "/billUpdate", async (params, { rejectWithValue }) => {
+export const groupUpdate = createAsyncThunk<string[], FormData, { rejectValue: apiErrorTypes }>(GROUP + "/groupUpdate", async (params, { rejectWithValue }) => {
     try {
         console.log(ApiConstants.GROUPLIST, params)
-        const response = await axiosClient.patch(ApiConstants.GROUPLIST + params.id + '/', params.data)
+        const response = await axiosClient.patch(ApiConstants.GROUPLIST + params.id + '/', params)
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {
@@ -153,10 +179,24 @@ const groupListSlice = createSlice({
         groupDetails: (state,) => {
             state.groupDetails = {
                 id: 0,
-                manager_details: { user_name: '' },
+                manager_details: {
+                    user_name: '',
+                    email: '',
+                    id: 0,
+                    phone: '',
+                    profile_image: '',
+                    role: 0
+                },
                 inspector_details: { user_name: '' },
-                member_details: '',
-                form_details: {},
+                member_details: [],
+                form_details: [{
+                    bill: [],
+                    created_at: '',
+                    id: 0,
+                    is_sign: false,
+                    name: '',
+                    updated_at: ''
+                }],
                 total_member_in_group: '',
                 assign_jobs: '',
                 created_at: '',

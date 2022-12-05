@@ -32,6 +32,7 @@ interface paramsTypes {
     page?: undefined | number,
     name?: string,
     bill?: [],
+    search?: string,
     is_sign?: boolean
 
 }
@@ -63,12 +64,12 @@ export interface apiErrorTypes {
 const FORM = "FORM";
 
 export const formList = createAsyncThunk
-    (FORM + "/groupList", async (params: paramsTypes, { rejectWithValue }) => {
+    (FORM + "/formList", async (params: paramsTypes, { rejectWithValue }) => {
         try {
-            console.log("🚀 ~ file: groupListSlice.ts ~ line 60 ~ params", params)
+            console.log("🚀 ~ file: formListSlice.ts ~ line 60 ~ params", params)
             console.log(ApiConstants.FORMS)
-            const response = await axiosClient.get(ApiConstants.FORMS + `?page=${params.page}`)
-            console.log("🚀 ~ file: groupListSlice.ts ~ line 69 ~ response", response)
+            const response = await axiosClient.get(ApiConstants.FORMS + `?page=${params.page}&search=${params.search}`)
+            console.log("🚀 ~ file: formListSlice.ts ~ line 69 ~ response", response)
             return response;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -161,7 +162,9 @@ const formListSlice = createSlice({
             let tempArray: FormDataProps = action.meta.arg.page == 1 ? [] : {
                 ...action.payload.data,
                 results: [...current(state.formListData?.results), ...action.payload?.data?.results]
+
             }
+            console.log('tempdata======>', tempArray)
             state.formListData = action.meta.arg.page == 1 ? action.payload.data : tempArray
             state.error = ''
         });

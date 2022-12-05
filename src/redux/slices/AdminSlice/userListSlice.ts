@@ -3,7 +3,7 @@ import { Alert } from "react-native";
 import { ApiConstants } from "../../../config/ApiConstants";
 import { axiosClient } from "../../../config/Axios";
 
-export interface userData {
+export interface UserData {
     id: number
     profile_image: string
     user_name: string
@@ -18,7 +18,7 @@ interface userDataListProps {
     count: number
     next: string | null
     previous: number | null
-    results: userData[]
+    results: UserData[]
 }
 
 interface userDetails {
@@ -44,17 +44,10 @@ export interface inspectorListProps {
     count: number
     next: string | null
     previous: number | null
-    results: [{
-        id: number,
-        user_name: string,
-        profile_image: string,
-        email: string,
-        phone: string,
-        date_joined: string,
-        role: string,
-        is_active: boolean
-    }]
+    results: UserData[]
 }
+
+
 interface paramsTypes {
     id?: number
     data?: FormData,
@@ -63,7 +56,7 @@ interface paramsTypes {
 interface initialState {
     isLoading: boolean
     error: object | string | undefined
-    userListData: userData[] | [],
+    userListData: UserData[] | [],
     userDetails?: userDetails,
     userRoleList?: [{
         id: number,
@@ -234,6 +227,7 @@ const userListSlice = createSlice({
             state.error = ''
         });
         builder.addCase(userRoleList.fulfilled, (state, action) => {
+            console.log("🚀 ~ file: userListSlice.ts:237 ~ builder.addCase ~ action", action)
             state.isLoading = false
             state.userRoleList = action.payload.results
             state.error = ''

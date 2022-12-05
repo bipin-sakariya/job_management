@@ -13,19 +13,20 @@ import * as Yup from "yup";
 import { useFormik } from 'formik';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { useIsFocused } from '@react-navigation/native';
-import { getListOfUsers, inspectorListProps, roleList } from '../../redux/slices/AdminSlice/userListSlice';
+import { getListOfUsers, inspectorListProps, roleList, UserData } from '../../redux/slices/AdminSlice/userListSlice';
 import { formList } from '../../redux/slices/AdminSlice/formListSlice';
 import { createGroup } from '../../redux/slices/AdminSlice/groupListSlice';
 
 interface DataTypes {
-    user_name: string
+    user_name?: string
+    selected?: boolean
     date_joined?: string
     email?: string
     id?: number
     is_active?: boolean
     phone?: string
     profile_image?: string,
-    role?: { id: number, title: string }
+    role?: { id: number, title: string },
 }
 
 const CreateGroupValidationSchema = Yup.object().shape({
@@ -48,9 +49,9 @@ const CreateGroupScreen = () => {
     const [imageUrl, setImageUrl] = useState<string | undefined>('');
     const [visible, setVisible] = useState(false);
     const [formListVisible, setFormListVisible] = useState(false);
-    const [isInspector, setIsInspector] = useState([])
-    const [isManager, setIsManager] = useState([])
-    const [isUser, setIsUser] = useState([])
+    const [isInspector, setIsInspector] = useState<UserData[]>([])
+    const [isManager, setIsManager] = useState<UserData[]>([])
+    const [isUser, setIsUser] = useState<UserData[]>([])
     const [page, setPage] = useState(1)
     const [finalArray, setFinalArray] = useState([])
     const [finalFormsArray, setFinalFormsArray] = useState([])
@@ -84,8 +85,8 @@ const CreateGroupScreen = () => {
             let params = {
                 role: strings.Inspector
             }
-            dispatch(roleList(params)).unwrap().then((res) => {
-                console.log({ res });
+            dispatch(roleList(params)).unwrap().then((res: inspectorListProps) => {
+                console.log({ res111: res });
                 setIsInspector(res.results)
                 console.log("🚀 ~ file: DrawerStack.tsx ~ line 21 ~ dispatch ~ res", res)
             }).catch((error) => {
@@ -94,7 +95,7 @@ const CreateGroupScreen = () => {
             let param = {
                 role: strings.GroupManager
             }
-            dispatch(roleList(param)).unwrap().then((res) => {
+            dispatch(roleList(param)).unwrap().then((res: inspectorListProps) => {
                 console.log({ res });
                 setIsManager(res.results)
                 console.log("🚀 ~ file: DrawerStack.tsx ~ line 21 ~ dispatch ~ res", res)
@@ -114,6 +115,7 @@ const CreateGroupScreen = () => {
         }
         let params = {
             page: page,
+            search: ''
         }
         dispatch(formList(params)).unwrap().then((res) => {
             console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
@@ -133,10 +135,10 @@ const CreateGroupScreen = () => {
                 groupName: '',
                 image: '',
                 groupManager: {
-                    id: null
+                    id: 0
                 },
                 inspector: {
-                    id: null
+                    id: 0
                 },
                 member: [],
                 forms: []
@@ -262,85 +264,86 @@ const CreateGroupScreen = () => {
                     image={ImagesPath.from_list_icon}
                 />
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-                    <TouchableOpacity
-                        onPress={async () => {
-                            let option: ImageLibraryOptions = {
-                                mediaType: 'photo'
-                            }
-                            const result: any = await launchImageLibrary(option);
-                            setImageUrl(result ? result?.assets[0].uri : '')
-                            setFieldValue('image', result ? result?.assets[0].uri : '')
-                        }}
-                        activeOpacity={1}>
-                        <ImageBackground
-                            source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
-                            style={styles.addPhotoStyle}
-                            borderRadius={wp(2)}>
-                            <View style={styles.camreaBtnStyle}>
-                                <Image source={ImagesPath.camera_icon} style={styles.cameraIconStyle} />
-                            </View>
-                        </ImageBackground>
-                    </TouchableOpacity>
-                    <CustomTextInput
-                        title={strings.GroupName}
-                        placeholder={strings.Enter_group_name}
-                        container={{ marginBottom: wp(5) }}
-                        onChangeText={handleChange("groupName")}
-                        value={values.groupName}
-                    />
-                    {console.log({ values })}
-                    {(touched.groupName && errors?.groupName) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.groupName}</Text>}
-                    <DropDownComponent
-                        title={strings.Group_Manager}
-                        data={isManager}
-                        image={ImagesPath.down_white_arrow}
-                        labelField="user_name"
-                        valueField="id"
-                        onChange={(item) => setFieldValue('groupManager', item)}
-                        value={values.groupManager.id}
-                        placeholder={strings.SelectRoleforUser}
-                        container={{ marginBottom: wp(5) }}
-                    />
-                    {(touched?.groupManager) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text>}
-                    <DropDownComponent
-                        title={strings.Group_Inspector}
-                        data={isInspector}
-                        image={ImagesPath.down_white_arrow}
-                        labelField="user_name"
-                        valueField="id"
-                        onChange={(item) => setFieldValue('inspector', item)}
-                        value={values.inspector.id}
-                        placeholder={strings.GivePermission}
-                        container={{ marginBottom: wp(5) }}
+                    <>
+                        <TouchableOpacity
+                            onPress={async () => {
+                                let option: ImageLibraryOptions = {
+                                    mediaType: 'photo'
+                                }
+                                const result: any = await launchImageLibrary(option);
+                                setImageUrl(result ? result?.assets[0].uri : '')
+                                setFieldValue('image', result ? result?.assets[0].uri : '')
+                            }}
+                            activeOpacity={1}>
+                            <ImageBackground
+                                source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
+                                style={styles.addPhotoStyle}
+                                borderRadius={wp(2)}>
+                                <View style={styles.camreaBtnStyle}>
+                                    <Image source={ImagesPath.camera_icon} style={styles.cameraIconStyle} />
+                                </View>
+                            </ImageBackground>
+                        </TouchableOpacity>
+                        <CustomTextInput
+                            title={strings.GroupName}
+                            placeholder={strings.Enter_group_name}
+                            container={{ marginBottom: wp(5) }}
+                            onChangeText={handleChange("groupName")}
+                            value={values.groupName}
+                        />
+                        {console.log({ values })}
+                        {(touched.groupName && errors?.groupName) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.groupName}</Text>}
+                        <DropDownComponent
+                            title={strings.Group_Manager}
+                            data={isManager}
+                            image={ImagesPath.down_white_arrow}
+                            labelField="user_name"
+                            valueField="id"
+                            onChange={(item) => setFieldValue('groupManager', item)}
+                            value={values.groupManager.id}
+                            placeholder={strings.SelectRoleforUser}
+                            container={{ marginBottom: wp(5) }}
+                        />
+                        {(touched?.groupManager) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text>}
+                        <DropDownComponent
+                            title={strings.Group_Inspector}
+                            data={isInspector}
+                            image={ImagesPath.down_white_arrow}
+                            labelField="user_name"
+                            valueField="id"
+                            onChange={(item) => setFieldValue('inspector', item)}
+                            value={values.inspector.id}
+                            placeholder={strings.GivePermission}
+                            container={{ marginBottom: wp(5) }}
 
-                    />
-                    {(touched?.inspector) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text>}
-                    <MultileSelectDropDown
-                        setIsVisible={setVisible}
-                        isVisible={visible}
-                        data={isUser}
-                        title={strings.Groupmemeber}
-                        setSelectedMembers={(data: DataTypes[]) => {
-                            setSelectedMemberData(data)
-                            setFieldValue('member', data)
-                        }}
-                        countTitle={strings.people}
-                    />
+                        />
+                        {(touched?.inspector) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text>}
+                        <MultileSelectDropDown
+                            setIsVisible={setVisible}
+                            isVisible={visible}
+                            data={isUser}
+                            title={strings.Groupmemeber}
+                            setSelectedMembers={(data) => {
+                                setSelectedMemberData(data)
+                                setFieldValue('member', data)
+                            }}
+                            countTitle={strings.people}
+                        />
 
-                    {/* form list  */}
-                    <MultileSelectDropDown
-                        setIsVisible={setFormListVisible}
-                        isVisible={formListVisible}
-                        data={formsList}
-                        title={strings.Forms}
-                        setSelectedMembers={(data: DataTypes[]) => {
-                            setSelectedFormsData(data)
-                            setFieldValue('forms', data)
-                        }}
-                        container={{ marginTop: hp(2.5) }}
-                        countTitle={strings.Forms}
-                    />
-                    {/* <DropDownComponent
+                        {/* form list  */}
+                        <MultileSelectDropDown
+                            setIsVisible={setFormListVisible}
+                            isVisible={formListVisible}
+                            data={formsList}
+                            title={strings.Forms}
+                            setSelectedMembers={(data: DataTypes[]) => {
+                                setSelectedFormsData(data)
+                                setFieldValue('forms', data)
+                            }}
+                            container={{ marginTop: hp(2.5) }}
+                            countTitle={strings.Forms}
+                        />
+                        {/* <DropDownComponent
                         title={strings.GroupForms}
                         data={formListData.results}
                         image={ImagesPath.down_white_arrow}
@@ -351,11 +354,12 @@ const CreateGroupScreen = () => {
                         placeholder={strings.GivePermission}
                         container={{ marginTop: wp(5) }}
                     /> */}
-                    <CustomBlackButton
-                        title={strings.CreateGroup}
-                        image={ImagesPath.plus_white_circle_icon}
-                        onPress={handleSubmit}
-                    />
+                        <CustomBlackButton
+                            title={strings.CreateGroup}
+                            image={ImagesPath.plus_white_circle_icon}
+                            onPress={handleSubmit}
+                        />
+                    </>
                 </KeyboardAwareScrollView>
             </Container>
         </View>

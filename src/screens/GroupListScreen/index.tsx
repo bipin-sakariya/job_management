@@ -1,4 +1,4 @@
-import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomDashedComponent, CustomSubTitleWithImageComponent, GroupListComponent, Header } from '../../components';
@@ -29,6 +29,7 @@ const GroupListScreen = () => {
     const route = useRoute<RootRouteProps<'GroupListScreen'>>();
     const dispatch = useAppDispatch();
     const isFocus = useIsFocused()
+    const [isFooterLoading, setIsFooterLoading] = useState<boolean>(false)
 
 
     const [page, setPage] = useState(1)
@@ -36,23 +37,46 @@ const GroupListScreen = () => {
     const { groupListData, isLoading } = useAppSelector(state => state.groupList)
     console.log({ groupListData })
 
+    // useEffect(() => {
+    //     if (isFocus) {
+    //         let params = {
+    //             page: page,
+    //         }
+    //         groupListApiCall(params)
+    //     }
+
+    // }, [isFocus])
+
+    // console.log({ page });
+
+
+    // const groupListApiCall = (params: groupListParams) => {
+    //     dispatch(groupList(params)).unwrap().then((res) => {
+    //         console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+    //         setPage(page + 1)
+    //     }).catch((error) => {
+    //         console.log({ error });
+    //     })
+    // }
+
     useEffect(() => {
-        if (isFocus) {
-            let params = {
-                page: page,
-            }
-            groupListApiCall(params)
-        }
+
+        groupListApiCall(page)
         return () => {
             setPage(1)
         }
-    }, [isFocus])
-
-    console.log({ page });
+    }, [])
 
 
-    const groupListApiCall = (params: groupListParams) => {
+
+    const groupListApiCall = (page: number) => {
+        let params = {
+            page: page,
+            search: ''
+        }
+        // setIsFooterLoading(true)
         dispatch(groupList(params)).unwrap().then((res) => {
+            // setIsFooterLoading(false)
             console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
             setPage(page + 1)
         }).catch((error) => {
@@ -83,7 +107,7 @@ const GroupListScreen = () => {
                             }}>
                             <Image source={ImagesPath.add_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { }}>
+                        <TouchableOpacity onPress={() => { navigation.navigate('SearchScreen', { screenName: 'groupScreen' }) }}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                     </View>
@@ -116,6 +140,20 @@ const GroupListScreen = () => {
                     }}
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
                     showsVerticalScrollIndicator={false}
+                    onEndReached={() => {
+                        console.log("On reach call");
+                        if (groupListData.next) {
+                            groupListApiCall(page)
+                        }
+                    }}
+                    onEndReachedThreshold={0.1}
+                    ListFooterComponent={() => {
+                        return (
+                            <>
+                                {isFooterLoading && <ActivityIndicator size={'small'} />}
+                            </>
+                        )
+                    }}
                 />
             </Container>
         </View>

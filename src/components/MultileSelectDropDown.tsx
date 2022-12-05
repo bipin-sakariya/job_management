@@ -13,15 +13,16 @@ import { strings } from '../languages/localizedStrings'
 
 // We can chanage data type as per the component use in future.
 interface DataTypes {
-    user_name: string
-    selected: boolean
+    user_name?: string
+    selected?: boolean
     date_joined?: string
     email?: string
     id?: number
     is_active?: boolean
     phone?: string
     profile_image?: string,
-    role?: { id: number, title: string }
+    role?: { id: number, title: string },
+
 }
 
 interface DropDownComponentProps {

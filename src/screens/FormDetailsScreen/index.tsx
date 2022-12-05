@@ -74,6 +74,7 @@ const FormDetailsScreen = () => {
             setIsAllList(finalData)
         }
     }, [isBillList])
+    console.log({ isAllList })
     console.log({ selectedMemberData })
     useEffect(() => {
         let data: any = []
@@ -130,7 +131,7 @@ const FormDetailsScreen = () => {
             }
         })
 
-    const createForm = (values: any) => {
+    const createForm = (values) => {
         let params = {
             id: route.params.id,
             name: values.formName,

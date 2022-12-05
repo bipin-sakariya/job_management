@@ -1,4 +1,4 @@
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Alert, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomListView, Header } from '../../components'
@@ -22,22 +22,24 @@ const FormScreen = () => {
     const isFocus = useIsFocused();
     const { formListData, isLoading } = useAppSelector(state => state.formList)
     console.log({ formListData });
+    const [isFooterLoading, setIsFooterLoading] = useState<boolean>(false)
 
 
     useEffect(() => {
-        console.log("🚀 ~ file: index.tsx ~ line 95 ~ useEffect ~ isFocus", isFocus)
-        if (isFocus) {
-            let params = {
-                page: page,
-            }
-            formListApiCall(params)
-        }
+        if (isFocus)
+            formListApiCall(page)
         return () => {
             setPage(1)
         }
     }, [isFocus])
 
-    const formListApiCall = (params: formListParams) => {
+
+
+    const formListApiCall = (page: number) => {
+        let params = {
+            page: page,
+            search: ''
+        }
         dispatch(formList(params)).unwrap().then((res) => {
             console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
             setPage(page + 1)
@@ -45,6 +47,22 @@ const FormScreen = () => {
             console.log({ error });
         })
     }
+
+    // const onReachEndApiCall = () => {
+    //     console.log("RTYRTY");
+    //     const ApiParams = {
+    //         page: page,
+
+    //     }
+    //     dispatch(formList(ApiParams)).unwrap().then((res) => {
+    //         console.log("🚀 ~ file: index.tsx:55 ~ dispatch ~ res", res)
+    //         setIsFooterLoading(false)
+    //         if (res.data.next) {
+    //             Alert.alert("|fdsfs")
+    //         }
+    //         // res.data.next && setPage(page + 1)
+    //     })
+    // }
 
 
     const navigation = useCustomNavigation('FormScreen');
@@ -116,6 +134,7 @@ const FormScreen = () => {
             />
         )
     }
+
     return (
         <View style={globalStyles.container}>
             <Header
@@ -131,7 +150,7 @@ const FormScreen = () => {
                         <TouchableOpacity style={{ marginRight: wp(3) }} onPress={() => { navigation.navigate("CreateFormScreen") }}>
                             <Image source={ImagesPath.add_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
-                        <TouchableOpacity >
+                        <TouchableOpacity onPress={() => navigation.navigate('SearchScreen', { screenName: 'formScreen' })}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                     </View>
@@ -142,6 +161,20 @@ const FormScreen = () => {
                     data={formListData.results}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}
+                    onEndReached={() => {
+                        console.log("On reach call");
+                        if (formListData.next) {
+                            formListApiCall(page)
+                        }
+                    }}
+                    onEndReachedThreshold={0.1}
+                    ListFooterComponent={() => {
+                        return (
+                            <>
+                                {isFooterLoading && <ActivityIndicator size={'small'} />}
+                            </>
+                        )
+                    }}
                     ListHeaderComponent={() => {
                         return (
                             <View style={[globalStyles.rowView, { marginBottom: wp(4) }]}>

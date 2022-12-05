@@ -59,7 +59,8 @@ export type RootStackParamList = {
     GroupListScreen: undefined,
     CreateGroupScreen: undefined,
     GroupDetailScreen: { params: any },
-    CreateJobMapScreen: undefined
+    CreateJobMapScreen: undefined,
+    SearchScreen: undefined
 };
 
 export type AuthStackParamList = {
