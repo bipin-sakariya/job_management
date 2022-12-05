@@ -14,6 +14,15 @@ interface DropDownComponentProps {
     imageStyle?: ImageStyle,
     title?: string,
     container?: ViewStyle
+    user_name?: string
+    date_joined?: string
+    email?: string
+    id?: number
+    is_active?: boolean
+    phone?: string
+    profile_image?: string,
+    role?: { id: number, title: string }
+    selected?: boolean
 }
 
 const DropDownComponent = (props: DropDownComponentProps & DropdownProps) => {

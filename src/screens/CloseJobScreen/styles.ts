@@ -43,15 +43,6 @@ export const styles = StyleSheet.create({
         borderRadius: wp(3),
         borderColor: colors.text_input_border_color
     },
-    roundView: {
-        height: wp(6),
-        width: wp(6),
-        borderRadius: wp(6),
-        borderColor: colors.brown,
-        borderWidth: wp(0.4),
-        alignItems: 'center',
-        justifyContent: "center"
-    },
     jobNameTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
@@ -73,6 +64,7 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         paddingHorizontal: wp(6),
         marginVertical: wp(10),
+        alignSelf: 'center'
     },
     modalTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,

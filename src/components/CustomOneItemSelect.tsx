@@ -38,7 +38,7 @@ const CustomOneItemSelect = (props: CustomOneItemSelectProps & TouchableOpacityP
     return (
         <TouchableOpacity onPress={() => { onSelectJob(props.item) }} style={[globalStyles.rowView, styles.jobListMainView]}>
             <Text style={styles.jobNameTxt}>{props.item.title}</Text>
-            <View style={styles.roundView} >
+            <View style={globalStyles.roundView} >
                 <View style={[styles.roundFillView, { backgroundColor: props.item.selected ? colors.fillColor : colors.white_5, }]} />
             </View>
         </TouchableOpacity>
@@ -55,15 +55,6 @@ const styles = StyleSheet.create({
         borderWidth: wp(0.3),
         borderRadius: wp(3),
         borderColor: colors.text_input_border_color
-    },
-    roundView: {
-        height: wp(6),
-        width: wp(6),
-        borderRadius: wp(6),
-        borderColor: colors.brown,
-        borderWidth: wp(0.4),
-        alignItems: 'center',
-        justifyContent: "center"
     },
     jobNameTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,

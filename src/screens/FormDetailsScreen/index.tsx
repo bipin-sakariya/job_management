@@ -35,6 +35,8 @@ const FormDetailsScreen = () => {
     const [countingValue, setCountingValue] = useState(0)
     const [selectedMemberData, setSelectedMemberData] = useState()
     const [finalArray, setFinalArray] = useState()
+    const [isALLSign, setIsAllSign] = useState(false)
+
 
     const dispatch = useAppDispatch()
     const { formDetails, isLoading } = useAppSelector(state => state.formList)
@@ -74,6 +76,7 @@ const FormDetailsScreen = () => {
             setIsAllList(finalData)
         }
     }, [isBillList])
+    console.log({ isAllList })
     console.log({ selectedMemberData })
     useEffect(() => {
         let data: any = []
@@ -130,7 +133,7 @@ const FormDetailsScreen = () => {
             }
         })
 
-    const createForm = (values: any) => {
+    const createForm = (values) => {
         let params = {
             id: route.params.id,
             name: values.formName,
@@ -147,6 +150,7 @@ const FormDetailsScreen = () => {
 
         })
     }
+
     return (
         <View style={globalStyles.container}>
             <Header
@@ -179,7 +183,9 @@ const FormDetailsScreen = () => {
                         data={isEdit ? isAllList : list}
                         onCount={(count) => { setCountingValue(count) }}
                         setSelectedMembers={(data) => { setSelectedMemberData(data) }}
-
+                        isForm={true}
+                        setIsAllSign={setIsAllSign}
+                        isALLSign={isALLSign}
                     /> :
                     <View style={[styles.sammedView, globalStyles.rtlDirection, { flexShrink: 1 }]}>
                         <View style={styles.formHeaderView}>

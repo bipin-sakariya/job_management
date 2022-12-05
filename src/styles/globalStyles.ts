@@ -62,7 +62,16 @@ export const globalStyles = StyleSheet.create({
         width: wp(12),
         resizeMode: 'contain',
         marginTop: wp(2)
-    }
+    },
+    roundView: {
+        height: wp(6),
+        width: wp(6),
+        borderRadius: wp(6),
+        borderColor: colors.fillColor,
+        borderWidth: wp(0.4),
+        alignItems: 'center',
+        justifyContent: "center"
+    },
 })
 
 export const customMapStyle = [

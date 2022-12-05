@@ -47,8 +47,8 @@ const JobDuplicateListScreen = () => {
         return (
             <TouchableOpacity onPress={() => { setSelected(item, index) }} style={styles.jobMainView}>
                 <View style={{ marginLeft: wp(3.5) }}>
-                    <View style={styles.roundView} >
-                        <View style={[styles.roundFillView, { backgroundColor: item.selected ? colors.brown : colors.white_5, }]} />
+                    <View style={globalStyles.roundView}>
+                        <View style={[styles.roundFillView, { backgroundColor: item.selected ? colors.fillColor : colors.white_5, }]} />
                     </View>
                 </View>
                 <CustomJobListComponent
@@ -103,7 +103,6 @@ const JobDuplicateListScreen = () => {
             />
             <Container>
                 <FlatList
-                    showsVerticalScrollIndicator={false}
                     data={jobData}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}

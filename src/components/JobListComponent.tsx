@@ -8,7 +8,7 @@ import fonts from '../styles/Fonts';
 import { colors } from '../styles/Colors';
 import CustomeJobListDetailsViewComponent from './CustomJobListDetailsViewComponent';
 import useCustomNavigation from '../hooks/useCustomNavigation';
-import moment from 'moment';
+import moment, { locale } from 'moment';
 import { useAppSelector } from '../hooks/reduxHooks';
 import CustomModal from './CustomModal';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
@@ -91,7 +91,6 @@ const JobListComponent = ({ item, index }: any) => {
         }
     };
 
-
     return (
         <View style={styles.itemContainer}>
             <View style={styles.dateTxtContainer}>
@@ -114,40 +113,6 @@ const JobListComponent = ({ item, index }: any) => {
                     item={i}
                 />
             ))}
-            {/* <Modal visible={isModelVisible} statusBarTranslucent={true} transparent={true} animationType="fade">
-                <View>
-                    <Calendar
-                        initialDate={date}
-                        minDate={'1990-05-10'}
-                        accessibilityLanguage={"hebrew"}
-                        maxDate={maxDate}
-                        monthFormat={'MMMM yyyy'}
-                        style={styles.calendarStyle}
-                        renderArrow={(direction) => <Image
-                            source={direction == "left" ? ImagesPath.right_arrow_cal_icon : ImagesPath.left_arrow_cal_icon}
-                            style={[styles.calendarArrowIcon, { marginLeft: direction == "left" ? wp(20) : 0, marginRight: direction == "right" ? wp(20) : 0, tintColor: colors.primary_color }]} />}
-                        renderHeader={(data) => {
-                            return (
-                                <Text style={[styles.calenderHeaderStyle, globalStyles.rtlStyle]}>{moment(data[0]).format("MMM YYYY")}</Text>
-                            )
-                        }}
-                        renders
-                        markingType={'period'}
-                        onDayPress={(date) => onDayPress(date)}
-                        markedDates={{ ...markDates, ...blockedDays }}
-                        theme={{
-                            dayTextColor: colors.gray_1,
-                            textDisabledColor: colors.gray_2,
-                            textDayFontWeight: '500',
-                            textDayHeaderFontWeight: '500',
-                            textDayFontSize: FontSizes.SMALL_14,
-                            textDayHeaderFontSize: FontSizes.EXTRA_SMALL_12,
-                            textDayFontFamily: fonts.FONT_POP_REGULAR,
-                            calendarBackground: colors.calendar_Bg,
-                        }}
-                    />
-                </View>
-            </Modal> */}
             <CustomModal
                 visible={isModelVisible}
                 onRequestClose={() => { setIsModelVisible(false) }}
@@ -169,7 +134,6 @@ const JobListComponent = ({ item, index }: any) => {
                                     <Text style={[styles.calenderHeaderStyle, globalStyles.rtlStyle]}>{moment(data[0]).format("MMM YYYY")}</Text>
                                 )
                             }}
-                            // renders
                             markingType={'period'}
                             onDayPress={(date) => onDayPress(date)}
                             markedDates={{ ...markDates, ...blockedDays }}

@@ -19,6 +19,7 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         paddingHorizontal: wp(2),
         paddingVertical: wp(4),
+        alignSelf: 'center'
     },
     modalDescriptionTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,

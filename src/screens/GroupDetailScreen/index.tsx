@@ -10,22 +10,40 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
 import { strings } from '../../languages/localizedStrings';
 import { useFormik } from 'formik';
-import * as yup from "yup";
+import * as Yup from "yup";
 import { colors } from '../../styles/Colors';
 import FontSizes from '../../styles/FontSizes';
 import { groupDelete, groupDetail, groupUpdate } from '../../redux/slices/AdminSlice/groupListSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { RootRouteProps } from '../../types/RootStackTypes';
 import { DropdownProps } from '../../types/commanTypes';
-import { roleList } from '../../redux/slices/AdminSlice/userListSlice';
+import { inspectorListProps, roleList } from '../../redux/slices/AdminSlice/userListSlice';
 import { useIsFocused, useRoute } from '@react-navigation/native';
+import { formDetails } from '../../redux/slices/AdminSlice/formListSlice';
 
-const CreateGroupValidationSchema = yup.object().shape({
-    groupName: yup.string().required(strings.Groupname_required),
-    groupManager: yup.string().required(strings.groupmanger_required),
-    inspector: yup.string().trim().required(strings.Contectno_invalid),
-    groupMember: yup.string().trim().required(strings.groupMember_required),
-    forms: yup.string().required(strings.forms_required)
+interface DataTypes {
+    user_name?: string
+    date_joined?: string
+    email?: string
+    id?: number
+    is_active?: boolean
+    phone?: string
+    profile_image?: string,
+    role?: { id: number, title: string }
+    selected?: boolean,
+    bill?: []
+}
+
+const CreateGroupValidationSchema = Yup.object().shape({
+    groupName: Yup.string().required(strings.Groupname_required),
+    groupManager: Yup.object().shape({
+        id: Yup.number().required(strings.groupmanger_required)
+    }),
+    inspector: Yup.object().shape({
+        id: Yup.number().required(strings.inspector_required)
+    }),
+    member: Yup.array().required(strings.groupMember_required),
+    forms: Yup.array().required(strings.forms_required)
 });
 
 const data_user = [
@@ -61,12 +79,26 @@ const GroupDetailScreen = () => {
     const route = useRoute<RootRouteProps<'GroupDetailScreen'>>()
     const isFocused = useIsFocused()
 
-    const [isInspector, setIsInspector] = useState([])
-    const [isManager, setIsManager] = useState([])
-    const [isUser, setIsUser] = useState([])
-    const [isMember, setIsMember] = useState([])
-    const [list, isList] = useState([])
+    const [isInspector, setIsInspector] = useState<DataTypes[]>()
+    const [isManager, setIsManager] = useState<DataTypes[]>()
+    const [isUser, setIsUser] = useState<DataTypes[]>([])
+    const [isMember, setIsMember] = useState<DataTypes[]>()
+    const [list, isList] = useState<DataTypes[]>([])
+    const [formsList, setFormList] = useState<DataTypes[]>([])
+    const [selectedFormsList, setSelectedFormList] = useState<DataTypes[]>([])
+    const [assignedJobs, setAssignedJobs] = useState([{}, {}, {}])
+    const [isEditable, setIsEditable] = useState(false);
+    const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
+    const [visible, setVisible] = useState(false);
+    const [modalShow, setModalShow] = useState(false);
+    const [selectedMemberData, setSelectedMemberData] = useState<DataTypes[]>([])
+    const [selectedFormsData, setSelectedFormsData] = useState<DataTypes[]>()
+    const [finalArray, setFinalArray] = useState([])
+    const [finalFormsArray, setFinalFormsArray] = useState([])
+    const [formListVisible, setFormListVisible] = useState(false);
+    const [isId, setIsId] = useState()
 
+    const { formListData } = useAppSelector(state => state.formList);
     const { groupDetails, isLoading } = useAppSelector(state => state.groupList)
 
     useEffect(() => {
@@ -111,7 +143,7 @@ const GroupDetailScreen = () => {
     }, [isFocused])
     console.log(route.params.params)
     useEffect(() => {
-        const findData = isUser.map((i: any) => {
+        const findData = isUser.map((i: DataTypes) => {
             return {
                 ...i,
                 selected: false
@@ -129,9 +161,30 @@ const GroupDetailScreen = () => {
             setIsMember(finalData)
         }
 
-
-
     }, [isUser])
+    useEffect(() => {
+        const findData: DataTypes[] = formListData.results.map((i) => {
+            return {
+                ...i,
+                user_name: i.name,
+                selected: false,
+            }
+        })
+        setFormList(findData)
+
+        if (formDetails.bill) {
+            const finalData: DataTypes[] = formDetails?.bill?.map((i: any) => {
+                return {
+                    ...i,
+                    user_name: i.name,
+                    selected: true,
+
+                }
+            })
+            console.log({ finalData })
+            setSelectedFormList(finalData)
+        }
+    }, [formDetails?.bill])
     console.log({ isUser })
     console.log({ isMember })
     const deleteGroupData = (id: number) => {
@@ -141,25 +194,22 @@ const GroupDetailScreen = () => {
     }
 
     const optionData = [
-        { title: strings.Remove, onPress: () => deleteGroupData(route.params.params.id), imageSource: ImagesPath.bin_icon },
+        {
+            title: strings.Remove, onPress: () => {
+                deleteGroupData(route.params.params.id)
+                navigation.goBack()
+            }, imageSource: ImagesPath.bin_icon
+        },
         {
             title: strings.Edit, onPress: () => {
                 setIsEditable(true)
-                createForm(values)
+                updateGroup(values)
                 setVisible(false)
             }, imageSource: ImagesPath.edit_icon
         }
     ]
 
-    const [assignedJobs, setAssignedJobs] = useState([{}, {}, {}])
-    const [isEditable, setIsEditable] = useState(false);
-    const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
-    const [visible, setVisible] = useState(false);
-    const [modalShow, setModalShow] = useState(false);
-    const [selectedMemberData, setSelectedMemberData] = useState()
-    const [finalArray, setFinalArray] = useState()
 
-    const { formListData } = useAppSelector(state => state.formList);
 
     // const [countingValue, setCountingValue] = useState<DropdownProps>({
     //     label: groupDetails.inspector_details?.user_name ?? '',
@@ -192,7 +242,7 @@ const GroupDetailScreen = () => {
             },
             validationSchema: CreateGroupValidationSchema,
             onSubmit: values => {
-                Alert.alert("dsf")
+                updateGroup(values)
             }
         })
 
@@ -203,28 +253,90 @@ const GroupDetailScreen = () => {
             data.push(item.id)
         })
         setFinalArray(data)
+        setIsId(route.params.params.id)
+
     }, [selectedMemberData])
 
-    const createForm = (values: any) => {
-        let params = {
-            id: route.params.id,
-            name: values.groupName,
-            groupManager: values.groupManager.id,
-            inspector: values.inspector.id,
-            groupMember: finalArray,
-            forms: groupDetails?.form_details
-        }
-        console.log({ params })
-        dispatch(groupUpdate(params)).unwrap().then((res) => {
-
-            navigation.goBack()
-            // navigation.navigate('FormScreen')
-        }).catch((e) => {
-            console.log({ error: e });
-
+    useEffect(() => {
+        let data: any = []
+        selectedFormsData?.map((item) => {
+            data.push(item.id)
         })
+        setFinalFormsArray(data)
+    }, [selectedFormsData])
+
+    // console.log('route========', { route: route.params.id })
+    // const createForm = (values: any) => {
+    //     let params = {
+    //         id: route.params.id,
+    //         name: values.groupName,
+    //         groupManager: values.groupManager.id,
+    //         inspector: values.inspector.id,
+    //         groupMember: finalArray,
+    //         forms: groupDetails?.form_details
+    //     }
+    //     console.log({ params })
+    //     dispatch(groupUpdate(params)).unwrap().then((res) => {
+
+    //         navigation.goBack()
+    //         // navigation.navigate('FormScreen')
+    //     }).catch((e) => {
+    //         console.log({ error: e });
+
+    //     })
+    // }
+
+    const updateGroup = (values: {
+        id: number
+        groupName: string;
+        image: string,
+        groupManager: {
+            id: number;
+        };
+        inspector: {
+            id: number;
+        };
+        member: [];
+        forms: { id: number }
     }
 
+    ) => {
+        if (!imageUrl) {
+            Alert.alert('Alert', 'Please select your profile picture.')
+        } else {
+            let data = new FormData()
+            let images = {
+                uri: imageUrl,
+                name: "photo.jpg",
+                type: "image/jpeg"
+            }
+            console.log({ images })
+            if (imageUrl) {
+                data.append("image", images ? images : '')
+            }
+            data.append("name", values.groupName)
+            data.append("manager", values.groupManager.id)
+            data.append("inspector", values.inspector.id)
+            finalArray.map((_member) => {
+                // data.append()
+                data.append("member", _member)
+            })
+            finalFormsArray.map((_form) => {
+                data.append("form", _form)
+            })
+            let params = {
+                data: data,
+                id: isId
+            }
+            dispatch(groupUpdate(params)).unwrap().then((res) => {
+                console.log({ res: res });
+                navigation.goBack()
+            }).catch((e) => {
+                console.log({ error: e });
+                // setError(e.data)
+            })
+        }
+    }
     const renderItem = ({ item, index }: any) => {
         return (
             <AssignedJobsComponent item={item} />
@@ -314,16 +426,24 @@ const GroupDetailScreen = () => {
                         isVisible={modalShow}
                         data={!isEditable ? isMember : list}
                         title={strings.Groupmemeber}
-                        setSelectedMembers={(data) => { setSelectedMemberData(data) }}
+                        setSelectedMembers={(data: DataTypes[]) => {
+                            setSelectedMemberData(data)
+                            setFieldValue('member', data)
+                        }}
+                        countTitle={strings.people}
                     />
                     {isEditable ?
                         <MultileSelectDropDown
                             disabled={!isEditable}
-                            setIsVisible={setModalShow}
-                            isVisible={modalShow}
-                            data={!isEditable ? isMember : list}
-                            title={strings.Groupmemeber}
-                            setSelectedMembers={(data) => { setSelectedMemberData(data) }}
+                            setIsVisible={setFormListVisible}
+                            isVisible={formListVisible}
+                            data={formsList}
+                            title={strings.GroupForms}
+                            setSelectedMembers={(data: DataTypes[]) => {
+                                setSelectedFormsData(data)
+                                setFieldValue('forms', data)
+                            }}
+                            countTitle={strings.Forms}
                             container={{ marginVertical: heightPercentageToDP(2) }}
                         />
                         :
@@ -386,7 +506,7 @@ const GroupDetailScreen = () => {
                         title={strings.CreateGroup}
                         image={ImagesPath.plus_white_circle_icon}
                         onPress={() => {
-
+                            handleSubmit()
                         }}
                     />}
                 </KeyboardAwareScrollView>

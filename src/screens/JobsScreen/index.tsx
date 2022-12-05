@@ -23,7 +23,7 @@ const data = [
 
 const JobData = [
     {
-        data: '16 May 2022',
+        data: '16 may 2022',
         jobs: [
             { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
             { title: 'Job Return', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobReturn },
@@ -31,7 +31,7 @@ const JobData = [
         ]
     },
     {
-        data: '16 May 2022',
+        data: '16 may 2022',
         jobs: [
             { title: 'Job Close', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobClose },
             { title: 'Job Partial', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobPartial },
@@ -39,7 +39,7 @@ const JobData = [
         ]
     },
     {
-        data: '16 May 2022',
+        data: '16 may 2022',
         jobs: [
             { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
             { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },

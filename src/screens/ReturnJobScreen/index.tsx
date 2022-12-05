@@ -29,7 +29,8 @@ const ReturnJobScreen = () => {
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomModal
-                    visible={isModelVisible} onRequestClose={() => { setIsModelVisible(false) }}
+                    visible={isModelVisible}
+                    onRequestClose={() => { setIsModelVisible(false) }}
                     children={
                         <View style={styles.modalView}>
                             <Image source={ImagesPath.check_circle_icon} style={[globalStyles.modalImageStyle]} />
@@ -40,14 +41,14 @@ const ReturnJobScreen = () => {
                 <CustomSubTitleWithImageComponent disabled title={strings.ResoneofReturnjob} image={ImagesPath.arrow_counter_clockwise_black_icon} />
                 <TouchableOpacity onPress={() => { setIsDuplicate(true) }} style={[globalStyles.rowView, styles.jobListMainView]}>
                     <Text style={styles.jobNameTxt}>{strings.Duplicate}</Text>
-                    <View style={styles.roundView} >
+                    <View style={globalStyles.roundView} >
                         <View style={[styles.roundFillView, { backgroundColor: isDuplicate ? colors.fillColor : colors.white_5, }]} />
                     </View>
                 </TouchableOpacity>
                 <View style={[styles.jobListMainView]}>
                     <TouchableOpacity onPress={() => { setIsDuplicate(false) }} style={[globalStyles.rowView, { justifyContent: 'space-between' }]}>
                         <Text style={styles.jobNameTxt}>{strings.WrongInformation}</Text>
-                        <View style={styles.roundView} >
+                        <View style={globalStyles.roundView} >
                             <View style={[styles.roundFillView, { backgroundColor: !isDuplicate ? colors.fillColor : colors.white_5, }]} />
                         </View>
                     </TouchableOpacity>

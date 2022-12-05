@@ -13,15 +13,16 @@ import { strings } from '../languages/localizedStrings'
 
 // We can chanage data type as per the component use in future.
 interface DataTypes {
-    user_name: string
-    selected: boolean
+    user_name?: string
+    selected?: boolean
     date_joined?: string
     email?: string
     id?: number
     is_active?: boolean
     phone?: string
     profile_image?: string,
-    role?: { id: number, title: string }
+    role?: { id: number, title: string },
+
 }
 
 interface DropDownComponentProps {
@@ -33,7 +34,12 @@ interface DropDownComponentProps {
     disabled?: boolean
     onCount?: (count: number) => void
     setSelectedMembers?: (data: DataTypes[]) => void
+    setSelectedAllSign?: (data: DataTypes[]) => void
     countTitle?: string
+    isForm?: boolean
+    isSelected?: boolean
+    isALLSign?: boolean
+    setIsAllSign?: (data: boolean) => void
 }
 
 const MultileSelectDropDown = (props: DropDownComponentProps) => {
@@ -42,6 +48,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
     const [list, setList] = useState(props.data)
     const [searchTxt, setSearchTxt] = useState('');
     const [searchData, setSearchData] = useState<DataTypes[]>([])
+    // const [isALLSign, setIsAllSign] = useState(false)
 
     console.log({ data: props.data });
 
@@ -51,7 +58,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
         }
         dispatch(roleList(role)).unwrap().then((res) => {
         }).catch((error) => {
-            console.log("🚀 ~ file: DrawerStack.tsx ~ line 20 ~ dispatch ~ error", error)
+            console.log("🚀  file: DrawerStack.tsx  line 20  dispatch  error", error)
         })
     }, [props.data])
 
@@ -137,14 +144,22 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                                 placeholder={strings.SearchHere}
                                 value={searchTxt}
                                 onChangeText={(txt) => {
-                                    const searchData = props.data.filter((i) => i.user_name.includes(txt.toLowerCase()))
+                                    const searchData = props.data.filter((i) => i.user_name?.includes(txt.toLowerCase()))
                                     setSearchData(searchData)
                                     setSearchTxt(txt)
                                 }}
                             />
                         </View>
                     </KeyboardAvoidingView>
-
+                    {props.isForm && <TouchableOpacity
+                        onPress={() => props.setIsAllSign(!props.isALLSign)}
+                        style={[globalStyles.rowView, { justifyContent: 'space-between', paddingHorizontal: wp(2.5), paddingVertical: wp(3.5) }]}>
+                        <Text style={styles.itemListTxt}>{strings.Add_all_sign}</Text>
+                        {props.isALLSign ?
+                            <Image source={ImagesPath.check_box_fill_icon} style={styles.checkBoxIcon} /> :
+                            <Image source={ImagesPath.check_box_border_icon} style={styles.checkBoxIcon1} />
+                        }
+                    </TouchableOpacity>}
                     <FlatList
                         data={searchTxt ? searchData : list}
                         extraData={list}

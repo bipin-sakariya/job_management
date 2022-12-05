@@ -42,6 +42,7 @@ import CreateUserScreen from '../screens/CreateUserScreen';
 import UserDetailScreen from '../screens/UserDetailScreen';
 import CreateJobMapScreen from '../screens/CreateJobMapScreen';
 import { colors } from '../styles/Colors';
+import SearchScreen from '../screens/SearchScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -106,6 +107,7 @@ const AppNavigation = () => {
                 <Stack.Screen name={'CreateUserScreen'} component={CreateUserScreen} />
                 <Stack.Screen name={'UserDetailScreen'} component={UserDetailScreen} />
                 <Stack.Screen name={'CreateJobMapScreen'} component={CreateJobMapScreen} />
+                <Stack.Screen name={'SearchScreen'} component={SearchScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

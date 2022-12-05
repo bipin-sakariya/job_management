@@ -335,7 +335,7 @@ const CloseJobScreen = () => {
                     />
                     <TouchableOpacity onPress={() => { setIsSelected(!isSelected) }} style={[globalStyles.rowView, styles.jobListMainView]}>
                         <Text style={styles.jobNameTxt}>{strings.FuthurBilling}</Text>
-                        <View style={styles.roundView} >
+                        <View style={globalStyles.roundView} >
                             {isSelected && <Image source={ImagesPath.right_white_icon} style={styles.checkView} />}
                         </View>
                     </TouchableOpacity>
