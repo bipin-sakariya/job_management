@@ -211,5 +211,7 @@ export const eng = {
     select: 'Select',
     Total: 'Total',
     Search_here: 'Search here',
-    date: 'Date'
+    date: 'Date',
+    Add_all_sign: 'Add all the signs',
+    All_Assign_job: 'All assigned jobs'
 }

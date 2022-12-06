@@ -1,5 +1,5 @@
 import { FlatList, I18nManager, Image, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { globalStyles } from '../styles/globalStyles'
 import { ImagesPath } from '../utils/ImagePaths'
@@ -50,6 +50,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
     const [searchData, setSearchData] = useState<DataTypes[]>([])
     // const [isALLSign, setIsAllSign] = useState(false)
 
+
     console.log({ data: props.data });
 
     useEffect(() => {
@@ -96,7 +97,18 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
         setList(listOfItem)
     }
 
-    const tempSelectedItem = list.filter((_item) => _item.selected);
+    const tempSelectedItem = useMemo(() => list.filter((_item) => _item.selected), [list]);
+
+    // useEffect(() => {
+    //     props?.setSelectedMembers && props?.setSelectedMembers(tempSelectedItem)
+    // }, [tempSelectedItem, props])
+
+    useEffect(() => {
+        if (props.data.length !== 0) {
+            props?.setSelectedMembers && props?.setSelectedMembers(props.data.filter((_item) => _item.selected))
+        }
+    }, [props.data])
+
 
     return (
         <>

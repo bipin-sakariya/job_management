@@ -37,13 +37,15 @@ axiosClient.interceptors.request.use(async (config) => {
 		} else if (config.method == "put") {
 			// Alert.alert("nothing")
 		}
-		// if (config.url == ApiConstants.GROUPLIST && config.method == 'patch') {
-		// 	config.headers = {
-		// 		'Content-Type': 'multipart/form-data',
-		// 		Accept: 'application/json',
-		// 		Authorization: `Bearer ${token}`,
-		// 	};
-		// }
+
+		console.log('API check', config.url, ApiConstants.GROUPLIST, config.method)
+		if (config.url?.includes(ApiConstants.GROUPLIST) && config.method == 'patch') {
+			config.headers = {
+				'Content-Type': 'multipart/form-data',
+				Accept: 'application/json',
+				Authorization: `Bearer ${token}`,
+			};
+		}
 		if (config.url === ApiConstants.FORMS && config.method === 'post' || config.method == "put") {
 			config.headers = {
 				'Content-Type': 'application/json',

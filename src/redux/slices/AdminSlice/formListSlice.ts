@@ -5,7 +5,7 @@ import { axiosClient } from "../../../config/Axios";
 
 export interface FormData {
     id: number,
-    bill: [],
+    bill: [{ id: number }],
     created_at: string,
     updated_at: string,
     name: string,
@@ -48,7 +48,7 @@ const initialState: InitialState = {
     },
     formDetails: {
         id: 0,
-        bill: [],
+        bill: [{ id: 0 }],
         created_at: '',
         updated_at: '',
         name: '',
@@ -105,11 +105,11 @@ export const formDelete = createAsyncThunk<string, number, { rejectValue: apiErr
     }
 })
 
-export const formCreate = createAsyncThunk<FormData, paramsTypes, { rejectValue: apiErrorTypes }>(FORM + "/jobCreate", async (params, { rejectWithValue }) => {
+export const formCreate = createAsyncThunk<FormData, paramsTypes, { rejectValue: apiErrorTypes }>(FORM + "/formCreate", async (params, { rejectWithValue }) => {
     let obj = {
         name: params.name,
-        bill: [20],//.toString(),
-        is_sign: false//params.is_sign
+        bill: params.bill,
+        is_sign: params.is_sign
     }
     try {
         console.log(ApiConstants.FORMS, { obj })
@@ -144,7 +144,7 @@ const formListSlice = createSlice({
         formDetails: (state,) => {
             state.formDetails = {
                 id: 0,
-                bill: [],
+                bill: [{ id: 0 }],
                 created_at: '',
                 updated_at: '',
                 name: '',

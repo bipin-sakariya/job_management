@@ -133,10 +133,11 @@ export const groupDelete = createAsyncThunk<string, number, { rejectValue: apiEr
         return rejectWithValue(e?.response)
     }
 })
-export const groupUpdate = createAsyncThunk<string[], FormData, { rejectValue: apiErrorTypes }>(GROUP + "/groupUpdate", async (params, { rejectWithValue }) => {
+export const groupUpdate = createAsyncThunk<string[], paramsTypes, { rejectValue: apiErrorTypes }>(GROUP + "/groupUpdate", async (params, { rejectWithValue }) => {
     try {
         console.log(ApiConstants.GROUPLIST, params)
-        const response = await axiosClient.patch(ApiConstants.GROUPLIST + params.id + '/', params)
+        const response = await axiosClient.patch(ApiConstants.GROUPLIST + params.id + '/', params.data)
+        console.log('response check update group', { response })
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {

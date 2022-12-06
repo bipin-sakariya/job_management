@@ -27,7 +27,7 @@ const SearchScreen = () => {
     const { groupListData } = useAppSelector(state => state.groupList)
 
 
-    const searchName = (input) => {
+    const searchName = (input: string) => {
         let param = {
             page: page,
             search: input
@@ -64,6 +64,7 @@ const SearchScreen = () => {
             />
         )
     }
+
     return (
         <View style={globalStyles.container}>
             <Header

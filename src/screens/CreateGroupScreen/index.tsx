@@ -67,12 +67,15 @@ const CreateGroupScreen = () => {
     })
     const [selectedMemberData, setSelectedMemberData] = useState<DataTypes[]>()
     const [formsList, setFormList] = useState([])
+    const [memberList, setMemberList] = useState([])
+    const [allForm, setAllForm] = useState([])
     const [selectedFormsList, setSelectedFormList] = useState([])
     const [selectedFormsData, setSelectedFormsData] = useState<DataTypes[]>()
 
 
     const { isLoading, userListData, } = useAppSelector(state => state.userList);
     const { formListData, formDetails } = useAppSelector(state => state.formList);
+    const { groupDetails } = useAppSelector(state => state.groupList);
 
     useEffect(() => {
         if (isFoucs) {
@@ -119,6 +122,7 @@ const CreateGroupScreen = () => {
         }
         dispatch(formList(params)).unwrap().then((res) => {
             console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+            setAllForm(res.results)
             setPage(page + 1)
         }).catch((error) => {
             console.log({ error });
@@ -135,16 +139,27 @@ const CreateGroupScreen = () => {
                 groupName: '',
                 image: '',
                 groupManager: {
-                    id: 0
+                    id: groupDetails.manager ? groupDetails.manager : 0
                 },
                 inspector: {
-                    id: 0
+                    id: groupDetails.inspector ? groupDetails.inspector : 0
                 },
                 member: isUser,
                 forms: formsList
             },
             validationSchema: CreateGroupValidationSchema,
-            onSubmit: (values) => {
+            onSubmit: (values: {
+                groupName: string,
+                image: string,
+                groupManager: {
+                    id: number
+                },
+                inspector: {
+                    id: number
+                },
+                member: UserData[],
+                forms: UserData[]
+            }) => {
                 console.log({ values, touched, error })
                 groupCreate(values)
                 // alert('hjgjhgjguighjh')
@@ -227,6 +242,13 @@ const CreateGroupScreen = () => {
             }
         })
         setFormList(findData)
+        const finaldata: any = userListData.map((i) => {
+            return {
+                ...i,
+                selected: false,
+            }
+        })
+        setMemberList(finaldata)
 
         if (formDetails.bill) {
             const finalData: any = formDetails?.bill?.map((i: any) => {
@@ -245,7 +267,7 @@ const CreateGroupScreen = () => {
 
     return (
         <View style={globalStyles.container}>
-            {/* {console.log("FORMIK ------", { error: errors, values: values })} */}
+            {console.log("FORMIK ------", { error: errors, values: values })}
             <Header
                 headerLeftStyle={{
                     paddingLeft: wp(3)
@@ -304,7 +326,7 @@ const CreateGroupScreen = () => {
                             placeholder={strings.SelectRoleforUser}
                             container={{ marginBottom: wp(5) }}
                         />
-                        {(touched?.groupManager) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text>}
+                        {(touched?.groupManager && errors.groupManager) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text>}
                         <DropDownComponent
                             title={strings.Inspector}
                             data={isInspector}
@@ -317,11 +339,11 @@ const CreateGroupScreen = () => {
                             container={{ marginBottom: wp(5) }}
 
                         />
-                        {(touched?.inspector) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text>}
+                        {(touched?.inspector && errors.inspector) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text>}
                         <MultileSelectDropDown
                             setIsVisible={setVisible}
                             isVisible={visible}
-                            data={values.member}
+                            data={memberList}
                             title={strings.Groupmemeber}
                             setSelectedMembers={(data) => {
                                 console.log({ data });
@@ -337,7 +359,7 @@ const CreateGroupScreen = () => {
                         <MultileSelectDropDown
                             setIsVisible={setFormListVisible}
                             isVisible={formListVisible}
-                            data={values.forms}
+                            data={formsList}
                             title={strings.Forms}
                             setSelectedMembers={(data: DataTypes[]) => {
                                 setSelectedFormsData(data)

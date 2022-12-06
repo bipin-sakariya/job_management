@@ -60,12 +60,12 @@ const GroupListScreen = () => {
     // }
 
     useEffect(() => {
-
-        groupListApiCall(page)
+        if (isFocus)
+            groupListApiCall(page)
         return () => {
             setPage(1)
         }
-    }, [])
+    }, [isFocus])
 
 
 

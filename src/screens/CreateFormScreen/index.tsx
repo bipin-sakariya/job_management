@@ -32,11 +32,12 @@ const CreateFormScreen = () => {
     const dispatch = useAppDispatch()
     const isFocus = useIsFocused()
     const route = useRoute<RootRouteProps<'GroupDetailScreen'>>()
-    const { formDetails, isLoading } = useAppSelector(state => state.formList)
+    const { formListData, formDetails, isLoading } = useAppSelector(state => state.formList)
+    const { billListData } = useAppSelector(state => state.billList)
 
     const [countingValue, setCountingValue] = useState(0)
     const [isVisible, setIsVisible] = useState(false)
-    const [isBillError, setIsBillError] = useState(false)
+    const [isBillSelected, setIsBillSelected] = useState(false)
     const [page, setPage] = useState(1)
     const [btn, setBtn] = useState({ open: true, close: false })
     const [isBillList, setBillList] = useState([])
@@ -44,6 +45,7 @@ const CreateFormScreen = () => {
     const [list, isList] = useState([])
     const [selectedMemberData, setSelectedMemberData] = useState()
     const [finalArray, setFinalArray] = useState()
+    const [isALLSign, setIsAllSign] = useState(false)
     console.log({ route })
 
     const CreateFormValidationSchema = yup.object().shape({
@@ -70,7 +72,7 @@ const CreateFormScreen = () => {
         let params = {
             name: values.formName,
             bill: finalArray,
-            is_sign: true
+            is_sign: isALLSign
         }
         console.log({ params })
         dispatch(formCreate(params)).unwrap().then((res) => {
@@ -90,7 +92,7 @@ const CreateFormScreen = () => {
         if (isFocus && btn) {
             let params = {
                 page: page,
-                bill_type: btn.open ? 'Material' : 'Sign'
+                bill_type: ''
             }
             billListApiCall(params)
         }
@@ -115,7 +117,6 @@ const CreateFormScreen = () => {
 
     useEffect(() => {
         const findData: any = isBillList.map((i) => {
-
             return {
                 ...i,
                 user_name: i.name,
@@ -124,30 +125,24 @@ const CreateFormScreen = () => {
         })
         isList(findData)
         if (formDetails.bill) {
-            const finalData: any = formDetails?.bill?.map((i) => {
+            const finalData: any = billListData.results.map((i) => {
                 return {
                     ...i,
                     user_name: i.name,
-                    selected: true,
+                    // selected: true,
 
                 }
             })
-            console.log({ finalData })
+            console.log('=====---=-=-=-==-==-===-=', { finalData })
             setIsAllList(finalData)
         }
     }, [isBillList])
-    // const selectdata = selectedMemberData?.map((item) = {
-
-    // })
     console.log({ selectedMemberData })
     useEffect(() => {
         let data: any = []
         selectedMemberData?.map((item) => {
-            data.push(
-                item.id
-            )
-        }
-        )
+            data.push(item.id)
+        })
         setFinalArray(data)
     }, [selectedMemberData])
     console.log(finalArray)
@@ -303,17 +298,17 @@ const CreateFormScreen = () => {
                         isVisible={isVisible}
                         setIsVisible={setIsVisible}
                         title={strings.AddBill}
-                        data={isVisible ? isAllList : list}
+                        data={isAllList}
                         onCount={(count) => { setCountingValue(count) }}
                         setSelectedMembers={(data) => { setSelectedMemberData(data) }}
-
+                        countTitle={strings.Forms}
+                        isForm={true}
+                        setIsAllSign={setIsAllSign}
+                        isALLSign={isALLSign}
                     />
-                    {isBillError ? <Text style={[globalStyles.rtlStyle, { bottom: wp(0), color: 'red' }]}>{strings.Bill_required}</Text> : null}
+                    {/* {isBillError ? <Text style={[globalStyles.rtlStyle, { bottom: wp(0), color: 'red' }]}>{strings.Bill_required}</Text> : null} */}
 
                     <CustomBlackButton onPress={() => {
-                        if (countingValue == 0) {
-                            setIsBillError(true)
-                        }
                         handleSubmit()
                     }} title={strings.CreateForm} image={ImagesPath.plus_white_circle_icon} imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} />
                 </Container>

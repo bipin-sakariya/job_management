@@ -269,4 +269,6 @@ export const hebrew = {
     select: 'בחר',
     Total: 'סך הכל',
     date: 'תַאֲרִיך',
+    Add_all_sign: 'הוסף את כל השלטים',
+    All_Assign_job: 'כל העבודות שהוקצו'
 }

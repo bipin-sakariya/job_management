@@ -43,6 +43,7 @@ import UserDetailScreen from '../screens/UserDetailScreen';
 import CreateJobMapScreen from '../screens/CreateJobMapScreen';
 import { colors } from '../styles/Colors';
 import SearchScreen from '../screens/SearchScreen';
+import AssignJobScreen from '../screens/AssignJobScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -108,6 +109,7 @@ const AppNavigation = () => {
                 <Stack.Screen name={'UserDetailScreen'} component={UserDetailScreen} />
                 <Stack.Screen name={'CreateJobMapScreen'} component={CreateJobMapScreen} />
                 <Stack.Screen name={'SearchScreen'} component={SearchScreen} />
+                <Stack.Screen name={'AssignJobScreen'} component={AssignJobScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

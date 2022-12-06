@@ -1,6 +1,7 @@
 import { Dimensions, PixelRatio, Platform, StatusBar } from 'react-native';
 import 'moment/locale/he'
 import moment from 'moment';
+import { object } from 'yup';
 
 export const pixelRatio = PixelRatio.get();
 export const defaultPixel = 2; // provided in design 2px
@@ -107,3 +108,12 @@ export const convertDate = (date: string) => {
   moment.locale('he')
   return moment(date).format('DD MMM YYYY')
 }
+
+export function renameKeys(obj: any, newKeys: any) {
+  const keyValues = Object.keys(obj).map((key: string) => {
+    const newKey = newKeys[key] || key;
+    return { [newKey]: obj[key] };
+  });
+  return Object.assign({}, ...keyValues);
+}
+

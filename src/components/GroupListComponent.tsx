@@ -48,7 +48,7 @@ const GroupListComponent = ({ item }: itemPropsType) => {
             title: strings.Edit,
             onPress: () => {
                 setVisible(false)
-                navigation.navigate("GroupDetailScreen", { params: item, isEditable: true })
+                navigation.navigate("GroupDetailScreen", { params: item, isEdit: true })
             },
             imageSource: ImagesPath.edit_icon
         }
