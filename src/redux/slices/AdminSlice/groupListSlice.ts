@@ -15,9 +15,21 @@ export interface GroupData {
 
     },
     inspector_details: {
-        user_name: string
+        user_name: string,
+        email: string
+        id: number
+        phone: string
+        profile_image: string
+        role: number
     },
-    member_details: [],
+    member_details: [{
+        email: string
+        id: number
+        phone: string
+        profile_image: string
+        role: number
+        user_name: string
+    }],
     form_details: [{
         bill: [],
         created_at: string,
@@ -76,8 +88,22 @@ const initialState: InitialState = {
             profile_image: '',
             role: 0
         },
-        inspector_details: { user_name: '' },
-        member_details: [],
+        inspector_details: {
+            user_name: '',
+            email: '',
+            id: 0,
+            phone: '',
+            profile_image: '',
+            role: 0
+        },
+        member_details: [{
+            user_name: '',
+            email: '',
+            id: 0,
+            phone: '',
+            profile_image: '',
+            role: 0
+        }],
         form_details: [{
             bill: [],
             created_at: '',
@@ -188,8 +214,22 @@ const groupListSlice = createSlice({
                     profile_image: '',
                     role: 0
                 },
-                inspector_details: { user_name: '' },
-                member_details: [],
+                inspector_details: {
+                    user_name: '',
+                    email: '',
+                    id: 0,
+                    phone: '',
+                    profile_image: '',
+                    role: 0
+                },
+                member_details: [{
+                    user_name: '',
+                    email: '',
+                    id: 0,
+                    phone: '',
+                    profile_image: '',
+                    role: 0
+                }],
                 form_details: [{
                     bill: [],
                     created_at: '',
