@@ -1,4 +1,5 @@
 import { RouteProp } from "@react-navigation/native";
+import { GroupData } from "../redux/slices/AdminSlice/groupListSlice";
 
 export type BottomStackParamList = {
     JobsScreen: undefined
@@ -16,16 +17,21 @@ interface BillSectionScreenProps {
     isEdit?: boolean
 }
 
+export interface JobDetailsProps {
+    description: string
+    km: string
+    status: string
+    title: string
+}
+
 export type RootStackParamList = {
     AuthStack: AuthStackParamList
     DrawerScreens: DrawerStackParamList
     MapScreen: undefined
     IndoxScreen: undefined
-    JobDuplicateListScreen?: {
-        params?: any,
-    }
+    JobDuplicateListScreen: undefined
     NotificationScreen: undefined
-    JobDetailsScreen: { params?: any, type?: string }
+    JobDetailsScreen: { params: JobDetailsProps, type?: string }
     ReportGeneratorScreen: undefined
     BillListScreen: { billType?: string }
     BillCreateScreen: undefined
@@ -58,7 +64,7 @@ export type RootStackParamList = {
     UserDetailScreen: { userId: number, isEdit?: boolean }
     GroupListScreen: undefined,
     CreateGroupScreen: undefined,
-    GroupDetailScreen: { screenName?: string, params?: any, isEdit?: boolean },
+    GroupDetailScreen: { screenName?: string, params: GroupData, isEdit?: boolean },
     CreateJobMapScreen: undefined,
     SearchScreen: { screenName?: string }
     AssignJobScreen: undefined
