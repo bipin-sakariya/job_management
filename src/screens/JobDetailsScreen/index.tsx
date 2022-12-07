@@ -219,7 +219,7 @@ const JobDetailsScreen = () => {
                 headerRightComponent={
                     <>
                         {
-                            userData?.role != strings.Inspector && (data.status == strings.JobOpen || data.status == strings.JobTransfer) ?
+                            userData?.role != strings.Inspector && (data.status != strings.CloseJob) ?
                                 <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
                                     <Image source={ImagesPath.menu_dots_icon} style={globalStyles.headerIcon} />
                                 </TouchableOpacity>
@@ -375,7 +375,7 @@ const JobDetailsScreen = () => {
                             />
                             : null
                         }
-                        {!type && (data.status == strings.JobOpen || data.status == strings.JobReturn || data.status == strings.JobTransfer) ?
+                        {type && (data.status == strings.JobOpen || data.status == strings.JobReturn || data.status == strings.JobTransfer) ?
                             <CustomDetailsComponent
                                 title={data.status == strings.JobTransfer ? strings.Transferto : strings.FurtherInspection}
                                 detailsContainerStyle={{ marginVertical: wp(4) }}

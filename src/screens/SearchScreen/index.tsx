@@ -78,39 +78,27 @@ const SearchScreen = () => {
                     </TouchableOpacity>
                 }
                 headerRightComponent={
-                    <View style={[styles.searchinputview, {}]}>
-                        <TextInput style={[styles.searchinputtext, {}]}
-                            placeholder={'search'}
+                    <View style={[styles.searchinputview]}>
+                        <Image source={ImagesPath.search_icon} style={styles.searchviewimage} />
+                        <TextInput
+                            style={[styles.searchinputtext]}
+                            placeholder={strings.SearchHere}
                             onChangeText={(text) => {
                                 setText(text)
                                 searchName(text)
                             }}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
                         />
-                        <Image source={ImagesPath.search_icon} style={styles.searchviewimage} />
                     </View>
                 }
 
-
             />
-            <Container style={{ paddingHorizontal: wp(2) }}>
+            <Container style={{ paddingHorizontal: wp(4) }}>
                 {route.params.screenName == 'formScreen' && <FlatList
                     data={formListData.results}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}
-                    // onEndReached={() => {
-                    //     console.log("On reach call");
-                    //     if (formListData.next) {
-                    //         formListApiCall(page)
-                    //     }
-                    // }}
-                    // onEndReachedThreshold={0.1}
-                    // ListFooterComponent={() => {
-                    //     return (
-                    //         <>
-                    //             {isFooterLoading && <ActivityIndicator size={'small'} />}
-                    //         </>
-                    //     )
-                    // }}
                     ListHeaderComponent={() => {
                         return (
                             <View style={[globalStyles.rowView, { marginBottom: wp(4) }]}>
@@ -125,17 +113,17 @@ const SearchScreen = () => {
                         )
                     }}
                 />}
-                {route.params.screenName == 'groupScreen' && <FlatList
-                    data={groupListData?.results}
-                    renderItem={({ item, index }) => {
-                        return (
-                            <GroupListComponent item={item} />
-                        )
-                    }}
-                    ItemSeparatorComponent={() => <View style={styles.separator} />}
-                    showsVerticalScrollIndicator={false}
-
-                />}
+                {route.params.screenName == 'groupScreen' &&
+                    <FlatList
+                        data={groupListData?.results}
+                        renderItem={({ item, index }) => {
+                            return (
+                                <GroupListComponent item={item} />
+                            )
+                        }}
+                        ItemSeparatorComponent={() => <View style={styles.separator} />}
+                        showsVerticalScrollIndicator={false}
+                    />}
             </Container>
         </View>
 

@@ -13,6 +13,7 @@ import { useAppSelector } from '../hooks/reduxHooks';
 import CustomModal from './CustomModal';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { strings } from '../languages/localizedStrings';
+import { convertDate } from '../utils/screenUtils';
 
 const JobListComponent = ({ item, index }: any) => {
     const navigation = useCustomNavigation('JobsScreen')
@@ -96,13 +97,13 @@ const JobListComponent = ({ item, index }: any) => {
             <View style={styles.dateTxtContainer}>
                 <View style={globalStyles.rowView}>
                     <Image source={ImagesPath.calender_icon} style={styles.calenderIconStyle} />
-                    <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{moment(item.data).format('ll')}</Text>
+                    <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{convertDate(item.data)}</Text>
                 </View>
                 {index == 0 &&
                     <TouchableOpacity onPress={() => {
                         setIsModelVisible(true)
                     }} style={{ padding: wp(1.5) }}>
-                        <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{strings.date}</Text>
+                        <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle, { fontFamily: fonts.FONT_POP_SEMI_BOLD, paddingHorizontal: 0 }]}>{strings.date}</Text>
                     </TouchableOpacity>}
             </View>
             {item.jobs.map((i: any) => (

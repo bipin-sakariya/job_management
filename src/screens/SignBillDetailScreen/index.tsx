@@ -21,7 +21,6 @@ const SignBillDetailScreen = () => {
     const [isModelVisible, setIsModelVisible] = useState(false)
 
     let { type } = route.params
-    console.log({ type })
     const data = [
         { label: strings.meters, value: 'Meters' },
         { label: strings.units, value: 'Units' },
@@ -88,19 +87,21 @@ const SignBillDetailScreen = () => {
                     disabled
                     title={strings.auto_fill_detail}
                     image={ImagesPath.receipt_icon} />
-                {type == 'sign' && <Image
-                    source={ImagesPath.arrow_icon}
-                    resizeMode={'contain'}
-                    style={styles.arrowIconStyle}
-                />}
+                {type == 'sign' &&
+                    <Image
+                        source={ImagesPath.arrow_icon}
+                        resizeMode={'contain'}
+                        style={styles.arrowIconStyle}
+                    />}
                 <CustomTextInput
                     title={strings.There}
                     container={{ marginVertical: wp(4) }}
                     placeholder={'סימן שם'}
                     onChangeText={(text) => { }}
                 />
-                {type == 'material' &&
-                    <View style={{}}><DropDownComponent
+                {/* type counting  */}
+                <View style={{}}>
+                    <DropDownComponent
                         title={strings.TypeCounting}
                         data={data}
                         image={ImagesPath.down_white_arrow}
@@ -111,11 +112,12 @@ const SignBillDetailScreen = () => {
                         placeholder={strings.choose}
                         container={{ marginBottom: wp(5) }}
                     />
-                    </View>
-                }
-                {type == 'sign' && <View style={[styles.textInputContainer, globalStyles.rtlDirection]}>
+                </View>
+
+                {/* measurement */}
+                <View style={[styles.textInputContainer, globalStyles.rtlDirection]}>
                     <View style={styles.titleContainer}>
-                        <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{strings.Quantity}</Text>
+                        <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{type == 'sign' ? strings.Quantity : strings.measurement}</Text>
                     </View>
                     <View style={[globalStyles.rowView, globalStyles.rtlDirection, styles.btnContainerStyle]}>
                         <TouchableOpacity onPress={() => Increment()}>
@@ -126,35 +128,7 @@ const SignBillDetailScreen = () => {
                             <Image source={ImagesPath.minus} resizeMode={'contain'} style={styles.btnIconStyle} />
                         </TouchableOpacity>
                     </View>
-                </View>}
-                {type == 'sign' &&
-                    <View style={{ marginVertical: wp(5) }}><DropDownComponent
-                        title={strings.TypeCounting}
-                        data={data}
-                        image={ImagesPath.down_white_arrow}
-                        labelField="label"
-                        valueField="value"
-                        onChange={(item) => setFieldValue('name', item)}
-                        value={values.name}
-                        placeholder={strings.choose}
-                        container={{ marginBottom: wp(5) }}
-                    />
-                    </View>
-                }
-                {type == 'material' && <View style={[styles.textInputContainer, globalStyles.rtlDirection]}>
-                    <View style={styles.titleContainer}>
-                        <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{strings.measurement}</Text>
-                    </View>
-                    <View style={[globalStyles.rowView, globalStyles.rtlDirection, styles.btnContainerStyle]}>
-                        <TouchableOpacity onPress={() => Increment()}>
-                            <Image source={ImagesPath.plus} resizeMode={'contain'} style={styles.btnIconStyle} />
-                        </TouchableOpacity>
-                        <Text style={{ width: wp(10), textAlign: 'center' }}>{count}</Text>
-                        <TouchableOpacity onPress={() => Decrement()}>
-                            <Image source={ImagesPath.minus} resizeMode={'contain'} style={styles.btnIconStyle} />
-                        </TouchableOpacity>
-                    </View>
-                </View>}
+                </View>
                 <CustomBlackButton
                     onPress={() => {
                         setIsModelVisible(true)

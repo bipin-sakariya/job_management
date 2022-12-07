@@ -22,7 +22,7 @@ const data = [
 const IndoxScreen = () => {
     return (
         <View style={globalStyles.container}>
-            <Header
+            {/* <Header
                 headerLeftStyle={{
                     width: '50%',
                     paddingLeft: wp(3)
@@ -45,7 +45,7 @@ const IndoxScreen = () => {
                     contentContainerStyle={{ paddingBottom: wp(30) }}
                     showsVerticalScrollIndicator={false}
                 />
-            </Container>
+            </Container> */}
         </View>
     )
 }

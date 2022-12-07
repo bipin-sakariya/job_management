@@ -31,10 +31,8 @@ const styles = StyleSheet.create({
         borderWidth: wp(0.3),
         borderRadius: wp(2),
         borderStyle: 'dashed',
-        paddingVertical: wp(8),
         justifyContent: 'center',
         alignItems: "center",
-        alignContent: 'center',
         flexDirection: 'row',
         marginVertical: wp(2)
     },

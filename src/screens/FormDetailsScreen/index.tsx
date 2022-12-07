@@ -256,18 +256,22 @@ const FormDetailsScreen = () => {
                         <View style={styles.formHeaderView}>
                             <Text style={[styles.noNameTxt, globalStyles.rtlStyle]}>{strings.Edit}</Text>
                         </View>
+                        <TableHeaderView type={"form"} />
                         <FlatList
                             data={formDetails.bill}
                             renderItem={renderItem}
                             style={{ maxHeight: wp(80) }}
-                            ListHeaderComponent={() => {
-                                return (
-                                    <TableHeaderView type={"form"} />
-                                )
-                            }}
+                            // ListHeaderComponent={() => {
+                            //     return (
+                            //         <TableHeaderView type={"form"} />
+                            //     )
+                            // }}
+                            ListEmptyComponent={() => <View>
+                                <Text></Text>
+                            </View>}
                             ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}
                         />
-                        <Text style={[globalStyles.rtlStyle, { fontFamily: fonts.FONT_POP_SEMI_BOLD, fontSize: FontSizes.EXTRA_SMALL_12, color: colors.dark_blue2_color, marginHorizontal: wp(2), marginBottom: wp(2) }]}>{strings.Differentsignshavebeenassignedtothisform}</Text>
+                        <Text style={[globalStyles.rtlStyle, { fontFamily: fonts.FONT_POP_SEMI_BOLD, fontSize: FontSizes.EXTRA_SMALL_12, color: colors.dark_blue2_color, margin: wp(2) }]}>{strings.assignedSignTitles}</Text>
                     </View>}
                 {isEdit || route.params.isEdit == true ? <CustomBlackButton onPress={() => {
                     handleSubmit()

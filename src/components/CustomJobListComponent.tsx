@@ -11,6 +11,7 @@ import FontSizes from "../styles/FontSizes";
 import { globalStyles } from "../styles/globalStyles";
 import { RootRouteProps } from "../types/RootStackTypes";
 import { ImagesPath } from "../utils/ImagePaths";
+import { convertDate } from "../utils/screenUtils";
 
 interface CustomJobListComponentProps {
     item: any,
@@ -36,7 +37,7 @@ const CustomJobListComponent = (props: CustomJobListComponentProps & TouchableOp
                     </View>
                     <CustomStatusBtn title={props.item.button} />
                 </View>
-                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_10, textAlign: "left" }]}>{moment(props.item.date).format('ll')}</Text>
+                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_10, textAlign: "left" }]}>{convertDate(props.item.date)}</Text>
                 <View style={styles.descriptionView}>
                     <Text numberOfLines={2} style={[props.textStyle, styles.descriptionTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>{props.item.description}</Text>
                     <View style={[globalStyles.rowView, styles.kmViewStyle, globalStyles.rtlDirection]}>

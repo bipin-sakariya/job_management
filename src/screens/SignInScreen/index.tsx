@@ -98,7 +98,7 @@ const SignInScreen = () => {
     }, [values])
 
     return (
-        <View style={[globalStyles.container, { paddingHorizontal: wp(5), justifyContent: 'center' }]}>
+        <View style={[globalStyles.container, { paddingHorizontal: wp(4), justifyContent: 'center' }]}>
             <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'padding'}>
                 <Image source={ImagesPath.logo_of_job_managment} style={styles.appLogo} />
                 <View style={[{ paddingTop: wp(4), paddingBottom: wp(8), }]}>

@@ -22,7 +22,6 @@ interface DataTypes {
     phone?: string
     profile_image?: string,
     role?: { id: number, title: string },
-
 }
 
 interface DropDownComponentProps {
@@ -37,7 +36,7 @@ interface DropDownComponentProps {
     setSelectedAllSign?: (data: DataTypes[]) => void
     countTitle?: string
     isForm?: boolean
-    isSelected?: boolean
+    isSelected?: (data: boolean) => void
     isALLSign?: boolean
     setIsAllSign?: (data: boolean) => void
 }
@@ -48,10 +47,6 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
     const [list, setList] = useState(props.data)
     const [searchTxt, setSearchTxt] = useState('');
     const [searchData, setSearchData] = useState<DataTypes[]>([])
-    // const [isALLSign, setIsAllSign] = useState(false)
-
-
-    console.log({ data: props.data });
 
     useEffect(() => {
         let role = {
@@ -64,13 +59,17 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
     }, [props.data])
 
     useEffect(() => {
-        if (props.data.length != 0) {
+        if (props.data?.length != 0) {
             setList(props.data)
         }
     }, [props.data])
 
+    useEffect(() => {
+        props.isSelected && props.isSelected(props.isVisible)
+    }, [props.isVisible])
+
     const removeSelectedItem = (removeItem: any) => {
-        const newList = list.map((_listItem) => {
+        const newList = list?.map((_listItem) => {
             if (removeItem.user_name === _listItem.user_name) {
                 return {
                     ..._listItem,
@@ -81,8 +80,8 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
             return _listItem
         })
 
-        props.onCount && props.onCount(newList.filter(i => i.selected == true).length)
-        props.setSelectedMembers && props.setSelectedMembers(newList.filter(i => i.selected))
+        props.onCount && props.onCount(newList?.filter(i => i.selected == true)?.length)
+        props.setSelectedMembers && props.setSelectedMembers(newList?.filter(i => i.selected))
         setList(newList)
     }
 
@@ -92,23 +91,18 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
         if (index >= 0) {
             listOfItem[index].selected = listOfItem[index].selected ? false : true
         }
-        props.onCount && props.onCount(listOfItem.filter(i => i.selected == true).length)
-        props.setSelectedMembers && props.setSelectedMembers(listOfItem.filter(i => i.selected))
+        props.onCount && props.onCount(listOfItem?.filter(i => i.selected == true)?.length)
+        props.setSelectedMembers && props.setSelectedMembers(listOfItem?.filter(i => i.selected))
         setList(listOfItem)
     }
 
     const tempSelectedItem = useMemo(() => list.filter((_item) => _item.selected), [list]);
-
-    // useEffect(() => {
-    //     props?.setSelectedMembers && props?.setSelectedMembers(tempSelectedItem)
-    // }, [tempSelectedItem, props])
 
     useEffect(() => {
         if (props.data.length !== 0) {
             props?.setSelectedMembers && props?.setSelectedMembers(props.data.filter((_item) => _item.selected))
         }
     }, [props.data])
-
 
     return (
         <>
@@ -120,7 +114,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                     <View style={[globalStyles.rowView, { justifyContent: 'space-between', paddingHorizontal: wp(2), paddingTop: wp(2) }]}>
                         <Text
                             style={[globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_12, color: colors.dark_blue2_color }]}>
-                            {props.isVisible ? `${strings.Total} ${tempSelectedItem.length} ${props?.countTitle}` : `${strings.select} ${props?.countTitle}`}
+                            {props.isVisible ? `${strings.Total} ${tempSelectedItem?.length} ${props?.countTitle}` : `${strings.select} ${props?.countTitle}`}
                         </Text>
                         {!props.disabled &&
                             <Image
@@ -128,10 +122,10 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                                 style={[globalStyles.backArrowStyle, { transform: [{ rotate: props.isVisible ? '270deg' : '90deg' }], marginRight: 0 }]}
                             />}
                     </View>
-                    {tempSelectedItem.length !== 0 ?
+                    {tempSelectedItem?.length !== 0 ?
                         <View style={[globalStyles.rowView, {}]}>
                             <View style={[globalStyles.rowView, { flexWrap: 'wrap', paddingHorizontal: wp(2.5), paddingVertical: wp(1.5), width: '90%', }]}>
-                                {tempSelectedItem.map((item, index) => (
+                                {tempSelectedItem?.map((item, index) => (
                                     <View style={styles.itemContainer}>
                                         <Text style={styles.selectedTxtStyle}>{item.user_name}</Text>
                                         {!props.disabled && <TouchableOpacity onPress={() => removeSelectedItem(item)}>
@@ -164,7 +158,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                         </View>
                     </KeyboardAvoidingView>
                     {props.isForm && <TouchableOpacity
-                        onPress={() => props.setIsAllSign(!props.isALLSign)}
+                        onPress={() => { props.setIsAllSign && props.setIsAllSign(!props.isALLSign) }}
                         style={[globalStyles.rowView, { justifyContent: 'space-between', paddingHorizontal: wp(2.5), paddingVertical: wp(3.5) }]}>
                         <Text style={styles.itemListTxt}>{strings.Add_all_sign}</Text>
                         {props.isALLSign ?

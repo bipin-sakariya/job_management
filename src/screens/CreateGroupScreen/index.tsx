@@ -139,10 +139,10 @@ const CreateGroupScreen = () => {
                 groupName: '',
                 image: '',
                 groupManager: {
-                    id: groupDetails.manager ? groupDetails.manager : 0
+                    id: 0
                 },
                 inspector: {
-                    id: groupDetails.inspector ? groupDetails.inspector : 0
+                    id: 0
                 },
                 member: isUser,
                 forms: formsList
@@ -347,12 +347,10 @@ const CreateGroupScreen = () => {
                             title={strings.Groupmemeber}
                             setSelectedMembers={(data) => {
                                 console.log({ data });
-
                                 setSelectedMemberData(data)
                                 setFieldValue('member', data)
                             }}
                             countTitle={strings.people}
-
                         />
 
                         {/* form list  */}

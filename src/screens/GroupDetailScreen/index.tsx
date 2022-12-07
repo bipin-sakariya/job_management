@@ -16,8 +16,7 @@ import FontSizes from '../../styles/FontSizes';
 import { groupDelete, groupDetail, groupUpdate } from '../../redux/slices/AdminSlice/groupListSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { RootRouteProps } from '../../types/RootStackTypes';
-import { DropdownProps } from '../../types/commanTypes';
-import { inspectorListProps, roleList } from '../../redux/slices/AdminSlice/userListSlice';
+import { roleList } from '../../redux/slices/AdminSlice/userListSlice';
 import { useIsFocused, useRoute } from '@react-navigation/native';
 
 interface DataTypes {
@@ -55,32 +54,6 @@ const CreateGroupValidationSchema = Yup.object().shape({
     forms: Yup.array().required(strings.forms_required)
 });
 
-// const data_user = [
-//     {
-//         id: 1,
-//         name: 'Stanley Lamb 1'
-//     },
-//     {
-//         id: 2,
-//         name: 'Robert Kramer 2'
-//     },
-//     {
-//         id: 3,
-//         name: 'Tiffany Rivas 3'
-//     },
-//     {
-//         id: 4,
-//         name: 'Linda Mark 4'
-//     },
-//     {
-//         id: 5,
-//         name: 'Tiffany Rivas 5'
-//     },
-//     {
-//         id: 6,
-//         name: 'Tiffany Rivads fdsfsfs'
-//     },
-// ]
 const GroupDetailScreen = () => {
     const navigation = useCustomNavigation('GroupDetailScreen');
     const menuRef = useRef(null);

@@ -58,7 +58,7 @@ const GroupListComponent = ({ item }: itemPropsType) => {
         <View style={styles.itemContainer}>
             <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate('GroupDetailScreen', { params: item })
+                    navigation.navigate("GroupDetailScreen", { params: item })
                 }}
                 style={globalStyles.rowView}>
                 <FastImage source={item.image ? { uri: item.image } : ImagesPath.placeholder_img} resizeMode={'stretch'} style={styles.itemImgStyle} />

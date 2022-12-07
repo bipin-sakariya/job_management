@@ -59,7 +59,9 @@ const DuplicateScreen = () => {
                             container={{ marginBottom: wp(4) }}
                             value={'123'}
                         />
-                        <CustomTextInputWithImage title='9 Oxfort street' value='9 Oxfort street'
+                        <CustomTextInputWithImage
+                            title='9 Oxfort street'
+                            value='9 Oxfort street'
                             mainContainerStyle={{ flex: 1, }}
                             container={{ width: wp(61) }}
                             mapStyle={{
@@ -67,7 +69,12 @@ const DuplicateScreen = () => {
                             }} />
                         <CustomCarouselImageAndVideo result={result} viewStyle={{ width: '81%', }} />
                     </View>
-                    <CustomSubTitleWithImageComponent disabled title={strings.originalJob} image={ImagesPath.files_icon} viewStyle={{ marginVertical: hp(1) }} />
+                    <CustomSubTitleWithImageComponent
+                        disabled
+                        title={strings.originalJob}
+                        image={ImagesPath.files_icon}
+                        viewStyle={{ marginVertical: hp(1) }}
+                    />
                     <View style={[styles.duplicateFirstView, {}]}>
                         <CustomTextInput
                             title={strings.JobId}
@@ -82,12 +89,14 @@ const DuplicateScreen = () => {
                             }} />
                         <CustomCarouselImageAndVideo result={result} viewStyle={{ width: '81%', }} />
                     </View>
-                    <CustomBlackButton buttonStyle={{
-                        marginVertical: wp(10)
-                    }} image={ImagesPath.arrow_counter_clockwise_white_icon} title={strings.ReturntoInspector} />
-                </ScrollView >
-            </Container >
-        </View >
+                    <CustomBlackButton
+                        buttonStyle={{ marginVertical: wp(10) }}
+                        image={ImagesPath.arrow_counter_clockwise_white_icon}
+                        title={strings.ReturntoInspector}
+                    />
+                </ScrollView>
+            </Container>
+        </View>
     )
 }
 

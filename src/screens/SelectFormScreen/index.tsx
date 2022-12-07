@@ -9,6 +9,7 @@ import { styles } from './styles';
 import { strings } from '../../languages/localizedStrings';
 import fonts from '../../styles/Fonts';
 import FontSizes from '../../styles/FontSizes';
+import { convertDate } from '../../utils/screenUtils';
 
 interface formItemProps {
     id: number,
@@ -92,10 +93,10 @@ const SelectFormScreen = () => {
                         </Text>
                     </View>
                     <View style={globalStyles.rowView}>
-                        <Text style={[styles.dateTxt, globalStyles.rtlStyle]}>{item.date}</Text>
+                        <Text style={[styles.dateTxt, globalStyles.rtlStyle]}>{convertDate(item.date)}</Text>
                     </View>
                 </View>
-            </TouchableOpacity >
+            </TouchableOpacity>
         )
     }
     return (

@@ -13,6 +13,7 @@ import useCustomNavigation from '../hooks/useCustomNavigation'
 import { billData, billDelete } from '../redux/slices/AdminSlice/billListSlice'
 import { useAppDispatch } from '../hooks/reduxHooks'
 import { formDelete } from '../redux/slices/AdminSlice/formListSlice'
+import { convertDate } from '../utils/screenUtils'
 
 interface CustomeListViewProps {
     item: billData,
@@ -87,7 +88,7 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
                     </Text>
                 </View>
                 <View style={globalStyles.rowView}>
-                    <Text numberOfLines={1} style={[styles.dateTxt, globalStyles.rtlStyle, { width: wp(22) }]}>{moment(data.date).format('YYYY MMM DD')}</Text>
+                    <Text numberOfLines={1} style={[styles.dateTxt, globalStyles.rtlStyle, { width: wp(22) }]}>{convertDate(data.date)}</Text>
                     <TouchableOpacity ref={imageRef} onPress={() => setVisible(true)}>
                         <Image style={styles.menuImageStyle} source={ImagesPath.menu_dots_icon} />
                     </TouchableOpacity>

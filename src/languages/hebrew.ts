@@ -233,7 +233,7 @@ export const hebrew = {
     UpdateBill: 'עדכון חשבון',
     Fromname_required: 'שם נדרש',
     Bill_required: 'נדרש חיוב',
-    Differentsignshavebeenassignedtothisform: 'לטופס זה הוקצו שלטים שונים',
+    assignedSignTitles: 'לטופס זה הוקצו שלטים שונים',
     Unit: 'יחידה',
     QTY: 'כמות',
     Srno: 'סרנו.',

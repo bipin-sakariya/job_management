@@ -109,6 +109,10 @@ const BillListScreen = () => {
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <ButtonTab btnOneTitle={strings.accountmaterial} btnTwoTitle={strings.Signabill} setBtn={setBtn} onReset={setPage} btnValue={btn} />
+                <View style={[globalStyles.rowView, { marginVertical: hp(1) }]}>
+                    <Image source={ImagesPath.squre_note_icon} style={styles.noteIconStyle} />
+                    <Text style={[styles.billListTxt, globalStyles.rtlStyle]}>{strings.BillList}</Text>
+                </View>
                 <FlatList
                     data={billListData?.results}
                     renderItem={renderItem}
@@ -117,8 +121,8 @@ const BillListScreen = () => {
                     ListHeaderComponent={() => {
                         return (
                             <View style={[globalStyles.rowView, { marginBottom: wp(4) }]}>
-                                <Image source={ImagesPath.squre_note_icon} style={styles.noteIconStyle} />
-                                <Text style={[styles.billListTxt, globalStyles.rtlStyle]}>{strings.BillList}</Text>
+                                {/* <Image source={ImagesPath.squre_note_icon} style={styles.noteIconStyle} />
+                                <Text style={[styles.billListTxt, globalStyles.rtlStyle]}>{strings.BillList}</Text> */}
                             </View>
                         )
                     }}

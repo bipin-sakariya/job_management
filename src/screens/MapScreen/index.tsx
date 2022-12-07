@@ -63,7 +63,7 @@ const MapScreen = () => {
 
     return (
         <View style={globalStyles.container}>
-            <Header
+            {/* <Header
                 containerStyle={{ backgroundColor: colors.white }}
                 headerLeftComponent={
                     <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
@@ -119,7 +119,7 @@ const MapScreen = () => {
                     ref={refJobListSheet}
                     data={JobData}
                 />
-            }
+            } */}
         </View>
     )
 }

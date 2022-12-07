@@ -1,22 +1,25 @@
 
-import { StyleSheet } from "react-native";
+import { I18nManager, StyleSheet } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { colors } from "../../styles/Colors";
 import fonts from "../../styles/Fonts";
 import FontSizes from "../../styles/FontSizes";
+import { globalStyles } from "../../styles/globalStyles";
 
 export const styles = StyleSheet.create({
     searchinputtext: {
         width: wp(80),
-        zIndex: 99999999,
-        // fontFamily: AppFonts.MONTSERRAT_MEDIUM,
+        // zIndex: 99999999,
+        fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: RFValue(15),
         // marginLeft: wp(5),
         color: colors.black,
         height: wp(15),
         // backgroundColor: 'red',
-        paddingHorizontal: wp(3)
+        paddingHorizontal: wp(3),
+        textAlign: I18nManager.isRTL ? 'right' : 'left',
+        writingDirection: I18nManager.getConstants().isRTL ? "rtl" : "ltr",
     },
     searchviewimage: {
         width: wp(5),
@@ -26,9 +29,11 @@ export const styles = StyleSheet.create({
     searchinputview: {
         flexDirection: 'row',
         alignItems: 'center',
+        ...globalStyles.rtlDirection,
+        // backgroundColor: 'red'
         // marginTop: wp(12),
 
-        color: colors.black
+        // color: colors.black
     },
     JobTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
@@ -48,6 +53,6 @@ export const styles = StyleSheet.create({
         tintColor: colors.dark_blue1_color
     },
     separator: {
-        height: hp(1.4),
+        height: hp(2),
     },
 })

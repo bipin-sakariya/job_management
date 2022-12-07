@@ -116,7 +116,7 @@ const CreateNewJobScreen = () => {
                             // editable={isEdit}
                             onChangeText={(text) => { }}
                         />
-                        <Text style={{ marginVertical: wp(1), marginBottom: wp(3), alignSelf: 'flex-end', color: '#B7B7B7', fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_10 }}>Additional Address Information</Text>
+                        <Text style={{ marginVertical: wp(1), marginBottom: wp(3), alignSelf: 'flex-end', color: '#B7B7B7', fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_10 }}>{strings.Additionaladdressinformation}</Text>
                         <CustomDetailsComponent
                             title={strings.Description}
                             bottomComponent={
