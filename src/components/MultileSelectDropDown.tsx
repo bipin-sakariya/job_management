@@ -12,17 +12,16 @@ import { useAppDispatch } from '../hooks/reduxHooks'
 import { strings } from '../languages/localizedStrings'
 
 // We can chanage data type as per the component use in future.
-interface DataTypes {
+export interface DataTypes {
     user_name?: string
     selected?: boolean
     date_joined?: string
     email?: string
-    id?: number
+    id: number
     is_active?: boolean
     phone?: string
     profile_image?: string,
-    role?: { id: number, title: string },
-
+    role?: { id: number, title?: string },
 }
 
 interface DropDownComponentProps {
@@ -164,7 +163,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                         </View>
                     </KeyboardAvoidingView>
                     {props.isForm && <TouchableOpacity
-                        onPress={() => props.setIsAllSign(!props.isALLSign)}
+                        onPress={() => props?.setIsAllSign && props?.setIsAllSign(!props.isALLSign)}
                         style={[globalStyles.rowView, { justifyContent: 'space-between', paddingHorizontal: wp(2.5), paddingVertical: wp(3.5) }]}>
                         <Text style={styles.itemListTxt}>{strings.Add_all_sign}</Text>
                         {props.isALLSign ?

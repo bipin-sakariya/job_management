@@ -31,7 +31,7 @@ interface paramsTypes {
     data?: FormData,
     page?: undefined | number,
     name?: string,
-    bill?: [],
+    bill?: number[],
     search?: string,
     is_sign?: boolean
 

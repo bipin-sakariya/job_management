@@ -1,7 +1,7 @@
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomActivityIndicator, CustomBlackButton, CustomTextInput, Header, MultileSelectDropDown } from '../../components'
+import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, Header, MultileSelectDropDown } from '../../components'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { ImagesPath } from '../../utils/ImagePaths'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -27,16 +27,28 @@ interface DataTypes {
     selected?: boolean
     date_joined?: string
     email?: string
-    id?: number
+    id: number
     is_active?: boolean
     phone?: string
     profile_image?: string,
-    role?: { id: number, title: string },
+    role?: { id: number, title?: string },
     name?: string
 }
 
 interface Formvalues {
     formName: string
+}
+
+interface billDetails {
+    created_at: string
+    id: number
+    image: string
+    jumping_ration: number
+    name: string
+    quantity: number
+    type: string
+    type_counting: string
+    updated_at: string
 }
 
 const FormDetailsScreen = () => {
@@ -48,10 +60,10 @@ const FormDetailsScreen = () => {
     const isFocused = useIsFocused()
     const [isBillList, setBillList] = useState<DataTypes[]>([])
     const [isAllList, setIsAllList] = useState<DataTypes[]>([])
-    const [list, isList] = useState([])
+    const [list, isList] = useState<DataTypes[]>([])
     const [countingValue, setCountingValue] = useState(0)
     const [selectedMemberData, setSelectedMemberData] = useState<DataTypes[]>([])
-    const [finalArray, setFinalArray] = useState()
+    const [finalArray, setFinalArray] = useState<number[]>()
     const [page, setPage] = useState(1)
     const [FormDetails, setFormDetails] = useState<FormData>()
 
@@ -96,7 +108,7 @@ const FormDetailsScreen = () => {
     }, [isFocused, formDetails?.is_sign])
     console.log({ isBillList })
     useEffect(() => {
-        const findData: any = billListData.results.map((i) => {
+        const findData: DataTypes[] = billListData.results.map((i) => {
             return {
                 ...i,
                 user_name: i.name,
@@ -141,7 +153,7 @@ const FormDetailsScreen = () => {
     console.log({ isAllList })
     console.log({ selectedMemberData })
     useEffect(() => {
-        let data: any = []
+        let data: number[] = []
         selectedMemberData?.map((item) => {
             data.push(item.id)
         }
@@ -177,6 +189,7 @@ const FormDetailsScreen = () => {
     ]
 
     const renderItem = ({ item, index }: any) => {
+        console.log({ item1111111: item })
         return (
             <TableDetailsComponent type='form' item={item} index={index} />
         )

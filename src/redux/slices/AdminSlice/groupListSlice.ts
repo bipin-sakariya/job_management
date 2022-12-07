@@ -3,6 +3,15 @@ import { Alert } from "react-native";
 import { ApiConstants } from "../../../config/ApiConstants";
 import { axiosClient } from "../../../config/Axios";
 
+
+export interface MemberDetailsProps {
+    email: string
+    id: number
+    phone: string
+    profile_image: string
+    role: number
+    user_name: string
+}
 export interface GroupData {
     id: number,
     manager_details: {
@@ -22,14 +31,7 @@ export interface GroupData {
         profile_image: string
         role: number
     },
-    member_details: [{
-        email: string
-        id: number
-        phone: string
-        profile_image: string
-        role: number
-        user_name: string
-    }],
+    member_details: MemberDetailsProps[],
     form_details: [{
         bill: [],
         created_at: string,
@@ -45,7 +47,8 @@ export interface GroupData {
     name: string,
     image: string,
     manager: number,
-    inspector: number
+    inspector: number,
+    member: number[]
 }
 
 interface GroupDataProps {
@@ -119,7 +122,8 @@ const initialState: InitialState = {
         name: '',
         image: '',
         manager: 0,
-        inspector: 0
+        inspector: 0,
+        member: []
     }
 }
 
@@ -245,7 +249,8 @@ const groupListSlice = createSlice({
                 name: '',
                 image: '',
                 manager: 0,
-                inspector: 0
+                inspector: 0,
+                member: []
             }
         }
     },

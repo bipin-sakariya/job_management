@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomListView, Header } from '../../components'
@@ -32,11 +32,8 @@ const FormScreen = () => {
             setPage(1)
         }
     }, [isFocus])
-
-
-
     const formListApiCall = (page: number) => {
-        let params = {
+        let params: formListParams = {
             page: page,
             search: ''
         }
@@ -48,81 +45,8 @@ const FormScreen = () => {
         })
     }
 
-    // const onReachEndApiCall = () => {
-    //     console.log("RTYRTY");
-    //     const ApiParams = {
-    //         page: page,
-
-    //     }
-    //     dispatch(formList(ApiParams)).unwrap().then((res) => {
-    //         console.log("🚀 ~ file: index.tsx:55 ~ dispatch ~ res", res)
-    //         setIsFooterLoading(false)
-    //         if (res.data.next) {
-    //             Alert.alert("|fdsfs")
-    //         }
-    //         // res.data.next && setPage(page + 1)
-    //     })
-    // }
-
-
     const navigation = useCustomNavigation('FormScreen');
-    const form = [
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-    ]
+
     const renderItem = ({ item, index }: any) => {
         return (
             <CustomListView
