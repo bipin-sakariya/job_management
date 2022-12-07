@@ -36,7 +36,7 @@ export type RootStackParamList = {
     ResetPasswordScreen: undefined
     EditProfileScreen: undefined
     CreateFormScreen: undefined
-    FormDetailsScreen: { id?: number | undefined, isEdit: boolean }
+    FormDetailsScreen: { id?: number | undefined, isEdit?: boolean }
     ChatScreen: undefined
     TransferJobScreen: undefined
     ReturnJobScreen: undefined
@@ -58,7 +58,7 @@ export type RootStackParamList = {
     UserDetailScreen: { userId: number, isEdit?: boolean }
     GroupListScreen: undefined,
     CreateGroupScreen: undefined,
-    GroupDetailScreen: { screenName?: string, params?: any },
+    GroupDetailScreen: { screenName?: string, params?: any, isEdit?: boolean },
     CreateJobMapScreen: undefined,
     SearchScreen: { screenName?: string }
     AssignJobScreen: undefined
