@@ -10,7 +10,32 @@ import CustomStatusBtn from './CustomStatusBtn';
 import { strings } from '../languages/localizedStrings';
 import { convertDate } from '../utils/screenUtils';
 
-const AssignedJobsComponent = ({ item }: any) => {
+export interface AssignJobTypeProps {
+    id: number
+    added_by: {}
+    address: string
+    closed_by: {}
+    images: []
+    attachments: []
+    forms: []
+    bills: []
+    group_forms: []
+    created_at: string,
+    updated_at: string,
+    address_information: string,
+    description: string,
+    latitude: null,
+    longitude: null,
+    priority: boolean,
+    further_inspection: boolean,
+    note: null,
+    status: string,
+    comment: null,
+    form: [],
+    bill: []
+}
+
+const AssignedJobsComponent = ({ item, index }: { item: AssignJobTypeProps, index: number }) => {
     return (
         <View style={[globalStyles.rowView, styles.mainView]}>
             <Image source={ImagesPath.empty_image_white_border_icon} style={styles.imageStyle} />
@@ -18,11 +43,11 @@ const AssignedJobsComponent = ({ item }: any) => {
                 <View style={[globalStyles.rowView, { justifyContent: "space-between", flex: 1 }]}>
                     <View style={globalStyles.rowView}>
                         <Image source={ImagesPath.infocircle_icon} style={styles.infoImageStyle} />
-                        <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle]}>Job Title</Text>
+                        <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle]}>{item.address}</Text>
                     </View>
-                    <CustomStatusBtn title={strings.Open} style={{ backgroundColor: colors.dark_blue3_color }} txtStyle={{ color: colors.white_color }} />
+                    <CustomStatusBtn title={item.status} style={{ backgroundColor: colors.dark_blue3_color }} txtStyle={{ color: colors.white_color }} />
                 </View>
-                <Text numberOfLines={1} style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{strings.Assignedon} {convertDate('2022-11-25T05:10:46.091815Z')}</Text>
+                <Text numberOfLines={1} style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{strings.Assignedon} {convertDate(item.created_at)}</Text>
             </View>
         </View>
     )

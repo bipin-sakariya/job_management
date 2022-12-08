@@ -59,8 +59,6 @@ const AddNewJobScreen = () => {
         address: '',
         address_information: '',
         description: '',
-        images: '',
-        attachments: ''
     })
 
     const createJob = (values: {
@@ -69,20 +67,25 @@ const AddNewJobScreen = () => {
         addressInformation: string;
         description: string;
     }) => {
-        if (values && !imageError && !docError) {
+        if (values) {
             let data = new FormData
 
+            console.log('hghghjghj', values)
             let image_array: image_arrayList[] = []
             let doc_array: doc_arrayList[] = []
 
             if (imageList) {
                 imageList.map((item, index) => {
                     let images = {
+                        // uri: item.imgUrl,
+                        // name: "photo.jpg",
+                        // type: "image/jpeg"
                         uri: item.imgUrl,
                         name: `photo${index}${item.mediaType == "image" ? '.jpg' : '.mp4'}`,
                         type: item.mediaType == "image" ? "image/jpeg" : 'video/mp4'
                     }
                     image_array.push(images)
+                    console.log({ images })
                 })
             }
             if (docList) {
@@ -108,7 +111,10 @@ const AddNewJobScreen = () => {
             data.append("further_inspection", isFinishNotification)
             data.append("status", strings.JobOpen)
             if (!isEmptyArray(image_array)) {
-                data.append("image", image_array)
+                image_array.map((item) => {
+
+                    data.append("image", item)
+                })
             }
             if (!isEmptyArray(doc_array)) {
                 data.append("attachment", docList)
@@ -145,6 +151,7 @@ const AddNewJobScreen = () => {
             initialValues: { jobID: '', address: '', addressInformation: '', description: '', },
             validationSchema: CreateJobValidationSchema,
             onSubmit: values => {
+                console.log({ values })
                 createJob(values)
             }
         })
@@ -200,7 +207,8 @@ const AddNewJobScreen = () => {
     };
     return (
         <View style={globalStyles.container}>
-            {isLoading && <CustomActivityIndicator size={'small'} />}
+            {/* {console.log({ values, errors })} */}
+            {/* {isLoading && <CustomActivityIndicator size={'small'} />} */}
             <Header
                 headerLeftStyle={{
                     paddingLeft: wp(3),
@@ -273,12 +281,15 @@ const AddNewJobScreen = () => {
                                 <FlatList
                                     numColumns={2}
                                     data={docList}
-                                    renderItem={({ item, index }: any) => {
+                                    renderItem={({ item, index }: { item: docList, index: number }) => {
+                                        console.log("🚀 ~ file: index.tsx:302 ~ AddNewJobScreen ~ item", item)
+                                        console.log(typeof (item.path));
+                                        console.log(item.path.split(/[#?]/)[0].split('/').pop()?.split('.')[0]);
                                         return (
                                             <CommonPdfView
                                                 onPress={() => {
-                                                    const pdfName = item.path.split(/[#?]/)[0].split('/').pop().split('.')[0];
-                                                    const extension = item.path.split(/[#?]/)[0].split(".").pop().trim();;
+                                                    const pdfName = item.path.split(/[#?]/)[0].split('/').pop()?.split('.')[0];
+                                                    const extension = item.path.split(/[#?]/)[0].split('.').pop()?.trim();
                                                     const localFile = `${RNFS.DocumentDirectoryPath}/${pdfName}.${extension}`;
                                                     const options = {
                                                         fromUrl: item.path,
@@ -300,14 +311,14 @@ const AddNewJobScreen = () => {
                         onPress={() => selectOneFile()}
                         title={strings.Addimagesandattachments}
                         viewStyle={{ marginTop: wp(5), paddingVertical: wp(5) }} />
-                    {
+                    {/* {
                         imageError && docError ?
                             <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{strings.ImageandAttachments_required}</Text> :
                             <>
                                 {imageError || error.images ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.images ? error.images : strings.Image_required}</Text> : null}
                                 {docError || error.attachments ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.attachments ? error.attachments : strings.Attachments_required}</Text> : null}
                             </>
-                    }
+                    } */}
                     <CustomSwitchComponent
                         onPress={() => setIsUrgentJob(!isUrgentJob)}
                         value={isUrgentJob}
