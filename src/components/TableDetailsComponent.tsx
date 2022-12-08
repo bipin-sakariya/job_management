@@ -1,11 +1,10 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { globalStyles } from '../styles/globalStyles'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { ImagesPath } from '../utils/ImagePaths'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
-import { colors } from '../styles/Colors'
+import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { globalStyles } from '../styles/globalStyles';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import { colors } from '../styles/Colors';
 
 interface TableDetailsComponentProps {
     item: any,

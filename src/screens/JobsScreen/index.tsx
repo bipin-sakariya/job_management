@@ -1,6 +1,6 @@
-import { View, Text, TouchableOpacity, Image, I18nManager, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import { DrawerActions, NavigationProp, useNavigation } from '@react-navigation/native';
+import { DrawerActions } from '@react-navigation/native';
 import { styles } from './styles';
 import { ButtonTab, Container, CustomBottomSheet, Header, JobListComponent } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
@@ -8,10 +8,8 @@ import { globalStyles } from '../../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { ListDataProps } from '../../components/CustomBottomSheet';
-import { FlatList } from 'react-native-gesture-handler';
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
-import moment from 'moment';
 import { RootState, useAppSelector } from '../../hooks/reduxHooks';
 
 const data = [

@@ -1,10 +1,10 @@
-import { Image, ImageSourcePropType, ImageStyle, StyleSheet, Text, TextStyle, TouchableOpacity, TouchableOpacityProps, View, ViewStyle } from 'react-native'
-import React from 'react'
-import { globalStyles } from '../styles/globalStyles'
-import { colors } from '../styles/Colors'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
+import { Image, ImageSourcePropType, ImageStyle, StyleSheet, Text, TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
+import React from 'react';
+import { globalStyles } from '../styles/globalStyles';
+import { colors } from '../styles/Colors';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
 
 interface CustomDashedComponentProps {
     title: string

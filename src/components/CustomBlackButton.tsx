@@ -1,10 +1,10 @@
-import { Image, ImageProps, ImageSourcePropType, ImageStyle, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
-import React from 'react'
-import { globalStyles } from '../styles/globalStyles'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { colors } from '../styles/Colors'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
+import { Image, ImageSourcePropType, ImageStyle, StyleSheet, Text, TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
+import React from 'react';
+import { globalStyles } from '../styles/globalStyles';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { colors } from '../styles/Colors';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
 
 interface CustomBlackButtonProps {
     title: string,

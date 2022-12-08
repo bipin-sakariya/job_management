@@ -1,14 +1,14 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { globalStyles } from '../styles/globalStyles'
-import { ImagesPath } from '../utils/ImagePaths'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
-import { colors } from '../styles/Colors'
-import CustomStatusBtn from './CustomStatusBtn'
-import { strings } from '../languages/localizedStrings'
-import { convertDate } from '../utils/screenUtils'
+import { Image, StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { globalStyles } from '../styles/globalStyles';
+import { ImagesPath } from '../utils/ImagePaths';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import { colors } from '../styles/Colors';
+import CustomStatusBtn from './CustomStatusBtn';
+import { strings } from '../languages/localizedStrings';
+import { convertDate } from '../utils/screenUtils';
 
 const AssignedJobsComponent = ({ item }: any) => {
     return (

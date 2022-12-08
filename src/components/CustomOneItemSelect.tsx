@@ -1,10 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native'
-import React, { Dispatch, SetStateAction } from 'react'
-import { globalStyles } from '../styles/globalStyles'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { colors } from '../styles/Colors'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
+import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
+import React, { Dispatch, SetStateAction } from 'react';
+import { globalStyles } from '../styles/globalStyles';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { colors } from '../styles/Colors';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
 
 interface CustomOneItemSelectProps {
     item: any,

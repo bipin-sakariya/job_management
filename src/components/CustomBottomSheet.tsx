@@ -1,5 +1,5 @@
-import { FlatList, I18nManager, Image, StyleSheet, Text, TextInput, View } from 'react-native';
-import React, { useState } from 'react';
+import { FlatList, I18nManager, Image, StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import React, { ForwardedRef, useState } from 'react';
 import RBSheet, { RBSheetProps } from 'react-native-raw-bottom-sheet';
 import fonts from '../styles/Fonts';
 import FontSizes from '../styles/FontSizes';
@@ -7,7 +7,6 @@ import { colors } from '../styles/Colors';
 import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../utils/ImagePaths';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { strings } from '../languages/localizedStrings';
 
 export interface ListDataProps {
@@ -21,7 +20,7 @@ interface CustomBottomSheetProps {
     onSelectedTab: (item: ListDataProps) => void
 }
 
-const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSheetProps, ref: React.LegacyRef<RBSheet>) => {
+const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSheetProps, ref: ForwardedRef<RBSheet>) => {
     const [data, setData] = useState(props.data)
 
     const onSelectes = (selected: number) => {

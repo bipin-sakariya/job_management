@@ -1,12 +1,12 @@
-import { I18nManager, Image, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native'
-import React from 'react'
-import { globalStyles } from '../styles/globalStyles'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { ImagesPath } from '../utils/ImagePaths'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
-import { colors } from '../styles/Colors'
-import { strings } from '../languages/localizedStrings'
+import { I18nManager, Image, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
+import React from 'react';
+import { globalStyles } from '../styles/globalStyles';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { ImagesPath } from '../utils/ImagePaths';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import { colors } from '../styles/Colors';
+import { strings } from '../languages/localizedStrings';
 
 interface CustomeJobListDetailsViewComponentProps {
     item: any

@@ -1,14 +1,14 @@
-import { Image, StyleSheet, Text, View, TouchableOpacity, Modal } from 'react-native';
+import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { globalStyles } from '../styles/globalStyles';
-import { heightPercentageToDP, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../utils/ImagePaths';
 import FontSizes from '../styles/FontSizes';
 import fonts from '../styles/Fonts';
 import { colors } from '../styles/Colors';
 import CustomeJobListDetailsViewComponent from './CustomJobListDetailsViewComponent';
 import useCustomNavigation from '../hooks/useCustomNavigation';
-import moment, { locale } from 'moment';
+import moment from 'moment';
 import { useAppSelector } from '../hooks/reduxHooks';
 import CustomModal from './CustomModal';
 import { Calendar, LocaleConfig } from 'react-native-calendars';

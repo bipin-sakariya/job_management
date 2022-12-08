@@ -1,15 +1,14 @@
-import { FlatList, I18nManager, Image, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
-import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { globalStyles } from '../styles/globalStyles'
-import { ImagesPath } from '../utils/ImagePaths'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
-import { colors } from '../styles/Colors'
-import { TextInput } from 'react-native-gesture-handler'
-import { roleList } from '../redux/slices/AdminSlice/userListSlice'
-import { useAppDispatch } from '../hooks/reduxHooks'
-import { strings } from '../languages/localizedStrings'
+import { FlatList, I18nManager, Image, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, TextInput, View, ViewStyle } from 'react-native';
+import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { globalStyles } from '../styles/globalStyles';
+import { ImagesPath } from '../utils/ImagePaths';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import { colors } from '../styles/Colors';
+import { roleList } from '../redux/slices/AdminSlice/userListSlice';
+import { useAppDispatch } from '../hooks/reduxHooks';
+import { strings } from '../languages/localizedStrings';
 
 // We can chanage data type as per the component use in future.
 export interface DataTypes {

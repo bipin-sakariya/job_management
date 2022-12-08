@@ -1,10 +1,10 @@
-import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native'
-import React from 'react'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { colors } from '../styles/Colors'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
-import { globalStyles } from '../styles/globalStyles'
+import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
+import React from 'react';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { colors } from '../styles/Colors';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import { globalStyles } from '../styles/globalStyles';
 
 interface CustomDetailsComponentprops {
     title: string,

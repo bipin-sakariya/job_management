@@ -1,18 +1,18 @@
-import { Alert, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useRef, useState } from 'react'
-import { globalStyles } from '../styles/globalStyles'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { ImagesPath } from '../utils/ImagePaths'
-import { colors } from '../styles/Colors'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
-import moment from 'moment'
-import CustomDropdown from './CustomDropDown'
-import { strings } from '../languages/localizedStrings'
-import useCustomNavigation from '../hooks/useCustomNavigation'
-import { billData, billDelete } from '../redux/slices/AdminSlice/billListSlice'
-import { useAppDispatch } from '../hooks/reduxHooks'
-import { FormData, formDelete } from '../redux/slices/AdminSlice/formListSlice'
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { globalStyles } from '../styles/globalStyles';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { ImagesPath } from '../utils/ImagePaths';
+import { colors } from '../styles/Colors';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import moment from 'moment';
+import CustomDropdown from './CustomDropDown';
+import { strings } from '../languages/localizedStrings';
+import useCustomNavigation from '../hooks/useCustomNavigation';
+import { billData, billDelete } from '../redux/slices/AdminSlice/billListSlice';
+import { useAppDispatch } from '../hooks/reduxHooks';
+import { FormData, formDelete } from '../redux/slices/AdminSlice/formListSlice';
 
 interface CustomeListViewProps {
     item: Partial<billData> & Partial<FormData>,

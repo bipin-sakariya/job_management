@@ -1,9 +1,8 @@
-import { Alert, Image, Text, View } from 'react-native';
+import { Alert, Image, Text, View, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { strings } from '../../languages/localizedStrings';
@@ -21,7 +20,6 @@ const SignBillDetailScreen = () => {
     const [isModelVisible, setIsModelVisible] = useState(false)
 
     let { type } = route.params
-    console.log({ type })
     const data = [
         { label: strings.meters, value: 'Meters' },
         { label: strings.units, value: 'Units' },
