@@ -1,43 +1,51 @@
-import { Alert, Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { Alert, FlatList, Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
-import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header, MultileSelectDropDown } from '../../components';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { AssignedJobsComponent, Container, CustomBlackButton, CustomDetailsComponent, CustomDropdown, CustomTextInput, DropDownComponent, Header, MultileSelectDropDown } from '../../components';
+import { heightPercentageToDP, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../../utils/ImagePaths';
-import { strings } from '../../languages/localizedStrings';
+import { styles } from './styles';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { styles } from './styles';
 import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
-import * as Yup from "yup";
+import { strings } from '../../languages/localizedStrings';
 import { useFormik } from 'formik';
+import * as Yup from "yup";
+import { colors } from '../../styles/Colors';
+import FontSizes from '../../styles/FontSizes';
+import { groupDelete, groupDetail, groupUpdate, MemberDetailsProps } from '../../redux/slices/AdminSlice/groupListSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { useIsFocused } from '@react-navigation/native';
-import { getListOfUsers, inspectorListProps, roleList, UserData } from '../../redux/slices/AdminSlice/userListSlice';
-import { FormData, formList } from '../../redux/slices/AdminSlice/formListSlice';
-import { createGroup } from '../../redux/slices/AdminSlice/groupListSlice';
+import { RootRouteProps } from '../../types/RootStackTypes';
+import { roleList } from '../../redux/slices/AdminSlice/userListSlice';
+import { useIsFocused, useRoute } from '@react-navigation/native';
 import { billData } from '../../redux/slices/AdminSlice/billListSlice';
+import { AssignJobTypeProps } from '../../components/AssignedJobsComponent';
 
 interface DataTypes {
     user_name?: string
-    selected?: boolean
     date_joined?: string
     email?: string
     id: number
     is_active?: boolean
     phone?: string
     profile_image?: string,
-    role?: { id: number, title?: string },
+    role?: { id: number, title?: string }
+    selected?: boolean,
+    bill?: billData[],
+    created_at?: string,
+    updated_at?: string
 }
-interface FormDataProps {
-    id: number,
-    bill: billData[],
-    created_at: string,
-    updated_at: string,
-    user_name: string,
-    is_sign?: boolean,
-    selected: boolean
+interface GroupValue {
+    id: number
+    image: string
+    groupName: string
+    groupManager: { id: number, name?: string },
+    inspector: { id: number, name?: string },
+    groupMember: number[],
+    forms: {}
+    selected?: boolean
 }
+
 
 const CreateGroupValidationSchema = Yup.object().shape({
     groupName: Yup.string().required(strings.Groupname_required),
@@ -47,58 +55,55 @@ const CreateGroupValidationSchema = Yup.object().shape({
     inspector: Yup.object().shape({
         id: Yup.number().required(strings.inspector_required)
     }),
-    member: Yup.array().required(strings.groupMember_required),
+    groupMember: Yup.array().required(strings.groupMember_required),
     forms: Yup.array().required(strings.forms_required)
 });
 
-const CreateGroupScreen = () => {
-    const navigation = useCustomNavigation('CreateGroupScreen');
-    const dispatch = useAppDispatch();
-    const isFoucs = useIsFocused();
+const GroupDetailScreen = () => {
+    const navigation = useCustomNavigation('GroupDetailScreen');
+    const menuRef = useRef(null);
+    const dispatch = useAppDispatch()
+    const route = useRoute<RootRouteProps<'GroupDetailScreen'>>()
+    const isFocused = useIsFocused()
 
-    const [imageUrl, setImageUrl] = useState<string | undefined>('');
+    const [isInspector, setIsInspector] = useState<DataTypes[]>([])
+    const [isManager, setIsManager] = useState<DataTypes[]>([])
+    const [isUser, setIsUser] = useState<DataTypes[]>([])
+    const [isMember, setIsMember] = useState<DataTypes[]>([])
+    const [list, isList] = useState<DataTypes[]>([])
+    const [formsList, setFormList] = useState<DataTypes[]>([])
+    const [selectedFormsList, setSelectedFormList] = useState<DataTypes[]>([])
+    const [assignedJobs, setAssignedJobs] = useState([{}, {}, {}])
+    const [isEditable, setIsEditable] = useState(route?.params?.isEdit == true ? true : false);
+    const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
     const [visible, setVisible] = useState(false);
+    const [modalShow, setModalShow] = useState(false);
+    const [selectedMemberData, setSelectedMemberData] = useState<DataTypes[]>([])
+    const [selectedFormsData, setSelectedFormsData] = useState<DataTypes[]>()
     const [formListVisible, setFormListVisible] = useState(false);
-    const [isInspector, setIsInspector] = useState<UserData[]>([])
-    const [isManager, setIsManager] = useState<UserData[]>([])
-    const [isUser, setIsUser] = useState<UserData[]>([])
-    const [page, setPage] = useState(1)
+    const [isId, setIsId] = useState<number>()
+
+    const [setAllMember, isSetAllMember] = useState<DataTypes[]>([])
+    const [setAllForm, isSetAllForm] = useState<DataTypes[]>([])
+
+    const { formListData } = useAppSelector(state => state.formList);
+    const { groupDetails, isLoading } = useAppSelector(state => state.groupList)
     const [finalArray, setFinalArray] = useState<number[]>([])
     const [finalFormsArray, setFinalFormsArray] = useState<number[]>([])
-    const [error, setError] = useState({
-        groupName: '',
-        image: '',
-        groupManager: {
-            id: null
-        },
-        inspector: {
-            id: null
-        },
-    })
-    const [selectedMemberData, setSelectedMemberData] = useState<DataTypes[]>([])
-    const [formsList, setFormList] = useState<FormDataProps[]>([])
-    const [memberList, setMemberList] = useState<DataTypes[]>([])
-    const [allForm, setAllForm] = useState<FormData[]>([])
-    const [selectedFormsList, setSelectedFormList] = useState<FormDataProps[]>([])
-    const [selectedFormsData, setSelectedFormsData] = useState<DataTypes[]>()
-
-    const { isLoading, userListData, } = useAppSelector(state => state.userList);
-    const { formListData, formDetails } = useAppSelector(state => state.formList);
-    const { groupDetails } = useAppSelector(state => state.groupList);
 
     useEffect(() => {
-        if (isFoucs) {
-            dispatch(getListOfUsers("")).unwrap().then((res) => {
-                console.log("🚀 ~ file: index.tsx ~ line 41 ~ dispatch ~ res", res)
+        if (isFocused) {
+            dispatch(groupDetail(route.params.params.id)).unwrap().then((res) => {
+                console.log({ res });
+                setImageUrl(res.image)
             }).catch((error) => {
-                console.log("🚀 ~ file: index.tsx ~ line 38 ~ dispatch ~ error", error)
+                console.log({ error });
             })
-
             let params = {
                 role: strings.Inspector
             }
-            dispatch(roleList(params)).unwrap().then((res: inspectorListProps) => {
-                console.log({ res111: res });
+            dispatch(roleList(params)).unwrap().then((res) => {
+                console.log({ res });
                 setIsInspector(res.results)
                 console.log("🚀 ~ file: DrawerStack.tsx ~ line 21 ~ dispatch ~ res", res)
             }).catch((error) => {
@@ -107,7 +112,7 @@ const CreateGroupScreen = () => {
             let param = {
                 role: strings.Group_Manager
             }
-            dispatch(roleList(param)).unwrap().then((res: inspectorListProps) => {
+            dispatch(roleList(param)).unwrap().then((res) => {
                 console.log({ res });
                 setIsManager(res.results)
                 console.log("🚀 ~ file: DrawerStack.tsx ~ line 21 ~ dispatch ~ res", res)
@@ -125,60 +130,137 @@ const CreateGroupScreen = () => {
                 console.log("🚀 ~ file: DrawerStack.tsx ~ line 20 ~ dispatch ~ error", error)
             })
         }
-        let params = {
-            page: page,
-            search: ''
-        }
-        dispatch(formList(params)).unwrap().then((res) => {
-            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-            setAllForm(res.results)
-            setPage(page + 1)
-        }).catch((error) => {
-            console.log({ error });
+    }, [isFocused])
+    console.log(route.params.params)
+    useEffect(() => {
+        const findData = isUser.map((i: DataTypes) => {
+            return {
+                ...i,
+                selected: false
+            }
         })
-    }, [isFoucs])
+        isList(findData)
+
+        if (groupDetails.member_details) {
+            const finalData: DataTypes[] = groupDetails.member_details.map((i) => {
+                return {
+                    ...i,
+                    role: { id: i.role },
+                    selected: true
+                }
+            })
+            console.log({ finalData })
+            setIsMember(finalData)
+
+        }
+
+    }, [isUser])
+
+    useEffect(() => {
+        const results: DataTypes[] = isUser.map((i) => {
+            console.log("🚀 ~ file: index.tsx:212 ~ constresults:MemberValues[]=isUser.map ~ i", i)
+            return {
+                ...i,
+                selected: !!(groupDetails.member_details?.find((e) => e.id == i.id))
+            }
+        })
+        isSetAllMember(results)
+        console.log('================results', { results })
 
 
+        console.log('====================', { forms: formListData.results })
+        console.log('====================', { forms: groupDetails.form_details })
+        const formResult = formListData.results.map((i) => {
+            return {
+                ...i,
+                user_name: i.name,
+                selected: !!(groupDetails.form_details.find(e => e.id == i.id))
+            }
+        })
+        isSetAllForm(formResult)
+        console.log({ results })
+
+    }, [groupDetails.member_details, isUser])
+    console.log({ isUser })
+    console.log({ isMember })
+    const deleteGroupData = (id: number) => {
+
+        dispatch(groupDelete(id)).unwrap().then(() => {
+        })
+    }
+
+    const optionData = [
+        {
+            title: strings.Remove, onPress: () => {
+                deleteGroupData(route.params.params.id)
+                navigation.goBack()
+            }, imageSource: ImagesPath.bin_icon
+        },
+        {
+            title: strings.Edit, onPress: () => {
+                setIsEditable(true)
+                setVisible(false)
+            }, imageSource: ImagesPath.edit_icon
+        }
+    ]
+
+
+
+    // const [countingValue, setCountingValue] = useState<DropdownProps>({
+    //     label: groupDetails.inspector_details?.user_name ?? '',
+    //     value: groupDetails.inspector_details?.user_name ?? ''
+    // })
+    // useEffect(() => {
+    //     if (groupDetails.inspector_details) {
+    //         setCountingValue({
+    //             label: groupDetails.inspector_details?.user_name ? groupDetails.inspector_details?.user_name : '',
+    //             value: groupDetails.inspector_details?.user_name ? groupDetails.inspector_details?.user_name : ''
+    //         })
+    //     }
+    // }, [groupDetails.inspector_details])
 
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
             enableReinitialize: true,
             initialValues: {
-                groupName: '',
+                id: 0,
                 image: '',
+                groupName: groupDetails.name ? groupDetails.name : '',
                 groupManager: {
-                    id: 0
+                    id: !isEditable ? groupDetails.manager : groupDetails.manager_details.id,
+                    name: groupDetails.manager_details?.user_name ? groupDetails.manager_details?.user_name : '',
                 },
                 inspector: {
-                    id: 0
+                    id: !isEditable ? groupDetails.inspector : groupDetails.inspector,
+                    name: groupDetails.inspector_details?.user_name ? groupDetails.inspector_details?.user_name : '',
                 },
-                member: [],
-                forms: []
+                groupMember: !isEditable ? groupDetails.member : [0],
+                forms: !isEditable ? groupDetails.form_details : {},
             },
             validationSchema: CreateGroupValidationSchema,
-            onSubmit: (values: {
-                groupName: string,
-                image: string,
-                groupManager: {
-                    id: number
-                },
-                inspector: {
-                    id: number
-                },
-                member: [],
-                forms: []
-            }) => {
-                console.log({ values, touched, error })
-                groupCreate(values)
-                // alert('hjgjhgjguighjh')
+            onSubmit: (values: GroupValue) => {
+                console.log({ values })
+                updateGroup(values)
             }
         })
+
     useEffect(() => {
         let data: number[] = []
+        // if (groupDetails.member_details) {
+        //     groupDetails.member_details?.map((item) => {
+        //         data.push(item.id)
+        //     })
+        // }
         selectedMemberData?.map((item) => {
             data.push(item.id)
         })
         setFinalArray(data)
+        setIsId(route.params.params.id)
+    }, [groupDetails.member_details])
+
+    useEffect(() => {
+
+
     }, [selectedMemberData])
 
     useEffect(() => {
@@ -187,12 +269,31 @@ const CreateGroupScreen = () => {
             data.push(item.id)
         })
         setFinalFormsArray(data)
+        console.log({ finalFormsArray: data })
     }, [selectedFormsData])
+    // console.log('route========', { route: route.params.id })
+    // const createForm = (values: any) => {
+    //     let params = {
+    //         id: route.params.id,
+    //         name: values.groupName,
+    //         groupManager: values.groupManager.id,
+    //         inspector: values.inspector.id,
+    //         groupMember: finalArray,
+    //         forms: groupDetails?.form_details
+    //     }
+    //     console.log({ params })
+    //     dispatch(groupUpdate(params)).unwrap().then((res) => {
 
-    console.log({ finalArray, finalFormsArray });
+    //         navigation.goBack()
+    //         // navigation.navigate('FormScreen')
+    //     }).catch((e) => {
+    //         console.log({ error: e });
 
+    //     })
+    // }
 
-    const groupCreate = (values: {
+    const updateGroup = (values: {
+        id: number
         groupName: string;
         image: string,
         groupManager: {
@@ -201,9 +302,11 @@ const CreateGroupScreen = () => {
         inspector: {
             id: number;
         };
-        member: number[],
-        forms: number[]
-    }) => {
+        groupMember: number[]
+        forms: {}
+    }
+
+    ) => {
         if (!imageUrl) {
             Alert.alert('Alert', 'Please select your profile picture.')
         } else {
@@ -221,180 +324,227 @@ const CreateGroupScreen = () => {
             data.append("manager", values.groupManager.id)
             data.append("inspector", values.inspector.id)
             finalArray.map((_member) => {
-                // data.append()
                 data.append("member", _member)
             })
             finalFormsArray.map((_form) => {
                 data.append("form", _form)
             })
-            // data.append("form", values.forms.id)
-            dispatch(createGroup(data)).unwrap().then((res) => {
+
+            let params = {
+                data: data,
+                id: isId
+            }
+            dispatch(groupUpdate(params)).unwrap().then((res) => {
                 console.log({ res: res });
                 navigation.goBack()
             }).catch((e) => {
                 console.log({ error: e });
-                setError(e.data)
+                // setError(e.data)
             })
         }
     }
-
-    console.log({ imageUrl });
-
-
-    useEffect(() => {
-        const findData: FormDataProps[] = formListData.results.map((i) => {
-            return {
-                ...i,
-                user_name: i.name,
-                selected: false,
-            }
-        })
-        setFormList(findData)
-        const finaldata: DataTypes[] = userListData.map((i) => {
-            return {
-                ...i,
-                selected: false,
-            }
-        })
-        setMemberList(finaldata)
-
-        if (formDetails.bill) {
-            const finalData: FormDataProps[] = formDetails?.bill?.map((i: any) => {
-                return {
-                    ...i,
-                    user_name: i.name,
-                    selected: true,
-
-                }
-            })
-            console.log({ finalData })
-            setSelectedFormList(finalData)
-        }
-    }, [formListData])
-
+    console.log('=============', { id: values.groupManager.id, })
+    console.log('=============', { id: values.inspector.id, })
+    const renderItem = ({ item, index }: { item: AssignJobTypeProps, index: number }) => {
+        console.log('assignjob', { item })
+        return (
+            <AssignedJobsComponent item={item} index={index} />
+        )
+    }
 
     return (
         <View style={globalStyles.container}>
-
+            {/* {console.log("FORMIK ------", { error: errors, values: values })} */}
             <Header
                 headerLeftStyle={{
-                    paddingLeft: wp(3)
+                    paddingHorizontal: wp(3)
                 }}
                 headerLeftComponent={
-                    <TouchableOpacity style={[globalStyles.rowView, { width: wp(50) }]} onPress={() => { navigation.goBack() }}>
+                    <TouchableOpacity style={[globalStyles.rowView, { width: wp(60) }]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
-                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{strings.AddGroup}</Text>
+                        <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{groupDetails.name}</Text>
+                    </TouchableOpacity>
+                }
+                headerRightComponent={
+                    <TouchableOpacity ref={menuRef} onPress={() => setVisible(true)}>
+                        <Image source={ImagesPath.menu_dots_icon} style={styles.headerMenu} />
                     </TouchableOpacity>
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <CustomSubTitleWithImageComponent
-                    disabled
-                    title={strings.FillfromtoCreateGroup}
-                    image={ImagesPath.from_list_icon}
-                />
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
-                    <>
-                        <TouchableOpacity
-                            onPress={async () => {
-                                let option: ImageLibraryOptions = {
-                                    mediaType: 'photo'
-                                }
-                                const result: any = await launchImageLibrary(option);
-                                setImageUrl(result ? result?.assets[0].uri : '')
-                                setFieldValue('image', result ? result?.assets[0].uri : '')
-                            }}
-                            activeOpacity={1}>
-                            <ImageBackground
-                                source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
-                                style={styles.addPhotoStyle}
-                                borderRadius={wp(2)}>
+                    <TouchableOpacity
+                        onPress={async () => {
+                            let option: ImageLibraryOptions = {
+                                mediaType: 'photo'
+                            }
+                            const result: any = await launchImageLibrary(option);
+                            setImageUrl(result ? result?.assets[0].uri : '')
+                        }}
+                        disabled={isEditable ? false : true}
+                        activeOpacity={1}>
+                        <ImageBackground
+                            source={imageUrl ? { uri: imageUrl } : ImagesPath.image_for_user_icon}
+                            style={styles.addPhotoStyle}
+                            borderRadius={wp(2)}>
+                            {isEditable ?
                                 <View style={styles.camreaBtnStyle}>
                                     <Image source={ImagesPath.camera_icon} style={styles.cameraIconStyle} />
                                 </View>
-                            </ImageBackground>
-                        </TouchableOpacity>
-                        <CustomTextInput
-                            title={strings.GroupName}
-                            placeholder={strings.Enter_group_name}
-                            container={{ marginBottom: wp(5) }}
-                            onChangeText={handleChange("groupName")}
-                            value={values.groupName}
-                        />
-                        {console.log({ values })}
-                        {(touched.groupName && errors?.groupName) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.groupName}</Text>}
-                        <DropDownComponent
-                            title={strings.Group_Manager}
-                            data={isManager}
-                            image={ImagesPath.down_white_arrow}
-                            labelField="user_name"
-                            valueField="id"
-                            onChange={(item) => setFieldValue('groupManager', item)}
-                            value={values.groupManager.id}
-                            placeholder={strings.SelectRoleforUser}
-                            container={{ marginBottom: wp(5) }}
-                        />
-                        {(touched?.groupManager && errors.groupManager) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text>}
-                        <DropDownComponent
-                            title={strings.Inspector}
-                            data={isInspector}
-                            image={ImagesPath.down_white_arrow}
-                            labelField="user_name"
-                            valueField="id"
-                            onChange={(item) => setFieldValue('inspector', item)}
-                            value={values.inspector.id}
-                            placeholder={strings.GivePermission}
-                            container={{ marginBottom: wp(5) }}
+                                : null
+                            }
+                        </ImageBackground>
+                    </TouchableOpacity>
+                    <CustomTextInput
+                        editable={isEditable}
+                        title={strings.GroupName}
+                        container={{ marginBottom: wp(5) }}
+                        value={values.groupName}
+                        onChangeText={handleChange('groupName')}
+                    />
+                    {(touched?.groupName && errors?.groupName) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.groupName ? errors.groupName : ''}</Text> : null}
+                    <DropDownComponent
+                        disable={!isEditable}
+                        title={strings.Group_Manager}
+                        data={!isEditable ? [groupDetails?.manager_details] : isManager}
+                        image={!isEditable ? '' : ImagesPath.down_white_arrow}
+                        labelField={"user_name"}
+                        valueField="id"
+                        onChange={(item) => setFieldValue('groupManager', item)}
+                        value={groupDetails.manager_details?.id ? groupDetails.manager_details?.id : values.groupManager.id}
+                        placeholder={groupDetails.manager_details?.user_name ? groupDetails.manager_details?.user_name : strings.SelectRoleforUser}
+                        container={{ marginBottom: wp(5) }}
+                    />
+                    {/* {console.log({ countingValue })} */}
+                    {(touched?.groupManager && errors.groupMember) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text>}
+                    <DropDownComponent
+                        disable={!isEditable}
+                        title={strings.Inspector}
+                        data={!isEditable ? [groupDetails?.inspector_details] : isInspector}
+                        image={!isEditable ? '' : ImagesPath.down_white_arrow}
+                        labelField="user_name"
+                        valueField="id"
+                        onChange={(item) => setFieldValue('inspector', item)}
+                        value={groupDetails.inspector_details.id ? groupDetails.inspector_details?.id : values.inspector.id}
+                        placeholder={groupDetails.inspector_details?.user_name ? groupDetails.inspector_details?.user_name : strings.GivePermission}
+                        container={{ marginBottom: wp(5) }}
+                    />
+                    {(touched?.inspector && errors.inspector) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text>}
+                    {/* <MultileSelectDropDown
+                        disabled={!isEditable}
+                        setIsVisible={setModalShow}
+                        isVisible={modalShow}
+                        data={!isEditable ? isMember : list}
+                        title={strings.Groupmemeber}
+                        setSelectedMembers={(data: DataTypes[]) => {
+                            setSelectedMemberData(data)
+                            setFieldValue('member', data)
+                        }}
+                        countTitle={strings.people}
+                    /> */}
+                    <MultileSelectDropDown
+                        disabled={!isEditable}
+                        setIsVisible={setModalShow}
+                        isVisible={modalShow}
+                        data={!isEditable ? isMember : setAllMember}
+                        title={strings.Groupmemeber}
+                        setSelectedMembers={(data: DataTypes[]) => {
+                            setSelectedMemberData(data)
+                            setFieldValue('groupMember', data)
 
-                        />
-                        {(touched?.inspector && errors.inspector) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text>}
+                            console.log('setfield value', { data, isMember })
+                        }}
+                        countTitle={strings.people}
+                    />
+                    {isEditable ?
                         <MultileSelectDropDown
-                            setIsVisible={setVisible}
-                            isVisible={visible}
-                            data={memberList}
-                            title={strings.Groupmemeber}
-                            setSelectedMembers={(data: DataTypes[]) => {
-                                console.log({ data });
-                                setSelectedMemberData(data)
-                                setFieldValue('member', data)
-                            }}
-                            countTitle={strings.people}
-
-                        />
-                        {/* form list  */}
-                        <MultileSelectDropDown
+                            disabled={!isEditable}
                             setIsVisible={setFormListVisible}
                             isVisible={formListVisible}
-                            data={formsList}
-                            title={strings.Forms}
+                            data={setAllForm}
+                            title={strings.GroupForms}
                             setSelectedMembers={(data: DataTypes[]) => {
                                 setSelectedFormsData(data)
                                 setFieldValue('forms', data)
+                                // console.log('setfield value', { data, set })
                             }}
-                            container={{ marginTop: hp(2.5) }}
                             countTitle={strings.Forms}
+                            container={{ marginVertical: heightPercentageToDP(2) }}
                         />
-                        {/* <DropDownComponent
+                        :
+                        <CustomDetailsComponent
+                            title={strings.GroupForms}
+                            detailsContainerStyle={{ marginVertical: wp(5) }}
+                            bottomComponent={
+                                <View style={[globalStyles.rowView, { flexWrap: "wrap", alignItems: "center" }]}>
+                                    {groupDetails?.form_details?.map((item, index) => {
+                                        return (
+                                            <View style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, borderRadius: wp(2) }]}>
+                                                <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14, color: colors.dark_blue1_color }]}>{item?.name}</Text>
+                                            </View>
+                                        )
+                                    })}
+                                </View>
+                            }
+                        />}
+                    {/* <CustomDetailsComponent
                         title={strings.GroupForms}
-                        data={formListData.results}
-                        image={ImagesPath.down_white_arrow}
-                        labelField="name"
-                        valueField="id"
-                        onChange={(item) => setFieldValue('forms', item)}
-                        value={values.forms.id}
-                        placeholder={strings.GivePermission}
-                        container={{ marginTop: wp(5) }}
+                        detailsContainerStyle={{ marginVertical: wp(5) }}
+                        bottomComponent={
+                            <View style={[globalStyles.rowView, { flexWrap: "wrap", alignItems: "center" }]}>
+                                {groupDetails?.form_details?.map((item, index) => {
+                                    return (
+                                        <View style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, borderRadius: wp(2) }]}>
+                                            <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14, color: colors.dark_blue1_color }]}>{item?.name}</Text>
+                                        </View>
+                                    )
+                                })}
+                            </View>
+                        }
                     /> */}
-                        <CustomBlackButton
-                            title={strings.CreateGroup}
-                            image={ImagesPath.plus_white_circle_icon}
-                            onPress={handleSubmit}
-                        />
-                    </>
+                    <CustomDetailsComponent
+                        title={strings.Assignedjobs}
+                        detailsContainerStyle={{ marginBottom: wp(5) }}
+                        bottomComponent={
+                            <>
+                                <FlatList
+                                    data={groupDetails.assign_jobs.slice(0, 2)}
+                                    renderItem={renderItem}
+                                    style={{ paddingVertical: wp(2) }}
+                                    ItemSeparatorComponent={() => {
+                                        return (
+                                            <View style={{ height: wp(2), backgroundColor: colors.white_5 }} />
+                                        )
+                                    }}
+                                    showsVerticalScrollIndicator={false}
+                                />
+                                {groupDetails.assign_jobs.length > 2 &&
+                                    <TouchableOpacity onPress={() => { navigation.navigate('AssignJobScreen') }} style={[globalStyles.rowView, styles.viewAllJobs]}>
+                                        <Text style={styles.viewAllJobsTxt}>{strings.ViewallJobs}</Text>
+                                        <Image source={ImagesPath.arrow_right_black_border_icon} style={[styles.iconStyle, { transform: [{ rotate: '180deg' }] }]} />
+                                    </TouchableOpacity>
+                                }
+                            </>
+                        }
+                    />
+                    {isEditable && <CustomBlackButton
+                        title={strings.CreateGroup}
+                        image={ImagesPath.plus_white_circle_icon}
+                        onPress={() => {
+                            handleSubmit()
+                        }}
+                    />}
                 </KeyboardAwareScrollView>
             </Container>
+            <CustomDropdown
+                componentRef={menuRef}
+                dropdownData={optionData}
+                isVisible={visible}
+                setIsVisible={setVisible}
+                modalStyle={{ right: 0 }}
+            />
         </View>
     )
 }
 
-export default CreateGroupScreen
+export default GroupDetailScreen;
