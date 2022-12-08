@@ -35,7 +35,7 @@ const SearchScreen = () => {
 
         if (route.params.screenName == 'formScreen') {
             dispatch(formList(param)).unwrap().then((res) => {
-                if (res.data.next && !!input) {
+                if (res.next && !!input) {
                     setPage(page + 1)
                 }
                 console.log({ res })
@@ -44,7 +44,7 @@ const SearchScreen = () => {
         }
         if (route.params.screenName == 'groupScreen') {
             dispatch(groupList(param)).unwrap().then((res) => {
-                if (res.data.next && !!input) {
+                if (res.next && !!input) {
                     setPage(page + 1)
                 }
                 console.log({ res })
@@ -52,7 +52,7 @@ const SearchScreen = () => {
             })
         }
     }
-    console.log({ text })
+
     const renderItem = ({ item, index }: any) => {
         return (
             <CustomListView

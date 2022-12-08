@@ -21,7 +21,6 @@ export interface GroupData {
         phone: string
         profile_image: string
         role: number
-
     },
     inspector_details: {
         user_name: string,
@@ -135,14 +134,14 @@ export interface apiErrorTypes {
 
 const GROUP = "GROUP";
 
-export const groupList = createAsyncThunk
-    (GROUP + "/groupList", async (params: paramsTypes, { rejectWithValue }) => {
+export const groupList = createAsyncThunk<GroupDataProps, paramsTypes, { rejectValue: apiErrorTypes }>
+    (GROUP + "/groupList", async (params, { rejectWithValue }) => {
         try {
             console.log("🚀 ~ file: groupListSlice.ts ~ line 60 ~ params", params)
             console.log(ApiConstants.GROUPLIST)
             const response = await axiosClient.get(ApiConstants.GROUPLIST + `?page=${params.page}&search=${params.search}`)
             console.log("🚀 ~ file: groupListSlice.ts ~ line 69 ~ response", response)
-            return response;
+            return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
                 Alert.alert(e.message)
@@ -261,11 +260,11 @@ const groupListSlice = createSlice({
         });
         builder.addCase(groupList.fulfilled, (state, action) => {
             state.isLoading = false
-            let tempArray: GroupDataProps = action.meta.arg.page == 1 ? [] : {
-                ...action.payload.data,
-                results: [...current(state.groupListData?.results), ...action.payload?.data?.results]
+            let tempArray = action.meta.arg.page == 1 ? action.payload : {
+                ...action.payload,
+                results: [...current(state.groupListData?.results), ...action.payload?.results]
             }
-            state.groupListData = action.meta.arg.page == 1 ? action.payload.data : tempArray
+            state.groupListData = action.meta.arg.page == 1 ? action.payload : tempArray
             state.error = ''
         });
         builder.addCase(groupList.rejected, (state, action) => {

@@ -16,6 +16,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { getListOfUsers, inspectorListProps, roleList, UserData } from '../../redux/slices/AdminSlice/userListSlice';
 import { FormData, formList } from '../../redux/slices/AdminSlice/formListSlice';
 import { createGroup } from '../../redux/slices/AdminSlice/groupListSlice';
+import { billData } from '../../redux/slices/AdminSlice/billListSlice';
 
 interface DataTypes {
     user_name?: string
@@ -30,7 +31,7 @@ interface DataTypes {
 }
 interface FormDataProps {
     id: number,
-    bill: [{ id: number }],
+    bill: billData[],
     created_at: string,
     updated_at: string,
     user_name: string,
@@ -131,7 +132,7 @@ const CreateGroupScreen = () => {
         }
         dispatch(formList(params)).unwrap().then((res) => {
             console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-            setAllForm(res.data.results)
+            setAllForm(res.results)
             setPage(page + 1)
         }).catch((error) => {
             console.log({ error });

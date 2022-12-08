@@ -19,7 +19,7 @@ interface CustomCarouselImageAndVideoProps {
     result: ItemProps[]
     viewStyle?: ViewStyle
     videoStyle?: ViewStyle
-    children?: any
+    children?: React.ReactNode
 }
 
 const CustomCarouselImageAndVideo = (props: CustomCarouselImageAndVideoProps) => {

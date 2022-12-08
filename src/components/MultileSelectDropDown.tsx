@@ -163,7 +163,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                         </View>
                     </KeyboardAvoidingView>
                     {props.isForm && <TouchableOpacity
-                        onPress={() => props?.setIsAllSign && props?.setIsAllSign(!props.isALLSign)}
+                        onPress={() => props.setIsAllSign && props?.setIsAllSign(!props.isALLSign)}
                         style={[globalStyles.rowView, { justifyContent: 'space-between', paddingHorizontal: wp(2.5), paddingVertical: wp(3.5) }]}>
                         <Text style={styles.itemListTxt}>{strings.Add_all_sign}</Text>
                         {props.isALLSign ?

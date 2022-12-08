@@ -11,12 +11,6 @@ export type DrawerStackParamList = {
     BottomTabs: BottomStackParamList
 }
 
-interface BillSectionScreenProps {
-    id: number,
-    type: string,
-    isEdit?: boolean
-}
-
 export interface JobDetailsProps {
     description: string
     km: string
@@ -36,13 +30,13 @@ export type RootStackParamList = {
     BillListScreen: { billType?: string }
     BillCreateScreen: undefined
     CreateBillSectionScreen: { type?: string }
-    BillSectionScreen: BillSectionScreenProps
+    BillSectionScreen: { id?: number, type: string, isEdit?: boolean }
     FormScreen: undefined
     ProfileScreen: undefined
     ResetPasswordScreen: undefined
     EditProfileScreen: undefined
     CreateFormScreen: undefined
-    FormDetailsScreen: { id?: number | undefined, isEdit?: boolean }
+    FormDetailsScreen: { id?: number, isEdit?: boolean }
     ChatScreen: undefined
     TransferJobScreen: undefined
     ReturnJobScreen: undefined

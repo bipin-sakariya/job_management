@@ -19,7 +19,7 @@ import { FormData, formDelete, formDetail, formUpdate } from '../../redux/slices
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { useFormik } from 'formik'
 import * as yup from "yup";
-import { billList } from '../../redux/slices/AdminSlice/billListSlice'
+import { billData, billList } from '../../redux/slices/AdminSlice/billListSlice'
 import { renameKeys } from '../../utils/screenUtils'
 
 interface DataTypes {
@@ -60,10 +60,10 @@ const FormDetailsScreen = () => {
     const isFocused = useIsFocused()
     const [isBillList, setBillList] = useState<DataTypes[]>([])
     const [isAllList, setIsAllList] = useState<DataTypes[]>([])
-    const [list, isList] = useState<DataTypes[]>([])
+    const [list, isList] = useState<billData[]>([])
     const [countingValue, setCountingValue] = useState(0)
     const [selectedMemberData, setSelectedMemberData] = useState<DataTypes[]>([])
-    const [finalArray, setFinalArray] = useState<number[]>()
+    const [finalArray, setFinalArray] = useState<number[]>([])
     const [page, setPage] = useState(1)
     const [FormDetails, setFormDetails] = useState<FormData>()
 
@@ -98,7 +98,7 @@ const FormDetailsScreen = () => {
 
             dispatch(billList(params)).unwrap().then((res) => {
                 console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-                setBillList(res.data.results)
+                setBillList(res.results)
                 setPage(page + 1)
             }).catch((error) => {
                 console.log({ error });
@@ -106,9 +106,9 @@ const FormDetailsScreen = () => {
 
         }
     }, [isFocused, formDetails?.is_sign])
-    console.log({ isBillList })
+
     useEffect(() => {
-        const findData: DataTypes[] = billListData.results.map((i) => {
+        const findData: billData[] = billListData.results.map((i) => {
             return {
                 ...i,
                 user_name: i.name,
@@ -116,14 +116,13 @@ const FormDetailsScreen = () => {
             }
         })
         isList(findData)
+
         if (formDetails.bill) {
             const finalData: DataTypes[] = isBillList.map((i: DataTypes) => {
-
                 return {
                     ...i,
                     user_name: i.name,
                     // selected: true,
-
                 }
             })
             // console.log({ finalData })
@@ -188,8 +187,7 @@ const FormDetailsScreen = () => {
         }
     ]
 
-    const renderItem = ({ item, index }: any) => {
-        console.log({ item1111111: item })
+    const renderItem = ({ item, index }: { item: billData, index: number }) => {
         return (
             <TableDetailsComponent type='form' item={item} index={index} />
         )
@@ -226,7 +224,6 @@ const FormDetailsScreen = () => {
         })
     }
 
-    console.log({ isALLSign })
     return (
         <View style={globalStyles.container}>
             <Header

@@ -12,10 +12,10 @@ import { strings } from '../languages/localizedStrings'
 import useCustomNavigation from '../hooks/useCustomNavigation'
 import { billData, billDelete } from '../redux/slices/AdminSlice/billListSlice'
 import { useAppDispatch } from '../hooks/reduxHooks'
-import { formDelete } from '../redux/slices/AdminSlice/formListSlice'
+import { FormData, formDelete } from '../redux/slices/AdminSlice/formListSlice'
 
 interface CustomeListViewProps {
-    item: billData,
+    item: Partial<billData> & Partial<FormData>,
     onPress: () => void
     material?: boolean,
     isFrom?: boolean
@@ -37,14 +37,16 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
     const optionData = [
         {
             title: strings.Remove, onPress: () => {
-                if (isFrom) {
-                    //form data
-                    dispatch(formDelete(item.id))
-                    setVisible(false)
-                } else {
-                    //billdata
-                    dispatch(billDelete(item.id)).unwrap()
-                    setVisible(false)
+                if (item.id) {
+                    if (isFrom) {
+                        //form data
+                        dispatch(formDelete(item.id))
+                        setVisible(false)
+                    } else {
+                        //billdata
+                        dispatch(billDelete(item.id)).unwrap()
+                        setVisible(false)
+                    }
                 }
             }, imageSource: ImagesPath.bin_icon
         },

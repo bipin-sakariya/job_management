@@ -6,7 +6,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 
 interface CustomModalProps {
     onClose?: () => void
-    children?: any
+    children?: React.ReactNode
 }
 
 

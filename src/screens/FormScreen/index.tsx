@@ -8,7 +8,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { styles } from './styles'
 import { strings } from '../../languages/localizedStrings'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
-import { formList } from '../../redux/slices/AdminSlice/formListSlice'
+import { FormData, formList } from '../../redux/slices/AdminSlice/formListSlice'
 import { useIsFocused } from '@react-navigation/native'
 
 interface formListParams {
@@ -16,14 +16,14 @@ interface formListParams {
     search?: string,
 }
 const FormScreen = () => {
-
+    const navigation = useCustomNavigation('FormScreen');
     const dispatch = useAppDispatch();
-    const [page, setPage] = useState(1)
     const isFocus = useIsFocused();
-    const { formListData, isLoading } = useAppSelector(state => state.formList)
-    console.log({ formListData });
-    const [isFooterLoading, setIsFooterLoading] = useState<boolean>(false)
 
+    const { formListData, isLoading } = useAppSelector(state => state.formList)
+
+    const [isFooterLoading, setIsFooterLoading] = useState<boolean>(false)
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
         if (isFocus)
@@ -32,6 +32,7 @@ const FormScreen = () => {
             setPage(1)
         }
     }, [isFocus])
+    
     const formListApiCall = (page: number) => {
         let params: formListParams = {
             page: page,
@@ -45,9 +46,23 @@ const FormScreen = () => {
         })
     }
 
-    const navigation = useCustomNavigation('FormScreen');
+    // const onReachEndApiCall = () => {
+    //     console.log("RTYRTY");
+    //     const ApiParams = {
+    //         page: page,
 
-    const renderItem = ({ item, index }: any) => {
+    //     }
+    //     dispatch(formList(ApiParams)).unwrap().then((res) => {
+    //         console.log("🚀 ~ file: index.tsx:55 ~ dispatch ~ res", res)
+    //         setIsFooterLoading(false)
+    //         if (res.data.next) {
+    //             Alert.alert("|fdsfs")
+    //         }
+    //         // res.data.next && setPage(page + 1)
+    //     })
+    // }
+
+    const renderItem = ({ item, index }: { item: FormData, index: number }) => {
         return (
             <CustomListView
                 item={item}

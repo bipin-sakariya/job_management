@@ -10,7 +10,7 @@ import {
     ImageProps,
     Platform
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { MutableRefObject, useEffect, useState } from 'react';
 import ReactNativeModal from 'react-native-modal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -32,7 +32,7 @@ interface ComponentProps {
     isVisible: boolean;
     setIsVisible: (prev_state: boolean) => void;
     modalStyle?: ViewStyle;
-    componentRef: any;
+    componentRef: MutableRefObject<View | TouchableOpacity | Image | Text | null>;
 }
 
 const RenderDropdownItem = (dropdownItem: DropdownItem) => {

@@ -12,7 +12,7 @@ interface CustomDetailsComponentprops {
     detailsContainerStyle?: ViewStyle,
     titleViewStyle?: ViewStyle,
     bottomViewStyle?: ViewStyle,
-    bottomComponent?: any
+    bottomComponent?: React.ReactNode
 }
 
 const CustomDetailsComponent = ({ title, titleTxtStyle, detailsContainerStyle, bottomComponent, bottomViewStyle, titleViewStyle }: CustomDetailsComponentprops) => {
