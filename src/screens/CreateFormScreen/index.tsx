@@ -1,9 +1,8 @@
-import { Dimensions, Image, Text, TouchableWithoutFeedback, View } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import { Image, Text, TouchableWithoutFeedback, View, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomActivityIndicator, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, Header, MultileSelectDropDown } from '../../components'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import { ImagesPath } from '../../utils/ImagePaths'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { strings } from '../../languages/localizedStrings'
@@ -13,33 +12,60 @@ import * as yup from 'yup'
 import { RootRouteProps } from '../../types/RootStackTypes'
 import { useIsFocused, useRoute } from '@react-navigation/native'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
-import { billList } from '../../redux/slices/AdminSlice/billListSlice'
+import { billData, billList } from '../../redux/slices/AdminSlice/billListSlice'
 import { formCreate } from '../../redux/slices/AdminSlice/formListSlice'
-
 interface billListParams {
     page?: number,
     search?: string,
     type?: string
 }
 
+interface DataTypes {
+    user_name?: string
+    selected?: boolean
+    date_joined?: string
+    email?: string
+    id: number
+    is_active?: boolean
+    phone?: string
+    profile_image?: string,
+    role?: { id: number, title?: string },
+
+}
+interface BillTypes {
+    name?: string
+    selected?: boolean
+    date_joined?: string
+    email?: string
+    id: number
+    is_active?: boolean
+    phone?: string
+    profile_image?: string,
+    role?: { id: number, title?: string },
+}
+
+interface valuesProps {
+    name: string
+    bill: number[]
+    is_sign: boolean
+}
 const CreateFormScreen = () => {
     const navigation = useCustomNavigation('CreateFormScreen');
     const dispatch = useAppDispatch()
     const isFocus = useIsFocused()
-    const route = useRoute<RootRouteProps<'GroupDetailScreen'>>()
+    const route = useRoute<RootRouteProps<'CreateFormScreen'>>()
     const { formDetails, isLoading } = useAppSelector(state => state.formList)
     const { billListData } = useAppSelector(state => state.billList)
 
     const [countingValue, setCountingValue] = useState(0)
     const [isVisible, setIsVisible] = useState(false)
-    const [isBillSelected, setIsBillSelected] = useState(false)
     const [page, setPage] = useState(1)
     const [btn, setBtn] = useState({ open: true, close: false })
-    const [isBillList, setBillList] = useState([])
-    const [isAllList, setIsAllList] = useState([])
-    const [list, isList] = useState([])
-    const [selectedMemberData, setSelectedMemberData] = useState()
-    const [finalArray, setFinalArray] = useState()
+    const [isBillList, setBillList] = useState<DataTypes[]>([])
+    const [isAllList, setIsAllList] = useState<billData[]>([])
+    const [list, isList] = useState<BillTypes[]>([])
+    const [selectedMemberData, setSelectedMemberData] = useState<BillTypes[]>([])
+    const [finalArray, setFinalArray] = useState<number[]>([])
     const [isALLSign, setIsAllSign] = useState(false)
 
     const CreateFormValidationSchema = yup.object().shape({
@@ -69,13 +95,13 @@ const CreateFormScreen = () => {
         console.log({ params })
         dispatch(formCreate(params)).unwrap().then((res) => {
             navigation.goBack()
-            // navigation.navigate('FormScreen')
         }).catch((e) => {
             console.log({ error: e });
         })
     }
 
     useEffect(() => {
+        console.log("🚀 ~ file: index.tsx ~ line 95 ~ useEffect ~ isFocus", isFocus)
         if (isFocus && btn) {
             let params = {
                 page: page,
@@ -90,7 +116,8 @@ const CreateFormScreen = () => {
 
     const billListApiCall = (params: billListParams) => {
         dispatch(billList(params)).unwrap().then((res) => {
-            setBillList(res.data.results)
+            console.log("billList", res)
+            setBillList(res.results)
             setPage(page + 1)
         }).catch((error) => {
             console.log({ error });
@@ -98,7 +125,7 @@ const CreateFormScreen = () => {
     }
 
     useEffect(() => {
-        const findData: any = isBillList.map((i) => {
+        const findData: BillTypes[] = isBillList.map((i: BillTypes) => {
             return {
                 ...i,
                 user_name: i.name,
@@ -108,12 +135,10 @@ const CreateFormScreen = () => {
         isList(findData)
 
         if (formDetails.bill) {
-            const finalData: any = billListData.results.map((i) => {
+            const finalData: billData[] = billListData.results.map((i) => {
                 return {
                     ...i,
                     user_name: i.name,
-                    // selected: true,
-
                 }
             })
             setIsAllList(finalData)
@@ -121,13 +146,13 @@ const CreateFormScreen = () => {
     }, [isBillList])
 
     useEffect(() => {
-        let data: any = []
+        let data: number[] = []
         selectedMemberData?.map((item) => {
             data.push(item.id)
         })
         setFinalArray(data)
-
     }, [selectedMemberData])
+    console.log(finalArray)
 
     return (
         <TouchableWithoutFeedback onPress={() => {
@@ -156,8 +181,6 @@ const CreateFormScreen = () => {
                         value={values.formName}
                     />
                     {touched?.formName && errors?.formName ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.formName}</Text> : null}
-
-                    {/* bill selection list */}
                     <MultileSelectDropDown
                         isVisible={isVisible}
                         setIsVisible={setIsVisible}
@@ -171,14 +194,9 @@ const CreateFormScreen = () => {
                         isALLSign={isALLSign}
                     />
                     {/* {isBillError ? <Text style={[globalStyles.rtlStyle, { bottom: wp(0), color: 'red' }]}>{strings.Bill_required}</Text> : null} */}
-
-                    <CustomBlackButton
-                        onPress={() => {
-                            handleSubmit()
-                        }}
-                        title={strings.CreateForm}
-                        image={ImagesPath.plus_white_circle_icon}
-                        imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} />
+                    <CustomBlackButton onPress={() => {
+                        handleSubmit()
+                    }} title={strings.CreateForm} image={ImagesPath.plus_white_circle_icon} imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} />
                 </Container>
             </View>
         </TouchableWithoutFeedback>

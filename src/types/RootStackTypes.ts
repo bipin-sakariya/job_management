@@ -1,4 +1,5 @@
 import { RouteProp } from "@react-navigation/native";
+import { GroupData } from "../redux/slices/AdminSlice/groupListSlice";
 
 export type BottomStackParamList = {
     JobsScreen: undefined
@@ -10,10 +11,11 @@ export type DrawerStackParamList = {
     BottomTabs: BottomStackParamList
 }
 
-interface BillSectionScreenProps {
-    id: number,
-    type: string,
-    isEdit?: boolean
+export interface JobDetailsProps {
+    description: string
+    km: string
+    status: string
+    title: string
 }
 
 export type RootStackParamList = {
@@ -21,22 +23,20 @@ export type RootStackParamList = {
     DrawerScreens: DrawerStackParamList
     MapScreen: undefined
     IndoxScreen: undefined
-    JobDuplicateListScreen?: {
-        params?: any,
-    }
+    JobDuplicateListScreen: undefined
     NotificationScreen: undefined
-    JobDetailsScreen: { params?: any, type?: string }
+    JobDetailsScreen: { params: JobDetailsProps, type?: string }
     ReportGeneratorScreen: undefined
     BillListScreen: { billType?: string }
     BillCreateScreen: undefined
     CreateBillSectionScreen: { type?: string }
-    BillSectionScreen: BillSectionScreenProps
+    BillSectionScreen: { id?: number, type: string, isEdit?: boolean }
     FormScreen: undefined
     ProfileScreen: undefined
     ResetPasswordScreen: undefined
     EditProfileScreen: undefined
     CreateFormScreen: undefined
-    FormDetailsScreen: { id?: number | undefined, isEdit?: boolean, type?: string }
+    FormDetailsScreen: { id?: number, isEdit?: boolean }
     ChatScreen: undefined
     TransferJobScreen: undefined
     ReturnJobScreen: undefined
@@ -58,7 +58,7 @@ export type RootStackParamList = {
     UserDetailScreen: { userId: number, isEdit?: boolean }
     GroupListScreen: undefined,
     CreateGroupScreen: undefined,
-    GroupDetailScreen: { screenName?: string, params?: any, isEdit?: boolean },
+    GroupDetailScreen: { screenName?: string, params: GroupData, isEdit?: boolean },
     CreateJobMapScreen: undefined,
     SearchScreen: { screenName?: string }
     AssignJobScreen: undefined

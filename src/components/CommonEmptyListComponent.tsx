@@ -1,9 +1,9 @@
-import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native'
-import React from 'react'
-import { globalStyles } from '../styles/globalStyles'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
+import React from 'react';
+import { globalStyles } from '../styles/globalStyles';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 interface CommonEmptyListComponentProps {
     viewStyle?: ViewStyle,

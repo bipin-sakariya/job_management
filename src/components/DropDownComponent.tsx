@@ -1,13 +1,12 @@
-import { Image, ImageSourcePropType, ImageStyle, Keyboard, StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native'
-import React, { Dispatch, SetStateAction } from 'react'
-import { Dropdown } from 'react-native-element-dropdown'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { globalStyles } from '../styles/globalStyles'
-import { ImagesPath } from '../utils/ImagePaths'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
-import { colors } from '../styles/Colors'
-import { DropdownProps } from 'react-native-element-dropdown/lib/typescript/components/Dropdown/model'
+import { Image, ImageSourcePropType, ImageStyle, Keyboard, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import React from 'react';
+import { Dropdown } from 'react-native-element-dropdown';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { globalStyles } from '../styles/globalStyles';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import { colors } from '../styles/Colors';
+import { DropdownProps } from 'react-native-element-dropdown/lib/typescript/components/Dropdown/model';
 
 interface DropDownComponentProps {
     image?: ImageSourcePropType,

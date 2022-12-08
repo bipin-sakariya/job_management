@@ -14,6 +14,16 @@ import FontSizes from '../../styles/FontSizes'
 import { colors } from '../../styles/Colors'
 import { convertDate } from '../../utils/screenUtils'
 
+interface JobData {
+    titlr: string
+    description: string
+    km: string
+    status: string
+    image: string
+}
+
+
+
 const data = [
     { title: 'Job Return', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobReturn, image: ImagesPath.demo1 },
     { title: 'Job Transfer', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobTransfer, image: ImagesPath.demo2 },

@@ -1,17 +1,19 @@
-import { Image, ImageSourcePropType, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { globalStyles } from '../styles/globalStyles'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { colors } from '../styles/Colors'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
-import { strings } from '../languages/localizedStrings'
+import { Image, ImageSourcePropType, StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { globalStyles } from '../styles/globalStyles';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { colors } from '../styles/Colors';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import { strings } from '../languages/localizedStrings';
+
 interface CustomJobAddedByComponentProps {
     image?: ImageSourcePropType,
     userName?: string,
     role?: string,
     date?: string
 }
+
 const CustomJobAddedByComponent = ({ image, userName, role, date }: CustomJobAddedByComponentProps) => {
     return (
         <View style={[globalStyles.rowView, styles.jobView]}>
@@ -69,5 +71,4 @@ const styles = StyleSheet.create({
         color: colors.dark_blue2_color,
         maxWidth: wp(40)
     },
-
 })

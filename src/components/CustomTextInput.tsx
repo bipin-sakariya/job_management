@@ -1,6 +1,5 @@
-import { I18nManager, Platform, StyleSheet, Text, TextInputProps, View, ViewStyle } from 'react-native';
+import { I18nManager, Platform, StyleSheet, Text, TextInputProps, View, ViewStyle, TextInput } from 'react-native';
 import React from 'react';
-import { TextInput } from 'react-native-gesture-handler';
 import FontSizes from '../styles/FontSizes';
 import fonts from '../styles/Fonts';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';

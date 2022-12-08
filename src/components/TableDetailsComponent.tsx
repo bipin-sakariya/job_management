@@ -1,16 +1,15 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { globalStyles } from '../styles/globalStyles'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { ImagesPath } from '../utils/ImagePaths'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
-import { colors } from '../styles/Colors'
+import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { globalStyles } from '../styles/globalStyles';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import { colors } from '../styles/Colors';
 
 interface TableDetailsComponentProps {
     item: any,
     type?: string,
-    index?: number
+    index: number
 }
 
 const TableDetailsComponent = ({ item, type, index }: TableDetailsComponentProps) => {
@@ -27,8 +26,8 @@ const TableDetailsComponent = ({ item, type, index }: TableDetailsComponentProps
                 } */}
                 <Text numberOfLines={1} style={styles.commonScammedTxt}>{item.name}</Text>
             </View>
-            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.quantity}</Text>
-            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(12) }]}>{item.type_counting}</Text>
+            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.qty}</Text>
+            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(12) }]}>{item.unit}</Text>
         </View>
     )
 }

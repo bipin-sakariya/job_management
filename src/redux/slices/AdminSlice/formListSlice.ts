@@ -2,10 +2,11 @@ import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { Alert } from "react-native";
 import { ApiConstants } from "../../../config/ApiConstants";
 import { axiosClient } from "../../../config/Axios";
+import { billData } from "./billListSlice";
 
 export interface FormData {
     id: number,
-    bill: [{ id: number }],
+    bill: billData[],
     created_at: string,
     updated_at: string,
     name: string,
@@ -29,12 +30,11 @@ interface InitialState {
 interface paramsTypes {
     id?: number
     data?: FormData,
-    page?: undefined | number,
+    page?: number,
     name?: string,
-    bill?: [],
+    bill?: number[],
     search?: string,
     is_sign?: boolean
-
 }
 
 const initialState: InitialState = {
@@ -48,7 +48,7 @@ const initialState: InitialState = {
     },
     formDetails: {
         id: 0,
-        bill: [{ id: 0 }],
+        bill: [],
         created_at: '',
         updated_at: '',
         name: '',
@@ -63,14 +63,14 @@ export interface apiErrorTypes {
 
 const FORM = "FORM";
 
-export const formList = createAsyncThunk
-    (FORM + "/formList", async (params: paramsTypes, { rejectWithValue }) => {
+export const formList = createAsyncThunk<FormDataProps, paramsTypes, { rejectValue: apiErrorTypes }>
+    (FORM + "/formList", async (params, { rejectWithValue }) => {
         try {
             console.log("🚀 ~ file: formListSlice.ts ~ line 60 ~ params", params)
             console.log(ApiConstants.FORMS)
             const response = await axiosClient.get(ApiConstants.FORMS + `?page=${params.page}&search=${params.search}`)
             console.log("🚀 ~ file: formListSlice.ts ~ line 69 ~ response", response)
-            return response;
+            return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
                 Alert.alert(e.message)
@@ -144,7 +144,7 @@ const formListSlice = createSlice({
         formDetails: (state,) => {
             state.formDetails = {
                 id: 0,
-                bill: [{ id: 0 }],
+                bill: [],
                 created_at: '',
                 updated_at: '',
                 name: '',
@@ -159,13 +159,13 @@ const formListSlice = createSlice({
         builder.addCase(formList.fulfilled, (state, action) => {
             state.isLoading = false
             // state.formListData = action.payload.results
-            let tempArray: FormDataProps = action.meta.arg.page == 1 ? [] : {
-                ...action.payload.data,
-                results: [...current(state.formListData?.results), ...action.payload?.data?.results]
+            let tempArray: FormDataProps = action.meta.arg.page == 1 ? action.payload : {
+                ...action.payload,
+                results: [...current(state.formListData?.results), ...action.payload?.results]
 
             }
             console.log('tempdata======>', tempArray)
-            state.formListData = action.meta.arg.page == 1 ? action.payload.data : tempArray
+            state.formListData = action.meta.arg.page == 1 ? action.payload : tempArray
             state.error = ''
         });
         builder.addCase(formList.rejected, (state, action) => {

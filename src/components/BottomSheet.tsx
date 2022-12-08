@@ -1,10 +1,10 @@
-import React from 'react'
-import RBSheet, { RBSheetProps } from 'react-native-raw-bottom-sheet'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { colors } from '../styles/Colors'
+import React from 'react';
+import RBSheet, { RBSheetProps } from 'react-native-raw-bottom-sheet';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { colors } from '../styles/Colors';
 
 interface BottomSheetProps {
-    children?: any,
+    children?: React.ReactNode,
     height?: number,
     TopLeftRadius?: number,
     TopRightRadius?: number,

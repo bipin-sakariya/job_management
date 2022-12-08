@@ -1,8 +1,6 @@
-import { ActivityIndicator, ActivityIndicatorProps, ModalProps, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import CustomModal from './CustomModal'
-import { colors } from '../styles/Colors'
-import { Modal } from 'react-native'
+import { ActivityIndicator, ActivityIndicatorProps, StyleSheet } from 'react-native';
+import React from 'react';
+import { colors } from '../styles/Colors';
 
 const CustomActivityIndicator = (indicatorProps: ActivityIndicatorProps) => {
     return (

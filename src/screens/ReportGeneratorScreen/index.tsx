@@ -1,10 +1,10 @@
-import { Alert, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, Image, PermissionsAndroid, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { ButtonTab, Container, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
 import { styles } from './styles'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { LocaleConfig } from 'react-native-calendars';
 import { Calendar } from 'react-native-calendars';
 import moment from 'moment';
@@ -16,6 +16,8 @@ import useCustomNavigation from '../../hooks/useCustomNavigation'
 import TableHeaderView from '../../components/TableHeaderView'
 import TableDetailsComponent from '../../components/TableDetailsComponent'
 import { strings } from '../../languages/localizedStrings'
+import { convertDate } from '../../utils/screenUtils'
+import RNFetchBlob from 'rn-fetch-blob'
 
 const ReportGeneratorScreen = () => {
     const navigation = useCustomNavigation('ReportGeneratorScreen');
@@ -120,8 +122,8 @@ const ReportGeneratorScreen = () => {
         {
             srno: "01",
             name: "Asphalt Paint",
-            qty: "",
-            unit: "15",
+            qty: "15",
+            unit: "Meter",
             parameter: "Meter",
             imageUrl: ''
         },
@@ -129,7 +131,7 @@ const ReportGeneratorScreen = () => {
             srno: "01",
             name: "Asphalt Paint",
             qty: "1",
-            unit: "15",
+            unit: "Meter",
             parameter: "Meter",
             imageUrl: 'dssdfsdfsf'
         },
@@ -137,7 +139,7 @@ const ReportGeneratorScreen = () => {
             srno: "01",
             name: "Asphalt Paint",
             qty: "1",
-            unit: "15",
+            unit: "Meter",
             parameter: "Meter",
             imageUrl: ''
         },
@@ -145,7 +147,7 @@ const ReportGeneratorScreen = () => {
             srno: "01",
             name: "Asphalt Paint",
             qty: "",
-            unit: "15",
+            unit: "Meter",
             parameter: "Meter",
             imageUrl: 'dssdfsdfsf'
         },
@@ -153,7 +155,7 @@ const ReportGeneratorScreen = () => {
             srno: "01",
             name: "Asphalt Paint",
             qty: "1",
-            unit: "15",
+            unit: "Meter",
             parameter: "Meter",
             imageUrl: 'dssdfsdfsf'
         },
@@ -162,7 +164,7 @@ const ReportGeneratorScreen = () => {
             srno: "01",
             name: "Asphalt Paint",
             qty: "1",
-            unit: "15",
+            unit: "Meter",
             parameter: "Meter",
             imageUrl: ''
         },
@@ -170,7 +172,7 @@ const ReportGeneratorScreen = () => {
             srno: "01",
             name: "Asphalt Paint",
             qty: "",
-            unit: "15",
+            unit: "Meter",
             parameter: "Meter",
             imageUrl: ''
         },
@@ -178,7 +180,7 @@ const ReportGeneratorScreen = () => {
             srno: "01",
             name: "Asphalt Paint",
             qty: "1",
-            unit: "15",
+            unit: "Meter",
             parameter: "Meter",
             imageUrl: ''
         },
@@ -222,6 +224,9 @@ const ReportGeneratorScreen = () => {
         }
     };
 
+    console.log({ sdate, edate, markDates });
+
+
     const onDayPress = (date: any) => {
         if (sdate === edate) {
             if (sdate > date.dateString) {
@@ -259,10 +264,55 @@ const ReportGeneratorScreen = () => {
                                 })
                             }
                         </View> :
-                        <TableDetailsComponent type='report' item={item} />
+                        <TableDetailsComponent type='report' item={item} index={index} />
                 }
             </>
         )
+    }
+
+    // report generating functionality
+    const checkPermissionForDownloadFile = async () => {
+        if (Platform.OS === 'android') {
+            try {
+                const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+                console.log({ granted })
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    downloadFile()
+                } else {
+                    Alert.alert('Permission Denied!', 'You need to give storage permission to download the file');
+                }
+            } catch (err) {
+                console.warn(err);
+            }
+        } else {
+            downloadFile()
+        }
+    }
+
+    const downloadFile = () => {
+        const { dirs } = RNFetchBlob.fs;
+        console.log("DOWN---", { dirs })
+        RNFetchBlob.config({
+            fileCache: true,
+            addAndroidDownloads: {
+                useDownloadManager: true,
+                notification: true,
+                mediaScannable: true,
+                title: `report.doc`,
+                path: `${dirs.DownloadDir}/report.doc`,
+            },
+            path: `${dirs.DocumentDir}/report.doc`,
+        }).fetch('GET', 'https://www.sample-videos.com/doc/Sample-doc-file-100kb.doc')
+            // http://www.africau.edu/images/default/sample.pdf           **
+            // https://filesamples.com/samples/document/txt/sample3.txt   **
+            // https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx **
+            // https://filesamples.com/samples/document/xlsx/sample3.xlsx **
+            // https://www.sample-videos.com/doc/Sample-doc-file-100kb.doc **
+            .then((res) => {
+                RNFetchBlob.ios.openDocument(res.data)
+            }).catch((e) => {
+                console.log("DOWN--- Catch", { e })
+            })
     }
 
     return (
@@ -279,7 +329,7 @@ const ReportGeneratorScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <ScrollView showsVerticalScrollIndicator={false} >
+                <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={[globalStyles.rowView]}>
                         <Image source={ImagesPath.note_icon} style={styles.noteIconStyle} />
                         <Text style={[styles.reportTxt, globalStyles.rtlStyle]}>{strings.GenerateReport}</Text>
@@ -314,16 +364,31 @@ const ReportGeneratorScreen = () => {
                             calendarBackground: colors.calendar_Bg,
                         }}
                     />
+
+                    {/* start date - end date  */}
+                    <View style={[globalStyles.rowView, { justifyContent: 'center' }]}>
+                        <View style={styles.vwDate}>
+                            <Text style={[globalStyles.rtlStyle, styles.txtDate, { color: sdate ? colors.dark_blue1_color : colors.light_gray, }]}>{sdate ? convertDate(sdate) : strings.start_date}</Text>
+                        </View>
+                        <View style={{ marginBottom: hp(2), padding: wp(2.5), }}>
+                            <Text style={styles.txtDate}>-</Text>
+                        </View>
+                        <View style={styles.vwDate}>
+                            <Text style={[globalStyles.rtlStyle, styles.txtDate, { color: edate != ' ' ? colors.dark_blue1_color : colors.light_gray, }]}>{edate != ' ' ? convertDate(edate) : strings.end_date}</Text>
+                        </View>
+                    </View>
+
+                    {/* details & summed up tabs */}
                     <ButtonTab btnOneTitle={strings.Detailed} btnTwoTitle={strings.Sammedup} setBtn={setBtn} btnValue={btn} onReset={setPage} />
                     {
                         btn.open ?
                             <>
-                                <View style={[globalStyles.rowView, { justifyContent: "space-between", marginVertical: wp(2) }]}>
+                                <View style={[globalStyles.rowView, { justifyContent: "space-between", marginVertical: wp(2), marginTop: hp(2) }]}>
                                     <View style={[globalStyles.rowView]}>
                                         <Image source={ImagesPath.suitcase_icon} style={[styles.iconStyle, { tintColor: colors.dark_blue1_color }]} />
                                         <Text style={[styles.JobsTxt, globalStyles.rtlStyle]}>{strings.Jobs}</Text>
                                     </View>
-                                    <TouchableOpacity style={[globalStyles.rowView]} >
+                                    <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { checkPermissionForDownloadFile() }}>
                                         <Image source={ImagesPath.download_simple_icon} style={[styles.iconStyle, { tintColor: colors.dark_blue1_color }]} />
                                         <Text style={[styles.genrateTxt, globalStyles.rtlStyle]}>{strings.GenerateReport}</Text>
                                     </TouchableOpacity>

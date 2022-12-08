@@ -1,12 +1,12 @@
-import { Modal, ModalProps, Platform, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
-import React, { Dispatch, SetStateAction } from 'react'
-import { BlurView } from '@react-native-community/blur'
-import { globalStyles } from '../styles/globalStyles'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import { Modal, ModalProps, Platform, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import React from 'react';
+import { BlurView } from '@react-native-community/blur';
+import { globalStyles } from '../styles/globalStyles';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 interface CustomModalProps {
     onClose?: () => void
-    children?: any
+    children?: React.ReactNode
 }
 
 

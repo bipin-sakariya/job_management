@@ -5,9 +5,9 @@ const { StatusBarManager } = NativeModules;
 
 interface headerProps {
     containerStyle?: ViewStyle;
-    headerLeftComponent?: any;
-    headerCenterComponent?: any;
-    headerRightComponent?: any;
+    headerLeftComponent?: React.ReactNode;
+    headerCenterComponent?: React.ReactNode;
+    headerRightComponent?: React.ReactNode;
     headerRightStyle?: ViewStyle;
     headerCenterStyle?: ViewStyle;
     headerLeftStyle?: ViewStyle;

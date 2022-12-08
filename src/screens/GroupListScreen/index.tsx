@@ -19,11 +19,6 @@ interface groupListParams {
     search?: string,
 }
 
-const groups = [
-    { id: 10, is_active: true, phone: '+97223456787', name: 'P. Maintanence', user_name: 'divyesh10', profile_image: "https://bochan-dj.herokuapp.com/media/User/21/photo.jpg", role: { id: 1, title: 'Admin' }, date: '12 May 2022', email: 'divyesh10@gmail.com', date_joined: '2022-11-09T12:33:38.417751Z' },
-    { id: 10, is_active: true, phone: '+97223456787', name: 'P. Maintanence', user_name: 'divyesh10', profile_image: "https://bochan-dj.herokuapp.com/media/User/21/photo.jpg", role: { id: 1, title: 'Admin' }, date: '12 May 2022', email: 'divyesh10@gmail.com', date_joined: '2022-11-09T12:33:38.417751Z' },
-]
-
 const GroupListScreen = () => {
     const navigation = useCustomNavigation('GroupListScreen');
     const route = useRoute<RootRouteProps<'GroupListScreen'>>();
@@ -37,28 +32,6 @@ const GroupListScreen = () => {
     const { groupListData, isLoading } = useAppSelector(state => state.groupList)
     console.log({ groupListData })
 
-    // useEffect(() => {
-    //     if (isFocus) {
-    //         let params = {
-    //             page: page,
-    //         }
-    //         groupListApiCall(params)
-    //     }
-
-    // }, [isFocus])
-
-    // console.log({ page });
-
-
-    // const groupListApiCall = (params: groupListParams) => {
-    //     dispatch(groupList(params)).unwrap().then((res) => {
-    //         console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-    //         setPage(page + 1)
-    //     }).catch((error) => {
-    //         console.log({ error });
-    //     })
-    // }
-
     useEffect(() => {
         if (isFocus)
             groupListApiCall(page)
@@ -66,11 +39,8 @@ const GroupListScreen = () => {
             setPage(1)
         }
     }, [isFocus])
-
-
-
     const groupListApiCall = (page: number) => {
-        let params = {
+        let params: groupListParams = {
             page: page,
             search: ''
         }

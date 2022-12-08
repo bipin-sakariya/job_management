@@ -22,6 +22,7 @@ interface ButtonTabProps {
     btnValue?: ButtonTypeProps,
     onReset: Dispatch<SetStateAction<number>>
 }
+
 const ButtonTab = ({ btnOneTitle, btnTwoTitle, btnOneStyle, btnTwoStyle, btnOneTxtStyle, btnTwoTxtStyle, btnValue, setBtn, onReset }: ButtonTabProps) => {
 
     return (

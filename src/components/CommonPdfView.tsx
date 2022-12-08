@@ -1,10 +1,10 @@
-import { StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
-import React from 'react'
-import { globalStyles } from '../styles/globalStyles'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { colors } from '../styles/Colors'
-import FontSizes from '../styles/FontSizes'
-import fonts from '../styles/Fonts'
+import { StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
+import React from 'react';
+import { globalStyles } from '../styles/globalStyles';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { colors } from '../styles/Colors';
+import FontSizes from '../styles/FontSizes';
+import fonts from '../styles/Fonts';
 
 interface CommonPdfViewProps {
     item: itemDetails

@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { colors } from "../../styles/Colors";
 import fonts from "../../styles/Fonts";
 import FontSizes from "../../styles/FontSizes";
@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
     },
     reportTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
-        fontSize: FontSizes.EXTRA_SMALL_12,
+        fontSize: FontSizes.MEDIUM_16,
         marginHorizontal: wp(2),
         color: colors.light_brown
     },
@@ -131,4 +131,17 @@ export const styles = StyleSheet.create({
         paddingHorizontal: wp(2),
         marginVertical: wp(1)
     },
+    vwDate: {
+        borderWidth: 1,
+        borderRadius: wp(2),
+        padding: wp(2),
+        marginBottom: hp(2),
+        borderColor: colors.gray_border,
+        flex: 1,
+    },
+    txtDate: {
+        fontSize: FontSizes.MEDIUM_16,
+        color: colors.dark_blue1_color,
+        fontFamily: fonts.FONT_POP_REGULAR
+    }
 })

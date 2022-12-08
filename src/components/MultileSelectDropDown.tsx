@@ -1,27 +1,26 @@
-import { FlatList, I18nManager, Image, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
-import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { globalStyles } from '../styles/globalStyles'
-import { ImagesPath } from '../utils/ImagePaths'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
-import { colors } from '../styles/Colors'
-import { TextInput } from 'react-native-gesture-handler'
-import { roleList } from '../redux/slices/AdminSlice/userListSlice'
-import { useAppDispatch } from '../hooks/reduxHooks'
-import { strings } from '../languages/localizedStrings'
+import { FlatList, I18nManager, Image, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, TextInput, View, ViewStyle } from 'react-native';
+import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { globalStyles } from '../styles/globalStyles';
+import { ImagesPath } from '../utils/ImagePaths';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import { colors } from '../styles/Colors';
+import { roleList } from '../redux/slices/AdminSlice/userListSlice';
+import { useAppDispatch } from '../hooks/reduxHooks';
+import { strings } from '../languages/localizedStrings';
 
 // We can chanage data type as per the component use in future.
-interface DataTypes {
+export interface DataTypes {
     user_name?: string
     selected?: boolean
     date_joined?: string
     email?: string
-    id?: number
+    id: number
     is_active?: boolean
     phone?: string
     profile_image?: string,
-    role?: { id: number, title: string },
+    role?: { id: number, title?: string },
 }
 
 interface DropDownComponentProps {
@@ -158,7 +157,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                         </View>
                     </KeyboardAvoidingView>
                     {props.isForm && <TouchableOpacity
-                        onPress={() => { props.setIsAllSign && props.setIsAllSign(!props.isALLSign) }}
+                        onPress={() => props.setIsAllSign && props?.setIsAllSign(!props.isALLSign)}
                         style={[globalStyles.rowView, { justifyContent: 'space-between', paddingHorizontal: wp(2.5), paddingVertical: wp(3.5) }]}>
                         <Text style={styles.itemListTxt}>{strings.Add_all_sign}</Text>
                         {props.isALLSign ?

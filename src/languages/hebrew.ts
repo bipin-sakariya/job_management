@@ -270,5 +270,8 @@ export const hebrew = {
     Total: 'סך הכל',
     date: 'תַאֲרִיך',
     Add_all_sign: 'הוסף את כל השלטים',
-    All_Assign_job: 'כל העבודות שהוקצו'
+    All_Assign_job: 'כל העבודות שהוקצו',
+
+    start_date: 'תאריך התחלה',
+    end_date: 'תאריך סיום',
 }

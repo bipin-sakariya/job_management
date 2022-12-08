@@ -1,14 +1,39 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { globalStyles } from '../styles/globalStyles'
-import { ImagesPath } from '../utils/ImagePaths'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
-import { colors } from '../styles/Colors'
-import CustomStatusBtn from './CustomStatusBtn'
-import { strings } from '../languages/localizedStrings'
-import { convertDate } from '../utils/screenUtils'
+import { Image, StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { globalStyles } from '../styles/globalStyles';
+import { ImagesPath } from '../utils/ImagePaths';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import { colors } from '../styles/Colors';
+import CustomStatusBtn from './CustomStatusBtn';
+import { strings } from '../languages/localizedStrings';
+import { convertDate } from '../utils/screenUtils';
+
+export interface AssignJobTypeProps {
+    id: number
+    added_by: {}
+    address: string
+    closed_by: {}
+    images: []
+    attachments: []
+    forms: []
+    bills: []
+    group_forms: []
+    created_at: string,
+    updated_at: string,
+    address_information: string,
+    description: string,
+    latitude: null,
+    longitude: null,
+    priority: boolean,
+    further_inspection: boolean,
+    note: null,
+    status: string,
+    comment: null,
+    form: [],
+    bill: []
+}
 
 const AssignedJobsComponent = ({ item }: any) => {
     return (

@@ -11,17 +11,12 @@ import { RootState, useAppSelector } from "../../hooks/reduxHooks";
 import { strings } from "../../languages/localizedStrings";
 import useCustomNavigation from "../../hooks/useCustomNavigation";
 import { colors } from "../../styles/Colors";
-import { RootRouteProps } from "../../types/RootStackTypes";
+import { JobDetailsProps, RootRouteProps } from "../../types/RootStackTypes";
 import moment from "moment";
 import FileViewer from "react-native-file-viewer";
 import RNFS from "react-native-fs";
+import { jobDetailsData } from "../../redux/slices/AdminSlice/jobListSlice";
 
-interface JobDetailsScreenRouteProps {
-    description: string
-    km: string
-    status: string
-    title: string
-}
 
 const JobDetailsScreen = () => {
 
@@ -192,13 +187,13 @@ const JobDetailsScreen = () => {
         { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb", url: "https://www.math.hawaii.edu/~pavel/gcd.pdf" },
     ]
 
-    let data: JobDetailsScreenRouteProps = route.params.params
+    let data: JobDetailsProps = route.params.params
     let type = route.params.type
     console.log('juhuh', route.params)
 
     const renderItem = ({ item, index }: any) => {
         return (
-            <TableDetailsComponent item={item} />
+            <TableDetailsComponent item={item} index={index} />
         )
     }
 

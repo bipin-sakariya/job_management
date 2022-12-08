@@ -13,16 +13,16 @@ import { useAppSelector } from '../../hooks/reduxHooks';
 const AdminDrawerBtn = [
     { btnTitle: strings.drawer_User, image: ImagesPath.user_icon, route: 'UserListScreen' },
     { btnTitle: strings.drawer_Group, image: ImagesPath.group_icon, route: 'GroupListScreen' },
-    { btnTitle: strings.drawer_ReportGenerator, image: ImagesPath.report_icon, route: '' },
+    { btnTitle: strings.drawer_ReportGenerator, image: ImagesPath.report_icon, route: 'ReportGeneratorScreen' },
     { btnTitle: strings.drawer_BillSection, image: ImagesPath.bill_icon, route: 'BillListScreen' },
     { btnTitle: strings.drawer_Form, image: ImagesPath.form_icon, route: 'FormScreen' },
     { btnTitle: strings.drawer_AddJob, image: ImagesPath.add_icon, route: 'ReturnAndAddJobHistoryScreen' },
-    { btnTitle: strings.drawer_ReturnJoblist, image: ImagesPath.arrow_counter_clockwise_black_icon, route: '' },
+    { btnTitle: strings.drawer_ReturnJoblist, image: ImagesPath.arrow_counter_clockwise_black_icon, route: 'ReturnAndAddJobHistoryScreen' },
 ]
 const InspectorDrawerBtn = [
-    { btnTitle: strings.drawer_Group, image: ImagesPath.group_icon, route: '' },
-    { btnTitle: strings.drawer_AddNewJob, image: ImagesPath.add_icon, route: '' },
-    { btnTitle: strings.drawer_ReturnJoblist, image: ImagesPath.arrow_counter_clockwise_icon, route: '' },
+    { btnTitle: strings.drawer_Group, image: ImagesPath.group_icon, route: 'GroupListScreen' },
+    { btnTitle: strings.drawer_AddNewJob, image: ImagesPath.add_icon, route: 'ReportGeneratorScreen' },
+    { btnTitle: strings.drawer_ReturnJoblist, image: ImagesPath.arrow_counter_clockwise_icon, route: 'ReturnAndAddJobHistoryScreen' },
     // { btnTitle: strings.drawer_AddedJobHistory, image: ImagesPath.clock_counter_clockwise_icon, route: 'ReturnAndAddJobHistoryScreen' },
 ]
 const GroupManagerDrawerBtn = [

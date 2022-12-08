@@ -14,19 +14,29 @@ import { useFormik } from 'formik';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { useIsFocused } from '@react-navigation/native';
 import { getListOfUsers, inspectorListProps, roleList, UserData } from '../../redux/slices/AdminSlice/userListSlice';
-import { formList } from '../../redux/slices/AdminSlice/formListSlice';
+import { FormData, formList } from '../../redux/slices/AdminSlice/formListSlice';
 import { createGroup } from '../../redux/slices/AdminSlice/groupListSlice';
+import { billData } from '../../redux/slices/AdminSlice/billListSlice';
 
 interface DataTypes {
     user_name?: string
     selected?: boolean
     date_joined?: string
     email?: string
-    id?: number
+    id: number
     is_active?: boolean
     phone?: string
     profile_image?: string,
-    role?: { id: number, title: string },
+    role?: { id: number, title?: string },
+}
+interface FormDataProps {
+    id: number,
+    bill: billData[],
+    created_at: string,
+    updated_at: string,
+    user_name: string,
+    is_sign?: boolean,
+    selected: boolean
 }
 
 const CreateGroupValidationSchema = Yup.object().shape({
@@ -53,8 +63,8 @@ const CreateGroupScreen = () => {
     const [isManager, setIsManager] = useState<UserData[]>([])
     const [isUser, setIsUser] = useState<UserData[]>([])
     const [page, setPage] = useState(1)
-    const [finalArray, setFinalArray] = useState([])
-    const [finalFormsArray, setFinalFormsArray] = useState([])
+    const [finalArray, setFinalArray] = useState<number[]>([])
+    const [finalFormsArray, setFinalFormsArray] = useState<number[]>([])
     const [error, setError] = useState({
         groupName: '',
         image: '',
@@ -65,11 +75,11 @@ const CreateGroupScreen = () => {
             id: null
         },
     })
-    const [selectedMemberData, setSelectedMemberData] = useState<DataTypes[]>()
-    const [formsList, setFormList] = useState([])
-    const [memberList, setMemberList] = useState([])
-    const [allForm, setAllForm] = useState([])
-    const [selectedFormsList, setSelectedFormList] = useState([])
+    const [selectedMemberData, setSelectedMemberData] = useState<DataTypes[]>([])
+    const [formsList, setFormList] = useState<FormDataProps[]>([])
+    const [memberList, setMemberList] = useState<DataTypes[]>([])
+    const [allForm, setAllForm] = useState<FormData[]>([])
+    const [selectedFormsList, setSelectedFormList] = useState<FormDataProps[]>([])
     const [selectedFormsData, setSelectedFormsData] = useState<DataTypes[]>()
 
 
@@ -144,8 +154,8 @@ const CreateGroupScreen = () => {
                 inspector: {
                     id: 0
                 },
-                member: isUser,
-                forms: formsList
+                member: [],
+                forms: []
             },
             validationSchema: CreateGroupValidationSchema,
             onSubmit: (values: {
@@ -157,8 +167,8 @@ const CreateGroupScreen = () => {
                 inspector: {
                     id: number
                 },
-                member: UserData[],
-                forms: UserData[]
+                member: [],
+                forms: []
             }) => {
                 console.log({ values, touched, error })
                 groupCreate(values)
@@ -166,7 +176,7 @@ const CreateGroupScreen = () => {
             }
         })
     useEffect(() => {
-        let data: any = []
+        let data: number[] = []
         selectedMemberData?.map((item) => {
             data.push(item.id)
         })
@@ -174,7 +184,7 @@ const CreateGroupScreen = () => {
     }, [selectedMemberData])
 
     useEffect(() => {
-        let data: any = []
+        let data: number[] = []
         selectedFormsData?.map((item) => {
             data.push(item.id)
         })
@@ -193,8 +203,8 @@ const CreateGroupScreen = () => {
         inspector: {
             id: number;
         };
-        member: [],
-        forms: []
+        member: number[],
+        forms: number[]
     }) => {
         if (!imageUrl) {
             Alert.alert('Alert', 'Please select your profile picture.')
@@ -234,7 +244,7 @@ const CreateGroupScreen = () => {
 
 
     useEffect(() => {
-        const findData: any = formListData.results.map((i) => {
+        const findData: FormDataProps[] = formListData.results.map((i) => {
             return {
                 ...i,
                 user_name: i.name,
@@ -242,7 +252,7 @@ const CreateGroupScreen = () => {
             }
         })
         setFormList(findData)
-        const finaldata: any = userListData.map((i) => {
+        const finaldata: DataTypes[] = userListData.map((i) => {
             return {
                 ...i,
                 selected: false,
@@ -251,7 +261,7 @@ const CreateGroupScreen = () => {
         setMemberList(finaldata)
 
         if (formDetails.bill) {
-            const finalData: any = formDetails?.bill?.map((i: any) => {
+            const finalData: FormDataProps[] = formDetails?.bill?.map((i: any) => {
                 return {
                     ...i,
                     user_name: i.name,
@@ -267,7 +277,7 @@ const CreateGroupScreen = () => {
 
     return (
         <View style={globalStyles.container}>
-            {console.log("FORMIK ------", { error: errors, values: values })}
+
             <Header
                 headerLeftStyle={{
                     paddingLeft: wp(3)
@@ -345,7 +355,7 @@ const CreateGroupScreen = () => {
                             isVisible={visible}
                             data={memberList}
                             title={strings.Groupmemeber}
-                            setSelectedMembers={(data) => {
+                            setSelectedMembers={(data: DataTypes[]) => {
                                 console.log({ data });
                                 setSelectedMemberData(data)
                                 setFieldValue('member', data)

@@ -1,11 +1,11 @@
-import { Image, Platform, StyleSheet, Text, TextInput, TextInputProps, TextStyle, TouchableOpacity, TouchableOpacityProps, View, ViewStyle } from 'react-native'
-import React from 'react'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { globalStyles } from '../styles/globalStyles'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
-import { colors } from '../styles/Colors'
-import { ImagesPath } from '../utils/ImagePaths'
+import { Image, Platform, StyleSheet, Text, TextInput, TextInputProps, TextStyle, TouchableOpacity, TouchableOpacityProps, View, ViewStyle } from 'react-native';
+import React from 'react';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { globalStyles } from '../styles/globalStyles';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import { colors } from '../styles/Colors';
+import { ImagesPath } from '../utils/ImagePaths';
 
 interface CustomTextInputWithImageProps {
     title: string,

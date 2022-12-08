@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, Image, TouchableOpacity, TextInput, FlatList } from 'react-native'
 import React, { useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomListView, GroupListComponent, Header } from '../../components'
@@ -6,7 +6,6 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { styles } from './styles'
-import { FlatList } from 'react-native-gesture-handler'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { strings } from '../../languages/localizedStrings'
 import { formList } from '../../redux/slices/AdminSlice/formListSlice'
@@ -35,7 +34,7 @@ const SearchScreen = () => {
 
         if (route.params.screenName == 'formScreen') {
             dispatch(formList(param)).unwrap().then((res) => {
-                if (res.data.next && !!input) {
+                if (res.next && !!input) {
                     setPage(page + 1)
                 }
                 console.log({ res })
@@ -44,7 +43,7 @@ const SearchScreen = () => {
         }
         if (route.params.screenName == 'groupScreen') {
             dispatch(groupList(param)).unwrap().then((res) => {
-                if (res.data.next && !!input) {
+                if (res.next && !!input) {
                     setPage(page + 1)
                 }
                 console.log({ res })
@@ -52,7 +51,7 @@ const SearchScreen = () => {
             })
         }
     }
-    console.log({ text })
+
     const renderItem = ({ item, index }: any) => {
         return (
             <CustomListView

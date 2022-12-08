@@ -213,5 +213,8 @@ export const eng = {
     Search_here: 'Search here',
     date: 'Date',
     Add_all_sign: 'Add all the signs',
-    All_Assign_job: 'All assigned jobs'
+    All_Assign_job: 'All assigned jobs',
+
+    start_date:'Start date',
+    end_date:'End date',
 }

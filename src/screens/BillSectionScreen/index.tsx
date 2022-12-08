@@ -62,7 +62,7 @@ const BillSectionScreen = () => {
 
 
     useEffect(() => {
-        if (isFocus) {
+        if (isFocus && id) {
             dispatch(billDetail(id)).unwrap().then((res) => {
                 console.log({ res });
                 setImageUrl(res.image)
@@ -87,10 +87,12 @@ const BillSectionScreen = () => {
 
     const deleteBill = () => {
         //delete bill 
-        dispatch(billDelete(id)).unwrap().then(() => {
-            setVisible(false)
-            navigation.goBack()
-        })
+        if (id) {
+            dispatch(billDelete(id)).unwrap().then(() => {
+                setVisible(false)
+                navigation.goBack()
+            })
+        }
     }
 
     const CreateMaterialValidationSchema = yup.object().shape({

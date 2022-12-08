@@ -1,9 +1,9 @@
-import { StyleSheet, Text, TextStyle, TouchableOpacity, TouchableOpacityProps, View } from 'react-native'
-import React from 'react'
-import { colors } from '../styles/Colors'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
+import { StyleSheet, Text, TextStyle, TouchableOpacity, TouchableOpacityProps } from 'react-native';
+import React from 'react';
+import { colors } from '../styles/Colors';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
 
 interface CustomStatusBtn {
     title: string,

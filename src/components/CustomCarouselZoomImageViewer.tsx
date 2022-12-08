@@ -17,7 +17,7 @@ interface CustomCarouselZoomImageViewerProps {
     result: ItemProps[]
     viewStyle?: ViewStyle
     videoStyle?: ViewStyle
-    children?: any
+    children?: React.ReactNode
 }
 
 const CustomCarouselZoomImageViewer = (props: CustomCarouselZoomImageViewerProps) => {

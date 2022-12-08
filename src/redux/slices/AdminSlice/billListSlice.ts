@@ -18,8 +18,8 @@ export interface billData {
 
 interface billDataProps {
     count: number,
-    next: string | undefined | null,
-    previous: string | undefined | null,
+    next: string | null,
+    previous: string | null,
     results: billData[]
 }
 
@@ -33,7 +33,7 @@ interface initialState {
 interface paramsTypes {
     id?: number
     data?: FormData,
-    page?: undefined | number,
+    page?: number,
     bill_type?: string
 }
 
@@ -67,14 +67,14 @@ export interface apiErrorTypes {
 
 const BILL = "BILL";
 
-export const billList = createAsyncThunk
-    (BILL + "/billList", async (params: paramsTypes, { rejectWithValue }) => {
+export const billList = createAsyncThunk<billDataProps, paramsTypes, { rejectValue: apiErrorTypes }>
+    (BILL + "/billList", async (params, { rejectWithValue }) => {
         try {
             console.log("🚀 ~ file: billListSlice.ts ~ line 60 ~ params", params)
             console.log(ApiConstants.BILL)
             const response = await axiosClient.get(ApiConstants.BILL + `?page=${params.page}&bill_type=${params.bill_type}`)
             console.log("🚀 ~ file: billListSlice.ts ~ line 69 ~ response", response)
-            return response;
+            return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
                 Alert.alert(e.message)
@@ -162,11 +162,11 @@ const billListSlice = createSlice({
         });
         builder.addCase(billList.fulfilled, (state, action) => {
             state.isLoading = false
-            let tempArray: billDataProps = action.meta.arg.page == 1 ? [] : {
-                ...action.payload.data,
-                results: [...current(state.billListData?.results), ...action.payload?.data?.results]
+            let tempArray = action.meta.arg.page == 1 ? action.payload : {
+                ...action.payload,
+                results: [...current(state.billListData?.results), ...action.payload?.results]
             }
-            state.billListData = action.meta.arg.page == 1 ? action.payload.data : tempArray
+            state.billListData = action.meta.arg.page == 1 ? action.payload : tempArray
             state.error = ''
         });
         builder.addCase(billList.rejected, (state, action) => {

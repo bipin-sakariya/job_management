@@ -1,8 +1,7 @@
-import { Image, Text, View } from 'react-native';
+import { Image, Text, View, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, Header } from '../../components';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { strings } from '../../languages/localizedStrings';

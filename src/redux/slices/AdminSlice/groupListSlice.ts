@@ -3,6 +3,15 @@ import { Alert } from "react-native";
 import { ApiConstants } from "../../../config/ApiConstants";
 import { axiosClient } from "../../../config/Axios";
 
+
+export interface MemberDetailsProps {
+    email: string
+    id: number
+    phone: string
+    profile_image: string
+    role: number
+    user_name: string
+}
 export interface GroupData {
     id: number,
     manager_details: {
@@ -12,12 +21,16 @@ export interface GroupData {
         phone: string
         profile_image: string
         role: number
-
     },
     inspector_details: {
-        user_name: string
+        user_name: string,
+        email: string
+        id: number
+        phone: string
+        profile_image: string
+        role: number
     },
-    member_details: [],
+    member_details: MemberDetailsProps[],
     form_details: [{
         bill: [],
         created_at: string,
@@ -33,7 +46,8 @@ export interface GroupData {
     name: string,
     image: string,
     manager: number,
-    inspector: number
+    inspector: number,
+    member: number[]
 }
 
 interface GroupDataProps {
@@ -76,8 +90,22 @@ const initialState: InitialState = {
             profile_image: '',
             role: 0
         },
-        inspector_details: { user_name: '' },
-        member_details: [],
+        inspector_details: {
+            user_name: '',
+            email: '',
+            id: 0,
+            phone: '',
+            profile_image: '',
+            role: 0
+        },
+        member_details: [{
+            user_name: '',
+            email: '',
+            id: 0,
+            phone: '',
+            profile_image: '',
+            role: 0
+        }],
         form_details: [{
             bill: [],
             created_at: '',
@@ -93,7 +121,8 @@ const initialState: InitialState = {
         name: '',
         image: '',
         manager: 0,
-        inspector: 0
+        inspector: 0,
+        member: []
     }
 }
 
@@ -105,14 +134,14 @@ export interface apiErrorTypes {
 
 const GROUP = "GROUP";
 
-export const groupList = createAsyncThunk
-    (GROUP + "/groupList", async (params: paramsTypes, { rejectWithValue }) => {
+export const groupList = createAsyncThunk<GroupDataProps, paramsTypes, { rejectValue: apiErrorTypes }>
+    (GROUP + "/groupList", async (params, { rejectWithValue }) => {
         try {
             console.log("🚀 ~ file: groupListSlice.ts ~ line 60 ~ params", params)
             console.log(ApiConstants.GROUPLIST)
             const response = await axiosClient.get(ApiConstants.GROUPLIST + `?page=${params.page}&search=${params.search}`)
             console.log("🚀 ~ file: groupListSlice.ts ~ line 69 ~ response", response)
-            return response;
+            return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
                 Alert.alert(e.message)
@@ -188,8 +217,22 @@ const groupListSlice = createSlice({
                     profile_image: '',
                     role: 0
                 },
-                inspector_details: { user_name: '' },
-                member_details: [],
+                inspector_details: {
+                    user_name: '',
+                    email: '',
+                    id: 0,
+                    phone: '',
+                    profile_image: '',
+                    role: 0
+                },
+                member_details: [{
+                    user_name: '',
+                    email: '',
+                    id: 0,
+                    phone: '',
+                    profile_image: '',
+                    role: 0
+                }],
                 form_details: [{
                     bill: [],
                     created_at: '',
@@ -205,7 +248,8 @@ const groupListSlice = createSlice({
                 name: '',
                 image: '',
                 manager: 0,
-                inspector: 0
+                inspector: 0,
+                member: []
             }
         }
     },
@@ -216,11 +260,11 @@ const groupListSlice = createSlice({
         });
         builder.addCase(groupList.fulfilled, (state, action) => {
             state.isLoading = false
-            let tempArray: GroupDataProps = action.meta.arg.page == 1 ? [] : {
-                ...action.payload.data,
-                results: [...current(state.groupListData?.results), ...action.payload?.data?.results]
+            let tempArray = action.meta.arg.page == 1 ? action.payload : {
+                ...action.payload,
+                results: [...current(state.groupListData?.results), ...action.payload?.results]
             }
-            state.groupListData = action.meta.arg.page == 1 ? action.payload.data : tempArray
+            state.groupListData = action.meta.arg.page == 1 ? action.payload : tempArray
             state.error = ''
         });
         builder.addCase(groupList.rejected, (state, action) => {

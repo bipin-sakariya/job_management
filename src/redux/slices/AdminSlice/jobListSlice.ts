@@ -16,7 +16,7 @@ interface added_byData {
     },
     is_active: boolean
 }
-interface jobDetailsData {
+export interface jobDetailsData {
     id: number | null,
     added_by: added_byData,
     closed_by?: null,
