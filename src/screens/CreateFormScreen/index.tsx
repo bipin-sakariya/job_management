@@ -30,7 +30,7 @@ interface DataTypes {
     is_active?: boolean
     phone?: string
     profile_image?: string,
-    role?: { id: number, title: string },
+    role?: { id: number, title?: string },
 
 }
 interface BillTypes {
@@ -42,7 +42,7 @@ interface BillTypes {
     is_active?: boolean
     phone?: string
     profile_image?: string,
-    role?: { id: number, title: string },
+    role?: { id: number, title?: string },
 }
 
 interface valuesProps {
@@ -121,8 +121,8 @@ const CreateFormScreen = () => {
 
     const billListApiCall = (params: billListParams) => {
         dispatch(billList(params)).unwrap().then((res) => {
-            console.log("billList", res.data)
-            setBillList(res.data.results)
+            console.log("billList", res)
+            setBillList(res.results)
             setPage(page + 1)
         }).catch((error) => {
             console.log({ error });

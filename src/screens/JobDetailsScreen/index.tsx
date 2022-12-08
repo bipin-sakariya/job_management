@@ -193,7 +193,7 @@ const JobDetailsScreen = () => {
 
     const renderItem = ({ item, index }: any) => {
         return (
-            <TableDetailsComponent item={item} />
+            <TableDetailsComponent item={item} index={index} />
         )
     }
 
