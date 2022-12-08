@@ -64,8 +64,8 @@ const GroupDetailScreen = () => {
     const route = useRoute<RootRouteProps<'GroupDetailScreen'>>()
     const isFocused = useIsFocused()
 
-    const [isInspector, setIsInspector] = useState<DataTypes[] | undefined>()
-    const [isManager, setIsManager] = useState<DataTypes[] | undefined>()
+    const [isInspector, setIsInspector] = useState<DataTypes[]>([])
+    const [isManager, setIsManager] = useState<DataTypes[]>([])
     const [isUser, setIsUser] = useState<DataTypes[]>([])
     const [isMember, setIsMember] = useState<DataTypes[]>([])
     const [list, isList] = useState<DataTypes[]>([])

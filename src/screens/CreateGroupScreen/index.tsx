@@ -26,7 +26,7 @@ interface DataTypes {
     is_active?: boolean
     phone?: string
     profile_image?: string,
-    role?: { id: number, title: string },
+    role?: { id: number, title?: string },
 }
 interface FormDataProps {
     id: number,
@@ -202,8 +202,8 @@ const CreateGroupScreen = () => {
         inspector: {
             id: number;
         };
-        member: [],
-        forms: []
+        member: number[],
+        forms: number[]
     }) => {
         if (!imageUrl) {
             Alert.alert('Alert', 'Please select your profile picture.')
@@ -356,7 +356,6 @@ const CreateGroupScreen = () => {
                             title={strings.Groupmemeber}
                             setSelectedMembers={(data: DataTypes[]) => {
                                 console.log({ data });
-
                                 setSelectedMemberData(data)
                                 setFieldValue('member', data)
                             }}
