@@ -76,7 +76,7 @@ const ReturnAndAddJobHistoryScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView,]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{type == 'returnJob' ? strings.ReturnJob : strings.AddedJobHistory}</Text>
+                        <Text style={globalStyles.headerTitle}>{type == 'returnJob' ? strings.returnJob : strings.AddedJobHistory}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={

@@ -45,7 +45,7 @@ const AssignedJobsComponent = ({ item }: any) => {
                         <Image source={ImagesPath.infocircle_icon} style={styles.infoImageStyle} />
                         <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle]}>Job Title</Text>
                     </View>
-                    <CustomStatusBtn title={strings.Open} style={{ backgroundColor: colors.dark_blue3_color }} txtStyle={{ color: colors.white_color }} />
+                    <CustomStatusBtn title={strings.open} style={{ backgroundColor: colors.dark_blue3_color }} txtStyle={{ color: colors.white_color }} />
                 </View>
                 <Text numberOfLines={1} style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{strings.Assignedon} {convertDate('2022-11-25T05:10:46.091815Z')}</Text>
             </View>
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
         color: colors.dark_blue1_color
     },
     BtnStyle: {
-        backgroundColor: '#8D8D8D',
+        backgroundColor: colors.status_btn,
         paddingHorizontal: wp(2),
         paddingVertical: wp(0.7),
         borderRadius: wp(1.5)

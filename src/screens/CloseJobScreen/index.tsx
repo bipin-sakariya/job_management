@@ -266,14 +266,14 @@ const CloseJobScreen = () => {
                         <Text style={styles.modalTxt}>{strings.ClosejobModalText}</Text>
                         <View style={[globalStyles.rowView, { justifyContent: "space-around", width: '100%' }]}>
                             <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.Partial} />
-                            <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%" }} title={strings.Close} />
+                            <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%" }} title={strings.close} />
                         </View>
                     </View>
                 } />
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <CustomSubTitleWithImageComponent title={strings.CloseJobForm} image={ImagesPath.check_circle_black_icon} />
                     <CustomTextInput
-                        title={strings.JobId}
+                        title={strings.jobId}
                         container={{ marginBottom: wp(4) }}
                         value={'123'}
                     />
@@ -283,7 +283,7 @@ const CloseJobScreen = () => {
                         mainContainerStyle={{ marginBottom: wp(5), flex: 1, }}
                         container={{ width: wp(64) }} />
                     <CustomDetailsComponent
-                        title={strings.Description}
+                        title={strings.description}
                         bottomComponent={
                             <Text numberOfLines={3} style={styles.bottomTxtStyle}>Lorem Ipsum is simply dummy text of the printing and,typesetting industry has been the industry's standard dummy text....</Text>
                         }
@@ -329,7 +329,7 @@ const CloseJobScreen = () => {
                         viewStyle={{ paddingVertical: wp(5), marginBottom: wp(5) }}
                     />
                     <CustomTextInput
-                        title={strings.JobId}
+                        title={strings.jobId}
                         container={{ marginBottom: wp(4) }}
                         value={'123'}
                     />
@@ -348,9 +348,9 @@ const CloseJobScreen = () => {
                             <View style={[globalStyles.rowView, globalStyles.rtlDirection, styles.textInputContainer, { paddingHorizontal: wp(2), marginHorizontal: wp(4), marginTop: wp(5) }]}>
                                 <Image source={ImagesPath.search_icon} style={{ height: wp(6), width: wp(6), resizeMode: 'contain' }} />
                                 <TextInput
-                                    style={[globalStyles.rtlStyle, { color: '#455269', height: 40, marginHorizontal: wp(1.5), width: '80%', textAlign: I18nManager.isRTL ? 'right' : 'left', }]}
-                                    placeholder={'חפש כאן'}
-                                    placeholderTextColor={'#455269'}
+                                    style={[globalStyles.rtlStyle, { color: colors.dark_blue3_color, height: 40, marginHorizontal: wp(1.5), width: '80%', textAlign: I18nManager.isRTL ? 'right' : 'left', }]}
+                                    placeholder={strings.searchHere}
+                                    placeholderTextColor={colors.dark_blue3_color}
                                     onChangeText={(txt) => {
                                         const searchData = signData.filter((i) => i.name.includes(txt.toLowerCase()))
                                         setSearchData(searchData)

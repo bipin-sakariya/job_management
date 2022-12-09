@@ -13,7 +13,7 @@ import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { RootState, useAppSelector } from '../../hooks/reduxHooks';
 
 const data = [
-    { id: 1, title: strings.All, selected: true },
+    { id: 1, title: strings.all, selected: true },
     { id: 2, title: strings.PMaintanence, selected: false },
     { id: 3, title: strings.Paint, selected: false },
     { id: 4, title: strings.Council, selected: false },
@@ -97,7 +97,7 @@ const JobsScreen = () => {
                 }
             />
             <Container>
-                <ButtonTab btnOneTitle={strings.Open} btnTwoTitle={strings.Close} setBtn={setBtn} btnValue={btn} onReset={setPage} />
+                <ButtonTab btnOneTitle={strings.open} btnTwoTitle={strings.close} setBtn={setBtn} btnValue={btn} onReset={setPage} />
                 <FlatList
                     data={JobData}
                     renderItem={({ item, index }) => (

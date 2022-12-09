@@ -81,7 +81,7 @@ const SearchScreen = () => {
                         <Image source={ImagesPath.search_icon} style={styles.searchviewimage} />
                         <TextInput
                             style={[styles.searchinputtext]}
-                            placeholder={strings.SearchHere}
+                            placeholder={strings.searchHere}
                             onChangeText={(text) => {
                                 setText(text)
                                 searchName(text)

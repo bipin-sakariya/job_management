@@ -15,7 +15,7 @@ const TableHeaderView = ({ type }: TableHeaderViewProps) => {
         <>
             <View style={[globalStyles.rowView, styles.listHeaderView, { justifyContent: 'space-around' }]}>
                 <Text style={[styles.commonScammedTxt, { width: wp(15) }]}>{strings.Srno}</Text>
-                <Text style={[styles.commonScammedTxt, { width: wp(32) }]}>{strings.Name}</Text>
+                <Text style={[styles.commonScammedTxt, { width: wp(32) }]}>{strings.name}</Text>
                 <Text style={[styles.commonScammedTxt, { width: wp(11) }]}>{strings.QTY}</Text>
                 <Text style={[styles.commonScammedTxt, { width: wp(10) }]}>{strings.Unit}</Text>
             </View>

@@ -215,11 +215,11 @@ const AddNewJobScreen = () => {
             />
             <Container>
                 <ScrollView contentContainerStyle={[{ paddingHorizontal: wp(4), paddingBottom: wp(5) }]} showsVerticalScrollIndicator={false}>
-                    <CustomSubTitleWithImageComponent title={strings.Fillfromtocreatejob} image={ImagesPath.list_bullet_image_icon} />
+                    <CustomSubTitleWithImageComponent title={strings.fillFromToCreateJob} image={ImagesPath.list_bullet_image_icon} />
                     <CustomTextInput
-                        title={strings.JobId}
+                        title={strings.jobId}
                         container={{ marginTop: wp(3) }}
-                        placeholder={strings.JobId}
+                        placeholder={strings.jobId}
                         value={values.jobID}
                         onChangeText={handleChange("jobID")}
                     />
@@ -237,17 +237,17 @@ const AddNewJobScreen = () => {
                     />
                     {(touched?.address && errors?.address) || error?.address ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors?.address ? errors.address : error?.address}</Text> : null}
                     <CustomTextInput
-                        title={strings.Addressinformation}
+                        title={strings.addressInformation}
                         container={{ marginTop: wp(5) }}
                         value={values.addressInformation}
                         onChangeText={handleChange('addressInformation')}
-                        placeholder={strings.Addressinformation}
+                        placeholder={strings.addressInformation}
                     />
                     <Text style={[{ fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_10, color: colors.dark_blue3_color }]}>{strings.Additionaladdressinformation}</Text>
                     {(touched?.addressInformation && errors?.addressInformation) || error?.address_information ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors?.addressInformation ? errors.addressInformation : error?.address_information}</Text> : null}
                     <CustomDetailsComponent
                         detailsContainerStyle={{ marginTop: wp(4) }}
-                        title={strings.Description}
+                        title={strings.description}
                         bottomComponent={
                             <TextInput
                                 multiline
@@ -256,7 +256,7 @@ const AddNewJobScreen = () => {
                                 placeholderTextColor={colors.dark_blue2_color}
                                 value={values.description}
                                 onChangeText={handleChange('description')}
-                                placeholder={strings.Description}
+                                placeholder={strings.description}
                             />
                         }
                     />
@@ -267,7 +267,7 @@ const AddNewJobScreen = () => {
                             result={imageList} />}
                     {docList.length != 0 &&
                         <CustomDetailsComponent
-                            title={strings.Attachment}
+                            title={strings.attachment}
                             detailsContainerStyle={{ marginVertical: wp(4) }}
                             bottomComponent={
                                 <FlatList
@@ -312,16 +312,16 @@ const AddNewJobScreen = () => {
                         onPress={() => setIsUrgentJob(!isUrgentJob)}
                         value={isUrgentJob}
                         container={{ marginTop: wp(3) }}
-                        title={strings.Priority}
+                        title={strings.priority}
                         subTitle={strings.UrgentJob} />
                     <CustomSwitchComponent
                         onPress={() => setIsFinishNotification(!isFinishNotification)}
                         value={isFinishNotification}
                         container={{ marginTop: wp(4) }}
-                        title={strings.FurtherInspection}
-                        subTitle={strings.FinishNotification} />
+                        title={strings.furtherInspection}
+                        subTitle={strings.finishNotification} />
                     <CustomBlackButton
-                        title={strings.CreateJob}
+                        title={strings.createJob}
                         image={ImagesPath.add_icon}
                         imageStyle={{ tintColor: colors.white_color }}
                         onPress={() => {
@@ -340,11 +340,11 @@ const AddNewJobScreen = () => {
                         children={
                             <View style={styles.modalInnerView}>
                                 <Image source={ImagesPath.check_icon_circle} style={globalStyles.modalImageStyle} />
-                                <Text style={styles.modalDescriptionTxt}>{strings.NewJobAddedSuccessfully}</Text>
+                                <Text style={styles.modalDescriptionTxt}>{strings.newJobAddedSuccessfully}</Text>
                                 <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginVertical: wp(2.5) }} onPress={() => {
                                     setIsModelVisible(false)
                                     navigation.goBack()
-                                }} title={strings.Okay} />
+                                }} title={strings.okay} />
                             </View>
                         }
                     />
@@ -356,8 +356,8 @@ const AddNewJobScreen = () => {
                                     fontFamily: fonts.FONT_POP_REGULAR,
                                     fontSize: FontSizes.MEDIUM_16,
                                     color: colors.black
-                                }}>{strings.NewJobAddedSuccessfully}</Text>
-                                <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginTop: wp(2) }} onPress={() => { setIsModelVisible(false) }} title={strings.Okay} />
+                                }}>{strings.newJobAddedSuccessfully}</Text>
+                                <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginTop: wp(2) }} onPress={() => { setIsModelVisible(false) }} title={strings.okay} />
                             </View>
                         } />
                 </ScrollView>

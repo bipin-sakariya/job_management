@@ -208,7 +208,7 @@ const JobDetailsScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{strings.Job}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.job}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
@@ -252,7 +252,7 @@ const JobDetailsScreen = () => {
                     </View>
                     <View style={{ paddingVertical: wp(5) }}>
                         <CustomTextInput
-                            title={strings.JobId}
+                            title={strings.jobId}
                             container={{ marginBottom: wp(5) }}
                             value={"#123"}
                             // editable={isEdit}
@@ -276,14 +276,14 @@ const JobDetailsScreen = () => {
                             onpress={() => navigation.navigate('CreateJobMapScreen')}
                         />
                         <CustomDetailsComponent
-                            title={strings.Description}
+                            title={strings.description}
                             bottomComponent={
                                 <Text numberOfLines={3} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left", }]}>Lorem Ipsum הוא פשוט טקסט דמה של תעשיית הדפוס, ותעשיית הדפוס הייתה טקסט הדמה הסטנדרטי של התעשייה....</Text>
                             }
                         />
                         <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={result} />
                         <CustomDetailsComponent
-                            title={strings.Attachment}
+                            title={strings.attachment}
                             detailsContainerStyle={{ marginVertical: wp(4) }}
                             bottomComponent={
                                 <FlatList
@@ -355,7 +355,7 @@ const JobDetailsScreen = () => {
                         }
 
                         <CustomDetailsComponent
-                            title={strings.JobAddedby}
+                            title={strings.jobAddedBy}
                             bottomComponent={
                                 <CustomJobAddedByComponent date={moment('16 May 2022').format('ll')} image={ImagesPath.image_white_border} role='Inspector' userName="Oscar Fields" />
                             }
@@ -372,7 +372,7 @@ const JobDetailsScreen = () => {
                         }
                         {type && (data.status == strings.JobOpen || data.status == strings.JobReturn || data.status == strings.JobTransfer) ?
                             <CustomDetailsComponent
-                                title={data.status == strings.JobTransfer ? strings.Transferto : strings.FurtherInspection}
+                                title={data.status == strings.JobTransfer ? strings.Transferto : strings.furtherInspection}
                                 detailsContainerStyle={{ marginVertical: wp(4) }}
                                 bottomComponent={
                                     <Text numberOfLines={1} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left" }]}>{data.status == strings.JobTransfer ? 'P.Maintanence' : 'Yes'}</Text>
@@ -399,7 +399,7 @@ const JobDetailsScreen = () => {
                             || (userData?.role == strings.Admin && data.status == strings.JobTransfer))
                             ?
                             <CustomBlackButton
-                                title={strings.Close}
+                                title={strings.close}
                                 buttonStyle={{ paddingHorizontal: wp(10) }}
                                 onPress={() => {
                                     navigation.navigate("CloseJobScreen")
@@ -413,13 +413,13 @@ const JobDetailsScreen = () => {
                         ref={refRBSheet}
                         children={
                             <View style={[globalStyles.rowView, styles.bottomBtnView]}>
-                                <CustomJobDetailsBottomButton image={ImagesPath.right_arrow_icon} buttonText={strings.TransferJob} onPress={() => {
+                                <CustomJobDetailsBottomButton image={ImagesPath.right_arrow_icon} buttonText={strings.transferJob} onPress={() => {
                                     navigation.navigate("TransferJobScreen")
                                     refRBSheet.current?.close()
                                 }} />
                                 {
                                     userData?.role != strings.Group_Manager &&
-                                    <CustomJobDetailsBottomButton image={ImagesPath.round_arrow_icon} buttonText={strings.ReturnJob} onPress={() => {
+                                    <CustomJobDetailsBottomButton image={ImagesPath.round_arrow_icon} buttonText={strings.returnJob} onPress={() => {
                                         navigation.navigate("ReturnJobScreen")
                                         refRBSheet.current?.close()
                                     }} />

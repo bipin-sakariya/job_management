@@ -128,7 +128,7 @@ export const styles = StyleSheet.create({
         ...globalStyles.rtlStyle
     },
     commonTxt: {
-        color: '#5B5B5B',
+        color: colors.gray_8,
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.SMALL_14,
         marginVertical: wp(1),

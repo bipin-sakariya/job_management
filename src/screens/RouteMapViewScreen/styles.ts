@@ -40,7 +40,7 @@ export const styles = StyleSheet.create({
         left: wp(1.5),
         justifyContent: "center",
         alignItems: 'center',
-        borderColor: '#737373',
+        borderColor: colors.brown,
         borderWidth: wp(0.3),
         marginVertical: wp(5)
     },

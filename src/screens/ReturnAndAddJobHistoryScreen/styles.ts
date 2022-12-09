@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     titleTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.LARGE_22,
-        color: '#404040',
+        color: colors.dark_light_brown,
         maxWidth: wp(35)
     },
     desTxt: {

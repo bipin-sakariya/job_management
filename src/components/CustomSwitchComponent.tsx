@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         width: wp(9),
         justifyContent: 'center',
         paddingHorizontal: wp(1),
-        borderColor: '#666666',
+        borderColor: colors.light_brown,
         borderWidth: wp(0.5),
         borderRadius: wp(5)
     },

@@ -42,12 +42,12 @@ const UserListComponent = ({ item }: { item: itemPropsType }) => {
 
     const optionData = [
         {
-            title: strings.Remove,
+            title: strings.remove,
             onPress: () => deleteUserData(),
             imageSource: ImagesPath.bin_icon
         },
         {
-            title: strings.Edit,
+            title: strings.edit,
             onPress: () => {
                 setVisible(false)
                 navigation.navigate("UserDetailScreen", { userId: item.id, isEdit: true })

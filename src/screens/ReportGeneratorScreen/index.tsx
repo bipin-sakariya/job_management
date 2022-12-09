@@ -34,28 +34,8 @@ const ReportGeneratorScreen = () => {
     const [edate, setEdate] = useState(' ');
     const XDate = require("xdate")
     const [page, setPage] = useState(1)
+
     useEffect(() => setupMarkedDates(sdate, edate), [range]);
-    // LocaleConfig.locales['en'] = {
-    //     monthNames: [
-    //         'Janvier',
-    //         'Février',
-    //         'Mars',
-    //         'Avril',
-    //         'Mai',
-    //         'Juin',
-    //         'Juillet',
-    //         'Août',
-    //         'Septembre',
-    //         'Octobre',
-    //         'Novembre',
-    //         'Décembre'
-    //     ],
-    //     // monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-    //     monthNamesShort: ['Jan.', 'Feb.', 'Mar', 'Apr', 'May', 'Jun', 'Jul.', 'Aug', 'Sept.', 'Oct.', 'Nov.', 'Dec.'],
-    //     dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-    //     dayNamesShort: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-    //     today: 'Today\'now'
-    // };
 
     LocaleConfig.locales['hebrew'] = {
         monthNames: ['יָנוּאָר', 'פברואר', 'מרץ', 'אַפּרִיל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'סֶפּטֶמבֶּר', 'אוֹקְטוֹבֶּר', 'נוֹבֶמבֶּר', 'דֵצֶמבֶּר'],
@@ -223,9 +203,6 @@ const ReportGeneratorScreen = () => {
             setMarkedDates(markedDates);
         }
     };
-
-    console.log({ sdate, edate, markDates });
-
 
     const onDayPress = (date: any) => {
         if (sdate === edate) {

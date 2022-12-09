@@ -20,18 +20,18 @@ const CustomeJobListDetailsViewComponent = (props: CustomeJobListDetailsViewComp
                 <View style={styles.jobTitleContainer}>
                     <Text style={[styles.titleTxt, globalStyles.rtlStyle]}>{props.item.title}</Text>
                     <View style={[globalStyles.rowView, { direction: I18nManager.isRTL ? 'ltr' : 'rtl' }]}>
-                        {props.item.jobstatus != strings.JobAddedby && props.item.jobstatus != strings.JobClosedby &&
+                        {props.item.jobstatus != strings.jobAddedBy && props.item.jobstatus != strings.JobClosedby &&
                             <Image source={ImagesPath.map_pin_dark_line_icon} style={{ width: wp(5), height: wp(5), resizeMode: 'contain' }} />
                         }
                         <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>{props.item.km}</Text>
                     </View>
                 </View>
                 {props.item.author ?
-                        <>
-                            <Text style={[styles.descriptionTxt, { writingDirection: "ltr", textAlign: 'left' }]}>{props.item.jobstatus}</Text>
-                            <Text style={[styles.descriptionTxt, { writingDirection: "ltr", textAlign: 'left' }]}>{props.item.author}</Text>
-                        </> :
-                        <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{props.item.description}</Text>
+                    <>
+                        <Text style={[styles.descriptionTxt, { writingDirection: "ltr", textAlign: 'left' }]}>{props.item.jobstatus}</Text>
+                        <Text style={[styles.descriptionTxt, { writingDirection: "ltr", textAlign: 'left' }]}>{props.item.author}</Text>
+                    </> :
+                    <Text style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{props.item.description}</Text>
                 }
             </View>
         </TouchableOpacity>
@@ -43,7 +43,7 @@ export default CustomeJobListDetailsViewComponent
 const styles = StyleSheet.create({
     jobContainerStyle: {
         ...globalStyles.rowView,
-        backgroundColor: '#D9D9D9',
+        backgroundColor: colors.doc_bg_color_light_gray,
         paddingHorizontal: wp(3.5),
         paddingVertical: wp(2.5),
         borderRadius: 8,
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
         color: colors.dark_blue2_color
     },
     dropDownShadowStyle: {
-        shadowColor: "rgba(0, 0, 0, 0.06)",
+        shadowColor: colors.black_opacity,
         shadowOpacity: 5,
         shadowRadius: 6,
         shadowOffset: { height: 0, width: 0 },

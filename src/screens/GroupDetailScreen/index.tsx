@@ -184,13 +184,13 @@ const GroupDetailScreen = () => {
 
     const optionData = [
         {
-            title: strings.Remove, onPress: () => {
+            title: strings.remove, onPress: () => {
                 deleteGroupData(route.params.params.id)
                 navigation.goBack()
             }, imageSource: ImagesPath.bin_icon
         },
         {
-            title: strings.Edit, onPress: () => {
+            title: strings.edit, onPress: () => {
                 setIsEditable(true)
                 setVisible(false)
             }, imageSource: ImagesPath.edit_icon

@@ -36,7 +36,7 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
 
     const optionData = [
         {
-            title: strings.Remove, onPress: () => {
+            title: strings.remove, onPress: () => {
                 if (item.id) {
                     if (isFrom) {
                         //form data
@@ -51,7 +51,7 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
             }, imageSource: ImagesPath.bin_icon
         },
         {
-            title: strings.Edit, onPress: () => {
+            title: strings.edit, onPress: () => {
                 if (isFrom) {
                     let params = {
                         id: data.id,
@@ -109,7 +109,7 @@ export default CustomListView
 
 const styles = StyleSheet.create({
     dropDownShadowStyle: {
-        shadowColor: Platform.OS == "ios" ? "rgba(0, 0, 0, 0.06)" : "rgba(0, 0, 0, 0.6)",
+        shadowColor: Platform.OS == "ios" ? colors.black_opacity : "rgba(0, 0, 0, 0.6)",
         shadowOpacity: 5,
         shadowRadius: 8,
         shadowOffset: { height: 0, width: 0 },
