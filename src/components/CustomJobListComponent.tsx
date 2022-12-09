@@ -8,9 +8,12 @@ import fonts from "../styles/Fonts";
 import FontSizes from "../styles/FontSizes";
 import { globalStyles } from "../styles/globalStyles";
 import { ImagesPath } from "../utils/ImagePaths";
+import { JobDetailsData } from "../redux/slices/AdminSlice/jobListSlice";
+import { convertDate } from "../utils/screenUtils";
+import FastImage from "react-native-fast-image";
 
 interface CustomJobListComponentProps {
-    item: any,
+    item: JobDetailsData,
     type?: string
     listStyle?: TouchableOpacityProps['style']
     textStyle?: TextProps['style']
@@ -19,7 +22,7 @@ interface CustomJobListComponentProps {
 const CustomJobListComponent = (props: CustomJobListComponentProps & TouchableOpacityProps) => {
     return (
         <TouchableOpacity {...props} style={[props.listStyle, styles.jobContainerStyle, props.type == "carousel" ? styles.jobContainerBoxShadowStyle : null]}>
-            <Image source={props.item.image ? props.item.image : ImagesPath.placeholder_img} style={styles.jobImageStyle} />
+            <FastImage source={ImagesPath.placeholder_img} style={styles.jobImageStyle} />
             <View style={{ flex: 1 }}>
                 <View style={styles.jobTitleContainer}>
                     <View style={styles.jobStatusViewStyle}>
@@ -29,16 +32,16 @@ const CustomJobListComponent = (props: CustomJobListComponentProps & TouchableOp
                                 <Image source={ImagesPath.infocircle_icon} style={styles.infoCircleIcon} />
                             </TouchableOpacity>
                         }
-                        <Text style={[styles.titleTxt, globalStyles.rtlStyle]}>{props.item.title}</Text>
+                        <Text style={[styles.titleTxt, globalStyles.rtlStyle]}>{props.item.address}</Text>
                     </View>
-                    <CustomStatusBtn title={props.item.button} />
+                    <CustomStatusBtn title={props.item.status} />
                 </View>
-                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_10, textAlign: "left" }]}>{moment(props.item.date).format('ll')}</Text>
+                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_10, textAlign: "left" }]}>{convertDate(props.item.created_at)}</Text>
                 <View style={styles.descriptionView}>
                     <Text numberOfLines={2} style={[props.textStyle, styles.descriptionTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>{props.item.description}</Text>
                     <View style={[globalStyles.rowView, styles.kmViewStyle, globalStyles.rtlDirection]}>
                         <Image source={ImagesPath.map_pin_icon} style={styles.mapPinIcon} />
-                        <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>{props.item.km}</Text>
+                        <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>5 km away</Text>
                     </View>
                 </View>
             </View>
@@ -56,6 +59,7 @@ const styles = StyleSheet.create({
         paddingVertical: wp(2.5),
         marginVertical: wp(0.5),
         borderRadius: 8,
+        marginHorizontal: wp(2)
     },
     jobImageStyle: {
         height: wp(20),

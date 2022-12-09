@@ -13,10 +13,12 @@ import { useAppSelector } from '../hooks/reduxHooks';
 import CustomModal from './CustomModal';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { strings } from '../languages/localizedStrings';
+import { JobDetailsData } from '../redux/slices/AdminSlice/jobListSlice';
+import { convertDate } from '../utils/screenUtils';
 
-const JobListComponent = ({ item, index }: any) => {
+const JobListComponent = ({ item, index, isDateVisible }: { item: JobDetailsData, index: number, isDateVisible: boolean }) => {
     const navigation = useCustomNavigation('JobsScreen')
-    const { userData } = useAppSelector(state => state.userDetails)
+
 
     const [isModelVisible, setIsModelVisible] = useState(false)
     LocaleConfig.locales['hebrew'] = {
@@ -94,10 +96,10 @@ const JobListComponent = ({ item, index }: any) => {
     return (
         <View style={styles.itemContainer}>
             <View style={styles.dateTxtContainer}>
-                <View style={globalStyles.rowView}>
+                {isDateVisible && <View style={globalStyles.rowView}>
                     <Image source={ImagesPath.calender_icon} style={styles.calenderIconStyle} />
-                    <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{moment(item.data).format('ll')}</Text>
-                </View>
+                    <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{convertDate(item.created_at)}</Text>
+                </View>}
                 {index == 0 &&
                     <TouchableOpacity onPress={() => {
                         setIsModelVisible(true)
@@ -105,14 +107,13 @@ const JobListComponent = ({ item, index }: any) => {
                         <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{strings.date}</Text>
                     </TouchableOpacity>}
             </View>
-            {item.jobs.map((i: any) => (
-                <CustomeJobListDetailsViewComponent
-                    onPress={() => {
-                        navigation.navigate("JobDetailsScreen", { params: i, type: i.status })
-                    }}
-                    item={i}
-                />
-            ))}
+            <CustomeJobListDetailsViewComponent
+                onPress={() => {
+                    navigation.navigate("JobDetailsScreen", { params: item })
+                }}
+                item={item}
+            />
+
             <CustomModal
                 visible={isModelVisible}
                 onRequestClose={() => { setIsModelVisible(false) }}
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
     },
     dateTxtContainer: {
         ...globalStyles.rowView,
-        marginVertical: wp(2.5),
+        marginVertical: wp(2),
         justifyContent: 'space-between'
     },
     calenderIconStyle: {

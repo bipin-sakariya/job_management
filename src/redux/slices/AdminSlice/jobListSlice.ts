@@ -1,9 +1,9 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit"
 import { Alert } from "react-native"
 import { ApiConstants } from "../../../config/ApiConstants"
 import { axiosClient } from "../../../config/Axios"
 
-interface added_byData {
+interface Added_byData {
     id: number | null,
     profile_image?: string,
     user_name?: string,
@@ -16,9 +16,9 @@ interface added_byData {
     },
     is_active: boolean
 }
-export interface jobDetailsData {
-    id: number | null,
-    added_by: added_byData,
+export interface JobDetailsData {
+    id: number,
+    added_by: Added_byData,
     closed_by?: null,
     images: undefined,
     attachments: undefined,
@@ -40,18 +40,30 @@ export interface jobDetailsData {
     form?: undefined,
     bill?: undefined
 }
-
-interface initialState {
+interface JobDataListProps {
+    count: number,
+    next?: string | null,
+    previous?: string | null,
+    results: JobDetailsData[]
+}
+interface InitialState {
     isLoading: boolean
     error: object | string | undefined
-    jobDetails: jobDetailsData
+    jobDetails: JobDetailsData
+    jobListData: JobDataListProps,
 }
 
-const initialState: initialState = {
+const initialState: InitialState = {
     isLoading: false,
     error: '',
+    jobListData: {
+        count: 0,
+        next: null,
+        previous: null,
+        results: []
+    },
     jobDetails: {
-        id: null,
+        id: 0,
         added_by: {
             id: null,
             profile_image: '',
@@ -88,11 +100,13 @@ const initialState: initialState = {
     }
 }
 
+
 interface paramsTypes {
     id?: number
-    data?: FormData,
-    page?: undefined | number,
-    searchTxt?: string
+    data?: FormData
+    page?: undefined | number
+    search?: string
+    status?: string
 }
 
 export interface apiErrorTypes {
@@ -103,18 +117,14 @@ export interface apiErrorTypes {
 
 const JOB = "JOB";
 
-export const jobList = createAsyncThunk
-    (JOB + "/jobList", async (params: paramsTypes, { rejectWithValue }) => {
+export const jobList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
+    (JOB + "/jobList", async (params, { rejectWithValue }) => {
         try {
-            console.log(ApiConstants.JOB)
-            //search
-            let response
-            if (params.searchTxt) {
-                response = await axiosClient.get(ApiConstants.JOB + `?search=${params.searchTxt}&page=${params.page}`)
-            } else {
-                response = await axiosClient.get(ApiConstants.JOB + `?page=${params.page}`)
-            }
-            return response;
+            console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
+            // console.log('p000000000000', ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
+            const response = await axiosClient.get(ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
+            console.log("🚀 ~ file: jobListSlice.ts ~ line 69 ~ response", response)
+            return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
                 Alert.alert(e.message)
@@ -122,7 +132,6 @@ export const jobList = createAsyncThunk
             return rejectWithValue(e?.response)
         }
     })
-
 export const jobCreate = createAsyncThunk<string[], FormData, { rejectValue: apiErrorTypes }>(JOB + "/jobCreate", async (params, { rejectWithValue }) => {
     try {
         console.log(ApiConstants.JOB, params)
@@ -136,10 +145,10 @@ export const jobCreate = createAsyncThunk<string[], FormData, { rejectValue: api
     }
 })
 
-export const jobDetails = createAsyncThunk<jobDetailsData, paramsTypes, { rejectValue: apiErrorTypes }>(JOB + "/jobDetails", async (params, { rejectWithValue }) => {
+export const jobDetail = createAsyncThunk<JobDetailsData, number, { rejectValue: apiErrorTypes }>(JOB + "/jobDetails", async (id, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.JOB, params)
-        const response = await axiosClient.post(ApiConstants.JOB + params.id + '/')
+        console.log(ApiConstants.JOB, id)
+        const response = await axiosClient.get(ApiConstants.JOB + id + '/')
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {
@@ -149,6 +158,37 @@ export const jobDetails = createAsyncThunk<jobDetailsData, paramsTypes, { reject
     }
 })
 
+export const jobStatusWiseList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
+    (JOB + "/jobStatusWiseList", async (params, { rejectWithValue }) => {
+        try {
+            console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
+            // console.log('p000000000000', ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
+            const response = await axiosClient.get(ApiConstants.JOBSTATUSWISE + `?page=${params.page}&search=${params.search}&status=${params.status}`)
+            console.log("🚀 ~ file: jobListSlice.ts ~ line 700 ~ response", response)
+            return response.data;
+        } catch (e: any) {
+            if (e.code === "ERR_NETWORK") {
+                Alert.alert(e.message)
+            }
+            return rejectWithValue(e?.response)
+        }
+    })
+
+export const recentJobList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
+    (JOB + "/recentJobList", async (params, { rejectWithValue }) => {
+        try {
+            console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
+            // console.log('p000000000000', ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
+            const response = await axiosClient.get(ApiConstants.RECENTJOBLIST + `?page=${params.page}&search=${params.search}`)
+            console.log("🚀 ~ file: jobListSlice.ts ~ line 69 ~ response", response)
+            return response.data;
+        } catch (e: any) {
+            if (e.code === "ERR_NETWORK") {
+                Alert.alert(e.message)
+            }
+            return rejectWithValue(e?.response)
+        }
+    })
 const jobListSlice = createSlice({
     name: JOB,
     initialState,
@@ -161,11 +201,11 @@ const jobListSlice = createSlice({
         });
         builder.addCase(jobList.fulfilled, (state, action) => {
             state.isLoading = false
-            // let tempArray: billDataProps = action.meta.arg.page == 1 ? [] : {
-            //     ...action.payload.data,
-            //     results: [...current(state.billListData?.results), ...action.payload?.data?.results]
-            // }
-            // state.billListData = action.meta.arg.page == 1 ? action.payload.data : tempArray
+            let tempArray = action.meta.arg.page == 1 ? action.payload : {
+                ...action.payload,
+                results: [...current(state.jobListData?.results), ...action.payload?.results]
+            }
+            state.jobListData = action.meta.arg.page == 1 ? action.payload : tempArray
             state.error = ''
         });
         builder.addCase(jobList.rejected, (state, action) => {
@@ -188,16 +228,52 @@ const jobListSlice = createSlice({
         });
 
         // Job Details
-        builder.addCase(jobDetails.pending, state => {
+        builder.addCase(jobDetail.pending, state => {
             state.isLoading = true
             state.error = ''
         });
-        builder.addCase(jobDetails.fulfilled, (state, action) => {
+        builder.addCase(jobDetail.fulfilled, (state, action) => {
             state.isLoading = false
             state.jobDetails = action.payload
             state.error = ''
         });
-        builder.addCase(jobDetails.rejected, (state, action) => {
+        builder.addCase(jobDetail.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = ''
+        });
+
+        //jobstatusWiselist
+        builder.addCase(jobStatusWiseList.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(jobStatusWiseList.fulfilled, (state, action) => {
+            state.isLoading = false
+            let tempArray = action.meta.arg.page == 1 ? action.payload : {
+                ...action.payload,
+                results: [...current(state.jobListData?.results), ...action.payload?.results]
+            }
+            state.jobListData = action.meta.arg.page == 1 ? action.payload : tempArray
+            state.error = ''
+        });
+        builder.addCase(jobStatusWiseList.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = ''
+        });
+        builder.addCase(recentJobList.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(recentJobList.fulfilled, (state, action) => {
+            state.isLoading = false
+            let tempArray = action.meta.arg.page == 1 ? action.payload : {
+                ...action.payload,
+                results: [...current(state.jobListData?.results), ...action.payload?.results]
+            }
+            state.jobListData = action.meta.arg.page == 1 ? action.payload : tempArray
+            state.error = ''
+        });
+        builder.addCase(recentJobList.rejected, (state, action) => {
             state.isLoading = false
             state.error = ''
         });

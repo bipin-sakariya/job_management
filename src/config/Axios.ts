@@ -28,7 +28,7 @@ axiosClient.interceptors.request.use(async (config) => {
 				Authorization: `Bearer ${token}`
 			}
 		}
-		if (config.method == "post" || config.method == "put") {
+		if (config.method === "post") {
 			config.headers = {
 				'Content-Type': 'multipart/form-data',
 				Accept: 'application/json',
