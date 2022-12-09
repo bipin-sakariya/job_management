@@ -15,7 +15,6 @@ import { JobDetailsProps, RootRouteProps } from "../../types/RootStackTypes";
 import moment from "moment";
 import FileViewer from "react-native-file-viewer";
 import RNFS from "react-native-fs";
-import { jobDetailsData } from "../../redux/slices/AdminSlice/jobListSlice";
 
 
 const JobDetailsScreen = () => {

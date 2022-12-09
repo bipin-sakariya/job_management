@@ -80,5 +80,12 @@ export const styles = StyleSheet.create({
         height: wp(4.5),
         width: wp(4.5),
         resizeMode: 'contain'
-    }
+    },
+    indexValue: {
+        borderWidth: 1,
+        padding: 2,
+        paddingHorizontal: wp(1.5),
+        borderColor: colors.gray_1,
+        color: colors.gray_1,
+    },
 })

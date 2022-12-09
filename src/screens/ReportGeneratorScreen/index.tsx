@@ -239,6 +239,50 @@ const ReportGeneratorScreen = () => {
         }
     }
 
+    const downloadFile = () => {
+        const { dirs } = RNFetchBlob.fs;
+        console.log("DOWN---", { dirs })
+        RNFetchBlob.config({
+            fileCache: true,
+            addAndroidDownloads: {
+                useDownloadManager: true,
+                notification: true,
+                mediaScannable: true,
+                title: `report.doc`,
+                path: `${dirs.DownloadDir}/report.doc`,
+            },
+            path: `${dirs.DocumentDir}/report.doc`,
+        }).fetch('GET', 'https://www.sample-videos.com/doc/Sample-doc-file-100kb.doc')
+            // http://www.africau.edu/images/default/sample.pdf           **
+            // https://filesamples.com/samples/document/txt/sample3.txt   **
+            // https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx **
+            // https://filesamples.com/samples/document/xlsx/sample3.xlsx **
+            // https://www.sample-videos.com/doc/Sample-doc-file-100kb.doc **
+            .then((res) => {
+                RNFetchBlob.ios.openDocument(res.data)
+            }).catch((e) => {
+                console.log("DOWN--- Catch", { e })
+            })
+    }
+
+    const checkPermissionForDownloadFile = async () => {
+        if (Platform.OS === 'android') {
+            try {
+                const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+                console.log({ granted })
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    downloadFile()
+                } else {
+                    Alert.alert('Permission Denied!', 'You need to give storage permission to download the file');
+                }
+            } catch (err) {
+                console.warn(err);
+            }
+        } else {
+            downloadFile()
+        }
+    }
+
     const renderItem = ({ item, index }: any) => {
         return (
             <>

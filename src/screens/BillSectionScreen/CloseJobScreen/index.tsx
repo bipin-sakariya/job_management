@@ -2,7 +2,6 @@ import { FlatList, I18nManager, Image, ScrollView, StyleSheet, Text, TextInput, 
 import React, { useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { BottomSheet, Container, CustomBlackButton, CustomDashedComponent, CustomDetailsComponent, CustomModal, CustomOneItemSelect, CustomSubTitleWithImageComponent, CustomTextInput, Header } from '../../components'
-import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { strings } from '../../languages/localizedStrings'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -14,6 +13,7 @@ import TableDetailsComponent from '../../components/TableDetailsComponent'
 import { colors } from '../../styles/Colors'
 import RBSheet from 'react-native-raw-bottom-sheet'
 import { watchPosition } from 'react-native-geolocation-service'
+import { ImagesPath } from '../../../utils/ImagePaths'
 
 interface SignDataProps {
     id: number,
@@ -281,15 +281,7 @@ const CloseJobScreen = () => {
                         title="9 Oxfort street"
                         value='9 Oxfort street'
                         mainContainerStyle={{ marginBottom: wp(5), flex: 1, }}
-                        container={{ width: wp(64) }}
-                        onPress={() => {
-                            navigation.navigate("CreateJobMapScreen", {
-                                isEditing: true, jobLocation: {
-                                    latitude: 21.247181,
-                                    longitude: 72.890877,
-                                }
-                            })
-                        }} />
+                        container={{ width: wp(64) }} />
                     <CustomDetailsComponent
                         title={strings.Description}
                         bottomComponent={

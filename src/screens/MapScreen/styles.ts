@@ -100,4 +100,16 @@ export const styles = StyleSheet.create({
         width: wp(7),
         resizeMode: 'contain'
     },
+    markerWrap: {
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    selected_markerPinIcon: {
+        height: wp(15),
+        width: wp(15),
+    },
+    unselected_markerPinIcon: {
+        height: wp(14),
+        width: wp(14),
+    },
 })

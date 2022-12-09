@@ -8,10 +8,11 @@ import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { strings } from '../../languages/localizedStrings';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { colors } from '../../styles/Colors';
+import Geolocation from '@react-native-community/geolocation';
 import { RootRouteProps } from '../../types/RootStackTypes';
 import { useRoute } from '@react-navigation/native';
-import Geolocation from 'react-native-geolocation-service';
-import { hasLocationPermission } from '../../utils/locationPermission';
+import { setJobLocation } from '../../redux/slices/MapSlice/MapSlice';
+import { useAppDispatch } from '../../hooks/reduxHooks';
 
 const JobData = [
     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", status: "info" },
@@ -34,19 +35,18 @@ const CreateJobMapScreen = () => {
     const navigation = useCustomNavigation('CreateJobMapScreen')
     const route = useRoute<RootRouteProps<'CreateJobMapScreen'>>();
     const mapRef = useRef<MapView>(null);
-    const [currentLoaction, setCurruntLocation] = useState(false)
-    const [loaction, setLoaction] = useState<MapPositionProps | null>(null);
+    const dispatch = useAppDispatch()
+    const [isCurrentLoaction, setIsCurruntLocation] = useState(false)
+    const [curruntLoaction, setCurruntLoaction] = useState<MapPositionProps | null>(null);
     const [tapLoaction, setTapLoaction] = useState<MapPositionProps | null>(null);
     const [ChoosefromMap, setChooseFromMap] = useState(false)
 
-    const checkLocationPermission = async () => {
-        const hasPermission = await hasLocationPermission();
-        if (!hasPermission) {
-            return;
-        } else {
+    useEffect(() => {
+
+        if (route.params.isEditing) {
             Geolocation.getCurrentPosition(
                 position => {
-                    setLoaction({
+                    setCurruntLoaction({
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
                         latitudeDelta: 0.0922,
@@ -57,29 +57,27 @@ const CreateJobMapScreen = () => {
                     console.log(error.code, error.message);
                 }
             );
+        } else {
+            setTapLoaction({
+                latitude: route.params.jobLocation.latitude,
+                longitude: route.params.jobLocation.longitude,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+            })
         }
-    }
-
-    useEffect(() => {
-            checkLocationPermission()
-        // if (route.params.isEditing) {
-        // } else {
-        //     setTapLoaction({
-        //         latitude: route.params.jobLocation.latitude,
-        //         longitude: route.params.jobLocation.longitude,
-        //         latitudeDelta: 0.0922,
-        //         longitudeDelta: 0.0421,
-        //     })
-        // }
     }, [])
 
     useEffect(() => {
-        if (currentLoaction && loaction) {
-            mapRef.current?.animateToRegion(loaction);
-            setTapLoaction(loaction)
-            // route.params.setJobLocation(loaction)
+        if (isCurrentLoaction && curruntLoaction) {
+            mapRef.current?.animateToRegion(curruntLoaction);
+            setTapLoaction(curruntLoaction)
+            dispatch(setJobLocation({
+                latitude: curruntLoaction.latitude,
+                longitude: curruntLoaction.longitude
+            }))
         }
-    }, [currentLoaction])
+
+    }, [isCurrentLoaction])
 
     return (
         <View style={globalStyles.container}>
@@ -95,57 +93,63 @@ const CreateJobMapScreen = () => {
                     </TouchableOpacity>
                 }
             />
-           {loaction && <MapView
+
+            <MapView
                 ref={mapRef}
                 style={{ flex: 1 }}
                 provider={'google'}
                 customMapStyle={customMapStyle}
-                showsUserLocation={currentLoaction}
-                initialRegion={loaction}
+                showsUserLocation={isCurrentLoaction}
+                initialRegion={{
+                    latitude: !route.params.isEditing ? route.params.jobLocation.latitude : 21.247181,
+                    longitude: !route.params.isEditing ? route.params.jobLocation.longitude : 72.890877,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421
+                }}
                 onPress={(e: any) => {
-                    // if (route.params.isEditing) {
-                    //     if (ChoosefromMap) {
-                    //         route.params.setJobLocation({
-                    //             latitude: e.nativeEvent.coordinate.latitude,
-                    //             longitude: e.nativeEvent.coordinate.longitude,
-                    //             latitudeDelta: 0.0922,
-                    //             longitudeDelta: 0.0421,
-                    //         })
-                    //         setTapLoaction({
-                    //             latitude: e.nativeEvent.coordinate.latitude,
-                    //             longitude: e.nativeEvent.coordinate.longitude,
-                    //             latitudeDelta: 0.0922,
-                    //             longitudeDelta: 0.0421,
-                    //         })
-                    //     }
-                    // }
-                }}>
+                    if (route.params.isEditing) {
+                        if (ChoosefromMap) {
+                            dispatch(setJobLocation({
+                                latitude: e.nativeEvent.coordinate.latitude,
+                                longitude: e.nativeEvent.coordinate.longitude,
+                            }))
+                            setTapLoaction({
+                                latitude: e.nativeEvent.coordinate.latitude,
+                                longitude: e.nativeEvent.coordinate.longitude,
+                                latitudeDelta: 0.0922,
+                                longitudeDelta: 0.0421,
+                            })
+                        }
+                    }
+                }}
+            >
+
                 {tapLoaction && <Marker
                     coordinate={tapLoaction}>
                     <Image source={ImagesPath.map_pin_line_icon} style={{ width: wp(10), height: wp(10) }}></Image>
                 </Marker>}
-            </MapView>}
+
+            </MapView>
             <View style={[globalStyles.rowView, { justifyContent: 'space-around', position: 'absolute', bottom: 20, width: wp(100) }]}>
-                {/* {route.params.isEditing && */}
-                <>
-                    <CustomBlackButton
-                        title={strings.ChoosefromMap}
-                        buttonStyle={{ width: wp(45) }}
-                        imageStyle={{ tintColor: colors.white }}
-                        textStyle={{ color: colors.white }}
-                        onPress={() => setChooseFromMap(true)}
-                        image={ImagesPath.map_pin_line_icon}
-                    />
-                    <CustomBlackButton
-                        title={strings.current_loaction}
-                        buttonStyle={{ width: wp(45), backgroundColor: colors.light_blue_color }}
-                        imageStyle={{ tintColor: colors.primary_color }}
-                        textStyle={{ color: colors.primary_color }}
-                        onPress={() => setCurruntLocation(true)}
-                        image={ImagesPath.cross_hair_icon}
-                    />
-                </>
-                {/* } */}
+                {route.params.isEditing &&
+                    <>
+                        <CustomBlackButton
+                            title={strings.ChoosefromMap}
+                            buttonStyle={{ width: wp(45) }}
+                            imageStyle={{ tintColor: colors.white }}
+                            textStyle={{ color: colors.white }}
+                            onPress={() => setChooseFromMap(true)}
+                            image={ImagesPath.map_pin_line_icon}
+                        />
+                        <CustomBlackButton
+                            title={strings.current_loaction}
+                            buttonStyle={{ width: wp(45), backgroundColor: colors.light_blue_color }}
+                            imageStyle={{ tintColor: colors.primary_color }}
+                            textStyle={{ color: colors.primary_color }}
+                            onPress={() => setIsCurruntLocation(true)}
+                            image={ImagesPath.cross_hair_icon}
+                        />
+                    </>}
             </View>
         </View>
     )

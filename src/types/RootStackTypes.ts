@@ -1,6 +1,13 @@
 import { RouteProp } from "@react-navigation/native";
 import { GroupData } from "../redux/slices/AdminSlice/groupListSlice";
 
+export interface JobDetailsProps {
+    description: string
+    km: string
+    status: string
+    title: string
+}
+
 export type BottomStackParamList = {
     JobsScreen: undefined
     MapScreen: undefined

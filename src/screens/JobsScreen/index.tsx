@@ -10,7 +10,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { ListDataProps } from '../../components/CustomBottomSheet';
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
-import { RootState, useAppSelector } from '../../hooks/reduxHooks';
+import { useAppSelector } from '../../hooks/reduxHooks';
 
 const data = [
     { id: 1, title: strings.All, selected: true },
@@ -19,29 +19,30 @@ const data = [
     { id: 4, title: strings.Council, selected: false },
 ]
 
+
 const JobData = [
     {
-        data: '16 may 2022',
+        data: '16 May 2022',
         jobs: [
-            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
-            { title: 'Job Return', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobReturn },
-            { title: 'Job Transfer', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobTransfer }
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobReturn },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobTransfer }
         ]
     },
     {
-        data: '16 may 2022',
+        data: '16 May 2022',
         jobs: [
-            { title: 'Job Close', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobClose },
-            { title: 'Job Partial', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobPartial },
-            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen }
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobClose },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobPartial },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen }
         ]
     },
     {
-        data: '16 may 2022',
+        data: '16 May 2022',
         jobs: [
-            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
-            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
-            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen }
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
+            { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen }
         ]
     }
 ]
@@ -49,12 +50,13 @@ const JobData = [
 const JobsScreen = () => {
     const navigation = useCustomNavigation('JobsScreen')
     const refRBSheet = useRef<RBSheet | null>(null);
-
     const [selectedItem, setSelectedItem] = useState<ListDataProps | undefined>(undefined);
     const [page, setPage] = useState(1)
-    const [btn, setBtn] = useState({ open: true, close: false })
-
-    const { userData } = useAppSelector((state: RootState) => state.userDetails)
+    const [btn, setBtn] = useState({
+        open: true,
+        close: false
+    })
+    const { userData } = useAppSelector((state) => state.userDetails)
     useEffect(() => {
         let defaultSelected = data.find((i) => i.selected == true)
         setSelectedItem(defaultSelected)
@@ -99,11 +101,12 @@ const JobsScreen = () => {
             <Container>
                 <ButtonTab btnOneTitle={strings.Open} btnTwoTitle={strings.Close} setBtn={setBtn} btnValue={btn} onReset={setPage} />
                 <FlatList
+                    showsVerticalScrollIndicator={false}
+                    // style={{ marginBottom: Platform.OS == "ios" ? wp(28) : wp(22) }}
                     data={JobData}
                     renderItem={({ item, index }) => (
                         <JobListComponent item={item} index={index} />
                     )}
-                    showsVerticalScrollIndicator={false}
                 />
             </Container>
             <CustomBottomSheet
