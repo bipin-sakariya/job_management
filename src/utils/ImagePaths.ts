@@ -110,6 +110,10 @@ export const ImagesPath = {
     demo4: require('../assets/images/DemoImages/demo4.png'),
     demo5: require('../assets/images/DemoImages/demo5.png'),
     signImage: require('../assets/images/signImage.png'),
-    colorLeftArrow: require('../assets/images/colorLeftArrow.png')
+    colorLeftArrow: require('../assets/images/colorLeftArrow.png'),
+    linkImage: require('../assets/images/linkImage.png'),
+    file_image_icon: require('../assets/images/file_image.png'),
+    camera_image_icon: require('../assets/images/camera_image.png'),
+    gallary_image_icon: require('../assets/images/gallary_image.png'),
 
 }

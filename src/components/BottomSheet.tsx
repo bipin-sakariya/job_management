@@ -36,7 +36,8 @@ const BottomSheet = React.forwardRef((props: BottomSheetProps & RBSheetProps, re
                 draggableIcon: {
                     backgroundColor: colors.bottom_sheet_tab,
                     width: wp(30),
-                }
+                },
+                ...props.customStyles
             }}>
             {props.children}
         </RBSheet>

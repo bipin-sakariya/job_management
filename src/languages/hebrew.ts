@@ -270,5 +270,10 @@ export const hebrew = {
     Total: 'סך הכל',
     date: 'תַאֲרִיך',
     Add_all_sign: 'הוסף את כל השלטים',
-    All_Assign_job: 'כל העבודות שהוקצו'
+    All_Assign_job: 'כל העבודות שהוקצו',
+    message: 'הוֹדָעָה',
+    Write_a_message_here: 'כתבו כאן הודעה.....',
+    document: 'מסמך',
+    Camera: 'מַצלֵמָה',
+    Photos: 'תמונות'
 }
