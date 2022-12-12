@@ -37,6 +37,8 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+  <key>NSCameraUsageDescription</key>
+  <string>The camera is accessed for the first time</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Job management requires access to the photo library for posting media.</string>
 	<key>UIAppFonts</key>
