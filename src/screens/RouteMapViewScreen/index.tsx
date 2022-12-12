@@ -16,11 +16,8 @@ import MapViewDirections from 'react-native-maps-directions'
 import { GOOGLE_MAP_API } from '../../config/Host'
 import DraggableFlatList, { RenderItemParams, ScaleDecorator } from 'react-native-draggable-flatlist'
 import DashedLine from 'react-native-dashed-line'
+import { location } from '../../types/commanTypes'
 
-interface location {
-    latitude: number,
-    longitude: number
-}
 
 interface JobDetail {
     id: number
@@ -76,8 +73,6 @@ const RouteMapViewScreen = () => {
         console.log('distance', `${pdis / 1000} KM`)
         return `${pdis / 1000} KM`
     };
-
-
 
     // const renderDetail = (rowData: any, sectionID: number, rowID: number) => {
     const renderDetail = ({ item, getIndex, isActive, drag }: RenderItemParams<JobDetail>) => {

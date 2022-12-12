@@ -19,6 +19,72 @@ const data = [
     { id: 4, title: strings.Council, selected: false },
 ]
 
+const dataaa = [
+    {
+        data: '16 May 2022',
+        title: 'Job Title',
+        description: 'Lorem Ipsum is simply dummy text of the printing...',
+        km: '5 km away',
+        status: strings.JobOpen
+    },
+    {
+        data: '16 May 2022',
+        title: 'Job Title',
+        description: 'Lorem Ipsum is simply dummy text of the printing...',
+        km: '5 km away',
+        status: strings.JobOpen
+    },
+    {
+        data: '16 May 2022',
+        title: 'Job Title',
+        description: 'Lorem Ipsum is simply dummy text of the printing...',
+        km: '5 km away',
+        status: strings.JobOpen
+    },
+    {
+        data: '18 May 2022',
+        title: 'Job Title',
+        description: 'Lorem Ipsum is simply dummy text of the printing...',
+        km: '5 km away',
+        status: strings.JobOpen
+    },
+    {
+        data: '18 May 2022',
+        title: 'Job Title',
+        description: 'Lorem Ipsum is simply dummy text of the printing...',
+        km: '5 km away',
+        status: strings.JobOpen
+    },
+    {
+        data: '18 May 2022',
+        title: 'Job Title',
+        description: 'Lorem Ipsum is simply dummy text of the printing...',
+        km: '5 km away',
+        status: strings.JobOpen
+    },
+    {
+        data: '19 May 2022',
+        title: 'Job Title',
+        description: 'Lorem Ipsum is simply dummy text of the printing...',
+        km: '5 km away',
+        status: strings.JobOpen
+    },
+    {
+        data: '19 May 2022',
+        title: 'Job Title',
+        description: 'Lorem Ipsum is simply dummy text of the printing...',
+        km: '5 km away',
+        status: strings.JobOpen
+    },
+    {
+        data: '19 May 2022',
+        title: 'Job Title',
+        description: 'Lorem Ipsum is simply dummy text of the printing...',
+        km: '5 km away',
+        status: strings.JobOpen
+    }
+]
+
 
 const JobData = [
     {
@@ -47,6 +113,8 @@ const JobData = [
     }
 ]
 
+
+
 const JobsScreen = () => {
     const navigation = useCustomNavigation('JobsScreen')
     const refRBSheet = useRef<RBSheet | null>(null);
@@ -60,6 +128,19 @@ const JobsScreen = () => {
     useEffect(() => {
         let defaultSelected = data.find((i) => i.selected == true)
         setSelectedItem(defaultSelected)
+    }, [])
+
+    useEffect(() => {
+        let tempArray = []
+        dataaa.map((item, index) => {
+            let tempJob = []
+            tempArray.push(item)
+            if (index != 0) {
+
+            } else {
+
+            }
+        })
     }, [])
 
     return (
@@ -103,10 +184,13 @@ const JobsScreen = () => {
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     // style={{ marginBottom: Platform.OS == "ios" ? wp(28) : wp(22) }}
-                    data={JobData}
-                    renderItem={({ item, index }) => (
-                        <JobListComponent item={item} index={index} />
-                    )}
+                    data={dataaa}
+                    renderItem={({ item, index }) => {
+                        const isDateVisible = index != 0 ? dataaa[index].data == dataaa[index - 1].data ? false : true : true
+                        return (
+                            <JobListComponent item={item} index={index} isDateVisible={isDateVisible} />
+                        )
+                    }}
                 />
             </Container>
             <CustomBottomSheet

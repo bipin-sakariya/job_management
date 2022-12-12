@@ -284,10 +284,12 @@ const CloseJobScreen = () => {
                         container={{ width: wp(64) }}
                         onPress={() => {
                             navigation.navigate("CreateJobMapScreen", {
-                                isEditing: true, jobLocation: {
+                                isEditing: true,
+                                jobLocation: {
                                     latitude: 21.247181,
                                     longitude: 72.890877,
-                                }
+                                },
+                                isButtonVisible: true
                             })
                         }} />
                     <CustomDetailsComponent

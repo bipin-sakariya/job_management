@@ -113,4 +113,5 @@ export const ImagesPath = {
     colorLeftArrow: require('../assets/images/colorLeftArrow.png'),
     selected_marker_pin: require('../assets/images/selected_marker_pin.png'),
     unselected_marker_pin: require('../assets/images/unselected_marker_pin.png'),
+    marker: require('../assets/images/marker.png'),
 }

@@ -10,16 +10,16 @@ import { styles } from './styles'
 import { colors } from '../../styles/Colors'
 import fonts from '../../styles/Fonts'
 import FontSizes from '../../styles/FontSizes'
-import { MapPositionProps } from '../../components/JobListComponent'
 import Geocoder from 'react-native-geocoder';
-import { resetJobLocation } from '../../redux/slices/MapSlice/MapSlice'
+import { resetJobLocation, setJobLocation } from '../../redux/slices/MapSlice/MapSlice'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { store } from '../../redux/Store'
+import Geolocation from '@react-native-community/geolocation'
 
 const RouteChooseLocationDetailScreen = () => {
     const navigation = useCustomNavigation('RouteChooseLocationDetailScreen');
     const dispatch = useAppDispatch()
-    const { job_location } = useAppSelector(state => state.mapData)
+    const { job_location, routeList } = useAppSelector(state => state.mapData)
     const [selectedAddress, setSelectedAddress] = useState<string>('')
 
     const JobData = [
@@ -37,33 +37,45 @@ const RouteChooseLocationDetailScreen = () => {
     }
 
     useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            console.log("job_location", store.getState().mapData.job_location)
+            if (store.getState().mapData.job_location) {
+                navigation.goBack()
+            }
+        });
+        return unsubscribe;
+    }, [navigation])
+
+
+    useEffect(() => {
         let text = "How /are you doing today?";
         const myArray = text.split("/");
         console.log(myArray)
+        console.log(routeList)
     }, [])
 
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            console.log("location", job_location, store.getState().mapData.job_location)
-            Geocoder.geocodePosition({ lat: store.getState().mapData.job_location?.latitude, lng: store.getState().mapData.job_location?.longitude }).then((res: any) => {
-                console.log(res)
-                setSelectedAddress(res[0]?.formattedAddress)
-            }).catch((err: any) => console.log(err))
+    const getCurrentLocation = () => {
+        Geolocation.getCurrentPosition(
+            position => {
+                console.log(position.coords)
+                dispatch(setJobLocation({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                }))
+                navigation.goBack()
+            },
+            error => {
+                console.log(error.code, error.message);
+            }
+        );
+    }
 
-            // Geocoder.geocodeAddress('New York').then((res: any) => {
-            // })
-        });
-
-        return unsubscribe;
-
-    }, [navigation])
     return (
         <View style={globalStyles.container}>
             <Header
                 headerLeftStyle={{ width: "50%", paddingLeft: wp(3) }}
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView]} onPress={() => {
-                        dispatch(resetJobLocation())
                         navigation.goBack()
                     }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
@@ -83,20 +95,18 @@ const RouteChooseLocationDetailScreen = () => {
                 </View>
                 <CustomSubTitleWithImageComponent title={strings.YourLocation} image={ImagesPath.cross_hair_icon} titleStyle={styles.commonTxtStyle}
                     onPress={() => {
-                        navigation.navigate("CreateJobMapScreen", {
-                            isEditing: true, jobLocation: {
-                                latitude: 42.882004,
-                                longitude: 74.582748,
-                            }
-                        })
-                    }} />
+                        getCurrentLocation()
+                    }}
+                />
                 <CustomSubTitleWithImageComponent title={strings.ChoosefromMap} image={ImagesPath.map_pin_darkline_icon} titleStyle={styles.commonTxtStyle}
                     onPress={() => {
                         navigation.navigate("CreateJobMapScreen", {
-                            isEditing: true, jobLocation: {
+                            isEditing: true,
+                            jobLocation: {
                                 latitude: 42.882004,
                                 longitude: 74.582748,
-                            }
+                            },
+                            isButtonVisible: false
                         })
                     }} />
                 <View style={{

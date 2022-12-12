@@ -15,7 +15,7 @@ import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { strings } from '../languages/localizedStrings';
 import { convertDate } from '../utils/screenUtils';
 
-const JobListComponent = ({ item, index }: any) => {
+const JobListComponent = ({ item, index, isDateVisible }: any) => {
     const navigation = useCustomNavigation('JobsScreen')
     const { userData } = useAppSelector(state => state.userDetails)
 
@@ -95,10 +95,12 @@ const JobListComponent = ({ item, index }: any) => {
     return (
         <View style={styles.itemContainer}>
             <View style={styles.dateTxtContainer}>
-                <View style={globalStyles.rowView}>
-                    <Image source={ImagesPath.calender_icon} style={styles.calenderIconStyle} />
-                    <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{convertDate(item.data)}</Text>
-                </View>
+                {isDateVisible ?
+                    <View style={globalStyles.rowView}>
+                        <Image source={ImagesPath.calender_icon} style={styles.calenderIconStyle} />
+                        <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{convertDate(item.data)}</Text>
+                    </View>
+                    : null}
                 {index == 0 &&
                     <TouchableOpacity onPress={() => {
                         setIsModelVisible(true)
@@ -106,14 +108,14 @@ const JobListComponent = ({ item, index }: any) => {
                         <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle, { fontFamily: fonts.FONT_POP_SEMI_BOLD, paddingHorizontal: 0 }]}>{strings.date}</Text>
                     </TouchableOpacity>}
             </View>
-            {item.jobs.map((i: any) => (
-                <CustomeJobListDetailsViewComponent
-                    onPress={() => {
-                        navigation.navigate("JobDetailsScreen", { params: i, type: i.status })
-                    }}
-                    item={i}
-                />
-            ))}
+
+            <CustomeJobListDetailsViewComponent
+                onPress={() => {
+                    navigation.navigate("JobDetailsScreen", { params: item, type: i.status })
+                }}
+                item={item}
+            />
+
             <CustomModal
                 visible={isModelVisible}
                 onRequestClose={() => { setIsModelVisible(false) }}

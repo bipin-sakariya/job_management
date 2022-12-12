@@ -1,5 +1,5 @@
 import { FlatList, Image, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomBlackButton, CustomDashedComponent, CustomJobListComponent, CustomSubTitleWithImageComponent, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
@@ -9,6 +9,13 @@ import { strings } from '../../languages/localizedStrings';
 import { colors } from '../../styles/Colors';
 import { styles } from './styles';
 import FontSizes from '../../styles/FontSizes';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { LocationData, resetJobLocation, setDestination, setRouteList, setSource } from '../../redux/slices/MapSlice/MapSlice';
+import { location } from '../../types/commanTypes';
+import Geocoder from 'react-native-geocoder';
+import { getAddress } from '../../utils/screenUtils';
+import { store } from '../../redux/Store';
+import { useIsFocused } from '@react-navigation/native';
 
 
 interface JobDetail {
@@ -17,13 +24,24 @@ interface JobDetail {
     description: string
 }
 
+const locationn = [
+    { latitude: 21.247181, longitude: 72.890877 },
+    { latitude: 21.228125, longitude: 72.833771 },
+    { latitude: 21.214088, longitude: 72.887639 },
+    { latitude: 21.211527, longitude: 72.853284 },
+    { latitude: 21.230250, longitude: 72.813096 },
+]
 
 const RouteScreen = () => {
-    const [sourceAddress, setSourceAddress] = useState<JobDetail | null>(null)
-    const [destinationAddress, setDestinationAddress] = useState<JobDetail | null>(null)
+    const dispatch = useAppDispatch()
+    const isFocus = useIsFocused()
+    const [sourceAddress, setSourceAddress] = useState<String>('')
+    const [destinationAddress, setDestinationAddress] = useState<String>('')
     const [selectedAddress, setSelectedAddress] = useState<JobDetail[]>([]);
-
+    const { job_location, routeList } = useAppSelector(state => state.mapData)
+    const [locationList, setLocationList] = useState<location[]>([]);
     const navigation = useCustomNavigation('RouteScreen');
+
     const JobData = [
         { id: 1, title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", status: "info" },
         { id: 2, title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Return", status: "info" },
@@ -46,12 +64,73 @@ const RouteScreen = () => {
         }
     }
 
-
     const renderItem = ({ item, index }: any) => {
         return (
             <CustomJobListComponent item={item} onPress={() => handleJobSelection(item)} />
         )
     }
+
+    // const getAddress = (location: location) => {
+    //     Geocoder.geocodePosition({ lat: location?.latitude, lng: location?.longitude }).then((res: any) => {
+    //         setAddres(res[0]?.formattedAddress)
+    //         console.log(res[0]?.formattedAddress)
+    //     }).catch((err: any) => console.log(err))
+    // }
+
+    useEffect(() => {
+        let job = store?.getState()?.mapData?.job_location
+
+
+        let locationListData: LocationData[] = routeList
+        // console.log("beforelist", locationListData)
+        console.log("job_location_main", job)
+
+        const unsubscribe = navigation.addListener('focus', () => {
+            // console.log("job_location_main2", job)
+
+            if (job && !sourceAddress) {
+                // console.log(getAddress(job))
+                // setSourceAddress(getAddress(job))
+            }
+
+            // if (job) {
+            //     locationListData.push(job)
+            // }
+            // console.log("afterlist", locationListData)
+            // setLocationList(locationListData)
+            // dispatch(setRouteList(locationList))
+
+        });
+        return unsubscribe;
+    }, [navigation, sourceAddress])
+
+
+    const getLocation = async (isFocus: boolean) => {
+        if (isFocus && job_location) {
+            let location_res = await getAddress(job_location)
+            if (!sourceAddress) {
+                setSourceAddress(location_res)
+                dispatch(setSource(job_location))
+            }
+            else if (!destinationAddress) {
+                setDestinationAddress(location_res)
+                dispatch(setDestination(job_location))
+            } else {
+                dispatch(setRouteList([]))
+            }
+        }
+    }
+
+    useEffect(() => {
+        getLocation(isFocus)
+    }, [isFocus, job_location])
+
+
+    // useEffect(() => {
+
+    // }, [sourceAddress])
+
+
 
     return (
         <ScrollView style={globalStyles.container}>
@@ -70,17 +149,17 @@ const RouteScreen = () => {
                     <View style={{ flex: 1 }}>
                         <View style={styles.btnContainer}>
                             <Text style={[styles.textInputStyle, globalStyles.rtlStyle, { flex: 1, marginBottom: 0 }]} onPress={() => navigation.navigate("RouteChooseLocationDetailScreen")}>
-                                {sourceAddress ? sourceAddress?.title : strings.ChooseStartingLocation}
+                                {sourceAddress ? sourceAddress : strings.ChooseStartingLocation}
                             </Text>
-                            {sourceAddress && <TouchableOpacity style={styles.closeIconContainer} onPress={() => setSourceAddress(null)}>
+                            {sourceAddress && <TouchableOpacity style={styles.closeIconContainer} onPress={() => setSourceAddress('')}>
                                 <Image source={ImagesPath.close_icon} style={styles.closeIcon} />
                             </TouchableOpacity>}
                         </View>
                         <View style={styles.btnContainer}>
                             <Text style={[styles.textInputStyle, globalStyles.rtlStyle, { flex: 1, marginBottom: 0 }]} onPress={() => navigation.navigate("RouteChooseLocationDetailScreen")}>
-                                {destinationAddress ? destinationAddress.title : strings.ChooseDestination}
+                                {destinationAddress ? destinationAddress : strings.ChooseDestination}
                             </Text>
-                            {destinationAddress && <TouchableOpacity style={styles.closeIconContainer} onPress={() => setDestinationAddress(null)}>
+                            {destinationAddress && <TouchableOpacity style={styles.closeIconContainer} onPress={() => setDestinationAddress('')}>
                                 <Image source={ImagesPath.close_icon} style={styles.closeIcon} />
                             </TouchableOpacity>}
                         </View>
@@ -100,11 +179,14 @@ const RouteScreen = () => {
                                 </View>
                             )
                         }) : null}
+
                         <CustomDashedComponent
                             title={strings.AddOtherField}
                             image={ImagesPath.plus_circle_white_border_icon}
                             onPress={() => {
                                 navigation.navigate("RouteChooseLocationDetailScreen")
+                                dispatch(resetJobLocation())
+                                dispatch(setRouteList([]))
                             }}
                             viewStyle={{ paddingVertical: wp(3), borderColor: colors.bottom_sheet_tab, marginTop: wp(0) }}
                             textStyle={{ fontSize: FontSizes.MEDIUM_16, color: colors.dark_blue1_color }}
