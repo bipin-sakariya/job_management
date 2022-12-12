@@ -76,9 +76,9 @@ const BillSectionScreen = () => {
     }, [isFocus])
 
     const optionData = [
-        { title: strings.Remove, onPress: () => deleteBill(), imageSource: ImagesPath.bin_icon },
+        { title: strings.remove, onPress: () => deleteBill(), imageSource: ImagesPath.bin_icon },
         {
-            title: strings.Edit, onPress: () => {
+            title: strings.edit, onPress: () => {
                 setIsEditEditable(true)
                 setVisible(false)
             }, imageSource: ImagesPath.edit_icon
@@ -235,7 +235,7 @@ const BillSectionScreen = () => {
                     }
                     {error.image ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.image}</Text> : null}
                     <CustomTextInput
-                        title={strings.Name}
+                        title={strings.name}
                         container={{ marginVertical: wp(5) }}
                         value={values.name}
                         placeholder={type == "material" ? strings.Billname : strings.SignName}
@@ -245,7 +245,7 @@ const BillSectionScreen = () => {
                     {(touched.name && errors.name) || error.name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.name ? error.name : errors.name}</Text> : null}
                     {type == "sign" && <>
                         <CustomTextInput
-                            title={strings.Quantity}
+                            title={strings.quantity}
                             container={{ marginBottom: wp(5) }}
                             value={values.ration_qunt}
                             placeholder='2'
@@ -256,7 +256,7 @@ const BillSectionScreen = () => {
                         {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
                     </>}
                     <DropDownComponent
-                        title={strings.TypeCounting}
+                        title={strings.typeCounting}
                         data={data}
                         disable={isEditable ? !isEditable : true}
                         image={ImagesPath.down_white_arrow}
@@ -275,11 +275,11 @@ const BillSectionScreen = () => {
                     {typeCountError || error.type_counting ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.type_counting ? error.type_counting : strings.Typecount_required}</Text> : null}
                     {type != "sign" && <>
                         <CustomTextInput
-                            title={strings.JumpingRation}
+                            title={strings.jumpingRation}
                             container={{ marginBottom: wp(5) }}
                             value={values.ration_qunt}
                             editable={isEditable}
-                            placeholder={strings.JumpingRation}
+                            placeholder={strings.jumpingRation}
                             onChangeText={handleChange("ration_qunt")}
                             keyboardType={'decimal-pad'}
                         />

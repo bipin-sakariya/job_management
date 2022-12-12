@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { colors } from "../../styles/Colors";
 import fonts from "../../styles/Fonts";
 import FontSizes from "../../styles/FontSizes";
 
@@ -14,7 +15,7 @@ export const styles = StyleSheet.create({
         paddingHorizontal: wp(2),
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
-        color: '#444444'
+        color: colors.chat_right_Txt
     },
     composermainview: {
         alignItems: "center",

@@ -40,7 +40,7 @@ export interface GroupData {
         updated_at: string
     }],
     total_member_in_group: string,
-    assign_jobs: string,
+    assign_jobs: [],
     created_at: string,
     updated_at: string,
     name: string,
@@ -115,7 +115,7 @@ const initialState: InitialState = {
             updated_at: ''
         }],
         total_member_in_group: '',
-        assign_jobs: '',
+        assign_jobs: [],
         created_at: '',
         updated_at: '',
         name: '',
@@ -150,7 +150,7 @@ export const groupList = createAsyncThunk<GroupDataProps, paramsTypes, { rejectV
         }
     })
 
-export const groupDelete = createAsyncThunk<string, number, { rejectValue: apiErrorTypes }>(GROUP + "/groupDelete", async (id, { rejectWithValue }) => {
+export const groupDelete = createAsyncThunk<number, number, { rejectValue: apiErrorTypes }>(GROUP + "/groupDelete", async (id, { rejectWithValue }) => {
     try {
         console.log(ApiConstants.GROUPLIST, id)
         const response = await axiosClient.delete(ApiConstants.GROUPLIST + id + '/')
@@ -242,7 +242,7 @@ const groupListSlice = createSlice({
                     updated_at: ''
                 }],
                 total_member_in_group: '',
-                assign_jobs: '',
+                assign_jobs: [],
                 created_at: '',
                 updated_at: '',
                 name: '',
@@ -260,12 +260,12 @@ const groupListSlice = createSlice({
         });
         builder.addCase(groupList.fulfilled, (state, action) => {
             state.isLoading = false
-            let tempArray = action.meta.arg.page == 1 ? action.payload : {
-                ...action.payload,
-                results: [...current(state.groupListData?.results), ...action.payload?.results]
-            }
-            state.groupListData = action.meta.arg.page == 1 ? action.payload : tempArray
-            state.error = ''
+            // let tempArray = action.meta.arg.page == 1 ? action.payload : {
+            //     ...action.payload,
+            //     results: [...current(state.groupListData?.results), ...action.payload?.results]
+            // }
+            // state.groupListData = action.meta.arg.page == 1 ? action.payload : tempArray
+            // state.error = ''
         });
         builder.addCase(groupList.rejected, (state, action) => {
             state.isLoading = false

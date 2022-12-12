@@ -17,7 +17,7 @@ import useCustomNavigation from '../../hooks/useCustomNavigation';
 
 
 const data = [
-    { id: 1, title: strings.All, selected: true },
+    { id: 1, title: strings.all, selected: true },
     { id: 2, title: strings.PMaintanence, selected: false },
     { id: 3, title: strings.Paint, selected: false },
     { id: 4, title: strings.Council, selected: false },

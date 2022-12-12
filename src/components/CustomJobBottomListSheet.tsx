@@ -50,7 +50,7 @@ const CustomJobBottomListSheet = React.forwardRef((props: CustomJobBottomListShe
                     backgroundColor: "transparent",
                 },
                 draggableIcon: {
-                    backgroundColor: "#9E9E9E"
+                    backgroundColor: colors.gray_7
                 }
             }}>
             <>

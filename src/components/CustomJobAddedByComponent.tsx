@@ -19,7 +19,7 @@ const CustomJobAddedByComponent = ({ image, userName, role, date }: CustomJobAdd
         <View style={[globalStyles.rowView, styles.jobView]}>
             <View style={[globalStyles.rowView, globalStyles.spaceAroundView]}>
                 <View style={styles.jobImageView}>
-                    <Image source={image} style={styles.jobImage} />
+                    <Image source={image} resizeMode={'contain'} style={styles.jobImage} />
                 </View>
                 <View style={styles.jobDetailsView}>
                     <Text style={[styles.fieldTxt, globalStyles.rtlStyle, { textAlign: 'left' }]} numberOfLines={1}>{userName}</Text>
@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
         justifyContent: "space-between"
     },
     jobImageView: {
-        height: wp(10),
-        width: wp(10),
+        // height: wp(10),
+        // width: wp(10),
         backgroundColor: colors.doc_bg_color_dark_gray,
         borderRadius: wp(2),
         justifyContent: "center",
@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
         marginHorizontal: wp(2),
     },
     jobImage: {
-        height: wp(7),
-        width: wp(7),
+        height: wp(10),
+        width: wp(10),
         resizeMode: 'contain'
     },
     fieldTxt: {

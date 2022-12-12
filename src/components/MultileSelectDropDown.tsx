@@ -146,7 +146,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                             <Image source={ImagesPath.search_icon} style={{ height: wp(6), width: wp(6), resizeMode: 'contain' }} />
                             <TextInput
                                 style={[globalStyles.rtlStyle, { height: 40, marginHorizontal: wp(1.5), width: '90%', textAlign: I18nManager.isRTL ? 'right' : 'left', }]}
-                                placeholder={strings.SearchHere}
+                                placeholder={strings.searchHere}
                                 value={searchTxt}
                                 onChangeText={(txt) => {
                                     const searchData = props.data.filter((i) => i.user_name?.includes(txt.toLowerCase()))

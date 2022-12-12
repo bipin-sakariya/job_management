@@ -60,7 +60,7 @@ const CreateNewJobScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{type == strings.returnJob ? strings.ReturnJob : strings.AddNewJob}</Text>
+                        <Text style={globalStyles.headerTitle}>{type == strings.returnJob ? strings.returnJob : strings.AddNewJob}</Text>
                     </TouchableOpacity>
                 }
                 headerRightStyle={{
@@ -91,15 +91,15 @@ const CreateNewJobScreen = () => {
                             fontFamily: fonts.FONT_POP_REGULAR,
                             fontSize: FontSizes.MEDIUM_16,
                             color: colors.black
-                        }}>{strings.NewJobAddedSuccessfully}</Text>
-                        <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginTop: wp(2) }} onPress={() => { setIsModelVisible(false) }} title={strings.Okay} />
+                        }}>{strings.newJobAddedSuccessfully}</Text>
+                        <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginTop: wp(2) }} onPress={() => { setIsModelVisible(false) }} title={strings.okay} />
                     </View>
                 } />
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <CustomSubTitleWithImageComponent disabled title={strings.Fillfromtocreatejob} image={ImagesPath.list_bullet_image_icon} />
+                    <CustomSubTitleWithImageComponent disabled title={strings.fillFromToCreateJob} image={ImagesPath.list_bullet_image_icon} />
                     <View style={{ paddingVertical: wp(5) }}>
                         <CustomTextInput
-                            title={strings.JobId}
+                            title={strings.jobId}
                             container={{ marginBottom: wp(1) }}
                             value={"#123"}
                             // editable={isEdit}
@@ -110,7 +110,7 @@ const CreateNewJobScreen = () => {
                             value='9 Oxfort street'
                             container={{ marginVertical: wp(5), width: wp(67) }} />
                         <CustomTextInput
-                            title={strings.Addressinformation}
+                            title={strings.addressInformation}
                             numberOfLines={2}
                             value={"Just behind new yellow house"}
                             // editable={isEdit}
@@ -118,7 +118,7 @@ const CreateNewJobScreen = () => {
                         />
                         <Text style={{ marginVertical: wp(1), marginBottom: wp(3), alignSelf: 'flex-end', color: '#B7B7B7', fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_10 }}>{strings.Additionaladdressinformation}</Text>
                         <CustomDetailsComponent
-                            title={strings.Description}
+                            title={strings.description}
                             bottomComponent={
                                 <Text numberOfLines={3} style={styles.bottomTxtStyle}>Lorem Ipsum is simply dummy text of the printing and,typesetting industry has been the industry's standard dummy text....</Text>
                             }
@@ -128,7 +128,7 @@ const CreateNewJobScreen = () => {
                                 <>
                                     <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={result} />
                                     <CustomDetailsComponent
-                                        title={strings.Attachment}
+                                        title={strings.attachment}
                                         detailsContainerStyle={{ marginVertical: wp(4) }}
                                         bottomComponent={
                                             <FlatList
@@ -148,23 +148,23 @@ const CreateNewJobScreen = () => {
                             viewStyle={{ paddingVertical: wp(5) }}
                             image={ImagesPath.add_icon}
                             onPress={() => { }}
-                            title={strings.AddPhotosandAttachments}
+                            title={strings.addPhotosAndAttachments}
                         />
                         <CustomSwitchComponent container={{
                             marginVertical: wp(3)
                         }}
-                            title={strings.Priority}
+                            title={strings.priority}
                             subTitle="Urgent Job"
                             value={isurgent}
                             onPress={() => setIsUrgent(!isurgent)} />
                         <CustomSwitchComponent
-                            title={strings.FinishNotification}
+                            title={strings.finishNotification}
                             subTitle='Finish Notification'
                             value={isnotification}
                             onPress={() => setIsNotification(!isnotification)}
                         />
                         <CustomBlackButton
-                            title={type == strings.returnJob ? strings.SaveChanges : strings.CreateJob}
+                            title={type == strings.returnJob ? strings.SaveChanges : strings.createJob}
                             onPress={() => {
                                 setIsModelVisible(true)
                             }}

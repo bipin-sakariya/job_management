@@ -177,9 +177,9 @@ const FormDetailsScreen = () => {
     }
 
     const optionData = [
-        { title: strings.Remove, onPress: () => deleteGroupData(route.params.id), imageSource: ImagesPath.bin_icon },
+        { title: strings.remove, onPress: () => deleteGroupData(route.params.id), imageSource: ImagesPath.bin_icon },
         {
-            title: strings.Edit, onPress: () => {
+            title: strings.edit, onPress: () => {
                 setIsEdit(true)
                 setIsEditable(true)
                 setVisible(false)
@@ -264,7 +264,7 @@ const FormDetailsScreen = () => {
                     /> :
                     <View style={[styles.sammedView, globalStyles.rtlDirection, { flexShrink: 1 }]}>
                         <View style={styles.formHeaderView}>
-                            <Text style={[styles.noNameTxt, globalStyles.rtlStyle]}>{strings.Edit}</Text>
+                            <Text style={[styles.noNameTxt, globalStyles.rtlStyle]}>{strings.edit}</Text>
                         </View>
                         <TableHeaderView type={"form"} />
                         <FlatList

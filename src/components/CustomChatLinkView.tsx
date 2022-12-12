@@ -17,39 +17,37 @@ const CustomChatLinkView = (props: CustomChatLinkViewProps & TouchableOpacityPro
     const [isVisible, setIsVisible] = useState(true)
     return (
         <>
-            {
-                isVisible ?
-
-                    <View style={[styles.jobTypeMainView, props.viewStyle, {
-                        borderRadius: props.keyBoardVisible ? wp(3) : 0,
-                        borderBottomLeftRadius: wp(3),
-                        borderBottomRightRadius: props.keyBoardVisible ? wp(3) : props?.props.position == 'right' ? 0 : wp(3),
-                        borderTopLeftRadius: props.keyBoardVisible ? wp(3) : props?.props.position == 'right' ? wp(3) : 0,
-                        borderTopRightRadius: wp(3),
-                    }]}>
-                        <View style={[globalStyles.rowView, styles.jobDetailView]}>
-                            <View style={[globalStyles.centerView, styles.jobTypeImageView]}>
-                                <Image source={ImagesPath.image_white_border} style={styles.imageStyle} />
-                            </View>
-                            {
-                                props.keyBoardVisible ?
-                                    <TouchableOpacity onPress={() => { setIsVisible(false) }} {...props} style={styles.closeButtonView}>
-                                        <Image source={ImagesPath.close_icon} style={styles.closeBtnStyle} />
-                                    </TouchableOpacity> : null
-                            }
-                            <View style={styles.jobDetailsMainView}>
-                                <View style={[globalStyles.rowView, styles.jobDetailHeaderView]}>
-                                    <Text numberOfLines={1} style={styles.jobTitleTxt}>Job Title</Text>
-                                    <View style={[globalStyles.rowView, styles.pinImageViewStyle]}>
-                                        <Image source={ImagesPath.map_pin_dark_line_icon} style={styles.pinImageStyle} />
-                                        <Text numberOfLines={1} style={styles.jobDistanceTxt}>5 km away</Text>
-                                    </View>
-                                </View>
-                                <Text style={styles.jobDetailsTxt} numberOfLines={2}>Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing</Text>
-                            </View>
+            {isVisible ?
+                <View style={[styles.jobTypeMainView, props.viewStyle, {
+                    borderRadius: props.keyBoardVisible ? wp(3) : 0,
+                    borderBottomLeftRadius: wp(3),
+                    borderBottomRightRadius: props.keyBoardVisible ? wp(3) : props?.props.position == 'right' ? 0 : wp(3),
+                    borderTopLeftRadius: props.keyBoardVisible ? wp(3) : props?.props.position == 'right' ? wp(3) : 0,
+                    borderTopRightRadius: wp(3),
+                }]}>
+                    <View style={[globalStyles.rowView, styles.jobDetailView]}>
+                        <View style={[globalStyles.centerView, styles.jobTypeImageView]}>
+                            <Image source={ImagesPath.image_white_border} style={styles.imageStyle} />
                         </View>
-                        {props.textComponent}
-                    </View> : null
+                        {
+                            props.keyBoardVisible ?
+                                <TouchableOpacity onPress={() => { setIsVisible(false) }} {...props} style={styles.closeButtonView}>
+                                    <Image source={ImagesPath.close_icon} style={styles.closeBtnStyle} />
+                                </TouchableOpacity> : null
+                        }
+                        <View style={styles.jobDetailsMainView}>
+                            <View style={[globalStyles.rowView, styles.jobDetailHeaderView]}>
+                                <Text numberOfLines={1} style={styles.jobTitleTxt}>Job Title</Text>
+                                <View style={[globalStyles.rowView, styles.pinImageViewStyle]}>
+                                    <Image source={ImagesPath.map_pin_dark_line_icon} style={styles.pinImageStyle} />
+                                    <Text numberOfLines={1} style={styles.jobDistanceTxt}>5 km away</Text>
+                                </View>
+                            </View>
+                            <Text style={styles.jobDetailsTxt} numberOfLines={2}>Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing</Text>
+                        </View>
+                    </View>
+                    {props.textComponent}
+                </View> : null
             }
         </>
 
@@ -68,7 +66,7 @@ const styles = StyleSheet.create({
     jobTypeImageView: {
         width: wp(17),
         height: wp(17),
-        backgroundColor: '#9E9E9E',
+        backgroundColor: colors.gray_7,
         borderRadius: wp(2)
     },
     imageStyle: {
@@ -114,13 +112,13 @@ const styles = StyleSheet.create({
         maxWidth: '50%',
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        color: '#404040'
+        color: colors.dark_light_brown
     },
     jobDistanceTxt: {
         marginHorizontal: wp(0.5),
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_10,
-        color: '#7F7F7F'
+        color: colors.bottom_tab_btn
     },
     jobDetailsTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,

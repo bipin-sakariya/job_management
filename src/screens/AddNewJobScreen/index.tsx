@@ -59,8 +59,6 @@ const AddNewJobScreen = () => {
         address: '',
         address_information: '',
         description: '',
-        images: '',
-        attachments: ''
     })
 
     const createJob = (values: {
@@ -69,20 +67,25 @@ const AddNewJobScreen = () => {
         addressInformation: string;
         description: string;
     }) => {
-        if (values && !imageError && !docError) {
+        if (values) {
             let data = new FormData
 
+            console.log('hghghjghj', values)
             let image_array: image_arrayList[] = []
             let doc_array: doc_arrayList[] = []
 
             if (imageList) {
                 imageList.map((item, index) => {
                     let images = {
+                        // uri: item.imgUrl,
+                        // name: "photo.jpg",
+                        // type: "image/jpeg"
                         uri: item.imgUrl,
                         name: `photo${index}${item.mediaType == "image" ? '.jpg' : '.mp4'}`,
                         type: item.mediaType == "image" ? "image/jpeg" : 'video/mp4'
                     }
                     image_array.push(images)
+                    console.log({ images })
                 })
             }
             if (docList) {
@@ -108,7 +111,10 @@ const AddNewJobScreen = () => {
             data.append("further_inspection", isFinishNotification)
             data.append("status", strings.JobOpen)
             if (!isEmptyArray(image_array)) {
-                data.append("image", image_array)
+                image_array.map((item) => {
+
+                    data.append("image", item)
+                })
             }
             if (!isEmptyArray(doc_array)) {
                 data.append("attachment", docList)
@@ -145,6 +151,7 @@ const AddNewJobScreen = () => {
             initialValues: { jobID: '', address: '', addressInformation: '', description: '', },
             validationSchema: CreateJobValidationSchema,
             onSubmit: values => {
+                console.log({ values })
                 createJob(values)
             }
         })
@@ -200,7 +207,8 @@ const AddNewJobScreen = () => {
     };
     return (
         <View style={globalStyles.container}>
-            {isLoading && <CustomActivityIndicator size={'small'} />}
+            {/* {console.log({ values, errors })} */}
+            {/* {isLoading && <CustomActivityIndicator size={'small'} />} */}
             <Header
                 headerLeftStyle={{
                     paddingLeft: wp(3),
@@ -215,11 +223,11 @@ const AddNewJobScreen = () => {
             />
             <Container>
                 <ScrollView contentContainerStyle={[{ paddingHorizontal: wp(4), paddingBottom: wp(5) }]} showsVerticalScrollIndicator={false}>
-                    <CustomSubTitleWithImageComponent title={strings.Fillfromtocreatejob} image={ImagesPath.list_bullet_image_icon} />
+                    <CustomSubTitleWithImageComponent title={strings.fillFromToCreateJob} image={ImagesPath.list_bullet_image_icon} />
                     <CustomTextInput
-                        title={strings.JobId}
+                        title={strings.jobId}
                         container={{ marginTop: wp(3) }}
-                        placeholder={strings.JobId}
+                        placeholder={strings.jobId}
                         value={values.jobID}
                         onChangeText={handleChange("jobID")}
                     />
@@ -237,17 +245,17 @@ const AddNewJobScreen = () => {
                     />
                     {(touched?.address && errors?.address) || error?.address ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors?.address ? errors.address : error?.address}</Text> : null}
                     <CustomTextInput
-                        title={strings.Addressinformation}
+                        title={strings.addressInformation}
                         container={{ marginTop: wp(5) }}
                         value={values.addressInformation}
                         onChangeText={handleChange('addressInformation')}
-                        placeholder={strings.Addressinformation}
+                        placeholder={strings.addressInformation}
                     />
                     <Text style={[{ fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_10, color: colors.dark_blue3_color }]}>{strings.Additionaladdressinformation}</Text>
                     {(touched?.addressInformation && errors?.addressInformation) || error?.address_information ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors?.addressInformation ? errors.addressInformation : error?.address_information}</Text> : null}
                     <CustomDetailsComponent
                         detailsContainerStyle={{ marginTop: wp(4) }}
-                        title={strings.Description}
+                        title={strings.description}
                         bottomComponent={
                             <TextInput
                                 multiline
@@ -256,7 +264,7 @@ const AddNewJobScreen = () => {
                                 placeholderTextColor={colors.dark_blue2_color}
                                 value={values.description}
                                 onChangeText={handleChange('description')}
-                                placeholder={strings.Description}
+                                placeholder={strings.description}
                             />
                         }
                     />
@@ -267,18 +275,21 @@ const AddNewJobScreen = () => {
                             result={imageList} />}
                     {docList.length != 0 &&
                         <CustomDetailsComponent
-                            title={strings.Attachment}
+                            title={strings.attachment}
                             detailsContainerStyle={{ marginVertical: wp(4) }}
                             bottomComponent={
                                 <FlatList
                                     numColumns={2}
                                     data={docList}
-                                    renderItem={({ item, index }: any) => {
+                                    renderItem={({ item, index }: { item: docList, index: number }) => {
+                                        console.log("🚀 ~ file: index.tsx:302 ~ AddNewJobScreen ~ item", item)
+                                        console.log(typeof (item.path));
+                                        console.log(item.path.split(/[#?]/)[0].split('/').pop()?.split('.')[0]);
                                         return (
                                             <CommonPdfView
                                                 onPress={() => {
-                                                    const pdfName = item.path.split(/[#?]/)[0].split('/').pop().split('.')[0];
-                                                    const extension = item.path.split(/[#?]/)[0].split(".").pop().trim();;
+                                                    const pdfName = item.path.split(/[#?]/)[0].split('/').pop()?.split('.')[0];
+                                                    const extension = item.path.split(/[#?]/)[0].split('.').pop()?.trim();
                                                     const localFile = `${RNFS.DocumentDirectoryPath}/${pdfName}.${extension}`;
                                                     const options = {
                                                         fromUrl: item.path,
@@ -300,28 +311,28 @@ const AddNewJobScreen = () => {
                         onPress={() => selectOneFile()}
                         title={strings.Addimagesandattachments}
                         viewStyle={{ marginTop: wp(5), paddingVertical: wp(5) }} />
-                    {
+                    {/* {
                         imageError && docError ?
                             <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{strings.ImageandAttachments_required}</Text> :
                             <>
                                 {imageError || error.images ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.images ? error.images : strings.Image_required}</Text> : null}
                                 {docError || error.attachments ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.attachments ? error.attachments : strings.Attachments_required}</Text> : null}
                             </>
-                    }
+                    } */}
                     <CustomSwitchComponent
                         onPress={() => setIsUrgentJob(!isUrgentJob)}
                         value={isUrgentJob}
                         container={{ marginTop: wp(3) }}
-                        title={strings.Priority}
+                        title={strings.priority}
                         subTitle={strings.UrgentJob} />
                     <CustomSwitchComponent
                         onPress={() => setIsFinishNotification(!isFinishNotification)}
                         value={isFinishNotification}
                         container={{ marginTop: wp(4) }}
-                        title={strings.FurtherInspection}
-                        subTitle={strings.FinishNotification} />
+                        title={strings.furtherInspection}
+                        subTitle={strings.finishNotification} />
                     <CustomBlackButton
-                        title={strings.CreateJob}
+                        title={strings.createJob}
                         image={ImagesPath.add_icon}
                         imageStyle={{ tintColor: colors.white_color }}
                         onPress={() => {
@@ -340,11 +351,11 @@ const AddNewJobScreen = () => {
                         children={
                             <View style={styles.modalInnerView}>
                                 <Image source={ImagesPath.check_icon_circle} style={globalStyles.modalImageStyle} />
-                                <Text style={styles.modalDescriptionTxt}>{strings.NewJobAddedSuccessfully}</Text>
+                                <Text style={styles.modalDescriptionTxt}>{strings.newJobAddedSuccessfully}</Text>
                                 <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginVertical: wp(2.5) }} onPress={() => {
                                     setIsModelVisible(false)
                                     navigation.goBack()
-                                }} title={strings.Okay} />
+                                }} title={strings.okay} />
                             </View>
                         }
                     />
@@ -356,8 +367,8 @@ const AddNewJobScreen = () => {
                                     fontFamily: fonts.FONT_POP_REGULAR,
                                     fontSize: FontSizes.MEDIUM_16,
                                     color: colors.black
-                                }}>{strings.NewJobAddedSuccessfully}</Text>
-                                <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginTop: wp(2) }} onPress={() => { setIsModelVisible(false) }} title={strings.Okay} />
+                                }}>{strings.newJobAddedSuccessfully}</Text>
+                                <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginTop: wp(2) }} onPress={() => { setIsModelVisible(false) }} title={strings.okay} />
                             </View>
                         } />
                 </ScrollView>

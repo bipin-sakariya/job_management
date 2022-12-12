@@ -26,13 +26,13 @@ export const styles = StyleSheet.create({
     addNewUserTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.LARGE_22,
-        color: '#666666',
+        color: colors.light_brown,
         paddingVertical: wp(5)
     },
     subTitleTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.MEDIUM_16,
-        color: '#666666',
+        color: colors.light_brown,
         paddingHorizontal: wp(1.5)
     },
     folderIcon: {

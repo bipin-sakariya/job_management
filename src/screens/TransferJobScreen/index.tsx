@@ -46,7 +46,7 @@ const TransferJobScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{strings.TransferJob}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.transferJob}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
@@ -77,7 +77,7 @@ const TransferJobScreen = () => {
                     contentContainerStyle={{ paddingBottom: wp(20) }}
                     ItemSeparatorComponent={() => <View style={{ height: wp(4), backgroundColor: colors.white_5 }} />
                     } />
-                <CustomBlackButton onPress={() => { setIsModelVisible(true) }} title={strings.TransferJob} image={ImagesPath.arrow_bend_right_white_icon} buttonStyle={styles.buttonView} />
+                <CustomBlackButton onPress={() => { setIsModelVisible(true) }} title={strings.transferJob} image={ImagesPath.arrow_bend_right_white_icon} buttonStyle={styles.buttonView} />
             </Container>
         </View>
     )

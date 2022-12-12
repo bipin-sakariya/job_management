@@ -57,7 +57,7 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
                     backgroundColor: "transparent",
                 },
                 draggableIcon: {
-                    backgroundColor: "#9E9E9E"
+                    backgroundColor: colors.gray_7
                 }
             }}>
             <View style={{ flex: 1 }}>
@@ -72,8 +72,8 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
                     <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                     <TextInput
                         style={[styles.textInputStyle, { textAlign: I18nManager.isRTL ? 'right' : 'left' }]}
-                        placeholder={strings.SearchHere}
-                        placeholderTextColor={'#666666'}
+                        placeholder={strings.searchHere}
+                        placeholderTextColor={colors.light_brown}
                     />
                 </View>
                 <FlatList
@@ -124,6 +124,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp(2.5),
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        color: '#666666'
+        color: colors.light_brown
     }
 })

@@ -93,7 +93,7 @@ const BillListScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{strings.Bills}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.bills}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
@@ -111,7 +111,7 @@ const BillListScreen = () => {
                 <ButtonTab btnOneTitle={strings.accountmaterial} btnTwoTitle={strings.Signabill} setBtn={setBtn} onReset={setPage} btnValue={btn} />
                 <View style={[globalStyles.rowView, { marginVertical: hp(1) }]}>
                     <Image source={ImagesPath.squre_note_icon} style={styles.noteIconStyle} />
-                    <Text style={[styles.billListTxt, globalStyles.rtlStyle]}>{strings.BillList}</Text>
+                    <Text style={[styles.billListTxt, globalStyles.rtlStyle]}>{strings.billList}</Text>
                 </View>
                 <FlatList
                     data={billListData?.results}

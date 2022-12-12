@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
     titleTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        color: colors.drak_light_brown
+        color: colors.dark_light_brown
     },
     distanceTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
