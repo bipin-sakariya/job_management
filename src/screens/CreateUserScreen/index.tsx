@@ -92,7 +92,7 @@ const CreateUserScreen = () => {
             data.append("email", values.email)
             data.append("phone", `+972${values.contactNo}`)
             data.append("role", parseInt(values.role.id.toString()))
-            
+
             dispatch(createUser(data)).unwrap().then((res) => {
                 console.log({ res: res });
                 navigation.goBack()

@@ -430,8 +430,8 @@ const JobDetailsScreen = () => {
                         ref={refRBSheet}
                         children={
                             <View style={[globalStyles.rowView, styles.bottomBtnView]}>
-                                <CustomJobDetailsBottomButton image={ImagesPath.right_arrow_icon} buttonText={strings.transferJob} onPress={() => {
-                                    navigation.navigate("TransferJobScreen")
+                                <CustomJobDetailsBottomButton image={ImagesPath.right_arrow_icon} buttonText={strings.TransferJob} onPress={() => {
+                                    navigation.navigate("TransferJobScreen", { jobId: jobDetails.id })
                                     refRBSheet.current?.close()
                                 }} />
                                 {

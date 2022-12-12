@@ -38,7 +38,7 @@ const GroupListScreen = () => {
         return () => {
             setPage(1)
         }
-    }, [isFocus])
+    }, [isFocus, groupListData])
     const groupListApiCall = (page: number) => {
         let params: groupListParams = {
             page: page,

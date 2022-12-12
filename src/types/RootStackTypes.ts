@@ -39,7 +39,7 @@ export type RootStackParamList = {
     CreateFormScreen: undefined
     FormDetailsScreen: { id?: number, isEdit?: boolean }
     ChatScreen: undefined
-    TransferJobScreen: undefined
+    TransferJobScreen: { jobId: number }
     ReturnJobScreen: undefined
     DuplicateScreen?: { params?: any }
     CloseJobScreen: undefined
@@ -62,7 +62,8 @@ export type RootStackParamList = {
     GroupDetailScreen: { screenName?: string, params: GroupData, isEdit?: boolean },
     CreateJobMapScreen: undefined,
     SearchScreen: { screenName?: string }
-    AssignJobScreen: undefined
+    AssignJobScreen: undefined,
+    TransferJobListScreen: undefined
 };
 
 export type AuthStackParamList = {

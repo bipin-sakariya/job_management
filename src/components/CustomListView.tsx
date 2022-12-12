@@ -11,11 +11,11 @@ import { strings } from '../languages/localizedStrings';
 import useCustomNavigation from '../hooks/useCustomNavigation';
 import { billData, billDelete } from '../redux/slices/AdminSlice/billListSlice';
 import { useAppDispatch } from '../hooks/reduxHooks';
-import { FormData, formDelete } from '../redux/slices/AdminSlice/formListSlice';
 import { convertDate } from '../utils/screenUtils'
+import { FormDataTypes, formDelete } from '../redux/slices/AdminSlice/formListSlice';
 
 interface CustomeListViewProps {
-    item: Partial<billData> & Partial<FormData>,
+    item: Partial<billData> & Partial<FormDataTypes>,
     onPress: () => void
     material?: boolean,
     isFrom?: boolean

@@ -11,33 +11,154 @@ import { colors } from '../../styles/Colors'
 import CustomOneItemSelect from '../../components/CustomOneItemSelect'
 import fonts from '../../styles/Fonts'
 import FontSizes from '../../styles/FontSizes'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
+import { useIsFocused, useRoute } from '@react-navigation/native'
+import { GroupData, groupList, MemberDetailsProps } from '../../redux/slices/AdminSlice/groupListSlice'
+import { updateTransferJobList } from '../../redux/slices/AdminSlice/jobListSlice'
+import { RootRouteProps } from '../../types/RootStackTypes'
+
+interface groupListParams {
+    page?: number,
+    search?: string,
+}
+
+interface jobvalues {
+    group: number
+    job: number
+}
+
+export interface GroupParams {
+    id: number,
+    manager_details: {
+        user_name: string,
+        email: string
+        id: number
+        phone: string
+        profile_image: string
+        role: number
+    },
+    inspector_details: {
+        user_name: string,
+        email: string
+        id: number
+        phone: string
+        profile_image: string
+        role: number
+    },
+    member_details: MemberDetailsProps[],
+    form_details: [{
+        bill: [],
+        created_at: string,
+        id: number,
+        is_sign: boolean,
+        name: string,
+        updated_at: string
+    }],
+    total_member_in_group: string,
+    assign_jobs: [],
+    created_at: string,
+    updated_at: string,
+    name: string,
+    image: string,
+    manager: number,
+    inspector: number,
+    member: number[],
+    selected: boolean
+}
 
 const TransferJobScreen = () => {
     const navigation = useCustomNavigation('TransferJobScreen');
     const [isModelVisible, setIsModelVisible] = useState(false)
-    const data = [
-        { id: 1, title: 'title1', selected: false },
-        { id: 2, title: 'title1', selected: false },
-        { id: 3, title: 'title1', selected: false },
-        { id: 4, title: 'title1', selected: false },
-        { id: 5, title: 'title1', selected: false },
-        { id: 6, title: 'title1', selected: false },
-        { id: 7, title: 'title1', selected: false },
-        { id: 8, title: 'title1', selected: false },
-        { id: 9, title: 'title1', selected: false },
-        { id: 10, title: 'title1', selected: false },
-    ]
-    const [jobData, setJobData] = useState(data)
+    // const data = [
+    //     { id: 1, title: 'titljbhjbgjhbgjk1', selected: false },
+    //     { id: 2, title: 'title1', selected: false },
+    //     { id: 3, title: 'title1', selected: false },
+    //     { id: 4, title: 'title1', selected: false },
+    //     { id: 5, title: 'title1', selected: false },
+    //     { id: 6, title: 'title1', selected: false },
+    //     { id: 7, title: 'title1', selected: false },
+    //     { id: 8, title: 'title1', selected: false },
+    //     { id: 9, title: 'title1', selected: false },
+    //     { id: 10, title: 'title1', selected: false },
+    // ]
+    const [jobData, setJobData] = useState<GroupData[]>([])
+    const [page, setPage] = useState(1)
+    const [finalJobList, setFinaljobList] = useState<GroupParams[]>([])
+
+    const dispatch = useAppDispatch();
+    const isFocus = useIsFocused()
+    const route = useRoute<RootRouteProps<'TransferJobScreen'>>();
+    const { groupListData } = useAppSelector(state => state.groupList)
+
+    console.log('route=========>', { route })
 
 
+    useEffect(() => {
+        if (isFocus)
+            groupListApiCall(page)
+        return () => {
+            setPage(1)
+        }
+    }, [isFocus])
+    const groupListApiCall = (page: number) => {
+        let params: groupListParams = {
+            page: page,
+            search: ''
+        }
+        // setIsFooterLoading(true)
+        dispatch(groupList(params)).unwrap().then((res) => {
+            // setIsFooterLoading(false)
+            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+            setJobData(res.results)
+            setPage(page + 1)
+        }).catch((error) => {
+            console.log({ error });
+        })
+    }
 
-    const renderItem = ({ item, index }: any) => {
+
+    useEffect(() => {
+        const findData: GroupParams[] = jobData.map((i: GroupData) => {
+            return {
+                ...i,
+                user_name: i.name,
+                selected: false,
+            }
+        })
+        setFinaljobList(findData)
+
+    }, [jobData])
+
+
+    const groupId: GroupParams | undefined = finalJobList.find((i) => i.selected == true)
+    console.log('groupId', { groupId })
+
+
+    const transferJob = () => {
+        let params = {
+            group: groupId?.id,
+            job: route.params.jobId,
+        }
+        console.log({ params })
+        dispatch(updateTransferJobList(params)).unwrap().then((res) => {
+            setIsModelVisible(false)
+            navigation.goBack()
+            // navigation.goBack()
+        }).catch((e) => {
+            console.log({ error: e });
+
+        })
+    }
+
+    const renderItem = ({ item, index }: { item: GroupParams, index: number }) => {
+        { console.log('selected=====>', { item }) }
         return (
-            <CustomOneItemSelect item={item} data={jobData} onSetData={setJobData} />
+            <CustomOneItemSelect item={item} data={finalJobList} onSetData={setFinaljobList} />
         )
     }
     return (
         <View style={globalStyles.container}>
+            {/* {console.log({ finalJobList })} */}
             <Header
                 headerLeftStyle={{
                     width: "50%",
@@ -64,13 +185,13 @@ const TransferJobScreen = () => {
                             <Text style={styles.modalTxt}>{strings.Areyousureyou} P.Maintenance?</Text>
                             <View style={[globalStyles.rowView, { justifyContent: "space-around", width: '100%' }]}>
                                 <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.No} />
-                                <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%" }} title={strings.Yes} />
+                                <CustomBlackButton onPress={() => { transferJob() }} buttonStyle={{ width: "45%" }} title={strings.Yes} />
                             </View>
                         </View>
                     } />
                 <CustomSubTitleWithImageComponent disabled title={strings.Transferjobto} image={ImagesPath.arrow_bend_right_icon} />
                 <FlatList
-                    data={jobData}
+                    data={finalJobList}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}
                     style={{ marginTop: wp(3) }}

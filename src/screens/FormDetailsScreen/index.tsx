@@ -15,7 +15,7 @@ import FontSizes from '../../styles/FontSizes'
 import { colors } from '../../styles/Colors'
 import { RootRouteProps } from '../../types/RootStackTypes'
 import { useIsFocused, useRoute } from '@react-navigation/native'
-import { FormData, formDelete, formDetail, formUpdate } from '../../redux/slices/AdminSlice/formListSlice'
+import { FormDataTypes, formDelete, formDetail, formUpdate } from '../../redux/slices/AdminSlice/formListSlice'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { useFormik } from 'formik'
 import * as yup from "yup";
@@ -65,7 +65,7 @@ const FormDetailsScreen = () => {
     const [selectedMemberData, setSelectedMemberData] = useState<DataTypes[]>([])
     const [finalArray, setFinalArray] = useState<number[]>([])
     const [page, setPage] = useState(1)
-    const [FormDetails, setFormDetails] = useState<FormData>()
+    const [FormDetails, setFormDetails] = useState<FormDataTypes>()
 
     const [isselectData, setIsSelectData] = useState<DataTypes[]>([])
     const [isEditable, setIsEditable] = useState(isEdit || route.params.isEdit == true ? true : false)

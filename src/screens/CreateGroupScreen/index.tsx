@@ -14,7 +14,7 @@ import { useFormik } from 'formik';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { useIsFocused } from '@react-navigation/native';
 import { getListOfUsers, inspectorListProps, roleList, UserData } from '../../redux/slices/AdminSlice/userListSlice';
-import { FormData, formList } from '../../redux/slices/AdminSlice/formListSlice';
+import { FormDataTypes, formList } from '../../redux/slices/AdminSlice/formListSlice';
 import { createGroup } from '../../redux/slices/AdminSlice/groupListSlice';
 import { billData } from '../../redux/slices/AdminSlice/billListSlice';
 
@@ -78,7 +78,7 @@ const CreateGroupScreen = () => {
     const [selectedMemberData, setSelectedMemberData] = useState<DataTypes[]>([])
     const [formsList, setFormList] = useState<FormDataProps[]>([])
     const [memberList, setMemberList] = useState<DataTypes[]>([])
-    const [allForm, setAllForm] = useState<FormData[]>([])
+    const [allForm, setAllForm] = useState<FormDataTypes[]>([])
     const [selectedFormsList, setSelectedFormList] = useState<FormDataProps[]>([])
     const [selectedFormsData, setSelectedFormsData] = useState<DataTypes[]>()
 
@@ -209,6 +209,7 @@ const CreateGroupScreen = () => {
         if (!imageUrl) {
             Alert.alert('Alert', 'Please select your profile picture.')
         } else {
+            console.log('data=========>', {})
             let data = new FormData()
             let images = {
                 uri: imageUrl,
@@ -277,6 +278,7 @@ const CreateGroupScreen = () => {
 
     return (
         <View style={globalStyles.container}>
+            {/* {console.log({ values })} */}
 
             <Header
                 headerLeftStyle={{

@@ -260,12 +260,12 @@ const groupListSlice = createSlice({
         });
         builder.addCase(groupList.fulfilled, (state, action) => {
             state.isLoading = false
-            // let tempArray = action.meta.arg.page == 1 ? action.payload : {
-            //     ...action.payload,
-            //     results: [...current(state.groupListData?.results), ...action.payload?.results]
-            // }
-            // state.groupListData = action.meta.arg.page == 1 ? action.payload : tempArray
-            // state.error = ''
+            let tempArray = action.meta.arg.page == 1 ? action.payload : {
+                ...action.payload,
+                results: [...current(state.groupListData?.results), ...action.payload?.results]
+            }
+            state.groupListData = action.meta.arg.page == 1 ? action.payload : tempArray
+            state.error = ''
         });
         builder.addCase(groupList.rejected, (state, action) => {
             state.isLoading = false

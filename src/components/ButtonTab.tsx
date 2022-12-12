@@ -46,7 +46,7 @@ const ButtonTab = ({ btnOneTitle, btnTwoTitle, btnOneStyle, btnTwoStyle, btnOneT
             <TouchableOpacity
                 onPress={() => {
                     setBtn({ open: false, close: true }),
-                    onReset(1)
+                        onReset(1)
                 }}
                 style={[styles.btnStyle, btnTwoStyle, {
                     backgroundColor: btnValue?.close ? colors.primary_color : colors.light_blue_color,

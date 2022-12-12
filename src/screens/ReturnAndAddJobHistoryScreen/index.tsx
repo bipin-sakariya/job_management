@@ -64,6 +64,7 @@ const ReturnAndAddJobHistoryScreen = () => {
         jobListApiCall(jobPage)
         return () => {
             setPage(1)
+            setJobPage(1)
         }
     }, [isFocus])
 
@@ -128,7 +129,7 @@ const ReturnAndAddJobHistoryScreen = () => {
                     </TouchableOpacity>
                 }
                 headerRightComponent={
-                    <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { }}>
+                    <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { navigation.navigate('SearchScreen', { screenName: 'recentAndHistoryScreen' }) }}>
                         <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                     </TouchableOpacity>
                 }

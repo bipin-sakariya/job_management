@@ -5,10 +5,11 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { colors } from '../styles/Colors';
 import fonts from '../styles/Fonts';
 import FontSizes from '../styles/FontSizes';
+import { GroupParams } from '../screens/TransferJobScreen';
 
 interface CustomOneItemSelectProps {
-    item: any,
-    data?: any
+    item: GroupParams,
+    data: GroupParams[]
     onSetData: Dispatch<SetStateAction<any>>
 }
 interface jobDataProps {
@@ -18,9 +19,9 @@ interface jobDataProps {
 }
 const CustomOneItemSelect = (props: CustomOneItemSelectProps & TouchableOpacityProps) => {
 
-    const onSelectJob = (item: jobDataProps) => {
+    const onSelectJob = (item: GroupParams) => {
         let emptyJobList: Array<any> = []
-        props.data.map((data: jobDataProps) => {
+        props.data.map((data: GroupParams) => {
             if (data.id == item.id) {
                 emptyJobList.push({
                     ...data,
@@ -37,7 +38,7 @@ const CustomOneItemSelect = (props: CustomOneItemSelectProps & TouchableOpacityP
     }
     return (
         <TouchableOpacity onPress={() => { onSelectJob(props.item) }} style={[globalStyles.rowView, styles.jobListMainView]}>
-            <Text style={styles.jobNameTxt}>{props.item.title}</Text>
+            <Text style={styles.jobNameTxt}>{props.item.name}</Text>
             <View style={globalStyles.roundView} >
                 <View style={[styles.roundFillView, { backgroundColor: props.item.selected ? colors.fillColor : colors.white_5, }]} />
             </View>

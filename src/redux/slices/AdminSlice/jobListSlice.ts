@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit"
 import { Alert } from "react-native"
 import { ApiConstants } from "../../../config/ApiConstants"
 import { axiosClient } from "../../../config/Axios"
+import { FormDataTypes } from "./formListSlice"
 
 interface Added_byData {
     id: number | null,
@@ -103,10 +104,12 @@ const initialState: InitialState = {
 
 interface paramsTypes {
     id?: number
-    data?: FormData
+    data?: FormDataTypes
     page?: undefined | number
     search?: string
     status?: string
+    group?: number
+    job?: number
 }
 
 export interface apiErrorTypes {
@@ -189,6 +192,56 @@ export const recentJobList = createAsyncThunk<JobDataListProps, paramsTypes, { r
             return rejectWithValue(e?.response)
         }
     })
+
+export const recentTransferJobList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
+    (JOB + "/recentTransferJobList", async (params, { rejectWithValue }) => {
+        try {
+            console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
+            // console.log('p000000000000', ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
+            const response = await axiosClient.get(ApiConstants.RECENTTRANSFERJOBLIST + `?page=${params.page}&search=${params.search}`)
+            console.log("🚀 ~ file: jobListSlice.ts ~ line 69 ~ response", response)
+            return response.data;
+        } catch (e: any) {
+            if (e.code === "ERR_NETWORK") {
+                Alert.alert(e.message)
+            }
+            return rejectWithValue(e?.response)
+        }
+    })
+export const transferJobList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
+    (JOB + "/TransferJobList", async (params, { rejectWithValue }) => {
+        try {
+            console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
+            // console.log('p000000000000', ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
+            const response = await axiosClient.get(ApiConstants.TRANSFERJOB + `?page=${params.page}&search=${params.search}`)
+            console.log("🚀 ~ file: jobListSlice.ts ~ line 69 ~ response", response)
+            return response.data;
+        } catch (e: any) {
+            if (e.code === "ERR_NETWORK") {
+                Alert.alert(e.message)
+            }
+            return rejectWithValue(e?.response)
+        }
+    })
+export const updateTransferJobList = createAsyncThunk<JobDetailsData, paramsTypes, { rejectValue: apiErrorTypes }>
+    (JOB + "/updateTransferJobList", async (params, { rejectWithValue }) => {
+        let obj = {
+            group: params.group,
+            job: params.job,
+        }
+        try {
+            console.log(ApiConstants.TRANSFERJOB, { obj })
+            const response = await axiosClient.post(ApiConstants.TRANSFERJOB, obj)
+            console.log('data...........=====', { response: response })
+            return response.data
+        } catch (e: any) {
+            if (e.code === "ERR_NETWORK") {
+                Alert.alert(e.message)
+            }
+            return rejectWithValue(e?.response)
+        }
+    })
+
 const jobListSlice = createSlice({
     name: JOB,
     initialState,
@@ -260,6 +313,8 @@ const jobListSlice = createSlice({
             state.isLoading = false
             state.error = ''
         });
+
+        //recent job list
         builder.addCase(recentJobList.pending, state => {
             state.isLoading = true
             state.error = ''
@@ -274,6 +329,55 @@ const jobListSlice = createSlice({
             state.error = ''
         });
         builder.addCase(recentJobList.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = ''
+        });
+        //update tranfer job
+        builder.addCase(updateTransferJobList.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(updateTransferJobList.fulfilled, (state, action) => {
+            state.isLoading = false
+        });
+        builder.addCase(updateTransferJobList.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = ''
+        });
+
+        //tranferjob list
+        builder.addCase(transferJobList.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(transferJobList.fulfilled, (state, action) => {
+            state.isLoading = false
+            let tempArray = action.meta.arg.page == 1 ? action.payload : {
+                ...action.payload,
+                results: [...current(state.jobListData?.results), ...action.payload?.results]
+            }
+            state.jobListData = action.meta.arg.page == 1 ? action.payload : tempArray
+            state.error = ''
+        });
+        builder.addCase(transferJobList.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = ''
+        });
+        //recentTransferJobList
+        builder.addCase(recentTransferJobList.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(recentTransferJobList.fulfilled, (state, action) => {
+            state.isLoading = false
+            let tempArray = action.meta.arg.page == 1 ? action.payload : {
+                ...action.payload,
+                results: [...current(state.jobListData?.results), ...action.payload?.results]
+            }
+            state.jobListData = action.meta.arg.page == 1 ? action.payload : tempArray
+            state.error = ''
+        });
+        builder.addCase(recentTransferJobList.rejected, (state, action) => {
             state.isLoading = false
             state.error = ''
         });

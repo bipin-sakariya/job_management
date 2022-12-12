@@ -27,7 +27,7 @@ const InspectorDrawerBtn = [
 ]
 const GroupManagerDrawerBtn = [
     { btnTitle: strings.drawer_Group, image: ImagesPath.group_icon, route: 'UsersGroupsScreen' },
-    { btnTitle: strings.drawer_TransferJob, image: ImagesPath.report_icon, route: 'ReportGeneratorScreen' },
+    { btnTitle: strings.drawer_TransferJob, image: ImagesPath.report_icon, route: 'TransferJobListScreen' },
     { btnTitle: strings.drawer_Formlist, image: ImagesPath.form_icon, route: 'FormScreen' },
 ]
 
