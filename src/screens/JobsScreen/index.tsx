@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import { DrawerActions } from '@react-navigation/native';
+import { DrawerActions, useIsFocused } from '@react-navigation/native';
 import { styles } from './styles';
 import { ButtonTab, Container, CustomBottomSheet, Header, JobListComponent } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
@@ -10,7 +10,15 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { ListDataProps } from '../../components/CustomBottomSheet';
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
-import { RootState, useAppSelector } from '../../hooks/reduxHooks';
+import { RootState, useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { JobDetailsData, jobList, jobStatusWiseList } from '../../redux/slices/AdminSlice/jobListSlice';
+import moment from 'moment';
+
+interface jobListParams {
+    page?: number,
+    search?: string,
+    status?: string
+}
 
 const data = [
     { id: 1, title: strings.all, selected: true },
@@ -46,13 +54,20 @@ const JobData = [
     }
 ]
 
+
+
 const JobsScreen = () => {
     const navigation = useCustomNavigation('JobsScreen')
     const refRBSheet = useRef<RBSheet | null>(null);
 
     const [selectedItem, setSelectedItem] = useState<ListDataProps | undefined>(undefined);
-    const [page, setPage] = useState(1)
+
     const [btn, setBtn] = useState({ open: true, close: false })
+    const isFocus = useIsFocused()
+    const dispatch = useAppDispatch();
+
+    const [page, setPage] = useState(1);
+    const [openJobList, setOpenJobList] = useState<JobDetailsData[]>([])
 
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
     useEffect(() => {
@@ -60,8 +75,31 @@ const JobsScreen = () => {
         setSelectedItem(defaultSelected)
     }, [])
 
+    useEffect(() => {
+        if (isFocus)
+            console.log("useeffect", btn)
+        JobListApiCall(page)
+
+    }, [isFocus, btn])
+
+    const JobListApiCall = (page: number) => {
+        let params: jobListParams = {
+            page: page,
+            search: '',
+            status: btn.open ? 'open' : 'close'
+        }
+        dispatch(jobStatusWiseList(params)).unwrap().then((res) => {
+            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+            setOpenJobList(res.results)
+            // setPage(page + 1)
+        }).catch((error) => {
+            console.log({ error });
+        })
+    }
+
     return (
         <View style={globalStyles.container}>
+            {/* {console.log({ openJobList })} */}
             <Header
                 headerLeftComponent={
                     <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
@@ -99,10 +137,18 @@ const JobsScreen = () => {
             <Container>
                 <ButtonTab btnOneTitle={strings.open} btnTwoTitle={strings.close} setBtn={setBtn} btnValue={btn} onReset={setPage} />
                 <FlatList
-                    data={JobData}
-                    renderItem={({ item, index }) => (
-                        <JobListComponent item={item} index={index} />
-                    )}
+                    data={openJobList}
+                    renderItem={({ item, index }) => {
+                        console.log({ data: openJobList[index].created_at })
+                        const isDateVisible = index != 0 ? moment(openJobList[index].created_at).format('ll') == moment(openJobList[index - 1].created_at).format('ll') ? false : true : true
+                        return (
+                            <JobListComponent item={item} index={index} isDateVisible={isDateVisible} />
+                        )
+
+                    }}
+                    onEndReached={() => {
+                        console.log("On reach call");
+                    }}
                     showsVerticalScrollIndicator={false}
                 />
             </Container>

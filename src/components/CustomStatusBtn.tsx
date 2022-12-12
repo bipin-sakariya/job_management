@@ -6,7 +6,7 @@ import fonts from '../styles/Fonts';
 import FontSizes from '../styles/FontSizes';
 
 interface CustomStatusBtn {
-    title: string,
+    title?: string,
     txtStyle?: TextStyle
 }
 const CustomStatusBtn = (props: CustomStatusBtn & TouchableOpacityProps) => {
