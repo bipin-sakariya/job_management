@@ -216,14 +216,7 @@ const JobsScreen = () => {
                         console.log("On reach call");
                     }}
                     showsVerticalScrollIndicator={false}
-                    // style={{ marginBottom: Platform.OS == "ios" ? wp(28) : wp(22) }}
-                    data={dataaa}
-                    renderItem={({ item, index }) => {
-                        const isDateVisible = index != 0 ? dataaa[index].data == dataaa[index - 1].data ? false : true : true
-                        return (
-                            <JobListComponent item={item} index={index} isDateVisible={isDateVisible} />
-                        )
-                    }}
+                // style={{ marginBottom: Platform.OS == "ios" ? wp(28) : wp(22) }}
                 />
             </Container>
             <CustomBottomSheet
