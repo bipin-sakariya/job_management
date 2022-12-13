@@ -55,7 +55,7 @@ const SignBillDetailScreen = () => {
             },
             validationSchema: CreateGroupValidationSchema,
             onSubmit: values => {
-                Alert.alert("group create")
+                Alert.alert(strings.CreateGroup)
             }
         })
     return (

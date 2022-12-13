@@ -256,7 +256,7 @@ const ReportGeneratorScreen = () => {
                 if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                     downloadFile()
                 } else {
-                    Alert.alert('Permission Denied!', 'You need to give storage permission to download the file');
+                    Alert.alert(strings.permission_denied, strings.storage_permission);
                 }
             } catch (err) {
                 console.warn(err);

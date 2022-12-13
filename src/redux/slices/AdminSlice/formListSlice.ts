@@ -29,7 +29,7 @@ interface InitialState {
 
 interface paramsTypes {
     id?: number
-    data?: FormData,
+    data?: FormDataTypes,
     page?: number,
     name?: string,
     bill?: number[],
@@ -106,14 +106,9 @@ export const formDelete = createAsyncThunk<string, number, { rejectValue: apiErr
 })
 
 export const formCreate = createAsyncThunk<FormDataTypes, paramsTypes, { rejectValue: apiErrorTypes }>(FORM + "/formCreate", async (params, { rejectWithValue }) => {
-    let obj = {
-        name: params.name,
-        bill: params.bill,
-        is_sign: params.is_sign
-    }
     try {
-        console.log(ApiConstants.FORMS, { obj })
-        const response = await axiosClient.post(ApiConstants.FORMS, obj)
+        console.log(ApiConstants.FORMS, { params })
+        const response = await axiosClient.post(ApiConstants.FORMS, params)
         console.log('data...........=====', { response: response })
         return response.data
     } catch (e: any) {

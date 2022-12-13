@@ -215,4 +215,13 @@ export const eng = {
 
     start_date: 'Start date',
     end_date: 'End date',
+    apply: 'Apply',
+    profile_pic_required: 'Please select your profile picture.',
+    data_required: 'Please enter data',
+    permission_denied: 'Permission Denied!',
+    storage_permission: 'You need to give storage permission to download the file',
+    unable_to_open_setting: 'Unable to open settings',
+    location_permission_denied: 'Location permission denied',
+    group_created: 'group created.',
+    recently_assigned_jobs: 'Recently assigned jobs'
 }

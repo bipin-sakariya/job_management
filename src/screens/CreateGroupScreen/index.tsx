@@ -206,10 +206,11 @@ const CreateGroupScreen = () => {
         member: number[],
         forms: number[]
     }) => {
+        console.log("VALUE--->", values);
+
         if (!imageUrl) {
-            Alert.alert('Alert', 'Please select your profile picture.')
+            Alert.alert(strings.profile_pic_required)
         } else {
-            console.log('data=========>', {})
             let data = new FormData()
             let images = {
                 uri: imageUrl,
@@ -224,6 +225,8 @@ const CreateGroupScreen = () => {
             data.append("manager", values.groupManager.id)
             data.append("inspector", values.inspector.id)
             finalArray.map((_member) => {
+                console.log({ _member });
+
                 // data.append()
                 data.append("member", _member)
             })

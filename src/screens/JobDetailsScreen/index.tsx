@@ -271,7 +271,7 @@ const JobDetailsScreen = () => {
                         <CustomTextInput
                             title={strings.jobId}
                             container={{ marginBottom: wp(5) }}
-                            value={jobDetails.id.toString()}
+                            value={`${jobDetails.id}`}
                             // editable={isEdit}
                             onChangeText={(text) => { }}
                         />
@@ -313,7 +313,7 @@ const JobDetailsScreen = () => {
                                                 onPress={() => {
                                                     setLoading(true)
                                                     const pdfName = item.url.split(/[#?]/)[0].split('/').pop().split('.')[0];
-                                                    const extension = item.url.split(/[#?]/)[0].split(".").pop().trim();;
+                                                    const extension = item.url.split(/[#?]/)[0].split(".").pop().trim();
                                                     const localFile = `${RNFS.DocumentDirectoryPath}/${pdfName}.${extension}`;
                                                     const options = {
                                                         fromUrl: item.url,

@@ -176,8 +176,7 @@ const GroupDetailScreen = () => {
         isSetAllForm(formResult)
 
     }, [groupDetails.member_details, isUser, formListData.results])
-    console.log({ isUser })
-    console.log({ isMember })
+
     const deleteGroupData = (id: number) => {
 
         const deleteGroupData = (id: number) => {
@@ -299,7 +298,7 @@ const GroupDetailScreen = () => {
 
         ) => {
             if (!imageUrl) {
-                Alert.alert('Alert', 'Please select your profile picture.')
+                Alert.alert(strings.profile_pic_required)
             } else {
                 let data = new FormData()
                 let images = {
@@ -448,37 +447,39 @@ const GroupDetailScreen = () => {
                             }}
                             countTitle={strings.people}
                         />
-                        {isEditable ?
-                            <MultileSelectDropDown
-                                disabled={!isEditable}
-                                setIsVisible={setFormListVisible}
-                                isVisible={formListVisible}
-                                data={setAllForm}
-                                title={strings.GroupForms}
-                                setSelectedMembers={(data: DataTypes[]) => {
-                                    setSelectedFormsData(data)
-                                    setFieldValue('forms', data)
-                                    // console.log('setfield value', { data, set })
-                                }}
-                                countTitle={strings.Forms}
-                                container={{ marginVertical: heightPercentageToDP(2) }}
-                            />
-                            :
-                            <CustomDetailsComponent
-                                title={strings.GroupForms}
-                                detailsContainerStyle={{ marginVertical: wp(5) }}
-                                bottomComponent={
-                                    <View style={[globalStyles.rowView, { flexWrap: "wrap", alignItems: "center" }]}>
-                                        {groupDetails?.form_details?.map((item, index) => {
-                                            return (
-                                                <View style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, borderRadius: wp(2) }]}>
-                                                    <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14, color: colors.dark_blue1_color }]}>{item?.name}</Text>
-                                                </View>
-                                            )
-                                        })}
-                                    </View>
-                                }
-                            />}
+                        {
+                            isEditable ?
+                                <MultileSelectDropDown
+                                    disabled={!isEditable}
+                                    setIsVisible={setFormListVisible}
+                                    isVisible={formListVisible}
+                                    data={setAllForm}
+                                    title={strings.GroupForms}
+                                    setSelectedMembers={(data: DataTypes[]) => {
+                                        setSelectedFormsData(data)
+                                        setFieldValue('forms', data)
+                                        // console.log('setfield value', { data, set })
+                                    }}
+                                    countTitle={strings.Forms}
+                                    container={{ marginVertical: heightPercentageToDP(2) }}
+                                />
+                                :
+                                <CustomDetailsComponent
+                                    title={strings.GroupForms}
+                                    detailsContainerStyle={{ marginVertical: wp(5) }}
+                                    bottomComponent={
+                                        <View style={[globalStyles.rowView, { flexWrap: "wrap", alignItems: "center" }]}>
+                                            {groupDetails?.form_details?.map((item, index) => {
+                                                return (
+                                                    <View style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, borderRadius: wp(2) }]}>
+                                                        <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14, color: colors.dark_blue1_color }]}>{item?.name}</Text>
+                                                    </View>
+                                                )
+                                            })}
+                                        </View>
+                                    }
+                                />
+                        }
                         {/* <CustomDetailsComponent
                         title={strings.GroupForms}
                         detailsContainerStyle={{ marginVertical: wp(5) }}
@@ -519,15 +520,17 @@ const GroupDetailScreen = () => {
                                 </>
                             }
                         />
-                        {isEditable && <CustomBlackButton
-                            title={strings.CreateGroup}
-                            image={ImagesPath.plus_white_circle_icon}
-                            onPress={() => {
-                                handleSubmit()
-                            }}
-                        />}
-                    </KeyboardAwareScrollView>
-                </Container>
+                        {
+                            isEditable && <CustomBlackButton
+                                title={strings.CreateGroup}
+                                image={ImagesPath.plus_white_circle_icon}
+                                onPress={() => {
+                                    handleSubmit()
+                                }}
+                            />
+                        }
+                    </KeyboardAwareScrollView >
+                </Container >
                 <CustomDropdown
                     componentRef={menuRef}
                     dropdownData={optionData}

@@ -208,8 +208,9 @@ export const recentTransferJobList = createAsyncThunk<JobDataListProps, paramsTy
             return rejectWithValue(e?.response)
         }
     })
+
 export const transferJobList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
-    (JOB + "/TransferJobList", async (params, { rejectWithValue }) => {
+    (JOB + "/transferJobList", async (params, { rejectWithValue }) => {
         try {
             console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
             // console.log('p000000000000', ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
@@ -223,6 +224,7 @@ export const transferJobList = createAsyncThunk<JobDataListProps, paramsTypes, {
             return rejectWithValue(e?.response)
         }
     })
+
 export const updateTransferJobList = createAsyncThunk<JobDetailsData, paramsTypes, { rejectValue: apiErrorTypes }>
     (JOB + "/updateTransferJobList", async (params, { rejectWithValue }) => {
         let obj = {

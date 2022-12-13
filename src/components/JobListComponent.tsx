@@ -15,12 +15,13 @@ import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { strings } from '../languages/localizedStrings';
 import { JobDetailsData } from '../redux/slices/AdminSlice/jobListSlice';
 import { convertDate } from '../utils/screenUtils';
+import CustomBlackButton from './CustomBlackButton';
 
 const JobListComponent = ({ item, index, isDateVisible }: { item: JobDetailsData, index: number, isDateVisible: boolean }) => {
     const navigation = useCustomNavigation('JobsScreen')
 
-
     const [isModelVisible, setIsModelVisible] = useState(false)
+
     LocaleConfig.locales['hebrew'] = {
         monthNames: ['יָנוּאָר', 'פברואר', 'מרץ', 'אַפּרִיל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'סֶפּטֶמבֶּר', 'אוֹקְטוֹבֶּר', 'נוֹבֶמבֶּר', 'דֵצֶמבֶּר'],
         monthNamesShort: ['ינואר', 'פברואר', 'לְקַלְקֵל', 'אפריל', 'מאי', 'מאי', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
@@ -101,9 +102,10 @@ const JobListComponent = ({ item, index, isDateVisible }: { item: JobDetailsData
                     <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{convertDate(item.created_at)}</Text>
                 </View>}
                 {index == 0 &&
-                    <TouchableOpacity onPress={() => {
-                        setIsModelVisible(true)
-                    }} style={{ padding: wp(1.5) }}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            setIsModelVisible(true)
+                        }} style={{ padding: wp(1.5) }}>
                         <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle, { fontFamily: fonts.FONT_POP_SEMI_BOLD, paddingHorizontal: 0 }]}>{strings.date}</Text>
                     </TouchableOpacity>}
             </View>
@@ -148,6 +150,9 @@ const JobListComponent = ({ item, index, isDateVisible }: { item: JobDetailsData
                                 textDayFontFamily: fonts.FONT_POP_REGULAR,
                                 calendarBackground: colors.calendar_Bg,
                             }}
+                        />
+                        <CustomBlackButton
+                            title={strings.apply}
                         />
                     </View>
                 }

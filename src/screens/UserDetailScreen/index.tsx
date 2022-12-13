@@ -109,7 +109,8 @@ const UserDetailScreen = () => {
         dispatch(deleteUser(userId)).unwrap().then((res) => {
             navigation.goBack()
         }).catch((error) => {
-            Alert.alert("some thing went wrong")
+            console.log({ error });
+
         })
     }
 

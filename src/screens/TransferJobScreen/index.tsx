@@ -1,4 +1,4 @@
-import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, Header } from '../../components'
@@ -9,9 +9,7 @@ import { styles } from './styles'
 import { strings } from '../../languages/localizedStrings'
 import { colors } from '../../styles/Colors'
 import CustomOneItemSelect from '../../components/CustomOneItemSelect'
-import fonts from '../../styles/Fonts'
-import FontSizes from '../../styles/FontSizes'
-import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
+import { useAppDispatch } from '../../hooks/reduxHooks'
 import { useIsFocused, useRoute } from '@react-navigation/native'
 import { GroupData, groupList, MemberDetailsProps } from '../../redux/slices/AdminSlice/groupListSlice'
 import { updateTransferJobList } from '../../redux/slices/AdminSlice/jobListSlice'
@@ -20,11 +18,6 @@ import { RootRouteProps } from '../../types/RootStackTypes'
 interface groupListParams {
     page?: number,
     search?: string,
-}
-
-interface jobvalues {
-    group: number
-    job: number
 }
 
 export interface GroupParams {
@@ -68,38 +61,24 @@ export interface GroupParams {
 
 const TransferJobScreen = () => {
     const navigation = useCustomNavigation('TransferJobScreen');
+    const dispatch = useAppDispatch();
+    const isFocus = useIsFocused()
+    const route = useRoute<RootRouteProps<'TransferJobScreen'>>();
+
     const [isModelVisible, setIsModelVisible] = useState(false)
-    // const data = [
-    //     { id: 1, title: 'titljbhjbgjhbgjk1', selected: false },
-    //     { id: 2, title: 'title1', selected: false },
-    //     { id: 3, title: 'title1', selected: false },
-    //     { id: 4, title: 'title1', selected: false },
-    //     { id: 5, title: 'title1', selected: false },
-    //     { id: 6, title: 'title1', selected: false },
-    //     { id: 7, title: 'title1', selected: false },
-    //     { id: 8, title: 'title1', selected: false },
-    //     { id: 9, title: 'title1', selected: false },
-    //     { id: 10, title: 'title1', selected: false },
-    // ]
     const [jobData, setJobData] = useState<GroupData[]>([])
     const [page, setPage] = useState(1)
     const [finalJobList, setFinaljobList] = useState<GroupParams[]>([])
 
-    const dispatch = useAppDispatch();
-    const isFocus = useIsFocused()
-    const route = useRoute<RootRouteProps<'TransferJobScreen'>>();
-    const { groupListData } = useAppSelector(state => state.groupList)
-
-    console.log('route=========>', { route })
-
-
     useEffect(() => {
         if (isFocus)
             groupListApiCall(page)
+
         return () => {
             setPage(1)
         }
     }, [isFocus])
+
     const groupListApiCall = (page: number) => {
         let params: groupListParams = {
             page: page,
@@ -116,7 +95,6 @@ const TransferJobScreen = () => {
         })
     }
 
-
     useEffect(() => {
         const findData: GroupParams[] = jobData.map((i: GroupData) => {
             return {
@@ -126,36 +104,30 @@ const TransferJobScreen = () => {
             }
         })
         setFinaljobList(findData)
-
     }, [jobData])
 
-
     const groupId: GroupParams | undefined = finalJobList.find((i) => i.selected == true)
-    console.log('groupId', { groupId })
-
 
     const transferJob = () => {
         let params = {
             group: groupId?.id,
             job: route.params.jobId,
         }
-        console.log({ params })
+
         dispatch(updateTransferJobList(params)).unwrap().then((res) => {
             setIsModelVisible(false)
             navigation.goBack()
-            // navigation.goBack()
         }).catch((e) => {
             console.log({ error: e });
-
         })
     }
 
     const renderItem = ({ item, index }: { item: GroupParams, index: number }) => {
-        { console.log('selected=====>', { item }) }
         return (
             <CustomOneItemSelect item={item} data={finalJobList} onSetData={setFinaljobList} />
         )
     }
+
     return (
         <View style={globalStyles.container}>
             {/* {console.log({ finalJobList })} */}

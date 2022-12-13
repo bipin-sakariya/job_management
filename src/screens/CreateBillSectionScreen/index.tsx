@@ -71,7 +71,7 @@ const CreateBillSectionScreen = () => {
             setCountingError(true)
         }
         else if (!imageUrl && type == "sign") {
-            Alert.alert('Alert', 'Please select your profile picture.')
+            Alert.alert(strings.profile_pic_required)
         }
         else {
             var data = new FormData()

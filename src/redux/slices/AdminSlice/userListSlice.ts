@@ -2,6 +2,7 @@ import { AnyAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { Alert } from "react-native";
 import { ApiConstants } from "../../../config/ApiConstants";
 import { axiosClient } from "../../../config/Axios";
+import { FormDataTypes } from "./formListSlice";
 
 export interface UserData {
     id: number
@@ -50,7 +51,7 @@ export interface inspectorListProps {
 
 interface paramsTypes {
     id?: number
-    data?: FormData,
+    data?: FormDataTypes,
     role?: string
 }
 interface initialState {
