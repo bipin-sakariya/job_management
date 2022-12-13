@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, Image, FlatList, TextInput, ActivityIndicator } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { DrawerActions, useIsFocused } from '@react-navigation/native';
 import { styles } from './styles';
@@ -13,11 +13,14 @@ import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { RootState, useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { JobDetailsData, jobList, jobStatusWiseList } from '../../redux/slices/AdminSlice/jobListSlice';
 import moment from 'moment';
+import { GroupData, groupList } from '../../redux/slices/AdminSlice/groupListSlice';
+import { GroupParams } from '../TransferJobScreen';
 
 interface jobListParams {
     page?: number,
     search?: string,
-    status?: string
+    status?: string,
+    id?: number
 }
 
 const data = [
@@ -60,46 +63,97 @@ const JobsScreen = () => {
     const navigation = useCustomNavigation('JobsScreen')
     const refRBSheet = useRef<RBSheet | null>(null);
 
-    const [selectedItem, setSelectedItem] = useState<ListDataProps | undefined>(undefined);
+    const [selectedItem, setSelectedItem] = useState<GroupParams | undefined>(undefined);
 
     const [btn, setBtn] = useState({ open: true, close: false })
     const isFocus = useIsFocused()
     const dispatch = useAppDispatch();
 
     const [page, setPage] = useState(1);
+    const [groupPage, setGroupPage] = useState(1)
     const [openJobList, setOpenJobList] = useState<JobDetailsData[]>([])
+    const [isSearch, setIsSearch] = useState(false)
+    const [text, setText] = useState("");
+    const [isFooterLoading, setIsFooterLoading] = useState<boolean>(false)
+    const [groupData, setGroupData] = useState<GroupData[]>([])
+    const [finalGroupData, setfinalGroupList] = useState<GroupParams[]>([])
 
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
+    const { jobListData } = useAppSelector(state => state.jobList)
+    const { groupListData } = useAppSelector(state => state.groupList)
     useEffect(() => {
-        let defaultSelected = data.find((i) => i.selected == true)
+        let defaultSelected = finalGroupData.find((i) => i.selected == true)
         setSelectedItem(defaultSelected)
     }, [])
 
     useEffect(() => {
         if (isFocus)
             console.log("useeffect", btn)
-        JobListApiCall(page)
-
+        JobListApiCall(page, text)
+        return () => {
+            setPage(1)
+        }
     }, [isFocus, btn])
 
-    const JobListApiCall = (page: number) => {
+    useEffect(() => {
+        let params = {
+            search: '',
+            page: groupPage
+        }
+        // setIsFooterLoading(true)
+        dispatch(groupList(params)).unwrap().then((res) => {
+            // setIsFooterLoading(false) setPage(page + 1)
+            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+            setGroupData(res.results)
+            setGroupPage(groupPage + 1)
+        }).catch((error) => {
+            console.log({ error });
+        })
+    }, [isFocus, btn])
+
+    const JobListApiCall = (page: number, input?: string) => {
         let params: jobListParams = {
             page: page,
-            search: '',
-            status: btn.open ? 'open' : 'close'
+            search: input,
+            status: btn.open ? 'open' : 'close',
+            id: selectedItem?.id
         }
         dispatch(jobStatusWiseList(params)).unwrap().then((res) => {
             console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
             setOpenJobList(res.results)
-            // setPage(page + 1)
+            if (res.next && !!input) {
+                setPage(page + 1)
+                setOpenJobList(res.results)
+            }
+            // else {
+            //     setOpenJobList(res.results)
+            //     setPage(page + 1)
+            // }
+            setPage(page + 1)
         }).catch((error) => {
             console.log({ error });
         })
     }
 
+    useEffect(() => {
+        const findData: GroupParams[] = groupData.map((i: GroupData) => {
+            return {
+                ...i,
+                user_name: i.name,
+                selected: false,
+            }
+        })
+        setfinalGroupList(findData)
+
+    }, [groupData])
+    console.log({ finalGroupData })
+
+    const groupId: GroupParams | undefined = finalGroupData.find((i) => i.selected == true)
+    console.log('groupId', { data: selectedItem?.id })
+
     return (
         <View style={globalStyles.container}>
-            {/* {console.log({ openJobList })} */}
+            {/* {console.log('data=============', { selectedItem })} */}
             <Header
                 headerLeftComponent={
                     <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
@@ -108,15 +162,13 @@ const JobsScreen = () => {
                 }
                 headerCenterComponent={
                     <TouchableOpacity onPress={() => refRBSheet.current?.open()} activeOpacity={1} style={globalStyles.rowView}>
-                        <Text style={styles.jobTypeTxt}>{selectedItem?.title}</Text>
+                        <Text style={styles.jobTypeTxt}>{selectedItem?.name}</Text>
                         <Image source={ImagesPath.down_icon} style={styles.downIcon} />
                     </TouchableOpacity>
                 }
                 headerRightComponent={
                     <View style={globalStyles.rowView}>
-                        <TouchableOpacity onPress={() => {
-                            // navigation.navigate('ReportGeneratorScreen')
-                        }} style={{ marginRight: wp(3) }}>
+                        <TouchableOpacity onPress={() => setIsSearch(!isSearch)} style={{ marginRight: wp(3) }}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                         {
@@ -134,7 +186,28 @@ const JobsScreen = () => {
                     </View>
                 }
             />
+
             <Container>
+                {isSearch &&
+                    <View style={[styles.searchinputview]}>
+                        <Image source={ImagesPath.search_icon} style={styles.searchviewimage} />
+                        <TextInput
+                            style={[styles.searchinputtext]}
+                            placeholder={strings.searchHere}
+                            onChangeText={(text) => {
+                                setText(text)
+                                JobListApiCall(page, text)
+                            }}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
+                        />
+                        <TouchableOpacity style={[globalStyles.rowView, {}]} onPress={() => { setIsSearch(false) }}>
+                            <Image source={ImagesPath.close_icon} style={globalStyles.backArrowStyle} />
+                            <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle]}></Text>
+                        </TouchableOpacity>
+
+                    </View>
+                }
                 <ButtonTab btnOneTitle={strings.open} btnTwoTitle={strings.close} setBtn={setBtn} btnValue={btn} onReset={setPage} />
                 <FlatList
                     data={openJobList}
@@ -148,14 +221,25 @@ const JobsScreen = () => {
                     }}
                     onEndReached={() => {
                         console.log("On reach call");
+                        if (jobListData.next) {
+                            JobListApiCall(page)
+                        }
                     }}
-                    showsVerticalScrollIndicator={false}
+                    onEndReachedThreshold={0.1}
+                    ListFooterComponent={() => {
+                        return (
+                            <>
+                                {isFooterLoading && <ActivityIndicator size={'small'} />}
+                            </>
+                        )
+                    }}
                 />
             </Container>
             <CustomBottomSheet
                 ref={refRBSheet}
-                data={data}
+                data={finalGroupData}
                 onSelectedTab={(item) => {
+
                     setSelectedItem(item)
                     refRBSheet.current?.close()
                 }}

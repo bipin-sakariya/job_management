@@ -63,7 +63,7 @@ export interface GroupParams {
     manager: number,
     inspector: number,
     member: number[],
-    selected: boolean
+    selected?: boolean
 }
 
 const TransferJobScreen = () => {
@@ -84,6 +84,8 @@ const TransferJobScreen = () => {
     const [jobData, setJobData] = useState<GroupData[]>([])
     const [page, setPage] = useState(1)
     const [finalJobList, setFinaljobList] = useState<GroupParams[]>([])
+    const [text, setText] = useState("");
+    const [isSearch, setIsSearch] = useState(false)
 
     const dispatch = useAppDispatch();
     const isFocus = useIsFocused()
@@ -95,22 +97,27 @@ const TransferJobScreen = () => {
 
     useEffect(() => {
         if (isFocus)
-            groupListApiCall(page)
+            groupListApiCall(page, text)
         return () => {
             setPage(1)
         }
     }, [isFocus])
-    const groupListApiCall = (page: number) => {
+    const groupListApiCall = (page: number, input?: string) => {
         let params: groupListParams = {
             page: page,
-            search: ''
+            search: input
         }
         // setIsFooterLoading(true)
         dispatch(groupList(params)).unwrap().then((res) => {
             // setIsFooterLoading(false)
             console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-            setJobData(res.results)
-            setPage(page + 1)
+            if (res.next && !!input) {
+                setJobData(res.results)
+                setPage(page + 1)
+            } else {
+                setJobData(res.results)
+                // setPage(page + 1)
+            }
         }).catch((error) => {
             console.log({ error });
         })
@@ -171,12 +178,32 @@ const TransferJobScreen = () => {
                     </TouchableOpacity>
                 }
                 headerRightComponent={
-                    <TouchableOpacity >
+                    <TouchableOpacity onPress={() => { setIsSearch(!isSearch) }} >
                         <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                     </TouchableOpacity>
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
+                {isSearch &&
+                    <View style={[styles.searchinputview]}>
+                        <Image source={ImagesPath.search_icon} style={styles.searchviewimage} />
+                        <TextInput
+                            style={[styles.searchinputtext]}
+                            placeholder={strings.searchHere}
+                            onChangeText={(text) => {
+                                setText(text)
+                                groupListApiCall(page, text)
+                            }}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
+                        />
+                        <TouchableOpacity style={[globalStyles.rowView, {}]} onPress={() => { setIsSearch(false) }}>
+                            <Image source={ImagesPath.close_icon} style={globalStyles.backArrowStyle} />
+                            <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle]}></Text>
+                        </TouchableOpacity>
+
+                    </View>
+                }
                 <CustomModal
                     visible={isModelVisible} onRequestClose={() => { setIsModelVisible(false) }}
                     children={

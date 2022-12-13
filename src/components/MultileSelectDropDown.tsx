@@ -78,7 +78,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
 
             return _listItem
         })
-
+        props.setIsAllSign && props.setIsAllSign(false)
         props.onCount && props.onCount(newList?.filter(i => i.selected == true)?.length)
         props.setSelectedMembers && props.setSelectedMembers(newList?.filter(i => i.selected))
         setList(newList)
@@ -105,6 +105,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
 
     return (
         <>
+            {console.log({ data: props.setIsAllSign })}
             <View style={[styles.textInputContainer, props.container]}>
                 <View style={styles.titleContainer}>
                     <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{props.title}</Text>

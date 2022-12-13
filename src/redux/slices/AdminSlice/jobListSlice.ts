@@ -39,7 +39,8 @@ export interface JobDetailsData {
     status?: string,
     comment?: null,
     form?: undefined,
-    bill?: undefined
+    bill?: undefined,
+    // role: { id: number, title: string }
 }
 interface JobDataListProps {
     count: number,
@@ -242,6 +243,20 @@ export const updateTransferJobList = createAsyncThunk<JobDetailsData, paramsType
         }
     })
 
+export const updatejob = createAsyncThunk<string[], FormData, { rejectValue: apiErrorTypes }>(JOB + "/updateJob", async (params, { rejectWithValue }) => {
+    try {
+        console.log(ApiConstants.JOB)
+        const response = await axiosClient.patch(ApiConstants.JOB, params)
+        console.log('data...........=====', { response: response })
+        return response.data
+    } catch (e: any) {
+        if (e.code === "ERR_NETWORK") {
+            Alert.alert(e.message)
+        }
+        return rejectWithValue(e?.response)
+    }
+})
+
 const jobListSlice = createSlice({
     name: JOB,
     initialState,
@@ -378,6 +393,19 @@ const jobListSlice = createSlice({
             state.error = ''
         });
         builder.addCase(recentTransferJobList.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = ''
+        });
+
+        //updatejob
+        builder.addCase(updatejob.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(updatejob.fulfilled, (state, action) => {
+            state.isLoading = false
+        });
+        builder.addCase(updatejob.rejected, (state, action) => {
             state.isLoading = false
             state.error = ''
         });

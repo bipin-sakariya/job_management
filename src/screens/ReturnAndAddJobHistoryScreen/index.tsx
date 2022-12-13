@@ -29,22 +29,22 @@ interface jobListParams {
     search?: string
 }
 
-const data = [
-    { title: 'Job Return', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobReturn, image: ImagesPath.demo1 },
-    { title: 'Job Transfer', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobTransfer, image: ImagesPath.demo2 },
-    { title: 'Job Transfer', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobTransfer, image: ImagesPath.demo1 },
-    { title: 'Job Partial', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobPartial, image: ImagesPath.demo2 },
-    { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.Open, image: ImagesPath.demo1 },
-    { title: 'Job Transfer', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobTransfer, image: ImagesPath.demo2 },
-]
-const JobData = [
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', date: "16 may 2022", button: strings.Open, status: strings.Open, image: ImagesPath.demo3 },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '15 ק"מ משם', date: "16 may 2022", button: strings.JobTransfer, status: strings.Open, image: ImagesPath.demo4 },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '15 ק"מ משם', date: "16 may 2022", button: strings.JobTransfer, status: strings.Open, image: ImagesPath.demo5 },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '20 ק"מ משם', date: "16 may 2022", button: strings.Open, status: strings.Open, image: ImagesPath.demo3 },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', date: "16 may 2022", button: strings.Open, status: strings.Open, image: ImagesPath.demo4 },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', date: "16 may 2022", button: strings.Open, status: strings.Open, image: ImagesPath.demo5 }
-]
+// const data = [
+//     { title: 'Job Return', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobReturn, image: ImagesPath.demo1 },
+//     { title: 'Job Transfer', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobTransfer, image: ImagesPath.demo2 },
+//     { title: 'Job Transfer', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobTransfer, image: ImagesPath.demo1 },
+//     { title: 'Job Partial', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobPartial, image: ImagesPath.demo2 },
+//     { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.Open, image: ImagesPath.demo1 },
+//     { title: 'Job Transfer', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobTransfer, image: ImagesPath.demo2 },
+// ]
+// const JobData = [
+//     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', date: "16 may 2022", button: strings.Open, status: strings.Open, image: ImagesPath.demo3 },
+//     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '15 ק"מ משם', date: "16 may 2022", button: strings.JobTransfer, status: strings.Open, image: ImagesPath.demo4 },
+//     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '15 ק"מ משם', date: "16 may 2022", button: strings.JobTransfer, status: strings.Open, image: ImagesPath.demo5 },
+//     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '20 ק"מ משם', date: "16 may 2022", button: strings.Open, status: strings.Open, image: ImagesPath.demo3 },
+//     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', date: "16 may 2022", button: strings.Open, status: strings.Open, image: ImagesPath.demo4 },
+//     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', date: "16 may 2022", button: strings.Open, status: strings.Open, image: ImagesPath.demo5 }
+// ]
 const ReturnAndAddJobHistoryScreen = () => {
     const navigation = useCustomNavigation('ReturnAndAddJobHistoryScreen');
     const route = useRoute<RootRouteProps<'ReturnAndAddJobHistoryScreen'>>();
@@ -160,6 +160,9 @@ const ReturnAndAddJobHistoryScreen = () => {
                             renderItem={renderItem}
                             showsHorizontalScrollIndicator={false}
                             horizontal
+                            onEndReached={() => {
+                                console.log('hello')
+                            }}
                             ItemSeparatorComponent={() => <View style={{ width: wp(3) }} />}
                         />
                     </View>
@@ -180,6 +183,11 @@ const ReturnAndAddJobHistoryScreen = () => {
                                 )
                             }}
                             showsVerticalScrollIndicator={false}
+
+                            onEndReached={() => {
+                                console.log('hello')
+                            }}
+                            onEndReachedThreshold={0.5}
                             style={{ marginTop: wp(2), }}
                             ItemSeparatorComponent={() => <View style={{ height: wp(3) }} />}
                         />

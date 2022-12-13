@@ -1,7 +1,7 @@
-import { I18nManager, Image, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
+import { I18nManager, Image, Platform, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
 import React from 'react';
 import { globalStyles } from '../styles/globalStyles';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../utils/ImagePaths';
 import fonts from '../styles/Fonts';
 import FontSizes from '../styles/FontSizes';
@@ -81,10 +81,20 @@ const styles = StyleSheet.create({
         maxWidth: wp(80),
     },
     dropDownShadowStyle: {
-        shadowColor: colors.black_opacity,
-        shadowOpacity: 5,
+        // shadowColor: colors.black_opacity,
+        // shadowOpacity: 5,
+        // shadowRadius: 6,
+        // shadowOffset: { height: 0, width: 0 },
+        // elevation: 5
+        backgroundColor: colors.white_color,
+        // borderTopLeftRadius: 25,
+        // borderTopRightRadius: 25,
+        // height: Platform.OS == "ios" ? hp(14) : hp(12.5),
+        shadowColor: colors.black,
+        shadowOpacity: 0.10,
         shadowRadius: 6,
         shadowOffset: { height: 0, width: 0 },
-        elevation: 5
+        elevation: 5,
+        borderTopWidth: 0,
     }
 })

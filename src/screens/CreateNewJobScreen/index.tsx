@@ -14,7 +14,13 @@ import { colors } from '../../styles/Colors'
 import { RootRouteProps } from '../../types/RootStackTypes'
 import { useRoute } from '@react-navigation/native'
 import CommonPdfView from '../../components/CommonPdfView'
-import { useAppSelector } from '../../hooks/reduxHooks'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
+import { updatejob } from '../../redux/slices/AdminSlice/jobListSlice'
+
+interface ValuesProps {
+    status: string;
+    id: number;
+}
 
 const CreateNewJobScreen = () => {
     const navigation = useCustomNavigation('CreateNewJobScreen')
@@ -22,6 +28,7 @@ const CreateNewJobScreen = () => {
     const { type } = route.params
     const { userData } = useAppSelector(state => state.userDetails)
     const refRBSheet = useRef<RBSheet | null>(null)
+    const dispatch = useAppDispatch()
 
     const [isModelVisible, setIsModelVisible] = useState(false)
     const [isurgent, setIsUrgent] = useState(false)
@@ -53,6 +60,25 @@ const CreateNewJobScreen = () => {
         }
 
     ]
+
+    // const createbills = (values: ValuesProps) => {
+
+    //         var data = new FormData()
+
+    //         data.append('id',)
+    //         data.append("type", type == 'material' ? "Material" : 'Sign')
+
+    //         console.log("🚀 ~ file: index.tsx ~ line 73 ~ createbills ~ data", data)
+
+    //         dispatch(updatejob(data)).unwrap().then((res) => {
+    //             console.log({ res: res });
+    //             navigation.navigate('BillListScreen', { billType: type })
+    //         }).catch((e) => {
+    //             console.log({ error: e });
+    //         })
+
+    // }
+
     return (
         <View style={globalStyles.container} >
             <Header
