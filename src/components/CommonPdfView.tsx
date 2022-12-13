@@ -18,9 +18,11 @@ interface CommonPdfViewProps {
 }
 
 interface itemDetails {
-    type: string
-    title: string
-    mb: string
+    id?: number
+    path: string,
+    type: string | undefined
+    mb: number | null
+    title: string | null
 }
 const CommonPdfView = (props: CommonPdfViewProps) => {
     return (
