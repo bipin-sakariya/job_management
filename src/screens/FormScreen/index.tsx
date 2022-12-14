@@ -8,7 +8,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { styles } from './styles'
 import { strings } from '../../languages/localizedStrings'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
-import { FormData, formList } from '../../redux/slices/AdminSlice/formListSlice'
+import { FormDataTypes, formList } from '../../redux/slices/AdminSlice/formListSlice'
 import { useIsFocused } from '@react-navigation/native'
 
 interface formListParams {
@@ -32,7 +32,7 @@ const FormScreen = () => {
             setPage(1)
         }
     }, [isFocus])
-    
+
     const formListApiCall = (page: number) => {
         let params: formListParams = {
             page: page,
@@ -62,7 +62,7 @@ const FormScreen = () => {
     //     })
     // }
 
-    const renderItem = ({ item, index }: { item: FormData, index: number }) => {
+    const renderItem = ({ item, index }: { item: FormDataTypes, index: number }) => {
         return (
             <CustomListView
                 item={item}

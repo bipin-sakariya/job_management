@@ -24,27 +24,27 @@ const BillCreateScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{strings.BillSection}</Text>
+                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{strings.billSection}</Text>
                     </TouchableOpacity>
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <CustomSubTitleWithImageComponent disabled title={strings.CreateMaterialBillSection} image={ImagesPath.receipt_icon} />
+                <CustomSubTitleWithImageComponent disabled title={strings.createMaterialBillSection} image={ImagesPath.receipt_icon} />
                 <CustomDashedComponent
                     image={ImagesPath.add_icon}
                     viewStyle={{ paddingVertical: wp(8) }}
                     imageStyle={styles.iconStyle}
                     textStyle={{ fontSize: FontSizes.EXTRA_LARGE_24 }}
                     onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: "material" }) }}
-                    title={strings.CreateMaterialBill} />
-                <CustomSubTitleWithImageComponent disabled viewStyle={{ marginTop: wp(2) }} title={strings.CreateSignBillsection} image={ImagesPath.receipt_icon} />
+                    title={strings.createMaterialBill} />
+                <CustomSubTitleWithImageComponent disabled viewStyle={{ marginTop: wp(2) }} title={strings.createSignBillsection} image={ImagesPath.receipt_icon} />
                 <CustomDashedComponent
                     image={ImagesPath.add_icon}
                     viewStyle={{ paddingVertical: wp(8) }}
                     imageStyle={styles.iconStyle}
                     textStyle={{ fontSize: FontSizes.EXTRA_LARGE_24 }}
                     onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: "sign" }) }}
-                    title={strings.CreateSignBill} />
+                    title={strings.createSignBill} />
             </Container>
         </View>
     )

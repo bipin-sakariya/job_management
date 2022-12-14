@@ -67,7 +67,8 @@ export const styles = StyleSheet.create({
     modalView: {
         width: wp(85),
         height: wp(60),
-        backgroundColor: 'white',
+        backgroundColor: colors.white,
+        alignSelf: 'center',
         borderRadius: wp(3),
         justifyContent: 'space-around',
         alignItems: "center",

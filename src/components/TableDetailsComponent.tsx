@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { InteractionManager, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -26,8 +26,9 @@ const TableDetailsComponent = ({ item, type, index }: TableDetailsComponentProps
                 } */}
                 <Text numberOfLines={1} style={styles.commonScammedTxt}>{item.name}</Text>
             </View>
-            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.qty}</Text>
-            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(12) }]}>{item.unit}</Text>
+            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.quantity}</Text>
+            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(12) }]}>{item.type_counting
+            }</Text>
         </View>
     )
 }

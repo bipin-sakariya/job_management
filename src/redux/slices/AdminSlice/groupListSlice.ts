@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { Alert } from "react-native";
 import { ApiConstants } from "../../../config/ApiConstants";
 import { axiosClient } from "../../../config/Axios";
+import { FormDataTypes } from "./formListSlice";
 
 
 export interface MemberDetailsProps {
@@ -40,7 +41,7 @@ export interface GroupData {
         updated_at: string
     }],
     total_member_in_group: string,
-    assign_jobs: string,
+    assign_jobs: [],
     created_at: string,
     updated_at: string,
     name: string,
@@ -115,7 +116,7 @@ const initialState: InitialState = {
             updated_at: ''
         }],
         total_member_in_group: '',
-        assign_jobs: '',
+        assign_jobs: [],
         created_at: '',
         updated_at: '',
         name: '',
@@ -150,7 +151,7 @@ export const groupList = createAsyncThunk<GroupDataProps, paramsTypes, { rejectV
         }
     })
 
-export const groupDelete = createAsyncThunk<string, number, { rejectValue: apiErrorTypes }>(GROUP + "/groupDelete", async (id, { rejectWithValue }) => {
+export const groupDelete = createAsyncThunk<number, number, { rejectValue: apiErrorTypes }>(GROUP + "/groupDelete", async (id, { rejectWithValue }) => {
     try {
         console.log(ApiConstants.GROUPLIST, id)
         const response = await axiosClient.delete(ApiConstants.GROUPLIST + id + '/')
@@ -242,7 +243,7 @@ const groupListSlice = createSlice({
                     updated_at: ''
                 }],
                 total_member_in_group: '',
-                assign_jobs: '',
+                assign_jobs: [],
                 created_at: '',
                 updated_at: '',
                 name: '',

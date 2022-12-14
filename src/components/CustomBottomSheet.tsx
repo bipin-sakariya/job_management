@@ -8,6 +8,8 @@ import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../utils/ImagePaths';
 import { strings } from '../languages/localizedStrings';
+import { GroupParams } from '../screens/TransferJobScreen';
+import { useEffect } from 'react';
 
 export interface ListDataProps {
     id: number,
@@ -16,19 +18,24 @@ export interface ListDataProps {
 }
 
 interface CustomBottomSheetProps {
-    data: ListDataProps[],
-    onSelectedTab: (item: ListDataProps) => void
+    data: GroupParams[],
+    onSelectedTab: (item: GroupParams) => void
 }
 
 const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSheetProps, ref: ForwardedRef<RBSheet>) => {
-    const [data, setData] = useState(props.data)
 
-    const onSelectes = (selected: number) => {
+    useEffect(() => {
+        setData(props.data)
+    }, [props.data])
+    const [data, setData] = useState(props.data)
+    const onSelectes = (finalIndex: number) => {
         let mainData = [...data]
-        let finalData = mainData.map((item, index) => {
-            if (index == selected) {
+        { console.log({ finalIndex }) }
+        let finalData = props.data.map((item, index) => {
+            { console.log({ mainData }) }
+            if (index == finalIndex) {
                 return {
-                    ...item, selected: item.selected ? false : true
+                    ...item, selected: true
                 }
             } else {
                 return {
@@ -40,8 +47,8 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
         props.onSelectedTab(selectedItem[0])
         setData(finalData)
     }
-
     return (
+
         <RBSheet
             ref={ref}
             closeOnDragDown={true}
@@ -57,7 +64,7 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
                     backgroundColor: "transparent",
                 },
                 draggableIcon: {
-                    backgroundColor: "#9E9E9E"
+                    backgroundColor: colors.gray_7
                 }
             }}>
             <View style={{ flex: 1 }}>
@@ -72,17 +79,18 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
                     <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                     <TextInput
                         style={[styles.textInputStyle, { textAlign: I18nManager.isRTL ? 'right' : 'left' }]}
-                        placeholder={strings.SearchHere}
-                        placeholderTextColor={'#666666'}
+                        placeholder={strings.searchHere}
+                        placeholderTextColor={colors.light_brown}
                     />
                 </View>
                 <FlatList
                     data={data}
                     renderItem={({ item, index }) => {
-                        console.log("🚀 ~ file: CustomBottomSheet.tsx ~ line 83 ~ CustomBottomSheet ~ item", item)
+                        // { console.log({ index }) }
+                        // console.log("🚀 ~ file: CustomBottomSheet.tsx ~ line 83 ~ CustomBottomSheet ~ item", item)
                         return (
                             <TouchableOpacity onPress={() => onSelectes(index)} style={styles.itemContainer}>
-                                <Text style={styles.itemTitleTxt}>{item.title}</Text>
+                                <Text style={styles.itemTitleTxt}>{item.name}</Text>
                                 <Image source={item.selected ? ImagesPath.check_icon : ImagesPath.unCheck_icon} style={styles.checkIcon} />
                             </TouchableOpacity>
                         )
@@ -124,6 +132,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp(2.5),
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        color: '#666666'
+        color: colors.light_brown
     }
 })

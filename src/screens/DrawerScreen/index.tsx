@@ -27,7 +27,7 @@ const InspectorDrawerBtn = [
 ]
 const GroupManagerDrawerBtn = [
     { btnTitle: strings.drawer_Group, image: ImagesPath.group_icon, route: 'UsersGroupsScreen' },
-    { btnTitle: strings.drawer_TransferJob, image: ImagesPath.report_icon, route: 'ReportGeneratorScreen' },
+    { btnTitle: strings.drawer_TransferJob, image: ImagesPath.report_icon, route: 'TransferJobListScreen' },
     { btnTitle: strings.drawer_Formlist, image: ImagesPath.form_icon, route: 'FormScreen' },
 ]
 
@@ -82,7 +82,7 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
                 navigation.reset({ index: 0, routes: [{ name: "AuthStack" }] })
             }} style={styles.logoutBtnStyle}>
                 <Image source={ImagesPath.logout_icon} style={styles.logoutBtn} />
-                <Text style={styles.logoutTxt}>{strings.LogOut}</Text>
+                <Text style={styles.logoutTxt}>{strings.logOut}</Text>
             </TouchableOpacity>
         </View>
     )

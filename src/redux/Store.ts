@@ -27,7 +27,6 @@ const reducers = combineReducers({
     mapData: MapSlice,
 })
 
-
 const rootReducer = (state: any, action: any) => {
     if (action.type == 'USER_LOGOUT') {
         storage.removeItem('persist:root')

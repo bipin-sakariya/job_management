@@ -48,7 +48,7 @@ const FillFormScreen = () => {
                     onChangeText={(text) => { }}
                 />
                 <CustomTextInput
-                    title={strings.TypeCounting}
+                    title={strings.typeCounting}
                     container={{}}
                     value={'Meter'}
                     onChangeText={(text) => { }}

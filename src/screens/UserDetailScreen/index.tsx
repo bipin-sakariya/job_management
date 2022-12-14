@@ -109,14 +109,15 @@ const UserDetailScreen = () => {
         dispatch(deleteUser(userId)).unwrap().then((res) => {
             navigation.goBack()
         }).catch((error) => {
-            Alert.alert("some thing went wrong")
+            console.log({ error });
+
         })
     }
 
     const optionData = [
-        { title: strings.Remove, onPress: () => { deleteUserData() }, imageSource: ImagesPath.bin_icon },
+        { title: strings.remove, onPress: () => { deleteUserData() }, imageSource: ImagesPath.bin_icon },
         {
-            title: strings.Edit, onPress: () => {
+            title: strings.edit, onPress: () => {
                 setIsEditable(true)
                 setVisible(false)
             }, imageSource: ImagesPath.edit_icon

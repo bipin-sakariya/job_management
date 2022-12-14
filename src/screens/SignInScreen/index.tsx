@@ -102,8 +102,8 @@ const SignInScreen = () => {
             <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'padding'}>
                 <Image source={ImagesPath.logo_of_job_managment} style={styles.appLogo} />
                 <View style={[{ paddingTop: wp(4), paddingBottom: wp(8), }]}>
-                    <Text style={styles.titleTxt}>{strings.Welcometo}</Text>
-                    <Text style={styles.titleTxt}>{strings.JobManagement}</Text>
+                    <Text style={styles.titleTxt}>{strings.welcomeTo}</Text>
+                    <Text style={styles.titleTxt}>{strings.jobManagement}</Text>
                 </View>
                 <CustomTextInput
                     title={strings.UserName}
@@ -134,7 +134,7 @@ const SignInScreen = () => {
                     <Text style={styles.forgetPassTxt}>{strings.Forgotpassword}</Text>
                 </TouchableOpacity>
                 <CustomBlackButton
-                    title={strings.Signin}
+                    title={strings.signIn}
                     onPress={() => handleSubmit()}
                     buttonStyle={{ marginVertical: wp(10) }}
                 />

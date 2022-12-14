@@ -4,7 +4,7 @@ import { ApiConstants } from "../../../config/ApiConstants";
 import { axiosClient } from "../../../config/Axios";
 import { billData } from "./billListSlice";
 
-export interface FormData {
+export interface FormDataTypes {
     id: number,
     bill: billData[],
     created_at: string,
@@ -17,19 +17,19 @@ interface FormDataProps {
     count: number,
     next?: string | null,
     previous?: string | null,
-    results: FormData[]
+    results: FormDataTypes[]
 }
 
 interface InitialState {
     isLoading: boolean
     error: object | string | undefined
     formListData: FormDataProps,
-    formDetails: FormData
+    formDetails: FormDataTypes
 }
 
 interface paramsTypes {
     id?: number
-    data?: FormData,
+    data?: FormDataTypes,
     page?: number,
     name?: string,
     bill?: number[],
@@ -79,7 +79,7 @@ export const formList = createAsyncThunk<FormDataProps, paramsTypes, { rejectVal
         }
     })
 
-export const formDetail = createAsyncThunk<FormData, number, { rejectValue: apiErrorTypes }>(FORM + "/formDetail", async (id, { rejectWithValue }) => {
+export const formDetail = createAsyncThunk<FormDataTypes, number, { rejectValue: apiErrorTypes }>(FORM + "/formDetail", async (id, { rejectWithValue }) => {
     try {
         console.log(ApiConstants.FORMS, id)
         const response = await axiosClient.get(ApiConstants.FORMS + id + '/')
@@ -105,15 +105,10 @@ export const formDelete = createAsyncThunk<string, number, { rejectValue: apiErr
     }
 })
 
-export const formCreate = createAsyncThunk<FormData, paramsTypes, { rejectValue: apiErrorTypes }>(FORM + "/formCreate", async (params, { rejectWithValue }) => {
-    let obj = {
-        name: params.name,
-        bill: params.bill,
-        is_sign: params.is_sign
-    }
+export const formCreate = createAsyncThunk<FormDataTypes, paramsTypes, { rejectValue: apiErrorTypes }>(FORM + "/formCreate", async (params, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.FORMS, { obj })
-        const response = await axiosClient.post(ApiConstants.FORMS, obj)
+        console.log(ApiConstants.FORMS, { params })
+        const response = await axiosClient.post(ApiConstants.FORMS, params)
         console.log('data...........=====', { response: response })
         return response.data
     } catch (e: any) {
@@ -124,7 +119,7 @@ export const formCreate = createAsyncThunk<FormData, paramsTypes, { rejectValue:
     }
 })
 
-export const formUpdate = createAsyncThunk<FormData, paramsTypes, { rejectValue: apiErrorTypes }>(FORM + "/formUpdate", async (params, { rejectWithValue }) => {
+export const formUpdate = createAsyncThunk<FormDataTypes, paramsTypes, { rejectValue: apiErrorTypes }>(FORM + "/formUpdate", async (params, { rejectWithValue }) => {
     try {
         console.log(ApiConstants.FORMS, params)
         const response = await axiosClient.patch(ApiConstants.FORMS + params.id + '/', params)

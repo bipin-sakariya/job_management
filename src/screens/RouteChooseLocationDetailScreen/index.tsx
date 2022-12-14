@@ -1,4 +1,4 @@
-import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, PermissionsAndroid, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomJobListComponent, CustomSubTitleWithImageComponent, Header } from '../../components'
@@ -11,7 +11,7 @@ import { colors } from '../../styles/Colors'
 import fonts from '../../styles/Fonts'
 import FontSizes from '../../styles/FontSizes'
 import Geocoder from 'react-native-geocoder';
-import { resetJobLocation, setJobLocation } from '../../redux/slices/MapSlice/MapSlice'
+import { manageMapRoutesReducer, setJobLocation } from '../../redux/slices/MapSlice/MapSlice'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { store } from '../../redux/Store'
 import Geolocation from '@react-native-community/geolocation'
@@ -19,54 +19,53 @@ import Geolocation from '@react-native-community/geolocation'
 const RouteChooseLocationDetailScreen = () => {
     const navigation = useCustomNavigation('RouteChooseLocationDetailScreen');
     const dispatch = useAppDispatch()
+
     const { job_location, routeList } = useAppSelector(state => state.mapData)
     const [selectedAddress, setSelectedAddress] = useState<string>('')
 
     const JobData = [
-        { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", status: "info" },
-        { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Return", status: "info" },
-        { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Transfer" },
-        { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '20 km away', date: "16 may 2022", button: "Open", status: "info" },
-        { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", status: "info" },
-        { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open" }
+        { id: 1, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", status: "info", coordinates: { latitude: 7.225252, longitude: 18.252152 } },
+        { id: 2, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Return", status: "info", coordinates: { latitude: 7.208756, longitude: 18.501446 } },
+        { id: 3, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Transfer", coordinates: { latitude: 3.948409, longitude: 18.471092 } },
+        { id: 4, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '20 km away', date: "16 may 2022", button: "Open", status: "info", coordinates: { latitude: 4.394123, longitude: 18.501446 } },
+        { id: 5, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", status: "info", coordinates: { latitude: 4.558415, longitude: 18.276076 } },
+        { id: 6, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", coordinates: { latitude: 4.659710, longitude: 18.201869 }, }
     ]
     const renderItem = ({ item, index }: any) => {
         return (
-            <CustomJobListComponent item={item} />
+            <CustomJobListComponent item={item} onPress={() => {
+                dispatch(manageMapRoutesReducer({ id: item?.id, address: item?.address, coordinates: item?.coordinates, description: item?.description }))
+                navigation.goBack()
+            }} />
         )
     }
 
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            console.log("job_location", store.getState().mapData.job_location)
-            if (store.getState().mapData.job_location) {
-                navigation.goBack()
-            }
-        });
-        return unsubscribe;
-    }, [navigation])
-
-
-    useEffect(() => {
-        let text = "How /are you doing today?";
-        const myArray = text.split("/");
-        console.log(myArray)
-        console.log(routeList)
-    }, [])
-
-    const getCurrentLocation = () => {
+    const getCurrentLocation = async () => {
         Geolocation.getCurrentPosition(
             position => {
-                console.log(position.coords)
+                console.log("getCurrentPosition", position.coords)
                 dispatch(setJobLocation({
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
                 }))
-                navigation.goBack()
+                Geocoder.geocodePosition({ lat: position?.coords?.latitude, lng: position?.coords?.longitude }).then((response: [{ formattedAddress: string }]) => {
+                    let params = {
+                        id: position.coords.latitude,
+                        coordinates: {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                        },
+                        address: response[0].formattedAddress,
+                        description: 'current location of user',
+                    }
+                    dispatch(manageMapRoutesReducer(params))
+                    navigation.goBack()
+                })
             },
             error => {
                 console.log(error.code, error.message);
-            }
+            },
+            { enableHighAccuracy: true, timeout: 20000 },
         );
     }
 
@@ -106,7 +105,8 @@ const RouteChooseLocationDetailScreen = () => {
                                 latitude: 42.882004,
                                 longitude: 74.582748,
                             },
-                            isButtonVisible: false
+                            isButtonVisible: false,
+                            isAddressPreview: true
                         })
                     }} />
                 <View style={{

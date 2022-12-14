@@ -34,28 +34,8 @@ const ReportGeneratorScreen = () => {
     const [edate, setEdate] = useState(' ');
     const XDate = require("xdate")
     const [page, setPage] = useState(1)
+
     useEffect(() => setupMarkedDates(sdate, edate), [range]);
-    // LocaleConfig.locales['en'] = {
-    //     monthNames: [
-    //         'Janvier',
-    //         'Février',
-    //         'Mars',
-    //         'Avril',
-    //         'Mai',
-    //         'Juin',
-    //         'Juillet',
-    //         'Août',
-    //         'Septembre',
-    //         'Octobre',
-    //         'Novembre',
-    //         'Décembre'
-    //     ],
-    //     // monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-    //     monthNamesShort: ['Jan.', 'Feb.', 'Mar', 'Apr', 'May', 'Jun', 'Jul.', 'Aug', 'Sept.', 'Oct.', 'Nov.', 'Dec.'],
-    //     dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-    //     dayNamesShort: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-    //     today: 'Today\'now'
-    // };
 
     LocaleConfig.locales['hebrew'] = {
         monthNames: ['יָנוּאָר', 'פברואר', 'מרץ', 'אַפּרִיל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'סֶפּטֶמבֶּר', 'אוֹקְטוֹבֶּר', 'נוֹבֶמבֶּר', 'דֵצֶמבֶּר'],
@@ -224,9 +204,6 @@ const ReportGeneratorScreen = () => {
         }
     };
 
-    console.log({ sdate, edate, markDates });
-
-
     const onDayPress = (date: any) => {
         if (sdate === edate) {
             if (sdate > date.dateString) {
@@ -265,6 +242,8 @@ const ReportGeneratorScreen = () => {
             })
     }
 
+
+    // report generating functionality
     const checkPermissionForDownloadFile = async () => {
         if (Platform.OS === 'android') {
             try {
@@ -313,51 +292,6 @@ const ReportGeneratorScreen = () => {
             </>
         )
     }
-
-    // report generating functionality
-    // const checkPermissionForDownloadFile = async () => {
-    //     if (Platform.OS === 'android') {
-    //         try {
-    //             const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
-    //             console.log({ granted })
-    //             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-    //                 downloadFile()
-    //             } else {
-    //                 Alert.alert('Permission Denied!', 'You need to give storage permission to download the file');
-    //             }
-    //         } catch (err) {
-    //             console.warn(err);
-    //         }
-    //     } else {
-    //         downloadFile()
-    //     }
-    // }
-
-    // const downloadFile = () => {
-    //     const { dirs } = RNFetchBlob.fs;
-    //     console.log("DOWN---", { dirs })
-    //     RNFetchBlob.config({
-    //         fileCache: true,
-    //         addAndroidDownloads: {
-    //             useDownloadManager: true,
-    //             notification: true,
-    //             mediaScannable: true,
-    //             title: `report.doc`,
-    //             path: `${dirs.DownloadDir}/report.doc`,
-    //         },
-    //         path: `${dirs.DocumentDir}/report.doc`,
-    //     }).fetch('GET', 'https://www.sample-videos.com/doc/Sample-doc-file-100kb.doc')
-    //         // http://www.africau.edu/images/default/sample.pdf           **
-    //         // https://filesamples.com/samples/document/txt/sample3.txt   **
-    //         // https://scholar.harvard.edu/files/torman_personal/files/samplepptx.pptx **
-    //         // https://filesamples.com/samples/document/xlsx/sample3.xlsx **
-    //         // https://www.sample-videos.com/doc/Sample-doc-file-100kb.doc **
-    //         .then((res) => {
-    //             RNFetchBlob.ios.openDocument(res.data)
-    //         }).catch((e) => {
-    //             console.log("DOWN--- Catch", { e })
-    //         })
-    // }
 
     return (
         <View style={globalStyles.container}>

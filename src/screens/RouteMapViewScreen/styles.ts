@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { colors } from "../../styles/Colors";
 import fonts from "../../styles/Fonts";
 import FontSizes from "../../styles/FontSizes";
@@ -40,7 +40,7 @@ export const styles = StyleSheet.create({
         left: wp(1.5),
         justifyContent: "center",
         alignItems: 'center',
-        borderColor: '#737373',
+        borderColor: colors.brown,
         borderWidth: wp(0.3),
         marginVertical: wp(5)
     },
@@ -88,4 +88,37 @@ export const styles = StyleSheet.create({
         borderColor: colors.gray_1,
         color: colors.gray_1,
     },
+    jobListContainer: {
+        paddingHorizontal: wp(3),
+        bottom: 0,
+        height: hp(50),
+        position: 'absolute',
+        elevation: 8,
+        width: wp(100),
+        backgroundColor: colors.white,
+        borderTopLeftRadius: wp(8),
+        borderTopRightRadius: wp(8),
+        shadowRadius: 8,
+        shadowColor: colors.black,
+        shadowOpacity: 0.08,
+        shadowOffset: {
+            height: -8,
+            width: 0,
+        },
+    },
+    sourceIconStyle: {
+        height: wp(6),
+        width: wp(6),
+    },
+    dashedLine: {
+        alignItems: "center",
+        height: '82%',
+        position: "absolute",
+        top: 45,
+        left: 10,
+    },
+    timeLineContainer: {
+        marginTop: wp(5),
+        marginRight: wp(3)
+    }
 })

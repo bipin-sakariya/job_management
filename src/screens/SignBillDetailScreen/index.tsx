@@ -55,7 +55,7 @@ const SignBillDetailScreen = () => {
             },
             validationSchema: CreateGroupValidationSchema,
             onSubmit: values => {
-                Alert.alert("group create")
+                Alert.alert(strings.CreateGroup)
             }
         })
     return (
@@ -78,7 +78,7 @@ const SignBillDetailScreen = () => {
                         <Text style={styles.modalTxt}>{strings.ClosejobModalText}</Text>
                         <View style={[globalStyles.rowView, { justifyContent: "space-around", width: '100%' }]}>
                             <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.Partial} />
-                            <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%" }} title={strings.Close} />
+                            <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%" }} title={strings.close} />
                         </View>
                     </View>
                 } />
@@ -101,7 +101,7 @@ const SignBillDetailScreen = () => {
                 {/* type counting  */}
                 <View style={{}}>
                     <DropDownComponent
-                        title={strings.TypeCounting}
+                        title={strings.typeCounting}
                         data={data}
                         image={ImagesPath.down_white_arrow}
                         labelField="label"
@@ -116,7 +116,7 @@ const SignBillDetailScreen = () => {
                 {/* measurement */}
                 <View style={[styles.textInputContainer, globalStyles.rtlDirection]}>
                     <View style={styles.titleContainer}>
-                        <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{type == 'sign' ? strings.Quantity : strings.measurement}</Text>
+                        <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{type == 'sign' ? strings.quantity : strings.measurement}</Text>
                     </View>
                     <View style={[globalStyles.rowView, globalStyles.rtlDirection, styles.btnContainerStyle]}>
                         <TouchableOpacity onPress={() => Increment()}>

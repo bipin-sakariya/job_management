@@ -14,25 +14,25 @@ const NotificationScreen = () => {
         {
             data: '16 May 2022',
             jobs: [
-                { title: '9 Beit Hadfus', jobstatus: strings.JobAddedby, author: '@Robert Kramer', km: '2m' },
+                { title: '9 Beit Hadfus', jobstatus: strings.jobAddedBy, author: '@Robert Kramer', km: '2m' },
                 { title: '9 Beit Hadfus', jobstatus: strings.JobClosedby, author: '@Tiffany Rivas', km: '2m' },
-                { title: '9 Beit Hadfus', jobstatus: strings.JobAddedby, author: '@Robert Kramer', km: '2m' }
+                { title: '9 Beit Hadfus', jobstatus: strings.jobAddedBy, author: '@Robert Kramer', km: '2m' }
             ]
         },
         {
             data: '15 May 2022',
             jobs: [
                 { title: '9 Beit Hadfus', jobstatus: strings.JobClosedby, author: '@Tiffany Rivas', km: '1d' },
-                { title: '9 Beit Hadfus', jobstatus: strings.JobAddedby, author: '@Robert Kramer', km: '1d' },
+                { title: '9 Beit Hadfus', jobstatus: strings.jobAddedBy, author: '@Robert Kramer', km: '1d' },
                 { title: '9 Beit Hadfus', jobstatus: strings.JobClosedby, author: '@Tiffany Rivas', km: '1d' }
             ]
         },
         {
             data: '14 May 2022',
             jobs: [
-                { title: '9 Beit Hadfus', jobstatus: strings.JobAddedby, author: '@Robert Kramer', km: '2d' },
+                { title: '9 Beit Hadfus', jobstatus: strings.jobAddedBy, author: '@Robert Kramer', km: '2d' },
                 { title: '9 Beit Hadfus', jobstatus: strings.JobClosedby, author: '@Tiffany Rivas', km: '2d' },
-                { title: '9 Beit Hadfus', jobstatus: strings.JobAddedby, author: '@Robert Kramer', km: '2d' }
+                { title: '9 Beit Hadfus', jobstatus: strings.jobAddedBy, author: '@Robert Kramer', km: '2d' }
             ]
         }
     ]

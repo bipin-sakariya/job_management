@@ -8,7 +8,10 @@ export const styles = StyleSheet.create({
 
     bottomContainer: {
         paddingVertical: wp(5),
-        paddingHorizontal: wp(10)
+        paddingHorizontal: wp(10),
+    },
+    addressTxt: {
+        height: hp(4)
     }
 
 })

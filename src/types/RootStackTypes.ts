@@ -1,5 +1,7 @@
 import { RouteProp } from "@react-navigation/native";
+import { date } from "yup";
 import { GroupData } from "../redux/slices/AdminSlice/groupListSlice";
+import { JobDetailsData } from "../redux/slices/AdminSlice/jobListSlice";
 
 export interface JobDetailsProps {
     description: string
@@ -28,11 +30,11 @@ export interface JobDetailsProps {
 export type RootStackParamList = {
     AuthStack: AuthStackParamList
     DrawerScreens: DrawerStackParamList
-    MapScreen: undefined
+    MapScreen: { type: 'viewJob' | 'viewJobs', JobDetails?: { id?: number, image?: string, date?: string, status?: string, button?: string, title?: string, description?: string, km?: string, coordinate?: { latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number }, } }
     IndoxScreen: undefined
     JobDuplicateListScreen: undefined
     NotificationScreen: undefined
-    JobDetailsScreen: { params: JobDetailsProps, type?: string }
+    JobDetailsScreen: { params: JobDetailsData, type?: string }
     ReportGeneratorScreen: undefined
     BillListScreen: { billType?: string }
     BillCreateScreen: undefined
@@ -45,7 +47,7 @@ export type RootStackParamList = {
     CreateFormScreen: undefined
     FormDetailsScreen: { id?: number, isEdit?: boolean }
     ChatScreen: undefined
-    TransferJobScreen: undefined
+    TransferJobScreen: { jobId: number }
     ReturnJobScreen: undefined
     DuplicateScreen?: { params?: any }
     CloseJobScreen: undefined
@@ -66,9 +68,10 @@ export type RootStackParamList = {
     GroupListScreen: undefined,
     CreateGroupScreen: undefined,
     GroupDetailScreen: { screenName?: string, params: GroupData, isEdit?: boolean },
-    CreateJobMapScreen: { isEditing: boolean, jobLocation: { latitude: number, longitude: number }, isButtonVisible?: boolean }
+    CreateJobMapScreen: { isEditing?: boolean, jobLocation?: { latitude?: number, longitude?: number }, isButtonVisible?: boolean, isAddressPreview?: boolean }
     SearchScreen: { screenName?: string }
-    AssignJobScreen: undefined
+    AssignJobScreen: undefined,
+    TransferJobListScreen: undefined
 };
 
 export type AuthStackParamList = {

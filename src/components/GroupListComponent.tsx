@@ -40,12 +40,12 @@ const GroupListComponent = ({ item }: itemPropsType) => {
 
     const optionData = [
         {
-            title: strings.Remove,
+            title: strings.remove,
             onPress: () => deleteGroupData(item.id),
             imageSource: ImagesPath.bin_icon
         },
         {
-            title: strings.Edit,
+            title: strings.edit,
             onPress: () => {
                 setVisible(false)
                 navigation.navigate("GroupDetailScreen", { params: item, isEdit: true })

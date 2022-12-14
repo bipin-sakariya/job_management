@@ -1,7 +1,7 @@
 import { View, Text, Image, TouchableOpacity, TextInput, FlatList } from 'react-native'
 import React, { useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomListView, GroupListComponent, Header } from '../../components'
+import { Container, CustomJobListComponent, CustomListView, GroupListComponent, Header } from '../../components'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
@@ -12,6 +12,7 @@ import { formList } from '../../redux/slices/AdminSlice/formListSlice'
 import { RootRouteProps } from '../../types/RootStackTypes'
 import { useRoute } from '@react-navigation/native'
 import { groupList } from '../../redux/slices/AdminSlice/groupListSlice'
+import { JobDetailsData, jobList, transferJobList } from '../../redux/slices/AdminSlice/jobListSlice'
 
 const SearchScreen = () => {
 
@@ -24,7 +25,7 @@ const SearchScreen = () => {
     const [page, setPage] = useState(1)
     const { formListData, isLoading } = useAppSelector(state => state.formList)
     const { groupListData } = useAppSelector(state => state.groupList)
-
+    const { jobListData } = useAppSelector(state => state.jobList)
 
     const searchName = (input: string) => {
         let param = {
@@ -48,6 +49,24 @@ const SearchScreen = () => {
                 }
                 console.log({ res })
 
+            })
+        }
+
+        if (route.params.screenName == 'recentAndHistoryScreen') {
+            dispatch(jobList(param)).unwrap().then((res) => {
+                if (res.next && !!input) {
+                    setPage(page + 1)
+                }
+                console.log({ res })
+
+            })
+        }
+        if (route.params.screenName == 'transferJobScreen') {
+            dispatch(transferJobList(param)).unwrap().then((res) => {
+                if (res.next && !!input) {
+                    setPage(page + 1)
+                }
+                console.log({ res })
             })
         }
     }
@@ -81,7 +100,7 @@ const SearchScreen = () => {
                         <Image source={ImagesPath.search_icon} style={styles.searchviewimage} />
                         <TextInput
                             style={[styles.searchinputtext]}
-                            placeholder={strings.SearchHere}
+                            placeholder={strings.searchHere}
                             onChangeText={(text) => {
                                 setText(text)
                                 searchName(text)
@@ -112,17 +131,46 @@ const SearchScreen = () => {
                         )
                     }}
                 />}
-                {route.params.screenName == 'groupScreen' &&
-                    <FlatList
-                        data={groupListData?.results}
-                        renderItem={({ item, index }) => {
-                            return (
-                                <GroupListComponent item={item} />
-                            )
-                        }}
-                        ItemSeparatorComponent={() => <View style={styles.separator} />}
-                        showsVerticalScrollIndicator={false}
-                    />}
+                {route.params.screenName == 'groupScreen' && <FlatList
+                    data={groupListData?.results}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <GroupListComponent item={item} />
+                        )
+                    }}
+                    ItemSeparatorComponent={() => <View style={styles.separator} />}
+                    showsVerticalScrollIndicator={false}
+
+                />}
+                {route.params.screenName == 'recentAndHistoryScreen' && <FlatList
+                    data={jobListData.results}
+                    renderItem={({ item, index }: { item: JobDetailsData, index: number }) => {
+                        return (
+                            <CustomJobListComponent
+                                item={item}
+                                onPress={() => navigation.navigate('JobDetailsScreen', { params: item })}
+                            />
+                        )
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    style={{ marginTop: wp(2), }}
+                    ItemSeparatorComponent={() => <View style={{ height: wp(3) }} />}
+                />}
+
+                {route.params.screenName == 'transferJobScreen' && <FlatList
+                    data={jobListData.results}
+                    renderItem={({ item, index }: { item: JobDetailsData, index: number }) => {
+                        return (
+                            <CustomJobListComponent
+                                item={item}
+                                onPress={() => navigation.navigate('JobDetailsScreen', { params: item })}
+                            />
+                        )
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    style={{ marginTop: wp(2), }}
+                    ItemSeparatorComponent={() => <View style={{ height: wp(3) }} />}
+                />}
             </Container>
         </View>
 

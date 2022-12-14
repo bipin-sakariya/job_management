@@ -114,4 +114,7 @@ export const ImagesPath = {
     selected_marker_pin: require('../assets/images/selected_marker_pin.png'),
     unselected_marker_pin: require('../assets/images/unselected_marker_pin.png'),
     marker: require('../assets/images/marker.png'),
+    sourceMarker: require('../assets/images/sourceMarkerIcon.png'),
+    mapGrayPin: require('../assets/images/MapGrayPin.png'),
+    checkBlackCircle: require('../assets/images/CheckBlackCircle.png'),
 }

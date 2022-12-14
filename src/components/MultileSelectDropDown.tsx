@@ -78,7 +78,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
 
             return _listItem
         })
-
+        props.setIsAllSign && props.setIsAllSign(false)
         props.onCount && props.onCount(newList?.filter(i => i.selected == true)?.length)
         props.setSelectedMembers && props.setSelectedMembers(newList?.filter(i => i.selected))
         setList(newList)
@@ -105,6 +105,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
 
     return (
         <>
+            {console.log({ data: props.setIsAllSign })}
             <View style={[styles.textInputContainer, props.container]}>
                 <View style={styles.titleContainer}>
                     <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{props.title}</Text>
@@ -146,7 +147,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                             <Image source={ImagesPath.search_icon} style={{ height: wp(6), width: wp(6), resizeMode: 'contain' }} />
                             <TextInput
                                 style={[globalStyles.rtlStyle, { height: 40, marginHorizontal: wp(1.5), width: '90%', textAlign: I18nManager.isRTL ? 'right' : 'left', }]}
-                                placeholder={strings.SearchHere}
+                                placeholder={strings.searchHere}
                                 value={searchTxt}
                                 onChangeText={(txt) => {
                                     const searchData = props.data.filter((i) => i.user_name?.includes(txt.toLowerCase()))

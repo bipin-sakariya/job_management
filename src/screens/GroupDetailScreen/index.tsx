@@ -42,7 +42,7 @@ interface GroupValue {
     groupManager: { id: number, name?: string },
     inspector: { id: number, name?: string },
     groupMember: number[],
-    forms: {}
+    forms: number[] | [{}]
     selected?: boolean
 }
 
@@ -131,7 +131,7 @@ const GroupDetailScreen = () => {
             })
         }
     }, [isFocused])
-    console.log(route.params.params)
+
     useEffect(() => {
         const findData = isUser.map((i: DataTypes) => {
             return {
@@ -175,22 +175,24 @@ const GroupDetailScreen = () => {
         })
         isSetAllForm(formResult)
 
-    }, [groupDetails.member_details, isUser])
+    }, [groupDetails.member_details, isUser, formListData.results])
 
     const deleteGroupData = (id: number) => {
-        dispatch(groupDelete(id)).unwrap().then(() => {
-        })
-    }
 
+        const deleteGroupData = (id: number) => {
+            dispatch(groupDelete(id)).unwrap().then(() => {
+            })
+        }
+    }
     const optionData = [
         {
-            title: strings.Remove, onPress: () => {
+            title: strings.remove, onPress: () => {
                 deleteGroupData(route.params.params.id)
                 navigation.goBack()
             }, imageSource: ImagesPath.bin_icon
         },
         {
-            title: strings.Edit, onPress: () => {
+            title: strings.edit, onPress: () => {
                 setIsEditable(true)
                 setVisible(false)
             }, imageSource: ImagesPath.edit_icon
@@ -227,8 +229,8 @@ const GroupDetailScreen = () => {
                     id: !isEditable ? groupDetails.inspector : groupDetails.inspector,
                     name: groupDetails.inspector_details?.user_name ? groupDetails.inspector_details?.user_name : '',
                 },
-                groupMember: !isEditable ? groupDetails.member : [0],
-                forms: !isEditable ? groupDetails.form_details : {},
+                groupMember: !isEditable ? groupDetails.member : finalArray,
+                forms: !isEditable ? groupDetails.form_details : finalFormsArray,
             },
             validationSchema: CreateGroupValidationSchema,
             onSubmit: (values: GroupValue) => {
@@ -249,7 +251,7 @@ const GroupDetailScreen = () => {
         })
         setFinalArray(data)
         setIsId(route.params.params.id)
-    }, [groupDetails.member_details])
+    }, [groupDetails.member_details, selectedMemberData])
 
     useEffect(() => {
         let data: number[] = []
@@ -291,12 +293,12 @@ const GroupDetailScreen = () => {
             id: number;
         };
         groupMember: number[]
-        forms: {}
+        forms: number[] | [{}]
     }
 
     ) => {
         if (!imageUrl) {
-            Alert.alert('Alert', 'Please select your profile picture.')
+            Alert.alert(strings.profile_pic_required)
         } else {
             let data = new FormData()
             let images = {
@@ -342,7 +344,8 @@ const GroupDetailScreen = () => {
 
     return (
         <View style={globalStyles.container}>
-            {/* {console.log("FORMIK ------", { error: errors, values: values })} */}
+            {/* {console.log("FORMIK ------", { error: errors, values: values })}
+            {console.log('ujghuygtuigh', { selectedMemberData, selectedFormsData })} */}
             <Header
                 headerLeftStyle={{
                     paddingHorizontal: wp(3)
@@ -434,7 +437,7 @@ const GroupDetailScreen = () => {
                         disabled={!isEditable}
                         setIsVisible={setModalShow}
                         isVisible={modalShow}
-                        data={!isEditable ? isMember : setAllMember}
+                        data={setAllMember}
                         title={strings.Groupmemeber}
                         setSelectedMembers={(data: DataTypes[]) => {
                             setSelectedMemberData(data)
@@ -444,37 +447,39 @@ const GroupDetailScreen = () => {
                         }}
                         countTitle={strings.people}
                     />
-                    {isEditable ?
-                        <MultileSelectDropDown
-                            disabled={!isEditable}
-                            setIsVisible={setFormListVisible}
-                            isVisible={formListVisible}
-                            data={setAllForm}
-                            title={strings.GroupForms}
-                            setSelectedMembers={(data: DataTypes[]) => {
-                                setSelectedFormsData(data)
-                                setFieldValue('forms', data)
-                                // console.log('setfield value', { data, set })
-                            }}
-                            countTitle={strings.Forms}
-                            container={{ marginVertical: heightPercentageToDP(2) }}
-                        />
-                        :
-                        <CustomDetailsComponent
-                            title={strings.GroupForms}
-                            detailsContainerStyle={{ marginVertical: wp(5) }}
-                            bottomComponent={
-                                <View style={[globalStyles.rowView, { flexWrap: "wrap", alignItems: "center" }]}>
-                                    {groupDetails?.form_details?.map((item, index) => {
-                                        return (
-                                            <View style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, borderRadius: wp(2) }]}>
-                                                <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14, color: colors.dark_blue1_color }]}>{item?.name}</Text>
-                                            </View>
-                                        )
-                                    })}
-                                </View>
-                            }
-                        />}
+                    {
+                        isEditable ?
+                            <MultileSelectDropDown
+                                disabled={!isEditable}
+                                setIsVisible={setFormListVisible}
+                                isVisible={formListVisible}
+                                data={setAllForm}
+                                title={strings.GroupForms}
+                                setSelectedMembers={(data: DataTypes[]) => {
+                                    setSelectedFormsData(data)
+                                    setFieldValue('forms', data)
+                                    // console.log('setfield value', { data, set })
+                                }}
+                                countTitle={strings.Forms}
+                                container={{ marginVertical: heightPercentageToDP(2) }}
+                            />
+                            :
+                            <CustomDetailsComponent
+                                title={strings.GroupForms}
+                                detailsContainerStyle={{ marginVertical: wp(5) }}
+                                bottomComponent={
+                                    <View style={[globalStyles.rowView, { flexWrap: "wrap", alignItems: "center" }]}>
+                                        {groupDetails?.form_details?.map((item, index) => {
+                                            return (
+                                                <View style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, borderRadius: wp(2) }]}>
+                                                    <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14, color: colors.dark_blue1_color }]}>{item?.name}</Text>
+                                                </View>
+                                            )
+                                        })}
+                                    </View>
+                                }
+                            />
+                    }
                     {/* <CustomDetailsComponent
                         title={strings.GroupForms}
                         detailsContainerStyle={{ marginVertical: wp(5) }}
@@ -515,15 +520,17 @@ const GroupDetailScreen = () => {
                             </>
                         }
                     />
-                    {isEditable && <CustomBlackButton
-                        title={strings.CreateGroup}
-                        image={ImagesPath.plus_white_circle_icon}
-                        onPress={() => {
-                            handleSubmit()
-                        }}
-                    />}
-                </KeyboardAwareScrollView>
-            </Container>
+                    {
+                        isEditable && <CustomBlackButton
+                            title={strings.CreateGroup}
+                            image={ImagesPath.plus_white_circle_icon}
+                            onPress={() => {
+                                handleSubmit()
+                            }}
+                        />
+                    }
+                </KeyboardAwareScrollView >
+            </Container >
             <CustomDropdown
                 componentRef={menuRef}
                 dropdownData={optionData}
@@ -534,5 +541,4 @@ const GroupDetailScreen = () => {
         </View>
     )
 }
-
 export default GroupDetailScreen;

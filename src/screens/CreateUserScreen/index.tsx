@@ -77,7 +77,7 @@ const CreateUserScreen = () => {
         };
     }) => {
         if (!imageUrl) {
-            Alert.alert('Alert', 'Please select your profile picture.')
+            Alert.alert(strings.profile_pic_required)
         } else {
             var data = new FormData()
             let images = {
@@ -92,7 +92,7 @@ const CreateUserScreen = () => {
             data.append("email", values.email)
             data.append("phone", `+972${values.contactNo}`)
             data.append("role", parseInt(values.role.id.toString()))
-            
+
             dispatch(createUser(data)).unwrap().then((res) => {
                 console.log({ res: res });
                 navigation.goBack()

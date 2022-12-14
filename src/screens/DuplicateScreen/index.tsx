@@ -55,7 +55,7 @@ const DuplicateScreen = () => {
                     <CustomSubTitleWithImageComponent disabled title={strings.DuplicateJob} image={ImagesPath.files_icon} viewStyle={{ marginBottom: hp(0.5) }} />
                     <View style={styles.duplicateFirstView}>
                         <CustomTextInput
-                            title={strings.JobId}
+                            title={strings.jobId}
                             container={{ marginBottom: wp(4) }}
                             value={'123'}
                         />
@@ -77,7 +77,7 @@ const DuplicateScreen = () => {
                     />
                     <View style={[styles.duplicateFirstView, {}]}>
                         <CustomTextInput
-                            title={strings.JobId}
+                            title={strings.jobId}
                             container={{ marginBottom: wp(4) }}
                             value={'123'}
                         />

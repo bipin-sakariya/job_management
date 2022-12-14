@@ -1,7 +1,7 @@
 import { Image, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { customMapStyle, globalStyles } from '../../styles/globalStyles';
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import MapView, { Marker } from 'react-native-maps';
 import { CustomBlackButton, Header } from '../../components';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
@@ -12,7 +12,7 @@ import Geolocation from '@react-native-community/geolocation';
 import { getDistance } from 'geolib';
 import { RootRouteProps } from '../../types/RootStackTypes';
 import { useRoute } from '@react-navigation/native';
-import { setJobLocation } from '../../redux/slices/MapSlice/MapSlice';
+import { manageMapRoutesReducer, setJobLocation } from '../../redux/slices/MapSlice/MapSlice';
 import { useAppDispatch } from '../../hooks/reduxHooks';
 import { styles } from './styles';
 import Geocoder from 'react-native-geocoder';
@@ -27,25 +27,36 @@ const JobData = [
     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open" }
 ]
 
-
-
 const CreateJobMapScreen = () => {
 
     const navigation = useCustomNavigation('CreateJobMapScreen')
     const route = useRoute<RootRouteProps<'CreateJobMapScreen'>>();
     const mapRef = useRef<MapView>(null);
     const dispatch = useAppDispatch()
+
     const [isCurrentLoaction, setIsCurruntLocation] = useState(false)
-    const [address, setAddres] = useState(false)
+    const [address, setAddres] = useState('')
     const [curruntLoaction, setCurruntLoaction] = useState<MapPositionProps | null>(null);
     const [tapLoaction, setTapLoaction] = useState<MapPositionProps | null>(null);
     const [ChoosefromMap, setChooseFromMap] = useState(false)
 
     useEffect(() => {
-        if (route.params.isEditing) {
+        console.log({ route })
+        if (route.params?.isEditing) {
             Geolocation.getCurrentPosition(
                 position => {
                     setCurruntLoaction({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421
+                    })
+                    let params = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                    }
+                    getAddress(params)
+                    setTapLoaction({
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
                         latitudeDelta: 0.0922,
@@ -71,12 +82,13 @@ const CreateJobMapScreen = () => {
                 },
                 error => {
                     console.log(error.code, error.message);
-                }
+                },
+                { enableHighAccuracy: true, timeout: 20000 },
             );
         } else {
             setTapLoaction({
-                latitude: route.params.jobLocation.latitude,
-                longitude: route.params.jobLocation.longitude,
+                latitude: route.params?.jobLocation?.latitude ?? 0,
+                longitude: route.params?.jobLocation?.longitude ?? 0,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
             })
@@ -132,14 +144,16 @@ const CreateJobMapScreen = () => {
                 customMapStyle={customMapStyle}
                 showsUserLocation={isCurrentLoaction}
                 initialRegion={{
-                    latitude: !route.params.isEditing ? route.params.jobLocation.latitude : 21.247181,
-                    longitude: !route.params.isEditing ? route.params.jobLocation.longitude : 72.890877,
+                    latitude: (!route.params?.isEditing) ? route.params?.jobLocation?.latitude : 21.247181,
+                    longitude: (!route.params?.isEditing) ? route.params?.jobLocation?.longitude : 72.890877,
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421
                 }}
                 onPress={(e: any) => {
-                    getAddress(e.nativeEvent.coordinate)
-                    if (route.params.isEditing) {
+                    if (ChoosefromMap) {
+                        getAddress(e.nativeEvent.coordinate)
+                    }
+                    if (route.params?.isEditing) {
                         if (ChoosefromMap) {
                             // dispatch(setJobLocation({
                             //     latitude: e.nativeEvent.coordinate.latitude,
@@ -155,16 +169,16 @@ const CreateJobMapScreen = () => {
                     }
                 }}
             >
-                {tapLoaction &&
+                {tapLoaction && ChoosefromMap &&
                     <Marker
                         coordinate={tapLoaction}>
                         <Image source={ImagesPath.marker} style={{ width: wp(15), height: wp(15) }}></Image>
                     </Marker>}
 
             </MapView>
-            {route?.params?.isButtonVisible ?
-                <View style={[globalStyles.rowView, { justifyContent: 'space-around', position: 'absolute', bottom: 20, width: wp(100) }]}>
-                    {route.params.isEditing &&
+            {route?.params?.isButtonVisible &&
+                <View style={[globalStyles.rowView, { justifyContent: 'space-around', position: 'absolute', bottom: route?.params?.isAddressPreview ? hp(17) : 20, width: wp(100) }]}>
+                    {route.params?.isEditing &&
                         <>
                             <CustomBlackButton
                                 title={strings.ChoosefromMap}
@@ -183,10 +197,10 @@ const CreateJobMapScreen = () => {
                                 image={ImagesPath.cross_hair_icon}
                             />
                         </>}
-                </View>
-                :
+                </View>}
+            {route?.params?.isAddressPreview &&
                 <View style={styles.bottomContainer}>
-                    <Text style={{}}>{address}</Text>
+                    <Text style={styles.addressTxt} numberOfLines={2}>{address}</Text>
                     <CustomBlackButton
                         title={'Done'}
                         buttonStyle={{ width: wp(45) }}
@@ -197,6 +211,17 @@ const CreateJobMapScreen = () => {
                                 latitude: tapLoaction?.latitude,
                                 longitude: tapLoaction?.longitude,
                             }))
+                            let params = {
+                                id: tapLoaction?.latitude,
+                                coordinates: {
+                                    latitude: tapLoaction?.latitude,
+                                    longitude: tapLoaction?.longitude,
+                                },
+                                address: address,
+                                description: 'selected location from map',
+                            }
+                            dispatch(manageMapRoutesReducer(params))
+                            navigation.goBack()
                             navigation.goBack()
                         }}
                         image={ImagesPath.map_pin_line_icon}

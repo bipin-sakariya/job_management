@@ -71,7 +71,7 @@ const CreateBillSectionScreen = () => {
             setCountingError(true)
         }
         else if (!imageUrl && type == "sign") {
-            Alert.alert('Alert', 'Please select your profile picture.')
+            Alert.alert(strings.profile_pic_required)
         }
         else {
             var data = new FormData()
@@ -134,7 +134,7 @@ const CreateBillSectionScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView, { width: wp(50) }]} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{strings.BillSection}</Text>
+                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{strings.billSection}</Text>
                     </TouchableOpacity>
                 }
             />
@@ -181,7 +181,7 @@ const CreateBillSectionScreen = () => {
                     }
                     {imageError || error.image ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.image ? error.image : strings.Pleaseentersignlogo}</Text> : null}
                     <CustomTextInput
-                        title={strings.Name}
+                        title={strings.name}
                         container={{ marginVertical: wp(5), marginTop: wp(3) }}
                         placeholder={type == "material" ? strings.Billname : strings.SignName}
                         onChangeText={handleChange("name")}
@@ -190,7 +190,7 @@ const CreateBillSectionScreen = () => {
                     {type == "material" ?
                         <>
                             <DropDownComponent
-                                title={strings.TypeCounting}
+                                title={strings.typeCounting}
                                 data={data}
                                 image={ImagesPath.down_white_arrow}
                                 labelField="label"
@@ -210,9 +210,9 @@ const CreateBillSectionScreen = () => {
                             {countingError || error.type ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.type ? error.type : strings.Typecount_required}</Text> : null}
 
                             <CustomTextInput
-                                title={strings.Jumpdish}
+                                title={strings.jumpdish}
                                 value={values.ration_qunt}
-                                placeholder={strings.Jumpdish}
+                                placeholder={strings.jumpdish}
                                 container={{ marginBottom: wp(5) }}
                                 onChangeText={handleChange("ration_qunt")}
                                 placeholderTextColor={colors.light_brown}
@@ -223,7 +223,7 @@ const CreateBillSectionScreen = () => {
                         :
                         <>
                             <CustomTextInput
-                                title={strings.Quantity}
+                                title={strings.quantity}
                                 placeholder={strings.EnterQuantity}
                                 container={{ marginBottom: wp(5) }}
                                 onChangeText={handleChange("ration_qunt")}
@@ -232,7 +232,7 @@ const CreateBillSectionScreen = () => {
                             {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
 
                             <DropDownComponent
-                                title={strings.TypeCounting}
+                                title={strings.typeCounting}
                                 data={data}
                                 image={ImagesPath.down_white_arrow}
                                 labelField="label"
