@@ -1,12 +1,12 @@
-import { Alert, Image, PermissionsAndroid, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useCallback, useRef, useState } from 'react'
+import { Alert, FlatList, Image, PermissionsAndroid, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { BottomSheet, CommonPdfView, Container, CustomJobDetailsBottomButton, Header } from '../../components'
+import { BottomSheet, CommonPdfView, Container, CustomActivityIndicator, CustomCarouselImageAndVideo, CustomJobDetailsBottomButton, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { styles } from './styles'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { Avatar, AvatarProps, Bubble, BubbleProps, ComposerProps, GiftedChat, IMessage, InputToolbar, InputToolbarProps, MessageImageProps, Send, SendProps, } from 'react-native-gifted-chat'
+import { Avatar, AvatarProps, Bubble, BubbleProps, ComposerProps, GiftedChat, IMessage, InputToolbar, InputToolbarProps, MessageImageProps, MessageVideoProps, Send, SendProps, User, } from 'react-native-gifted-chat'
 import { colors } from '../../styles/Colors'
 import fonts from '../../styles/Fonts'
 import FontSizes from '../../styles/FontSizes'
@@ -14,60 +14,41 @@ import moment from 'moment'
 import { strings } from '../../languages/localizedStrings'
 import RBSheet from 'react-native-raw-bottom-sheet'
 import DocumentPicker from 'react-native-document-picker';
-import { CameraOptions, ImageLibraryOptions, launchCamera, launchImageLibrary } from 'react-native-image-picker'
+import { CameraOptions, ImageLibraryOptions, launchCamera, launchImageLibrary, MediaType } from 'react-native-image-picker'
 import { LinkPreview } from '@flyerhq/react-native-link-preview'
-import { DocList, ImageList } from '../../types/commanTypes'
+import { DocList, ImageList, VideoList } from '../../types/commanTypes'
 import { isEmptyArray } from 'formik'
-// import Modal from 'react-native-modal';
-// import CustomCarouselZoomImageViewer from '../../components/CustomCarouselZoomImageViewer';
-// import Carousel from 'react-native-snap-carousel';
-// import ImageViewer from 'react-native-image-zoom-viewer'
-
-interface UserProps {
-    _id: string | number;
-    name?: string;
-    avatar?: string;
-}
+import Modal from 'react-native-modal';
+import Carousel from 'react-native-snap-carousel';
+import ImageViewer from 'react-native-image-zoom-viewer'
+import RNFS from "react-native-fs";
+import FileViewer from "react-native-file-viewer";
+import { Camera, useCameraDevices } from 'react-native-vision-camera'
+import Video from 'react-native-video'
 interface MessageProps {
     createdAt: Date | number;
     text: string;
-    user: UserProps;
+    user: User;
     image?: ImageList[],
     type?: string,
     attachment?: DocList[]
     _id: string | number;
+    video?: VideoList[];
 }
 
-const doc = [
-    {
-        "id": 0.37442033995468504,
-        "path": "file:///Users/mac/Library/Developer/CoreSimulator/Devices/6DF8A61F-9784-4627-9F57-C96D05AEFC39/data/Containers/Data/Application/5D1B9E9A-095D-4297-A634-E2FE75DE3FC3/tmp/org.reactjs.native.example.Job-Management-Inbox/pdf-test.pdf",
-        "type": "pdf",
-        "mb": 20597,
-        "title": "pdf-test.pdf"
-    },
-    {
-        "id": 0.37442033995468504,
-        "path": "file:///Users/mac/Library/Developer/CoreSimulator/Devices/6DF8A61F-9784-4627-9F57-C96D05AEFC39/data/Containers/Data/Application/5D1B9E9A-095D-4297-A634-E2FE75DE3FC3/tmp/org.reactjs.native.example.Job-Management-Inbox/pdf-test.pdf",
-        "type": "pdf",
-        "mb": 20597,
-        "title": "pdf-test.pdf"
-    },
-    {
-        "id": 0.37442033995468504,
-        "path": "file:///Users/mac/Library/Developer/CoreSimulator/Devices/6DF8A61F-9784-4627-9F57-C96D05AEFC39/data/Containers/Data/Application/5D1B9E9A-095D-4297-A634-E2FE75DE3FC3/tmp/org.reactjs.native.example.Job-Management-Inbox/pdf-test.pdf",
-        "type": "pdf",
-        "mb": 20597,
-        "title": "pdf-test.pdf"
-    },
-    {
-        "id": 0.37442033995468504,
-        "path": "file:///Users/mac/Library/Developer/CoreSimulator/Devices/6DF8A61F-9784-4627-9F57-C96D05AEFC39/data/Containers/Data/Application/5D1B9E9A-095D-4297-A634-E2FE75DE3FC3/tmp/org.reactjs.native.example.Job-Management-Inbox/pdf-test.pdf",
-        "type": "pdf",
-        "mb": 20597,
-        "title": "pdf-test.pdf"
-    },
-]
+interface SelectedImageProps {
+    visible: boolean,
+    selectedIndex?: number,
+    data: ImageList[] | undefined
+}
+
+interface JobDataProps {
+    id: number,
+    name: string,
+    distance: string,
+    descriprion: string,
+    imageurl: string
+}
 
 const messageData = [
     {
@@ -121,30 +102,57 @@ const messageData = [
             name: 'React Native',
             avatar: 'https://placeimg.com/140/140/any',
         },
-        attachment: doc
+    },
+    {
+        _id: 16,
+        text: 'Hello developer ',
+        createdAt: new Date(),
+        user: {
+            _id: 1,
+            name: 'React Native',
+            avatar: 'https://placeimg.com/140/140/any',
+        },
+        video: [{
+            id: Math.random(),
+            url: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+            mediaType: 'mp4'
+        }]
     },
 ]
 
+const job = {
+    id: 1,
+    name: 'job title',
+    distance: '5 km',
+    descriprion: 'hello this is the job details screen page',
+    imageurl: "https://dummyimage.com/600x400/000/fff",
+}
 const ChatScreen = () => {
     const navigation = useCustomNavigation('ChatScreen')
     const [messages, setMessages] = useState<Array<MessageProps>>(messageData)
     const refRBSheet = useRef<RBSheet | null>(null);
     const [imageList, setImageList] = useState<ImageList[]>([])
     const [docList, setDocList] = useState<DocList[] | []>([])
-
+    const [loading, setLoading] = useState(false);
     const [isVisible, setIsVisible] = useState(true)
+    const [selectedImage, setSelectedImage] = useState<SelectedImageProps>({ visible: false, selectedIndex: 0, data: [] });
+    const [vedio, setVedio] = useState([])
+    const [showCameraView, setShowCameraView] = useState(false)
+    useEffect(() => {
+        checkPermission()
+    }, [])
 
-    const [visible, setVisible] = useState<boolean>(false);
-    const [visibleImage, setVisibleImage] = useState<ImageList[]>([]);
-
-    const jobData = {
-        id: 1,
-        name: 'job title',
-        distance: '5 km',
-        descriprion: 'hello this is the job details screen page',
-        imageurl: "https://dummyimage.com/600x400/000/fff",
+    const checkPermission = async () => {
+        const cameraPermission = await Camera.getCameraPermissionStatus()
+        console.log("🚀 ~ file: index.tsx:133 ~ ChatScreen ~ cameraPermission", cameraPermission)
+        const newCameraPermission = await Camera.requestCameraPermission()
+        console.log("🚀 ~ file: index.tsx:141 ~ checkPermission ~ newCameraPermission", newCameraPermission)
     }
-    // const jobData = undefined
+
+    const devices = useCameraDevices()
+    const device = devices.back
+    //temp data
+    const [jobData, setJobData] = useState<JobDataProps | undefined>(job)
 
     const onSend = useCallback((messages: MessageProps[] = []) => {
         console.log("🚀 ~ file: index.tsx:157 ~ onSend ~ messages", messages)
@@ -159,9 +167,23 @@ const ChatScreen = () => {
             },
             image: messages[0].image,
             attachment: messages[0].attachment,
-            type: messages[0].type
+            type: messages[0].type,
+            video: [{
+                id: Math.random(),
+                url: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+                mediaType: 'mp4'
+            }, {
+                id: Math.random(),
+                url: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+                mediaType: 'mp4'
+            }, {
+                id: Math.random(),
+                url: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+                mediaType: 'mp4'
+            }]
         }]
         //clear the job data
+        setJobData(undefined)
         setIsVisible(false)
         setMessages(previousMessages => GiftedChat.append(previousMessages, message))
     }, [])
@@ -190,13 +212,15 @@ const ChatScreen = () => {
         } else return true;
     };
 
-    const cameraLaunch = async () => {
+    const cameraLaunch = async (type: MediaType) => {
         let option: CameraOptions = {
-            mediaType: 'photo',
+            mediaType: type,
             cameraType: 'back',
-            presentationStyle: 'fullScreen'
+            saveToPhotos: true,
+            presentationStyle: 'fullScreen',
         }
         const result = await launchCamera(option);
+        console.log("🚀 ~ file: index.tsx:187 ~ cameraLaunch ~ result", result)
 
         if (result.didCancel) {
             console.log('User cancelled image picker');
@@ -231,39 +255,59 @@ const ChatScreen = () => {
                             <>
                                 {
                                     props.currentMessage?.type &&
-                                    <View style={[globalStyles.rowView, globalStyles.rtlDirection, styles.jobDetailsViewStyle, { backgroundColor: props.position == 'left' ? colors.light_blue_color : colors.white_color, }]}>
-                                        <Image source={ImagesPath.image_white_border} style={[styles.imageStyle, { backgroundColor: props.position == 'left' ? colors.white_color : colors.light_blue_color }]} />
-                                        <View style={styles.jobDetailsMainView}>
-                                            <View style={[globalStyles.rowView, styles.jobDetailHeaderView]}>
-                                                <Text numberOfLines={1} style={[styles.jobTitleTxt,]}>Job Title</Text>
-                                                <View style={[globalStyles.rowView, styles.pinImageViewStyle]}>
-                                                    <Image source={ImagesPath.map_pin_dark_line_icon} style={styles.pinImageStyle} />
-                                                    <Text numberOfLines={1} style={styles.jobDistanceTxt}>5 km away</Text>
+                                    <LinkPreview
+                                        previewData={{
+                                            description: 'This link https://github.com/flyerhq asd asd can be extracted from the text',
+                                            image: { height: 50, width: 50, url: 'https://dummyimage.com/600x400/000/fff' },
+                                            link: 'https://github.com/flyerhq',
+                                            title: 'hello'
+                                        }}
+                                        metadataContainerStyle={{ direction: 'ltr', marginTop: 0 }}
+                                        metadataTextContainerStyle={styles.linkMetadataTextContainerStyle}
+                                        textContainerStyle={styles.linkTextContainerStyle}
+                                        text='This link https://github.com/flyerhq asd asd can be extracted from the text'
+                                        renderTitle={() => {
+                                            return (
+                                                <View style={[globalStyles.rowView, styles.jobDetailHeaderView, globalStyles.rtlDirection,]}>
+                                                    <Text numberOfLines={1} style={styles.jobTitleTxt}>Job Title as dasdasd</Text>
+                                                    <View style={[globalStyles.rowView, styles.pinImageViewStyle]}>
+                                                        <Image source={ImagesPath.map_pin_dark_line_icon} style={styles.pinImageStyle} />
+                                                        <Text numberOfLines={1} style={styles.jobDistanceTxt}>5 km away ads sd sdasdasd</Text>
+                                                    </View>
                                                 </View>
-                                            </View>
-                                            <Text style={styles.jobDetailsTxt} numberOfLines={2}>Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing</Text>
-                                        </View>
-                                    </View>
+                                            )
+                                        }}
+                                        renderDescription={(props) => <Text numberOfLines={2} style={[styles.jobDetailsTxt, { direction: 'ltr' }]}>{props}</Text>}
+                                        renderText={() => {
+                                            return null
+                                        }}
+                                        renderMinimizedImage={(props) => <Image source={{ uri: props.url }} style={[styles.renderMinimizedImageStyle]} />}
+                                    />
                                 }
                                 {
                                     props.currentMessage?.attachment &&
                                     <View style={{ alignItems: 'flex-start', flex: 1 }}>
-                                        {
-                                            props.currentMessage?.attachment?.slice(0, 4).map((item, index) => {
+                                        <FlatList
+                                            data={props.currentMessage?.attachment}
+                                            renderItem={({ item, index }: { item: DocList, index: number }) => {
                                                 return (
-                                                    <>
-                                                        {
-                                                            index < 3 ?
-                                                                <CommonPdfView item={item} onPress={() => { }} />
-                                                                :
-                                                                <View style={[globalStyles.rtlDirection, styles.remainAttachmentViewStyle]}>
-                                                                    <Text style={styles.remainTxtStyle}>+{props.currentMessage?.attachment?.length && props.currentMessage?.attachment?.length - 3}</Text>
-                                                                </View>
-                                                        }
-                                                    </>
+                                                    <CommonPdfView item={item} onPress={() => {
+                                                        const pdfName = item.path.split(/[#?]/)[0].split('/').pop()?.split('.')[0];
+                                                        const extension = item.path.split(/[#?]/)[0].split(".").pop()?.trim();;
+                                                        const localFile = `${RNFS.DocumentDirectoryPath}/${pdfName}.${extension}`;
+                                                        const options = {
+                                                            fromUrl: item.path,
+                                                            toFile: localFile,
+                                                        };
+                                                        RNFS.downloadFile(options).promise.then(() =>
+                                                            FileViewer.open(localFile)).then(() => {
+                                                            }).catch((error) => {
+                                                            });
+                                                    }}
+                                                    />
                                                 )
-                                            })
-                                        }
+                                            }}
+                                        />
                                     </View>
                                 }
                             </>
@@ -368,7 +412,7 @@ const ChatScreen = () => {
         try {
             if (type == "image") {
                 let option: ImageLibraryOptions = {
-                    mediaType: 'photo',
+                    mediaType: 'mixed',
                     presentationStyle: 'fullScreen'
                 }
                 const result = await launchImageLibrary(option);
@@ -399,7 +443,13 @@ const ChatScreen = () => {
                 })
                 let DocTempArray = [...docList]
                 if (res[0]?.type?.split("/")[0] == 'application') {
-                    DocTempArray.push({ id: Math.random(), path: res[0].uri, type: res[0]?.type?.split("/")[1], mb: res[0].size, title: res[0].name })
+                    DocTempArray.push({
+                        id: Math.random(),
+                        path: res[0].uri,
+                        type: res[0]?.type?.split("/")[1],
+                        mb: res[0].size,
+                        title: res[0].name
+                    })
                 }
                 setDocList(DocTempArray)
             }
@@ -418,7 +468,7 @@ const ChatScreen = () => {
             <InputToolbar
                 {...props}
                 primaryStyle={{ marginBottom: wp(2) }}
-                containerStyle={{ flex: 1, paddingVertical: wp(1), height: Platform.OS == 'ios' ? wp(15) : wp(15) }}
+                containerStyle={{ flex: 1, paddingVertical: wp(1), height: wp(14) }}
                 renderComposer={(data: ComposerProps) => {
                     return (
                         <View style={styles.inputToolBarMainViewStyle}>
@@ -460,13 +510,14 @@ const ChatScreen = () => {
                                             {
                                                 index <= 2 ?
                                                     <TouchableOpacity onPress={() => {
-                                                        // props.currentMessage?.image && setVisibleImage(props.currentMessage?.image)
-                                                        // setVisible(true)
+                                                        props.currentMessage?.image && setSelectedImage({ visible: true, selectedIndex: index, data: props.currentMessage?.image })
                                                     }}>
                                                         <Image source={{ uri: item.imgUrl }} style={styles.renderImageStyle} />
                                                     </TouchableOpacity>
                                                     :
-                                                    <TouchableOpacity style={styles.remainImageViewStyle}>
+                                                    <TouchableOpacity onPress={() => {
+                                                        props.currentMessage?.image && setSelectedImage({ visible: true, selectedIndex: index, data: props.currentMessage?.image })
+                                                    }} style={styles.remainImageViewStyle}>
                                                         <Text style={styles.remainTxtStyle}>+{props.currentMessage?.image && props.currentMessage?.image?.length - 3}</Text>
                                                     </TouchableOpacity>
                                             }
@@ -478,9 +529,12 @@ const ChatScreen = () => {
                         :
                         <>
                             {
-                                props.currentMessage?.image?.map((item) => {
+                                props.currentMessage?.image?.map((item, index) => {
                                     return (
-                                        <TouchableOpacity style={styles.singleImageViewStyle} onPress={() => { setVisible(true) }}>
+                                        <TouchableOpacity style={styles.singleImageViewStyle} onPress={() => {
+                                            console.log({ oneItem: item });
+                                            props.currentMessage?.image && setSelectedImage({ visible: true, selectedIndex: index, data: props.currentMessage?.image })
+                                        }}>
                                             <Image source={{ uri: item.imgUrl }} style={styles.singleImageStyle} />
                                         </TouchableOpacity>
                                     )
@@ -488,40 +542,7 @@ const ChatScreen = () => {
                             }
                         </>
                 }
-                {/* <Modal
-                    isVisible={visible}
-                    style={{ margin: 0, backgroundColor: colors.white_color }}>
-                    <>
-                        <TouchableOpacity
-                            onPress={() => setVisible(false)}
-                            style={styles.closeImageBtnStyle}>
-                            <Image source={ImagesPath.cross_icon} style={styles.closeIcon} />
-                        </TouchableOpacity>
-                        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                            <Carousel
-                                layout={'default'}
-                                data={props.currentMessage?.image}
-                                sliderWidth={wp(100)}
-                                itemWidth={wp(100)}
-                                renderItem={({ item, index }: { item: string, index: number }) => {
-                                    console.log("🚀 ~ file: index.tsx:536 ~ renderMessageImage ~ item", item)
-
-                                    return (
-                                        <View style={{ width: '100%', height: '100%', justifyContent: 'center' }}>
-                                            <ImageViewer
-                                                imageUrls={[{ url: item }]}
-                                                renderIndicator={() => <></>}
-                                                backgroundColor='transparent'
-                                            />
-                                        </View>
-                                    )
-                                }}
-                            />
-                        </View>
-                    </>
-                </Modal> */}
             </>
-
         )
     }
 
@@ -558,44 +579,44 @@ const ChatScreen = () => {
             <View style={[styles.chatFooterMainView, { padding: !isEmptyArray(docList) || !isEmptyArray(imageList) ? wp(4) : 0 }]}>
                 {
                     jobData && isVisible &&
-                    <View style={[styles.jobDetailsMainViewStyle]}>
-                        <TouchableOpacity onPress={() => { setIsVisible(!isVisible) }} style={[styles.jobCloseBtnStyle]}>
-                            <Image source={ImagesPath.close_icon} style={styles.closeBtnStyle} />
-                        </TouchableOpacity>
-                        <LinkPreview
-                            text='This link https://github.com/flyerhq'
-                            containerStyle={styles.linkContainerStyle}
-                            enableAnimation={true}
-                            metadataContainerStyle={styles.linkMetadataContainerStyle}
-                            metadataTextContainerStyle={styles.linkMetadataTextContainerStyle}
-                            previewData={{ description: jobData.descriprion, image: { url: jobData.imageurl, height: wp(15), width: wp(15) }, link: '', title: jobData.name }}
-                            renderDescription={(props) => {
-                                return (
-                                    <Text style={styles.jobDetailsTxt}>{props}</Text>
-                                )
-                            }}
-                            renderMinimizedImage={(image) => {
-                                console.log(image);
-                                return (
-                                    <Image source={{ uri: image.url }} style={[styles.renderMinimizedImageStyle]} />
-                                )
-                            }}
-                            renderTitle={() => {
-                                return (
-                                    <View style={[globalStyles.rowView, styles.jobDetailHeaderView, globalStyles.rtlDirection]}>
-                                        <Text numberOfLines={1} style={styles.jobTitleTxt}>Job Title</Text>
-                                        <View style={[globalStyles.rowView, styles.pinImageViewStyle]}>
-                                            <Image source={ImagesPath.map_pin_dark_line_icon} style={styles.pinImageStyle} />
-                                            <Text numberOfLines={1} style={styles.jobDistanceTxt}>5 km away</Text>
-                                        </View>
+                    <LinkPreview
+                        previewData={{
+                            description: 'This link https://github.com/flyerhq asd asd can be extracted from the text',
+                            image: { height: 100, width: 100, url: 'https://dummyimage.com/600x400/000/fff' },
+                            link: 'https://github.com/flyerhq',
+                            title: 'hello'
+                        }}
+                        metadataContainerStyle={{ direction: 'ltr', marginTop: 0 }}
+                        metadataTextContainerStyle={styles.footerMetadataTextStyle}
+                        textContainerStyle={styles.footerTextContainerStyle}
+                        text='This link https://github.com/flyerhq asd asd can be extracted from the text'
+                        renderTitle={() => {
+                            return (
+                                <View style={[globalStyles.rowView, styles.jobDetailHeaderView, globalStyles.rtlDirection,]}>
+                                    <Text numberOfLines={1} style={styles.jobTitleTxt}>Job Title</Text>
+                                    <View style={[globalStyles.rowView, styles.pinImageViewStyle]}>
+                                        <Image source={ImagesPath.map_pin_dark_line_icon} style={styles.pinImageStyle} />
+                                        <Text numberOfLines={1} style={styles.jobDistanceTxt}>5 km away</Text>
                                     </View>
-                                )
-                            }}
-                            renderText={() => {
-                                return null
-                            }}
-                        />
-                    </View>
+                                </View>
+                            )
+                        }}
+                        renderDescription={(props) => <Text numberOfLines={2} style={[styles.jobDetailsTxt, { direction: 'ltr' }]}>{props}</Text>}
+                        renderText={() => {
+                            return (
+                                <TouchableOpacity onPress={() => {
+                                    setIsVisible(!isVisible)
+                                }} style={[globalStyles.rtlDirection, {
+                                    width: wp(4),
+                                    alignSelf: 'flex-end',
+                                    position: "absolute"
+                                }]}>
+                                    <Image source={ImagesPath.close_icon} style={styles.closeBtnStyle} />
+                                </TouchableOpacity>
+                            )
+                        }}
+                        renderMinimizedImage={(props) => <Image source={{ uri: props.url }} style={[styles.renderMinimizedImageStyle]} />}
+                    />
                 }
                 {
                     imageList.length != 0 &&
@@ -649,18 +670,18 @@ const ChatScreen = () => {
                         )}
                     </View>
                 }
-            </View>
+            </View >
         )
     }
-
     return (
         <View style={[globalStyles.container]}>
+            {loading && <CustomActivityIndicator size={'small'} />}
             <Header
                 containerStyle={{ backgroundColor: colors.white }}
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView,]} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={styles.titleTxt}>Bill name</Text>
+                        <Text style={[globalStyles.rtlStyle, styles.titleTxt]}>Bill name</Text>
                     </TouchableOpacity>
                 }
                 headerLeftStyle={{ width: "50%", paddingLeft: wp(3) }}
@@ -677,17 +698,105 @@ const ChatScreen = () => {
                     renderChatFooter={renderChatFooter}
                     renderInputToolbar={renderInputToolbar}
                     renderMessageImage={renderMessageImage}
+                    renderMessageVideo={(props: MessageVideoProps<IMessage>) => {
+                        return (
+                            <>
+                                {
+                                    props.currentMessage?.video && props.currentMessage?.video?.length >= 4 ?
+                                        <View style={styles.renderImageMainStyle}>
+                                            {
+                                                props.currentMessage?.video?.slice(0, 4).map((item, index) => {
+                                                    return (
+                                                        <>
+                                                            {/* <View style={{ height: 100, width: 100, backgroundColor: 'red' }}></View> */}
+                                                            {
+                                                                index <= 2 ?
+                                                                    <TouchableOpacity onPress={() => {
+                                                                        props.currentMessage?.image && setSelectedImage({ visible: true, selectedIndex: index, data: props.currentMessage?.image })
+                                                                    }}>
+                                                                        <Image source={{ uri: item.url }} style={styles.renderImageStyle} />
+                                                                    </TouchableOpacity>
+                                                                    :
+                                                                    <TouchableOpacity onPress={() => {
+                                                                        props.currentMessage?.image && setSelectedImage({ visible: true, selectedIndex: index, data: props.currentMessage?.image })
+                                                                    }} style={styles.remainImageViewStyle}>
+                                                                        <Text style={styles.remainTxtStyle}>+{props.currentMessage?.image && props.currentMessage?.image?.length - 3}</Text>
+                                                                    </TouchableOpacity>
+                                                            }
+                                                        </>
+                                                    )
+                                                })
+                                            }
+                                        </View>
+                                        :
+                                        <>
+                                            {
+                                                props.currentMessage?.video?.map((item, index) => {
+                                                    return (
+                                                        <TouchableOpacity style={styles.singleImageViewStyle} onPress={() => {
+                                                            console.log({ oneItem: item });
+                                                            props.currentMessage?.image && setSelectedImage({ visible: true, selectedIndex: index, data: props.currentMessage?.image })
+                                                        }}>
+                                                            <Video source={{ uri: item.url }} paused style={{ minHeight: wp(40), minWidth: wp(70), marginTop: wp(2), borderRadius: wp(2), marginHorizontal: wp(2) }} resizeMode={'cover'} />
+                                                            {/* <Image source={{ uri: item.imgUrl }} style={styles.singleImageStyle} /> */}
+                                                        </TouchableOpacity>
+                                                    )
+                                                })
+                                            }
+                                        </>
+                                }
+                            </>
+                        )
+                    }}
                     renderSend={renderSend}
                     alwaysShowSend
                     user={{
                         _id: 1,
                         name: "new one",
-                        // avatar:
+                        // avatar: ""
                     }}
                 />
             </Container>
+            {selectedImage.visible && selectedImage.data &&
+                <Modal
+                    isVisible={selectedImage.visible}
+                    style={{ margin: 0, backgroundColor: colors.white_color }}>
+                    <>
+                        <TouchableOpacity
+                            onPress={() => setSelectedImage({ visible: false, selectedIndex: 0, data: [] })}
+                            style={styles.closeImageBtnStyle}>
+                            <Image source={ImagesPath.cross_icon} style={styles.closeIcon} />
+                        </TouchableOpacity>
+                        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                            <Carousel
+                                layout={'default'}
+                                data={selectedImage.data}
+                                firstItem={selectedImage.selectedIndex}
+                                sliderWidth={wp(100)}
+                                itemWidth={wp(100)}
+                                renderItem={({ item, index }: { item: ImageList, index: number }) => {
+                                    console.log("🚀 ~ file: index.tsx:536 ~ renderMessageImage ~ item", item)
+
+                                    return (
+                                        <View style={{ width: '100%', height: '100%', justifyContent: 'center' }}>
+                                            <ImageViewer
+                                                imageUrls={[{ url: item.imgUrl }]}
+                                                renderIndicator={() => <></>}
+                                                backgroundColor='transparent'
+                                            />
+                                        </View>
+                                    )
+                                }}
+                            />
+                        </View>
+                    </>
+                </Modal>
+            }
             <BottomSheet
                 ref={refRBSheet}
+                onClose={() => {
+                    setShowCameraView(false)
+                }}
                 animationType={'slide'}
                 customStyles={{
                     draggableIcon: {
@@ -708,31 +817,46 @@ const ChatScreen = () => {
                     <View style={styles.bottomViewStyle}>
                         <CustomJobDetailsBottomButton
                             imageStyle={styles.bottomImageStyle}
-                            image={ImagesPath.gallary_image_icon}
-                            buttonText={strings.Photos}
-                            onPress={() => {
-                                selectOneFile('image')
+                            image={showCameraView ? ImagesPath.video_icon : ImagesPath.gallary_image_icon}
+                            buttonText={showCameraView ? strings.Video : strings.Photos}
+                            onPress={async () => {
+                                if (showCameraView) {
+                                    let permission
+                                    if (Platform.OS == "android") {
+                                        permission = await requestCameraPermission()
+                                        permission && cameraLaunch('video')
+                                    } else {
+                                        cameraLaunch('video')
+                                    }
+                                } else {
+                                    selectOneFile('image')
+                                }
                             }} />
                         <CustomJobDetailsBottomButton
                             imageStyle={styles.bottomImageStyle}
                             image={ImagesPath.camera_image_icon}
                             buttonText={strings.Camera}
                             onPress={async () => {
-                                let permission
-                                if (Platform.OS == "android") {
-                                    permission = await requestCameraPermission()
-                                    permission && cameraLaunch()
+                                if (!showCameraView) {
+                                    setShowCameraView(true)
                                 } else {
-                                    cameraLaunch()
+                                    let permission
+                                    if (Platform.OS == "android") {
+                                        permission = await requestCameraPermission()
+                                        permission && cameraLaunch('photo')
+                                    } else {
+                                        cameraLaunch('photo')
+                                    }
                                 }
                             }} />
-                        <CustomJobDetailsBottomButton
+                        {!showCameraView && <CustomJobDetailsBottomButton
                             imageStyle={styles.bottomImageStyle}
                             image={ImagesPath.file_image_icon}
                             buttonText={strings.document}
                             onPress={() => {
                                 selectOneFile('file')
-                            }} />
+                            }} />}
+
                     </View>
                 }
                 height={225}

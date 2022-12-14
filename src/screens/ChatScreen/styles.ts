@@ -79,7 +79,7 @@ export const styles = StyleSheet.create({
         width: '100%'
     },
     pinImageViewStyle: {
-        width: "50%",
+        width: "40%",
         justifyContent: 'flex-end'
     },
     pinImageStyle: {
@@ -248,8 +248,20 @@ export const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     linkMetadataTextContainerStyle: {
-        alignItems: 'flex-end',
-        marginRight: wp(2),
+        alignSelf: 'center',
+        height: wp(20),
+        justifyContent: 'space-between',
+        paddingBottom: wp(2),
+        paddingHorizontal: wp(2)
+    },
+    linkTextContainerStyle: {
+        backgroundColor: colors.light_blue_color_1,
+        marginHorizontal: wp(2),
+        marginTop: wp(2),
+        marginBottom: 0,
+        padding: wp(2),
+        borderRadius: wp(2),
+        width: wp(70)
     },
     renderMinimizedImageStyle: {
         height: wp(19),
@@ -305,5 +317,20 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: colors.white_color,
         borderRadius: wp(2)
-    }
+    },
+    footerTextContainerStyle: {
+        backgroundColor: colors.light_blue_color_1,
+        marginHorizontal: wp(2),
+        marginVertical: wp(2),
+        marginBottom: wp(5),
+        padding: wp(2),
+        borderRadius: wp(2)
+    },
+    footerMetadataTextStyle: {
+        alignSelf: 'center',
+        height: wp(20),
+        justifyContent: 'space-between',
+        paddingBottom: wp(2),
+        paddingHorizontal: wp(2)
+    },
 })

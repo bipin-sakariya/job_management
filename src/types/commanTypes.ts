@@ -15,3 +15,9 @@ export interface DocList {
     mb: number | null
     title: string | null
 }
+
+export interface VideoList {
+    id: number
+    url: string
+    mediaType: string | undefined
+}

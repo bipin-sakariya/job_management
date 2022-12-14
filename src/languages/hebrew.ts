@@ -275,5 +275,6 @@ export const hebrew = {
     Write_a_message_here: 'כתבו כאן הודעה.....',
     document: 'מסמך',
     Camera: 'מַצלֵמָה',
-    Photos: 'תמונות'
+    Photos: 'תמונות',
+    Video: 'וִידֵאוֹ'
 }
