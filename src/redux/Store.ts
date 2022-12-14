@@ -25,7 +25,6 @@ const reducers = combineReducers({
     formList: formListSlice
 })
 
-
 const rootReducer = (state: any, action: any) => {
     if (action.type == 'USER_LOGOUT') {
         storage.removeItem('persist:root')

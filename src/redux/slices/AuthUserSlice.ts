@@ -115,7 +115,5 @@ export const UserSlice = createSlice({
     },
 })
 
-
-
 export const { userDataReducer, resetUserDataReducer } = UserSlice.actions;
 export default UserSlice.reducer;

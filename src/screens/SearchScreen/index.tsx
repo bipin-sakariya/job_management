@@ -27,7 +27,6 @@ const SearchScreen = () => {
     const { groupListData } = useAppSelector(state => state.groupList)
     const { jobListData } = useAppSelector(state => state.jobList)
 
-
     const searchName = (input: string) => {
         let param = {
             page: page,
@@ -68,7 +67,6 @@ const SearchScreen = () => {
                     setPage(page + 1)
                 }
                 console.log({ res })
-
             })
         }
     }

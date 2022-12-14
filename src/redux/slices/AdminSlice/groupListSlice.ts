@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { Alert } from "react-native";
 import { ApiConstants } from "../../../config/ApiConstants";
 import { axiosClient } from "../../../config/Axios";
+import { FormDataTypes } from "./formListSlice";
 
 
 export interface MemberDetailsProps {

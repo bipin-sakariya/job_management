@@ -12,11 +12,7 @@ interface CustomOneItemSelectProps {
     data: GroupParams[]
     onSetData: Dispatch<SetStateAction<any>>
 }
-interface jobDataProps {
-    id: number
-    title: string
-    selected: boolean
-}
+
 const CustomOneItemSelect = (props: CustomOneItemSelectProps & TouchableOpacityProps) => {
 
     const onSelectJob = (item: GroupParams) => {
@@ -36,10 +32,11 @@ const CustomOneItemSelect = (props: CustomOneItemSelectProps & TouchableOpacityP
         })
         props.onSetData(emptyJobList)
     }
+
     return (
         <TouchableOpacity onPress={() => { onSelectJob(props.item) }} style={[globalStyles.rowView, styles.jobListMainView]}>
             <Text style={styles.jobNameTxt}>{props.item.name}</Text>
-            <View style={globalStyles.roundView} >
+            <View style={globalStyles.roundView}>
                 <View style={[styles.roundFillView, { backgroundColor: props.item.selected ? colors.fillColor : colors.white_5, }]} />
             </View>
         </TouchableOpacity>

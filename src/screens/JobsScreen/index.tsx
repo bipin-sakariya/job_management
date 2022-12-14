@@ -30,45 +30,15 @@ const data = [
     { id: 4, title: strings.Council, selected: false },
 ]
 
-const JobData = [
-    {
-        data: '16 may 2022',
-        jobs: [
-            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
-            { title: 'Job Return', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobReturn },
-            { title: 'Job Transfer', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobTransfer }
-        ]
-    },
-    {
-        data: '16 may 2022',
-        jobs: [
-            { title: 'Job Close', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobClose },
-            { title: 'Job Partial', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobPartial },
-            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen }
-        ]
-    },
-    {
-        data: '16 may 2022',
-        jobs: [
-            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
-            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
-            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen }
-        ]
-    }
-]
-
-
-
 const JobsScreen = () => {
     const navigation = useCustomNavigation('JobsScreen')
     const refRBSheet = useRef<RBSheet | null>(null);
+    const dispatch = useAppDispatch();
+    const isFocus = useIsFocused()
 
     const [selectedItem, setSelectedItem] = useState<GroupParams | undefined>(undefined);
 
     const [btn, setBtn] = useState({ open: true, close: false })
-    const isFocus = useIsFocused()
-    const dispatch = useAppDispatch();
-
     const [page, setPage] = useState(1);
     const [groupPage, setGroupPage] = useState(1)
     const [openJobList, setOpenJobList] = useState<JobDetailsData[]>([])
@@ -118,6 +88,7 @@ const JobsScreen = () => {
             status: btn.open ? 'open' : 'close',
             id: selectedItem?.id
         }
+
         dispatch(jobStatusWiseList(params)).unwrap().then((res) => {
             console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
             setOpenJobList(res.results)
@@ -153,7 +124,6 @@ const JobsScreen = () => {
 
     return (
         <View style={globalStyles.container}>
-            {/* {console.log('data=============', { selectedItem })} */}
             <Header
                 headerLeftComponent={
                     <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
@@ -212,12 +182,10 @@ const JobsScreen = () => {
                 <FlatList
                     data={openJobList}
                     renderItem={({ item, index }) => {
-                        console.log({ data: openJobList[index].created_at })
                         const isDateVisible = index != 0 ? moment(openJobList[index].created_at).format('ll') == moment(openJobList[index - 1].created_at).format('ll') ? false : true : true
                         return (
                             <JobListComponent item={item} index={index} isDateVisible={isDateVisible} />
                         )
-
                     }}
                     onEndReached={() => {
                         console.log("On reach call");

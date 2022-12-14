@@ -148,7 +148,7 @@ const BillSectionScreen = () => {
                     setError(e.data)
                 })
             } else {
-                Alert.alert("Please enter data")
+                Alert.alert(strings.data_required)
             }
         }
     }

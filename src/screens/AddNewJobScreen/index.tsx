@@ -1,7 +1,7 @@
-import { Alert, FlatList, Image, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, Image, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomActivityIndicator, CustomBlackButton, CustomCarouselImageAndVideo, CustomDashedComponent, CustomDetailsComponent, CustomModal, CustomSubTitleWithImageComponent, CustomSwitchComponent, CustomTextInput, CustomTextInputWithImage, Header } from '../../components'
+import { Container, CustomBlackButton, CustomCarouselImageAndVideo, CustomDashedComponent, CustomDetailsComponent, CustomModal, CustomSubTitleWithImageComponent, CustomSwitchComponent, CustomTextInput, CustomTextInputWithImage, Header } from '../../components'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
@@ -41,25 +41,26 @@ interface doc_arrayList {
     type: string | undefined,
     mb: number | null
 }
+
 const AddNewJobScreen = () => {
     const navigation = useCustomNavigation('AddNewJobScreen');
+    const dispatch = useAppDispatch()
+
     const [isUrgentJob, setIsUrgentJob] = useState(false)
     const [isFinishNotification, setIsFinishNotification] = useState(false)
     const [isModelVisible, setIsModelVisible] = useState(false)
-    // const [imageUrl, setImageUrl] = useState('')
     const [imageList, setImageList] = useState<imageList[]>([])
     const [docList, setDocList] = useState<docList[] | []>([])
     const [imageError, setImageError] = useState(false)
     const [docError, setDocError] = useState(false)
-    const { isLoading } = useAppSelector(state => state.jobList)
     const [latlong, setLatLong] = useState({ latitude: '', longitude: '' })
-    const dispatch = useAppDispatch()
     const [error, setError] = useState({
         id: '',
         address: '',
         address_information: '',
         description: '',
     })
+    const { isLoading } = useAppSelector(state => state.jobList)
 
     const createJob = (values: {
         jobID: string;
@@ -68,28 +69,22 @@ const AddNewJobScreen = () => {
         description: string;
     }) => {
         if (values) {
-            let data = new FormData
-
-            console.log('hghghjghj', values)
+            let data = new FormData()
             let image_array: image_arrayList[] = []
             let doc_array: doc_arrayList[] = []
 
             if (imageList) {
                 imageList.map((item, index) => {
                     let images = {
-                        // uri: item.imgUrl,
-                        // name: "photo.jpg",
-                        // type: "image/jpeg"
                         uri: item.imgUrl,
                         name: `photo${index}${item.mediaType == "image" ? '.jpg' : '.mp4'}`,
                         type: item.mediaType == "image" ? "image/jpeg" : 'video/mp4'
                     }
                     image_array.push(images)
-                    console.log({ images })
                 })
             }
             if (docList) {
-                docList.map((item, index) => {
+                docList.map((item) => {
                     let docs = {
                         uri: item.path,
                         name: item.title,
@@ -110,20 +105,19 @@ const AddNewJobScreen = () => {
             data.append("priority", isUrgentJob)
             data.append("further_inspection", isFinishNotification)
             data.append("status", strings.JobOpen)
+
             if (!isEmptyArray(image_array)) {
                 image_array.map((item) => {
-
                     data.append("image", item)
                 })
             }
             if (!isEmptyArray(doc_array)) {
                 data.append("attachment", docList)
             }
-            dispatch(jobCreate(data)).unwrap().then((datas) => {
-                console.log({ datas: datas });
+
+            dispatch(jobCreate(data)).unwrap().then((value) => {
                 setIsModelVisible(true)
             }).catch((error) => {
-                console.log({ Error: error });
                 setError(error.data)
             })
         } else {
@@ -137,25 +131,21 @@ const AddNewJobScreen = () => {
     }
 
     const CreateJobValidationSchema = yup.object().shape({
-        jobID: yup
-            .string()
-            .trim()
-            .required(strings.jobid_required),
+        jobID: yup.string().trim().required(strings.jobid_required),
         address: yup.string().required(strings.address_required),
         addressInformation: yup.string().required(strings.addressInformation_required),
         description: yup.string().required(strings.description_required),
     });
+
     const { values, errors, touched, handleSubmit, handleChange } =
         useFormik({
             enableReinitialize: true,
             initialValues: { jobID: '', address: '', addressInformation: '', description: '', },
             validationSchema: CreateJobValidationSchema,
             onSubmit: values => {
-                console.log({ values })
                 createJob(values)
             }
         })
-
 
     useEffect(() => {
         if (values.jobID) {
@@ -176,15 +166,16 @@ const AddNewJobScreen = () => {
         //Opening Document Picker for selection of one file
         try {
             const res = await DocumentPicker.pick({
-                // type: [DocumentPicker.types.images, DocumentPicker.types.pdf, DocumentPicker.types.video],
                 type: [DocumentPicker.types.allFiles],
                 presentationStyle: 'fullScreen',
                 mode: 'import',
                 allowMultiSelection: true,
                 copyTo: 'cachesDirectory'
             })
+
             let ImageTempArray = [...imageList]
             let DocTempArray = [...docList]
+
             if (res[0]?.type?.split("/")[0] == 'application') {
                 DocTempArray.push({ path: res[0].uri, type: res[0]?.type?.split("/")[1], mb: res[0].size, title: res[0].name })
                 setDocError(false)
@@ -193,11 +184,10 @@ const AddNewJobScreen = () => {
                 ImageTempArray.push({ imgUrl: res[0].uri, mediaType: res[0]?.type?.split("/")[0] == 'image' ? 'image' : 'video', id: Math.random() })
                 setImageError(false)
             }
-            console.log(ImageTempArray)
             setImageList(ImageTempArray)
-            console.log({ DocTempArray })
             setDocList(DocTempArray)
-        } catch (err) {
+        }
+        catch (err) {
             if (DocumentPicker.isCancel(err)) {
             } else {
                 Alert.alert('Unknown Error: ' + JSON.stringify(err));
@@ -205,9 +195,9 @@ const AddNewJobScreen = () => {
             }
         }
     };
+
     return (
         <View style={globalStyles.container}>
-            {/* {console.log({ values, errors })} */}
             {/* {isLoading && <CustomActivityIndicator size={'small'} />} */}
             <Header
                 headerLeftStyle={{
@@ -282,9 +272,6 @@ const AddNewJobScreen = () => {
                                     numColumns={2}
                                     data={docList}
                                     renderItem={({ item, index }: { item: docList, index: number }) => {
-                                        console.log("🚀 ~ file: index.tsx:302 ~ AddNewJobScreen ~ item", item)
-                                        console.log(typeof (item.path));
-                                        console.log(item.path.split(/[#?]/)[0].split('/').pop()?.split('.')[0]);
                                         return (
                                             <CommonPdfView
                                                 onPress={() => {
@@ -311,14 +298,6 @@ const AddNewJobScreen = () => {
                         onPress={() => selectOneFile()}
                         title={strings.Addimagesandattachments}
                         viewStyle={{ marginTop: wp(5), paddingVertical: wp(5) }} />
-                    {/* {
-                        imageError && docError ?
-                            <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{strings.ImageandAttachments_required}</Text> :
-                            <>
-                                {imageError || error.images ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.images ? error.images : strings.Image_required}</Text> : null}
-                                {docError || error.attachments ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.attachments ? error.attachments : strings.Attachments_required}</Text> : null}
-                            </>
-                    } */}
                     <CustomSwitchComponent
                         onPress={() => setIsUrgentJob(!isUrgentJob)}
                         value={isUrgentJob}

@@ -272,5 +272,13 @@ export const hebrew = {
 
     start_date: 'תאריך התחלה',
     end_date: 'תאריך סיום',
-
+    apply: 'להגיש מועמדות',
+    profile_pic_required: 'אנא בחר את תמונת הפרופיל שלך.',
+    data_required: 'נא להזין נתונים',
+    permission_denied: 'ההרשאה נדחתה!',
+    storage_permission: 'עליך לתת הרשאת אחסון כדי להוריד את הקובץ',
+    unable_to_open_setting: 'לא ניתן לפתוח הגדרות',
+    location_permission_denied: 'הרשאת המיקום נדחתה',
+    group_created: 'הקבוצה נוצרה.',
+    recently_assigned_jobs: 'משרות שהוקצו לאחרונה',
 }

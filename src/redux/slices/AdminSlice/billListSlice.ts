@@ -3,6 +3,7 @@ import { Alert } from "react-native";
 import { Double } from "react-native/Libraries/Types/CodegenTypes";
 import { ApiConstants } from "../../../config/ApiConstants";
 import { axiosClient } from "../../../config/Axios";
+import { FormDataTypes } from "./formListSlice";
 
 export interface billData {
     id: number,
@@ -32,7 +33,7 @@ interface initialState {
 
 interface paramsTypes {
     id?: number
-    data?: FormData,
+    data?: FormDataTypes,
     page?: number,
     bill_type?: string
 }
