@@ -22,9 +22,10 @@ const Header = ({ containerStyle, headerLeftComponent, headerCenterComponent, he
                 <View style={[styles.headerLeft, headerLeftStyle]}>
                     {headerLeftComponent}
                 </View>
-                <View style={[styles.headerCenter, headerCenterStyle]}>
-                    {headerCenterComponent}
-                </View>
+                {headerCenterComponent &&
+                    <View style={[styles.headerCenter, headerCenterStyle]}>
+                        {headerCenterComponent}
+                    </View>}
                 <View style={[styles.headerRight, headerRightStyle]}>
                     {headerRightComponent}
                 </View>

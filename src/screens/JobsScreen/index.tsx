@@ -79,19 +79,19 @@ const JobsScreen = () => {
         }).catch((error) => {
             console.log({ error });
         })
-    }, [isFocus, btn])
+    }, [isFocus, btn, groupListData.results,])
 
-    const JobListApiCall = (page: number, input?: string) => {
+    const JobListApiCall = (page: number, input?: string, id?: number) => {
         let params: jobListParams = {
             page: page,
             search: input,
-            status: btn.open ? 'open' : 'close',
-            id: selectedItem?.id
+            status: btn.open ? strings.Open : strings.Close,
+            id: selectedItem?.id ? selectedItem?.id : id
         }
 
         dispatch(jobStatusWiseList(params)).unwrap().then((res) => {
             console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-            setOpenJobList(res.results)
+            // setOpenJobList(res.results)
             if (res.next && !!input) {
                 setPage(page + 1)
                 setOpenJobList(res.results)
@@ -100,16 +100,17 @@ const JobsScreen = () => {
             //     setOpenJobList(res.results)
             //     setPage(page + 1)
             // }
-            setPage(page + 1)
+            // setPage(page + 1)
         }).catch((error) => {
             console.log({ error });
         })
     }
-
+    { console.log({ openJobList }) }
     useEffect(() => {
         const findData: GroupParams[] = groupData.map((i: GroupData) => {
             return {
                 ...i,
+
                 user_name: i.name,
                 selected: false,
             }
@@ -178,18 +179,18 @@ const JobsScreen = () => {
 
                     </View>
                 }
-                <ButtonTab btnOneTitle={strings.open} btnTwoTitle={strings.close} setBtn={setBtn} btnValue={btn} onReset={setPage} />
+                <ButtonTab btnOneTitle={strings.Open} btnTwoTitle={strings.Close} setBtn={setBtn} btnValue={btn} onReset={setPage} />
                 <FlatList
-                    data={openJobList}
+                    data={jobListData?.results}
                     renderItem={({ item, index }) => {
-                        const isDateVisible = index != 0 ? moment(openJobList[index].created_at).format('ll') == moment(openJobList[index - 1].created_at).format('ll') ? false : true : true
+                        const isDateVisible = index != 0 ? moment(jobListData?.results[index].created_at).format('ll') == moment(jobListData?.results[index - 1].created_at).format('ll') ? false : true : true
                         return (
                             <JobListComponent item={item} index={index} isDateVisible={isDateVisible} />
                         )
                     }}
                     onEndReached={() => {
                         console.log("On reach call");
-                        if (jobListData.next) {
+                        if (jobListData?.next) {
                             JobListApiCall(page)
                         }
                     }}
@@ -207,7 +208,8 @@ const JobsScreen = () => {
                 ref={refRBSheet}
                 data={finalGroupData}
                 onSelectedTab={(item) => {
-
+                    console.log({ item })
+                    JobListApiCall(page, text, item.id)
                     setSelectedItem(item)
                     refRBSheet.current?.close()
                 }}

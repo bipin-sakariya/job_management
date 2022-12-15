@@ -1,6 +1,14 @@
 import { RouteProp } from "@react-navigation/native";
+import { date } from "yup";
 import { GroupData } from "../redux/slices/AdminSlice/groupListSlice";
 import { JobDetailsData } from "../redux/slices/AdminSlice/jobListSlice";
+
+export interface JobDetailsProps {
+    description: string
+    km: string
+    status: string
+    title: string
+}
 
 export type BottomStackParamList = {
     JobsScreen: undefined
@@ -22,7 +30,7 @@ export interface JobDetailsProps {
 export type RootStackParamList = {
     AuthStack: AuthStackParamList
     DrawerScreens: DrawerStackParamList
-    MapScreen: undefined
+    MapScreen: { type: 'viewJob' | 'viewJobs', JobDetails?: { id?: number, image?: string, date?: string, status?: string, button?: string, title?: string, description?: string, km?: string, coordinate?: { latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number }, } }
     IndoxScreen: undefined
     JobDuplicateListScreen: undefined
     NotificationScreen: undefined
@@ -60,7 +68,7 @@ export type RootStackParamList = {
     GroupListScreen: undefined,
     CreateGroupScreen: undefined,
     GroupDetailScreen: { screenName?: string, params: GroupData, isEdit?: boolean },
-    CreateJobMapScreen: undefined,
+    CreateJobMapScreen: { isEditing?: boolean, jobLocation?: { latitude?: number, longitude?: number }, isButtonVisible?: boolean, isAddressPreview?: boolean }
     SearchScreen: { screenName?: string }
     AssignJobScreen: undefined,
     TransferJobListScreen: undefined

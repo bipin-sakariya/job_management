@@ -131,7 +131,7 @@ const GroupDetailScreen = () => {
             })
         }
     }, [isFocused])
-    console.log(route.params.params)
+
     useEffect(() => {
         const findData = isUser.map((i: DataTypes) => {
             return {

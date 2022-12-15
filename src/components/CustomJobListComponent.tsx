@@ -58,7 +58,8 @@ const styles = StyleSheet.create({
         paddingVertical: wp(2.5),
         marginVertical: wp(0.5),
         borderRadius: 8,
-        marginHorizontal: wp(2)
+        marginHorizontal: wp(2),
+
     },
     jobImageStyle: {
         height: wp(20),
@@ -69,6 +70,7 @@ const styles = StyleSheet.create({
         ...globalStyles.rowView,
         justifyContent: 'space-between',
         paddingLeft: wp(2.5),
+
     },
     titleTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
@@ -109,7 +111,7 @@ const styles = StyleSheet.create({
     jobStatusViewStyle: {
         flexDirection: "row",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
     },
     infoCircleIcon: {
         height: wp(5),
@@ -125,7 +127,9 @@ const styles = StyleSheet.create({
         shadowColor: "rgba(0, 0, 0, 0.3)",
         shadowOpacity: 2,
         shadowOffset: { height: 0, width: 0 },
-        elevation: 5
+        elevation: 5,
+        paddingHorizontal: wp(2),
+        marginHorizontal: wp(0)
     },
     kmViewStyle: {
         justifyContent: "center", alignSelf: "center", direction: "rtl", maxWidth: wp(25), flex: 1

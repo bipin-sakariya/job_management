@@ -223,5 +223,10 @@ export const eng = {
     unable_to_open_setting: 'Unable to open settings',
     location_permission_denied: 'Location permission denied',
     group_created: 'group created.',
-    recently_assigned_jobs: 'Recently assigned jobs'
+    recently_assigned_jobs: 'Recently assigned jobs',
+
+    Please_select_a_source_and_destination: 'Please select a source and destination',
+    please_select_a_destination: 'please select a destination',
+
+    KM_away: 'KM away',
 }

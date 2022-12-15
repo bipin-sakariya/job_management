@@ -101,17 +101,19 @@ const JobListComponent = ({ item, index, isDateVisible }: { item: JobDetailsData
                     <Image source={ImagesPath.calender_icon} style={styles.calenderIconStyle} />
                     <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{convertDate(item.created_at)}</Text>
                 </View>}
-                {index == 0 &&
+                {
+                    index == 0 &&
                     <TouchableOpacity
                         onPress={() => {
                             setIsModelVisible(true)
                         }} style={{ padding: wp(1.5) }}>
                         <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle, { fontFamily: fonts.FONT_POP_SEMI_BOLD, paddingHorizontal: 0 }]}>{strings.date}</Text>
-                    </TouchableOpacity>}
-            </View>
+                    </TouchableOpacity>
+                }
+            </View >
             <CustomeJobListDetailsViewComponent
                 onPress={() => {
-                    navigation.navigate("JobDetailsScreen", { params: item })
+                    navigation.navigate("JobDetailsScreen", { params: item, type: item?.status })
                 }}
                 item={item}
             />
@@ -157,7 +159,7 @@ const JobListComponent = ({ item, index, isDateVisible }: { item: JobDetailsData
                     </View>
                 }
             />
-        </View>
+        </View >
     )
 }
 

@@ -2,7 +2,6 @@ import { FlatList, I18nManager, Image, ScrollView, StyleSheet, Text, TextInput, 
 import React, { useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { BottomSheet, Container, CustomBlackButton, CustomDashedComponent, CustomDetailsComponent, CustomModal, CustomOneItemSelect, CustomSubTitleWithImageComponent, CustomTextInput, Header } from '../../components'
-import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { strings } from '../../languages/localizedStrings'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -14,6 +13,7 @@ import TableDetailsComponent from '../../components/TableDetailsComponent'
 import { colors } from '../../styles/Colors'
 import RBSheet from 'react-native-raw-bottom-sheet'
 import { watchPosition } from 'react-native-geolocation-service'
+import { ImagesPath } from '../../../utils/ImagePaths'
 
 interface SignDataProps {
     id: number,
@@ -250,7 +250,7 @@ const CloseJobScreen = () => {
             <Header
                 headerLeftStyle={{
                     width: "50%",
-                    paddingLeft: wp(3),
+                    paddingLeft: wp(3)
                 }}
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
@@ -266,14 +266,14 @@ const CloseJobScreen = () => {
                         <Text style={styles.modalTxt}>{strings.ClosejobModalText}</Text>
                         <View style={[globalStyles.rowView, { justifyContent: "space-around", width: '100%' }]}>
                             <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.Partial} />
-                            <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%" }} title={strings.close} />
+                            <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%" }} title={strings.Close} />
                         </View>
                     </View>
                 } />
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <CustomSubTitleWithImageComponent title={strings.CloseJobForm} image={ImagesPath.check_circle_black_icon} />
                     <CustomTextInput
-                        title={strings.jobId}
+                        title={strings.JobId}
                         container={{ marginBottom: wp(4) }}
                         value={'123'}
                     />
@@ -281,28 +281,9 @@ const CloseJobScreen = () => {
                         title="9 Oxfort street"
                         value='9 Oxfort street'
                         mainContainerStyle={{ marginBottom: wp(5), flex: 1, }}
-                        container={{ width: wp(64) }}
-                        onPress={() => {
-                            navigation.navigate('MapScreen', {
-                                type: 'viewJob',
-                                JobDetails: {
-                                    title: 'Job Title',
-                                    description: 'Lorem Ipsum is simply dummy text of the printing...',
-                                    km: '5 km away',
-                                    date: "16 may 2022",
-                                    button: "Open",
-                                    status: "info",
-                                    coordinate: {
-                                        latitude: 45.524548,
-                                        longitude: -122.6749817,
-                                        latitudeDelta: 0.04864195044303443,
-                                        longitudeDelta: 0.040142817690068,
-                                    },
-                                }
-                            })
-                        }} />
+                        container={{ width: wp(64) }} />
                     <CustomDetailsComponent
-                        title={strings.description}
+                        title={strings.Description}
                         bottomComponent={
                             <Text numberOfLines={3} style={styles.bottomTxtStyle}>Lorem Ipsum is simply dummy text of the printing and,typesetting industry has been the industry's standard dummy text....</Text>
                         }
@@ -348,7 +329,7 @@ const CloseJobScreen = () => {
                         viewStyle={{ paddingVertical: wp(5), marginBottom: wp(5) }}
                     />
                     <CustomTextInput
-                        title={strings.jobId}
+                        title={strings.JobId}
                         container={{ marginBottom: wp(4) }}
                         value={'123'}
                     />
@@ -367,9 +348,9 @@ const CloseJobScreen = () => {
                             <View style={[globalStyles.rowView, globalStyles.rtlDirection, styles.textInputContainer, { paddingHorizontal: wp(2), marginHorizontal: wp(4), marginTop: wp(5) }]}>
                                 <Image source={ImagesPath.search_icon} style={{ height: wp(6), width: wp(6), resizeMode: 'contain' }} />
                                 <TextInput
-                                    style={[globalStyles.rtlStyle, { color: colors.dark_blue3_color, height: 40, marginHorizontal: wp(1.5), width: '80%', textAlign: I18nManager.isRTL ? 'right' : 'left', }]}
-                                    placeholder={strings.searchHere}
-                                    placeholderTextColor={colors.dark_blue3_color}
+                                    style={[globalStyles.rtlStyle, { color: '#455269', height: 40, marginHorizontal: wp(1.5), width: '80%', textAlign: I18nManager.isRTL ? 'right' : 'left', }]}
+                                    placeholder={'חפש כאן'}
+                                    placeholderTextColor={'#455269'}
                                     onChangeText={(txt) => {
                                         const searchData = signData.filter((i) => i.name.includes(txt.toLowerCase()))
                                         setSearchData(searchData)

@@ -290,7 +290,24 @@ const JobDetailsScreen = () => {
                             onChangeText={(text) => { }}
                             mainContainerStyle={{ marginBottom: wp(5), flex: 1, }}
                             container={{ width: wp(68) }}
-                            onpress={() => navigation.navigate('CreateJobMapScreen')}
+                            onPress={() => {
+                                navigation.navigate('MapScreen', {
+                                    type: 'viewJob', JobDetails: {
+                                        title: 'Job Title',
+                                        description: 'Lorem Ipsum is simply dummy text of the printing...',
+                                        km: '5 km away',
+                                        date: "16 may 2022",
+                                        button: "Open",
+                                        status: "info",
+                                        coordinate: {
+                                            latitude: 45.524548,
+                                            longitude: -122.6749817,
+                                            latitudeDelta: 0.04864195044303443,
+                                            longitudeDelta: 0.040142817690068,
+                                        },
+                                    }
+                                })
+                            }}
                         />
                         <CustomDetailsComponent
                             title={strings.description}

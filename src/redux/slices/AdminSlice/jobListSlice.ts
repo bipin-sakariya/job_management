@@ -166,8 +166,11 @@ export const jobStatusWiseList = createAsyncThunk<JobDataListProps, paramsTypes,
     (JOB + "/jobStatusWiseList", async (params, { rejectWithValue }) => {
         try {
             console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
+            const urlParams = new URLSearchParams({ page: params.page, search: params.search, status: params.status })
+            params?.id && urlParams.append('id', params.id)
+            console.log({ urlParams: urlParams.toString() })
             // console.log('p000000000000', ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
-            const response = await axiosClient.get(ApiConstants.JOBSTATUSWISE + `?page=${params.page}&search=${params.search}&status=${params.status}`)
+            const response = await axiosClient.get(ApiConstants.JOBSTATUSWISE + "?" + urlParams.toString())
             console.log("🚀 ~ file: jobListSlice.ts ~ line 700 ~ response", response)
             return response.data;
         } catch (e: any) {

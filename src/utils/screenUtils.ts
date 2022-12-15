@@ -2,6 +2,9 @@ import { Dimensions, PixelRatio, Platform, StatusBar } from 'react-native';
 import 'moment/locale/he'
 import moment from 'moment';
 import { object } from 'yup';
+import { location } from '../types/commanTypes';
+import Geocoder from 'react-native-geocoder';
+
 
 export const pixelRatio = PixelRatio.get();
 export const defaultPixel = 2; // provided in design 2px
@@ -115,5 +118,13 @@ export function renameKeys(obj: any, newKeys: any) {
     return { [newKey]: obj[key] };
   });
   return Object.assign({}, ...keyValues);
+}
+
+export const getAddress = async (location: location) => {
+  const res = await Geocoder.geocodePosition({ lat: location?.latitude, lng: location?.longitude }).then((res: any) => {
+    console.log("LO", res[0]?.formattedAddress)
+    return res[0]?.formattedAddress
+  }).catch((err: any) => console.log(err))
+  return res
 }
 

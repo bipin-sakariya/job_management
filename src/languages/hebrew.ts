@@ -281,4 +281,10 @@ export const hebrew = {
     location_permission_denied: 'הרשאת המיקום נדחתה',
     group_created: 'הקבוצה נוצרה.',
     recently_assigned_jobs: 'משרות שהוקצו לאחרונה',
+
+    Please_select_a_source_and_destination: 'אנא בחר מקור ויעד',
+    please_select_a_destination: 'אנא בחר יעד',
+
+    KM_away: 'ק"מ משם',
+    KM: 'ק"מ',
 }

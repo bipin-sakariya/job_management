@@ -1,8 +1,8 @@
 import { StyleSheet } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { colors } from "../../styles/Colors";
-import fonts from "../../styles/Fonts";
-import FontSizes from "../../styles/FontSizes";
+import { colors } from "../../../styles/Colors";
+import fonts from "../../../styles/Fonts";
+import FontSizes from "../../../styles/FontSizes";
 
 export const styles = StyleSheet.create({
     billSectionTxt: {
@@ -67,8 +67,7 @@ export const styles = StyleSheet.create({
     modalView: {
         width: wp(85),
         height: wp(60),
-        backgroundColor: colors.white,
-        alignSelf: 'center',
+        backgroundColor: 'white',
         borderRadius: wp(3),
         justifyContent: 'space-around',
         alignItems: "center",
@@ -127,22 +126,4 @@ export const styles = StyleSheet.create({
         fontSize: FontSizes.MEDIUM_16,
         color: colors.light_brown
     },
-    textInputContainer: {
-        borderRadius: wp(2),
-        borderColor: colors.text_input_border_color,
-        borderWidth: wp(0.5),
-    },
-    itemListTxt: {
-        fontFamily: fonts.FONT_POP_REGULAR,
-        fontSize: FontSizes.SMALL_14,
-        color: colors.dark_blue2_color,
-    },
-    checkBoxIcon: {
-        height: wp(6),
-        width: wp(6)
-    },
-    checkBoxIcon1: {
-        height: wp(5),
-        width: wp(5)
-    }
 })

@@ -32,5 +32,25 @@ export const styles = StyleSheet.create({
         resizeMode: "contain",
         marginVertical: wp(4),
         marginHorizontal: wp(2)
+    },
+    closeIconContainer: {
+        backgroundColor: colors.black,
+        borderRadius: wp(8),
+        height: wp(8),
+        width: wp(8),
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: wp(2),
+    },
+    closeIcon: {
+        tintColor: 'white',
+        height: wp(6),
+        width: wp(6)
+    },
+    btnContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: wp(3),
     }
 })

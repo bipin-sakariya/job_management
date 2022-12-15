@@ -134,7 +134,19 @@ const CreateNewJobScreen = () => {
                         <CustomTextInputWithImage
                             title="9 Oxfort street"
                             value='9 Oxfort street'
-                            container={{ marginVertical: wp(5), width: wp(67) }} />
+                            container={{ marginVertical: wp(5), width: wp(67) }}
+                            onPress={() => {
+                                navigation.navigate("CreateJobMapScreen", {
+                                    isEditing: true,
+                                    jobLocation: {
+                                        latitude: 21.247181,
+                                        longitude: 72.890877,
+                                    },
+                                    isButtonVisible: true,
+                                    isAddressPreview: true,
+                                })
+                            }}
+                        />
                         <CustomTextInput
                             title={strings.addressInformation}
                             numberOfLines={2}

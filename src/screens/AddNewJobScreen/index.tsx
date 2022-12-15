@@ -231,7 +231,11 @@ const AddNewJobScreen = () => {
                         mainContainerStyle={{ marginTop: wp(5), flex: 1, }}
                         mapStyle={{ paddingVertical: Platform.OS == "ios" ? wp(4.2) : wp(5.5) }}
                         container={{ width: wp(68) }}
-                        onPress={() => navigation.navigate('CreateJobMapScreen')}
+                        onPress={() => navigation.navigate('CreateJobMapScreen', {
+                            isEditing: true,
+                            isAddressPreview: true,
+                            isButtonVisible: true,
+                        })}
                     />
                     {(touched?.address && errors?.address) || error?.address ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors?.address ? errors.address : error?.address}</Text> : null}
                     <CustomTextInput

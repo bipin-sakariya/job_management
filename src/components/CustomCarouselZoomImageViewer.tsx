@@ -22,7 +22,7 @@ interface CustomCarouselZoomImageViewerProps {
 
 const CustomCarouselZoomImageViewer = (props: CustomCarouselZoomImageViewerProps) => {
     const [activeSlide, setActiveSlide] = useState<number>(0)
-    
+
     const renderItem = ({ item, index }: { item: ItemProps, index: number }) => {
         return (
             <>
