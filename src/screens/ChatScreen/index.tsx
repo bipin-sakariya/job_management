@@ -1,7 +1,7 @@
-import { Alert, FlatList, Image, PermissionsAndroid, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { Alert, FlatList, Image, Modal, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useCallback, useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { BottomSheet, CommonPdfView, Container, CustomActivityIndicator, CustomCarouselImageAndVideo, CustomJobDetailsBottomButton, Header } from '../../components'
+import { BottomSheet, CameraScreenView, CommonPdfView, Container, CustomActivityIndicator, CustomJobDetailsBottomButton, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { styles } from './styles'
@@ -14,16 +14,14 @@ import moment from 'moment'
 import { strings } from '../../languages/localizedStrings'
 import RBSheet from 'react-native-raw-bottom-sheet'
 import DocumentPicker from 'react-native-document-picker';
-import { CameraOptions, ImageLibraryOptions, launchCamera, launchImageLibrary, MediaType } from 'react-native-image-picker'
+import { ImageLibraryOptions, launchImageLibrary, } from 'react-native-image-picker'
 import { LinkPreview } from '@flyerhq/react-native-link-preview'
 import { DocList, ImageList, VideoList } from '../../types/commanTypes'
 import { isEmptyArray } from 'formik'
-import Modal from 'react-native-modal';
 import Carousel from 'react-native-snap-carousel';
 import ImageViewer from 'react-native-image-zoom-viewer'
 import RNFS from "react-native-fs";
 import FileViewer from "react-native-file-viewer";
-import { Camera, useCameraDevices } from 'react-native-vision-camera'
 import Video from 'react-native-video'
 interface MessageProps {
     createdAt: Date | number;
@@ -131,26 +129,15 @@ const ChatScreen = () => {
     const navigation = useCustomNavigation('ChatScreen')
     const [messages, setMessages] = useState<Array<MessageProps>>(messageData)
     const refRBSheet = useRef<RBSheet | null>(null);
+
     const [imageList, setImageList] = useState<ImageList[]>([])
     const [docList, setDocList] = useState<DocList[] | []>([])
     const [loading, setLoading] = useState(false);
     const [isVisible, setIsVisible] = useState(true)
-    const [selectedImage, setSelectedImage] = useState<SelectedImageProps>({ visible: false, selectedIndex: 0, data: [] });
-    const [vedio, setVedio] = useState([])
+    const [selectedImageVedio, setSelectedImageVedio] = useState<SelectedImageProps>({ visible: false, selectedIndex: 0, data: [] });
+    const [vedio, setVedio] = useState<boolean>(false)
     const [showCameraView, setShowCameraView] = useState(false)
-    useEffect(() => {
-        checkPermission()
-    }, [])
 
-    const checkPermission = async () => {
-        const cameraPermission = await Camera.getCameraPermissionStatus()
-        console.log("🚀 ~ file: index.tsx:133 ~ ChatScreen ~ cameraPermission", cameraPermission)
-        const newCameraPermission = await Camera.requestCameraPermission()
-        console.log("🚀 ~ file: index.tsx:141 ~ checkPermission ~ newCameraPermission", newCameraPermission)
-    }
-
-    const devices = useCameraDevices()
-    const device = devices.back
     //temp data
     const [jobData, setJobData] = useState<JobDataProps | undefined>(job)
 
@@ -169,18 +156,19 @@ const ChatScreen = () => {
             attachment: messages[0].attachment,
             type: messages[0].type,
             video: [{
-                id: Math.random(),
+                id: 123,
                 url: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-                mediaType: 'mp4'
+                mediaType: 'video'
             }, {
-                id: Math.random(),
+                id: 123,
                 url: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-                mediaType: 'mp4'
+                mediaType: 'video'
             }, {
-                id: Math.random(),
+                id: 123,
                 url: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-                mediaType: 'mp4'
+                mediaType: 'video'
             }]
+            // video: messages[0].video
         }]
         //clear the job data
         setJobData(undefined)
@@ -194,52 +182,52 @@ const ChatScreen = () => {
         )
     }
 
-    const requestCameraPermission = async () => {
-        if (Platform.OS === 'android') {
-            try {
-                const granted = await PermissionsAndroid.request(
-                    PermissionsAndroid.PERMISSIONS.CAMERA, {
-                    title: 'Camera Permission',
-                    message: 'App needs camera permission',
-                    buttonPositive: 'ok'
-                }
-                );
-                return granted === PermissionsAndroid.RESULTS.GRANTED;
-            } catch (err) {
-                console.warn(err);
-                return false;
-            }
-        } else return true;
-    };
+    // const requestCameraPermission = async () => {
+    //     if (Platform.OS === 'android') {
+    //         try {
+    //             const granted = await PermissionsAndroid.request(
+    //                 PermissionsAndroid.PERMISSIONS.CAMERA, {
+    //                 title: 'Camera Permission',
+    //                 message: 'App needs camera permission',
+    //                 buttonPositive: 'ok'
+    //             }
+    //             );
+    //             return granted === PermissionsAndroid.RESULTS.GRANTED;
+    //         } catch (err) {
+    //             console.warn(err);
+    //             return false;
+    //         }
+    //     } else return true;
+    // };
 
-    const cameraLaunch = async (type: MediaType) => {
-        let option: CameraOptions = {
-            mediaType: type,
-            cameraType: 'back',
-            saveToPhotos: true,
-            presentationStyle: 'fullScreen',
-        }
-        const result = await launchCamera(option);
-        console.log("🚀 ~ file: index.tsx:187 ~ cameraLaunch ~ result", result)
+    // const cameraLaunch = async (type: MediaType) => {
+    //     let option: CameraOptions = {
+    //         mediaType: type,
+    //         cameraType: 'back',
+    //         saveToPhotos: true,
+    //         presentationStyle: 'fullScreen',
+    //     }
+    //     const result = await launchCamera(option);
+    //     console.log("🚀 ~ file: index.tsx:187 ~ cameraLaunch ~ result", result)
 
-        if (result.didCancel) {
-            console.log('User cancelled image picker');
-        } else if (result.errorMessage) {
-            console.log('ImagePicker Error: ', result.errorMessage);
-        } else {
-            if (result.assets && result.assets[0]?.uri) {
-                let ImageTempArray = [...imageList]
-                ImageTempArray.push({
-                    id: Math.random(),
-                    imgUrl: result.assets[0].uri,
-                    mediaType: result.assets[0].type?.split('/')[1],
-                })
-                setImageList(ImageTempArray)
-                refRBSheet.current?.close()
-            }
-        }
+    //     if (result.didCancel) {
+    //         console.log('User cancelled image picker');
+    //     } else if (result.errorMessage) {
+    //         console.log('ImagePicker Error: ', result.errorMessage);
+    //     } else {
+    //         if (result.assets && result.assets[0]?.uri) {
+    //             let ImageTempArray = [...imageList]
+    //             ImageTempArray.push({
+    //                 id: Math.random(),
+    //                 imgUrl: result.assets[0].uri,
+    //                 mediaType: result.assets[0].type?.split('/')[1],
+    //             })
+    //             setImageList(ImageTempArray)
+    //             refRBSheet.current?.close()
+    //         }
+    //     }
 
-    }
+    // }
 
     const renderBubble = (props: BubbleProps<IMessage>) => {
         return (
@@ -262,9 +250,9 @@ const ChatScreen = () => {
                                             link: 'https://github.com/flyerhq',
                                             title: 'hello'
                                         }}
-                                        metadataContainerStyle={{ direction: 'ltr', marginTop: 0 }}
+                                        metadataContainerStyle={{ direction: 'rtl', marginTop: 0 }}
                                         metadataTextContainerStyle={styles.linkMetadataTextContainerStyle}
-                                        textContainerStyle={styles.linkTextContainerStyle}
+                                        textContainerStyle={[styles.linkTextContainerStyle,]}
                                         text='This link https://github.com/flyerhq asd asd can be extracted from the text'
                                         renderTitle={() => {
                                             return (
@@ -368,9 +356,10 @@ const ChatScreen = () => {
                             setDocList([])
                             props.onSend({
                                 text: props.text,
-                                image: imageList,
+                                image: imageList.filter((i) => i.mediaType == "image"),
                                 attachment: docList,
-                                type: jobData && "job"
+                                type: jobData && "job",
+                                video: imageList.filter((i) => i.mediaType == "video")
                             }, true)
                         }
                     }
@@ -410,7 +399,7 @@ const ChatScreen = () => {
 
     const selectOneFile = async (type: string) => {
         try {
-            if (type == "image") {
+            if (type == "mixed") {
                 let option: ImageLibraryOptions = {
                     mediaType: 'mixed',
                     presentationStyle: 'fullScreen'
@@ -421,15 +410,30 @@ const ChatScreen = () => {
                 } else if (result.errorMessage) {
                     console.log('ImagePicker Error: ', result.errorMessage);
                 } else {
+                    console.log("🚀 ~ file: index.tsx:415 ~ selectOneFile ~ result", result)
                     if (result.assets && result.assets[0]?.uri) {
+                        // if (result.assets[0].type?.split('/')[0] == 'image') {
                         let ImageTempArray = [...imageList]
                         ImageTempArray.push({
                             id: Math.random(),
-                            imgUrl: result.assets[0].uri,
-                            mediaType: result.assets[0].type?.split('/')[1],
+                            url: result.assets[0].uri,
+                            mediaType: result.assets[0].type?.split('/')[0],
                         })
                         setImageList(ImageTempArray)
+                        // } else {
+                        //     console.log("🚀 ~ file: index.tsx:415 ~ selectOneFile ~ result", result)
+                        //     let VedioTempArray = [...vedio]
+                        //     VedioTempArray.push({
+                        //         id: Math.random(),
+                        //         url: result.assets[0].uri,
+                        //         mediaType: result.assets[0].type?.split('/')[1],
+                        //     })
+                        //     setVedio(VedioTempArray)
+                        // }
                         refRBSheet.current?.close()
+                        // if (result.assets[0].type == "video/mp4") {
+
+                        // }
                     }
                 }
             }
@@ -468,7 +472,7 @@ const ChatScreen = () => {
             <InputToolbar
                 {...props}
                 primaryStyle={{ marginBottom: wp(2) }}
-                containerStyle={{ flex: 1, paddingVertical: wp(1), height: wp(14) }}
+                containerStyle={styles.inputTextToolBarContainerStyle}
                 renderComposer={(data: ComposerProps) => {
                     return (
                         <View style={styles.inputToolBarMainViewStyle}>
@@ -510,13 +514,13 @@ const ChatScreen = () => {
                                             {
                                                 index <= 2 ?
                                                     <TouchableOpacity onPress={() => {
-                                                        props.currentMessage?.image && setSelectedImage({ visible: true, selectedIndex: index, data: props.currentMessage?.image })
+                                                        props.currentMessage?.image && setSelectedImageVedio({ visible: true, selectedIndex: index, data: props.currentMessage?.image })
                                                     }}>
-                                                        <Image source={{ uri: item.imgUrl }} style={styles.renderImageStyle} />
+                                                        <Image source={{ uri: item.url }} style={styles.renderImageStyle} />
                                                     </TouchableOpacity>
                                                     :
                                                     <TouchableOpacity onPress={() => {
-                                                        props.currentMessage?.image && setSelectedImage({ visible: true, selectedIndex: index, data: props.currentMessage?.image })
+                                                        props.currentMessage?.image && setSelectedImageVedio({ visible: true, selectedIndex: index, data: props.currentMessage?.image })
                                                     }} style={styles.remainImageViewStyle}>
                                                         <Text style={styles.remainTxtStyle}>+{props.currentMessage?.image && props.currentMessage?.image?.length - 3}</Text>
                                                     </TouchableOpacity>
@@ -533,9 +537,9 @@ const ChatScreen = () => {
                                     return (
                                         <TouchableOpacity style={styles.singleImageViewStyle} onPress={() => {
                                             console.log({ oneItem: item });
-                                            props.currentMessage?.image && setSelectedImage({ visible: true, selectedIndex: index, data: props.currentMessage?.image })
+                                            props.currentMessage?.image && setSelectedImageVedio({ visible: true, selectedIndex: index, data: props.currentMessage?.image })
                                         }}>
-                                            <Image source={{ uri: item.imgUrl }} style={styles.singleImageStyle} />
+                                            <Image source={{ uri: item.url }} style={styles.singleImageStyle} />
                                         </TouchableOpacity>
                                     )
                                 })
@@ -586,7 +590,7 @@ const ChatScreen = () => {
                             link: 'https://github.com/flyerhq',
                             title: 'hello'
                         }}
-                        metadataContainerStyle={{ direction: 'ltr', marginTop: 0 }}
+                        metadataContainerStyle={{ direction: 'rtl', marginTop: 0 }}
                         metadataTextContainerStyle={styles.footerMetadataTextStyle}
                         textContainerStyle={styles.footerTextContainerStyle}
                         text='This link https://github.com/flyerhq asd asd can be extracted from the text'
@@ -630,7 +634,7 @@ const ChatScreen = () => {
                                                 <TouchableOpacity onPress={() => { removeImage(index, item) }} style={styles.closeButtonView}>
                                                     <Image source={ImagesPath.close_icon} style={styles.closeBtnStyle} />
                                                 </TouchableOpacity>
-                                                <Image source={{ uri: item.imgUrl }} style={styles.footerImageStyle} />
+                                                <Image source={{ uri: item.url }} style={styles.footerImageStyle} />
                                             </View>
                                             :
                                             <View style={styles.footerImageViewStyle}>
@@ -708,19 +712,18 @@ const ChatScreen = () => {
                                                 props.currentMessage?.video?.slice(0, 4).map((item, index) => {
                                                     return (
                                                         <>
-                                                            {/* <View style={{ height: 100, width: 100, backgroundColor: 'red' }}></View> */}
                                                             {
                                                                 index <= 2 ?
                                                                     <TouchableOpacity onPress={() => {
-                                                                        props.currentMessage?.image && setSelectedImage({ visible: true, selectedIndex: index, data: props.currentMessage?.image })
+                                                                        props.currentMessage?.video && setSelectedImageVedio({ visible: true, selectedIndex: index, data: props.currentMessage?.video })
                                                                     }}>
-                                                                        <Image source={{ uri: item.url }} style={styles.renderImageStyle} />
+                                                                        <Video poster={'https://dummyimage.com/600x400/000/fff'} posterResizeMode={'cover'} source={{ uri: item.url }} paused style={{ minHeight: wp(40), borderRadius: wp(2), minWidth: wp(65) }} resizeMode={'cover'} />
                                                                     </TouchableOpacity>
                                                                     :
                                                                     <TouchableOpacity onPress={() => {
-                                                                        props.currentMessage?.image && setSelectedImage({ visible: true, selectedIndex: index, data: props.currentMessage?.image })
+                                                                        props.currentMessage?.video && setSelectedImageVedio({ visible: true, selectedIndex: index, data: props.currentMessage?.video })
                                                                     }} style={styles.remainImageViewStyle}>
-                                                                        <Text style={styles.remainTxtStyle}>+{props.currentMessage?.image && props.currentMessage?.image?.length - 3}</Text>
+                                                                        <Text style={styles.remainTxtStyle}>+{props.currentMessage?.video && props.currentMessage?.video?.length - 3}</Text>
                                                                     </TouchableOpacity>
                                                             }
                                                         </>
@@ -733,12 +736,10 @@ const ChatScreen = () => {
                                             {
                                                 props.currentMessage?.video?.map((item, index) => {
                                                     return (
-                                                        <TouchableOpacity style={styles.singleImageViewStyle} onPress={() => {
-                                                            console.log({ oneItem: item });
-                                                            props.currentMessage?.image && setSelectedImage({ visible: true, selectedIndex: index, data: props.currentMessage?.image })
+                                                        <TouchableOpacity style={[styles.singleImageViewStyle, { marginTop: wp(2), }]} onPress={() => {
+                                                            props.currentMessage?.video && setSelectedImageVedio({ visible: true, selectedIndex: index, data: props.currentMessage?.video })
                                                         }}>
-                                                            <Video source={{ uri: item.url }} paused style={{ minHeight: wp(40), minWidth: wp(70), marginTop: wp(2), borderRadius: wp(2), marginHorizontal: wp(2) }} resizeMode={'cover'} />
-                                                            {/* <Image source={{ uri: item.imgUrl }} style={styles.singleImageStyle} /> */}
+                                                            <Video poster={'https://dummyimage.com/600x400/000/fff'} posterResizeMode={'cover'} source={{ uri: item.url }} paused style={{ minHeight: wp(40), borderRadius: wp(2), minWidth: wp(65) }} resizeMode={'cover'} />
                                                         </TouchableOpacity>
                                                     )
                                                 })
@@ -757,39 +758,48 @@ const ChatScreen = () => {
                     }}
                 />
             </Container>
-            {selectedImage.visible && selectedImage.data &&
+            {selectedImageVedio.visible && selectedImageVedio.data &&
                 <Modal
-                    isVisible={selectedImage.visible}
+                    visible={selectedImageVedio.visible}
                     style={{ margin: 0, backgroundColor: colors.white_color }}>
-                    <>
+                    <View style={{ backgroundColor: colors.white_color }}>
                         <TouchableOpacity
-                            onPress={() => setSelectedImage({ visible: false, selectedIndex: 0, data: [] })}
+                            onPress={() => setSelectedImageVedio({ visible: false, selectedIndex: 0, data: [] })}
                             style={styles.closeImageBtnStyle}>
                             <Image source={ImagesPath.cross_icon} style={styles.closeIcon} />
                         </TouchableOpacity>
-                        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                        <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: colors.white_color }}>
                             <Carousel
                                 layout={'default'}
-                                data={selectedImage.data}
-                                firstItem={selectedImage.selectedIndex}
+                                data={selectedImageVedio.data}
+                                firstItem={selectedImageVedio.selectedIndex}
                                 sliderWidth={wp(100)}
                                 itemWidth={wp(100)}
                                 renderItem={({ item, index }: { item: ImageList, index: number }) => {
-                                    console.log("🚀 ~ file: index.tsx:536 ~ renderMessageImage ~ item", item)
-
                                     return (
-                                        <View style={{ width: '100%', height: '100%', justifyContent: 'center' }}>
-                                            <ImageViewer
-                                                imageUrls={[{ url: item.imgUrl }]}
-                                                renderIndicator={() => <></>}
-                                                backgroundColor='transparent'
-                                            />
+                                        <View style={{ width: '100%', height: '100%', justifyContent: 'center', backgroundColor: colors.white_color }}>
+                                            {
+                                                item.mediaType == 'video' ?
+                                                    <Video
+                                                        source={{ uri: item.url }}
+                                                        // paused
+                                                        resizeMode={'cover'}
+                                                        repeat={true}
+                                                        style={[styles.backgroundVideo]}
+                                                    />
+                                                    : <ImageViewer
+                                                        imageUrls={[{ url: item.url }]}
+                                                        renderIndicator={() => <></>}
+                                                        backgroundColor='transparent'
+                                                    />
+
+                                            }
                                         </View>
                                     )
                                 }}
                             />
                         </View>
-                    </>
+                    </View>
                 </Modal>
             }
             <BottomSheet
@@ -817,50 +827,58 @@ const ChatScreen = () => {
                     <View style={styles.bottomViewStyle}>
                         <CustomJobDetailsBottomButton
                             imageStyle={styles.bottomImageStyle}
-                            image={showCameraView ? ImagesPath.video_icon : ImagesPath.gallary_image_icon}
-                            buttonText={showCameraView ? strings.Video : strings.Photos}
+                            image={ImagesPath.gallary_image_icon}
+                            buttonText={strings.Photos}
                             onPress={async () => {
-                                if (showCameraView) {
-                                    let permission
-                                    if (Platform.OS == "android") {
-                                        permission = await requestCameraPermission()
-                                        permission && cameraLaunch('video')
-                                    } else {
-                                        cameraLaunch('video')
-                                    }
-                                } else {
-                                    selectOneFile('image')
-                                }
+                                // if (showCameraView) {
+                                //     let permission
+                                //     if (Platform.OS == "android") {
+                                //         permission = await requestCameraPermission()
+                                //         permission && cameraLaunch('video')
+                                //     } else {
+                                //         cameraLaunch('video')
+                                //     }
+                                // } else {
+                                selectOneFile('mixed')
+                                // }
                             }} />
                         <CustomJobDetailsBottomButton
                             imageStyle={styles.bottomImageStyle}
                             image={ImagesPath.camera_image_icon}
                             buttonText={strings.Camera}
                             onPress={async () => {
-                                if (!showCameraView) {
-                                    setShowCameraView(true)
-                                } else {
-                                    let permission
-                                    if (Platform.OS == "android") {
-                                        permission = await requestCameraPermission()
-                                        permission && cameraLaunch('photo')
-                                    } else {
-                                        cameraLaunch('photo')
-                                    }
-                                }
+                                // if (!showCameraView) {
+                                setShowCameraView(true)
+                                // } else {
+                                //     let permission
+                                //     if (Platform.OS == "android") {
+                                //         permission = await requestCameraPermission()
+                                //         permission && cameraLaunch('photo')
+                                //     } else {
+                                //         cameraLaunch('photo')
+                                //     }
+                                // }
                             }} />
-                        {!showCameraView && <CustomJobDetailsBottomButton
+                        <CustomJobDetailsBottomButton
                             imageStyle={styles.bottomImageStyle}
                             image={ImagesPath.file_image_icon}
                             buttonText={strings.document}
                             onPress={() => {
                                 selectOneFile('file')
-                            }} />}
-
+                            }} />
                     </View>
                 }
                 height={225}
             />
+            {showCameraView &&
+                <Modal
+                    onRequestClose={async () => {
+                        // await refRBSheet.current?.close()
+                    }}
+                    visible={showCameraView} style={{ margin: 0, flex: 1 }} statusBarTranslucent>
+                    <CameraScreenView onClose={setShowCameraView} />
+                </Modal>
+            }
         </View>
     )
 }

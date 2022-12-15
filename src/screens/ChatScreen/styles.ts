@@ -333,4 +333,15 @@ export const styles = StyleSheet.create({
         paddingBottom: wp(2),
         paddingHorizontal: wp(2)
     },
+    inputTextToolBarContainerStyle: {
+        flex: 1,
+        paddingVertical: wp(1),
+        height: wp(14)
+    },
+    backgroundVideo: {
+        height: wp(60),
+        width: '100%',
+        backgroundColor: colors.white_color,
+        borderRadius: wp(3),
+    },
 })

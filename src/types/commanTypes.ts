@@ -5,7 +5,7 @@ export interface DropdownProps {
 
 export interface ImageList {
     id: number
-    imgUrl: string
+    url: string
     mediaType: string | undefined
 }
 export interface DocList {

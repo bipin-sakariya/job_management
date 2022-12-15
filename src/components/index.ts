@@ -35,7 +35,7 @@ import TableHeaderView from './TableHeaderView';
 import TableDetailsComponent from './TableDetailsComponent';
 import CommonPdfView from './CommonPdfView';
 import CommonEmptyListComponent from './CommonEmptyListComponent';
-
+import CameraScreenView from './CameraScreenView';
 
 export {
     Header,
@@ -74,5 +74,6 @@ export {
     TableHeaderView,
     TableDetailsComponent,
     CommonPdfView,
-    CommonEmptyListComponent
+    CommonEmptyListComponent,
+    CameraScreenView
 }
