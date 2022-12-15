@@ -7,11 +7,10 @@ import { ImagesPath } from '../../utils/ImagePaths';
 import { globalStyles } from '../../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import RBSheet from "react-native-raw-bottom-sheet";
-import { ListDataProps } from '../../components/CustomBottomSheet';
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { RootState, useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { JobDetailsData, jobList, jobStatusWiseList } from '../../redux/slices/AdminSlice/jobListSlice';
+import { JobDetailsData, jobStatusWiseList } from '../../redux/slices/AdminSlice/jobListSlice';
 import moment from 'moment';
 import { GroupData, groupList } from '../../redux/slices/AdminSlice/groupListSlice';
 import { GroupParams } from '../TransferJobScreen';
@@ -23,13 +22,6 @@ interface jobListParams {
     id?: number
 }
 
-const data = [
-    { id: 1, title: strings.all, selected: true },
-    { id: 2, title: strings.PMaintanence, selected: false },
-    { id: 3, title: strings.Paint, selected: false },
-    { id: 4, title: strings.Council, selected: false },
-]
-
 const JobsScreen = () => {
     const navigation = useCustomNavigation('JobsScreen')
     const refRBSheet = useRef<RBSheet | null>(null);
@@ -37,7 +29,6 @@ const JobsScreen = () => {
     const isFocus = useIsFocused()
 
     const [selectedItem, setSelectedItem] = useState<GroupParams | undefined>(undefined);
-
     const [btn, setBtn] = useState({ open: true, close: false })
     const [page, setPage] = useState(1);
     const [groupPage, setGroupPage] = useState(1)
@@ -51,6 +42,7 @@ const JobsScreen = () => {
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
     const { jobListData } = useAppSelector(state => state.jobList)
     const { groupListData } = useAppSelector(state => state.groupList)
+
     useEffect(() => {
         let defaultSelected = finalGroupData.find((i) => i.selected == true)
         setSelectedItem(defaultSelected)
@@ -85,7 +77,7 @@ const JobsScreen = () => {
         let params: jobListParams = {
             page: page,
             search: input,
-            status: btn.open ? strings.Open : strings.Close,
+            status: btn.open ? strings.open : strings.close,
             id: selectedItem?.id ? selectedItem?.id : id
         }
 
@@ -105,12 +97,11 @@ const JobsScreen = () => {
             console.log({ error });
         })
     }
-    { console.log({ openJobList }) }
+
     useEffect(() => {
         const findData: GroupParams[] = groupData.map((i: GroupData) => {
             return {
                 ...i,
-
                 user_name: i.name,
                 selected: false,
             }
@@ -179,7 +170,7 @@ const JobsScreen = () => {
 
                     </View>
                 }
-                <ButtonTab btnOneTitle={strings.Open} btnTwoTitle={strings.Close} setBtn={setBtn} btnValue={btn} onReset={setPage} />
+                <ButtonTab btnOneTitle={strings.open} btnTwoTitle={strings.close} setBtn={setBtn} btnValue={btn} onReset={setPage} />
                 <FlatList
                     data={jobListData?.results}
                     renderItem={({ item, index }) => {

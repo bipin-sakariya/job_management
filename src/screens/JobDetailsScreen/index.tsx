@@ -205,9 +205,6 @@ const JobDetailsScreen = () => {
         { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb", url: "https://www.math.hawaii.edu/~pavel/gcd.pdf" },
     ]
 
-
-    console.log('juhuh', route.params)
-
     const renderItem = ({ item, index }: any) => {
         return (
             <TableDetailsComponent item={item} index={index} />

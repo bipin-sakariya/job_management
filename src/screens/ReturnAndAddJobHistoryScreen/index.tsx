@@ -1,7 +1,7 @@
-import { Alert, Dimensions, FlatList, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomDashedComponent, CustomeJobListDetailsViewComponent, CustomJobListComponent, CustomSubTitleWithImageComponent, Header } from '../../components'
+import { Container, CustomDashedComponent, CustomJobListComponent, CustomSubTitleWithImageComponent, Header } from '../../components'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
@@ -16,35 +16,11 @@ import { convertDate } from '../../utils/screenUtils'
 import { JobDetailsData, jobList, recentJobList } from '../../redux/slices/AdminSlice/jobListSlice'
 import { useAppDispatch } from '../../hooks/reduxHooks'
 
-interface JobData {
-    titlr: string
-    description: string
-    km: string
-    status: string
-    image: string
-}
-
 interface jobListParams {
     page?: number,
     search?: string
 }
 
-// const data = [
-//     { title: 'Job Return', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobReturn, image: ImagesPath.demo1 },
-//     { title: 'Job Transfer', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobTransfer, image: ImagesPath.demo2 },
-//     { title: 'Job Transfer', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobTransfer, image: ImagesPath.demo1 },
-//     { title: 'Job Partial', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobPartial, image: ImagesPath.demo2 },
-//     { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.Open, image: ImagesPath.demo1 },
-//     { title: 'Job Transfer', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobTransfer, image: ImagesPath.demo2 },
-// ]
-// const JobData = [
-//     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', date: "16 may 2022", button: strings.Open, status: strings.Open, image: ImagesPath.demo3 },
-//     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '15 ק"מ משם', date: "16 may 2022", button: strings.JobTransfer, status: strings.Open, image: ImagesPath.demo4 },
-//     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '15 ק"מ משם', date: "16 may 2022", button: strings.JobTransfer, status: strings.Open, image: ImagesPath.demo5 },
-//     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '20 ק"מ משם', date: "16 may 2022", button: strings.Open, status: strings.Open, image: ImagesPath.demo3 },
-//     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', date: "16 may 2022", button: strings.Open, status: strings.Open, image: ImagesPath.demo4 },
-//     { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', date: "16 may 2022", button: strings.Open, status: strings.Open, image: ImagesPath.demo5 }
-// ]
 const ReturnAndAddJobHistoryScreen = () => {
     const navigation = useCustomNavigation('ReturnAndAddJobHistoryScreen');
     const route = useRoute<RootRouteProps<'ReturnAndAddJobHistoryScreen'>>();
@@ -57,11 +33,11 @@ const ReturnAndAddJobHistoryScreen = () => {
     const [recentJob, setRecentJob] = useState<JobDetailsData[]>([])
     const [isJobList, setJobList] = useState<JobDetailsData[]>([])
 
-
     useEffect(() => {
         if (isFocus)
             recentJobListApiCall(page)
         jobListApiCall(jobPage)
+
         return () => {
             setPage(1)
             setJobPage(1)
@@ -81,6 +57,7 @@ const ReturnAndAddJobHistoryScreen = () => {
             console.log({ error });
         })
     }
+    
     const jobListApiCall = (jobpage: number) => {
         let params: jobListParams = {
             page: jobPage,
