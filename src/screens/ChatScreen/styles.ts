@@ -268,7 +268,7 @@ export const styles = StyleSheet.create({
         width: wp(19),
         borderRadius: wp(2)
     },
-    footerImageMainViewStyle: {
+    footerImageDocMainViewStyle: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-around',
@@ -292,14 +292,7 @@ export const styles = StyleSheet.create({
         backgroundColor: colors.white_color,
         borderRadius: wp(2)
     },
-    footerDocMainViewStyle: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        alignSelf: 'center',
-        padding: wp(1)
-    },
+
     footerDocStyle: {
         height: wp(20),
         width: wp(20),

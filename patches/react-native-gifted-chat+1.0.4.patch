@@ -1,24 +1,25 @@
 diff --git a/node_modules/react-native-gifted-chat/lib/Models.d.ts b/node_modules/react-native-gifted-chat/lib/Models.d.ts
-index 78539c7..9786bc0 100644
+index 78539c7..f455200 100644
 --- a/node_modules/react-native-gifted-chat/lib/Models.d.ts
 +++ b/node_modules/react-native-gifted-chat/lib/Models.d.ts
 @@ -1,5 +1,6 @@
  import { StyleProp, ViewStyle } from 'react-native';
  import { LightboxProps } from 'react-native-lightbox-v2';
-+import { DocList, ImageList } from '../../../src/types/commanTypes';
++import { DocList, ImageList, VideoList } from '../../../src/types/commanTypes';
  export { ActionsProps } from './Actions';
  export { AvatarProps } from './Avatar';
  export { BubbleProps, RenderMessageImageProps, RenderMessageVideoProps, RenderMessageAudioProps, RenderMessageTextProps, } from './Bubble';
-@@ -42,7 +43,7 @@ export interface IMessage {
+@@ -42,14 +43,16 @@ export interface IMessage {
      text: string;
      createdAt: Date | number;
      user: User;
 -    image?: string;
+-    video?: string;
 +    image?: ImageList[];
-     video?: string;
++    video?: VideoList[];
      audio?: string;
      system?: boolean;
-@@ -50,6 +51,8 @@ export interface IMessage {
+     sent?: boolean;
      received?: boolean;
      pending?: boolean;
      quickReplies?: QuickReplies;
