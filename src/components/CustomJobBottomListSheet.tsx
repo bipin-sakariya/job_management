@@ -4,6 +4,7 @@ import RBSheet, { RBSheetProps } from "react-native-raw-bottom-sheet";
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import useCustomNavigation from "../hooks/useCustomNavigation";
 import { strings } from "../languages/localizedStrings";
+import { JobDetailsData } from "../redux/slices/AdminSlice/jobListSlice";
 import { colors } from "../styles/Colors";
 import fonts from "../styles/Fonts";
 import FontSizes from "../styles/FontSizes";
@@ -11,23 +12,23 @@ import { globalStyles } from "../styles/globalStyles";
 import { ImagesPath } from "../utils/ImagePaths";
 import CustomJobListComponent from "./CustomJobListComponent";
 
-interface ListDataProps {
-    title: string,
-    description: string,
-    km: string,
-    date: string,
-    button: string
-}
+// interface ListDataProps {
+//     title: string,
+//     description: string,
+//     km: string,
+//     date: string,
+//     button: string
+// }
 
 interface CustomJobBottomListSheetProps {
-    data: ListDataProps[],
+    data: JobDetailsData[],
     onClose: () => void
 }
 
 const CustomJobBottomListSheet = React.forwardRef((props: CustomJobBottomListSheetProps & RBSheetProps, ref: any) => {
 
     const navigation = useCustomNavigation('MapScreen');
-    const renderItem = ({ item, index }: any) => {
+    const renderItem = ({ item }: { item: JobDetailsData }) => {
         return (
             <CustomJobListComponent item={item} />
         )

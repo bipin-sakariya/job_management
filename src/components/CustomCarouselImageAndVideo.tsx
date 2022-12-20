@@ -72,7 +72,7 @@ const CustomCarouselImageAndVideo = (props: CustomCarouselImageAndVideoProps) =>
                 onSnapToItem={(index: number) => setActiveSlide(index)}
             />
             <Pagination
-                dotsLength={props.result.length}
+                dotsLength={props?.result?.length}
                 activeDotIndex={activeSlide}
                 containerStyle={styles.paginationDots}
                 dotStyle={styles.activeDotStyle}

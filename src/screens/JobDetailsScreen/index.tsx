@@ -431,7 +431,7 @@ const JobDetailsScreen = () => {
                             || (userData?.role == strings.Admin && data.status == strings.JobTransfer))
                             ?
                             <CustomBlackButton
-                                title={strings.Close}
+                                title={strings.close}
                                 buttonStyle={{ paddingHorizontal: wp(10) }}
                                 onPress={() => {
                                     navigation.navigate("CloseJobScreen", { params: id })
