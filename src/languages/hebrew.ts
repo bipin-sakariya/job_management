@@ -284,7 +284,9 @@ export const hebrew = {
 
     Please_select_a_source_and_destination: 'אנא בחר מקור ויעד',
     please_select_a_destination: 'אנא בחר יעד',
+    please_select_a_source: 'אנא בחר מקור',
 
     KM_away: 'ק"מ משם',
     KM: 'ק"מ',
+    Drive: 'נסיעה',
 }

@@ -61,6 +61,17 @@ const AddNewJobScreen = () => {
         description: '',
     })
     const { isLoading } = useAppSelector(state => state.jobList)
+    const { createJobLocation } = useAppSelector(state => state.mapData)
+
+
+    useEffect(() => {
+        if (createJobLocation?.address) {
+            setFieldValue('address', createJobLocation?.address)
+        }
+    }, [createJobLocation])
+
+
+
 
     const createJob = (values: {
         jobID: string;
@@ -137,7 +148,7 @@ const AddNewJobScreen = () => {
         description: yup.string().required(strings.description_required),
     });
 
-    const { values, errors, touched, handleSubmit, handleChange } =
+    const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
             enableReinitialize: true,
             initialValues: { jobID: '', address: '', addressInformation: '', description: '', },
@@ -235,6 +246,7 @@ const AddNewJobScreen = () => {
                             isEditing: true,
                             isAddressPreview: true,
                             isButtonVisible: true,
+                            screenName: 'AddNewJobScreen',
                         })}
                     />
                     {(touched?.address && errors?.address) || error?.address ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors?.address ? errors.address : error?.address}</Text> : null}

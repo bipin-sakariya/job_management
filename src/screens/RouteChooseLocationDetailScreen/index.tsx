@@ -115,14 +115,15 @@ const RouteChooseLocationDetailScreen = () => {
                 />
                 <CustomSubTitleWithImageComponent title={strings.ChoosefromMap} image={ImagesPath.map_pin_darkline_icon} titleStyle={styles.commonTxtStyle}
                     onPress={() => {
-                        navigation.navigate("CreateJobMapScreen", {
+                        navigation.navigate('CreateJobMapScreen', {
                             isEditing: true,
                             jobLocation: {
                                 latitude: 42.882004,
                                 longitude: 74.582748,
                             },
                             isButtonVisible: false,
-                            isAddressPreview: true
+                            isAddressPreview: true,
+                            screenName: 'RouteChooseLocationDetailScreen',
                         })
                     }} />
                 <View style={{

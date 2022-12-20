@@ -11,7 +11,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 import FontSizes from '../../styles/FontSizes'
 import { styles } from './styles'
 import { getDistance, getPreciseDistance } from 'geolib';
-import MapViewDirections from 'react-native-maps-directions'
+import MapViewDirections, { MapDirectionsLegs } from 'react-native-maps-directions'
 import { GOOGLE_MAP_API } from '../../config/Host'
 import DraggableFlatList, { RenderItemParams, ScaleDecorator } from 'react-native-draggable-flatlist'
 import DashedLine from 'react-native-dashed-line'
@@ -34,6 +34,94 @@ interface Coordinates {
     longitude: number
 }
 
+interface RenderDetailProps extends RenderItemParams<LocationData> {
+    jobDetail: LocationData[]
+    selectedAddressIndex: number | null
+    isOnlySourceAndDestination: boolean
+    distanceAndDuration: MapDirectionsLegs | []
+}
+
+const RenderDetail = memo(({ item, getIndex, isActive, drag, jobDetail, selectedAddressIndex, isOnlySourceAndDestination, distanceAndDuration }: RenderDetailProps) => {
+    const [distanceFromSource, setDistanceFromSource] = useState<string>('')
+
+    const getDistanceFromLatLong = (lat1: number, lon1: number, lat2: number, lon2: number): string => {
+        let url = `https://maps.googleapis.com/maps/api/directions/json?origin=${lat2 + "," + lon2}&waypoints=&destination=${lat1 + "," + lon1}&key=AIzaSyB4UlbIcjYgMoBLJ_dpWmhwr24VHSeiFpw&mode=driving&language=he&region=undefined`
+        console.log("RES", { url })
+
+        fetch(url)
+            .then(res => res.json())
+            .then((res) => {
+                console.log("RES ------", { res, jobDetail, dis: res?.routes[0].legs[0].distance?.text })
+                setDistanceFromSource(res?.routes[0].legs[0].distance?.text)
+            }).catch((e) => {
+                console.log("RES Catch", { e })
+                setDistanceFromSource('')
+            })
+    }
+
+    useEffect(() => {
+        console.log("HHHELLO -----", { distanceAndDuration })
+        getIndex() != 0 && getDistanceFromLatLong(item?.coordinates?.latitude, item?.coordinates?.longitude, jobDetail[0]?.coordinates?.latitude, jobDetail[0]?.coordinates?.longitude)
+    }, [jobDetail]);
+
+
+    let currIndex = getIndex() ?? 0
+    return (
+        <ScaleDecorator>
+            <TouchableOpacity style={styles.mainTimeLineView} onLongPress={drag} disabled={isActive}>
+                {(jobDetail.length - 1 != getIndex() && selectedAddressIndex !== getIndex()) && <DashedLine style={styles.dashedLine} axis='vertical' dashLength={5} dashColor={colors.gray_1} />}
+                <View style={{ flexDirection: 'row' }}>
+                    <View style={styles.timeLineContainer}>
+                        {isOnlySourceAndDestination ?
+                            <Image source={getIndex() == 0 ? ImagesPath.checkBlackCircle : getIndex() == 1 && ImagesPath.mapGrayPin} style={[styles.sourceIconStyle, { tintColor: getIndex() == 1 ? colors.black : undefined }]} />
+                            :
+                            <Text style={styles.indexValue}>{getIndex()}</Text>
+                        }
+                    </View>
+                    <View style={[globalStyles.rowView, { marginBottom: jobDetail.length <= 2 ? wp(1) : wp(3), flex: 1 }]}>
+                        <View style={[globalStyles.centerView, styles.imageView, { height: jobDetail.length <= 2 ? wp(16) : wp(15), width: jobDetail.length <= 2 ? wp(16) : wp(15) }]}>
+                            <Image source={ImagesPath.image_white_border} style={[styles.imageStyle]} />
+                        </View>
+                        <View style={styles.itemDetailsView}>
+                            <View style={[globalStyles.rowView, styles.itemAndBtnView]}>
+                                <View style={[globalStyles.rowView,]}>
+                                    {
+                                        item?.status &&
+                                        <Image source={ImagesPath.infocircle_icon} style={styles.infoImageView} />
+                                    }
+                                    <Text numberOfLines={1} style={[styles.commonDarkTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>{item?.description}</Text>
+                                </View>
+                                <CustomStatusBtn txtStyle={{ ...styles.smallBut, ...globalStyles.rtlStyle }} style={{ ...styles.openButton }} title='button' />
+                            </View>
+                            {
+                                jobDetail.length <= 2 &&
+                                <Text numberOfLines={1} style={[styles.commonLightTxt, globalStyles.rtlStyle, { marginHorizontal: wp(3) }]}>13 may 2022</Text>
+                            }
+                            <View style={[globalStyles.rowView, { justifyContent: 'space-between', paddingHorizontal: wp(3) }]}>
+                                <Text numberOfLines={jobDetail.length <= 2 ? 2 : 1} style={[styles.commonLightTxt, globalStyles.rtlStyle, { width: '60%', color: colors.dark_blue2_color, fontSize: FontSizes.EXTRA_SMALL_12 }]}>{jobDetail.length <= 2 ? "Lorem Ipsum הוא פשוט טקסט דמה של הכתיבה......." : "13 may 2022"}</Text>
+                                {currIndex != 0 &&
+                                    <View style={[globalStyles.rowView, { direction: "ltr" }]}>
+                                        <Image source={ImagesPath.map_pin_dark_line_icon} style={styles.mapPinStyle} />
+                                        {/* <Text numberOfLines={1} style={[styles.commonLightTxt, globalStyles.rtlStyle, { maxWidth: wp(25) }]}>{calculateDistance(item?.coordinates, jobDetail[0]?.coordinates)}&nbsp;{strings.KM_away}</Text> */}
+                                        <Text numberOfLines={1} style={[styles.commonLightTxt, globalStyles.rtlStyle, { maxWidth: wp(25) }]}>{distanceFromSource}</Text>
+                                    </View>
+                                }
+                            </View>
+                        </View>
+                    </View>
+                </View >
+                {
+                    (jobDetail.length - 1 != currIndex) &&
+                    <View style={{ marginLeft: wp(10) }}>
+                        <Text numberOfLines={1} style={[styles.commonDarkTxt, globalStyles.rtlStyle,]}>{distanceAndDuration[currIndex]?.distance?.text}</Text>
+                        <Text numberOfLines={1} style={[styles.commonLightTxt, globalStyles.rtlStyle]}> {distanceAndDuration[currIndex]?.duration?.text} {strings.Drive}  </Text>
+                    </View>
+                }
+            </TouchableOpacity >
+        </ScaleDecorator>
+    )
+})
+
 const RouteMapViewScreen = () => {
     const navigation = useCustomNavigation('RouteMapViewScreen');
 
@@ -43,6 +131,7 @@ const RouteMapViewScreen = () => {
     const [selectedAddressIndex, setSelectedAddressIndex] = useState<number | null>(null)
     const [wayPoints, setWayPoints] = useState<Coordinates[]>([])
     const [isOnlySourceAndDestination, setIsOnlySourceAndDestination] = useState(false)
+    const [distanceAndDuration, setDistanceAndDuration] = useState<MapDirectionsLegs | []>([])
 
     useEffect(() => {
         setJobDetail(finalJobRouteList)
@@ -61,8 +150,6 @@ const RouteMapViewScreen = () => {
         })
         wayPointsArray.length && setWayPoints(wayPointsArray)
     }
-
-
     const origin = { latitude: 21.240880638879975, longitude: 72.88060530857202 };
     const destination = { latitude: 21.21519161004509, longitude: 72.88814448486836 };
 
@@ -78,64 +165,9 @@ const RouteMapViewScreen = () => {
         return `${pdis / 1000} KM`
     };
 
-
-    const RenderDetail = memo(({ item, getIndex, isActive, drag }: RenderItemParams<LocationData>) => {
-        let currIndex = getIndex() ?? 0
-        return (
-            <ScaleDecorator>
-                <TouchableOpacity style={styles.mainTimeLineView} onLongPress={drag} disabled={isActive}>
-                    {(jobDetail.length - 1 != getIndex() && selectedAddressIndex !== getIndex()) && <DashedLine style={styles.dashedLine} axis='vertical' dashLength={5} dashColor={colors.gray_1} />}
-                    <View style={{ flexDirection: 'row' }}>
-                        <View style={styles.timeLineContainer}>
-                            {isOnlySourceAndDestination ?
-                                <Image source={getIndex() == 0 ? ImagesPath.checkBlackCircle : getIndex() == 1 && ImagesPath.mapGrayPin} style={[styles.sourceIconStyle, { tintColor: getIndex() == 1 ? colors.black : undefined }]} />
-                                :
-                                <Text style={styles.indexValue}>{getIndex()}</Text>
-                            }
-                        </View>
-                        <View style={[globalStyles.rowView, { marginBottom: jobDetail.length <= 2 ? wp(1) : wp(3), flex: 1 }]}>
-                            <View style={[globalStyles.centerView, styles.imageView, { height: jobDetail.length <= 2 ? wp(16) : wp(15), width: jobDetail.length <= 2 ? wp(16) : wp(15) }]}>
-                                <Image source={ImagesPath.image_white_border} style={[styles.imageStyle]} />
-                            </View>
-                            <View style={styles.itemDetailsView}>
-                                <View style={[globalStyles.rowView, styles.itemAndBtnView]}>
-                                    <View style={[globalStyles.rowView,]}>
-                                        {
-                                            item?.status &&
-                                            <Image source={ImagesPath.infocircle_icon} style={styles.infoImageView} />
-                                        }
-                                        <Text numberOfLines={1} style={[styles.commonDarkTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>{item?.description}</Text>
-                                    </View>
-                                    <CustomStatusBtn txtStyle={{ ...styles.smallBut, ...globalStyles.rtlStyle }} style={{ ...styles.openButton }} title='button' />
-                                </View>
-                                {
-                                    jobDetail.length <= 2 &&
-                                    <Text numberOfLines={1} style={[styles.commonLightTxt, globalStyles.rtlStyle, { marginHorizontal: wp(3) }]}>13 may 2022</Text>
-                                }
-                                <View style={[globalStyles.rowView, { justifyContent: 'space-between', paddingHorizontal: wp(3) }]}>
-                                    <Text numberOfLines={jobDetail.length <= 2 ? 2 : 1} style={[styles.commonLightTxt, globalStyles.rtlStyle, { width: '60%', color: colors.dark_blue2_color, fontSize: FontSizes.EXTRA_SMALL_12 }]}>{jobDetail.length <= 2 ? "Lorem Ipsum הוא פשוט טקסט דמה של הכתיבה......." : "13 may 2022"}</Text>
-                                    {currIndex != 0 &&
-                                        <View style={[globalStyles.rowView, { direction: "ltr" }]}>
-                                            <Image source={ImagesPath.map_pin_dark_line_icon} style={styles.mapPinStyle} />
-                                            <Text numberOfLines={1} style={[styles.commonLightTxt, globalStyles.rtlStyle, { maxWidth: wp(25) }]}>{calculateDistance(item?.coordinates, jobDetail[0]?.coordinates)}&nbsp;{strings.KM_away}</Text>
-                                        </View>
-                                    }
-                                </View>
-                            </View>
-                        </View>
-                    </View >
-                    {
-                        (jobDetail.length - 1 != currIndex) &&
-                        <View style={{ marginLeft: wp(10) }}>
-                            <Text numberOfLines={1} style={[styles.commonDarkTxt, globalStyles.rtlStyle,]}>{calculateDistance(item?.coordinates, jobDetail[currIndex + 1]?.coordinates)}&nbsp;{strings.KM}</Text>
-                            <Text numberOfLines={1} style={[styles.commonLightTxt, globalStyles.rtlStyle]}>8 min Drive</Text>
-                        </View>
-                    }
-                </TouchableOpacity >
-            </ScaleDecorator>
-        )
-    })
-
+    const deg2rad = (deg: number) => {
+        return deg * (Math.PI / 180)
+    }
 
     return (
         <View style={[globalStyles.container]}>
@@ -165,30 +197,36 @@ const RouteMapViewScreen = () => {
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421
                         }} >
-                {(jobDetail.length > 0) && <>
-                    <MapViewDirections
-                        origin={jobDetail[0]?.coordinates}
-                        destination={jobDetail[jobDetail.length - 1]?.coordinates}
-                        apikey={GOOGLE_MAP_API}
-                        strokeWidth={6}
-                        waypoints={wayPoints}
-                        strokeColor={colors.black}
-                    />
-                    <Marker coordinate={jobDetail[0]?.coordinates} >
-                        <Image source={ImagesPath.sourceMarker} style={{ height: wp(16), width: wp(15) }} />
-                    </Marker>
-                    {jobDetail.slice(1, jobDetail.length - 1).map((location) => {
-                        return (
-                            <Marker coordinate={location?.coordinates} >
-                                <Image source={ImagesPath.selected_marker_pin} style={{ height: wp(12), width: wp(12) }} />
-                            </Marker>
-                        )
-                    })}
+                {(jobDetail.length > 0) &&
+                    <>
+                        <MapViewDirections
+                            origin={jobDetail[0]?.coordinates}
+                            destination={jobDetail[jobDetail.length - 1]?.coordinates}
+                            apikey={GOOGLE_MAP_API}
+                            strokeWidth={6}
+                            language={"he"}
+                            waypoints={wayPoints}
+                            strokeColor={colors.black}
+                            onReady={result => {
+                                console.log('Distance: Duration', { result, jobDetail })
+                                setDistanceAndDuration(result?.legs)
+                            }}
+                        />
+                        <Marker coordinate={jobDetail[0]?.coordinates} >
+                            <Image source={ImagesPath.sourceMarker} style={{ height: wp(16), width: wp(15) }} />
+                        </Marker>
+                        {jobDetail.slice(1, jobDetail.length - 1).map((location) => {
+                            return (
+                                <Marker coordinate={location?.coordinates} >
+                                    <Image source={ImagesPath.selected_marker_pin} style={{ height: wp(12), width: wp(12) }} />
+                                </Marker>
+                            )
+                        })}
 
-                    <Marker coordinate={jobDetail[jobDetail.length - 1]?.coordinates} >
-                        <Image source={ImagesPath.sourceMarker} style={{ height: wp(16), width: wp(15) }} />
-                    </Marker>
-                </>}
+                        <Marker coordinate={jobDetail[jobDetail.length - 1]?.coordinates} >
+                            <Image source={ImagesPath.sourceMarker} style={{ height: wp(16), width: wp(15) }} />
+                        </Marker>
+                    </>}
             </MapView>
             <View style={styles.jobListContainer}>
                 <ScrollView contentContainerStyle={{ flex: 1 }}>
@@ -196,7 +234,7 @@ const RouteMapViewScreen = () => {
                     <DraggableFlatList
                         data={jobDetail}
                         keyExtractor={(item) => item?.id.toString()}
-                        renderItem={({ drag, getIndex, isActive, item }) => <RenderDetail drag={drag} getIndex={() => getIndex()} isActive={isActive} item={item} />}
+                        renderItem={({ drag, getIndex, isActive, item }) => <RenderDetail drag={drag} getIndex={() => getIndex()} isActive={isActive} item={item} distanceAndDuration={distanceAndDuration} isOnlySourceAndDestination={isOnlySourceAndDestination} jobDetail={jobDetail} selectedAddressIndex={selectedAddressIndex} />}
                         showsVerticalScrollIndicator={false}
                         onDragEnd={({ data }) => {
                             setSelectedAddressIndex(null)

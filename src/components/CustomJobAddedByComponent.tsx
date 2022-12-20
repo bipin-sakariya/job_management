@@ -39,8 +39,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-between"
     },
     jobImageView: {
-        // height: wp(10),
-        // width: wp(10),
         backgroundColor: colors.doc_bg_color_dark_gray,
         borderRadius: wp(2),
         justifyContent: "center",

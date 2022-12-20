@@ -19,6 +19,16 @@ import CustomBlackButton from './CustomBlackButton';
 const JobListComponent = ({ item, index, isDateVisible, setSelectedDate, onPress }: { item: JobDetailsData, index: number, isDateVisible?: boolean, onPress: () => void, setSelectedDate?: Dispatch<SetStateAction<{ toDate?: string | undefined, fromDate?: string | undefined }>> }) => {
     const navigation = useCustomNavigation('JobsScreen')
 
+    const [isModelVisible, setIsModelVisible] = useState(false)
+    const [range, setRange] = useState(0);
+    const [dateArray, setDateArray] = useState<any>([]);
+    const [markDates, setMarkedDates] = useState({});
+    const [blockedDays, setBlockedDays] = useState({});
+    const [sdate, setSdate] = useState('');
+    const [edate, setEdate] = useState(' ');
+    const XDate = require("xdate")
+    const [page, setPage] = useState(1)
+
     LocaleConfig.locales['hebrew'] = {
         monthNames: ['יָנוּאָר', 'פברואר', 'מרץ', 'אַפּרִיל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'סֶפּטֶמבֶּר', 'אוֹקְטוֹבֶּר', 'נוֹבֶמבֶּר', 'דֵצֶמבֶּר'],
         monthNamesShort: ['ינואר', 'פברואר', 'לְקַלְקֵל', 'אפריל', 'מאי', 'מאי', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'],
@@ -31,14 +41,6 @@ const JobListComponent = ({ item, index, isDateVisible, setSelectedDate, onPress
     let maxDate = moment().add(10, "year").format("YYYY-MM-DD").toString()
     LocaleConfig.defaultLocale = 'hebrew';
 
-    const [isModelVisible, setIsModelVisible] = useState(false)
-    const [range, setRange] = useState(0);
-    const [dateArray, setDateArray] = useState<any>([]);
-    const [markDates, setMarkedDates] = useState({});
-    const [blockedDays, setBlockedDays] = useState({});
-    const [sdate, setSdate] = useState('');
-    const [edate, setEdate] = useState(' ');
-    const XDate = require("xdate")
 
     useEffect(() => setupMarkedDates(sdate, edate), [range]);
 

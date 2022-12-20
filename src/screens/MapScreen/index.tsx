@@ -143,10 +143,11 @@ const MapScreen = () => {
                 provider={'google'}
                 customMapStyle={customMapStyle}
                 region={route?.params?.type == 'viewJob' ? route?.params?.JobDetails?.coordinate : {
-                    latitude: Number(jobListData.results[selectedindex].latitude), longitude: Number(jobListData.results[selectedindex].longitude), latitudeDelta: 0.04864195044303443,
+                    latitude: Number(jobListData.results[selectedindex].latitude), longitude: Number(jobListData.results[selectedindex].longitude),
+                    latitudeDelta: 0.04864195044303443,
                     longitudeDelta: 0.040142817690068,
                 }}>
-                {route?.params?.type == 'viewJob' ?
+                {route?.params?.type && route?.params?.JobDetails == 'viewJob' ?
                     <Marker coordinate={route?.params?.JobDetails?.coordinate}>
                         <Animated.View style={[styles.markerWrap]}>
                             <Image source={route?.params?.JobDetails?.image[0] ? { uri: route?.params?.JobDetails?.image[0] } : ImagesPath.selected_marker_pin}

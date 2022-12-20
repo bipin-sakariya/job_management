@@ -59,7 +59,6 @@ const CustomCarouselZoomImageViewer = (props: CustomCarouselZoomImageViewerProps
                 onSnapToItem={(index: number) => setActiveSlide(index)}
             />
         </View>
-
     )
 }
 

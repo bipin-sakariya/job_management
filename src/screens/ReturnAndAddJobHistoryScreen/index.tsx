@@ -2,7 +2,7 @@ import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomDashedComponent, CustomJobListComponent, CustomSubTitleWithImageComponent, Header } from '../../components'
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { useIsFocused, useRoute } from '@react-navigation/native'
@@ -15,6 +15,7 @@ import { colors } from '../../styles/Colors'
 import { convertDate } from '../../utils/screenUtils'
 import { JobDetailsData, jobList, recentJobList } from '../../redux/slices/AdminSlice/jobListSlice'
 import { useAppDispatch } from '../../hooks/reduxHooks'
+import { resetCreateJobLocationReducer } from '../../redux/slices/MapSlice/MapSlice'
 
 interface jobListParams {
     page?: number,
@@ -57,7 +58,7 @@ const ReturnAndAddJobHistoryScreen = () => {
             console.log({ error });
         })
     }
-    
+
     const jobListApiCall = (jobpage: number) => {
         let params: jobListParams = {
             page: jobPage,
@@ -120,7 +121,10 @@ const ReturnAndAddJobHistoryScreen = () => {
                             textStyle={styles.dottedTxtStyle}
                             imageStyle={styles.dottedImageStyle}
                             image={ImagesPath.add_icon}
-                            onPress={() => { navigation.navigate('AddNewJobScreen') }}
+                            onPress={() => {
+                                dispatch(resetCreateJobLocationReducer())
+                                navigation.navigate('AddNewJobScreen')
+                            }}
                         />
                         : null
                     }

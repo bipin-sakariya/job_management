@@ -25,7 +25,6 @@ interface DropDownComponentProps {
 }
 
 const DropDownComponent = (props: DropDownComponentProps & DropdownProps) => {
-    console.log("DROP DOWN====", { props })
     return (
         <View style={[styles.textInputContainer, props.container]}>
             <View style={styles.titleContainer}>

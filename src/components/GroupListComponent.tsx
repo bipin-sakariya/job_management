@@ -16,13 +16,6 @@ import { GroupData, groupDelete } from '../redux/slices/AdminSlice/groupListSlic
 
 interface itemPropsType {
     item: GroupData,
-    // id: number
-    // profile_image: string,
-    // user_name: string,
-    // email: string,
-    // phone: string,
-    // role: { id: number, title: string },
-    // date_joined: string
 }
 
 const GroupListComponent = ({ item }: itemPropsType) => {

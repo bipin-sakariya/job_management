@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.SMALL_14,
         width: '100%',
-        // height: 40,
         borderBottomLeftRadius: wp(1.5),
         borderBottomRightRadius: wp(1.5),
         color: colors.light_brown
@@ -79,7 +78,6 @@ const styles = StyleSheet.create({
         paddingVertical: Platform.OS == "ios" ? wp(4.5) : wp(6),
         borderRadius: wp(2),
         marginLeft: wp(3),
-        // marginTop: wp(-0.5)
     },
     mapPinIcon: {
         width: wp(10),

@@ -1,7 +1,7 @@
-import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useRef, useState } from 'react'
+import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { BottomSheet, Container, CustomBlackButton, CustomCarouselImageAndVideo, CustomDashedComponent, CustomDetailsComponent, CustomJobDetailsBottomButton, CustomModal, CustomSubTitleWithImageComponent, CustomSwitchComponent, CustomTextInput, CustomTextInputWithImage, Header } from '../../components'
+import { Container, CustomBlackButton, CustomCarouselImageAndVideo, CustomDashedComponent, CustomDetailsComponent, CustomJobDetailsBottomButton, CustomModal, CustomSubTitleWithImageComponent, CustomSwitchComponent, CustomTextInput, CustomTextInputWithImage, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
 import { styles } from './styles'
 import { strings } from '../../languages/localizedStrings'
@@ -15,7 +15,7 @@ import { RootRouteProps } from '../../types/RootStackTypes'
 import { useRoute } from '@react-navigation/native'
 import CommonPdfView from '../../components/CommonPdfView'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
-import { updatejob } from '../../redux/slices/AdminSlice/jobListSlice'
+import { resetCreateJobLocationReducer } from '../../redux/slices/MapSlice/MapSlice'
 
 interface ValuesProps {
     status: string;
@@ -60,6 +60,11 @@ const CreateNewJobScreen = () => {
         }
 
     ]
+
+    useEffect(() => {
+        dispatch(resetCreateJobLocationReducer())
+    }, [])
+
 
     // const createbills = (values: ValuesProps) => {
 
@@ -136,7 +141,7 @@ const CreateNewJobScreen = () => {
                             value='9 Oxfort street'
                             container={{ marginVertical: wp(5), width: wp(67) }}
                             onPress={() => {
-                                navigation.navigate("CreateJobMapScreen", {
+                                navigation.navigate('CreateJobMapScreen', {
                                     isEditing: true,
                                     jobLocation: {
                                         latitude: 21.247181,
@@ -144,6 +149,7 @@ const CreateNewJobScreen = () => {
                                     },
                                     isButtonVisible: true,
                                     isAddressPreview: true,
+                                    screenName: 'CreateNewJobScreen'
                                 })
                             }}
                         />

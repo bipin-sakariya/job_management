@@ -89,7 +89,7 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
                     </Text>
                 </View>
                 <View style={globalStyles.rowView}>
-                    <Text numberOfLines={1} style={[styles.dateTxt, globalStyles.rtlStyle, { width: wp(22) }]}>{convertDate(data.date)}</Text>
+                    <Text numberOfLines={1} style={[styles.dateTxt, globalStyles.rtlStyle, { width: wp(22) }]}>{convertDate(data.date ? data?.date : '')}</Text>
                     <TouchableOpacity ref={imageRef} onPress={() => setVisible(true)}>
                         <Image style={styles.menuImageStyle} source={ImagesPath.menu_dots_icon} />
                     </TouchableOpacity>

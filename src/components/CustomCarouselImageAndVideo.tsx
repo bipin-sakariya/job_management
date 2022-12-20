@@ -26,8 +26,6 @@ const CustomCarouselImageAndVideo = (props: CustomCarouselImageAndVideoProps) =>
     const [activeSlide, setActiveSlide] = useState<number>(0)
     const [visible, setIsVisible] = useState<boolean>(false);
 
-    console.log({ item: props })
-
     const renderItem = ({ item, index }: { item: ItemProps, index: number }) => {
         return (
             <TouchableOpacity style={[styles.imageMainView, props.viewStyle]} onPress={() => setIsVisible(true)}>

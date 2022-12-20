@@ -68,7 +68,7 @@ export type RootStackParamList = {
     GroupListScreen: undefined,
     CreateGroupScreen: undefined,
     GroupDetailScreen: { screenName?: string, params: GroupData, isEdit?: boolean },
-    CreateJobMapScreen: { isEditing?: boolean, jobLocation?: { latitude?: number, longitude?: number }, isButtonVisible?: boolean, isAddressPreview?: boolean }
+    CreateJobMapScreen: { screenName?: 'RouteChooseLocationDetailScreen' | 'CreateNewJobScreen' | 'AddNewJobScreen' | 'CreateNewJobScreen', isEditing?: boolean, jobLocation?: { latitude?: number, longitude?: number }, isButtonVisible?: boolean, isAddressPreview?: boolean }
     SearchScreen: { screenName?: string }
     AssignJobScreen: undefined,
     TransferJobListScreen: undefined
