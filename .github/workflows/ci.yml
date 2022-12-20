@@ -1,0 +1,66 @@
+name: deploy
+ 
+on:
+ push:
+   branches:   
+    - main 
+   tags: [ v* ]
+ 
+ 
+jobs:
+ deploy_ios:
+   runs-on: macos-latest
+   if: "!contains(github.event.head_commit.message, 'skip ci')"
+   steps:
+     - uses: maxim-lobanov/setup-xcode@v1
+       with:
+         xcode-version: '13.1' #latest version
+     - uses: actions/checkout@v2
+     - name: setup ruby
+       run: brew install openssl readline rbenv ruby-build
+ 
+     - name: Set environment variables from project settings
+       run: |
+         exec .github/scripts/set-env-from-xcodeproj.sh
+ 
+     - name: Import signing certificate
+       env:
+         SIGNING_CERTIFICATE_P12_DATA: ${{ secrets.SIGNING_CERTIFICATE_P12_DATA }}
+         SIGNING_CERTIFICATE_PASSWORD: ${{ secrets.SIGNING_CERTIFICATE_PASSWORD }}
+       run: |
+         exec .github/scripts/import-certificate.sh
+ 
+     - name: Import provisioning profile
+       env:
+         PROVISIONING_PROFILE_DATA: ${{ secrets.PROVISIONING_PROFILE_DATA }}
+       run: |
+         exec .github/scripts/import-profile.sh
+ 
+     - name: setup xcode version
+       run: |
+         cd ios
+         sudo xcode-select -s /Applications/Xcode_13.1.app  #latest version
+ 
+ 
+ 
+     - name: Install npm dependencies
+       run: npm install
+ 
+ 
+ 
+     - name: Install pod dependencies
+       run: |
+         cd ios && pod install
+ 
+     - name: setup fastlane
+       run: cd ios && bundle install
+      
+     - name: upload to testflight
+       env:
+         FASTLANE_USER: ${{ secrets.APP_STORE_CONNECT_USERNAME }}
+         FASTLANE_PASSWORD: ${{ secrets.APP_STORE_CONNECT_PASSWORD }}
+         APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+         FASTLANE_SESSION: ${{ secrets.FASTLANE_SESSION }}
+       run: |
+         cd ios
+         bundle exec fastlane build_to_testflight
