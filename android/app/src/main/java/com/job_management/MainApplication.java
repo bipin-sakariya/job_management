@@ -2,6 +2,7 @@ package com.job_management;
 
 import android.app.Application;
 import android.content.Context;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
@@ -13,6 +14,7 @@ import com.job_management.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.facebook.react.modules.i18nmanager.I18nUtil;
+import com.devfd.RNGeocoder.RNGeocoderPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 

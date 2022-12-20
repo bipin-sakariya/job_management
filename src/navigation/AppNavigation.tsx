@@ -44,6 +44,7 @@ import CreateJobMapScreen from '../screens/CreateJobMapScreen';
 import { colors } from '../styles/Colors';
 import SearchScreen from '../screens/SearchScreen';
 import AssignJobScreen from '../screens/AssignJobScreen';
+import NotificationController from '../notification/NotificationController';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -64,6 +65,7 @@ const AppNavigation = () => {
 
     return (
         <NavigationContainer theme={navTheme}>
+            <NotificationController />
             <Stack.Navigator
                 screenOptions={{
                     headerShown: false,

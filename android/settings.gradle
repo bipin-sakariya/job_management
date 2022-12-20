@@ -10,4 +10,8 @@ if (settings.hasProperty("newArchEnabled") && settings.newArchEnabled == "true")
     project(":ReactAndroid:hermes-engine").projectDir = file('../node_modules/react-native/ReactAndroid/hermes-engine')
     include ':react-native-maps'
     project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/lib/android')
+    include ':react-native-geocoder', ':app'
+    project(':react-native-geocoder').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-geocoder/android')
+    include ':react-native-push-notification'
+    project(':react-native-push-notification').projectDir = file('../node_modules/react-native-push-notification/android')
 }
