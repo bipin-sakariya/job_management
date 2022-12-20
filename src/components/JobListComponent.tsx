@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../utils/ImagePaths';
@@ -9,7 +9,6 @@ import { colors } from '../styles/Colors';
 import CustomeJobListDetailsViewComponent from './CustomJobListDetailsViewComponent';
 import useCustomNavigation from '../hooks/useCustomNavigation';
 import moment from 'moment';
-import { useAppSelector } from '../hooks/reduxHooks';
 import CustomModal from './CustomModal';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { strings } from '../languages/localizedStrings';
@@ -17,10 +16,8 @@ import { JobDetailsData } from '../redux/slices/AdminSlice/jobListSlice';
 import { convertDate } from '../utils/screenUtils';
 import CustomBlackButton from './CustomBlackButton';
 
-const JobListComponent = ({ item, index, isDateVisible }: { item: JobDetailsData, index: number, isDateVisible: boolean }) => {
+const JobListComponent = ({ item, index, isDateVisible, setSelectedDate, onPress }: { item: JobDetailsData, index: number, isDateVisible?: boolean, onPress: () => void, setSelectedDate?: Dispatch<SetStateAction<{ toDate?: string | undefined, fromDate?: string | undefined }>> }) => {
     const navigation = useCustomNavigation('JobsScreen')
-
-    const [isModelVisible, setIsModelVisible] = useState(false)
 
     LocaleConfig.locales['hebrew'] = {
         monthNames: ['יָנוּאָר', 'פברואר', 'מרץ', 'אַפּרִיל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'סֶפּטֶמבֶּר', 'אוֹקְטוֹבֶּר', 'נוֹבֶמבֶּר', 'דֵצֶמבֶּר'],
@@ -34,6 +31,7 @@ const JobListComponent = ({ item, index, isDateVisible }: { item: JobDetailsData
     let maxDate = moment().add(10, "year").format("YYYY-MM-DD").toString()
     LocaleConfig.defaultLocale = 'hebrew';
 
+    const [isModelVisible, setIsModelVisible] = useState(false)
     const [range, setRange] = useState(0);
     const [dateArray, setDateArray] = useState<any>([]);
     const [markDates, setMarkedDates] = useState({});
@@ -41,7 +39,7 @@ const JobListComponent = ({ item, index, isDateVisible }: { item: JobDetailsData
     const [sdate, setSdate] = useState('');
     const [edate, setEdate] = useState(' ');
     const XDate = require("xdate")
-    const [page, setPage] = useState(1)
+
     useEffect(() => setupMarkedDates(sdate, edate), [range]);
 
     const onDayPress = (date: any) => {
@@ -91,10 +89,18 @@ const JobListComponent = ({ item, index, isDateVisible }: { item: JobDetailsData
             setSdate(fromDate);
             setEdate(toDate);
             setMarkedDates(markedDates);
+            setSelectedDate && setSelectedDate({ toDate: toDate, fromDate: fromDate })
         }
     };
 
+    const handleAPIcall = () => {
+        console.log("Hello")
+        setIsModelVisible(false)
+        onPress()
+    }
+
     return (
+
         <View style={styles.itemContainer}>
             <View style={styles.dateTxtContainer}>
                 {isDateVisible && <View style={globalStyles.rowView}>
@@ -155,6 +161,9 @@ const JobListComponent = ({ item, index, isDateVisible }: { item: JobDetailsData
                         />
                         <CustomBlackButton
                             title={strings.apply}
+                            onPress={() => {
+                                handleAPIcall()
+                            }}
                         />
                     </View>
                 }

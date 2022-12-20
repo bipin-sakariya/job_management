@@ -37,7 +37,7 @@ const CustomOneItemSelect = (props: CustomOneItemSelectProps & TouchableOpacityP
         <TouchableOpacity onPress={() => { onSelectJob(props.item) }} style={[globalStyles.rowView, styles.jobListMainView]}>
             <Text style={styles.jobNameTxt}>{props.item.name}</Text>
             <View style={globalStyles.roundView}>
-                <View style={[styles.roundFillView, { backgroundColor: props.item.selected ? colors.fillColor : colors.white_5, }]} />
+                <View style={[styles.roundFillView, { backgroundColor: props.item.selected ? colors.dark_blue3_color : colors.white_5, }]} />
             </View>
         </TouchableOpacity>
     )

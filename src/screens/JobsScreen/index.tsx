@@ -19,7 +19,14 @@ interface jobListParams {
     page?: number,
     search?: string,
     status?: string,
-    id?: number
+    id?: number,
+    to_date?: string | undefined
+    from_date?: string | undefined
+}
+
+interface DateParams {
+    toDate?: string | undefined
+    fromDate?: string | undefined
 }
 
 const JobsScreen = () => {
@@ -38,6 +45,8 @@ const JobsScreen = () => {
     const [isFooterLoading, setIsFooterLoading] = useState<boolean>(false)
     const [groupData, setGroupData] = useState<GroupData[]>([])
     const [finalGroupData, setfinalGroupList] = useState<GroupParams[]>([])
+    const [finalAllGroup, setFinalAllGroup] = useState<GroupParams[]>([])
+    const [selectedDate, setSelectedDate] = useState<DateParams>()
 
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
     const { jobListData } = useAppSelector(state => state.jobList)
@@ -49,12 +58,7 @@ const JobsScreen = () => {
     }, [])
 
     useEffect(() => {
-        if (isFocus)
-            console.log("useeffect", btn)
         JobListApiCall(page, text)
-        return () => {
-            setPage(1)
-        }
     }, [isFocus, btn])
 
     useEffect(() => {
@@ -73,16 +77,20 @@ const JobsScreen = () => {
         })
     }, [isFocus, btn, groupListData.results,])
 
-    const JobListApiCall = (page: number, input?: string, id?: number) => {
+    const JobListApiCall = (page: number, input?: string, id?: number, to_date?: string, from_date?: string) => {
         let params: jobListParams = {
             page: page,
             search: input,
             status: btn.open ? strings.open : strings.close,
-            id: selectedItem?.id ? selectedItem?.id : id
+            id: selectedItem?.id ? selectedItem?.id : id,
+            to_date: to_date,
+            from_date: from_date
         }
+        console.log("API PARAMS ===", { params })
 
         dispatch(jobStatusWiseList(params)).unwrap().then((res) => {
             console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+            // refRBSheet.current?.close()
             // setOpenJobList(res.results)
             if (res.next && !!input) {
                 setPage(page + 1)
@@ -111,11 +119,26 @@ const JobsScreen = () => {
     }, [groupData])
     console.log({ finalGroupData })
 
+    useEffect(() => {
+        if (finalGroupData.length) {
+            let catList = [{ name: 'All', selected: true, id: 0 }]
+            finalGroupData.map((listItem: GroupParams) => {
+                catList.push({
+                    name: listItem.name,
+                    selected: false,
+                    id: listItem.id
+                });
+                setFinalAllGroup(catList);
+            });
+        }
+    }, [finalGroupData]);
+    console.log({ finalAllGroup })
+
     const groupId: GroupParams | undefined = finalGroupData.find((i) => i.selected == true)
-    console.log('groupId', { data: selectedItem?.id })
 
     return (
         <View style={globalStyles.container}>
+            {/* {console.log({ selectedDate })} */}
             <Header
                 headerLeftComponent={
                     <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
@@ -176,7 +199,7 @@ const JobsScreen = () => {
                     renderItem={({ item, index }) => {
                         const isDateVisible = index != 0 ? moment(jobListData?.results[index].created_at).format('ll') == moment(jobListData?.results[index - 1].created_at).format('ll') ? false : true : true
                         return (
-                            <JobListComponent item={item} index={index} isDateVisible={isDateVisible} />
+                            <JobListComponent item={item} index={index} isDateVisible={isDateVisible} setSelectedDate={setSelectedDate} onPress={() => JobListApiCall(page, text, undefined, selectedDate?.toDate, selectedDate?.fromDate)} />
                         )
                     }}
                     onEndReached={() => {
@@ -197,7 +220,7 @@ const JobsScreen = () => {
             </Container>
             <CustomBottomSheet
                 ref={refRBSheet}
-                data={finalGroupData}
+                data={finalAllGroup}
                 onSelectedTab={(item) => {
                     console.log({ item })
                     JobListApiCall(page, text, item.id)

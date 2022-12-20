@@ -1,5 +1,5 @@
-import { FlatList, Image, PermissionsAndroid, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { FlatList, Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomJobListComponent, CustomSubTitleWithImageComponent, Header } from '../../components'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -8,29 +8,27 @@ import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { strings } from '../../languages/localizedStrings'
 import { styles } from './styles'
 import { colors } from '../../styles/Colors'
-import fonts from '../../styles/Fonts'
-import FontSizes from '../../styles/FontSizes'
 import Geocoder from 'react-native-geocoder';
 import { manageMapRoutesReducer, setJobLocation } from '../../redux/slices/MapSlice/MapSlice'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
-import { store } from '../../redux/Store'
 import Geolocation from '@react-native-community/geolocation'
+import { jobList } from '../../redux/slices/AdminSlice/jobListSlice'
+import { useIsFocused } from '@react-navigation/native'
+
+interface jobListParams {
+    page?: number,
+    search?: string
+}
 
 const RouteChooseLocationDetailScreen = () => {
     const navigation = useCustomNavigation('RouteChooseLocationDetailScreen');
     const dispatch = useAppDispatch()
+    const isFocused = useIsFocused()
 
-    const { job_location, routeList } = useAppSelector(state => state.mapData)
+    const { jobListData } = useAppSelector(state => state.jobList)
     const [selectedAddress, setSelectedAddress] = useState<string>('')
+    const [page, setPage] = useState(1)
 
-    const JobData = [
-        { id: 1, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", status: "info", coordinates: { latitude: 7.225252, longitude: 18.252152 } },
-        { id: 2, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Return", status: "info", coordinates: { latitude: 7.208756, longitude: 18.501446 } },
-        { id: 3, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Transfer", coordinates: { latitude: 3.948409, longitude: 18.471092 } },
-        { id: 4, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '20 km away', date: "16 may 2022", button: "Open", status: "info", coordinates: { latitude: 4.394123, longitude: 18.501446 } },
-        { id: 5, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", status: "info", coordinates: { latitude: 4.558415, longitude: 18.276076 } },
-        { id: 6, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", coordinates: { latitude: 4.659710, longitude: 18.201869 }, }
-    ]
     const renderItem = ({ item, index }: any) => {
         return (
             <CustomJobListComponent item={item} onPress={() => {
@@ -38,6 +36,24 @@ const RouteChooseLocationDetailScreen = () => {
                 navigation.goBack()
             }} />
         )
+    }
+
+    useEffect(() => {
+        jobListApiCall(page)
+    }, [navigation, isFocused])
+
+    const jobListApiCall = (page: number) => {
+        let params: jobListParams = {
+            page: page,
+            search: ''
+        }
+        dispatch(jobList(params)).unwrap().then((res) => {
+            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+            // setJobList(res.results)
+            setPage(page + 1)
+        }).catch((error) => {
+            console.log({ error });
+        })
     }
 
     const getCurrentLocation = async () => {
@@ -114,7 +130,7 @@ const RouteChooseLocationDetailScreen = () => {
                     marginTop: wp(2)
                 }} />
                 <CustomSubTitleWithImageComponent viewStyle={{ marginVertical: wp(2) }} disabled title={strings.Recent} image={ImagesPath.clock_counter_clockwise_icon} />
-                <FlatList showsVerticalScrollIndicator={false} data={JobData} renderItem={renderItem} />
+                <FlatList showsVerticalScrollIndicator={false} data={jobListData.results} renderItem={renderItem} />
             </Container>
         </View>
     )

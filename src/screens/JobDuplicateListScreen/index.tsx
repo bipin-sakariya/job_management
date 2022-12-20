@@ -24,7 +24,6 @@ interface JobDataProps {
 }
 
 const JobDuplicateListScreen = () => {
-
     const navigation = useCustomNavigation('JobDuplicateListScreen');
 
     const JobData: JobDataProps[] = [
@@ -48,7 +47,7 @@ const JobDuplicateListScreen = () => {
             <TouchableOpacity onPress={() => { setSelected(item, index) }} style={styles.jobMainView}>
                 <View style={{ marginLeft: wp(3.5) }}>
                     <View style={globalStyles.roundView}>
-                        <View style={[styles.roundFillView, { backgroundColor: item.selected ? colors.fillColor : colors.white_5, }]} />
+                        <View style={[styles.roundFillView, { backgroundColor: item.selected ? colors.dark_blue3_color : colors.white_5, }]} />
                     </View>
                 </View>
                 <CustomJobListComponent
@@ -80,7 +79,7 @@ const JobDuplicateListScreen = () => {
         // navigation.navigate('DuplicateScreen')
         setJobData(emptyJobList)
     }
-    console.log({ isIndex })
+
     return (
         <View style={globalStyles.container}>
             <Header

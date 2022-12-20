@@ -1,5 +1,5 @@
-import { Alert, Image, Text, View, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
+import { Image, Text, View, TouchableOpacity } from 'react-native';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
@@ -12,14 +12,21 @@ import { useRoute } from '@react-navigation/native';
 import * as yup from "yup";
 import { useFormik } from 'formik';
 import { colors } from '../../styles/Colors';
+import { billUpdate } from '../../redux/slices/AdminSlice/billListSlice';
+import { useAppDispatch } from '../../hooks/reduxHooks';
 
 const SignBillDetailScreen = () => {
     const navigation = useCustomNavigation('SignBillDetailScreen');
-    const [count, setCount] = useState(0)
-    const route = useRoute<RootRouteProps<'CreateBillSectionScreen'>>();
-    const [isModelVisible, setIsModelVisible] = useState(false)
+    const route = useRoute<RootRouteProps<'SignBillDetailScreen'>>();
+    const dispatch = useAppDispatch()
 
     let { type } = route.params
+    let quntity = route.params.item.quantity
+    let jumping_ration = route.params.item.jumping_ration
+
+    const [count, setCount] = useState(type == 'Sign' ? quntity : jumping_ration)
+    const [isModelVisible, setIsModelVisible] = useState(false)
+
     const data = [
         { label: strings.meters, value: 'Meters' },
         { label: strings.units, value: 'Units' },
@@ -30,34 +37,59 @@ const SignBillDetailScreen = () => {
 
     const CreateGroupValidationSchema = yup.object().shape({
         name: yup.string()
-            .required(type == "material" ? strings.Billname_required : strings.Signname_required),
+            .required(type == "Material" ? strings.Billname_required : strings.Signname_required),
         ration_qunt: yup.string()
-            .required(type == "material" ? strings.Jumpingration_required : strings.Quantity_required),
+            .required(type == "Material" ? strings.Jumpingration_required : strings.Quantity_required),
     });
+
     const Increment = () => {
-        setCount(count + 1)
+        type == 'Sign' ? setCount(count + quntity) : setCount(count + jumping_ration)
     }
+
     const Decrement = () => {
         if (count == 0) {
             setCount(0)
         }
         else {
-            setCount(count - 1)
+            type == 'Sign' ? setCount(count - quntity) : setCount(count - jumping_ration)
         }
     }
+
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
             enableReinitialize: true,
             initialValues: {
-                name: '',
-                ration_qunt: '',
+                name: route.params.item.name,
+                ration_qunt: type == 'Material' ? count ? count.toString() : '' : count ? count.toString() : '',
 
             },
             validationSchema: CreateGroupValidationSchema,
             onSubmit: values => {
-                Alert.alert(strings.CreateGroup)
+                console.log({ values })
+                updateBill(values)
             }
         })
+
+    const updateBill = (values: { name: string, ration_qunt: string }) => {
+        console.log({ values, type, float: values.ration_qunt });
+        let data = new FormData()
+        // data.append('name', values.name)
+        if (type == 'Material' && parseFloat(values.ration_qunt) != quntity) {
+            data.append("jumping_ration", parseFloat(values.ration_qunt))
+        }
+        if (type == 'Sign' && parseFloat(values.ration_qunt) != jumping_ration) {
+            data.append("quantity", parseFloat(values.ration_qunt))
+        }
+        let params = {
+            data: data,
+            id: route.params.item.id
+        }
+        dispatch(billUpdate(params)).unwrap().then((res) => {
+            navigation.goBack()
+        }).catch((e) => {
+        })
+    }
+
     return (
         <View style={globalStyles.container}>
             <Header
@@ -77,8 +109,8 @@ const SignBillDetailScreen = () => {
                         <Image source={ImagesPath.check_icon_circle} style={[globalStyles.modalImageStyle]} />
                         <Text style={styles.modalTxt}>{strings.ClosejobModalText}</Text>
                         <View style={[globalStyles.rowView, { justifyContent: "space-around", width: '100%' }]}>
-                            <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.Partial} />
-                            <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%" }} title={strings.close} />
+                            <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => handleSubmit()} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.Partial} />
+                            <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%" }} title={strings.Close} />
                         </View>
                     </View>
                 } />
@@ -86,28 +118,31 @@ const SignBillDetailScreen = () => {
                     disabled
                     title={strings.auto_fill_detail}
                     image={ImagesPath.receipt_icon} />
-                {type == 'sign' &&
+                {type == 'Sign' &&
                     <Image
                         source={ImagesPath.arrow_icon}
                         resizeMode={'contain'}
                         style={styles.arrowIconStyle}
                     />}
                 <CustomTextInput
+                    editable={false}
                     title={strings.There}
                     container={{ marginVertical: wp(4) }}
-                    placeholder={'סימן שם'}
-                    onChangeText={(text) => { }}
+                    placeholder={route.params.item.name}
+                // onChangeText={(text) => { }}
                 />
+
                 {/* type counting  */}
                 <View style={{}}>
                     <DropDownComponent
+                        // disable
                         title={strings.typeCounting}
                         data={data}
                         image={ImagesPath.down_white_arrow}
                         labelField="label"
                         valueField="value"
                         onChange={(item) => setFieldValue('name', item)}
-                        value={values.name}
+                        value={route.params.item.type_counting}
                         placeholder={strings.choose}
                         container={{ marginBottom: wp(5) }}
                     />
@@ -116,7 +151,7 @@ const SignBillDetailScreen = () => {
                 {/* measurement */}
                 <View style={[styles.textInputContainer, globalStyles.rtlDirection]}>
                     <View style={styles.titleContainer}>
-                        <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{type == 'sign' ? strings.quantity : strings.measurement}</Text>
+                        <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{type == 'Sign' ? strings.quantity : strings.measurement}</Text>
                     </View>
                     <View style={[globalStyles.rowView, globalStyles.rtlDirection, styles.btnContainerStyle]}>
                         <TouchableOpacity onPress={() => Increment()}>

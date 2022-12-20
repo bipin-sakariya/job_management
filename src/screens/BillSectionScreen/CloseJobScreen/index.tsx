@@ -1,80 +1,30 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Alert, FlatList, I18nManager, Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { globalStyles } from '../../styles/globalStyles'
-import { BottomSheet, Container, CustomBlackButton, CustomDashedComponent, CustomDetailsComponent, CustomModal, CustomOneItemSelect, CustomSubTitleWithImageComponent, CustomTextInput, Header } from '../../components'
-import { ImagesPath } from '../../utils/ImagePaths'
-import useCustomNavigation from '../../hooks/useCustomNavigation'
-import { strings } from '../../languages/localizedStrings'
+import { FlatList, I18nManager, Image, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useRef, useState } from 'react'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import CustomTextInputWithImage from '../../components/CustomTextInputWithImage'
-import CustomCarouselImageAndVideo from '../../components/CustomCarouselImageAndVideo'
 import { styles } from './styles'
-import TableHeaderView from '../../components/TableHeaderView'
-import TableDetailsComponent from '../../components/TableDetailsComponent'
-import { colors } from '../../styles/Colors'
 import RBSheet from 'react-native-raw-bottom-sheet'
-import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
-import { useIsFocused, useRoute } from '@react-navigation/native'
-import { jobDetail, JobDetailsData } from '../../redux/slices/AdminSlice/jobListSlice'
-import { RootRouteProps } from '../../types/RootStackTypes'
-import { groupDetails } from '../../redux/slices/AdminSlice/groupListSlice'
-import { billDetail } from '../../redux/slices/AdminSlice/billListSlice'
-import DocumentPicker from 'react-native-document-picker';
+import { ImagesPath } from '../../../utils/ImagePaths'
+import { colors } from '../../../styles/Colors'
+import { strings } from '../../../languages/localizedStrings'
+import { globalStyles } from '../../../styles/globalStyles'
+import useCustomNavigation from '../../../hooks/useCustomNavigation'
+import { CustomCarouselImageAndVideo, CustomTextInput, CustomTextInputWithImage, TableDetailsComponent, TableHeaderView, BottomSheet, Container, CustomBlackButton, CustomDashedComponent, CustomDetailsComponent, CustomModal, CustomSubTitleWithImageComponent, Header } from '../../../components'
 
 interface SignDataProps {
     id: number,
     name: string,
     image: any,
     selected: boolean,
-}
-interface imageList {
-    id: number
-    imgUrl: string
-    mediaType: string
-}
-interface docList {
-    path: string,
-    type: string | undefined
-    mb: number | null
-    title: string | null
-}
 
+}
 const CloseJobScreen = () => {
     const navigation = useCustomNavigation('CloseJobScreen')
-    const refRBSheet = useRef<RBSheet | null>(null);
-    const dispatch = useAppDispatch()
-    const isFocused = useIsFocused()
-    const route = useRoute<RootRouteProps<'JobDetailsScreen'>>();
-
     const [isSelected, setIsSelected] = useState(false)
     const [isModelVisible, setIsModelVisible] = useState(false)
+    const [isSign, setISSign] = useState('sign')
+    const refRBSheet = useRef<RBSheet | null>(null);
     const [searchTxt, setSearchTxt] = useState('');
     const [searchData, setSearchData] = useState<SignDataProps[]>([])
-    const [BillData, setBillData] = useState()
-    const [imageError, setImageError] = useState(false)
-    const [docError, setDocError] = useState(false)
-    const [imageList, setImageList] = useState<imageList[]>([])
-    const [docList, setDocList] = useState<docList[] | []>([])
-
-    const { jobDetails, isLoading, formData } = useAppSelector(state => state.jobList)
-
-    let id: number = route.params.params.id
-
-    useEffect(() => {
-        if (isFocused && route.params.params.id) {
-            dispatch(jobDetail(id)).unwrap().then((res) => {
-                // setFormDetails(res)
-                console.log({ formDetails: res });
-            }).catch((error) => {
-                console.log({ error });
-            })
-        }
-
-        //         const billData = formData?.map((item) => { 
-        // setBillData(formData.bill)
-        //         })
-        //         console.log({ billData })
-    }, [isFocused, billDetail])
 
     const SignData: SignDataProps[] = [
         {
@@ -133,139 +83,139 @@ const CloseJobScreen = () => {
         }
 
     ]
-    // const FormData = [
-    //     {
-    //         srno: "01",
-    //         name: "Asphalt Paint",
-    //         qty: "",
-    //         unit: "15",
-    //         parameter: "Meter",
-    //         imageUrl: ''
-    //     },
-    //     {
-    //         srno: "01",
-    //         name: "Asphalt Paint",
-    //         qty: "1",
-    //         unit: "15",
-    //         parameter: "Meter",
-    //         imageUrl: 'dssdfsdfsf'
-    //     },
-    //     {
-    //         srno: "01",
-    //         name: "Asphalt Paint",
-    //         qty: "1",
-    //         unit: "15",
-    //         parameter: "Meter",
-    //         imageUrl: ''
-    //     },
-    //     {
-    //         srno: "01",
-    //         name: "Asphalt Paint",
-    //         qty: "",
-    //         unit: "15",
-    //         parameter: "Meter",
-    //         imageUrl: 'dssdfsdfsf'
-    //     },
-    //     {
-    //         srno: "01",
-    //         name: "Asphalt Paint",
-    //         qty: "1",
-    //         unit: "15",
-    //         parameter: "Meter",
-    //         imageUrl: 'dssdfsdfsf'
-    //     },
+    const FormData = [
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
 
-    //     {
-    //         srno: "01",
-    //         name: "Asphalt Paint",
-    //         qty: "1",
-    //         unit: "15",
-    //         parameter: "Meter",
-    //         imageUrl: ''
-    //     },
-    //     {
-    //         srno: "01",
-    //         name: "Asphalt Paint",
-    //         qty: "",
-    //         unit: "15",
-    //         parameter: "Meter",
-    //         imageUrl: ''
-    //     },
-    //     {
-    //         srno: "01",
-    //         name: "Asphalt Paint",
-    //         qty: "1",
-    //         unit: "15",
-    //         parameter: "Meter",
-    //         imageUrl: ''
-    //     },
-    //     {
-    //         srno: "01",
-    //         name: "Asphalt Paint",
-    //         qty: "",
-    //         unit: "15",
-    //         parameter: "Meter",
-    //         imageUrl: ''
-    //     },
-    //     {
-    //         srno: "01",
-    //         name: "Asphalt Paint",
-    //         qty: "1",
-    //         unit: "15",
-    //         parameter: "Meter",
-    //         imageUrl: 'dssdfsdfsf'
-    //     },
-    //     {
-    //         srno: "01",
-    //         name: "Asphalt Paint",
-    //         qty: "1",
-    //         unit: "15",
-    //         parameter: "Meter",
-    //         imageUrl: ''
-    //     },
-    //     {
-    //         srno: "01",
-    //         name: "Asphalt Paint",
-    //         qty: "",
-    //         unit: "15",
-    //         parameter: "Meter",
-    //         imageUrl: 'dssdfsdfsf'
-    //     },
-    //     {
-    //         srno: "01",
-    //         name: "Asphalt Paint",
-    //         qty: "1",
-    //         unit: "15",
-    //         parameter: "Meter",
-    //         imageUrl: 'dssdfsdfsf'
-    //     },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: 'dssdfsdfsf'
+        },
 
-    //     {
-    //         srno: "01",
-    //         name: "Asphalt Paint",
-    //         qty: "1",
-    //         unit: "15",
-    //         parameter: "Meter",
-    //         imageUrl: ''
-    //     },
-    //     {
-    //         srno: "01",
-    //         name: "Asphalt Paint",
-    //         qty: "",
-    //         unit: "15",
-    //         parameter: "Meter",
-    //         imageUrl: ''
-    //     },
-    //     {
-    //         srno: "01",
-    //         name: "Asphalt Paint",
-    //         qty: "1",
-    //         unit: "15",
-    //         parameter: "Meter",
-    //         imageUrl: ''
-    //     },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
+        {
+            srno: "01",
+            name: "Asphalt Paint",
+            qty: "1",
+            unit: "15",
+            parameter: "Meter",
+            imageUrl: ''
+        },
 
-    // ]
+    ]
 
 
     const setSelected = (item: SignDataProps, index: number) => {
@@ -290,67 +240,12 @@ const CloseJobScreen = () => {
             <TableDetailsComponent item={item} index={index} />
         )
     }
-
-    let TempBillData: any = []
-    formData?.map(obj => {
-
-        TempBillData = TempBillData.concat(obj.bill)
-        console.log("CONCAT-->", TempBillData)
-        return obj.bill
-    })
-    console.log({ TempBillData, BillData })
-
-    let IsSign = TempBillData.filter((i: any) => i.type == "Sign")
-    console.log({ IsSign })
-
-    const updateCloseJob = () => {
-        let data = new FormData()
-        data.append('bill', TempBillData)
-        data.append('status', strings.Close)
-        // data.append('notes',)
-    }
-
-    const selectOneFile = async () => {
-        //Opening Document Picker for selection of one file
-        try {
-            const res = await DocumentPicker.pick({
-                type: [DocumentPicker.types.allFiles],
-                presentationStyle: 'fullScreen',
-                mode: 'import',
-                allowMultiSelection: true,
-                copyTo: 'cachesDirectory'
-            })
-
-            let ImageTempArray = [...imageList]
-            let DocTempArray = [...docList]
-
-            if (res[0]?.type?.split("/")[0] == 'application') {
-                DocTempArray.push({ path: res[0].uri, type: res[0]?.type?.split("/")[1], mb: res[0].size, title: res[0].name })
-                setDocError(false)
-            }
-            else {
-                ImageTempArray.push({ imgUrl: res[0].uri, mediaType: res[0]?.type?.split("/")[0] == 'image' ? 'image' : 'video', id: Math.random() })
-                setImageError(false)
-            }
-            setImageList(ImageTempArray)
-            setDocList(DocTempArray)
-        }
-        catch (err) {
-            if (DocumentPicker.isCancel(err)) {
-            } else {
-                Alert.alert('Unknown Error: ' + JSON.stringify(err));
-                throw err;
-            }
-        }
-    };
-
-
     return (
         <View style={globalStyles.container}>
             <Header
                 headerLeftStyle={{
                     width: "50%",
-                    paddingLeft: wp(3),
+                    paddingLeft: wp(3)
                 }}
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
@@ -375,51 +270,32 @@ const CloseJobScreen = () => {
                     <CustomTextInput
                         title={strings.jobId}
                         container={{ marginBottom: wp(4) }}
-                        value={jobDetails?.id.toString()}
+                        value={'123'}
                     />
                     <CustomTextInputWithImage
-                        title={jobDetails.address}
-                        value={jobDetails.address_information}
+                        title="9 Oxfort street"
+                        value='9 Oxfort street'
                         mainContainerStyle={{ marginBottom: wp(5), flex: 1, }}
-                        container={{ width: wp(64) }}
-                        onPress={() => {
-                            navigation.navigate('MapScreen', {
-                                type: 'viewJob',
-                                JobDetails: {
-                                    title: 'Job Title',
-                                    description: 'Lorem Ipsum is simply dummy text of the printing...',
-                                    km: '5 km away',
-                                    date: "16 may 2022",
-                                    button: "Open",
-                                    status: "info",
-                                    coordinate: {
-                                        latitude: 45.524548,
-                                        longitude: -122.6749817,
-                                        latitudeDelta: 0.04864195044303443,
-                                        longitudeDelta: 0.040142817690068,
-                                    },
-                                }
-                            })
-                        }} />
+                        container={{ width: wp(64) }} />
                     <CustomDetailsComponent
                         title={strings.description}
                         bottomComponent={
-                            <Text numberOfLines={3} style={[styles.bottomTxtStyle, globalStyles.rtlStyle]}>{jobDetails.description}</Text>
+                            <Text numberOfLines={3} style={styles.bottomTxtStyle}>Lorem Ipsum is simply dummy text of the printing and,typesetting industry has been the industry's standard dummy text....</Text>
                         }
                     />
                     <CustomCarouselImageAndVideo
                         viewStyle={{ width: wp(90) }}
                         result={result} children={
-                            <TouchableOpacity onPress={() => selectOneFile()} style={styles.roundBtnView}>
+                            <TouchableOpacity style={styles.roundBtnView}>
                                 <Image source={ImagesPath.Pluscircle_icon} style={[styles.roundImageStyle]} />
                             </TouchableOpacity>
                         } />
-                    <View style={[styles.sammedView, { marginTop: wp(5) }]}>
+                    <View style={[styles.sammedView, { height: wp(100), marginTop: wp(5) }]}>
                         <View style={styles.formHeaderView}>
                             <Text style={[styles.noNameTxt, globalStyles.rtlStyle]}>{strings.Forms}</Text>
                         </View>
-                        {formData?.length != 0 && <FlatList
-                            data={TempBillData}
+                        <FlatList
+                            data={FormData}
                             renderItem={renderItem}
                             showsVerticalScrollIndicator={false}
                             ListHeaderComponent={() => {
@@ -428,8 +304,8 @@ const CloseJobScreen = () => {
                                 )
                             }}
                             ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}
-                        />}
-                        {IsSign.length != 0 && <TouchableOpacity onPress={() => { refRBSheet.current?.open() }}
+                        />
+                        {isSign == 'sign' && <TouchableOpacity onPress={() => { refRBSheet.current?.open() }}
                             style={[globalStyles.rowView, styles.addFormView, { backgroundColor: colors.light_blue_color }]}>
                             <Image source={ImagesPath.add_form_icon} style={[globalStyles.headerIcon, { marginHorizontal: wp(1), tintColor: colors.primary_color }]} />
                             <Text style={[styles.addFormTxt, { color: colors.primary_color }]}>{strings.AddForm}</Text>
@@ -443,19 +319,19 @@ const CloseJobScreen = () => {
                     </View>
                     <CustomDashedComponent
                         image={ImagesPath.add_icon}
-                        onPress={() => { navigation.navigate('BillCreateScreen') }}
+                        onPress={() => { navigation.navigate('SignBillDetailScreen', { type: 'sign' }) }}
                         title={strings.AddField}
                         viewStyle={{ paddingVertical: wp(5), marginBottom: wp(5) }}
                     />
                     <CustomTextInput
                         title={strings.jobId}
                         container={{ marginBottom: wp(4) }}
-                        value={jobDetails.notes || ''}
+                        value={'123'}
                     />
                     <TouchableOpacity onPress={() => { setIsSelected(!isSelected) }} style={[globalStyles.rowView, styles.jobListMainView]}>
                         <Text style={styles.jobNameTxt}>{strings.FuthurBilling}</Text>
                         <View style={globalStyles.roundView} >
-                            {isSelected || jobDetails.further_inspection && <Image source={ImagesPath.right_white_icon} style={styles.checkView} />}
+                            {isSelected && <Image source={ImagesPath.right_white_icon} style={styles.checkView} />}
                         </View>
                     </TouchableOpacity>
                     <CustomBlackButton onPress={() => setIsModelVisible(true)} title={strings.ChangeJobStatus} buttonStyle={{ marginVertical: wp(10) }} />
@@ -464,7 +340,7 @@ const CloseJobScreen = () => {
                     ref={refRBSheet}
                     children={
                         <>
-                            <View style={[globalStyles.rowView, globalStyles.rtlDirection, styles.textInputContainer, { paddingHorizontal: wp(2), marginHorizontal: wp(4), marginTop: wp(5) }]}>
+                            <View style={[globalStyles.rowView, globalStyles.rtlDirection, { paddingHorizontal: wp(2), marginHorizontal: wp(4), marginTop: wp(5) }]}>
                                 <Image source={ImagesPath.search_icon} style={{ height: wp(6), width: wp(6), resizeMode: 'contain' }} />
                                 <TextInput
                                     style={[globalStyles.rtlStyle, { color: colors.dark_blue3_color, height: 40, marginHorizontal: wp(1.5), width: '80%', textAlign: I18nManager.isRTL ? 'right' : 'left', }]}
@@ -508,7 +384,7 @@ const CloseJobScreen = () => {
                     height={360}
                 />
             </Container>
-        </View >
+        </View>
     )
 }
 

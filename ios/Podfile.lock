@@ -321,7 +321,9 @@ PODS:
     - React-Core
   - react-native-document-picker (8.1.2):
     - React-Core
-  - react-native-geolocation (3.0.3):
+  - react-native-geocoder (0.5.0):
+    - React
+  - react-native-geolocation (3.0.4):
     - React-Core
   - react-native-geolocation-service (5.3.1):
     - React
@@ -413,6 +415,8 @@ PODS:
     - React-logger (= 0.70.1)
     - React-perflogger (= 0.70.1)
   - ReactNativeLocalization (2.3.1):
+    - React-Core
+  - rn-fetch-blob (0.12.0):
     - React-Core
   - RNCAsyncStorage (1.17.11):
     - React-Core
@@ -515,6 +519,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
+  - react-native-geocoder (from `../node_modules/react-native-geocoder`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
@@ -536,6 +541,7 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeLocalization (from `../node_modules/react-native-localization`)
+  - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
@@ -612,6 +618,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/blur"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
+  react-native-geocoder:
+    :path: "../node_modules/react-native-geocoder"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-geolocation-service:
@@ -654,6 +662,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeLocalization:
     :path: "../node_modules/react-native-localization"
+  rn-fetch-blob:
+    :path: "../node_modules/rn-fetch-blob"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCMaskedView:
@@ -711,7 +721,8 @@ SPEC CHECKSUMS:
   React-logger: 7bd569e3857d74ed412ce0a5c51f421ff7d4ca7f
   react-native-blur: 50c9feabacbc5f49b61337ebc32192c6be7ec3c3
   react-native-document-picker: f5ec1a712ca2a975c233117f044817bb8393cad4
-  react-native-geolocation: 2b4052c14edff18ba402795f4ce0f2a093c4ba3e
+  react-native-geocoder: 757427682892bb256f3b3745858cc90eba148a8e
+  react-native-geolocation: 3ed60c3d7f613c36b777b9fd0bc3453214e1b0d5
   react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
   react-native-google-maps: 035ad2f9b4974f22af3d4d4c6993960a181b0aaf
   react-native-image-picker: f2ab1215d17bcfe27b0eb6417cc236fd1f4775e7
@@ -732,6 +743,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: a11d0c2e14140baf1e449264ca9168ae9ae6bbd0
   ReactCommon: 7f86326b92009925c6dcf93f8e825060171c379f
   ReactNativeLocalization: 076497d7ca70341c751cd3b3e7c86187332a182d
+  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCAsyncStorage: 8616bd5a58af409453ea4e1b246521bb76578d60
   RNCMaskedView: bc0170f389056201c82a55e242e5d90070e18e5a
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
@@ -746,6 +758,6 @@ SPEC CHECKSUMS:
   Yoga: 6c8252e38d65aa387daee699eacf027e055e0b31
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: eed2d982f9081908169e911bf9ef61a7aaa934ba
+PODFILE CHECKSUM: f3bd92a98c840a2b2e3af5c2fe98a389a7ecc88f
 
 COCOAPODS: 1.11.3

@@ -1,5 +1,5 @@
-import { Alert, FlatList, Image, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { Alert, FlatList, Image, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomBlackButton, CustomDashedComponent, CustomJobListComponent, CustomSubTitleWithImageComponent, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
@@ -10,13 +10,10 @@ import { colors } from '../../styles/Colors';
 import { styles } from './styles';
 import FontSizes from '../../styles/FontSizes';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { LocationData, manageMapRoutesReducer, resetPerticularRoutesReducer, updateFinalMapRoutesReducer } from '../../redux/slices/MapSlice/MapSlice';
+import { manageMapRoutesReducer, resetPerticularRoutesReducer, updateFinalMapRoutesReducer } from '../../redux/slices/MapSlice/MapSlice';
 import { location } from '../../types/commanTypes';
-import Geocoder from 'react-native-geocoder';
-import { getAddress } from '../../utils/screenUtils';
-import { store } from '../../redux/Store';
 import { useIsFocused } from '@react-navigation/native';
-
+import { jobList } from '../../redux/slices/AdminSlice/jobListSlice';
 
 interface JobDetail {
     address?: string
@@ -24,33 +21,41 @@ interface JobDetail {
     description?: string
 }
 
-const locationn = [
-    { latitude: 21.247181, longitude: 72.890877 },
-    { latitude: 21.228125, longitude: 72.833771 },
-    { latitude: 21.214088, longitude: 72.887639 },
-    { latitude: 21.211527, longitude: 72.853284 },
-    { latitude: 21.230250, longitude: 72.813096 },
-]
+interface jobListParams {
+    page?: number,
+    search?: string
+}
 
 const RouteScreen = () => {
     const dispatch = useAppDispatch()
-    const isFocus = useIsFocused()
     const navigation = useCustomNavigation('RouteScreen');
+    const isFocused = useIsFocused()
 
     const [sourceAddress, setSourceAddress] = useState<JobDetail | null>(null)
     const [destinationAddress, setDestinationAddress] = useState<JobDetail | null>(null)
     const [selectedAddress, setSelectedAddress] = useState<JobDetail[]>([]);
-    const { job_location, routeList, destination, source } = useAppSelector(state => state.mapData)
-    const [locationList, setLocationList] = useState<location[]>([]);
+    const [page, setPage] = useState(1)
 
-    const JobData = [
-        { id: 1, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", status: "info", coordinates: { latitude: 4.659710, longitude: 18.201869 } },
-        { id: 2, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Return", status: "info", coordinates: { latitude: 4.558415, longitude: 18.276076 } },
-        { id: 3, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Transfer", coordinates: { latitude: 4.394123, longitude: 18.501446 } },
-        { id: 4, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '20 km away', date: "16 may 2022", button: "Open", status: "info", coordinates: { latitude: 3.948409, longitude: 18.471092 } },
-        { id: 5, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", status: "info", coordinates: { latitude: 7.208756, longitude: 18.501446 } },
-        { id: 6, address: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", coordinates: { latitude: 7.948409, longitude: 18.012456 } }
-    ]
+    const { routeList, destination, source } = useAppSelector(state => state.mapData)
+    const { jobListData } = useAppSelector(state => state.jobList)
+
+    useEffect(() => {
+        jobListApiCall(page)
+    }, [navigation, isFocused])
+
+    const jobListApiCall = (page: number) => {
+        let params: jobListParams = {
+            page: page,
+            search: ''
+        }
+        dispatch(jobList(params)).unwrap().then((res) => {
+            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+            // setJobList(res.results)
+            setPage(page + 1)
+        }).catch((error) => {
+            console.log({ error });
+        })
+    }
 
     // const handleJobSelection = (address: JobDetail) => {
     //     console.log({ address, sourceAddress, destinationAddress })
@@ -198,7 +203,7 @@ const RouteScreen = () => {
                     </View>
                     <CustomSubTitleWithImageComponent disabled title={strings.Recent} image={ImagesPath.clock_counter_clockwise_icon} />
                     <FlatList
-                        data={JobData}
+                        data={jobListData.results}
                         renderItem={renderItem}
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={{ paddingBottom: wp(20) }}

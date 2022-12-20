@@ -67,7 +67,7 @@ export const globalStyles = StyleSheet.create({
         height: wp(6),
         width: wp(6),
         borderRadius: wp(6),
-        borderColor: colors.fillColor,
+        borderColor: colors.dark_blue3_color,
         borderWidth: wp(0.4),
         alignItems: 'center',
         justifyContent: "center"

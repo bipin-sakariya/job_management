@@ -50,7 +50,7 @@ export type RootStackParamList = {
     TransferJobScreen: { jobId: number }
     ReturnJobScreen: undefined
     DuplicateScreen?: { params?: any }
-    CloseJobScreen: undefined
+    CloseJobScreen: { params?: any }
     RouteScreen: undefined
     RouteChooseLocationDetailScreen: undefined
     RouteMapViewScreen: undefined
@@ -60,7 +60,7 @@ export type RootStackParamList = {
     CustomJobListComponent: { type?: string },
     SelectFormScreen: undefined,
     FillFormScreen: undefined,
-    SignBillDetailScreen: { type: string },
+    SignBillDetailScreen: { type?: string, item?: any },
     AddNewJobScreen: undefined,
     UserListScreen: undefined,
     CreateUserScreen: undefined,

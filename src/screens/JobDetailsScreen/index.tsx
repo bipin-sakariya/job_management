@@ -14,7 +14,7 @@ import { colors } from "../../styles/Colors";
 import { RootRouteProps } from "../../types/RootStackTypes";
 import FileViewer from "react-native-file-viewer";
 import RNFS from "react-native-fs";
-import { jobDetail, JobDetailsData } from "../../redux/slices/AdminSlice/jobListSlice";
+import { jobDetail, JobDetailsData, resetSelectedReducer } from "../../redux/slices/AdminSlice/jobListSlice";
 import { convertDate } from "../../utils/screenUtils";
 
 const JobDetailsScreen = () => {
@@ -43,6 +43,7 @@ const JobDetailsScreen = () => {
                 console.log({ error });
             })
         }
+        dispatch(resetSelectedReducer())
     }, [isFocused])
 
     const result = [
@@ -430,10 +431,10 @@ const JobDetailsScreen = () => {
                             || (userData?.role == strings.Admin && data.status == strings.JobTransfer))
                             ?
                             <CustomBlackButton
-                                title={strings.close}
+                                title={strings.Close}
                                 buttonStyle={{ paddingHorizontal: wp(10) }}
                                 onPress={() => {
-                                    navigation.navigate("CloseJobScreen")
+                                    navigation.navigate("CloseJobScreen", { params: id })
                                 }}
                                 image={ImagesPath.check_circle}
                             />

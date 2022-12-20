@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit"
 import { Alert } from "react-native"
 import { ApiConstants } from "../../../config/ApiConstants"
 import { axiosClient } from "../../../config/Axios"
+import { billData } from "./billListSlice"
 import { FormDataTypes } from "./formListSlice"
 
 interface Added_byData {
@@ -53,8 +54,18 @@ interface InitialState {
     error: object | string | undefined
     jobDetails: JobDetailsData
     jobListData: JobDataListProps,
+    formData: formdata[] | undefined
 }
 
+
+interface formdata {
+    bill: billData[]
+    created_at: string
+    id: number
+    is_sign: boolean
+    name: string
+    updated_at: string
+}
 const initialState: InitialState = {
     isLoading: false,
     error: '',
@@ -99,18 +110,21 @@ const initialState: InitialState = {
         comment: null,
         form: undefined,
         bill: undefined
-    }
+    },
+    formData: undefined
 }
 
 
 interface paramsTypes {
     id?: number
     data?: FormDataTypes
-    page?: undefined | number
+    page?: number
     search?: string
     status?: string
     group?: number
     job?: number
+    from_date?: string
+    to_date?: string
 }
 
 export interface apiErrorTypes {
@@ -125,7 +139,6 @@ export const jobList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectV
     (JOB + "/jobList", async (params, { rejectWithValue }) => {
         try {
             console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
-            // console.log('p000000000000', ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
             const response = await axiosClient.get(ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
             console.log("🚀 ~ file: jobListSlice.ts ~ line 69 ~ response", response)
             return response.data;
@@ -166,12 +179,16 @@ export const jobStatusWiseList = createAsyncThunk<JobDataListProps, paramsTypes,
     (JOB + "/jobStatusWiseList", async (params, { rejectWithValue }) => {
         try {
             console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
-            const urlParams = new URLSearchParams({ page: params.page, search: params.search, status: params.status })
-            params?.id && urlParams.append('id', params.id)
+            const urlParams = new URLSearchParams({ page: params.page?.toString() ?? '', search: params.search ?? '', status: params.status ?? '' })
+            params?.id && urlParams.append('id', params.id.toString())
+            params?.from_date && urlParams.append('from_date', params.from_date)
+            params?.to_date && urlParams.append('to_date', params.to_date)
             console.log({ urlParams: urlParams.toString() })
+
             // console.log('p000000000000', ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
             const response = await axiosClient.get(ApiConstants.JOBSTATUSWISE + "?" + urlParams.toString())
             console.log("🚀 ~ file: jobListSlice.ts ~ line 700 ~ response", response)
+
             return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -265,7 +282,14 @@ export const updatejob = createAsyncThunk<string[], FormData, { rejectValue: api
 const jobListSlice = createSlice({
     name: JOB,
     initialState,
-    reducers: {},
+    reducers: {
+        resetSelectedReducer: (state) => {
+            state.formData = undefined
+        },
+        selectedFormReducers: (state, action) => {
+            state.formData = action.payload
+        }
+    },
     extraReducers(builder) {
         // Job list
         builder.addCase(jobList.pending, state => {
@@ -418,5 +442,5 @@ const jobListSlice = createSlice({
     }
 })
 
-export const { } = jobListSlice.actions
+export const { selectedFormReducers, resetSelectedReducer } = jobListSlice.actions
 export default jobListSlice.reducer

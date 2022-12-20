@@ -33,7 +33,7 @@ interface initialState {
 
 interface paramsTypes {
     id?: number
-    data?: FormDataTypes,
+    data?: FormDataTypes | FormData,
     page?: number,
     bill_type?: string
 }
