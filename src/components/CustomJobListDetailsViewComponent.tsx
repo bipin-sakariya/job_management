@@ -23,7 +23,7 @@ const CustomeJobListDetailsViewComponent = (props: CustomeJobListDetailsViewComp
                     <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle]}>{props.item.address}</Text>
                     <View style={[globalStyles.rowView, { direction: I18nManager.isRTL ? 'ltr' : 'rtl', }]}>
                         {props.item.status != strings.jobAddedBy && props.item.status != strings.JobClosedby &&
-                            <Image source={ImagesPath.map_pin_dark_line_icon} style={{ width: wp(5), height: wp(5), resizeMode: 'contain' }} />
+                            <Image source={ImagesPath.map_pin_dark_line_icon} style={styles.iconStyle} />
                         }
                         <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>5000 km Away</Text>
                     </View>
@@ -82,5 +82,10 @@ const styles = StyleSheet.create({
         shadowOffset: { height: 0, width: 0 },
         elevation: 5,
         borderTopWidth: 0,
+    },
+    iconStyle: {
+        width: wp(5),
+        height: wp(5),
+        resizeMode: 'contain'
     }
 })

@@ -10,8 +10,7 @@ import { colors } from '../../styles/Colors';
 import { styles } from './styles';
 import FontSizes from '../../styles/FontSizes';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { manageMapRoutesReducer, resetPerticularRoutesReducer, updateFinalMapRoutesReducer } from '../../redux/slices/MapSlice/MapSlice';
-import { location } from '../../types/commanTypes';
+import { manageMapRoutesReducer, resetPerticularRoutesReducer, updateFinalMapRoutesReducer, updatePerticularSelectionOfAddress } from '../../redux/slices/MapSlice/MapSlice';
 import { useIsFocused } from '@react-navigation/native';
 import { jobList } from '../../redux/slices/AdminSlice/jobListSlice';
 
@@ -57,79 +56,11 @@ const RouteScreen = () => {
         })
     }
 
-    // const handleJobSelection = (address: JobDetail) => {
-    //     console.log({ address, sourceAddress, destinationAddress })
-    //     if (sourceAddress == null) {
-    //         setSourceAddress(address)
-    //     } else if (destinationAddress == null) {
-    //         setDestinationAddress(address)
-    //     } else {
-    //         let addresses = [...selectedAddress, address]
-    //         console.log({ addresses, con: selectedAddress.length <= 8 })
-    //         selectedAddress.length <= 8 && setSelectedAddress(addresses)
-    //     }
-    // }
-
     const renderItem = ({ item, index }: any) => {
         return (
-            <CustomJobListComponent item={item} onPress={() => dispatch(manageMapRoutesReducer({ id: item?.id, address: item?.address, coordinates: item?.coordinates, description: item?.description }))} />
+            <CustomJobListComponent item={item} onPress={() => dispatch(manageMapRoutesReducer({ id: item?.id, address: item?.address, coordinates: item?.coordinates, description: item?.description, isCheckBlank: true }))} />
         )
     }
-
-    // const getAddress = (location: location) => {
-    //     Geocoder.geocodePosition({ lat: location?.latitude, lng: location?.longitude }).then((res: any) => {
-    //         setAddres(res[0]?.formattedAddress)
-    //         console.log(res[0]?.formattedAddress)
-    //     }).catch((err: any) => console.log(err))
-    // }
-
-    // useEffect(() => {
-    //     let job = store?.getState()?.mapData?.job_location
-
-
-    //     let locationListData: LocationData[] = routeList
-    //     // console.log("beforelist", locationListData)
-    //     console.log("job_location_main", job)
-
-    //     const unsubscribe = navigation.addListener('focus', () => {
-    //         // console.log("job_location_main2", job)
-
-    //         if (job && !sourceAddress) {
-    //             // console.log(getAddress(job))
-    //             // setSourceAddress(getAddress(job))
-    //         }
-
-    //         // if (job) {
-    //         //     locationListData.push(job)
-    //         // }
-    //         // console.log("afterlist", locationListData)
-    //         // setLocationList(locationListData)
-    //         // dispatch(setRouteList(locationList))
-
-    //     });
-    //     return unsubscribe;
-    // }, [navigation, sourceAddress])
-
-
-    // const getLocation = async (isFocus: boolean) => {
-    //     if (isFocus && job_location) {
-    //         // let location_res = await getAddress(job_location)
-    //         // if (sourceAddress == null) {
-    //         //     setSourceAddress(location_res)
-    //         //     dispatch(setSource(job_location))
-    //         // }
-    //         // else if (destinationAddress == null) {
-    //         //     setDestinationAddress(location_res)
-    //         //     dispatch(setDestination(job_location))
-    //         // } else {
-    //         //     dispatch(setRouteList([]))
-    //         // }
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     getLocation(isFocus)
-    // }, [isFocus, job_location])
 
     useEffect(() => {
         setSourceAddress({ address: source?.address })
@@ -154,7 +85,7 @@ const RouteScreen = () => {
                         <Image source={ImagesPath.map_direction_icon} style={styles.mapdirectionIcon} />
                         <View style={{ flex: 1 }}>
                             <View style={styles.btnContainer}>
-                                <Text style={[styles.textInputStyle, globalStyles.rtlStyle, { flex: 1, marginBottom: 0 }]} numberOfLines={2} onPress={() => { console.log('NAVIGATION called sourceAddress'); navigation.navigate("RouteChooseLocationDetailScreen") }}>
+                                <Text style={[styles.textInputStyle, globalStyles.rtlStyle, { flex: 1, marginBottom: 0 }]} numberOfLines={2} onPress={() => { dispatch(updatePerticularSelectionOfAddress('source')), navigation.navigate("RouteChooseLocationDetailScreen") }}>
                                     {sourceAddress?.address ? sourceAddress.address : strings.ChooseStartingLocation}
                                 </Text>
                                 {sourceAddress?.address && <TouchableOpacity style={styles.closeIconContainer} onPress={() => dispatch(resetPerticularRoutesReducer({ type: 'source' }))}>
@@ -162,7 +93,14 @@ const RouteScreen = () => {
                                 </TouchableOpacity>}
                             </View>
                             <View style={styles.btnContainer}>
-                                <Text style={[styles.textInputStyle, globalStyles.rtlStyle, { flex: 1, marginBottom: 0 }]} numberOfLines={2} onPress={() => { console.log('NAVIGATION called destinationAddress'); navigation.navigate("RouteChooseLocationDetailScreen") }}>
+                                <Text style={[styles.textInputStyle, globalStyles.rtlStyle, { flex: 1, marginBottom: 0 }]} numberOfLines={2} onPress={() => {
+                                    if (!source) {
+                                        Alert.alert(strings.please_select_a_source, "")
+                                    } else {
+                                        dispatch(updatePerticularSelectionOfAddress('destination'))
+                                        navigation.navigate("RouteChooseLocationDetailScreen")
+                                    }
+                                }}>
                                     {destinationAddress?.address ? destinationAddress.address : strings.ChooseDestination}
                                 </Text>
                                 {destinationAddress?.address && <TouchableOpacity style={styles.closeIconContainer} onPress={() => dispatch(resetPerticularRoutesReducer({ type: 'destination' }))}>
@@ -173,12 +111,10 @@ const RouteScreen = () => {
                                 console.log({ item })
                                 return (
                                     <View style={styles.btnContainer}>
-                                        <Text style={[styles.textInputStyle, globalStyles.rtlStyle, { flex: 1, marginBottom: 0 }]} numberOfLines={2} onPress={() => { console.log('NAVIGATION called .MAP'); navigation.navigate("RouteChooseLocationDetailScreen") }}>
+                                        <Text style={[styles.textInputStyle, globalStyles.rtlStyle, { flex: 1, marginBottom: 0 }]} numberOfLines={2} onPress={() => { dispatch(updatePerticularSelectionOfAddress('waypoints')), navigation.navigate("RouteChooseLocationDetailScreen") }}>
                                             {item?.address}
                                         </Text>
                                         <TouchableOpacity style={styles.closeIconContainer} onPress={() => {
-                                            // let latestAddress = selectedAddress.filter((i) => i.id !== item.id)
-                                            // setSelectedAddress(latestAddress)
                                             dispatch(resetPerticularRoutesReducer({ type: 'waypoints', id: item?.id }))
                                         }}>
                                             <Image source={ImagesPath.close_icon} style={styles.closeIcon} />
@@ -191,10 +127,16 @@ const RouteScreen = () => {
                                 title={strings.AddOtherField}
                                 image={ImagesPath.plus_circle_white_border_icon}
                                 onPress={() => {
-                                    console.log('NAVIGATION called CustomDashedComponent', { navigation });
-                                    navigation.navigate('RouteChooseLocationDetailScreen')
-                                    // dispatch(resetJobLocation())
-                                    // dispatch(setRouteList([]))
+                                    if (!source && !destination) {
+                                        Alert.alert(strings.Please_select_a_source_and_destination, "")
+                                    } else if (!source) {
+                                        Alert.alert(strings.please_select_a_source, "")
+                                    } else if (!destination) {
+                                        Alert.alert(strings.please_select_a_destination, "")
+                                    } else {
+                                        dispatch(updatePerticularSelectionOfAddress('waypoints'))
+                                        navigation.navigate('RouteChooseLocationDetailScreen')
+                                    }
                                 }}
                                 viewStyle={{ paddingVertical: wp(3), borderColor: colors.bottom_sheet_tab, marginTop: wp(0) }}
                                 textStyle={{ fontSize: FontSizes.MEDIUM_16, color: colors.dark_blue1_color }}

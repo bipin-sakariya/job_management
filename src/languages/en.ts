@@ -227,6 +227,9 @@ export const eng = {
 
     Please_select_a_source_and_destination: 'Please select a source and destination',
     please_select_a_destination: 'please select a destination',
+    please_select_a_source: "please select a source",
 
     KM_away: 'KM away',
+    KM: 'KM',
+    Drive: 'drive',
 }

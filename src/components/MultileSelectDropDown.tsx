@@ -105,7 +105,6 @@ const MultipleSelectDropDown = (props: DropDownComponentProps) => {
 
     return (
         <>
-            {console.log({ data: props.setIsAllSign })}
             <View style={[styles.textInputContainer, props.container]}>
                 <View style={styles.titleContainer}>
                     <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{props.title}</Text>

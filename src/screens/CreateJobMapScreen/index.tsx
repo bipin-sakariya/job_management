@@ -9,10 +9,9 @@ import { strings } from '../../languages/localizedStrings';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { colors } from '../../styles/Colors';
 import Geolocation from '@react-native-community/geolocation';
-import { getDistance } from 'geolib';
 import { RootRouteProps } from '../../types/RootStackTypes';
 import { useRoute } from '@react-navigation/native';
-import { manageMapRoutesReducer, setJobLocation } from '../../redux/slices/MapSlice/MapSlice';
+import { manageMapRoutesReducer, setJobLocation, storeCreateJoblocationReducer } from '../../redux/slices/MapSlice/MapSlice';
 import { useAppDispatch } from '../../hooks/reduxHooks';
 import { styles } from './styles';
 import Geocoder from 'react-native-geocoder';
@@ -43,48 +42,7 @@ const CreateJobMapScreen = () => {
     useEffect(() => {
         console.log({ route })
         if (route.params?.isEditing) {
-            Geolocation.getCurrentPosition(
-                position => {
-                    setCurruntLoaction({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421
-                    })
-                    let params = {
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                    }
-                    getAddress(params)
-                    setTapLoaction({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421
-                    })
-                    console.log(position)
-                    if (!route?.params?.isButtonVisible) {
-                        setChooseFromMap(true)
-                        setTapLoaction({
-                            latitude: position.coords.latitude,
-                            longitude: position.coords.longitude,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421
-                        })
-                        getAddress({
-                            latitude: position.coords.latitude,
-                            longitude: position.coords.longitude,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421
-                        })
-                    }
-
-                },
-                error => {
-                    console.log(error.code, error.message);
-                },
-                { enableHighAccuracy: true, timeout: 20000 },
-            );
+            getUserCurrentLocation()
         } else {
             setTapLoaction({
                 latitude: route.params?.jobLocation?.latitude ?? 0,
@@ -95,6 +53,50 @@ const CreateJobMapScreen = () => {
         }
 
     }, [])
+
+    const getUserCurrentLocation = () => {
+        Geolocation.getCurrentPosition(
+            position => {
+                setCurruntLoaction({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421
+                })
+                let params = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                }
+                getAddress(params)
+                setTapLoaction({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421
+                })
+                console.log(position)
+                if (!route?.params?.isButtonVisible) {
+                    setChooseFromMap(true)
+                    setTapLoaction({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421
+                    })
+                    getAddress({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421
+                    })
+                }
+            },
+            error => {
+                console.log(error.code, error.message);
+            },
+            { enableHighAccuracy: true, timeout: 20000 },
+        );
+    }
 
     useEffect(() => {
         if (route?.params?.isButtonVisible) {
@@ -116,7 +118,7 @@ const CreateJobMapScreen = () => {
         if (location) {
             console.log({ lat: curruntLoaction?.latitude, lng: curruntLoaction?.longitude })
             Geocoder.geocodePosition({ lat: location?.latitude, lng: location?.longitude }).then((res: any) => {
-                setAddres(res[0]?.formattedAddress)
+                setAddres(res[0]?.formattedAddress ?? `${location?.latitude} ${location?.longitude}`)
                 console.log(res[0]?.formattedAddress)
             }).catch((err: any) => console.log(err))
         }
@@ -185,7 +187,10 @@ const CreateJobMapScreen = () => {
                                 buttonStyle={{ width: wp(45) }}
                                 imageStyle={{ tintColor: colors.white }}
                                 textStyle={{ color: colors.white }}
-                                onPress={() => setChooseFromMap(true)}
+                                onPress={() => {
+                                    setIsCurruntLocation(false)
+                                    setChooseFromMap(true)
+                                }}
                                 image={ImagesPath.map_pin_line_icon}
                             />
                             <CustomBlackButton
@@ -193,7 +198,11 @@ const CreateJobMapScreen = () => {
                                 buttonStyle={{ width: wp(45), backgroundColor: colors.light_blue_color }}
                                 imageStyle={{ tintColor: colors.primary_color }}
                                 textStyle={{ color: colors.primary_color }}
-                                onPress={() => setIsCurruntLocation(true)}
+                                onPress={() => {
+                                    getUserCurrentLocation()
+                                    setChooseFromMap(false)
+                                    setIsCurruntLocation(true)
+                                }}
                                 image={ImagesPath.cross_hair_icon}
                             />
                         </>}
@@ -220,9 +229,15 @@ const CreateJobMapScreen = () => {
                                 address: address,
                                 description: 'selected location from map',
                             }
-                            dispatch(manageMapRoutesReducer(params))
-                            navigation.goBack()
-                            navigation.goBack()
+                            if (route?.params?.screenName == 'RouteChooseLocationDetailScreen') {
+                                dispatch(manageMapRoutesReducer(params))
+                                navigation?.navigate('RouteScreen')
+                            } else if (route?.params?.screenName == 'AddNewJobScreen' || route?.params?.screenName == 'CreateNewJobScreen') {
+                                dispatch(storeCreateJoblocationReducer(params))
+                                navigation.goBack()
+                            } else {
+                                navigation.goBack()
+                            }
                         }}
                         image={ImagesPath.map_pin_line_icon}
                     />

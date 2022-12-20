@@ -23,12 +23,11 @@ interface CustomBottomSheetProps {
 }
 
 const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSheetProps, ref: ForwardedRef<RBSheet>) => {
+    const [data, setData] = useState(props.data)
 
     useEffect(() => {
         setData(props.data)
     }, [props.data])
-
-    const [data, setData] = useState(props.data)
 
     const onSelectes = (finalIndex: number) => {
         let finalData = props.data.map((item, index) => {
@@ -85,8 +84,6 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
                 <FlatList
                     data={data}
                     renderItem={({ item, index }) => {
-                        // { console.log({ index }) }
-                        // console.log("🚀 ~ file: CustomBottomSheet.tsx ~ line 83 ~ CustomBottomSheet ~ item", item)
                         return (
                             <TouchableOpacity onPress={() => onSelectes(index)} style={styles.itemContainer}>
                                 <Text style={styles.itemTitleTxt}>{item.name}</Text>

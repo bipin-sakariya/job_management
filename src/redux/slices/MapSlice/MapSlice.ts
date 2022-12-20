@@ -20,6 +20,8 @@ interface initialStateTypes {
     source: LocationData | undefined,
     destination: LocationData | undefined
     finalJobRouteList: LocationData[] | []
+    selectperticularAddress: 'source' | 'destination' | "waypoints" | null
+    createJobLocation: LocationData | undefined
 }
 
 const initialState: initialStateTypes = {
@@ -27,7 +29,9 @@ const initialState: initialStateTypes = {
     routeList: [],
     source: undefined,
     destination: undefined,
-    finalJobRouteList: []
+    finalJobRouteList: [],
+    selectperticularAddress: null,
+    createJobLocation: undefined
 }
 
 const USER = "USER";
@@ -36,31 +40,17 @@ const MapSlice = createSlice({
     name: USER,
     initialState,
     reducers: {
-        // resetJobLocation: (state) => {
-        //     state.job_location = undefined
-        // },
         setJobLocation: (state, action) => {
             state.job_location = action.payload
         },
-        // resetRouteList: (state) => {
-        //     state.routeList = []
-        // },
-        // setSource: (state, action) => {
-        //     console.log("state===>", action.payload)
-        //     state.routeList = action.payload
-        // },
-        // setDestination: (state, action) => {
-        //     state.routeList = action.payload
-        // },
-        // setRouteList: (state, action) => {
-        //     let temp = action.payload
-        //     console.log("STATE", temp)
-        //     state.routeList = action.payload
-        // },
         resetMapRoutesReducer: (state) => {
             state.source = undefined
             state.destination = undefined
             state.routeList = []
+            state.finalJobRouteList = []
+        },
+        resetCreateJobLocationReducer: (state) => {
+            state.createJobLocation = undefined
         },
         resetPerticularRoutesReducer: (state, action) => {
             if (action.payload?.type == 'source') {
@@ -75,11 +65,12 @@ const MapSlice = createSlice({
         },
         manageMapRoutesReducer: (state, action) => {
             console.log({ action, state })
-            if (!state.source) {
+            console.log({ condition: action.payload?.isCheckBlank })
+            if (!action.payload?.isCheckBlank ? (state.selectperticularAddress == 'source') : (!state.source)) {
                 state.source = action.payload
-            } else if (!state.destination) {
+            } else if (!action.payload?.isCheckBlank ? (state.selectperticularAddress == 'destination') : (!state.destination)) {
                 state.destination = action.payload
-            } else {
+            } else if (!action.payload?.isCheckBlank ? (state.selectperticularAddress == 'waypoints') : true) {
                 let routeList: LocationData[] = [...current(state.routeList), action.payload]
                 console.log({ routeList })
                 if (routeList.length <= 8) {
@@ -93,9 +84,16 @@ const MapSlice = createSlice({
             state.routeList && finalRoutes.push(...current(state.routeList))
             state.destination && finalRoutes.push(current(state.destination))
             state.finalJobRouteList = finalRoutes
+        },
+        updatePerticularSelectionOfAddress: (state, action) => {
+            state.selectperticularAddress = action.payload
+        },
+        storeCreateJoblocationReducer: (state, action) => {
+            console.log("storeCreateJoblocation", { action })
+            state.createJobLocation = action?.payload
         }
     },
 })
 
-export const { setJobLocation, manageMapRoutesReducer, resetMapRoutesReducer, resetPerticularRoutesReducer, updateFinalMapRoutesReducer } = MapSlice.actions
+export const { setJobLocation, manageMapRoutesReducer, resetMapRoutesReducer, resetPerticularRoutesReducer, updateFinalMapRoutesReducer, updatePerticularSelectionOfAddress, storeCreateJoblocationReducer, resetCreateJobLocationReducer } = MapSlice.actions
 export default MapSlice.reducer;

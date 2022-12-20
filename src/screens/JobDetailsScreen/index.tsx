@@ -389,7 +389,7 @@ const JobDetailsScreen = () => {
                         <CustomDetailsComponent
                             title={strings.jobAddedBy}
                             bottomComponent={
-                                <CustomJobAddedByComponent date={convertDate(jobDetails.added_by.date_joined)} image={{ uri: jobDetails.added_by.profile_image }} role={jobDetails.added_by.role.title} userName={jobDetails.added_by.user_name} />
+                                <CustomJobAddedByComponent date={convertDate(jobDetails?.added_by?.date_joined)} image={{ uri: jobDetails?.added_by?.profile_image }} role={jobDetails?.added_by?.role?.title} userName={jobDetails?.added_by?.user_name} />
                             }
                         />
                         {data.status == strings.JobClose || data.status == strings.JobPartial ?
@@ -431,7 +431,7 @@ const JobDetailsScreen = () => {
                             || (userData?.role == strings.Admin && data.status == strings.JobTransfer))
                             ?
                             <CustomBlackButton
-                                title={strings.Close}
+                                title={strings.close}
                                 buttonStyle={{ paddingHorizontal: wp(10) }}
                                 onPress={() => {
                                     navigation.navigate("CloseJobScreen", { params: id })

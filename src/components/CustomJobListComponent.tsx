@@ -1,53 +1,88 @@
-import React from "react";
-import { Image, StyleSheet, Text, TextProps, TouchableOpacity, TouchableOpacityProps, View } from "react-native";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { CustomStatusBtn } from "./";
-import { colors } from "../styles/Colors";
-import fonts from "../styles/Fonts";
-import FontSizes from "../styles/FontSizes";
-import { globalStyles } from "../styles/globalStyles";
-import { ImagesPath } from "../utils/ImagePaths";
-import { JobDetailsData } from "../redux/slices/AdminSlice/jobListSlice";
-import { convertDate } from "../utils/screenUtils";
-import FastImage from "react-native-fast-image";
+import React from 'react';
+import { Image, StyleSheet, Text, TextProps, TouchableOpacity, TouchableOpacityProps, View, } from 'react-native';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { CustomStatusBtn } from './';
+import { colors } from '../styles/Colors';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import { globalStyles } from '../styles/globalStyles';
+import { ImagesPath } from '../utils/ImagePaths';
+import { JobDetailsData } from '../redux/slices/AdminSlice/jobListSlice';
+import { convertDate } from '../utils/screenUtils';
+import FastImage from 'react-native-fast-image';
 
 interface CustomJobListComponentProps {
-    item: JobDetailsData,
-    type?: string
-    listStyle?: TouchableOpacityProps['style']
-    textStyle?: TextProps['style']
+    item: JobDetailsData;
+    type?: string;
+    listStyle?: TouchableOpacityProps['style'];
+    textStyle?: TextProps['style'];
 }
 
 const CustomJobListComponent = (props: CustomJobListComponentProps & TouchableOpacityProps) => {
-
     return (
-        <TouchableOpacity {...props} style={[props.listStyle, styles.jobContainerStyle, props.type == "carousel" ? styles.jobContainerBoxShadowStyle : null]}>
-            <FastImage source={ImagesPath.placeholder_img} style={styles.jobImageStyle} />
+        <TouchableOpacity
+            {...props}
+            style={[
+                props.listStyle,
+                styles.jobContainerStyle,
+                props.type == 'carousel' ? styles.jobContainerBoxShadowStyle : null,
+            ]}>
+            <FastImage
+                source={ImagesPath.placeholder_img}
+                style={styles.jobImageStyle}
+            />
             <View style={{ flex: 1 }}>
                 <View style={styles.jobTitleContainer}>
                     <View style={styles.jobStatusViewStyle}>
-                        {
-                            props.item.status &&
+                        {props.item.status && (
                             <TouchableOpacity onPress={() => { }}>
-                                <Image source={ImagesPath.infocircle_icon} style={styles.infoCircleIcon} />
+                                <Image
+                                    source={ImagesPath.infocircle_icon}
+                                    style={styles.infoCircleIcon}
+                                />
                             </TouchableOpacity>
-                        }
-                        <Text style={[styles.titleTxt, globalStyles.rtlStyle]}>{props.item.address}</Text>
+                        )}
+                        <Text style={[styles.titleTxt, globalStyles.rtlStyle]}>
+                            {props.item.address}
+                        </Text>
                     </View>
                     <CustomStatusBtn title={props.item.status} />
                 </View>
-                <Text style={[styles.descriptionTxt, globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_10, textAlign: "left" }]}>{convertDate(props.item.created_at)}</Text>
+                <Text
+                    style={[
+                        styles.descriptionTxt,
+                        globalStyles.rtlStyle,
+                        { fontSize: FontSizes.EXTRA_SMALL_10, textAlign: 'left' },
+                    ]}>
+                    {convertDate(props.item.created_at)}
+                </Text>
                 <View style={styles.descriptionView}>
-                    <Text numberOfLines={2} style={[props.textStyle, styles.descriptionTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>{props.item.description}</Text>
-                    <View style={[globalStyles.rowView, styles.kmViewStyle, globalStyles.rtlDirection]}>
+                    <Text
+                        numberOfLines={2}
+                        style={[
+                            props.textStyle,
+                            styles.descriptionTxt,
+                            globalStyles.rtlStyle,
+                            { textAlign: 'left' },
+                        ]}>
+                        {props.item.description}
+                    </Text>
+                    <View
+                        style={[
+                            globalStyles.rowView,
+                            styles.kmViewStyle,
+                            globalStyles.rtlDirection,
+                        ]}>
                         <Image source={ImagesPath.map_pin_icon} style={styles.mapPinIcon} />
-                        <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>5 km away</Text>
+                        <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>
+                            5 km away
+                        </Text>
                     </View>
                 </View>
             </View>
         </TouchableOpacity>
-    )
-}
+    );
+};
 
 export default CustomJobListComponent;
 
@@ -64,7 +99,7 @@ const styles = StyleSheet.create({
     jobImageStyle: {
         height: wp(20),
         width: wp(20),
-        resizeMode: 'contain'
+        resizeMode: 'contain',
     },
     jobTitleContainer: {
         ...globalStyles.rowView,
@@ -75,7 +110,7 @@ const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.SEMI_LARGE_20,
         color: colors.dark_blue1_color,
-        marginHorizontal: wp(1)
+        marginHorizontal: wp(1),
     },
     distanceTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
@@ -87,27 +122,27 @@ const styles = StyleSheet.create({
         fontSize: FontSizes.EXTRA_SMALL_12,
         paddingHorizontal: wp(2.5),
         color: colors.dark_blue2_color,
-        width: wp("45%")
+        width: wp('45%'),
     },
     mapPinIcon: {
         height: wp(5),
         width: wp(5),
-        resizeMode: "contain",
+        resizeMode: 'contain',
     },
     jobStatusViewStyle: {
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     infoCircleIcon: {
         height: wp(5),
         width: wp(5),
-        resizeMode: "contain"
+        resizeMode: 'contain',
     },
     descriptionView: {
-        flexDirection: "row",
-        alignItems: "flex-end",
-        justifyContent: "space-between",
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        justifyContent: 'space-between',
     },
     jobContainerBoxShadowStyle: {
         shadowColor: colors.black_opacity_2,
@@ -115,13 +150,13 @@ const styles = StyleSheet.create({
         shadowOffset: { height: 0, width: 0 },
         elevation: 5,
         paddingHorizontal: wp(2),
-        marginHorizontal: wp(0)
+        marginHorizontal: wp(0),
     },
     kmViewStyle: {
-        justifyContent: "center",
-        alignSelf: "center",
-        direction: "rtl",
+        justifyContent: 'center',
+        alignSelf: 'center',
+        direction: 'rtl',
         maxWidth: wp(25),
-        flex: 1
-    }
-})
+        flex: 1,
+    },
+});
