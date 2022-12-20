@@ -1,7 +1,7 @@
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, Header, MultileSelectDropDown } from '../../components'
+import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, Header, MultipleSelectDropDown } from '../../components'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { ImagesPath } from '../../utils/ImagePaths'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -249,7 +249,7 @@ const FormDetailsScreen = () => {
                     onChangeText={handleChange('formName')}
                 />
                 {isEdit || route.params.isEdit == true ?
-                    <MultileSelectDropDown
+                    <MultipleSelectDropDown
                         isVisible={isEditable}
                         setIsVisible={setIsEditable}
                         title={strings.AddBill}

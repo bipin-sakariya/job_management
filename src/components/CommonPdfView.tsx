@@ -1,5 +1,5 @@
-import { StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import React from 'react';
+import { StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { colors } from '../styles/Colors';
@@ -23,6 +23,7 @@ interface itemDetails {
     mb: number | null
     title: string | null
 }
+
 const CommonPdfView = (props: CommonPdfViewProps) => {
     return (
         <TouchableOpacity onPress={props.onPress} style={[globalStyles.rowView, styles.mainDocView, props.mainView]}>
@@ -37,7 +38,7 @@ const CommonPdfView = (props: CommonPdfViewProps) => {
     )
 }
 
-export default CommonPdfView
+export default CommonPdfView;
 
 const styles = StyleSheet.create({
     mainDocView: {
@@ -47,13 +48,6 @@ const styles = StyleSheet.create({
         marginVertical: wp(2),
         borderRadius: wp(2),
         paddingVertical: wp(2)
-    },
-    docStyle: {
-        backgroundColor: colors.doc_bg_color_light_gray,
-        alignItems: "center",
-        justifyContent: "space-around",
-        paddingVertical: wp(2),
-        borderRadius: wp(2),
     },
     docPdfViewStyle: {
         width: wp(10),

@@ -190,8 +190,8 @@ const ReportGeneratorScreen = () => {
                     .toString('yyyy-MM-dd');
                 setDateArray((s: any) => [...s, tempDate]);
                 markedDates[tempDate] = {
-                    color: i === 0 ? "transparent" : i === range ? "transparent" : colors.white_color,
-                    textColor: i === 0 || i === range ? colors.white_color : '#545454',
+                    color: i === 0 ? colors.transparent : i === range ? colors.transparent : colors.white_color,
+                    textColor: i === 0 || i === range ? colors.white_color : colors.grey_18,
                     startingDay: i === 0,
                     endingDay: i === range,
                 }

@@ -1,7 +1,7 @@
 import { Alert, FlatList, Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
-import { AssignedJobsComponent, Container, CustomBlackButton, CustomDetailsComponent, CustomDropdown, CustomTextInput, DropDownComponent, Header, MultileSelectDropDown } from '../../components';
+import { AssignedJobsComponent, Container, CustomBlackButton, CustomDetailsComponent, CustomDropdown, CustomTextInput, DropDownComponent, Header, MultipleSelectDropDown } from '../../components';
 import { heightPercentageToDP, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { styles } from './styles';
@@ -393,7 +393,7 @@ const GroupDetailScreen = () => {
                         value={values.groupName}
                         onChangeText={handleChange('groupName')}
                     />
-                    {(touched?.groupName && errors?.groupName) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.groupName ? errors.groupName : ''}</Text> : null}
+                    {(touched?.groupName && errors?.groupName) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors?.groupName ? errors.groupName : ''}</Text> : null}
                     <DropDownComponent
                         disable={!isEditable}
                         title={strings.Group_Manager}
@@ -407,7 +407,7 @@ const GroupDetailScreen = () => {
                         container={{ marginBottom: wp(5) }}
                     />
                     {/* {console.log({ countingValue })} */}
-                    {(touched?.groupManager && errors.groupMember) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text>}
+                    {(touched?.groupManager && errors.groupMember) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.role_required}</Text>}
                     <DropDownComponent
                         disable={!isEditable}
                         title={strings.Inspector}
@@ -420,8 +420,8 @@ const GroupDetailScreen = () => {
                         placeholder={groupDetails.inspector_details?.user_name ? groupDetails.inspector_details?.user_name : strings.GivePermission}
                         container={{ marginBottom: wp(5) }}
                     />
-                    {(touched?.inspector && errors.inspector) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text>}
-                    {/* <MultileSelectDropDown
+                    {(touched?.inspector && errors.inspector) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.Permission_required}</Text>}
+                    {/* <MultipleSelectDropDown
                         disabled={!isEditable}
                         setIsVisible={setModalShow}
                         isVisible={modalShow}
@@ -433,7 +433,7 @@ const GroupDetailScreen = () => {
                         }}
                         countTitle={strings.people}
                     /> */}
-                    <MultileSelectDropDown
+                    <MultipleSelectDropDown
                         disabled={!isEditable}
                         setIsVisible={setModalShow}
                         isVisible={modalShow}
@@ -449,7 +449,7 @@ const GroupDetailScreen = () => {
                     />
                     {
                         isEditable ?
-                            <MultileSelectDropDown
+                            <MultipleSelectDropDown
                                 disabled={!isEditable}
                                 setIsVisible={setFormListVisible}
                                 isVisible={formListVisible}

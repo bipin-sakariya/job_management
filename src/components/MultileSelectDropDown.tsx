@@ -1,5 +1,5 @@
-import { FlatList, I18nManager, Image, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, TextInput, View, ViewStyle } from 'react-native';
 import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { FlatList, I18nManager, Image, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, TextInput, View, ViewStyle } from 'react-native';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { globalStyles } from '../styles/globalStyles';
 import { ImagesPath } from '../utils/ImagePaths';
@@ -40,7 +40,7 @@ interface DropDownComponentProps {
     setIsAllSign?: (data: boolean) => void
 }
 
-const MultileSelectDropDown = (props: DropDownComponentProps) => {
+const MultipleSelectDropDown = (props: DropDownComponentProps) => {
     const dispatch = useAppDispatch()
 
     const [list, setList] = useState(props.data)
@@ -139,6 +139,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                     }
                 </TouchableOpacity>
             </View>
+
             {props.isVisible &&
                 <View style={[styles.modalContainer, styles.borderList]}>
                     <KeyboardAvoidingView behavior='padding'>
@@ -190,7 +191,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
     )
 }
 
-export default MultileSelectDropDown;
+export default MultipleSelectDropDown;
 
 const styles = StyleSheet.create({
     textInputContainer: {

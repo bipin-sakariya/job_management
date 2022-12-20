@@ -1,5 +1,5 @@
-import { Image, ImageSourcePropType, ImageStyle, StyleSheet, Text, TextStyle, TouchableOpacity, TouchableOpacityProps, View, ViewStyle } from 'react-native';
 import React from 'react';
+import { Image, ImageSourcePropType, ImageStyle, StyleSheet, Text, TextStyle, TouchableOpacity, TouchableOpacityProps, ViewStyle } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import fonts from '../styles/Fonts';
@@ -15,6 +15,7 @@ interface CustomSubTitleWithImageComponentProps {
 }
 
 const CustomSubTitleWithImageComponent = (props: CustomSubTitleWithImageComponentProps & TouchableOpacityProps) => {
+
     return (
         <TouchableOpacity {...props} style={[globalStyles.rowView, props.viewStyle, { paddingVertical: wp(1.5), alignItems: "center" }]}>
             <Image source={props.image} style={[styles.imageStyle, props.imageStyle]} />
@@ -23,7 +24,7 @@ const CustomSubTitleWithImageComponent = (props: CustomSubTitleWithImageComponen
     )
 }
 
-export default CustomSubTitleWithImageComponent
+export default CustomSubTitleWithImageComponent;
 
 const styles = StyleSheet.create({
     imageStyle: {

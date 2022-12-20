@@ -1,6 +1,7 @@
-import { NativeModules, StyleSheet, View, ViewStyle } from 'react-native';
 import React from 'react';
+import { NativeModules, StyleSheet, View, ViewStyle } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { colors } from '../styles/Colors';
 const { StatusBarManager } = NativeModules;
 
 interface headerProps {
@@ -38,7 +39,7 @@ export default Header;
 
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: 'transparent',
+        backgroundColor: colors.transparent,
         position: "absolute",
         top: 0,
         zIndex: 99999,
@@ -49,7 +50,6 @@ const styles = StyleSheet.create({
         height: 54,
         justifyContent: "center",
         alignItems: "center",
-        // backgroundColor: 'red'
     },
     headerCenter: {
         width: "50%",

@@ -1,5 +1,5 @@
-import { StyleSheet, View, ViewStyle } from 'react-native';
 import React, { useState } from 'react';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import Video from 'react-native-video';
@@ -10,7 +10,6 @@ interface ItemProps {
     id: number
     imgUrl: string
     mediaType: string
-
 }
 
 interface CustomCarouselZoomImageViewerProps {
@@ -32,7 +31,7 @@ const CustomCarouselZoomImageViewer = (props: CustomCarouselZoomImageViewerProps
                         <ImageViewer
                             imageUrls={[{ url: item.imgUrl, }]}
                             renderIndicator={() => <></>}
-                            backgroundColor='transparent'
+                            backgroundColor={colors.transparent}
                         />
                         :
                         <View style={{ alignItems: 'center', justifyContent: 'center', height: '100%' }}>
@@ -71,10 +70,5 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: colors.doc_bg_color_light_gray,
         borderRadius: wp(3),
-    },
-    imageView: {
-        height: wp(50),
-        borderRadius: wp(3),
-        resizeMode: "cover"
-    },
+    }
 })

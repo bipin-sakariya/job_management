@@ -15,6 +15,7 @@ interface CustomJobAddedByComponentProps {
 }
 
 const CustomJobAddedByComponent = ({ image, userName, role, date }: CustomJobAddedByComponentProps) => {
+    
     return (
         <View style={[globalStyles.rowView, styles.jobView]}>
             <View style={[globalStyles.rowView, globalStyles.spaceAroundView]}>
@@ -31,7 +32,7 @@ const CustomJobAddedByComponent = ({ image, userName, role, date }: CustomJobAdd
     )
 }
 
-export default CustomJobAddedByComponent
+export default CustomJobAddedByComponent;
 
 const styles = StyleSheet.create({
     jobView: {
@@ -39,8 +40,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-between"
     },
     jobImageView: {
-        // height: wp(10),
-        // width: wp(10),
         backgroundColor: colors.doc_bg_color_dark_gray,
         borderRadius: wp(2),
         justifyContent: "center",

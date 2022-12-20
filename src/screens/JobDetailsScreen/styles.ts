@@ -80,7 +80,7 @@ export const styles = StyleSheet.create({
         backgroundColor: colors.bottom_tab_bg,
     },
     paginationDots: {
-        backgroundColor: 'transparent',
+        backgroundColor: colors.transparent,
         position: 'absolute',
         bottom: wp(-5),
         alignSelf: "center",

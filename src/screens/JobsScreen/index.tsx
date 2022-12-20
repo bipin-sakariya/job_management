@@ -75,7 +75,7 @@ const JobsScreen = () => {
         }).catch((error) => {
             console.log({ error });
         })
-    }, [isFocus, btn, groupListData.results,])
+    }, [isFocus, btn, groupListData.results])
 
     const JobListApiCall = (page: number, input?: string, id?: number, to_date?: string, from_date?: string) => {
         let params: jobListParams = {

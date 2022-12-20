@@ -1,5 +1,5 @@
-import { Image, ImageSourcePropType, ImageStyle, StyleSheet, Text, TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
 import React from 'react';
+import { Image, ImageSourcePropType, ImageStyle, StyleSheet, Text, TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { colors } from '../styles/Colors';
@@ -24,7 +24,7 @@ const CustomBlackButton = ({ title, onPress, image, buttonStyle, imageStyle, tex
     )
 }
 
-export default CustomBlackButton
+export default CustomBlackButton;
 
 const styles = StyleSheet.create({
     blackBtnStyle: {

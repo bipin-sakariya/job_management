@@ -12,6 +12,7 @@ interface BottomSheetProps {
 }
 
 const BottomSheet = React.forwardRef((props: BottomSheetProps & RBSheetProps, ref: any) => {
+
     return (
         <RBSheet
             ref={ref}
@@ -26,7 +27,7 @@ const BottomSheet = React.forwardRef((props: BottomSheetProps & RBSheetProps, re
                     borderTopRightRadius: props.TopRightRadius ? props.TopRightRadius : wp(8),
                 },
                 wrapper: {
-                    backgroundColor: "transparent",
+                    backgroundColor: colors.transparent,
                     shadowColor: 'rgba(0, 0, 0, 0.2)',
                     shadowOpacity: 10,
                     shadowRadius: 10,
@@ -43,4 +44,4 @@ const BottomSheet = React.forwardRef((props: BottomSheetProps & RBSheetProps, re
     )
 })
 
-export default BottomSheet
+export default BottomSheet;

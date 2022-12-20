@@ -1,5 +1,5 @@
+import React, { Dispatch, SetStateAction } from 'react';
 import { StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
-import React, { Dispatch, SetStateAction, useState } from 'react';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { globalStyles } from '../styles/globalStyles';
 import fonts from '../styles/Fonts';
@@ -41,7 +41,8 @@ const ButtonTab = ({ btnOneTitle, btnTwoTitle, btnOneStyle, btnTwoStyle, btnOneT
                     style={[styles.btnTxtStyle, btnOneTxtStyle, {
                         fontFamily: btnValue?.open ? fonts.FONT_POP_MEDIUM : fonts.FONT_POP_REGULAR,
                         color: btnValue?.open ? colors.white_color : colors.dark_blue1_color,
-                    }]}>{btnOneTitle}</Text>
+                    }]}>{btnOneTitle}
+                </Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => {
@@ -63,13 +64,12 @@ const ButtonTab = ({ btnOneTitle, btnTwoTitle, btnOneStyle, btnTwoStyle, btnOneT
     )
 }
 
-export default ButtonTab
+export default ButtonTab;
 
 const styles = StyleSheet.create({
     buttonContainer: {
         width: wp(80),
         alignSelf: 'center',
-        // backgroundColor: 'red',
         marginBottom: wp(2),
         ...globalStyles.rowView
     },

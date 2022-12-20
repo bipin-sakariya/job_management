@@ -43,7 +43,7 @@ export const styles = StyleSheet.create({
         // marginLeft: wp(5),
         color: colors.black,
         height: wp(15),
-        // backgroundColor: 'red',
+        // backgroundColor: colors.red,
         paddingHorizontal: wp(3),
         textAlign: I18nManager.isRTL ? 'right' : 'left',
         writingDirection: I18nManager.getConstants().isRTL ? "rtl" : "ltr",
@@ -58,7 +58,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
         ...globalStyles.rtlDirection,
-        // backgroundColor: 'red'
+        // backgroundColor: colors.red
         // marginTop: wp(12),
 
         // color: colors.black

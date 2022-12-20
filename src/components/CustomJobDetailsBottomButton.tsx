@@ -14,6 +14,7 @@ interface CustomJobDetailsBottomButtonProps {
     buttonTextStyle?: ViewStyle,
     onPress?: () => void
 }
+
 const CustomJobDetailsBottomButton = ({ buttonStyle, image, imageStyle, buttonText, buttonTextStyle, onPress, viewStyle }: CustomJobDetailsBottomButtonProps) => {
     return (
         <View style={[styles.roundButtonStyle, buttonStyle]}>
@@ -25,7 +26,7 @@ const CustomJobDetailsBottomButton = ({ buttonStyle, image, imageStyle, buttonTe
     )
 }
 
-export default CustomJobDetailsBottomButton
+export default CustomJobDetailsBottomButton;
 
 const styles = StyleSheet.create({
     roundButtonStyle: {

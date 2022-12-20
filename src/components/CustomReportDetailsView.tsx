@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import fonts from '../styles/Fonts';
@@ -18,7 +18,7 @@ const CustomReportDetailsView = ({ data }: any) => {
     )
 }
 
-export default CustomReportDetailsView
+export default CustomReportDetailsView;
 
 const styles = StyleSheet.create({
     commonTxt: {

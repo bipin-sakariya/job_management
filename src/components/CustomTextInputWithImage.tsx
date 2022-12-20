@@ -1,5 +1,5 @@
-import { Image, Platform, StyleSheet, Text, TextInput, TextInputProps, TextStyle, TouchableOpacity, TouchableOpacityProps, View, ViewStyle } from 'react-native';
 import React from 'react';
+import { Image, Platform, StyleSheet, Text, TextInput, TextInputProps, TextStyle, TouchableOpacity, TouchableOpacityProps, View, ViewStyle } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { globalStyles } from '../styles/globalStyles';
 import fonts from '../styles/Fonts';
@@ -15,7 +15,9 @@ interface CustomTextInputWithImageProps {
     mainContainerStyle?: ViewStyle
     onpress?: () => void
 }
+
 const CustomTextInputWithImage = (props: CustomTextInputWithImageProps & TextInputProps & TouchableOpacityProps) => {
+
     return (
         <View style={[globalStyles.rowView, props.mainContainerStyle,]}>
             <View style={[styles.textInputContainer, props.container]}>
@@ -36,7 +38,7 @@ const CustomTextInputWithImage = (props: CustomTextInputWithImageProps & TextInp
     )
 }
 
-export default CustomTextInputWithImage
+export default CustomTextInputWithImage;
 
 const styles = StyleSheet.create({
     textInputViewStyle: {
@@ -66,7 +68,6 @@ const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.SMALL_14,
         width: '100%',
-        // height: 40,
         borderBottomLeftRadius: wp(1.5),
         borderBottomRightRadius: wp(1.5),
         color: colors.light_brown
@@ -79,7 +80,6 @@ const styles = StyleSheet.create({
         paddingVertical: Platform.OS == "ios" ? wp(4.5) : wp(6),
         borderRadius: wp(2),
         marginLeft: wp(3),
-        // marginTop: wp(-0.5)
     },
     mapPinIcon: {
         width: wp(10),

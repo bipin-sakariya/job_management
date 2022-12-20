@@ -43,7 +43,7 @@ const CustomOneItemSelect = (props: CustomOneItemSelectProps & TouchableOpacityP
     )
 }
 
-export default CustomOneItemSelect
+export default CustomOneItemSelect;
 
 const styles = StyleSheet.create({
     jobListMainView: {

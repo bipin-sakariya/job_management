@@ -1,5 +1,5 @@
-import { FlatList, I18nManager, Image, StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import React, { ForwardedRef, useState } from 'react';
+import { FlatList, I18nManager, Image, StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import RBSheet, { RBSheetProps } from 'react-native-raw-bottom-sheet';
 import fonts from '../styles/Fonts';
 import FontSizes from '../styles/FontSizes';
@@ -27,12 +27,11 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
     useEffect(() => {
         setData(props.data)
     }, [props.data])
+
     const [data, setData] = useState(props.data)
+
     const onSelectes = (finalIndex: number) => {
-        let mainData = [...data]
-        { console.log({ finalIndex }) }
         let finalData = props.data.map((item, index) => {
-            { console.log({ mainData }) }
             if (index == finalIndex) {
                 return {
                     ...item, selected: true
@@ -47,8 +46,8 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
         props.onSelectedTab(selectedItem[0])
         setData(finalData)
     }
-    return (
 
+    return (
         <RBSheet
             ref={ref}
             closeOnDragDown={true}
@@ -61,7 +60,7 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
                     borderTopRightRadius: 25
                 },
                 wrapper: {
-                    backgroundColor: "transparent",
+                    backgroundColor: colors.transparent,
                 },
                 draggableIcon: {
                     backgroundColor: colors.gray_7

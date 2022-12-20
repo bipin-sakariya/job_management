@@ -26,7 +26,7 @@ import CustomTextInputWithImage from './CustomTextInputWithImage';
 import CustomCarouselImageAndVideo from './CustomCarouselImageAndVideo';
 import AssignedJobsComponent from './AssignedJobsComponent';
 import CustomStatusBtn from './CustomStatusBtn';
-import MultileSelectDropDown from './MultileSelectDropDown';
+import MultipleSelectDropDown from './MultipleSelectDropDown';
 import GroupListComponent from './GroupListComponent';
 import CustomActivityIndicator from './CustomActivityIndicator';
 import CustomListView from './CustomListView';
@@ -66,7 +66,7 @@ export {
     CustomCarouselImageAndVideo,
     AssignedJobsComponent,
     CustomStatusBtn,
-    MultileSelectDropDown,
+    MultipleSelectDropDown,
     GroupListComponent,
     CustomActivityIndicator,
     CustomListView,

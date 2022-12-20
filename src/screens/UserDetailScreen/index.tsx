@@ -175,7 +175,7 @@ const UserDetailScreen = () => {
                         onChangeText={handleChange('userName')}
                         placeholder={isEditable ? strings.UserName : ''}
                     />
-                    {(touched?.userName && errors?.userName) || error?.user_name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.userName ? errors.userName : error?.email}</Text> : null}
+                    {(touched?.userName && errors?.userName) || error?.user_name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors?.userName ? errors.userName : error?.email}</Text> : null}
                     <CustomTextInput
                         editable={isEditable}
                         title={strings.Email}
@@ -185,7 +185,7 @@ const UserDetailScreen = () => {
                         placeholder={isEditable ? strings.Email : ''}
                         keyboardType={'email-address'}
                     />
-                    {(touched?.email && errors?.email) || error?.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.email ? errors?.email : error?.email}</Text> : null}
+                    {(touched?.email && errors?.email) || error?.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors?.email ? errors?.email : error?.email}</Text> : null}
                     <CustomTextInput
                         editable={isEditable}
                         title={strings.Contactno}
@@ -195,7 +195,7 @@ const UserDetailScreen = () => {
                         placeholder={isEditable ? strings.Contactno : ''}
                         keyboardType={'number-pad'}
                     />
-                    {(touched?.contactNo && errors?.contactNo) || error?.phone ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error?.phone ? error.phone : errors.contactNo}</Text> : null}
+                    {(touched?.contactNo && errors?.contactNo) || error?.phone ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error?.phone ? error.phone : errors.contactNo}</Text> : null}
                     <CustomTextInput
                         editable={false}
                         title={strings.Role}

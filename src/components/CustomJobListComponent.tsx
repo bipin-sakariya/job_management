@@ -19,6 +19,7 @@ interface CustomJobListComponentProps {
 }
 
 const CustomJobListComponent = (props: CustomJobListComponentProps & TouchableOpacityProps) => {
+
     return (
         <TouchableOpacity {...props} style={[props.listStyle, styles.jobContainerStyle, props.type == "carousel" ? styles.jobContainerBoxShadowStyle : null]}>
             <FastImage source={ImagesPath.placeholder_img} style={styles.jobImageStyle} />
@@ -48,7 +49,7 @@ const CustomJobListComponent = (props: CustomJobListComponentProps & TouchableOp
     )
 }
 
-export default CustomJobListComponent
+export default CustomJobListComponent;
 
 const styles = StyleSheet.create({
     jobContainerStyle: {
@@ -59,7 +60,6 @@ const styles = StyleSheet.create({
         marginVertical: wp(0.5),
         borderRadius: 8,
         marginHorizontal: wp(2),
-
     },
     jobImageStyle: {
         height: wp(20),
@@ -70,7 +70,6 @@ const styles = StyleSheet.create({
         ...globalStyles.rowView,
         justifyContent: 'space-between',
         paddingLeft: wp(2.5),
-
     },
     titleTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
@@ -89,19 +88,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp(2.5),
         color: colors.dark_blue2_color,
         width: wp("45%")
-    },
-    openButton: {
-        height: wp(5),
-        backgroundColor: colors.status_btn,
-        borderRadius: wp(1),
-        alignItems: 'center',
-        justifyContent: "center",
-        paddingHorizontal: wp(1.5),
-    },
-    smallBut: {
-        fontFamily: fonts.FONT_POP_REGULAR,
-        fontSize: FontSizes.EXTRA_SMALL_10,
-        color: colors.white_5
     },
     mapPinIcon: {
         height: wp(5),
@@ -124,7 +110,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
     },
     jobContainerBoxShadowStyle: {
-        shadowColor: "rgba(0, 0, 0, 0.3)",
+        shadowColor: colors.black_opacity_2,
         shadowOpacity: 2,
         shadowOffset: { height: 0, width: 0 },
         elevation: 5,
@@ -132,6 +118,10 @@ const styles = StyleSheet.create({
         marginHorizontal: wp(0)
     },
     kmViewStyle: {
-        justifyContent: "center", alignSelf: "center", direction: "rtl", maxWidth: wp(25), flex: 1
+        justifyContent: "center",
+        alignSelf: "center",
+        direction: "rtl",
+        maxWidth: wp(25),
+        flex: 1
     }
 })

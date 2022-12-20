@@ -113,7 +113,7 @@ const SignInScreen = () => {
                     container={{ marginBottom: wp(5) }}
                     keyboardType={'email-address'}
                 />
-                {touched.email && errors.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors.email}</Text> : null}
+                {touched.email && errors.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors.email}</Text> : null}
                 <CustomTextInput
                     title={strings.Password}
                     placeholder={strings.Password}
@@ -126,8 +126,8 @@ const SignInScreen = () => {
                         </TouchableOpacity>
                     }
                 />
-                {touched.password && errors.password ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors.password}</Text> : null}
-                {isError ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error}</Text> : null}
+                {touched.password && errors.password ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{errors.password}</Text> : null}
+                {isError ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{error}</Text> : null}
                 <TouchableOpacity onPress={() => {
                     refForgetPassRBSheet.current?.open()
                 }}>
@@ -169,7 +169,7 @@ const SignInScreen = () => {
                                                 placeholder={strings.Email_new}
                                                 value={values.email}
                                                 onChangeText={handleChange("email")} />
-                                            {touched.email && errors.email && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors.email}</Text>}
+                                            {touched.email && errors.email && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors.email}</Text>}
                                             <CustomBlackButton
                                                 onPress={() => { handleSubmit() }}
                                                 title={strings.Requestaresetlink}

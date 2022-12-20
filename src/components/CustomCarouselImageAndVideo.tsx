@@ -1,5 +1,5 @@
-import { Image, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
 import React, { useState } from 'react';
+import { Image, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import Video from 'react-native-video';
@@ -25,8 +25,6 @@ interface CustomCarouselImageAndVideoProps {
 const CustomCarouselImageAndVideo = (props: CustomCarouselImageAndVideoProps) => {
     const [activeSlide, setActiveSlide] = useState<number>(0)
     const [visible, setIsVisible] = useState<boolean>(false);
-
-    console.log({ item: props })
 
     const renderItem = ({ item, index }: { item: ItemProps, index: number }) => {
         return (
@@ -118,7 +116,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.bottom_tab_bg,
     },
     paginationDots: {
-        backgroundColor: 'transparent',
+        backgroundColor: colors.transparent,
         position: 'absolute',
         bottom: wp(-5),
         alignSelf: "center",

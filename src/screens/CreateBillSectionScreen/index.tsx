@@ -179,14 +179,14 @@ const CreateBillSectionScreen = () => {
                         </>
                         : null
                     }
-                    {imageError || error.image ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.image ? error.image : strings.Pleaseentersignlogo}</Text> : null}
+                    {imageError || error.image ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{error.image ? error.image : strings.Pleaseentersignlogo}</Text> : null}
                     <CustomTextInput
                         title={strings.name}
                         container={{ marginVertical: wp(5), marginTop: wp(3) }}
                         placeholder={type == "material" ? strings.Billname : strings.SignName}
                         onChangeText={handleChange("name")}
                     />
-                    {(touched.name && errors.name) || error.name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.name ? error.name : errors.name}</Text> : null}
+                    {(touched.name && errors.name) || error.name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.name ? error.name : errors.name}</Text> : null}
                     {type == "material" ?
                         <>
                             <DropDownComponent
@@ -207,7 +207,7 @@ const CreateBillSectionScreen = () => {
                                 placeholder={strings.choose}
                                 container={{ marginBottom: wp(5) }}
                             />
-                            {countingError || error.type ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.type ? error.type : strings.Typecount_required}</Text> : null}
+                            {countingError || error.type ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.type ? error.type : strings.Typecount_required}</Text> : null}
 
                             <CustomTextInput
                                 title={strings.jumpdish}
@@ -218,7 +218,7 @@ const CreateBillSectionScreen = () => {
                                 placeholderTextColor={colors.light_brown}
                                 keyboardType={'decimal-pad'}
                             />
-                            {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}
+                            {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}
                         </>
                         :
                         <>
@@ -229,7 +229,7 @@ const CreateBillSectionScreen = () => {
                                 onChangeText={handleChange("ration_qunt")}
                                 keyboardType={'number-pad'}
                             />
-                            {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
+                            {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
 
                             <DropDownComponent
                                 title={strings.typeCounting}
@@ -249,7 +249,7 @@ const CreateBillSectionScreen = () => {
                                 placeholder={strings.choose}
                                 container={{ marginBottom: wp(5) }}
                             />
-                            {countingError || error.type_counting ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.type_counting ? error.type_counting : strings.Typecount_required}</Text> : null}
+                            {countingError || error.type_counting ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.type_counting ? error.type_counting : strings.Typecount_required}</Text> : null}
                         </>
                     }
                     <CustomBlackButton

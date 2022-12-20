@@ -1,5 +1,5 @@
-import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View, ViewStyle } from 'react-native';
 import React, { Dispatch, SetStateAction } from 'react';
+import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View, ViewStyle } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { globalStyles } from '../styles/globalStyles';
 import fonts from '../styles/Fonts';
@@ -13,7 +13,9 @@ interface CustomSwitchComponentProps {
     subTitle?: string
     onPress?: Dispatch<SetStateAction<boolean>>
 }
+
 const CustomSwitchComponent = (props: CustomSwitchComponentProps & TouchableOpacityProps) => {
+
     return (
         <View style={[styles.textInputContainer, props.container, globalStyles.rtlDirection]}>
             <View style={styles.titleContainer}>
@@ -29,7 +31,7 @@ const CustomSwitchComponent = (props: CustomSwitchComponentProps & TouchableOpac
     )
 }
 
-export default CustomSwitchComponent
+export default CustomSwitchComponent;
 
 const styles = StyleSheet.create({
     textInputContainer: {

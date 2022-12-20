@@ -1,5 +1,5 @@
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useRef, useState } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../utils/ImagePaths';
@@ -25,9 +25,9 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
     const imageRef = useRef(null);
     const [visible, setVisible] = useState(false);
     const navigation = useCustomNavigation('BillListScreen');
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
 
-    let data = {
+    let data: any = {
         id: item.id,
         iamgeUrl: item.image,
         title: item.name,
@@ -105,11 +105,11 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
     )
 }
 
-export default CustomListView
+export default CustomListView;
 
 const styles = StyleSheet.create({
     dropDownShadowStyle: {
-        shadowColor: Platform.OS == "ios" ? colors.black_opacity : "rgba(0, 0, 0, 0.6)",
+        shadowColor: colors.black_opacity_1,
         shadowOpacity: 5,
         shadowRadius: 8,
         shadowOffset: { height: 0, width: 0 },
@@ -138,11 +138,6 @@ const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
         color: colors.dark_blue2_color,
-    },
-    iamgeStyle: {
-        height: wp(5),
-        width: wp(5),
-        resizeMode: "contain"
     },
     menuImageStyle: {
         height: wp(8),

@@ -1,7 +1,7 @@
 import { Alert, Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
-import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header, MultileSelectDropDown } from '../../components';
+import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header, MultipleSelectDropDown } from '../../components';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { strings } from '../../languages/localizedStrings';
@@ -329,7 +329,7 @@ const CreateGroupScreen = () => {
                             value={values.groupName}
                         />
                         {console.log({ values })}
-                        {(touched.groupName && errors?.groupName) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.groupName}</Text>}
+                        {(touched.groupName && errors?.groupName) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors?.groupName}</Text>}
                         <DropDownComponent
                             title={strings.Group_Manager}
                             data={isManager}
@@ -341,7 +341,7 @@ const CreateGroupScreen = () => {
                             placeholder={strings.SelectRoleforUser}
                             container={{ marginBottom: wp(5) }}
                         />
-                        {(touched?.groupManager && errors.groupManager) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text>}
+                        {(touched?.groupManager && errors.groupManager) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.role_required}</Text>}
                         <DropDownComponent
                             title={strings.Inspector}
                             data={isInspector}
@@ -354,8 +354,8 @@ const CreateGroupScreen = () => {
                             container={{ marginBottom: wp(5) }}
 
                         />
-                        {(touched?.inspector && errors.inspector) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text>}
-                        <MultileSelectDropDown
+                        {(touched?.inspector && errors.inspector) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.Permission_required}</Text>}
+                        <MultipleSelectDropDown
                             setIsVisible={setVisible}
                             isVisible={visible}
                             data={memberList}
@@ -369,7 +369,7 @@ const CreateGroupScreen = () => {
                         />
 
                         {/* form list  */}
-                        <MultileSelectDropDown
+                        <MultipleSelectDropDown
                             setIsVisible={setFormListVisible}
                             isVisible={formListVisible}
                             data={formsList}

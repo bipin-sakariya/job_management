@@ -1,5 +1,5 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
 import { ImagesPath } from '../utils/ImagePaths';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -36,6 +36,7 @@ export interface AssignJobTypeProps {
 }
 
 const AssignedJobsComponent = ({ item, index }: { item: AssignJobTypeProps, index: number }) => {
+
     return (
         <View style={[globalStyles.rowView, styles.mainView]}>
             <Image source={ImagesPath.empty_image_white_border_icon} style={styles.imageStyle} />
@@ -53,7 +54,7 @@ const AssignedJobsComponent = ({ item, index }: { item: AssignJobTypeProps, inde
     )
 }
 
-export default AssignedJobsComponent
+export default AssignedJobsComponent;
 
 const styles = StyleSheet.create({
     mainView: {
@@ -83,18 +84,6 @@ const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
         color: colors.dark_blue1_color
-    },
-    BtnStyle: {
-        backgroundColor: colors.status_btn,
-        paddingHorizontal: wp(2),
-        paddingVertical: wp(0.7),
-        borderRadius: wp(1.5)
-    },
-    BtnTxtStyle: {
-        maxWidth: wp(15),
-        color: colors.white_5,
-        fontFamily: fonts.FONT_POP_REGULAR,
-        fontSize: FontSizes.EXTRA_SMALL_12
     },
     dateTxtStyle: {
         maxWidth: wp(60),

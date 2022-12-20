@@ -221,7 +221,7 @@ const AddNewJobScreen = () => {
                         value={values.jobID}
                         onChangeText={handleChange("jobID")}
                     />
-                    {(touched?.jobID && errors?.jobID) || error?.id ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors?.jobID ? errors.jobID : error?.id}</Text> : null}
+                    {(touched?.jobID && errors?.jobID) || error?.id ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{errors?.jobID ? errors.jobID : error?.id}</Text> : null}
                     <CustomTextInputWithImage
                         title={strings.Address}
                         value={values.address}
@@ -237,7 +237,7 @@ const AddNewJobScreen = () => {
                             isButtonVisible: true,
                         })}
                     />
-                    {(touched?.address && errors?.address) || error?.address ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors?.address ? errors.address : error?.address}</Text> : null}
+                    {(touched?.address && errors?.address) || error?.address ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{errors?.address ? errors.address : error?.address}</Text> : null}
                     <CustomTextInput
                         title={strings.addressInformation}
                         container={{ marginTop: wp(5) }}
@@ -246,7 +246,7 @@ const AddNewJobScreen = () => {
                         placeholder={strings.addressInformation}
                     />
                     <Text style={[{ fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_10, color: colors.dark_blue3_color }]}>{strings.Additionaladdressinformation}</Text>
-                    {(touched?.addressInformation && errors?.addressInformation) || error?.address_information ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors?.addressInformation ? errors.addressInformation : error?.address_information}</Text> : null}
+                    {(touched?.addressInformation && errors?.addressInformation) || error?.address_information ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{errors?.addressInformation ? errors.addressInformation : error?.address_information}</Text> : null}
                     <CustomDetailsComponent
                         detailsContainerStyle={{ marginTop: wp(4) }}
                         title={strings.description}
@@ -262,7 +262,7 @@ const AddNewJobScreen = () => {
                             />
                         }
                     />
-                    {(touched?.description && errors?.description) || error?.description ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors?.description ? errors.description : error?.description}</Text> : null}
+                    {(touched?.description && errors?.description) || error?.description ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{errors?.description ? errors.description : error?.description}</Text> : null}
                     {imageList && imageList.length != 0 &&
                         <CustomCarouselImageAndVideo
                             viewStyle={{ width: wp(90) }}

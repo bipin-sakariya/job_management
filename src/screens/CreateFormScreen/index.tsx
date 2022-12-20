@@ -1,7 +1,7 @@
 import { Image, Text, TouchableWithoutFeedback, View, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomActivityIndicator, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, Header, MultileSelectDropDown } from '../../components'
+import { Container, CustomActivityIndicator, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, Header, MultipleSelectDropDown } from '../../components'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { ImagesPath } from '../../utils/ImagePaths'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -180,8 +180,8 @@ const CreateFormScreen = () => {
                         onChangeText={handleChange('formName')}
                         value={values.formName}
                     />
-                    {touched?.formName && errors?.formName ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.formName}</Text> : null}
-                    <MultileSelectDropDown
+                    {touched?.formName && errors?.formName ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors?.formName}</Text> : null}
+                    <MultipleSelectDropDown
                         isVisible={isVisible}
                         setIsVisible={setIsVisible}
                         title={strings.AddBill}
@@ -193,7 +193,7 @@ const CreateFormScreen = () => {
                         setIsAllSign={setIsAllSign}
                         isALLSign={isALLSign}
                     />
-                    {/* {isBillError ? <Text style={[globalStyles.rtlStyle, { bottom: wp(0), color: 'red' }]}>{strings.Bill_required}</Text> : null} */}
+                    {/* {isBillError ? <Text style={[globalStyles.rtlStyle, { bottom: wp(0), color: colors.red }]}>{strings.Bill_required}</Text> : null} */}
                     <CustomBlackButton onPress={() => {
                         handleSubmit()
                     }} title={strings.CreateForm} image={ImagesPath.plus_white_circle_icon} imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} />

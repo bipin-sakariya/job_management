@@ -1,5 +1,5 @@
-import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../utils/ImagePaths';
@@ -59,7 +59,9 @@ const JobListComponent = ({ item, index, isDateVisible, setSelectedDate, onPress
         let isNotValid = false;
         const mFromDate = XDate(fromDate);
         const mToDate = XDate(toDate);
+
         setRange(mFromDate.diffDays(mToDate));
+
         if (fromDate === toDate) {
             setDateArray([toDate]);
             markedDates = {
@@ -78,8 +80,8 @@ const JobListComponent = ({ item, index, isDateVisible, setSelectedDate, onPress
                     .toString('yyyy-MM-dd');
                 setDateArray((s: any) => [...s, tempDate]);
                 markedDates[tempDate] = {
-                    color: i === 0 ? "transparent" : i === range ? "transparent" : colors.white_color,
-                    textColor: i === 0 || i === range ? colors.white_color : '#545454',
+                    color: i === 0 ? colors.transparent : i === range ? colors.transparent : colors.white_color,
+                    textColor: i === 0 || i === range ? colors.white_color : colors.grey_18,
                     startingDay: i === 0,
                     endingDay: i === range,
                 }

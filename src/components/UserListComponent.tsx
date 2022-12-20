@@ -1,5 +1,5 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import React, { useRef, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
 import { ImagesPath } from '../utils/ImagePaths';
 import fonts from '../styles/Fonts';
@@ -61,7 +61,6 @@ const UserListComponent = ({ item }: { item: itemPropsType }) => {
             <TouchableOpacity
                 onPress={() => navigation.navigate('UserDetailScreen', { userId: item.id })}
                 style={globalStyles.rowView}>
-                {/* <Image source={item.profile_image ? { uri: item.profile_image } : ImagesPath.placeholder_img} style={styles.itemImgStyle} /> */}
                 <FastImage source={item.profile_image ? { uri: item.profile_image } : ImagesPath.placeholder_img} resizeMode={'stretch'} style={styles.itemImgStyle} />
                 <View style={{ paddingHorizontal: wp(2) }}>
                     <Text numberOfLines={1} style={[styles.itemTitle, globalStyles.rtlStyle]}>{item?.user_name ?? 'user'}</Text>
@@ -70,7 +69,6 @@ const UserListComponent = ({ item }: { item: itemPropsType }) => {
             </TouchableOpacity>
             <View style={globalStyles.rowView}>
                 <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { width: wp(25), textAlign: 'right' }]}>{convertDate(item.date_joined)}</Text>
-                {/* <Text>{convertDate(item.date_joined)}</Text> */}
                 <TouchableOpacity ref={imageRef} onPress={() => setVisible(true)}>
                     <Image source={ImagesPath.menu_dots_icon} style={styles.menuIconStyle} />
                 </TouchableOpacity>

@@ -1,5 +1,5 @@
-import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
 import React from 'react';
+import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { colors } from '../styles/Colors';
 import fonts from '../styles/Fonts';

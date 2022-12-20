@@ -233,7 +233,7 @@ const BillSectionScreen = () => {
                         </TouchableOpacity>
                         // <Image source={imageUrl ? imageUrl : ImagesPath.add_photo} style={styles.addPhotoStyle} />
                     }
-                    {error.image ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.image}</Text> : null}
+                    {error.image ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{error.image}</Text> : null}
                     <CustomTextInput
                         title={strings.name}
                         container={{ marginVertical: wp(5) }}
@@ -242,7 +242,7 @@ const BillSectionScreen = () => {
                         editable={isEditable}
                         onChangeText={handleChange('name')}
                     />
-                    {(touched.name && errors.name) || error.name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.name ? error.name : errors.name}</Text> : null}
+                    {(touched.name && errors.name) || error.name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.name ? error.name : errors.name}</Text> : null}
                     {type == "sign" && <>
                         <CustomTextInput
                             title={strings.quantity}
@@ -253,7 +253,7 @@ const BillSectionScreen = () => {
                             onChangeText={handleChange('ration_qunt')}
                             keyboardType={'number-pad'}
                         />
-                        {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
+                        {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
                     </>}
                     <DropDownComponent
                         title={strings.typeCounting}
@@ -272,7 +272,7 @@ const BillSectionScreen = () => {
                         placeholder={strings.choose}
                         container={{ marginBottom: wp(5) }}
                     />
-                    {typeCountError || error.type_counting ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.type_counting ? error.type_counting : strings.Typecount_required}</Text> : null}
+                    {typeCountError || error.type_counting ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.type_counting ? error.type_counting : strings.Typecount_required}</Text> : null}
                     {type != "sign" && <>
                         <CustomTextInput
                             title={strings.jumpingRation}
@@ -283,9 +283,9 @@ const BillSectionScreen = () => {
                             onChangeText={handleChange("ration_qunt")}
                             keyboardType={'decimal-pad'}
                         />
-                        {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}
+                        {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}
                     </>}
-                    {error.detail ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.detail}</Text> : null}
+                    {error.detail ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.detail}</Text> : null}
                     {isEditable && <CustomBlackButton
                         title={strings.UpdateBill}
                         image={ImagesPath.plus_white_circle_icon}

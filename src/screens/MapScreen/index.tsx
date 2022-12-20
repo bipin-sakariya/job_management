@@ -90,7 +90,7 @@ const MapScreen = () => {
 
     const renderItem = ({ item, index }: any) => {
         return (
-            <CustomJobListComponent item={item} type='carousel' listStyle={{ backgroundColor: 'red' }} />
+            <CustomJobListComponent item={item} type='carousel' listStyle={{ backgroundColor: colors.red }} />
         )
     }
     return (

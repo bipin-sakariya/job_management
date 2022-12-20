@@ -149,7 +149,7 @@ const CreateUserScreen = () => {
                         onChangeText={handleChange("userName")}
                         value={values.userName}
                     />
-                    {(touched?.userName && errors?.userName) || error?.user_name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.userName ? errors.userName : error?.email}</Text> : null}
+                    {(touched?.userName && errors?.userName) || error?.user_name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors?.userName ? errors.userName : error?.email}</Text> : null}
                     <CustomTextInput
                         title={strings.Email}
                         container={{ marginBottom: wp(5) }}
@@ -158,7 +158,7 @@ const CreateUserScreen = () => {
                         value={values.email}
                         keyboardType={'email-address'}
                     />
-                    {(touched?.email && errors?.email) || error?.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.email ? errors?.email : error?.email}</Text> : null}
+                    {(touched?.email && errors?.email) || error?.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors?.email ? errors?.email : error?.email}</Text> : null}
                     <CustomTextInput
                         title={strings.Contactno}
                         container={{ marginBottom: wp(5) }}
@@ -167,7 +167,7 @@ const CreateUserScreen = () => {
                         value={values.contactNo}
                         keyboardType={'number-pad'}
                     />
-                    {(touched?.contactNo && errors?.contactNo) || error?.phone ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error?.phone ? error.phone : errors.contactNo}</Text> : null}
+                    {(touched?.contactNo && errors?.contactNo) || error?.phone ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error?.phone ? error.phone : errors.contactNo}</Text> : null}
                     {userRoleList && <DropDownComponent
                         title={strings.Role}
                         data={userRoleList}
@@ -181,7 +181,7 @@ const CreateUserScreen = () => {
                         placeholder={strings.SelectRoleforUser}
                         container={{ marginBottom: wp(5) }}
                     />}
-                    {(touched?.role && errors.role) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.role_required}</Text> : null}
+                    {(touched?.role && errors.role) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.role_required}</Text> : null}
                     {userRoleList && <DropDownComponent
                         title={strings.Permission}
                         data={userRoleList}
@@ -195,7 +195,7 @@ const CreateUserScreen = () => {
                         placeholder={strings.GivePermission}
                         container={{ marginBottom: wp(5) }}
                     />}
-                    {(touched?.permission && errors.permission) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{strings.Permission_required}</Text> : null}
+                    {(touched?.permission && errors.permission) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.Permission_required}</Text> : null}
                     <CustomBlackButton
                         title={strings.CreateUser}
                         image={ImagesPath.plus_white_circle_icon}

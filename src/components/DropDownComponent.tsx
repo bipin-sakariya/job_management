@@ -1,5 +1,5 @@
-import { Image, ImageSourcePropType, ImageStyle, Keyboard, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import React from 'react';
+import { Image, ImageSourcePropType, ImageStyle, Keyboard, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { globalStyles } from '../styles/globalStyles';
@@ -25,7 +25,7 @@ interface DropDownComponentProps {
 }
 
 const DropDownComponent = (props: DropDownComponentProps & DropdownProps) => {
-    console.log("DROP DOWN====", { props })
+
     return (
         <View style={[styles.textInputContainer, props.container]}>
             <View style={styles.titleContainer}>

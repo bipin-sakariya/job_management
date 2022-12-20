@@ -1,5 +1,5 @@
-import { I18nManager, Image, Platform, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
 import React from 'react';
+import { I18nManager, Image, StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../utils/ImagePaths';
@@ -14,6 +14,7 @@ interface CustomeJobListDetailsViewComponentProps {
 }
 
 const CustomeJobListDetailsViewComponent = (props: CustomeJobListDetailsViewComponentProps & TouchableOpacityProps) => {
+
     return (
         <TouchableOpacity {...props} style={[styles.jobContainerStyle, styles.dropDownShadowStyle]} >
             <Image source={ImagesPath.placeholder_img} style={styles.jobImageStyle} />
@@ -27,19 +28,13 @@ const CustomeJobListDetailsViewComponent = (props: CustomeJobListDetailsViewComp
                         <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>5000 km Away</Text>
                     </View>
                 </View>
-                {/* {props.item.author ?
-                    <>
-                        <Text style={[styles.descriptionTxt, { writingDirection: "ltr", textAlign: 'left' }]}>{props.item.jobstatus}</Text>
-                        <Text style={[styles.descriptionTxt, { writingDirection: "ltr", textAlign: 'left' }]}>{props.item.author}</Text>
-                    </> : */}
                 <Text numberOfLines={2} style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{props.item.description}</Text>
-                {/* } */}
             </View>
-        </TouchableOpacity >
+        </TouchableOpacity>
     )
 }
 
-export default CustomeJobListDetailsViewComponent
+export default CustomeJobListDetailsViewComponent;
 
 const styles = StyleSheet.create({
     jobContainerStyle: {
@@ -65,7 +60,6 @@ const styles = StyleSheet.create({
         fontSize: FontSizes.REGULAR_18,
         color: colors.dark_blue1_color,
         flex: 1,
-        // height: wp(1),
     },
     distanceTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
@@ -81,15 +75,7 @@ const styles = StyleSheet.create({
         maxWidth: wp(80),
     },
     dropDownShadowStyle: {
-        // shadowColor: colors.black_opacity,
-        // shadowOpacity: 5,
-        // shadowRadius: 6,
-        // shadowOffset: { height: 0, width: 0 },
-        // elevation: 5
         backgroundColor: colors.white_color,
-        // borderTopLeftRadius: 25,
-        // borderTopRightRadius: 25,
-        // height: Platform.OS == "ios" ? hp(14) : hp(12.5),
         shadowColor: colors.black,
         shadowOpacity: 0.10,
         shadowRadius: 6,
