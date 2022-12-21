@@ -34,6 +34,7 @@ const BillSectionScreen = () => {
     const [typeCountError, setTypeCountError] = useState(false)
     const [imageUrl, setImageUrl] = useState<string | undefined>('');
 
+
     const [error, setError] = useState({
         name: "",
         jumping_ration: "",
@@ -185,6 +186,9 @@ const BillSectionScreen = () => {
             setError({ ...error, quantity: '' })
         }
     }, [values.ration_qunt])
+
+
+
 
     return (
         <View style={globalStyles.container}>

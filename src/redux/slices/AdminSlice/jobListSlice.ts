@@ -43,6 +43,8 @@ export interface JobDetailsData {
     bill?: undefined,
     // role: { id: number, title: string }
 }
+
+
 interface JobDataListProps {
     count: number,
     next?: string | null,
@@ -125,6 +127,7 @@ interface paramsTypes {
     job?: number
     from_date?: string
     to_date?: string
+    formData?: FormData
 }
 
 export interface apiErrorTypes {
@@ -265,10 +268,10 @@ export const updateTransferJobList = createAsyncThunk<JobDetailsData, paramsType
         }
     })
 
-export const updatejob = createAsyncThunk<string[], FormData, { rejectValue: apiErrorTypes }>(JOB + "/updateJob", async (params, { rejectWithValue }) => {
+export const updatejob = createAsyncThunk<string[], paramsTypes, { rejectValue: apiErrorTypes }>(JOB + "/updateJob", async (params, { rejectWithValue }) => {
     try {
         console.log(ApiConstants.JOB)
-        const response = await axiosClient.patch(ApiConstants.JOB, params)
+        const response = await axiosClient.patch(ApiConstants.JOB + params.id + '/', params.formData)
         console.log('data...........=====', { response: response })
         return response.data
     } catch (e: any) {

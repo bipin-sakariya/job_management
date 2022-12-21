@@ -11,9 +11,15 @@ import CustomSubTitleWithImageComponent from '../../components/CustomSubTitleWit
 import CustomDashedComponent from '../../components/CustomDashedComponent'
 import { strings } from '../../languages/localizedStrings'
 import FontSizes from '../../styles/FontSizes'
+import { RootRouteProps } from '../../types/RootStackTypes'
+import { useRoute } from '@react-navigation/native'
+import RouteScreen from '../RouteScreen'
 
 const BillCreateScreen = () => {
     const navigation = useCustomNavigation('BillCreateScreen');
+    const route = useRoute<RootRouteProps<'BillCreateScreen'>>();
+
+    console.log({ route })
     return (
         <View style={globalStyles.container}>
             <Header
@@ -35,7 +41,7 @@ const BillCreateScreen = () => {
                     viewStyle={{ paddingVertical: wp(8) }}
                     imageStyle={styles.iconStyle}
                     textStyle={{ fontSize: FontSizes.EXTRA_LARGE_24 }}
-                    onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: "material" }) }}
+                    onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: "material", screenName: route.params.screenName }) }}
                     title={strings.createMaterialBill} />
                 <CustomSubTitleWithImageComponent disabled viewStyle={{ marginTop: wp(2) }} title={strings.createSignBillsection} image={ImagesPath.receipt_icon} />
                 <CustomDashedComponent
@@ -43,7 +49,7 @@ const BillCreateScreen = () => {
                     viewStyle={{ paddingVertical: wp(8) }}
                     imageStyle={styles.iconStyle}
                     textStyle={{ fontSize: FontSizes.EXTRA_LARGE_24 }}
-                    onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: "sign" }) }}
+                    onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: "sign", screenName: route.params.screenName }) }}
                     title={strings.createSignBill} />
             </Container>
         </View>

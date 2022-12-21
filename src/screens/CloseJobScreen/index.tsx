@@ -15,11 +15,12 @@ import { colors } from '../../styles/Colors'
 import RBSheet from 'react-native-raw-bottom-sheet'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { useIsFocused, useRoute } from '@react-navigation/native'
-import { jobDetail, JobDetailsData } from '../../redux/slices/AdminSlice/jobListSlice'
+import { jobDetail, JobDetailsData, updatejob } from '../../redux/slices/AdminSlice/jobListSlice'
 import { RootRouteProps } from '../../types/RootStackTypes'
 import { groupDetails } from '../../redux/slices/AdminSlice/groupListSlice'
-import { billDetail } from '../../redux/slices/AdminSlice/billListSlice'
+import { billData, billDetail } from '../../redux/slices/AdminSlice/billListSlice'
 import DocumentPicker from 'react-native-document-picker';
+import { isEmptyArray } from 'formik'
 
 interface SignDataProps {
     id: number,
@@ -38,6 +39,11 @@ interface docList {
     mb: number | null
     title: string | null
 }
+interface image_arrayList {
+    uri: string,
+    name: string,
+    type: string
+}
 
 const CloseJobScreen = () => {
     const navigation = useCustomNavigation('CloseJobScreen')
@@ -45,6 +51,7 @@ const CloseJobScreen = () => {
     const dispatch = useAppDispatch()
     const isFocused = useIsFocused()
     const route = useRoute<RootRouteProps<'JobDetailsScreen'>>();
+    const { jobDetails, isLoading, formData } = useAppSelector(state => state.jobList)
 
     const [isSelected, setIsSelected] = useState(false)
     const [isModelVisible, setIsModelVisible] = useState(false)
@@ -53,10 +60,11 @@ const CloseJobScreen = () => {
     const [BillData, setBillData] = useState()
     const [imageError, setImageError] = useState(false)
     const [docError, setDocError] = useState(false)
-    const [imageList, setImageList] = useState<imageList[]>([])
+    const [imageList, setImageList] = useState<imageList[]>(jobDetails.images)
     const [docList, setDocList] = useState<docList[] | []>([])
+    const [updatedImage, setUpdatedImage] = useState<imageList[]>([])
+    const [billIdArray, setBillIdArray] = useState<number[]>([])
 
-    const { jobDetails, isLoading, formData } = useAppSelector(state => state.jobList)
 
     let id: number = route.params.params.id
 
@@ -291,7 +299,7 @@ const CloseJobScreen = () => {
         )
     }
 
-    let TempBillData: any = []
+    let TempBillData: billData[] = []
     formData?.map(obj => {
 
         TempBillData = TempBillData.concat(obj.bill)
@@ -300,13 +308,58 @@ const CloseJobScreen = () => {
     })
     console.log({ TempBillData, BillData })
 
-    let IsSign = TempBillData.filter((i: any) => i.type == "Sign")
+    let IsSign = TempBillData.filter((i: billData) => i.type == "Sign")
     console.log({ IsSign })
+    useEffect(() => {
+        if (TempBillData && isFocused) {
+            let data: number[] = []
+            TempBillData.map((i: billData) => {
+                data.push(i.id)
+            })
+            setBillIdArray(data)
+        }
+
+    }, [isFocused])
+
+    console.log({ billIdArray })
 
     const updateCloseJob = () => {
         let data = new FormData()
-        data.append('bill', TempBillData)
-        data.append('status', strings.Close)
+        data.append('status', strings.close)
+        let image_array: image_arrayList[] = []
+
+        if (updatedImage) {
+            updatedImage.map((item, index) => {
+                let images = {
+                    uri: item.imgUrl,
+                    name: `photo${index}${item.mediaType == "image" ? '.jpg' : '.mp4'}`,
+                    type: item.mediaType == "image" ? "image/jpeg" : 'video/mp4'
+                }
+                image_array.push(images)
+            })
+        }
+        if (!isEmptyArray(image_array)) {
+            image_array.map((item) => {
+                data.append("image", item)
+            })
+        }
+        data.append("further_inspection", jobDetails.further_inspection == true ? jobDetails.further_inspection : isSelected)
+        billIdArray.map((_bill) => {
+            data.append("bill", _bill)
+        })
+        let params = {
+            id: jobDetails.id,
+            formData: data
+        }
+        console.log({ params })
+        dispatch(updatejob(params)).unwrap().then((res) => {
+            setIsModelVisible(false)
+            navigation.goBack()
+        }).catch((e) => {
+            console.log({ error: e });
+            setIsModelVisible(false)
+
+        })
         // data.append('notes',)
     }
 
@@ -320,7 +373,7 @@ const CloseJobScreen = () => {
                 allowMultiSelection: true,
                 copyTo: 'cachesDirectory'
             })
-
+            let UpdatedImageArray = []
             let ImageTempArray = [...imageList]
             let DocTempArray = [...docList]
 
@@ -330,8 +383,10 @@ const CloseJobScreen = () => {
             }
             else {
                 ImageTempArray.push({ imgUrl: res[0].uri, mediaType: res[0]?.type?.split("/")[0] == 'image' ? 'image' : 'video', id: Math.random() })
+                UpdatedImageArray.push({ imgUrl: res[0].uri, mediaType: res[0]?.type?.split("/")[0] == 'image' ? 'image' : 'video', id: Math.random() })
                 setImageError(false)
             }
+            setUpdatedImage(UpdatedImageArray)
             setImageList(ImageTempArray)
             setDocList(DocTempArray)
         }
@@ -365,8 +420,8 @@ const CloseJobScreen = () => {
                         <Image source={ImagesPath.check_icon_circle} style={[globalStyles.modalImageStyle]} />
                         <Text style={styles.modalTxt}>{strings.ClosejobModalText}</Text>
                         <View style={[globalStyles.rowView, { justifyContent: "space-around", width: '100%' }]}>
-                            <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.Partial} />
-                            <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%" }} title={strings.Close} />
+                            <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { updateCloseJob() }} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.Partial} />
+                            <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%" }} title={strings.close} />
                         </View>
                     </View>
                 } />
@@ -407,13 +462,18 @@ const CloseJobScreen = () => {
                             <Text numberOfLines={3} style={[styles.bottomTxtStyle, globalStyles.rtlStyle]}>{jobDetails.description}</Text>
                         }
                     />
-                    <CustomCarouselImageAndVideo
+                    {imageList.length != 0 && <CustomCarouselImageAndVideo
                         viewStyle={{ width: wp(90) }}
-                        result={result} children={
+                        result={imageList} children={
                             <TouchableOpacity onPress={() => selectOneFile()} style={styles.roundBtnView}>
                                 <Image source={ImagesPath.Pluscircle_icon} style={[styles.roundImageStyle]} />
                             </TouchableOpacity>
-                        } />
+                        } />}
+                    {imageList.length == 0 && <CustomDashedComponent
+                        image={ImagesPath.add_icon}
+                        onPress={() => selectOneFile()}
+                        title={strings.Addimagesandattachments}
+                        viewStyle={{ marginTop: wp(5), paddingVertical: wp(5) }} />}
                     <View style={[styles.sammedView, { marginTop: wp(5) }]}>
                         <View style={styles.formHeaderView}>
                             <Text style={[styles.noNameTxt, globalStyles.rtlStyle]}>{strings.Forms}</Text>
@@ -441,9 +501,10 @@ const CloseJobScreen = () => {
                             <Text style={[styles.addFormTxt]}>{strings.AddForm}</Text>
                         </TouchableOpacity>
                     </View>
+
                     <CustomDashedComponent
                         image={ImagesPath.add_icon}
-                        onPress={() => { navigation.navigate('BillCreateScreen') }}
+                        onPress={() => { navigation.navigate('BillCreateScreen', { screenName: 'updatedJob' }) }}
                         title={strings.AddField}
                         viewStyle={{ paddingVertical: wp(5), marginBottom: wp(5) }}
                     />
@@ -455,7 +516,7 @@ const CloseJobScreen = () => {
                     <TouchableOpacity onPress={() => { setIsSelected(!isSelected) }} style={[globalStyles.rowView, styles.jobListMainView]}>
                         <Text style={styles.jobNameTxt}>{strings.FuthurBilling}</Text>
                         <View style={globalStyles.roundView} >
-                            {isSelected || jobDetails.further_inspection && <Image source={ImagesPath.right_white_icon} style={styles.checkView} />}
+                            {(isSelected || jobDetails.further_inspection) && <Image source={ImagesPath.right_white_icon} style={styles.checkView} />}
                         </View>
                     </TouchableOpacity>
                     <CustomBlackButton onPress={() => setIsModelVisible(true)} title={strings.ChangeJobStatus} buttonStyle={{ marginVertical: wp(10) }} />

@@ -12,13 +12,13 @@ import { globalStyles } from "../styles/globalStyles";
 import { ImagesPath } from "../utils/ImagePaths";
 import CustomJobListComponent from "./CustomJobListComponent";
 
-interface ListDataProps {
-    title: string,
-    description: string,
-    km: string,
-    date: string,
-    button: string
-}
+// interface ListDataProps {
+//     title: string,
+//     description: string,
+//     km: string,
+//     date: string,
+//     button: string
+// }
 
 interface CustomJobBottomListSheetProps {
     data: JobDetailsData[],
@@ -27,7 +27,7 @@ interface CustomJobBottomListSheetProps {
 
 const CustomJobBottomListSheet = React.forwardRef((props: CustomJobBottomListSheetProps & RBSheetProps, ref: any) => {
     const navigation = useCustomNavigation('MapScreen');
-
+    
     const renderItem = ({ item }: { item: JobDetailsData }) => {
         return (
             <CustomJobListComponent item={item} />
