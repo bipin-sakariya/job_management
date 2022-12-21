@@ -18,7 +18,7 @@ import { useIsFocused, useRoute } from '@react-navigation/native'
 import { jobDetail, JobDetailsData, updatejob } from '../../redux/slices/AdminSlice/jobListSlice'
 import { RootRouteProps } from '../../types/RootStackTypes'
 import { groupDetails } from '../../redux/slices/AdminSlice/groupListSlice'
-import { billDetail } from '../../redux/slices/AdminSlice/billListSlice'
+import { billData, billDetail } from '../../redux/slices/AdminSlice/billListSlice'
 import DocumentPicker from 'react-native-document-picker';
 import { isEmptyArray } from 'formik'
 
@@ -63,7 +63,7 @@ const CloseJobScreen = () => {
     const [imageList, setImageList] = useState<imageList[]>(jobDetails.images)
     const [docList, setDocList] = useState<docList[] | []>([])
     const [updatedImage, setUpdatedImage] = useState<imageList[]>([])
-    const [billIdArray, setBillIdArray] = useState([])
+    const [billIdArray, setBillIdArray] = useState<number[]>([])
 
 
     let id: number = route.params.params.id
@@ -299,7 +299,7 @@ const CloseJobScreen = () => {
         )
     }
 
-    let TempBillData: any = []
+    let TempBillData: billData[] = []
     formData?.map(obj => {
 
         TempBillData = TempBillData.concat(obj.bill)
@@ -308,12 +308,12 @@ const CloseJobScreen = () => {
     })
     console.log({ TempBillData, BillData })
 
-    let IsSign = TempBillData.filter((i: any) => i.type == "Sign")
+    let IsSign = TempBillData.filter((i: billData) => i.type == "Sign")
     console.log({ IsSign })
     useEffect(() => {
         if (TempBillData && isFocused) {
-            let data: any = []
-            TempBillData.map((i) => {
+            let data: number[] = []
+            TempBillData.map((i: billData) => {
                 data.push(i.id)
             })
             setBillIdArray(data)
@@ -504,7 +504,7 @@ const CloseJobScreen = () => {
 
                     <CustomDashedComponent
                         image={ImagesPath.add_icon}
-                        onPress={() => { navigation.navigate('BillCreateScreen') }}
+                        onPress={() => { navigation.navigate('BillCreateScreen', { screenName: 'updatedJob' }) }}
                         title={strings.AddField}
                         viewStyle={{ paddingVertical: wp(5), marginBottom: wp(5) }}
                     />

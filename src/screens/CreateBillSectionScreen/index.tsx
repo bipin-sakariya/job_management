@@ -24,7 +24,7 @@ interface DropdownProps {
 
 interface ValuesProps {
     name: string;
-    ration_qunt: string;
+    ration_qunt?: string;
 }
 
 const CreateBillSectionScreen = () => {
@@ -36,6 +36,7 @@ const CreateBillSectionScreen = () => {
     const [countingError, setCountingError] = useState(false)
     const [imageUrl, setImageUrl] = useState<string | undefined>('');
     const [imageError, setImageError] = useState(false)
+    const [count, setCount] = useState(1)
     const dispatch = useAppDispatch()
     // const { error } = useAppSelector(state => state.billList)
     const [error, setError] = useState({
@@ -88,7 +89,7 @@ const CreateBillSectionScreen = () => {
             if (imageUrl) {
                 data.append("image", images ? images : '')
             }
-            data.append(type == 'material' ? "jumping_ration" : "quantity", parseFloat(values.ration_qunt))
+            data.append(type == 'material' ? "jumping_ration" : "quantity", route.params.screenName == 'updateJob' ? count : parseFloat(values.ration_qunt))
             data.append("type", type == 'material' ? "Material" : 'Sign')
 
             console.log("🚀 ~ file: index.tsx ~ line 73 ~ createbills ~ data", data)
@@ -128,8 +129,21 @@ const CreateBillSectionScreen = () => {
         }
     }, [values.ration_qunt])
 
+    const Increment = () => {
+        setCount(count + 1)
+    }
+
+    const Decrement = () => {
+        if (count == 0) {
+            setCount(0)
+        }
+        else {
+            setCount(count - 1)
+        }
+    }
     return (
         <View style={globalStyles.container}>
+            {console.log({ values })}
             <Header
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView, { width: wp(50) }]} onPress={() => navigation.goBack()}>
@@ -187,71 +201,106 @@ const CreateBillSectionScreen = () => {
                         onChangeText={handleChange("name")}
                     />
                     {(touched.name && errors.name) || error.name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.name ? error.name : errors.name}</Text> : null}
-                    {type == "material" ?
-                        <>
-                            <DropDownComponent
-                                title={strings.typeCounting}
-                                data={data}
-                                image={ImagesPath.down_white_arrow}
-                                labelField="label"
-                                valueField="value"
-                                onChange={(item) => {
-                                    setError({
-                                        ...error,
-                                        type_counting: ''
-                                    })
-                                    setCountingError(false)
-                                    setCountingValue(item)
-                                }}
-                                value={countingValue.value}
-                                placeholder={strings.choose}
-                                container={{ marginBottom: wp(5) }}
-                            />
-                            {countingError || error.type ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.type ? error.type : strings.Typecount_required}</Text> : null}
-
-                            <CustomTextInput
-                                title={strings.jumpdish}
-                                value={values.ration_qunt}
-                                placeholder={strings.jumpdish}
-                                container={{ marginBottom: wp(5) }}
-                                onChangeText={handleChange("ration_qunt")}
-                                placeholderTextColor={colors.light_brown}
-                                keyboardType={'decimal-pad'}
-                            />
-                            {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}
-                        </>
+                    {route.params.screenName == 'updatedJob' ? <DropDownComponent
+                        title={strings.typeCounting}
+                        data={data}
+                        image={ImagesPath.down_white_arrow}
+                        labelField="label"
+                        valueField="value"
+                        onChange={(item) => {
+                            setError({
+                                ...error,
+                                type_counting: ''
+                            })
+                            setCountingError(false)
+                            setCountingValue(item)
+                        }}
+                        value={countingValue.value}
+                        placeholder={strings.choose}
+                        container={{ marginBottom: wp(5) }}
+                    />
                         :
                         <>
-                            <CustomTextInput
-                                title={strings.quantity}
-                                placeholder={strings.EnterQuantity}
-                                container={{ marginBottom: wp(5) }}
-                                onChangeText={handleChange("ration_qunt")}
-                                keyboardType={'number-pad'}
-                            />
-                            {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
+                            {type == "material" ?
+                                <>
+                                    <DropDownComponent
+                                        title={strings.typeCounting}
+                                        data={data}
+                                        image={ImagesPath.down_white_arrow}
+                                        labelField="label"
+                                        valueField="value"
+                                        onChange={(item) => {
+                                            setError({
+                                                ...error,
+                                                type_counting: ''
+                                            })
+                                            setCountingError(false)
+                                            setCountingValue(item)
+                                        }}
+                                        value={countingValue.value}
+                                        placeholder={strings.choose}
+                                        container={{ marginBottom: wp(5) }}
+                                    />
+                                    {countingError || error.type ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.type ? error.type : strings.Typecount_required}</Text> : null}
 
-                            <DropDownComponent
-                                title={strings.typeCounting}
-                                data={data}
-                                image={ImagesPath.down_white_arrow}
-                                labelField="label"
-                                valueField="value"
-                                onChange={(item) => {
-                                    setError({
-                                        ...error,
-                                        type_counting: ''
-                                    })
-                                    setCountingError(false)
-                                    setCountingValue(item)
-                                }}
-                                value={countingValue.value}
-                                placeholder={strings.choose}
-                                container={{ marginBottom: wp(5) }}
-                            />
-                            {countingError || error.type_counting ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.type_counting ? error.type_counting : strings.Typecount_required}</Text> : null}
-                        </>
-                    }
+                                    <CustomTextInput
+                                        title={strings.jumpdish}
+                                        value={values.ration_qunt}
+                                        placeholder={strings.jumpdish}
+                                        container={{ marginBottom: wp(5) }}
+                                        onChangeText={handleChange("ration_qunt")}
+                                        placeholderTextColor={colors.light_brown}
+                                        keyboardType={'decimal-pad'}
+                                    />
+                                    {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}
+                                </>
+                                :
+                                <>
+                                    <CustomTextInput
+                                        title={strings.quantity}
+                                        placeholder={strings.EnterQuantity}
+                                        container={{ marginBottom: wp(5) }}
+                                        onChangeText={handleChange("ration_qunt")}
+                                        keyboardType={'number-pad'}
+                                    />
+                                    {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
+
+                                    <DropDownComponent
+                                        title={strings.typeCounting}
+                                        data={data}
+                                        image={ImagesPath.down_white_arrow}
+                                        labelField="label"
+                                        valueField="value"
+                                        onChange={(item) => {
+                                            setError({
+                                                ...error,
+                                                type_counting: ''
+                                            })
+                                            setCountingError(false)
+                                            setCountingValue(item)
+                                        }}
+                                        value={countingValue.value}
+                                        placeholder={strings.choose}
+                                        container={{ marginBottom: wp(5) }}
+                                    />
+                                    {countingError || error.type_counting ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.type_counting ? error.type_counting : strings.Typecount_required}</Text> : null}
+                                </>
+                            }
+                        </>}
+                    {route.params.screenName == 'updatedJob' && <View style={[styles.textInputContainer, globalStyles.rtlDirection]}>
+                        <View style={styles.titleContainer}>
+                            <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{type == 'Sign' ? strings.quantity : strings.measurement}</Text>
+                        </View>
+                        <View style={[globalStyles.rowView, globalStyles.rtlDirection, styles.btnContainerStyle]}>
+                            <TouchableOpacity onPress={() => Increment()}>
+                                <Image source={ImagesPath.plus} resizeMode={'contain'} style={styles.btnIconStyle} />
+                            </TouchableOpacity>
+                            <Text style={{ width: wp(10), textAlign: 'center' }}>{count}</Text>
+                            <TouchableOpacity onPress={() => Decrement()}>
+                                <Image source={ImagesPath.minus} resizeMode={'contain'} style={styles.btnIconStyle} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>}
                     <CustomBlackButton
                         title={strings.CreateBill}
                         image={ImagesPath.plus_white_circle_icon}

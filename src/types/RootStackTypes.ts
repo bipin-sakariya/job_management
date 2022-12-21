@@ -37,8 +37,8 @@ export type RootStackParamList = {
     JobDetailsScreen: { params: JobDetailsData, type?: string }
     ReportGeneratorScreen: undefined
     BillListScreen: { billType?: string }
-    BillCreateScreen: undefined
-    CreateBillSectionScreen: { type?: string }
+    BillCreateScreen: { screenName?: string }
+    CreateBillSectionScreen: { type?: string, screenName?: string }
     BillSectionScreen: { id?: number, type: string, isEdit?: boolean }
     FormScreen: undefined
     ProfileScreen: undefined
