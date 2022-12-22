@@ -24,7 +24,7 @@ const ResetPasswordScreen = () => {
                         style={[globalStyles.rowView]}
                         onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
-                        <Text style={globalStyles.headerTitle}>{strings.ResetPassword}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.resetPassword}</Text>
                     </TouchableOpacity>
                 }
             />
@@ -32,12 +32,12 @@ const ResetPasswordScreen = () => {
                 <CustomSubTitleWithImageComponent
                     disabled
                     titleStyle={{ color: colors.dark_blue1_color }}
-                    title={strings.FillthedeatiltoresetPassword}
+                    title={strings.fillTheDetailToResetPassword}
                     image={ImagesPath.from_list_icon}
                 />
                 <CustomTextInput
-                    title={strings.OldPassword}
-                    placeholder={strings.Password}
+                    title={strings.oldPassword}
+                    placeholder={strings.password}
                     container={{ marginVertical: wp(5) }}
                     onChangeText={(text) => { }}
                     secureTextEntry
@@ -48,8 +48,8 @@ const ResetPasswordScreen = () => {
                     }
                 />
                 <CustomTextInput
-                    title={strings.NewPassword}
-                    placeholder={strings.Password}
+                    title={strings.newPassword}
+                    placeholder={strings.password}
                     container={{ marginVertical: wp(5) }}
                     onChangeText={(text) => { }}
                     secureTextEntry
@@ -60,8 +60,8 @@ const ResetPasswordScreen = () => {
                     }
                 />
                 <CustomTextInput
-                    title={strings.ConfirmNewPassword}
-                    placeholder={strings.Password}
+                    title={strings.confirmNewPassword}
+                    placeholder={strings.password}
                     container={{ marginVertical: wp(5) }}
                     onChangeText={(text) => { }}
                     secureTextEntry
@@ -72,7 +72,7 @@ const ResetPasswordScreen = () => {
                     }
                 />
                 <CustomBlackButton
-                    title={strings.Changepassword}
+                    title={strings.changePassword}
                     onPress={() => { }}
                 />
             </Container>

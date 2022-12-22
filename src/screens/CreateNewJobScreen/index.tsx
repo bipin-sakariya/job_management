@@ -91,7 +91,7 @@ const CreateNewJobScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{type == strings.returnJob ? strings.returnJob : strings.AddNewJob}</Text>
+                        <Text style={globalStyles.headerTitle}>{type == strings.returnJob ? strings.returnJob : strings.addNewJob}</Text>
                     </TouchableOpacity>
                 }
                 headerRightStyle={{
@@ -101,15 +101,15 @@ const CreateNewJobScreen = () => {
                 headerRightComponent={
                     <>
                         {
-                            (userData?.role == strings.Group_Manager) &&
+                            (userData?.role == strings.groupManager) &&
                             <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
                                 <Image source={ImagesPath.menu_dots_icon} style={globalStyles.headerIcon} />
                             </TouchableOpacity>
                         }
                         {
-                            type == strings.returnJob && (userData?.role == strings.Admin || userData?.role == strings.Inspector) ?
+                            type == strings.returnJob && (userData?.role == strings.admin || userData?.role == strings.inspector) ?
                                 <TouchableOpacity onPress={() => { }} >
-                                    <Text style={globalStyles.headerTitle}>{strings.Done}</Text>
+                                    <Text style={globalStyles.headerTitle}>{strings.done}</Text>
                                 </TouchableOpacity> : null
                         }
                     </>
@@ -160,7 +160,7 @@ const CreateNewJobScreen = () => {
                             // editable={isEdit}
                             onChangeText={(text) => { }}
                         />
-                        <Text style={{ marginVertical: wp(1), marginBottom: wp(3), alignSelf: 'flex-end', color: '#B7B7B7', fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_10 }}>{strings.Additionaladdressinformation}</Text>
+                        <Text style={{ marginVertical: wp(1), marginBottom: wp(3), alignSelf: 'flex-end', color: '#B7B7B7', fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_10 }}>{strings.additionaladdressinformation}</Text>
                         <CustomDetailsComponent
                             title={strings.description}
                             bottomComponent={
@@ -168,7 +168,7 @@ const CreateNewJobScreen = () => {
                             }
                         />
                         {
-                            type == strings.returnJob && userData?.role == strings.Inspector ?
+                            type == strings.returnJob && userData?.role == strings.inspector ?
                                 <>
                                     <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={result} />
                                     <CustomDetailsComponent
@@ -208,7 +208,7 @@ const CreateNewJobScreen = () => {
                             onPress={() => setIsNotification(!isnotification)}
                         />
                         <CustomBlackButton
-                            title={type == strings.returnJob ? strings.SaveChanges : strings.createJob}
+                            title={type == strings.returnJob ? strings.saveChanges : strings.createJob}
                             onPress={() => {
                                 setIsModelVisible(true)
                             }}

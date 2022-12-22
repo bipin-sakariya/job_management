@@ -113,7 +113,7 @@ const MultipleSelectDropDown = (props: DropDownComponentProps) => {
                     <View style={[globalStyles.rowView, { justifyContent: 'space-between', paddingHorizontal: wp(2), paddingTop: wp(2) }]}>
                         <Text
                             style={[globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_12, color: colors.dark_blue2_color }]}>
-                            {props.isVisible ? `${strings.Total} ${tempSelectedItem?.length} ${props?.countTitle}` : `${strings.select} ${props?.countTitle}`}
+                            {props.isVisible ? `${strings.total} ${tempSelectedItem?.length} ${props?.countTitle}` : `${strings.select} ${props?.countTitle}`}
                         </Text>
                         {!props.disabled &&
                             <Image
@@ -160,7 +160,7 @@ const MultipleSelectDropDown = (props: DropDownComponentProps) => {
                     {props.isForm && <TouchableOpacity
                         onPress={() => props.setIsAllSign && props?.setIsAllSign(!props.isALLSign)}
                         style={[globalStyles.rowView, { justifyContent: 'space-between', paddingHorizontal: wp(2.5), paddingVertical: wp(3.5) }]}>
-                        <Text style={styles.itemListTxt}>{strings.Add_all_sign}</Text>
+                        <Text style={styles.itemListTxt}>{strings.add_all_sign}</Text>
                         {props.isALLSign ?
                             <Image source={ImagesPath.check_box_fill_icon} style={styles.checkBoxIcon} /> :
                             <Image source={ImagesPath.check_box_border_icon} style={styles.checkBoxIcon1} />

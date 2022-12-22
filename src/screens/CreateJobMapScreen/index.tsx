@@ -134,7 +134,7 @@ const CreateJobMapScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{strings.Place}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.place}</Text>
                     </TouchableOpacity>
                 }
             />
@@ -183,7 +183,7 @@ const CreateJobMapScreen = () => {
                     {route.params?.isEditing &&
                         <>
                             <CustomBlackButton
-                                title={strings.ChoosefromMap}
+                                title={strings.chooseFromMap}
                                 buttonStyle={{ width: wp(45) }}
                                 imageStyle={{ tintColor: colors.white }}
                                 textStyle={{ color: colors.white }}
@@ -211,7 +211,7 @@ const CreateJobMapScreen = () => {
                 <View style={styles.bottomContainer}>
                     <Text style={styles.addressTxt} numberOfLines={2}>{address}</Text>
                     <CustomBlackButton
-                        title={'Done'}
+                        title={strings.done}
                         buttonStyle={{ width: wp(45) }}
                         imageStyle={{ tintColor: colors.white }}
                         textStyle={{ color: colors.white }}

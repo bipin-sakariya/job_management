@@ -22,7 +22,7 @@ const CustomeJobListDetailsViewComponent = (props: CustomeJobListDetailsViewComp
                 <View style={styles.jobTitleContainer}>
                     <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle]}>{props.item.address}</Text>
                     <View style={[globalStyles.rowView, { direction: I18nManager.isRTL ? 'ltr' : 'rtl', }]}>
-                        {props.item.status != strings.jobAddedBy && props.item.status != strings.JobClosedby &&
+                        {props.item.status != strings.jobAddedBy && props.item.status != strings.jobClosedBy &&
                             <Image source={ImagesPath.map_pin_dark_line_icon} style={styles.iconStyle} />
                         }
                         <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>5000 km Away</Text>

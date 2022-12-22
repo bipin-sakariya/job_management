@@ -53,7 +53,7 @@ const AssignJobScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView, { width: wp(60) }]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={[globalStyles.backArrowStyle, {}]} />
-                        <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{strings.All_Assign_job}</Text>
+                        <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{strings.all_Assign_job}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={

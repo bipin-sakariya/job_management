@@ -45,7 +45,7 @@ const BottomTab = () => {
                                 fontFamily: focused ? fonts.FONT_POP_SEMI_BOLD : fonts.FONT_POP_MEDIUM,
                                 color: focused ? colors.primary_color : colors.light_blue_Txt_color
                             }]}>
-                            {strings.Map}
+                            {strings.map}
                         </Text>
                     ),
                     tabBarIcon: ({ focused }) => (
@@ -83,7 +83,7 @@ const BottomTab = () => {
                                 fontFamily: focused ? fonts.FONT_POP_SEMI_BOLD : fonts.FONT_POP_MEDIUM,
                                 color: focused ? colors.primary_color : colors.light_blue_Txt_color
                             }]}>
-                            {strings.Inbox}
+                            {strings.inbox}
                         </Text>
                     ),
                     tabBarIcon: ({ color, focused }) => (

@@ -23,7 +23,7 @@ const EditProfileScreen = () => {
                         style={[globalStyles.rowView]}
                         onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
-                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{strings.EditYourProfile}</Text>
+                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{strings.editYourProfile}</Text>
                     </TouchableOpacity>
                 }
             />
@@ -35,22 +35,22 @@ const EditProfileScreen = () => {
                     }]} />
                 </TouchableOpacity>
                 <CustomTextInput
-                    title={strings.UserName}
+                    title={strings.userName}
                     container={{ marginBottom: wp(5) }}
                     value={'Stanley Lamb'}
                 />
                 <CustomTextInput
-                    title={strings.Email}
+                    title={strings.email}
                     container={{ marginBottom: wp(5) }}
                     value={'stanleylamb@gmail.com'}
                 />
                 <CustomTextInput
-                    title={strings.Contactno}
+                    title={strings.contactNo}
                     container={{ marginBottom: wp(5) }}
                     value={'0123456789'}
                 />
                 <CustomBlackButton
-                    title={strings.Save}
+                    title={strings.save}
                     image={ImagesPath.save_icon}
                     imageStyle={{ tintColor: colors.white }}
                     onPress={() => { }}

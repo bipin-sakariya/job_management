@@ -229,14 +229,14 @@ const JobDetailsScreen = () => {
                 headerRightComponent={
                     <>
                         {
-                            userData?.role != strings.Inspector && (data.status == 'Open' || data.status == strings.JobOpen || data.status == strings.JobTransfer) ?
+                            userData?.role != strings.inspector && (data.status == 'Open' || data.status == strings.jobOpen || data.status == strings.jobTransfer) ?
                                 <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
                                     <Image source={ImagesPath.menu_dots_icon} style={globalStyles.headerIcon} />
                                 </TouchableOpacity>
                                 : null
                         }
                         {
-                            userData?.role == strings.Inspector && !type ?
+                            userData?.role == strings.inspector && !type ?
                                 <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
                                     <Image source={ImagesPath.share_network_icon} style={globalStyles.headerIcon} />
                                 </TouchableOpacity> : null
@@ -246,13 +246,13 @@ const JobDetailsScreen = () => {
             <Container>
                 <ScrollView contentContainerStyle={[{ paddingHorizontal: wp(4) }]} showsVerticalScrollIndicator={false}>
                     {
-                        data.status == strings.JobReturn ?
+                        data.status == strings.jobReturn ?
                             <View style={styles.warningView}>
                                 <View style={globalStyles.rowView}>
                                     <Image source={ImagesPath.warning_icon} style={styles.imageStyle} />
-                                    <Text style={styles.jobReturnTxt}>{strings.JobisReturn}</Text>
+                                    <Text style={styles.jobReturnTxt}>{strings.jobIsReturn}</Text>
                                 </View>
-                                <Text style={styles.reasonTxt}>{strings.Reasonofjobreturn}</Text>
+                                <Text style={styles.reasonTxt}>{strings.reasonOfJobReturn}</Text>
                             </View> : null
                     }
                     <View style={[globalStyles.rowView, { justifyContent: "space-between", }]}>
@@ -273,9 +273,9 @@ const JobDetailsScreen = () => {
                             // editable={isEdit}
                             onChangeText={(text) => { }}
                         />
-                        {data.status == strings.JobReturn || data.status == strings.JobTransfer ?
+                        {data.status == strings.jobReturn || data.status == strings.jobTransfer ?
                             <CustomTextInput
-                                title={strings.RelatedJobID}
+                                title={strings.relatedJobId}
                                 container={{ marginBottom: wp(5) }}
                                 value={"#123"}
                                 // editable={isEdit}
@@ -347,10 +347,10 @@ const JobDetailsScreen = () => {
                                     showsVerticalScrollIndicator={false} />
                             }
                         />
-                        {data.status == strings.JobClose || data.status == strings.JobPartial ?
+                        {data.status == strings.jobClose || data.status == strings.jobPartial ?
                             <>
                                 <CustomDetailsComponent
-                                    title={strings.Transferto}
+                                    title={strings.transferTo}
                                     detailsContainerStyle={{ marginBottom: wp(4) }}
                                     bottomComponent={
                                         <>
@@ -361,7 +361,7 @@ const JobDetailsScreen = () => {
                                 />
                                 <View style={[styles.sammedView, { height: wp(100) }]}>
                                     <View style={styles.formHeaderView}>
-                                        <Text style={[styles.noNameTxt]}>{strings.Forms}</Text>
+                                        <Text style={[styles.noNameTxt]}>{strings.forms}</Text>
                                     </View>
                                     <FlatList
                                         data={FormData}
@@ -376,7 +376,7 @@ const JobDetailsScreen = () => {
                                     />
                                 </View>
                                 <CustomDetailsComponent
-                                    title={strings.Notes}
+                                    title={strings.notes}
                                     detailsContainerStyle={{ marginBottom: wp(4) }}
                                     bottomComponent={
                                         <Text numberOfLines={3} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left" }]}>Lorem Ipsum הוא פשוט טקסט דמה של תעשיית הדפוס והקביעה. לורם איפסום היה של התעשייה...</Text>
@@ -392,43 +392,43 @@ const JobDetailsScreen = () => {
                                 <CustomJobAddedByComponent date={convertDate(jobDetails?.added_by?.date_joined)} image={{ uri: jobDetails?.added_by?.profile_image }} role={jobDetails?.added_by?.role?.title} userName={jobDetails?.added_by?.user_name} />
                             }
                         />
-                        {data.status == strings.JobClose || data.status == strings.JobPartial ?
+                        {data.status == strings.jobClose || data.status == strings.jobPartial ?
                             <CustomDetailsComponent
-                                title={strings.JobClosedby}
+                                title={strings.jobClosedBy}
                                 detailsContainerStyle={{ marginTop: wp(4) }}
                                 bottomComponent={
-                                    <CustomJobAddedByComponent date="16 may 2022" image={ImagesPath.image_white_border} role='Inspector' userName="Oscar Fields" />
+                                    <CustomJobAddedByComponent date="16 may 2022" image={ImagesPath.image_white_border} role='inspector' userName="Oscar Fields" />
                                 }
                             />
                             : null
                         }
-                        {!type && (data.status == 'Open' || data.status == strings.JobOpen || data.status == strings.JobReturn || data.status == strings.JobTransfer) ?
+                        {!type && (data.status == 'Open' || data.status == strings.jobOpen || data.status == strings.jobReturn || data.status == strings.jobTransfer) ?
                             <CustomDetailsComponent
-                                title={data.status == strings.JobTransfer ? strings.Transferto : strings.furtherInspection}
+                                title={data.status == strings.jobTransfer ? strings.transferTo : strings.furtherInspection}
                                 detailsContainerStyle={{ marginVertical: wp(4) }}
                                 bottomComponent={
-                                    <Text numberOfLines={1} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left" }]}>{data.status == strings.JobTransfer ? 'P.Maintanence' : 'Yes'}</Text>
+                                    <Text numberOfLines={1} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left" }]}>{data.status == strings.jobTransfer ? 'P.Maintanence' : 'yes'}</Text>
                                 }
                             />
                             : null
                         }
-                        {(type && (userData?.role == strings.Inspector || userData?.role == strings.Admin) && data.status == strings.JobReturn) &&
+                        {(type && (userData?.role == strings.inspector || userData?.role == strings.admin) && data.status == strings.jobReturn) &&
                             <View style={[globalStyles.rowView, { justifyContent: 'space-between', marginVertical: wp(5) }]}>
                                 <CustomBlackButton
-                                    title={strings.Delete}
+                                    title={strings.delete}
                                     image={ImagesPath.trash_icon}
                                     imageStyle={{ tintColor: colors.primary_color }}
                                     textStyle={{ color: colors.primary_color }}
                                     buttonStyle={styles.deleteBtnTxt} />
                                 <CustomBlackButton
                                     onPress={() => { navigation.navigate("CreateNewJobScreen", { type: strings.returnJob }) }}
-                                    title={strings.Edit_job}
+                                    title={strings.editJob}
                                     image={ImagesPath.pencil_simple_icon}
                                     buttonStyle={{ paddingHorizontal: wp(13), borderRadius: wp(2) }} />
                             </View>
                         }
-                        {((userData?.role == strings.Admin || userData?.role == strings.Group_Manager) && (data.status == strings.JobOpen || data.status == strings.JobPartial)
-                            || (userData?.role == strings.Admin && data.status == strings.JobTransfer))
+                        {((userData?.role == strings.admin || userData?.role == strings.groupManager) && (data.status == strings.jobOpen || data.status == strings.jobPartial)
+                            || (userData?.role == strings.admin && data.status == strings.jobTransfer))
                             ?
                             <CustomBlackButton
                                 title={strings.close}
@@ -445,20 +445,20 @@ const JobDetailsScreen = () => {
                         ref={refRBSheet}
                         children={
                             <View style={[globalStyles.rowView, styles.bottomBtnView]}>
-                                {userData?.role != strings.Group_Manager &&
+                                {userData?.role != strings.groupManager &&
                                     <CustomJobDetailsBottomButton image={ImagesPath.right_arrow_icon} buttonText={strings.transferJob} onPress={() => {
                                         navigation.navigate("TransferJobScreen", { jobId: jobDetails.id })
                                         refRBSheet.current?.close()
                                     }} />
                                 }
                                 {
-                                    userData?.role != strings.Group_Manager &&
+                                    userData?.role != strings.groupManager &&
                                     <CustomJobDetailsBottomButton image={ImagesPath.round_arrow_icon} buttonText={strings.returnJob} onPress={() => {
                                         navigation.navigate("ReturnJobScreen")
                                         refRBSheet.current?.close()
                                     }} />
                                 }
-                                <CustomJobDetailsBottomButton image={ImagesPath.share_icon} buttonText={strings.Askaboutjobs} onPress={() => {
+                                <CustomJobDetailsBottomButton image={ImagesPath.share_icon} buttonText={strings.askAboutJobs} onPress={() => {
                                     navigation.navigate('JobDuplicateListScreen')
                                     refRBSheet.current?.close()
                                 }} />

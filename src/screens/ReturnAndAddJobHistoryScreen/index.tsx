@@ -103,7 +103,7 @@ const ReturnAndAddJobHistoryScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView,]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{type == 'returnJob' ? strings.returnJob : strings.AddedJobHistory}</Text>
+                        <Text style={globalStyles.headerTitle}>{type == 'returnJob' ? strings.returnJob : strings.addedJobHistory}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
@@ -116,7 +116,7 @@ const ReturnAndAddJobHistoryScreen = () => {
                 <ScrollView showsVerticalScrollIndicator={false}>
                     {type == "addJob" ?
                         <CustomDashedComponent
-                            title={strings.ADDNEWJOB}
+                            title={strings.addNewJob}
                             viewStyle={styles.dottedViewStyle}
                             textStyle={styles.dottedTxtStyle}
                             imageStyle={styles.dottedImageStyle}
@@ -130,7 +130,7 @@ const ReturnAndAddJobHistoryScreen = () => {
                     }
                     <CustomSubTitleWithImageComponent
                         viewStyle={{ paddingHorizontal: wp(4) }}
-                        title={type == "addJob" ? strings.addedjob : strings.RecentallyReturnedJobs}
+                        title={type == "addJob" ? strings.addedJob : strings.recentllyReturnedJobs}
                         titleStyle={{ fontSize: FontSizes.MEDIUM_16, color: colors.dark_blue2_color }}
                         image={ImagesPath.folder_user_icon}
                         imageStyle={globalStyles.headerIcon}

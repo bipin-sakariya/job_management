@@ -14,10 +14,10 @@ const TableHeaderView = ({ type }: TableHeaderViewProps) => {
     return (
         <>
             <View style={[globalStyles.rowView, styles.listHeaderView, { justifyContent: 'space-around' }]}>
-                <Text style={[styles.commonScammedTxt, { width: wp(15) }]}>{strings.Srno}</Text>
+                <Text style={[styles.commonScammedTxt, { width: wp(15) }]}>{strings.srNo}</Text>
                 <Text style={[styles.commonScammedTxt, { width: wp(32) }]}>{strings.name}</Text>
                 <Text style={[styles.commonScammedTxt, { width: wp(11) }]}>{strings.QTY}</Text>
-                <Text style={[styles.commonScammedTxt, { width: wp(10) }]}>{strings.Unit}</Text>
+                <Text style={[styles.commonScammedTxt, { width: wp(10) }]}>{strings.unit}</Text>
             </View>
             <View style={[styles.sammedSepratorLine, { marginHorizontal: type == 'form' ? wp(3) : wp(1) }]} />
         </>

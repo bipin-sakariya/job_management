@@ -104,7 +104,7 @@ const MapScreen = () => {
                     headerLeftComponent={
                         <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
                             <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                            <Text style={globalStyles.headerTitle}>{strings.Place}</Text>
+                            <Text style={globalStyles.headerTitle}>{strings.place}</Text>
                         </TouchableOpacity>
                     }
                 />
@@ -157,7 +157,7 @@ const MapScreen = () => {
                     :
                     jobListData.results.map((marker, index) => {
                         console.log("data", marker)
-                        if (marker.latitude != null) {
+                        if (marker?.latitude != null) {
                             return (
                                 <Marker key={index} coordinate={{
                                     latitude: Number(marker?.latitude), longitude: Number(marker.longitude), latitudeDelta: 0.04864195044303443,

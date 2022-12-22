@@ -46,13 +46,13 @@ const DuplicateScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{strings.Duplicate}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.duplicate}</Text>
                     </TouchableOpacity>
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <CustomSubTitleWithImageComponent disabled title={strings.DuplicateJob} image={ImagesPath.files_icon} viewStyle={{ marginBottom: hp(0.5) }} />
+                    <CustomSubTitleWithImageComponent disabled title={strings.duplicateJob} image={ImagesPath.files_icon} viewStyle={{ marginBottom: hp(0.5) }} />
                     <View style={styles.duplicateFirstView}>
                         <CustomTextInput
                             title={strings.jobId}
@@ -92,7 +92,7 @@ const DuplicateScreen = () => {
                     <CustomBlackButton
                         buttonStyle={{ marginVertical: wp(10) }}
                         image={ImagesPath.arrow_counter_clockwise_white_icon}
-                        title={strings.ReturntoInspector}
+                        title={strings.returnToInspector}
                     />
                 </ScrollView>
             </Container>

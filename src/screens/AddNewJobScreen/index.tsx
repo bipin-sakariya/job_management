@@ -115,7 +115,7 @@ const AddNewJobScreen = () => {
             }
             data.append("priority", isUrgentJob)
             data.append("further_inspection", isFinishNotification)
-            data.append("status", strings.JobOpen)
+            data.append("status", strings.jobOpen)
 
             if (!isEmptyArray(image_array)) {
                 image_array.map((item) => {
@@ -218,7 +218,7 @@ const AddNewJobScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{strings.AddNewJob}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.addNewJob}</Text>
                     </TouchableOpacity>
                 }
             />
@@ -231,12 +231,13 @@ const AddNewJobScreen = () => {
                         placeholder={strings.jobId}
                         value={values.jobID}
                         onChangeText={handleChange("jobID")}
+                        keyboardType={'number-pad'}
                     />
                     {(touched?.jobID && errors?.jobID) || error?.id ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{errors?.jobID ? errors.jobID : error?.id}</Text> : null}
                     <CustomTextInputWithImage
-                        title={strings.Address}
+                        title={strings.address}
                         value={values.address}
-                        placeholder={strings.Address}
+                        placeholder={strings.address}
                         placeholderTextColor={colors.dark_blue2_color}
                         onChangeText={handleChange("address")}
                         mainContainerStyle={{ marginTop: wp(5), flex: 1, }}
@@ -257,7 +258,7 @@ const AddNewJobScreen = () => {
                         onChangeText={handleChange('addressInformation')}
                         placeholder={strings.addressInformation}
                     />
-                    <Text style={[{ fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_10, color: colors.dark_blue3_color }]}>{strings.Additionaladdressinformation}</Text>
+                    <Text style={[{ fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_10, color: colors.dark_blue3_color }]}>{strings.additionaladdressinformation}</Text>
                     {(touched?.addressInformation && errors?.addressInformation) || error?.address_information ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{errors?.addressInformation ? errors.addressInformation : error?.address_information}</Text> : null}
                     <CustomDetailsComponent
                         detailsContainerStyle={{ marginTop: wp(4) }}
@@ -312,14 +313,14 @@ const AddNewJobScreen = () => {
                     <CustomDashedComponent
                         image={ImagesPath.add_icon}
                         onPress={() => selectOneFile()}
-                        title={strings.Addimagesandattachments}
+                        title={strings.addimagesandattachments}
                         viewStyle={{ marginTop: wp(5), paddingVertical: wp(5) }} />
                     <CustomSwitchComponent
                         onPress={() => setIsUrgentJob(!isUrgentJob)}
                         value={isUrgentJob}
                         container={{ marginTop: wp(3) }}
                         title={strings.priority}
-                        subTitle={strings.UrgentJob} />
+                        subTitle={strings.urgentJob} />
                     <CustomSwitchComponent
                         onPress={() => setIsFinishNotification(!isFinishNotification)}
                         value={isFinishNotification}

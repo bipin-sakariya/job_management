@@ -28,7 +28,7 @@ const IndoxScreen = () => {
                     paddingLeft: wp(3)
                 }}
                 headerLeftComponent={
-                    <Text style={globalStyles.headerTitle}>Inbox</Text>
+                    <Text style={globalStyles.headerTitle}>inbox</Text>
                 }
                 headerRightComponent={
                     <TouchableOpacity style={{ marginRight: wp(3) }}>

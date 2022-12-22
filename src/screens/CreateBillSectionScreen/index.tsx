@@ -59,10 +59,10 @@ const CreateBillSectionScreen = () => {
     const CreateMaterialValidationSchema = yup.object().shape({
         name: yup
             .string()
-            .required(type == "material" ? strings.Billname_required : strings.Signname_required),
+            .required(type == "material" ? strings.billNameRequired : strings.signNameRequired),
         ration_qunt: yup
             .string()
-            .required(type == "material" ? strings.Jumpingration_required : strings.Quantity_required),
+            .required(type == "material" ? strings.jumpingRatioRequired : strings.quantityRequired),
     });
 
     const createbills = (values: ValuesProps) => {
@@ -154,7 +154,7 @@ const CreateBillSectionScreen = () => {
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps={'always'}>
-                    <CustomSubTitleWithImageComponent disabled title={strings.Prepare_bill} image={ImagesPath.receipt_icon} />
+                    <CustomSubTitleWithImageComponent disabled title={strings.prepareBill} image={ImagesPath.receipt_icon} />
                     {type == "sign" ?
                         <>
                             {imageUrl && <ImageBackground
@@ -189,15 +189,15 @@ const CreateBillSectionScreen = () => {
                                     setImageError(false)
                                     setError({ ...error, image: '' })
                                 }
-                            }} title={strings.Addasignlogo} />}
+                            }} title={strings.addSignLogo} />}
                         </>
                         : null
                     }
-                    {imageError || error.image ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{error.image ? error.image : strings.Pleaseentersignlogo}</Text> : null}
+                    {imageError || error.image ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{error.image ? error.image : strings.pleaseEnterSignLogo}</Text> : null}
                     <CustomTextInput
                         title={strings.name}
                         container={{ marginVertical: wp(5), marginTop: wp(3) }}
-                        placeholder={type == "material" ? strings.Billname : strings.SignName}
+                        placeholder={type == "material" ? strings.billName : strings.signName}
                         onChangeText={handleChange("name")}
                     />
                     {(touched.name && errors.name) || error.name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.name ? error.name : errors.name}</Text> : null}
@@ -241,7 +241,7 @@ const CreateBillSectionScreen = () => {
                                         placeholder={strings.choose}
                                         container={{ marginBottom: wp(5) }}
                                     />
-                                    {countingError || error.type ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.type ? error.type : strings.Typecount_required}</Text> : null}
+                                    {countingError || error.type ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.type ? error.type : strings.typeCountRequired}</Text> : null}
 
                                     <CustomTextInput
                                         title={strings.jumpdish}
@@ -258,7 +258,7 @@ const CreateBillSectionScreen = () => {
                                 <>
                                     <CustomTextInput
                                         title={strings.quantity}
-                                        placeholder={strings.EnterQuantity}
+                                        placeholder={strings.enterQuantity}
                                         container={{ marginBottom: wp(5) }}
                                         onChangeText={handleChange("ration_qunt")}
                                         keyboardType={'number-pad'}
@@ -283,7 +283,7 @@ const CreateBillSectionScreen = () => {
                                         placeholder={strings.choose}
                                         container={{ marginBottom: wp(5) }}
                                     />
-                                    {countingError || error.type_counting ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.type_counting ? error.type_counting : strings.Typecount_required}</Text> : null}
+                                    {countingError || error.type_counting ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.type_counting ? error.type_counting : strings.typeCountRequired}</Text> : null}
                                 </>
                             }
                         </>}
@@ -302,7 +302,7 @@ const CreateBillSectionScreen = () => {
                         </View>
                     </View>}
                     <CustomBlackButton
-                        title={strings.CreateBill}
+                        title={strings.createBill}
                         image={ImagesPath.plus_white_circle_icon}
                         onPress={() => {
                             if (!countingValue.value) {

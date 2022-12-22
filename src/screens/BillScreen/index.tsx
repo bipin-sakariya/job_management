@@ -108,7 +108,12 @@ const BillListScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <ButtonTab btnOneTitle={strings.accountmaterial} btnTwoTitle={strings.Signabill} setBtn={setBtn} onReset={setPage} btnValue={btn} />
+                <ButtonTab
+                    btnOneTitle={strings.accountMaterial}
+                    btnTwoTitle={strings.signBill}
+                    setBtn={setBtn}
+                    onReset={setPage}
+                    btnValue={btn} />
                 <View style={[globalStyles.rowView, { marginVertical: hp(1) }]}>
                     <Image source={ImagesPath.squre_note_icon} style={styles.noteIconStyle} />
                     <Text style={[styles.billListTxt, globalStyles.rtlStyle]}>{strings.billList}</Text>
@@ -126,7 +131,7 @@ const BillListScreen = () => {
                             </View>
                         )
                     }}
-                    ListEmptyComponent={() => <CommonEmptyListComponent Txt={strings.Billdatanotfound} />}
+                    ListEmptyComponent={() => <CommonEmptyListComponent Txt={strings.billdatanotfound} />}
                     onEndReached={() => {
                         if (billListData.next) {
                             let param = {

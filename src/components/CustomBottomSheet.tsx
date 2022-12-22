@@ -79,6 +79,8 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
                         style={[styles.textInputStyle, { textAlign: I18nManager.isRTL ? 'right' : 'left' }]}
                         placeholder={strings.searchHere}
                         placeholderTextColor={colors.light_brown}
+                        autoCorrect={false}
+                        autoCapitalize={'none'}
                     />
                 </View>
                 <FlatList

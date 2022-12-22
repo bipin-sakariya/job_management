@@ -48,7 +48,7 @@ const AssignedJobsComponent = ({ item, index }: { item: AssignJobTypeProps, inde
                     </View>
                     <CustomStatusBtn title={item.status} style={{ backgroundColor: colors.dark_blue3_color }} txtStyle={{ color: colors.white_color }} />
                 </View>
-                <Text numberOfLines={1} style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{strings.Assignedon} {convertDate(item.created_at)}</Text>
+                <Text numberOfLines={1} style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{strings.assignedon} {convertDate(item.created_at)}</Text>
             </View>
         </View>
     )

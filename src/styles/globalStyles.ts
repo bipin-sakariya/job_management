@@ -1,5 +1,6 @@
 import { I18nManager, StyleSheet } from 'react-native'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import { scaleSize } from '../utils/screenUtils'
 import { colors } from './Colors'
 import fonts from './Fonts'
 import FontSizes from './FontSizes'
@@ -71,6 +72,39 @@ export const globalStyles = StyleSheet.create({
         borderWidth: wp(0.4),
         alignItems: 'center',
         justifyContent: "center"
+    },
+    closeIconContainer: {
+        backgroundColor: colors.gray_1,
+        borderRadius: wp(8),
+        height: wp(6),
+        width: wp(6),
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: wp(2),
+    },
+    closeIcon: {
+        tintColor: colors.white,
+        height: wp(4),
+        width: wp(4),
+        marginLeft: scaleSize(1),
+        marginBottom: scaleSize(0.5)
+    },
+    calendarStyle: {
+        backgroundColor: colors.calendar_Bg,
+        borderRadius: wp(2),
+        marginVertical: wp(5),
+    },
+    calenderHeaderStyle: {
+        marginVertical: wp(2),
+        textAlign: "center",
+        fontFamily: fonts.FONT_POP_MEDIUM,
+        fontSize: FontSizes.MEDIUM_16,
+        color: colors.gray_6
+    },
+    calendarArrowIcon: {
+        width: wp(5),
+        height: wp(5),
+        resizeMode: 'contain',
     },
 })
 
@@ -182,3 +216,14 @@ export const customMapStyle = [
         ]
     },
 ];
+
+export const calendarTheme = {
+    dayTextColor: colors.gray_1,
+    textDisabledColor: colors.gray_2,
+    textDayFontWeight: '500',
+    textDayHeaderFontWeight: '500',
+    textDayFontSize: FontSizes.SMALL_14,
+    textDayHeaderFontSize: FontSizes.EXTRA_SMALL_12,
+    textDayFontFamily: fonts.FONT_POP_REGULAR,
+    calendarBackground: colors.calendar_Bg,
+};

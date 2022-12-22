@@ -34,27 +34,27 @@ const ReturnJobScreen = () => {
                     children={
                         <View style={styles.modalView}>
                             <Image source={ImagesPath.check_circle_icon} style={[globalStyles.modalImageStyle]} />
-                            <Text style={styles.modalTxt}>{strings.Thejob} 9 Oxfort Street {strings.hasbeensuccessfullyreturnedto}P.Maintenance?</Text>
+                            <Text style={styles.modalTxt}>{strings.theJob} 9 Oxfort Street {strings.hasBeenSuccessfullyReturnedTo}P.Maintenance?</Text>
                             <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "50%" }} title={strings.okay} />
                         </View>
                     } />
-                <CustomSubTitleWithImageComponent disabled title={strings.ResoneofReturnjob} image={ImagesPath.arrow_counter_clockwise_black_icon} />
+                <CustomSubTitleWithImageComponent disabled title={strings.responeOfReturnJob} image={ImagesPath.arrow_counter_clockwise_black_icon} />
                 <TouchableOpacity onPress={() => { setIsDuplicate(true) }} style={[globalStyles.rowView, styles.jobListMainView]}>
-                    <Text style={styles.jobNameTxt}>{strings.Duplicate}</Text>
+                    <Text style={styles.jobNameTxt}>{strings.duplicate}</Text>
                     <View style={globalStyles.roundView} >
                         <View style={[styles.roundFillView, { backgroundColor: isDuplicate ? colors.dark_blue3_color : colors.white_5, }]} />
                     </View>
                 </TouchableOpacity>
                 <View style={[styles.jobListMainView]}>
                     <TouchableOpacity onPress={() => { setIsDuplicate(false) }} style={[globalStyles.rowView, { justifyContent: 'space-between' }]}>
-                        <Text style={styles.jobNameTxt}>{strings.WrongInformation}</Text>
+                        <Text style={styles.jobNameTxt}>{strings.wrongInformation}</Text>
                         <View style={globalStyles.roundView} >
                             <View style={[styles.roundFillView, { backgroundColor: !isDuplicate ? colors.dark_blue3_color : colors.white_5, }]} />
                         </View>
                     </TouchableOpacity>
                     <View style={globalStyles.rtlDirection}>
                         <TextInput
-                            placeholder={strings.WriteResoneofreturnjob}
+                            placeholder={strings.writeResponeOfReturnJob}
                             multiline
                             editable={!isDuplicate}
                             onChangeText={(text) => { }}
@@ -63,7 +63,7 @@ const ReturnJobScreen = () => {
                         />
                     </View>
                 </View>
-                <CustomBlackButton onPress={() => { navigation.navigate('JobDuplicateListScreen') }} buttonStyle={{ width: '50%' }} title={strings.Return} image={ImagesPath.arrow_counter_clockwise_white_icon} />
+                <CustomBlackButton onPress={() => { navigation.navigate('JobDuplicateListScreen') }} buttonStyle={{ width: '50%' }} title={strings.return} image={ImagesPath.arrow_counter_clockwise_white_icon} />
             </Container>
         </View>
     )

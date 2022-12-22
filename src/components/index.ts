@@ -35,6 +35,7 @@ import TableHeaderView from './TableHeaderView';
 import TableDetailsComponent from './TableDetailsComponent';
 import CommonPdfView from './CommonPdfView';
 import CommonEmptyListComponent from './CommonEmptyListComponent';
+import CalendarView from './CalendarView';
 
 
 export {
@@ -74,5 +75,6 @@ export {
     TableHeaderView,
     TableDetailsComponent,
     CommonPdfView,
-    CommonEmptyListComponent
+    CommonEmptyListComponent,
+    CalendarView
 }

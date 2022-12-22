@@ -32,17 +32,17 @@ const FillFormScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView]} >
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{strings.AsphaltColor}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.asphaltColor}</Text>
                     </TouchableOpacity>
                 } />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomSubTitleWithImageComponent
                     disabled
-                    title={strings.auto_fill_detail}
+                    title={strings.autoFillDetail}
                     image={ImagesPath.receipt_icon}
                 />
                 <CustomTextInput
-                    title={strings.There}
+                    title={strings.there}
                     container={{ marginVertical: wp(4) }}
                     value={'צבע אספלט'}
                     onChangeText={(text) => { }}
@@ -70,7 +70,7 @@ const FillFormScreen = () => {
                 <CustomBlackButton
                     onPress={() => {
                     }}
-                    title={strings.AddDetail}
+                    title={strings.addDetail}
                 />
             </Container>
         </View>

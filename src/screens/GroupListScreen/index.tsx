@@ -30,7 +30,6 @@ const GroupListScreen = () => {
     const [page, setPage] = useState(1)
 
     const { groupListData, isLoading } = useAppSelector(state => state.groupList)
-    console.log({ groupListData })
 
     useEffect(() => {
         if (isFocus)
@@ -44,10 +43,8 @@ const GroupListScreen = () => {
             page: page,
             search: ''
         }
-        // setIsFooterLoading(true)
+
         dispatch(groupList(params)).unwrap().then((res) => {
-            // setIsFooterLoading(false)
-            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
             setPage(page + 1)
         }).catch((error) => {
             console.log({ error });
@@ -56,12 +53,8 @@ const GroupListScreen = () => {
 
     return (
         <View style={globalStyles.container}>
-            {/* {isLoading && <CustomActivityIndicator size={'small'} />} */}
             <Header
-                headerLeftStyle={{
-                    width: '50%',
-                    paddingRight: wp(3)
-                }}
+                headerLeftStyle={{ width: '50%', paddingRight: wp(3) }}
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
@@ -88,7 +81,7 @@ const GroupListScreen = () => {
                     textStyle={{ color: colors.dark_blue1_color, fontSize: FontSizes.EXTRA_LARGE_24 }}
                     viewStyle={{ paddingVertical: wp(5), borderColor: colors.gray_color }}
                     imageStyle={{ height: wp(10), width: wp(10), tintColor: colors.dark_blue1_color }}
-                    title={strings.ADDNEWGROUP}
+                    title={strings.addNewGroup}
                     image={ImagesPath.add_icon}
                     onPress={() => {
                         navigation.navigate('CreateGroupScreen')

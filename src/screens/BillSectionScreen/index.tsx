@@ -97,8 +97,8 @@ const BillSectionScreen = () => {
     }
 
     const CreateMaterialValidationSchema = yup.object().shape({
-        name: yup.string().required(type == "material" ? strings.Billname_required : strings.Signname_required),
-        ration_qunt: yup.string().required(type == "material" ? strings.Jumpingration_required : strings.Quantity_required),
+        name: yup.string().required(type == "material" ? strings.billNameRequired : strings.signNameRequired),
+        ration_qunt: yup.string().required(type == "material" ? strings.jumpingRatioRequired : strings.quantityRequired),
         // imageUrl: yup.string().required(strings.Sign_image_required)
     });
 
@@ -242,7 +242,7 @@ const BillSectionScreen = () => {
                         title={strings.name}
                         container={{ marginVertical: wp(5) }}
                         value={values.name}
-                        placeholder={type == "material" ? strings.Billname : strings.SignName}
+                        placeholder={type == "material" ? strings.billName : strings.signName}
                         editable={isEditable}
                         onChangeText={handleChange('name')}
                     />
@@ -276,7 +276,7 @@ const BillSectionScreen = () => {
                         placeholder={strings.choose}
                         container={{ marginBottom: wp(5) }}
                     />
-                    {typeCountError || error.type_counting ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.type_counting ? error.type_counting : strings.Typecount_required}</Text> : null}
+                    {typeCountError || error.type_counting ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.type_counting ? error.type_counting : strings.typeCountRequired}</Text> : null}
                     {type != "sign" && <>
                         <CustomTextInput
                             title={strings.jumpingRation}
@@ -291,7 +291,7 @@ const BillSectionScreen = () => {
                     </>}
                     {error.detail ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.detail}</Text> : null}
                     {isEditable && <CustomBlackButton
-                        title={strings.UpdateBill}
+                        title={strings.updateBill}
                         image={ImagesPath.plus_white_circle_icon}
                         onPress={() => {
                             if (!countingValue.value) {

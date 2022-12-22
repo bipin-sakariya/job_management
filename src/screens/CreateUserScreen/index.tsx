@@ -13,21 +13,22 @@ import { useFormik } from 'formik';
 import * as yup from "yup";
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { createUser } from '../../redux/slices/AdminSlice/userListSlice';
+import { colors } from '../../styles/Colors';
 
 const roleSchema = yup.object().shape({
-    title: yup.string().required(strings.role_required),
-    id: yup.number().required(strings.role_required)
+    title: yup.string().required(strings.roleRequired),
+    id: yup.number().required(strings.roleRequired)
 })
 
 const permissionSchema = yup.object().shape({
-    title: yup.string().required(strings.Permission_required),
-    id: yup.number().required(strings.Permission_required)
+    title: yup.string().required(strings.permissionRequired),
+    id: yup.number().required(strings.permissionRequired)
 })
 
 const CreateUserValidationSchema = yup.object().shape({
-    userName: yup.string().required(strings.Username_required),
-    email: yup.string().email(strings.email_invalid).required(strings.email_required),
-    contactNo: yup.string().length(8, strings.Contectno_invalid).required(strings.contactNo_required),
+    userName: yup.string().required(strings.usernameRequired),
+    email: yup.string().email(strings.emailInvalid).required(strings.emailRequired),
+    contactNo: yup.string().length(8, strings.contactNoInvalid).required(strings.contactNoRequired),
     role: roleSchema,
     permission: permissionSchema
 });
@@ -112,7 +113,7 @@ const CreateUserScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView, { width: wp(50) }]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
-                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{strings.AddUser}</Text>
+                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{strings.addUser}</Text>
                     </TouchableOpacity>
                 }
             />
@@ -120,7 +121,7 @@ const CreateUserScreen = () => {
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomSubTitleWithImageComponent
                     disabled
-                    title={strings.FillfromtocreateUser}
+                    title={strings.fillFormToCreateUser}
                     image={ImagesPath.from_list_icon}
                 />
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: heightPercentageToDP(20) }} keyboardShouldPersistTaps={'handled'}>
@@ -143,33 +144,33 @@ const CreateUserScreen = () => {
                         </ImageBackground>
                     </TouchableOpacity>
                     <CustomTextInput
-                        title={strings.UserName}
-                        placeholder={strings.Enter_user_name}
+                        title={strings.userName}
+                        placeholder={strings.enterUserame}
                         container={{ marginBottom: wp(5) }}
                         onChangeText={handleChange("userName")}
                         value={values.userName}
                     />
                     {(touched?.userName && errors?.userName) || error?.user_name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors?.userName ? errors.userName : error?.email}</Text> : null}
                     <CustomTextInput
-                        title={strings.Email}
+                        title={strings.email}
                         container={{ marginBottom: wp(5) }}
-                        placeholder={strings.Enter_email_address}
+                        placeholder={strings.enterEmailAddress}
                         onChangeText={handleChange("email")}
                         value={values.email}
                         keyboardType={'email-address'}
                     />
                     {(touched?.email && errors?.email) || error?.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors?.email ? errors?.email : error?.email}</Text> : null}
                     <CustomTextInput
-                        title={strings.Contactno}
+                        title={strings.contactNo}
                         container={{ marginBottom: wp(5) }}
-                        placeholder={strings.Enter_contect_no}
+                        placeholder={strings.enterContactNo}
                         onChangeText={handleChange("contactNo")}
                         value={values.contactNo}
                         keyboardType={'number-pad'}
                     />
                     {(touched?.contactNo && errors?.contactNo) || error?.phone ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error?.phone ? error.phone : errors.contactNo}</Text> : null}
                     {userRoleList && <DropDownComponent
-                        title={strings.Role}
+                        title={strings.role}
                         data={userRoleList}
                         image={ImagesPath.down_white_arrow}
                         labelField="title"
@@ -178,12 +179,12 @@ const CreateUserScreen = () => {
                             setFieldValue('role', item)
                         }}
                         value={values.role.id}
-                        placeholder={strings.SelectRoleforUser}
+                        placeholder={strings.selectRoleForUser}
                         container={{ marginBottom: wp(5) }}
                     />}
-                    {(touched?.role && errors.role) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.role_required}</Text> : null}
+                    {(touched?.role && errors.role) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.roleRequired}</Text> : null}
                     {userRoleList && <DropDownComponent
-                        title={strings.Permission}
+                        title={strings.permission}
                         data={userRoleList}
                         image={ImagesPath.down_white_arrow}
                         labelField="title"
@@ -192,12 +193,12 @@ const CreateUserScreen = () => {
                             setFieldValue('permission', item)
                         }}
                         value={values.permission.id}
-                        placeholder={strings.GivePermission}
+                        placeholder={strings.givePermission}
                         container={{ marginBottom: wp(5) }}
                     />}
-                    {(touched?.permission && errors.permission) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.Permission_required}</Text> : null}
+                    {(touched?.permission && errors.permission) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.permissionRequired}</Text> : null}
                     <CustomBlackButton
-                        title={strings.CreateUser}
+                        title={strings.createUser}
                         image={ImagesPath.plus_white_circle_icon}
                         onPress={() => {
                             handleSubmit()

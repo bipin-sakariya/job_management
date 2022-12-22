@@ -118,7 +118,7 @@ const FormScreen = () => {
                         return (
                             <View style={[globalStyles.rowView, { marginBottom: wp(4) }]}>
                                 <Image source={ImagesPath.squre_note_icon} style={styles.noteIconStyle} />
-                                <Text style={[styles.billListTxt, globalStyles.rtlStyle]}>{strings.FormList}</Text>
+                                <Text style={[styles.billListTxt, globalStyles.rtlStyle]}>{strings.formList}</Text>
                             </View>
                         )
                     }}

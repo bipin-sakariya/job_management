@@ -76,7 +76,7 @@ const RouteScreen = () => {
                     headerLeftComponent={
                         <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { navigation.goBack() }}>
                             <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                            <Text style={[globalStyles.headerTitle, { marginHorizontal: wp(2) }]}>{strings.Route}</Text>
+                            <Text style={[globalStyles.headerTitle, { marginHorizontal: wp(2) }]}>{strings.route}</Text>
                         </TouchableOpacity>
                     }
                 />
@@ -86,7 +86,7 @@ const RouteScreen = () => {
                         <View style={{ flex: 1 }}>
                             <View style={styles.btnContainer}>
                                 <Text style={[styles.textInputStyle, globalStyles.rtlStyle, { flex: 1, marginBottom: 0 }]} numberOfLines={2} onPress={() => { dispatch(updatePerticularSelectionOfAddress('source')), navigation.navigate("RouteChooseLocationDetailScreen") }}>
-                                    {sourceAddress?.address ? sourceAddress.address : strings.ChooseStartingLocation}
+                                    {sourceAddress?.address ? sourceAddress.address : strings.chooseStartingLocation}
                                 </Text>
                                 {sourceAddress?.address && <TouchableOpacity style={styles.closeIconContainer} onPress={() => dispatch(resetPerticularRoutesReducer({ type: 'source' }))}>
                                     <Image source={ImagesPath.close_icon} style={styles.closeIcon} />
@@ -101,7 +101,7 @@ const RouteScreen = () => {
                                         navigation.navigate("RouteChooseLocationDetailScreen")
                                     }
                                 }}>
-                                    {destinationAddress?.address ? destinationAddress.address : strings.ChooseDestination}
+                                    {destinationAddress?.address ? destinationAddress.address : strings.chooseDestination}
                                 </Text>
                                 {destinationAddress?.address && <TouchableOpacity style={styles.closeIconContainer} onPress={() => dispatch(resetPerticularRoutesReducer({ type: 'destination' }))}>
                                     <Image source={ImagesPath.close_icon} style={styles.closeIcon} />
@@ -124,11 +124,11 @@ const RouteScreen = () => {
                             }) : null}
 
                             <CustomDashedComponent
-                                title={strings.AddOtherField}
+                                title={strings.addOtherField}
                                 image={ImagesPath.plus_circle_white_border_icon}
                                 onPress={() => {
                                     if (!source && !destination) {
-                                        Alert.alert(strings.Please_select_a_source_and_destination, "")
+                                        Alert.alert(strings.please_select_a_source_and_destination, "")
                                     } else if (!source) {
                                         Alert.alert(strings.please_select_a_source, "")
                                     } else if (!destination) {
@@ -143,7 +143,7 @@ const RouteScreen = () => {
                             />
                         </View>
                     </View>
-                    <CustomSubTitleWithImageComponent disabled title={strings.Recent} image={ImagesPath.clock_counter_clockwise_icon} />
+                    <CustomSubTitleWithImageComponent disabled title={strings.recent} image={ImagesPath.clock_counter_clockwise_icon} />
                     <FlatList
                         data={jobListData.results}
                         renderItem={renderItem}
@@ -154,14 +154,14 @@ const RouteScreen = () => {
                 </Container>
             </ScrollView >
             <CustomBlackButton
-                title={strings.Done}
+                title={strings.done}
                 textStyle={{ marginVertical: wp(1) }}
                 image={ImagesPath.route_icon}
                 buttonStyle={{ ...styles.boxShadowStyle, bottom: Platform.OS == "ios" ? wp(5) : 0, width: '90%' }}
                 onPress={() => {
                     dispatch(updateFinalMapRoutesReducer())
                     if (!source) {
-                        Alert.alert(strings.Please_select_a_source_and_destination, "")
+                        Alert.alert(strings.please_select_a_source_and_destination, "")
                     } else if (!destination) {
                         Alert.alert(strings.please_select_a_destination, "")
                     } else {

@@ -86,7 +86,7 @@ const JobDuplicateListScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
-                        <Text style={globalStyles.headerTitle}>{strings.Duplicate}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.duplicate}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
@@ -95,7 +95,7 @@ const JobDuplicateListScreen = () => {
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => { navigation.navigate('DuplicateScreen', { params: isIndex }) }}>
-                            <Text style={{ fontFamily: fonts.FONT_POP_MEDIUM, fontSize: FontSizes.REGULAR_18 }}>{strings.Done}</Text>
+                            <Text style={{ fontFamily: fonts.FONT_POP_MEDIUM, fontSize: FontSizes.REGULAR_18 }}>{strings.done}</Text>
                         </TouchableOpacity>
                     </View>
                 }

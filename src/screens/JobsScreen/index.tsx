@@ -2,10 +2,10 @@ import { View, Text, TouchableOpacity, Image, FlatList, TextInput, ActivityIndic
 import React, { useEffect, useRef, useState } from 'react';
 import { DrawerActions, useIsFocused } from '@react-navigation/native';
 import { styles } from './styles';
-import { ButtonTab, Container, CustomBottomSheet, Header, JobListComponent } from '../../components';
+import { ButtonTab, CalendarView, Container, CustomBlackButton, CustomBottomSheet, CustomModal, CustomSubTitleWithImageComponent, Header, JobListComponent } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { globalStyles } from '../../styles/globalStyles';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
@@ -14,6 +14,8 @@ import { JobDetailsData, jobStatusWiseList } from '../../redux/slices/AdminSlice
 import moment from 'moment';
 import { GroupData, groupList } from '../../redux/slices/AdminSlice/groupListSlice';
 import { GroupParams } from '../TransferJobScreen';
+import FontSizes from '../../styles/FontSizes';
+import fonts from '../../styles/Fonts';
 
 interface jobListParams {
     page?: number,
@@ -46,7 +48,10 @@ const JobsScreen = () => {
     const [groupData, setGroupData] = useState<GroupData[]>([])
     const [finalGroupData, setfinalGroupList] = useState<GroupParams[]>([])
     const [finalAllGroup, setFinalAllGroup] = useState<GroupParams[]>([])
-    const [selectedDate, setSelectedDate] = useState<DateParams>()
+    const [selectedDate, setSelectedDate] = useState<DateParams>({})
+    const [isModelVisible, setIsModelVisible] = useState(false)
+    const [sdate, setSdate] = useState('');
+    const [edate, setEdate] = useState(' ');
 
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
     const { jobListData } = useAppSelector(state => state.jobList)
@@ -66,10 +71,8 @@ const JobsScreen = () => {
             search: '',
             page: groupPage
         }
-        // setIsFooterLoading(true)
+
         dispatch(groupList(params)).unwrap().then((res) => {
-            // setIsFooterLoading(false) setPage(page + 1)
-            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
             setGroupData(res.results)
             setGroupPage(groupPage + 1)
         }).catch((error) => {
@@ -86,21 +89,12 @@ const JobsScreen = () => {
             to_date: to_date,
             from_date: from_date
         }
-        console.log("API PARAMS ===", { params })
 
         dispatch(jobStatusWiseList(params)).unwrap().then((res) => {
-            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-            // refRBSheet.current?.close()
-            // setOpenJobList(res.results)
             if (res.next && !!input) {
                 setPage(page + 1)
                 setOpenJobList(res.results)
             }
-            // else {
-            //     setOpenJobList(res.results)
-            //     setPage(page + 1)
-            // }
-            // setPage(page + 1)
         }).catch((error) => {
             console.log({ error });
         })
@@ -117,11 +111,11 @@ const JobsScreen = () => {
         setfinalGroupList(findData)
 
     }, [groupData])
-    console.log({ finalGroupData })
 
     useEffect(() => {
         if (finalGroupData.length) {
-            let catList = [{ name: 'All', selected: true, id: 0 }]
+            let catList: any = [{ name: 'All', selected: true, id: 0 }]
+
             finalGroupData.map((listItem: GroupParams) => {
                 catList.push({
                     name: listItem.name,
@@ -132,13 +126,9 @@ const JobsScreen = () => {
             });
         }
     }, [finalGroupData]);
-    console.log({ finalAllGroup })
-
-    const groupId: GroupParams | undefined = finalGroupData.find((i) => i.selected == true)
 
     return (
         <View style={globalStyles.container}>
-            {/* {console.log({ selectedDate })} */}
             <Header
                 headerLeftComponent={
                     <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
@@ -157,15 +147,15 @@ const JobsScreen = () => {
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                         {
-                            userData?.role != strings.Group_Manager &&
+                            userData?.role != strings.groupManager &&
                             <TouchableOpacity onPress={() => {
-                                if (userData?.role == strings.Admin) {
+                                if (userData?.role == strings.admin) {
                                     navigation.navigate("NotificationScreen")
                                 } else {
                                     navigation.navigate('CreateNewJobScreen', { type: strings.newJob })
                                 }
                             }}>
-                                <Image source={userData?.role == strings.Admin ? ImagesPath.notification_icon : ImagesPath.add_icon} style={globalStyles.headerIcon} />
+                                <Image source={userData?.role == strings.admin ? ImagesPath.notification_icon : ImagesPath.add_icon} style={globalStyles.headerIcon} />
                             </TouchableOpacity>
                         }
                     </View>
@@ -174,10 +164,10 @@ const JobsScreen = () => {
 
             <Container>
                 {isSearch &&
-                    <View style={[styles.searchinputview]}>
-                        <Image source={ImagesPath.search_icon} style={styles.searchviewimage} />
+                    <View style={[styles.searchInputView, {}]}>
+                        <Image source={ImagesPath.search_icon} style={styles.searchViewImage} />
                         <TextInput
-                            style={[styles.searchinputtext]}
+                            style={[styles.searchInputText]}
                             placeholder={strings.searchHere}
                             onChangeText={(text) => {
                                 setText(text)
@@ -186,24 +176,47 @@ const JobsScreen = () => {
                             autoCapitalize={'none'}
                             autoCorrect={false}
                         />
-                        <TouchableOpacity style={[globalStyles.rowView, {}]} onPress={() => { setIsSearch(false) }}>
-                            <Image source={ImagesPath.close_icon} style={globalStyles.backArrowStyle} />
-                            <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle]}></Text>
+                        <TouchableOpacity style={globalStyles.closeIconContainer} onPress={() => { setIsSearch(false) }}>
+                            <Image source={ImagesPath.close_icon} style={globalStyles.closeIcon} />
                         </TouchableOpacity>
-
                     </View>
                 }
-                <ButtonTab btnOneTitle={strings.open} btnTwoTitle={strings.close} setBtn={setBtn} btnValue={btn} onReset={setPage} />
+                <ButtonTab
+                    btnOneTitle={strings.open}
+                    btnTwoTitle={strings.close}
+                    setBtn={setBtn}
+                    btnValue={btn}
+                    onReset={setPage}
+                />
+
+                <View style={[globalStyles.rowView, { justifyContent: 'space-between', marginHorizontal: wp(4) }]}>
+                    <CustomSubTitleWithImageComponent
+                        disabled
+                        title={strings.AddedGroups}
+                        image={ImagesPath.group_icon}
+                        viewStyle={{ marginBottom: hp(0), }}
+                        titleStyle={{ fontSize: FontSizes.MEDIUM_16 }}
+                    />
+                    <TouchableOpacity
+                        onPress={() => {
+                            setIsModelVisible(true)
+                        }} style={{ padding: wp(1.5) }}>
+                        <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle, { fontFamily: fonts.FONT_POP_SEMI_BOLD, paddingHorizontal: 0 }]}>{strings.date}</Text>
+                    </TouchableOpacity>
+                </View>
+
                 <FlatList
                     data={jobListData?.results}
                     renderItem={({ item, index }) => {
                         const isDateVisible = index != 0 ? moment(jobListData?.results[index].created_at).format('ll') == moment(jobListData?.results[index - 1].created_at).format('ll') ? false : true : true
                         return (
-                            <JobListComponent item={item} index={index} isDateVisible={isDateVisible} setSelectedDate={setSelectedDate} onPress={() => JobListApiCall(page, text, undefined, selectedDate?.toDate, selectedDate?.fromDate)} />
+                            <JobListComponent
+                                item={item}
+                                isDateVisible={isDateVisible}
+                            />
                         )
                     }}
                     onEndReached={() => {
-                        console.log("On reach call");
                         if (jobListData?.next) {
                             JobListApiCall(page)
                         }
@@ -216,17 +229,50 @@ const JobsScreen = () => {
                             </>
                         )
                     }}
+                    ListEmptyComponent={() => {
+                        return (
+                            <View>
+                                <Text>{strings.empty_list}</Text>
+                            </View>
+                        )
+                    }}
                 />
             </Container>
+
+            {/* group list  */}
             <CustomBottomSheet
                 ref={refRBSheet}
                 data={finalAllGroup}
                 onSelectedTab={(item) => {
-                    console.log({ item })
                     JobListApiCall(page, text, item.id)
                     setSelectedItem(item)
                     refRBSheet.current?.close()
                 }}
+            />
+
+            {/* calendar model */}
+            <CustomModal
+                visible={isModelVisible}
+                onRequestClose={() => { setIsModelVisible(false) }}
+                onClose={() => { setIsModelVisible(false) }}
+                children={
+                    <View style={{ width: wp(90), alignSelf: 'center' }}>
+                        <CalendarView
+                            setSelectedDate={setSelectedDate}
+                            setSdate={setSdate}
+                            setEdate={setEdate}
+                            sdate={sdate}
+                            edate={edate}
+                        />
+                        <CustomBlackButton
+                            title={strings.apply}
+                            onPress={() => {
+                                setIsModelVisible(false)
+                                JobListApiCall(page, text, undefined, selectedDate?.toDate, selectedDate?.fromDate)
+                            }}
+                        />
+                    </View>
+                }
             />
         </View>
     )

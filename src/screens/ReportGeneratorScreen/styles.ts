@@ -26,23 +26,6 @@ export const styles = StyleSheet.create({
         marginHorizontal: wp(2),
         color: colors.light_brown
     },
-    calenderHeaderStyle: {
-        marginVertical: wp(2),
-        textAlign: "center",
-        fontFamily: fonts.FONT_POP_MEDIUM,
-        fontSize: FontSizes.MEDIUM_16,
-        color: colors.gray_6
-    },
-    calendarArrowIcon: {
-        width: wp(5),
-        height: wp(5),
-        resizeMode: 'contain',
-    },
-    calendarStyle: {
-        backgroundColor: colors.calendar_Bg,
-        borderRadius: wp(2),
-        marginVertical: wp(5),
-    },
     iconStyle: {
         height: wp(6),
         width: wp(6),

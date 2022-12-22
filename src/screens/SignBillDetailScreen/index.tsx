@@ -37,9 +37,9 @@ const SignBillDetailScreen = () => {
 
     const CreateGroupValidationSchema = yup.object().shape({
         name: yup.string()
-            .required(type == "Material" ? strings.Billname_required : strings.Signname_required),
+            .required(type == "Material" ? strings.billNameRequired : strings.signNameRequired),
         ration_qunt: yup.string()
-            .required(type == "Material" ? strings.Jumpingration_required : strings.Quantity_required),
+            .required(type == "Material" ? strings.jumpingRatioRequired : strings.quantityRequired),
     });
 
     const Increment = () => {
@@ -100,23 +100,23 @@ const SignBillDetailScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView]} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{strings.MarkThere}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.markThere}</Text>
                     </TouchableOpacity>
                 } />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomModal visible={isModelVisible} onRequestClose={() => { setIsModelVisible(false) }} children={
                     <View style={styles.modalView}>
                         <Image source={ImagesPath.check_icon_circle} style={[globalStyles.modalImageStyle]} />
-                        <Text style={styles.modalTxt}>{strings.ClosejobModalText}</Text>
+                        <Text style={styles.modalTxt}>{strings.closeJobModalText}</Text>
                         <View style={[globalStyles.rowView, { justifyContent: "space-around", width: '100%' }]}>
-                            <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => handleSubmit()} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.Partial} />
+                            <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => handleSubmit()} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.partial} />
                             <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%" }} title={strings.close} />
                         </View>
                     </View>
                 } />
                 <CustomSubTitleWithImageComponent
                     disabled
-                    title={strings.auto_fill_detail}
+                    title={strings.autoFillDetail}
                     image={ImagesPath.receipt_icon} />
                 {type == 'Sign' &&
                     <Image
@@ -126,7 +126,7 @@ const SignBillDetailScreen = () => {
                     />}
                 <CustomTextInput
                     editable={false}
-                    title={strings.There}
+                    title={strings.there}
                     container={{ marginVertical: wp(4) }}
                     placeholder={route.params.item.name}
                 // onChangeText={(text) => { }}
@@ -167,7 +167,7 @@ const SignBillDetailScreen = () => {
                     onPress={() => {
                         setIsModelVisible(true)
                     }}
-                    title={strings.AddDetail}
+                    title={strings.addDetail}
                 />
             </Container>
         </View>

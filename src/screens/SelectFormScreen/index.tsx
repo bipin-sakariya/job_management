@@ -139,7 +139,7 @@ const SelectFormScreen = () => {
                             <Image source={ImagesPath.search_icon} style={[globalStyles.headerIcon,]} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => { selectForm() }}>
-                            <Text style={{ fontFamily: fonts.FONT_POP_MEDIUM, fontSize: FontSizes.REGULAR_18, marginHorizontal: wp(3) }}>{strings.Done}</Text>
+                            <Text style={{ fontFamily: fonts.FONT_POP_MEDIUM, fontSize: FontSizes.REGULAR_18, marginHorizontal: wp(3) }}>{strings.done}</Text>
                         </TouchableOpacity>
                     </View>
                 }
@@ -147,7 +147,7 @@ const SelectFormScreen = () => {
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomSubTitleWithImageComponent
                     disabled
-                    title={strings.FormList}
+                    title={strings.formList}
                     image={ImagesPath.squre_note_icon}
                 />
                 <FlatList

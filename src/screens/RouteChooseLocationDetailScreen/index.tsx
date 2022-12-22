@@ -94,7 +94,7 @@ const RouteChooseLocationDetailScreen = () => {
                         navigation.goBack()
                     }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={[globalStyles.headerTitle]}>{strings.Route}</Text>
+                        <Text style={[globalStyles.headerTitle]}>{strings.route}</Text>
                     </TouchableOpacity>
                 }
             />
@@ -103,17 +103,17 @@ const RouteChooseLocationDetailScreen = () => {
                     <Image source={ImagesPath.map_pin_dark_line_icon} style={styles.mapPinImageStyle} />
                     <TextInput
                         style={[styles.textInputStyle, globalStyles.rtlStyle, { textAlign: "right" }]}
-                        placeholder={strings.ChooseStartingLocation}
+                        placeholder={strings.chooseStartingLocation}
                         placeholderTextColor={colors.dark_blue3_color}
                         value={selectedAddress}
                     />
                 </View>
-                <CustomSubTitleWithImageComponent title={strings.YourLocation} image={ImagesPath.cross_hair_icon} titleStyle={styles.commonTxtStyle}
+                <CustomSubTitleWithImageComponent title={strings.yourLocation} image={ImagesPath.cross_hair_icon} titleStyle={styles.commonTxtStyle}
                     onPress={() => {
                         getCurrentLocation()
                     }}
                 />
-                <CustomSubTitleWithImageComponent title={strings.ChoosefromMap} image={ImagesPath.map_pin_darkline_icon} titleStyle={styles.commonTxtStyle}
+                <CustomSubTitleWithImageComponent title={strings.chooseFromMap} image={ImagesPath.map_pin_darkline_icon} titleStyle={styles.commonTxtStyle}
                     onPress={() => {
                         navigation.navigate('CreateJobMapScreen', {
                             isEditing: true,
@@ -130,7 +130,7 @@ const RouteChooseLocationDetailScreen = () => {
                     height: wp(0.5), backgroundColor: colors.bottom_sheet_tab,
                     marginTop: wp(2)
                 }} />
-                <CustomSubTitleWithImageComponent viewStyle={{ marginVertical: wp(2) }} disabled title={strings.Recent} image={ImagesPath.clock_counter_clockwise_icon} />
+                <CustomSubTitleWithImageComponent viewStyle={{ marginVertical: wp(2) }} disabled title={strings.recent} image={ImagesPath.clock_counter_clockwise_icon} />
                 <FlatList showsVerticalScrollIndicator={false} data={jobListData.results} renderItem={renderItem} />
             </Container>
         </View>

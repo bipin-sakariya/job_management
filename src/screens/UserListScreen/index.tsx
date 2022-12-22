@@ -67,13 +67,13 @@ const UserListScreen = () => {
                     textStyle={styles.dashViewTxt}
                     viewStyle={styles.dashView}
                     imageStyle={styles.dashViewImg}
-                    title={strings.ADDNEWUSER}
+                    title={strings.addNewUser}
                     image={ImagesPath.add_icon}
                     onPress={() => navigation.navigate('CreateUserScreen')}
                 />
                 <CustomSubTitleWithImageComponent
                     disabled
-                    title={strings.AddedUsers}
+                    title={strings.addedUsers}
                     image={ImagesPath.group_icon}
                     viewStyle={{ marginBottom: hp(1) }}
                     titleStyle={{ fontSize: FontSizes.MEDIUM_16 }}

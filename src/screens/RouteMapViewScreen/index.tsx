@@ -114,7 +114,7 @@ const RenderDetail = memo(({ item, getIndex, isActive, drag, jobDetail, selected
                     (jobDetail.length - 1 != currIndex) &&
                     <View style={{ marginLeft: wp(10) }}>
                         <Text numberOfLines={1} style={[styles.commonDarkTxt, globalStyles.rtlStyle,]}>{distanceAndDuration[currIndex]?.distance?.text}</Text>
-                        <Text numberOfLines={1} style={[styles.commonLightTxt, globalStyles.rtlStyle]}> {distanceAndDuration[currIndex]?.duration?.text} {strings.Drive}  </Text>
+                        <Text numberOfLines={1} style={[styles.commonLightTxt, globalStyles.rtlStyle]}> {distanceAndDuration[currIndex]?.duration?.text} {strings.drive}  </Text>
                     </View>
                 }
             </TouchableOpacity >
@@ -177,7 +177,7 @@ const RouteMapViewScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle, { marginHorizontal: wp(2) }]}>{strings.Route}</Text>
+                        <Text style={[globalStyles.headerTitle, globalStyles.rtlStyle, { marginHorizontal: wp(2) }]}>{strings.route}</Text>
                     </TouchableOpacity>
                 }
             />
@@ -230,7 +230,7 @@ const RouteMapViewScreen = () => {
             </MapView>
             <View style={styles.jobListContainer}>
                 <ScrollView contentContainerStyle={{ flex: 1 }}>
-                    <CustomSubTitleWithImageComponent disabled title={strings.SeetheDistance} image={ImagesPath.route_drak_line_icon} titleStyle={{ fontSize: FontSizes.MEDIUM_16, color: colors.dark_blue2_color }} />
+                    <CustomSubTitleWithImageComponent disabled title={strings.seeTheDistance} image={ImagesPath.route_drak_line_icon} titleStyle={{ fontSize: FontSizes.MEDIUM_16, color: colors.dark_blue2_color }} />
                     <DraggableFlatList
                         data={jobDetail}
                         keyExtractor={(item) => item?.id.toString()}

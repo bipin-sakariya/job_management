@@ -163,7 +163,7 @@ const FormDetailsScreen = () => {
 
 
     const CreateGroupValidationSchema = yup.object().shape({
-        formName: yup.string().required(strings.forms_required),
+        formName: yup.string().required(strings.formsRequired),
 
     });
 
@@ -230,7 +230,7 @@ const FormDetailsScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView,]} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{strings.Form_Name}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.formName}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
@@ -242,7 +242,7 @@ const FormDetailsScreen = () => {
 
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomTextInput
-                    title={strings.Form_Name}
+                    title={strings.formName}
                     container={{ marginVertical: wp(5) }}
                     value={values.formName}
                     editable={isEdit}
@@ -252,14 +252,14 @@ const FormDetailsScreen = () => {
                     <MultipleSelectDropDown
                         isVisible={isEditable}
                         setIsVisible={setIsEditable}
-                        title={strings.AddBill}
+                        title={strings.addBill}
                         data={isselectData}
                         onCount={(count) => { setCountingValue(count) }}
                         setSelectedMembers={(data) => { setSelectedMemberData(data) }}
                         isForm={true}
                         setIsAllSign={setIsAllSign}
                         isALLSign={isALLSign}
-                        countTitle={strings.Forms}
+                        countTitle={strings.forms}
 
                     /> :
                     <View style={[styles.sammedView, globalStyles.rtlDirection, { flexShrink: 1 }]}>
@@ -285,7 +285,7 @@ const FormDetailsScreen = () => {
                     </View>}
                 {isEdit || route.params.isEdit == true ? <CustomBlackButton onPress={() => {
                     handleSubmit()
-                }} title={strings.CreateForm} image={ImagesPath.plus_white_circle_icon} imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} /> : null}
+                }} title={strings.createForm} image={ImagesPath.plus_white_circle_icon} imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} /> : null}
             </Container>
             <CustomDropdown
                 componentRef={menuRef}

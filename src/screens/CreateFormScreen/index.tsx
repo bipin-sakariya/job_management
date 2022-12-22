@@ -71,7 +71,7 @@ const CreateFormScreen = () => {
     const CreateFormValidationSchema = yup.object().shape({
         formName: yup
             .string()
-            .required(strings.Fromname_required),
+            .required(strings.formNameRequired),
     });
 
     const { values, errors, touched, handleSubmit, handleChange, } =
@@ -167,16 +167,16 @@ const CreateFormScreen = () => {
                     headerLeftComponent={
                         <TouchableOpacity style={[globalStyles.rowView]} onPress={() => navigation.goBack()}>
                             <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                            <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle, { width: wp(50), }]}>{strings.CreateForm}</Text>
+                            <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle, { width: wp(50), }]}>{strings.createForm}</Text>
                         </TouchableOpacity>
                     } />
                 {isLoading && <CustomActivityIndicator size={"small"} />}
                 <Container style={{ paddingHorizontal: wp(4) }}>
-                    <CustomSubTitleWithImageComponent disabled viewStyle={{ marginTop: wp(2) }} title={strings.CreateForm} image={ImagesPath.receipt_icon} />
+                    <CustomSubTitleWithImageComponent disabled viewStyle={{ marginTop: wp(2) }} title={strings.createForm} image={ImagesPath.receipt_icon} />
                     <CustomTextInput
-                        title={strings.formname}
+                        title={strings.formName}
                         container={{ marginVertical: wp(5) }}
-                        placeholder={strings.formname}
+                        placeholder={strings.formName}
                         onChangeText={handleChange('formName')}
                         value={values.formName}
                     />
@@ -184,19 +184,19 @@ const CreateFormScreen = () => {
                     <MultipleSelectDropDown
                         isVisible={isVisible}
                         setIsVisible={setIsVisible}
-                        title={strings.AddBill}
+                        title={strings.addBill}
                         data={isAllList}
                         onCount={(count) => { setCountingValue(count) }}
                         setSelectedMembers={(data) => { setSelectedMemberData(data) }}
-                        countTitle={strings.Forms}
+                        countTitle={strings.forms}
                         isForm={true}
                         setIsAllSign={setIsAllSign}
                         isALLSign={isALLSign}
                     />
-                    {/* {isBillError ? <Text style={[globalStyles.rtlStyle, { bottom: wp(0), color: colors.red }]}>{strings.Bill_required}</Text> : null} */}
+                    {/* {isBillError ? <Text style={[globalStyles.rtlStyle, { bottom: wp(0), color: colors.red }]}>{strings.billRequired}</Text> : null} */}
                     <CustomBlackButton onPress={() => {
                         handleSubmit()
-                    }} title={strings.CreateForm} image={ImagesPath.plus_white_circle_icon} imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} />
+                    }} title={strings.createForm} image={ImagesPath.plus_white_circle_icon} imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} />
                 </Container>
             </View>
         </TouchableWithoutFeedback>

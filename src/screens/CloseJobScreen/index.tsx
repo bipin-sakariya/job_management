@@ -410,7 +410,7 @@ const CloseJobScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{strings.CloseJob}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.closeJob}</Text>
                     </TouchableOpacity>
                 }
             />
@@ -418,15 +418,15 @@ const CloseJobScreen = () => {
                 <CustomModal visible={isModelVisible} onRequestClose={() => { setIsModelVisible(false) }} children={
                     <View style={styles.modalView}>
                         <Image source={ImagesPath.check_icon_circle} style={[globalStyles.modalImageStyle]} />
-                        <Text style={styles.modalTxt}>{strings.ClosejobModalText}</Text>
+                        <Text style={styles.modalTxt}>{strings.closeJobModalText}</Text>
                         <View style={[globalStyles.rowView, { justifyContent: "space-around", width: '100%' }]}>
-                            <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { updateCloseJob() }} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.Partial} />
+                            <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { updateCloseJob() }} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.partial} />
                             <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%" }} title={strings.close} />
                         </View>
                     </View>
                 } />
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <CustomSubTitleWithImageComponent title={strings.CloseJobForm} image={ImagesPath.check_circle_black_icon} />
+                    <CustomSubTitleWithImageComponent title={strings.closeJobForm} image={ImagesPath.check_circle_black_icon} />
                     <CustomTextInput
                         title={strings.jobId}
                         container={{ marginBottom: wp(4) }}
@@ -472,11 +472,11 @@ const CloseJobScreen = () => {
                     {imageList.length == 0 && <CustomDashedComponent
                         image={ImagesPath.add_icon}
                         onPress={() => selectOneFile()}
-                        title={strings.Addimagesandattachments}
+                        title={strings.addimagesandattachments}
                         viewStyle={{ marginTop: wp(5), paddingVertical: wp(5) }} />}
                     <View style={[styles.sammedView, { marginTop: wp(5) }]}>
                         <View style={styles.formHeaderView}>
-                            <Text style={[styles.noNameTxt, globalStyles.rtlStyle]}>{strings.Forms}</Text>
+                            <Text style={[styles.noNameTxt, globalStyles.rtlStyle]}>{strings.forms}</Text>
                         </View>
                         {formData?.length != 0 && <FlatList
                             data={TempBillData}
@@ -492,20 +492,20 @@ const CloseJobScreen = () => {
                         {IsSign.length != 0 && <TouchableOpacity onPress={() => { refRBSheet.current?.open() }}
                             style={[globalStyles.rowView, styles.addFormView, { backgroundColor: colors.light_blue_color }]}>
                             <Image source={ImagesPath.add_form_icon} style={[globalStyles.headerIcon, { marginHorizontal: wp(1), tintColor: colors.primary_color }]} />
-                            <Text style={[styles.addFormTxt, { color: colors.primary_color }]}>{strings.AddForm}</Text>
+                            <Text style={[styles.addFormTxt, { color: colors.primary_color }]}>{strings.addForm}</Text>
                         </TouchableOpacity>}
                         <TouchableOpacity
                             onPress={() => navigation.navigate('SelectFormScreen')}
                             style={[globalStyles.rowView, styles.addFormView]}>
                             <Image source={ImagesPath.add_form_icon} style={[globalStyles.headerIcon, { marginHorizontal: wp(1), tintColor: colors.white }]} />
-                            <Text style={[styles.addFormTxt]}>{strings.AddForm}</Text>
+                            <Text style={[styles.addFormTxt]}>{strings.addForm}</Text>
                         </TouchableOpacity>
                     </View>
 
                     <CustomDashedComponent
                         image={ImagesPath.add_icon}
                         onPress={() => { navigation.navigate('BillCreateScreen', { screenName: 'updatedJob' }) }}
-                        title={strings.AddField}
+                        title={strings.addField}
                         viewStyle={{ paddingVertical: wp(5), marginBottom: wp(5) }}
                     />
                     <CustomTextInput
@@ -514,12 +514,12 @@ const CloseJobScreen = () => {
                         value={jobDetails.notes || ''}
                     />
                     <TouchableOpacity onPress={() => { setIsSelected(!isSelected) }} style={[globalStyles.rowView, styles.jobListMainView]}>
-                        <Text style={styles.jobNameTxt}>{strings.FuthurBilling}</Text>
+                        <Text style={styles.jobNameTxt}>{strings.futhurBilling}</Text>
                         <View style={globalStyles.roundView} >
                             {(isSelected || jobDetails.further_inspection) && <Image source={ImagesPath.right_white_icon} style={styles.checkView} />}
                         </View>
                     </TouchableOpacity>
-                    <CustomBlackButton onPress={() => setIsModelVisible(true)} title={strings.ChangeJobStatus} buttonStyle={{ marginVertical: wp(10) }} />
+                    <CustomBlackButton onPress={() => setIsModelVisible(true)} title={strings.changeJobStatus} buttonStyle={{ marginVertical: wp(10) }} />
                 </ScrollView>
                 <BottomSheet
                     ref={refRBSheet}

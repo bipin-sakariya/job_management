@@ -1,6 +1,6 @@
 import { I18nManager, StyleSheet } from 'react-native';
 import { colors } from '../../styles/Colors';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import FontSizes from '../../styles/FontSizes';
 import fonts from '../../styles/Fonts';
 import { RFValue } from 'react-native-responsive-fontsize';
@@ -18,32 +18,39 @@ export const styles = StyleSheet.create({
         width: wp(5),
         resizeMode: 'contain'
     },
-    searchinputtext: {
-        width: wp(80),
-        // zIndex: 99999999,
+    searchInputText: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: RFValue(15),
-        // marginLeft: wp(5),
         color: colors.black,
-        height: wp(15),
-        // backgroundColor: colors.red,
         paddingHorizontal: wp(3),
         textAlign: I18nManager.isRTL ? 'right' : 'left',
         writingDirection: I18nManager.getConstants().isRTL ? "rtl" : "ltr",
+        padding: wp(2),
+        flex: 1,
     },
-    searchviewimage: {
+    searchViewImage: {
         width: wp(5),
         height: wp(5),
-
     },
-    searchinputview: {
+    searchInputView: {
         flexDirection: 'row',
         alignItems: 'center',
         alignSelf: 'center',
         ...globalStyles.rtlDirection,
-        // backgroundColor: colors.red
-        // marginTop: wp(12),
-
-        // color: colors.black
+        backgroundColor: colors.white,
+        borderRadius: wp(3),
+        shadowColor: colors.gray_4,
+        shadowOffset: { height: 0, width: 0 },
+        shadowOpacity: 0.5,
+        elevation: 0,
+        paddingHorizontal: wp(3),
+        width: wp(90),
+        marginBottom: hp(2)
+    },
+    dateTxtStyle: {
+        fontSize: FontSizes.MEDIUM_16,
+        fontFamily: fonts.FONT_POP_REGULAR,
+        paddingHorizontal: wp(2),
+        color: colors.dark_blue2_color,
     },
 })

@@ -27,7 +27,7 @@ interface CustomJobBottomListSheetProps {
 
 const CustomJobBottomListSheet = React.forwardRef((props: CustomJobBottomListSheetProps & RBSheetProps, ref: any) => {
     const navigation = useCustomNavigation('MapScreen');
-    
+
     const renderItem = ({ item }: { item: JobDetailsData }) => {
         return (
             <CustomJobListComponent item={item} />
@@ -58,14 +58,14 @@ const CustomJobBottomListSheet = React.forwardRef((props: CustomJobBottomListShe
                 <View style={styles.sheetHeaderView}>
                     <View style={styles.jobIconView}>
                         <Image source={ImagesPath.suitcase_icon} style={styles.jobIcon} />
-                        <Text style={[styles.jobsText, globalStyles.rtlStyle]}>{strings.Jobs}</Text>
+                        <Text style={[styles.jobsText, globalStyles.rtlStyle]}>{strings.jobs}</Text>
                     </View>
                     <TouchableOpacity onPress={() => {
                         ref.current.close()
                         navigation.navigate("RouteScreen")
                     }} style={styles.routeBut}>
                         <Image source={ImagesPath.route_icon} style={styles.routeIcon} />
-                        <Text style={[styles.routeTxt, globalStyles.rtlStyle]}>{strings.Route}</Text>
+                        <Text style={[styles.routeTxt, globalStyles.rtlStyle]}>{strings.route}</Text>
                     </TouchableOpacity>
                 </View>
                 <FlatList
