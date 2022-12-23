@@ -18,6 +18,7 @@ import DashedLine from 'react-native-dashed-line'
 import { location } from '../../types/commanTypes'
 import { useAppSelector } from '../../hooks/reduxHooks'
 import { LocationData } from '../../redux/slices/MapSlice/MapSlice'
+import { convertDate } from '../../utils/screenUtils'
 
 
 interface JobDetail {
@@ -95,7 +96,7 @@ const RenderDetail = memo(({ item, getIndex, isActive, drag, jobDetail, selected
                             </View>
                             {
                                 jobDetail.length <= 2 &&
-                                <Text numberOfLines={1} style={[styles.commonLightTxt, globalStyles.rtlStyle, { marginHorizontal: wp(3) }]}>13 may 2022</Text>
+                                <Text numberOfLines={1} style={[styles.commonLightTxt, globalStyles.rtlStyle, { marginHorizontal: wp(3) }]}>{convertDate('2022-12-05T12:57:17.611704Z')}</Text>
                             }
                             <View style={[globalStyles.rowView, { justifyContent: 'space-between', paddingHorizontal: wp(3) }]}>
                                 <Text numberOfLines={jobDetail.length <= 2 ? 2 : 1} style={[styles.commonLightTxt, globalStyles.rtlStyle, { width: '60%', color: colors.dark_blue2_color, fontSize: FontSizes.EXTRA_SMALL_12 }]}>{jobDetail.length <= 2 ? "Lorem Ipsum הוא פשוט טקסט דמה של הכתיבה......." : "13 may 2022"}</Text>

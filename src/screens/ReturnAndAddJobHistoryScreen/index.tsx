@@ -13,9 +13,10 @@ import { styles } from './styles'
 import FontSizes from '../../styles/FontSizes'
 import { colors } from '../../styles/Colors'
 import { convertDate } from '../../utils/screenUtils'
-import { JobDetailsData, jobList, recentJobList } from '../../redux/slices/AdminSlice/jobListSlice'
+import { JobDetailsData, jobList, recentJobList, } from '../../redux/slices/AdminSlice/jobListSlice'
 import { useAppDispatch } from '../../hooks/reduxHooks'
 import { resetCreateJobLocationReducer } from '../../redux/slices/MapSlice/MapSlice'
+import { recentReturnJobList, returnJobList } from '../../redux/slices/AdminSlice/returnJobListSlice'
 
 interface jobListParams {
     page?: number,
@@ -35,28 +36,41 @@ const ReturnAndAddJobHistoryScreen = () => {
     const [isJobList, setJobList] = useState<JobDetailsData[]>([])
 
     useEffect(() => {
-        if (isFocus)
-            recentJobListApiCall(page)
-        jobListApiCall(jobPage)
 
-        return () => {
-            setPage(1)
-            setJobPage(1)
-        }
+        if (isFocus)
+            return () => {
+                setPage(1)
+                setJobPage(1)
+            }
     }, [isFocus])
+    useEffect(() => {
+        recentJobListApiCall(page)
+        jobListApiCall(jobPage)
+    }, [])
 
     const recentJobListApiCall = (page: number) => {
         let params: jobListParams = {
             page: page,
             search: ''
         }
-        dispatch(recentJobList(params)).unwrap().then((res) => {
-            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-            setRecentJob(res.results)
-            setPage(page + 1)
-        }).catch((error) => {
-            console.log({ error });
-        })
+        {
+            type == 'returnJob' ?
+                dispatch(recentReturnJobList(params)).unwrap().then((res) => {
+                    console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+                    setRecentJob(res.results)
+                    setPage(page + 1)
+                }).catch((error) => {
+                    console.log({ error });
+                })
+                :
+                dispatch(recentJobList(params)).unwrap().then((res) => {
+                    console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+                    setRecentJob(res.results)
+                    setPage(page + 1)
+                }).catch((error) => {
+                    console.log({ error });
+                })
+        }
     }
 
     const jobListApiCall = (jobpage: number) => {
@@ -64,13 +78,20 @@ const ReturnAndAddJobHistoryScreen = () => {
             page: jobPage,
             search: ''
         }
-        dispatch(jobList(params)).unwrap().then((res) => {
+        type == 'returnJob' ? dispatch(returnJobList(params)).unwrap().then((res) => {
             console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
             setJobList(res.results)
             setJobPage(jobpage + 1)
         }).catch((error) => {
             console.log({ error });
-        })
+        }) :
+            dispatch(jobList(params)).unwrap().then((res) => {
+                console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+                setJobList(res.results)
+                setJobPage(jobpage + 1)
+            }).catch((error) => {
+                console.log({ error });
+            })
     }
 
     const renderItem = ({ item, index }: { item: JobDetailsData, index: number }) => {

@@ -301,7 +301,6 @@ const CloseJobScreen = () => {
 
     let TempBillData: billData[] = []
     formData?.map(obj => {
-
         TempBillData = TempBillData.concat(obj.bill)
         console.log("CONCAT-->", TempBillData)
         return obj.bill

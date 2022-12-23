@@ -123,7 +123,10 @@ const AddNewJobScreen = () => {
                 })
             }
             if (!isEmptyArray(doc_array)) {
-                data.append("attachment", docList)
+                docList.map((_doc) => {
+
+                    data.append("attachment", _doc)
+                })
             }
 
             dispatch(jobCreate(data)).unwrap().then((value) => {
@@ -186,7 +189,7 @@ const AddNewJobScreen = () => {
 
             let ImageTempArray = [...imageList]
             let DocTempArray = [...docList]
-
+            console.log({ title: res })
             if (res[0]?.type?.split("/")[0] == 'application') {
                 DocTempArray.push({ path: res[0].uri, type: res[0]?.type?.split("/")[1], mb: res[0].size, title: res[0].name })
                 setDocError(false)

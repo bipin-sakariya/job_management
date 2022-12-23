@@ -9,6 +9,8 @@ import { useDispatch } from 'react-redux';
 import { resetUserDataReducer } from '../../redux/slices/AuthUserSlice';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { useAppSelector } from '../../hooks/reduxHooks';
+import { DebugInstructions } from 'react-native/Libraries/NewAppScreen';
+import { resetSelectedGroupReducer } from '../../redux/slices/AdminSlice/groupListSlice';
 
 const AdminDrawerBtn = [
     { btnTitle: strings.drawer_User, image: ImagesPath.user_icon, route: 'UserListScreen' },
@@ -79,6 +81,7 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
             </View>
             <TouchableOpacity onPress={() => {
                 dispatch(resetUserDataReducer())
+                dispatch(resetSelectedGroupReducer())
                 navigation.reset({ index: 0, routes: [{ name: "AuthStack" }] })
             }} style={styles.logoutBtnStyle}>
                 <Image source={ImagesPath.logout_icon} style={styles.logoutBtn} />

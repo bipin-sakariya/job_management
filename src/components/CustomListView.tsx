@@ -109,11 +109,13 @@ export default CustomListView;
 
 const styles = StyleSheet.create({
     dropDownShadowStyle: {
-        shadowColor: colors.black_opacity_1,
-        shadowOpacity: 5,
-        shadowRadius: 8,
+        backgroundColor: colors.white_color,
+        shadowColor: colors.black,
+        shadowOpacity: 0.10,
+        shadowRadius: 6,
         shadowOffset: { height: 0, width: 0 },
-        elevation: 5
+        elevation: 5,
+        borderTopWidth: 0,
     },
     listMainView: {
         justifyContent: "space-between",

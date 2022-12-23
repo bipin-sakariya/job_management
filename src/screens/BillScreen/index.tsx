@@ -32,7 +32,7 @@ const BillListScreen = () => {
     const { billListData, isLoading } = useAppSelector(state => state.billList)
 
     useEffect(() => {
-        console.log({ route1: route });
+        // console.log({ route1: route });
 
         if (isFocus && route.params) {
             if (route.params?.billType == 'material') {
@@ -98,7 +98,7 @@ const BillListScreen = () => {
                 }
                 headerRightComponent={
                     <View style={globalStyles.rowView}>
-                        <TouchableOpacity style={{ marginRight: wp(3) }} onPress={() => { navigation.navigate('BillCreateScreen') }}>
+                        <TouchableOpacity style={{ marginRight: wp(3) }} onPress={() => { navigation.navigate('BillCreateScreen', { screenName: 'createBill' }) }}>
                             <Image source={ImagesPath.add_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                         <TouchableOpacity >

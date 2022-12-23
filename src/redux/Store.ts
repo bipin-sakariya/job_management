@@ -11,6 +11,7 @@ import jobListSlice from './slices/AdminSlice/jobListSlice';
 import groupListSlice from './slices/AdminSlice/groupListSlice';
 import formListSlice from './slices/AdminSlice/formListSlice';
 import MapSlice from './slices/MapSlice/MapSlice';
+import returnJobListSlice from './slices/AdminSlice/returnJobListSlice';
 
 const persistConfig = {
     key: "root",
@@ -25,6 +26,7 @@ const reducers = combineReducers({
     groupList: groupListSlice,
     formList: formListSlice,
     mapData: MapSlice,
+    returnJobList: returnJobListSlice
 })
 
 const rootReducer = (state: any, action: any) => {

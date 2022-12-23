@@ -42,7 +42,7 @@ const CustomJobListComponent = (props: CustomJobListComponentProps & TouchableOp
                                 />
                             </TouchableOpacity>
                         )}
-                        <Text style={[styles.titleTxt, globalStyles.rtlStyle]}>
+                        <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle]}>
                             {props.item.address}
                         </Text>
                     </View>
@@ -105,12 +105,14 @@ const styles = StyleSheet.create({
         ...globalStyles.rowView,
         justifyContent: 'space-between',
         paddingLeft: wp(2.5),
+        flex: 1
     },
     titleTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.SEMI_LARGE_20,
         color: colors.dark_blue1_color,
         marginHorizontal: wp(1),
+        flex: 1
     },
     distanceTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
@@ -133,6 +135,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        flex: 1
     },
     infoCircleIcon: {
         height: wp(5),
@@ -141,7 +144,7 @@ const styles = StyleSheet.create({
     },
     descriptionView: {
         flexDirection: 'row',
-        alignItems: 'flex-end',
+        // alignItems: 'flex-end',
         justifyContent: 'space-between',
     },
     jobContainerBoxShadowStyle: {

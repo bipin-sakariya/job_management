@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Container, Header } from "../../components";
 import CustomJobListComponent from "../../components/CustomJobListComponent";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import useCustomNavigation from "../../hooks/useCustomNavigation";
 import { strings } from "../../languages/localizedStrings";
+import { jobList } from "../../redux/slices/AdminSlice/jobListSlice";
 import { colors } from "../../styles/Colors";
 import fonts from "../../styles/Fonts";
 import FontSizes from "../../styles/FontSizes";
@@ -23,8 +26,35 @@ interface JobDataProps {
     status?: string
 }
 
+interface jobListParams {
+    page?: number,
+    search?: string
+}
 const JobDuplicateListScreen = () => {
     const navigation = useCustomNavigation('JobDuplicateListScreen');
+    const { jobListData } = useAppSelector(state => state.jobList)
+    const dispatch = useAppDispatch()
+    const isFocused = useIsFocused()
+
+    const [page, setPage] = useState(1)
+
+    useEffect(() => {
+        jobListApiCall(page)
+    }, [navigation, isFocused])
+
+    const jobListApiCall = (page: number) => {
+        let params: jobListParams = {
+            page: page,
+            search: ''
+        }
+        dispatch(jobList(params)).unwrap().then((res) => {
+            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+            // setJobList(res.results)
+            setPage(page + 1)
+        }).catch((error) => {
+            console.log({ error });
+        })
+    }
 
     const JobData: JobDataProps[] = [
         { id: 1, title: 'Job Title1', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false, status: 'hjb' },

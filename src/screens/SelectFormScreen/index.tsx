@@ -99,6 +99,13 @@ const SelectFormScreen = () => {
         setFormList(finalData);
     }
 
+    // const data = allFormList.map((i) => {
+    //     formData?.map((item) => { 
+
+    //     })
+    //  })
+
+
     const selectForm = () => {
         const selectedData = allFormList.filter((_item) => _item.isChecked)
         dispatch(selectedFormReducers(selectedData))

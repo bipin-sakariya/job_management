@@ -13,6 +13,7 @@ const ReturnJobScreen = () => {
     const navigation = useCustomNavigation('ReturnJobScreen');
     const [isDuplicate, setIsDuplicate] = useState(true)
     const [isModelVisible, setIsModelVisible] = useState(false)
+    const [isText, setIsText] = useState('')
     return (
         <View style={globalStyles.container}>
             <Header
@@ -57,7 +58,8 @@ const ReturnJobScreen = () => {
                             placeholder={strings.writeResponeOfReturnJob}
                             multiline
                             editable={!isDuplicate}
-                            onChangeText={(text) => { }}
+                            value={isText}
+                            onChangeText={(text) => { setIsText(text) }}
                             placeholderTextColor={colors.doc_bg_color_dark_gray}
                             style={[styles.textInputStyle, styles.textInputFontStyle, { textAlign: 'right' }]}
                         />

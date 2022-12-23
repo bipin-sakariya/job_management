@@ -12,7 +12,7 @@ import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { RootState, useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { JobDetailsData, jobStatusWiseList } from '../../redux/slices/AdminSlice/jobListSlice';
 import moment from 'moment';
-import { GroupData, groupList } from '../../redux/slices/AdminSlice/groupListSlice';
+import { GroupData, groupList, selectedGroupReducers } from '../../redux/slices/AdminSlice/groupListSlice';
 import { GroupParams } from '../TransferJobScreen';
 import FontSizes from '../../styles/FontSizes';
 import fonts from '../../styles/Fonts';
@@ -52,19 +52,42 @@ const JobsScreen = () => {
     const [isModelVisible, setIsModelVisible] = useState(false)
     const [sdate, setSdate] = useState('');
     const [edate, setEdate] = useState(' ');
+    const [selectedId, setSelectedId] = useState({})
 
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
     const { jobListData } = useAppSelector(state => state.jobList)
-    const { groupListData } = useAppSelector(state => state.groupList)
+    const { groupListData, selectedGroupData } = useAppSelector(state => state.groupList)
 
     useEffect(() => {
         let defaultSelected = finalGroupData.find((i) => i.selected == true)
         setSelectedItem(defaultSelected)
+        setSelectedId(selectedGroupData)
+        selectedGroup()
     }, [])
 
     useEffect(() => {
-        JobListApiCall(page, text)
+        if (isFocus) { JobListApiCall(page, text) }
+
     }, [isFocus, btn])
+
+    const selectedGroup = () => {
+        if (selectedGroupData) {
+            const data = finalAllGroup.map((i) => {
+
+                if (i.name == selectedGroupData.name) {
+                    return {
+                        ...i,
+                        selected: !i.selected,
+                    };
+                } else {
+                    return i;
+                }
+
+            })
+            setFinalAllGroup(data)
+            console.log({ data })
+        }
+    }
 
     useEffect(() => {
         let params = {
@@ -78,7 +101,9 @@ const JobsScreen = () => {
         }).catch((error) => {
             console.log({ error });
         })
-    }, [isFocus, btn, groupListData.results])
+
+
+    }, [isFocus, btn, groupListData.results,])
 
     const JobListApiCall = (page: number, input?: string, id?: number, to_date?: string, from_date?: string) => {
         let params: jobListParams = {
@@ -112,6 +137,12 @@ const JobsScreen = () => {
 
     }, [groupData])
 
+    // useEffect(() => {
+    //     dispatch(selectedGroupReducers(finalAllGroup))
+
+
+    // }, [finalAllGroup])
+
     useEffect(() => {
         if (finalGroupData.length) {
             let catList: any = [{ name: 'All', selected: true, id: 0 }]
@@ -123,8 +154,10 @@ const JobsScreen = () => {
                     id: listItem.id
                 });
                 setFinalAllGroup(catList);
+
             });
         }
+
     }, [finalGroupData]);
 
     return (
@@ -137,7 +170,7 @@ const JobsScreen = () => {
                 }
                 headerCenterComponent={
                     <TouchableOpacity onPress={() => refRBSheet.current?.open()} activeOpacity={1} style={globalStyles.rowView}>
-                        <Text style={styles.jobTypeTxt}>{selectedItem?.name}</Text>
+                        <Text style={styles.jobTypeTxt}>{selectedGroupData?.name ? selectedGroupData?.name : 'All'}</Text>
                         <Image source={ImagesPath.down_icon} style={styles.downIcon} />
                     </TouchableOpacity>
                 }
@@ -176,8 +209,12 @@ const JobsScreen = () => {
                             autoCapitalize={'none'}
                             autoCorrect={false}
                         />
-                        <TouchableOpacity style={globalStyles.closeIconContainer} onPress={() => { setIsSearch(false) }}>
-                            <Image source={ImagesPath.close_icon} style={globalStyles.closeIcon} />
+                        <TouchableOpacity style={[globalStyles.rowView, {}]} onPress={() => { setIsSearch(false) }}>
+                            <TouchableOpacity onPress={() => { setIsSearch(false), setText('') }} >
+                                <Image source={ImagesPath.close_icon} style={globalStyles.backArrowStyle} />
+                            </TouchableOpacity>
+
+                            <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle]}></Text>
                         </TouchableOpacity>
                     </View>
                 }
@@ -243,9 +280,12 @@ const JobsScreen = () => {
             <CustomBottomSheet
                 ref={refRBSheet}
                 data={finalAllGroup}
+                defaultSelected={selectedGroupData}
                 onSelectedTab={(item) => {
                     JobListApiCall(page, text, item.id)
                     setSelectedItem(item)
+                    dispatch(selectedGroupReducers(item))
+                    // selectedGroup()
                     refRBSheet.current?.close()
                 }}
             />

@@ -12,7 +12,7 @@ import { strings } from '../../languages/localizedStrings';
 import { useFormik } from 'formik';
 import * as yup from "yup";
 import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
-import { useAppDispatch } from '../../hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { billCreate } from '../../redux/slices/AdminSlice/billListSlice';
 import { colors } from '../../styles/Colors';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -24,7 +24,7 @@ interface DropdownProps {
 
 interface ValuesProps {
     name: string;
-    ration_qunt?: string;
+    ration_qunt?: string | number;
 }
 
 const CreateBillSectionScreen = () => {
@@ -38,6 +38,7 @@ const CreateBillSectionScreen = () => {
     const [imageError, setImageError] = useState(false)
     const [count, setCount] = useState(1)
     const dispatch = useAppDispatch()
+    const { formData } = useAppSelector(state => state.jobList)
     // const { error } = useAppSelector(state => state.billList)
     const [error, setError] = useState({
         name: "",
@@ -55,6 +56,7 @@ const CreateBillSectionScreen = () => {
         { label: strings.tons, value: 'Tons' },
         { label: strings.CBM, value: 'CBM' },
     ];
+    console.log({ formData })
 
     const CreateMaterialValidationSchema = yup.object().shape({
         name: yup
@@ -95,40 +97,14 @@ const CreateBillSectionScreen = () => {
             console.log("🚀 ~ file: index.tsx ~ line 73 ~ createbills ~ data", data)
 
             dispatch(billCreate(data)).unwrap().then((res) => {
+                // formData?.push({ res })
                 console.log({ res: res });
-                navigation.navigate('BillListScreen', { billType: type })
             }).catch((e) => {
                 console.log({ error: e });
                 setError(e.data)
             })
         }
     }
-
-    const { values, errors, touched, handleSubmit, handleChange, } =
-        useFormik({
-            initialValues: {
-                name: '',
-                ration_qunt: '',
-            },
-            validationSchema: CreateMaterialValidationSchema,
-            onSubmit: values => {
-                createbills(values)
-            }
-        })
-
-    useEffect(() => {
-        setError({ ...error, name: "" })
-    }, [values.name])
-
-    useEffect(() => {
-        if (error.jumping_ration) {
-            setError({ ...error, jumping_ration: "" })
-        }
-        if (error.quantity) {
-            setError({ ...error, quantity: '' })
-        }
-    }, [values.ration_qunt])
-
     const Increment = () => {
         setCount(count + 1)
     }
@@ -141,9 +117,36 @@ const CreateBillSectionScreen = () => {
             setCount(count - 1)
         }
     }
+    const { values, errors, touched, handleSubmit, handleChange, } =
+        useFormik({
+            initialValues: {
+                name: '',
+                ration_qunt: route.params.screenName == 'updatedJob' ? count : '',
+            },
+            validationSchema: CreateMaterialValidationSchema,
+            onSubmit: values => {
+                createbills(values)
+            }
+        })
+
+    useEffect(() => {
+        setError({ ...error, name: "" })
+        // formData?.push(values.name)
+    }, [values.name])
+
+    useEffect(() => {
+        if (error.jumping_ration) {
+            setError({ ...error, jumping_ration: "" })
+        }
+        if (error.quantity) {
+            setError({ ...error, quantity: '' })
+        }
+    }, [values.ration_qunt, count])
+
+
     return (
         <View style={globalStyles.container}>
-            {console.log({ values })}
+            {/* {console.log({ values })} */}
             <Header
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView, { width: wp(50) }]} onPress={() => navigation.goBack()}>

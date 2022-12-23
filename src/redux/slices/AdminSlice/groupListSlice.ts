@@ -62,9 +62,53 @@ interface InitialState {
     isLoading: boolean
     error: object | string | undefined
     groupListData: GroupDataProps,
-    groupDetails: GroupData
+    groupDetails: GroupData,
+    selectedGroupData: {
+        id: number
+        name: string
+        selected: boolean
+    }
 }
 
+
+export interface selectedGroupData {
+    id: number,
+    manager_details: {
+        user_name: string,
+        email: string
+        id: number
+        phone: string
+        profile_image: string
+        role: number
+    },
+    inspector_details: {
+        user_name: string,
+        email: string
+        id: number
+        phone: string
+        profile_image: string
+        role: number
+    },
+    member_details: MemberDetailsProps[],
+    form_details: [{
+        bill: [],
+        created_at: string,
+        id: number,
+        is_sign: boolean,
+        name: string,
+        updated_at: string
+    }],
+    total_member_in_group: string,
+    assign_jobs: [],
+    created_at: string,
+    updated_at: string,
+    name: string,
+    image: string,
+    manager: number,
+    inspector: number,
+    member: number[],
+    selected?: boolean
+}
 interface paramsTypes {
     id?: number
     data?: FormData,
@@ -124,7 +168,8 @@ const initialState: InitialState = {
         manager: 0,
         inspector: 0,
         member: []
-    }
+    },
+    selectedGroupData: undefined
 }
 
 export interface apiErrorTypes {
@@ -252,7 +297,13 @@ const groupListSlice = createSlice({
                 inspector: 0,
                 member: []
             }
-        }
+        },
+        selectedGroupReducers: (state, action) => {
+            state.selectedGroupData = action.payload
+        },
+        resetSelectedGroupReducer: (state) => {
+            state.selectedGroupData = undefined
+        },
     },
     extraReducers(builder) {
         builder.addCase(groupList.pending, state => {
@@ -328,5 +379,5 @@ const groupListSlice = createSlice({
     }
 })
 
-export const { groupDetails } = groupListSlice.actions
+export const { groupDetails, selectedGroupReducers, resetSelectedGroupReducer } = groupListSlice.actions
 export default groupListSlice.reducer
