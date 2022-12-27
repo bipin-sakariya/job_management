@@ -125,7 +125,7 @@ export const styles = StyleSheet.create({
         paddingVertical: wp(2),
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        color: colors.light_brown
+        color: colors.dark_blue1_color
     },
     textInputContainer: {
         borderRadius: wp(2),

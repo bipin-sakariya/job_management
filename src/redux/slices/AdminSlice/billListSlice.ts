@@ -35,7 +35,8 @@ interface paramsTypes {
     id?: number
     data?: FormDataTypes | FormData,
     page?: number,
-    bill_type?: string
+    bill_type?: string,
+    search?: string
 }
 
 const initialState: initialState = {
@@ -73,7 +74,7 @@ export const billList = createAsyncThunk<billDataProps, paramsTypes, { rejectVal
         try {
             console.log("🚀 ~ file: billListSlice.ts ~ line 60 ~ params", params)
             console.log(ApiConstants.BILL)
-            const response = await axiosClient.get(ApiConstants.BILL + `?page=${params.page}&bill_type=${params.bill_type}`)
+            const response = await axiosClient.get(ApiConstants.BILL + `?page=${params.page}&bill_type=${params.bill_type}&search=${params.search}`)
             console.log("🚀 ~ file: billListSlice.ts ~ line 69 ~ response", response)
             return response.data;
         } catch (e: any) {

@@ -52,7 +52,9 @@ export interface inspectorListProps {
 interface paramsTypes {
     id?: number
     data?: FormDataTypes,
-    role?: string
+    role?: string,
+    page?: number,
+    search?: string
 }
 interface initialState {
     isLoading: boolean
@@ -107,10 +109,10 @@ export const userRoleList = createAsyncThunk<userRoleListProps, string, { reject
         }
     })
 
-export const getListOfUsers = createAsyncThunk<userDataListProps, string, { rejectValue: apiErrorTypes }>
-    (USER + "/getListOfUsers", async (_, { rejectWithValue }) => {
+export const getListOfUsers = createAsyncThunk<userDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
+    (USER + "/getListOfUsers", async (params, { rejectWithValue }) => {
         try {
-            const response = await axiosClient.get(ApiConstants.USER)
+            const response = await axiosClient.get(ApiConstants.USER + `?page=${params.page}&search=${params.search}`)
             return response.data
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {

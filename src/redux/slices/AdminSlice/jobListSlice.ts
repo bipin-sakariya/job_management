@@ -56,7 +56,8 @@ interface InitialState {
     error: object | string | undefined
     jobDetails: JobDetailsData
     jobListData: JobDataListProps,
-    formData: formdata[] | undefined
+    formData: formdata[] | undefined,
+    jobDetailsData: JobDetailsData | undefined
 }
 
 
@@ -113,7 +114,8 @@ const initialState: InitialState = {
         form: undefined,
         bill: undefined
     },
-    formData: undefined
+    formData: undefined,
+    jobDetailsData: undefined
 }
 
 
@@ -291,7 +293,13 @@ const jobListSlice = createSlice({
         },
         selectedFormReducers: (state, action) => {
             state.formData = action.payload
-        }
+        },
+        jobDetailReducer: (state, action) => {
+            state.jobDetailsData = action.payload
+        },
+        resetJobDetailReducer: (state) => {
+            state.jobDetailsData = undefined
+        },
     },
     extraReducers(builder) {
         // Job list
@@ -445,5 +453,5 @@ const jobListSlice = createSlice({
     }
 })
 
-export const { selectedFormReducers, resetSelectedReducer } = jobListSlice.actions
+export const { selectedFormReducers, resetSelectedReducer, jobDetailReducer } = jobListSlice.actions
 export default jobListSlice.reducer

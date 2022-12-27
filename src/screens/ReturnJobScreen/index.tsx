@@ -8,12 +8,47 @@ import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { styles } from './styles';
 import { colors } from '../../styles/Colors';
+import { returnJobCreate } from '../../redux/slices/AdminSlice/returnJobListSlice';
+import { useAppDispatch } from '../../hooks/reduxHooks';
+import { RootRouteProps } from '../../types/RootStackTypes';
+import { useRoute } from '@react-navigation/native';
 
 const ReturnJobScreen = () => {
     const navigation = useCustomNavigation('ReturnJobScreen');
+    const route = useRoute<RootRouteProps<'ReturnJobScreen'>>();
     const [isDuplicate, setIsDuplicate] = useState(true)
     const [isModelVisible, setIsModelVisible] = useState(false)
+    const [isUpdate, setIsUpdate] = useState(false)
     const [isText, setIsText] = useState('')
+    const dispatch = useAppDispatch()
+
+    console.log({ route })
+
+    const updateReturnJob = () => {
+        let params = {
+            status: 'מידע שגוי',
+            comment: isText,
+            job: route.params.jobId,
+            // duplicate: 0
+        }
+        console.log({ params })
+        dispatch(returnJobCreate(params)).unwrap().then((res) => {
+            navigation.goBack()
+        }).catch((e) => {
+            console.log({ error: e });
+
+        })
+    }
+
+    const returnJob = () => {
+        if (isUpdate) {
+            updateReturnJob()
+        }
+        else {
+            navigation.navigate('JobDuplicateListScreen')
+        }
+    }
+
     return (
         <View style={globalStyles.container}>
             <Header
@@ -40,14 +75,14 @@ const ReturnJobScreen = () => {
                         </View>
                     } />
                 <CustomSubTitleWithImageComponent disabled title={strings.responeOfReturnJob} image={ImagesPath.arrow_counter_clockwise_black_icon} />
-                <TouchableOpacity onPress={() => { setIsDuplicate(true) }} style={[globalStyles.rowView, styles.jobListMainView]}>
+                <TouchableOpacity onPress={() => { setIsUpdate(false), setIsDuplicate(true) }} style={[globalStyles.rowView, styles.jobListMainView]}>
                     <Text style={styles.jobNameTxt}>{strings.duplicate}</Text>
                     <View style={globalStyles.roundView} >
                         <View style={[styles.roundFillView, { backgroundColor: isDuplicate ? colors.dark_blue3_color : colors.white_5, }]} />
                     </View>
                 </TouchableOpacity>
                 <View style={[styles.jobListMainView]}>
-                    <TouchableOpacity onPress={() => { setIsDuplicate(false) }} style={[globalStyles.rowView, { justifyContent: 'space-between' }]}>
+                    <TouchableOpacity onPress={() => { setIsDuplicate(false), setIsUpdate(true) }} style={[globalStyles.rowView, { justifyContent: 'space-between' }]}>
                         <Text style={styles.jobNameTxt}>{strings.wrongInformation}</Text>
                         <View style={globalStyles.roundView} >
                             <View style={[styles.roundFillView, { backgroundColor: !isDuplicate ? colors.dark_blue3_color : colors.white_5, }]} />
@@ -65,7 +100,7 @@ const ReturnJobScreen = () => {
                         />
                     </View>
                 </View>
-                <CustomBlackButton onPress={() => { navigation.navigate('JobDuplicateListScreen') }} buttonStyle={{ width: '50%' }} title={strings.return} image={ImagesPath.arrow_counter_clockwise_white_icon} />
+                {<CustomBlackButton onPress={() => returnJob()} buttonStyle={{ width: '50%' }} title={strings.return} image={ImagesPath.arrow_counter_clockwise_white_icon} />}
             </Container>
         </View>
     )

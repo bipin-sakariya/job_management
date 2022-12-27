@@ -48,7 +48,8 @@ const BillListScreen = () => {
         if (isFocus && btn) {
             let params = {
                 page: page,
-                bill_type: btn.open ? 'Material' : 'Sign'
+                bill_type: btn.open ? 'Material' : 'Sign',
+                search: ''
             }
             billListApiCall(params)
         }
@@ -101,7 +102,7 @@ const BillListScreen = () => {
                         <TouchableOpacity style={{ marginRight: wp(3) }} onPress={() => { navigation.navigate('BillCreateScreen', { screenName: 'createBill' }) }}>
                             <Image source={ImagesPath.add_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
-                        <TouchableOpacity >
+                        <TouchableOpacity onPress={() => { navigation.navigate('SearchScreen', { screenName: 'billScreen' }) }}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                     </View>

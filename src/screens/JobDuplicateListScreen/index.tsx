@@ -7,12 +7,14 @@ import CustomJobListComponent from "../../components/CustomJobListComponent";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import useCustomNavigation from "../../hooks/useCustomNavigation";
 import { strings } from "../../languages/localizedStrings";
+import { GroupData } from "../../redux/slices/AdminSlice/groupListSlice";
 import { jobList } from "../../redux/slices/AdminSlice/jobListSlice";
 import { colors } from "../../styles/Colors";
 import fonts from "../../styles/Fonts";
 import FontSizes from "../../styles/FontSizes";
 import { globalStyles } from "../../styles/globalStyles";
 import { ImagesPath } from "../../utils/ImagePaths";
+import { GroupParams } from "../TransferJobScreen";
 import { styles } from "./styles";
 
 interface JobDataProps {
@@ -68,8 +70,8 @@ const JobDuplicateListScreen = () => {
         { id: 9, title: 'Job Title9', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
 
     ]
-    const [jobData, setJobData] = useState(JobData)
     const [isIndex, setIsIndex] = useState(0)
+    const [finalJobList, setFinalJobList] = useState<GroupParams[]>([])
 
     const renderItem = ({ item, index }: any) => {
         { console.log(item.status) }
@@ -89,9 +91,22 @@ const JobDuplicateListScreen = () => {
         )
     }
 
+    useEffect(() => {
+        const findData: GroupParams[] = jobListData.results?.map((i: GroupData) => {
+            return {
+                ...i,
+                user_name: i.name,
+                selected: false,
+            }
+        })
+        setFinalJobList(findData)
+        console.log({ findData })
+
+    }, [jobListData])
+
     const setSelected = (item: JobDataProps, index: number) => {
         let emptyJobList: Array<any> = []
-        jobData.map((data) => {
+        finalJobList?.map((data) => {
             if (data.id == item.id) {
                 emptyJobList.push({
                     ...data,
@@ -107,11 +122,12 @@ const JobDuplicateListScreen = () => {
             }
         })
         // navigation.navigate('DuplicateScreen')
-        setJobData(emptyJobList)
+        setFinalJobList(emptyJobList)
     }
 
     return (
         <View style={globalStyles.container}>
+            {/* {console.log({ finalJobList })} */}
             <Header
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
@@ -132,7 +148,7 @@ const JobDuplicateListScreen = () => {
             />
             <Container>
                 <FlatList
-                    data={jobData}
+                    data={finalJobList}
                     renderItem={renderItem}
                 />
             </Container>

@@ -67,7 +67,8 @@ interface InitialState {
         id: number
         name: string
         selected: boolean
-    }
+    },
+    selectedAllGroupData: undefined
 }
 
 
@@ -169,7 +170,12 @@ const initialState: InitialState = {
         inspector: 0,
         member: []
     },
-    selectedGroupData: undefined
+    selectedGroupData: {
+        id: 0,
+        name: '',
+        selected: false
+    },
+    selectedAllGroupData: undefined
 }
 
 export interface apiErrorTypes {
@@ -302,7 +308,14 @@ const groupListSlice = createSlice({
             state.selectedGroupData = action.payload
         },
         resetSelectedGroupReducer: (state) => {
-            state.selectedGroupData = undefined
+            state.selectedGroupData = {
+                id: 0,
+                name: '',
+                selected: false
+            }
+        },
+        selectedAllGroupReducers: (state, action) => {
+            state.selectedAllGroupData = action.payload
         },
     },
     extraReducers(builder) {
@@ -379,5 +392,5 @@ const groupListSlice = createSlice({
     }
 })
 
-export const { groupDetails, selectedGroupReducers, resetSelectedGroupReducer } = groupListSlice.actions
+export const { groupDetails, selectedGroupReducers, resetSelectedGroupReducer, selectedAllGroupReducers } = groupListSlice.actions
 export default groupListSlice.reducer

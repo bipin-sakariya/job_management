@@ -1,5 +1,5 @@
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomDashedComponent, CustomSubTitleWithImageComponent, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
@@ -19,13 +19,18 @@ const UserListScreen = () => {
     const navigation = useCustomNavigation('UserListScreen');
     const route = useRoute<RootRouteProps<'UserListScreen'>>();
     const dispatch = useAppDispatch();
+    const [page, setpage] = useState(1)
     const { isLoading, userListData } = useAppSelector(state => state.userList);
 
     const isFoucs = useIsFocused();
 
     useEffect(() => {
         if (isFoucs) {
-            dispatch(getListOfUsers("")).unwrap().then((res) => {
+            let params = {
+                page: page
+            }
+            dispatch(getListOfUsers(params)).unwrap().then((res) => {
+                setpage(page + 1)
                 console.log("🚀 ~ file: index.tsx ~ line 41 ~ dispatch ~ res", res)
             }).catch((error) => {
                 console.log("🚀 ~ file: index.tsx ~ line 38 ~ dispatch ~ error", error)
@@ -56,7 +61,7 @@ const UserListScreen = () => {
                             }}>
                             <Image source={ImagesPath.add_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => { navigation.navigate('SearchScreen', { screenName: 'userScreen' }) }}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                     </View>

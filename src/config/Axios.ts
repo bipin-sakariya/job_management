@@ -46,7 +46,7 @@ axiosClient.interceptors.request.use(async (config) => {
 				Authorization: `Bearer ${token}`,
 			};
 		}
-		if ((config.url === ApiConstants.FORMS || config.url === ApiConstants.TRANSFERJOB) && config.method === 'post' || config.method == "put") {
+		if ((config.url === ApiConstants.FORMS || config.url === ApiConstants.TRANSFERJOB || config.url === ApiConstants.RETURNJOB) && config.method === 'post' || config.method == "put") {
 			config.headers = {
 				'Content-Type': 'application/json',
 				Accept: 'application/json',

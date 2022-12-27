@@ -14,6 +14,6 @@ export const ApiConstants = {
 	RECENTJOBLIST: APP_URL + 'job/recent-add-job/',
 	RECENTTRANSFERJOBLIST: APP_URL + 'job/recent-transfer-job/',
 	TRANSFERJOB: APP_URL + 'job/transfer-job/',
-	RETURNJOB: APP_URL + 'job/retrun-job/',
+	RETURNJOB: APP_URL + 'job/return-job/',
 	RECENTRETURNJOB: APP_URL + 'job/recent-return-job/',
 };

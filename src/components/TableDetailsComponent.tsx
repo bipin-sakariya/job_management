@@ -10,19 +10,23 @@ import useCustomNavigation from '../hooks/useCustomNavigation';
 interface TableDetailsComponentProps {
     item: any,
     type?: string,
-    index: number
+    index: number,
+    screenName?: string
 }
 
-const TableDetailsComponent = ({ item, type, index }: TableDetailsComponentProps) => {
+const TableDetailsComponent = ({ item, type, index, screenName }: TableDetailsComponentProps) => {
     const navigation = useCustomNavigation('SignBillDetailScreen')
 
     const handleSubmit = () => {
-        if (item.type == 'Sign') {
-            navigation.navigate('SignBillDetailScreen', { type: 'Sign', item: item })
+        if (screenName) {
+            if (item.type == 'Sign') {
+                navigation.navigate('SignBillDetailScreen', { type: 'Sign', item: item })
+            }
+            else {
+                navigation.navigate('SignBillDetailScreen', { type: 'Material', item: item })
+            }
         }
-        else {
-            navigation.navigate('SignBillDetailScreen', { type: 'Material', item: item })
-        }
+
     }
 
     return (

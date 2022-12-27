@@ -27,7 +27,7 @@ interface imageList {
 interface docList {
     path: string,
     type: string | undefined
-    mb: number | null
+    byte: number | null
     title: string | null
 }
 interface image_arrayList {
@@ -39,7 +39,7 @@ interface doc_arrayList {
     uri: string,
     name: string | null
     type: string | undefined,
-    mb: number | null
+    byte: number | null
 }
 
 const AddNewJobScreen = () => {
@@ -100,7 +100,7 @@ const AddNewJobScreen = () => {
                         uri: item.path,
                         name: item.title,
                         type: item.type,
-                        mb: item.mb
+                        byte: item.byte
                     }
                     doc_array.push(docs)
                 })

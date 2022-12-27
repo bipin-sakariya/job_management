@@ -14,7 +14,7 @@ import { colors } from "../../styles/Colors";
 import { RootRouteProps } from "../../types/RootStackTypes";
 import FileViewer from "react-native-file-viewer";
 import RNFS from "react-native-fs";
-import { jobDetail, JobDetailsData, resetSelectedReducer } from "../../redux/slices/AdminSlice/jobListSlice";
+import { jobDetail, jobDetailReducer, JobDetailsData, resetSelectedReducer } from "../../redux/slices/AdminSlice/jobListSlice";
 import { convertDate } from "../../utils/screenUtils";
 
 const JobDetailsScreen = () => {
@@ -29,14 +29,15 @@ const JobDetailsScreen = () => {
 
 
     let data: JobDetailsData = route.params.params
-    let id: number = route.params.params.id
+    let id: number = route?.params?.params?.id
     let type = route.params.type
 
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (isFocused && route.params.params.id) {
+        if (isFocused && route?.params?.params?.id) {
             dispatch(jobDetail(id)).unwrap().then((res) => {
+                dispatch(jobDetailReducer(res))
                 // setFormDetails(res)
                 console.log({ formDetails: res });
             }).catch((error) => {
@@ -454,7 +455,9 @@ const JobDetailsScreen = () => {
                                 {
                                     userData?.role != strings.groupManager &&
                                     <CustomJobDetailsBottomButton image={ImagesPath.round_arrow_icon} buttonText={strings.returnJob} onPress={() => {
-                                        navigation.navigate("ReturnJobScreen")
+                                        navigation.navigate("ReturnJobScreen", {
+                                            jobId: jobDetails.id, status: jobDetails.status
+                                        })
                                         refRBSheet.current?.close()
                                     }} />
                                 }

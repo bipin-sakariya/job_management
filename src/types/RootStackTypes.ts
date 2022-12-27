@@ -34,7 +34,7 @@ export type RootStackParamList = {
     IndoxScreen: undefined
     JobDuplicateListScreen: undefined
     NotificationScreen: undefined
-    JobDetailsScreen: { params: JobDetailsData, type?: string }
+    JobDetailsScreen: { params?: JobDetailsData, type?: string }
     ReportGeneratorScreen: undefined
     BillListScreen: { billType?: string }
     BillCreateScreen: { screenName?: string }
@@ -48,8 +48,8 @@ export type RootStackParamList = {
     FormDetailsScreen: { id?: number, isEdit?: boolean }
     ChatScreen: undefined
     TransferJobScreen: { jobId: number }
-    ReturnJobScreen: undefined
-    DuplicateScreen?: { params?: any }
+    ReturnJobScreen: { jobId: number, status: string | undefined }
+    DuplicateScreen?: { params?: number }
     CloseJobScreen: { params?: any }
     RouteScreen: undefined
     RouteChooseLocationDetailScreen: undefined

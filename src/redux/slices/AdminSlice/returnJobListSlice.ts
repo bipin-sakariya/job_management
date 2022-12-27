@@ -136,8 +136,8 @@ export const recentReturnJobList = createAsyncThunk<JobDataListProps, paramsType
     })
 export const returnJobCreate = createAsyncThunk<JobDetailsData, paramsTypes, { rejectValue: apiErrorTypes }>(JOB + "/returnJobCreate", async (params, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.RECENTRETURNJOB, { params })
-        const response = await axiosClient.post(ApiConstants.RECENTRETURNJOB, params)
+        console.log(ApiConstants.RETURNJOB, { params })
+        const response = await axiosClient.post(ApiConstants.RETURNJOB, params)
         console.log('data...........=====', { response: response })
         return response.data
     } catch (e: any) {

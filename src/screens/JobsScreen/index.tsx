@@ -12,7 +12,7 @@ import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { RootState, useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { JobDetailsData, jobStatusWiseList } from '../../redux/slices/AdminSlice/jobListSlice';
 import moment from 'moment';
-import { GroupData, groupList, selectedGroupReducers } from '../../redux/slices/AdminSlice/groupListSlice';
+import { GroupData, groupList, selectedAllGroupReducers, selectedGroupReducers } from '../../redux/slices/AdminSlice/groupListSlice';
 import { GroupParams } from '../TransferJobScreen';
 import FontSizes from '../../styles/FontSizes';
 import fonts from '../../styles/Fonts';
@@ -53,10 +53,11 @@ const JobsScreen = () => {
     const [sdate, setSdate] = useState('');
     const [edate, setEdate] = useState(' ');
     const [selectedId, setSelectedId] = useState({})
+    const [finalSelectedList, isFinalSelectedList] = useState(finalAllGroup)
 
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
     const { jobListData } = useAppSelector(state => state.jobList)
-    const { groupListData, selectedGroupData } = useAppSelector(state => state.groupList)
+    const { groupListData, selectedGroupData, selectedAllGroupData } = useAppSelector(state => state.groupList)
 
     useEffect(() => {
         let defaultSelected = finalGroupData.find((i) => i.selected == true)
@@ -66,9 +67,12 @@ const JobsScreen = () => {
     }, [])
 
     useEffect(() => {
-        if (isFocus) { JobListApiCall(page, text) }
+        if (isFocus) {
+            JobListApiCall(page, text)
 
-    }, [isFocus, btn])
+        }
+        // dispatch(selectedAllGroupReducers(finalSelectedList))
+    }, [isFocus, btn, text])
 
     const selectedGroup = () => {
         if (selectedGroupData) {
@@ -103,7 +107,7 @@ const JobsScreen = () => {
         })
 
 
-    }, [isFocus, btn, groupListData.results,])
+    }, [isFocus, btn, groupListData.results, finalAllGroup])
 
     const JobListApiCall = (page: number, input?: string, id?: number, to_date?: string, from_date?: string) => {
         let params: jobListParams = {
@@ -138,15 +142,11 @@ const JobsScreen = () => {
     }, [groupData])
 
     // useEffect(() => {
-    //     dispatch(selectedGroupReducers(finalAllGroup))
-
-
     // }, [finalAllGroup])
 
     useEffect(() => {
         if (finalGroupData.length) {
             let catList: any = [{ name: 'All', selected: true, id: 0 }]
-
             finalGroupData.map((listItem: GroupParams) => {
                 catList.push({
                     name: listItem.name,
@@ -154,14 +154,34 @@ const JobsScreen = () => {
                     id: listItem.id
                 });
                 setFinalAllGroup(catList);
-
             });
         }
 
-    }, [finalGroupData]);
+    }, [finalGroupData, groupListData.results]);
 
+
+    // useEffect(() => {
+    //     const data = finalAllGroup.map((item) => {
+    //         if (item.name == selectedGroupData.name) {
+    //             return {
+    //                 ...item,
+    //                 selected: !item.selected,
+    //             };
+    //         } else if (item.name == 'All') {
+    //             return {
+    //                 ...item,
+    //                 selected: false,
+    //             };
+    //         } else {
+    //             return item;
+    //         }
+    //     })
+    //     isFinalSelectedList(data)
+    //     console.log({ data })
+    // }, [])
     return (
         <View style={globalStyles.container}>
+            {/* {console.log({ finalGroupData })} */}
             <Header
                 headerLeftComponent={
                     <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
@@ -213,7 +233,6 @@ const JobsScreen = () => {
                             <TouchableOpacity onPress={() => { setIsSearch(false), setText('') }} >
                                 <Image source={ImagesPath.close_icon} style={globalStyles.backArrowStyle} />
                             </TouchableOpacity>
-
                             <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle]}></Text>
                         </TouchableOpacity>
                     </View>
@@ -285,6 +304,7 @@ const JobsScreen = () => {
                     JobListApiCall(page, text, item.id)
                     setSelectedItem(item)
                     dispatch(selectedGroupReducers(item))
+
                     // selectedGroup()
                     refRBSheet.current?.close()
                 }}

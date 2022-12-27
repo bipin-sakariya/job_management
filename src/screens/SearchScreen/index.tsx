@@ -1,7 +1,7 @@
 import { View, Text, Image, TouchableOpacity, TextInput, FlatList } from 'react-native'
 import React, { useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomJobListComponent, CustomListView, GroupListComponent, Header } from '../../components'
+import { CommonEmptyListComponent, Container, CustomJobListComponent, CustomListView, GroupListComponent, Header } from '../../components'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
@@ -13,6 +13,10 @@ import { RootRouteProps } from '../../types/RootStackTypes'
 import { useRoute } from '@react-navigation/native'
 import { groupList } from '../../redux/slices/AdminSlice/groupListSlice'
 import { JobDetailsData, jobList, transferJobList } from '../../redux/slices/AdminSlice/jobListSlice'
+import { getListOfUsers } from '../../redux/slices/AdminSlice/userListSlice'
+import UserListComponent from '../../components/UserListComponent';
+import { billList } from '../../redux/slices/AdminSlice/billListSlice'
+import { colors } from '../../styles/Colors'
 
 const SearchScreen = () => {
 
@@ -26,11 +30,19 @@ const SearchScreen = () => {
     const { formListData, isLoading } = useAppSelector(state => state.formList)
     const { groupListData } = useAppSelector(state => state.groupList)
     const { jobListData } = useAppSelector(state => state.jobList)
+    const { userListData } = useAppSelector(state => state.userList);
+    const { billListData } = useAppSelector(state => state.billList)
 
     const searchName = (input: string) => {
         let param = {
             page: page,
             search: input
+        }
+
+        let billParams = {
+            page: page,
+            search: input,
+            bill_type: '',
         }
 
         if (route.params.screenName == 'formScreen') {
@@ -69,6 +81,28 @@ const SearchScreen = () => {
                 console.log({ res })
             })
         }
+        if (route.params.screenName == 'userScreen') {
+            dispatch(getListOfUsers(param)).unwrap().then((res) => {
+                if (res.next && !!input) {
+                    setPage(page + 1)
+                }
+                console.log({ res })
+                console.log("🚀 ~ file: index.tsx ~ line 41 ~ dispatch ~ res", res)
+            }).catch((error) => {
+                console.log("🚀 ~ file: index.tsx ~ line 38 ~ dispatch ~ error", error)
+            })
+        }
+        if (route.params.screenName == 'billScreen') {
+            dispatch(billList(billParams)).unwrap().then((res) => {
+                if (res.next && !!input) {
+                    setPage(page + 1)
+                }
+                console.log({ res })
+                console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+            }).catch((error) => {
+                console.log({ error });
+            })
+        }
     }
 
     const renderItem = ({ item, index }: any) => {
@@ -101,6 +135,7 @@ const SearchScreen = () => {
                         <TextInput
                             style={[styles.searchinputtext]}
                             placeholder={strings.searchHere}
+                            placeholderTextColor={colors.gray_1}
                             onChangeText={(text) => {
                                 setText(text)
                                 searchName(text)
@@ -170,6 +205,36 @@ const SearchScreen = () => {
                     showsVerticalScrollIndicator={false}
                     style={{ marginTop: wp(2), }}
                     ItemSeparatorComponent={() => <View style={{ height: wp(3) }} />}
+                />}
+                {route.params.screenName == 'userScreen' && <FlatList
+                    data={userListData}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <UserListComponent item={item} />
+                        )
+                    }}
+                    ItemSeparatorComponent={() => <View style={styles.separator} />}
+                    showsVerticalScrollIndicator={false}
+                />}
+                {route.params.screenName == 'billScreen' && <FlatList
+                    data={billListData?.results}
+                    renderItem={renderItem}
+                    contentContainerStyle={{ paddingBottom: wp(10) }}
+                    showsVerticalScrollIndicator={false}
+                    ListHeaderComponent={() => {
+                        return (
+                            <View style={[globalStyles.rowView, { marginBottom: wp(4) }]}>
+                                {/* <Image source={ImagesPath.squre_note_icon} style={styles.noteIconStyle} />
+                                <Text style={[styles.billListTxt, globalStyles.rtlStyle]}>{strings.BillList}</Text> */}
+                            </View>
+                        )
+                    }}
+                    ListEmptyComponent={() => <CommonEmptyListComponent Txt={strings.billdatanotfound} />}
+                    ItemSeparatorComponent={() => {
+                        return (
+                            <View style={{ height: wp(3) }} />
+                        )
+                    }}
                 />}
             </Container>
         </View>
