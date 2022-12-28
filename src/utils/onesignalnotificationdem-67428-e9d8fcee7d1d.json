@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "onesignalnotificationdem-67428",
+  "private_key_id": "e9d8fcee7d1d7f2bfeba93a7d2bd90cab76eb13f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCtbnMhKmXyzPDw\nvmomeuohq7Y3h/JMOzrlzfv0YNHczDjNMKfGRcWTVqrJm9O7f7jH2XMpW2jRENvf\nShjIU4tseLPp0pxd5gcycts6I8N07KNQmGoK5g9K1bwKgdZVhNNWCnCVvhahyRdl\nHCH2hv/YjDhEfKoNpS3/vI5FjvqiDMP5meI+4TrOkrnkTRquvAsXaT1fuWV+fRLI\nXxvo2oMwpP9vun132CnUksG9RkKnDl7Q/ykGb182seoZHz1uxrmSVvwhlWmizlka\nJEUfRmWRXpVkrWyzUV8Ynt19lA0TvPwlHreor3ZMwwOsedKz1kN8nwbnMNA083d8\naL3IOlwXAgMBAAECggEAEC5rSio33jIw6MVbXMEVxz52Kd2NRdTg50ATb0xOna3l\nlCojUo8qoqybaA7EmoyNeQKuNABLWfZGDXdPCKHYMwQFWp5D6J7lsldKYl+j2kJE\nmpMd5xZqptjPn/YClsgQenP5kn8XLXvNqv63odYcA4r8VPzXVklAbslGR5x81fxN\n8Q2lvQZupO45LDypDZ5ZvlfLBbXQROk3H/6XcseajKExTx7QNc3oneS9d0mYmid9\ngFzEyzrRI8HC9Y23SUmMgz7CI8deNXW7bQwoWYcodtmdTcCAzT6gs8YPiZvcCnON\n9HxJTncNWOvSW3UT5OkceiI1TNlZdGwwgp4TcusywQKBgQDv1hXGpMZtqKSO6oYn\ntxcVUjXI8FleJCyVk6lh0jQNr+/cLD8ps843D86QsfQTbi39CblKfiXO1JsuFWU0\nMam4RpWVckS2YXQjWIgXqrKdVY3y6kqgI+kFutf+6XHHRpoXgQ60I6Dx4Q8XS6AY\n8RDgOwZnFX961BnOuehKbigK5QKBgQC5Hq0+UrN9EfctxoL1qb3iJdILQlj31PL8\nUWLpCILYPgLRFJYJxpLj31Yxbw76tD1Ixrs29GALeYY1gxWa3Umkp2PXVtR3/lAD\nZmoL8ohPoTZkUZ2yMd+rxVKe9JBXLUdiPST70BEJgGtw0YXodNtvZreSy9UE3VIH\nQrp5j/DPSwKBgDtNl3LX2YzR72a7TNLTLe0Ct/PoomBp13Bg47ghbueXglrRwgiA\nwlPRH8Wdivmm+84esmdeC+E5puldNvoR8aJ0KZabe6wRKtN2l6gqeCH5PrE7B5rT\nZlIZYkFQ3eZlacK4EbevO6Ozf7TF6V9hdEfNsIaaxTvM6Fi6lVqaJGKVAoGAfLbm\nEC63LXOFCxnJ8KdCfbDtKRixx4V3jfVmpYhOXlCopSMxUbSuEUbNUtB3Tv9OqlD4\nn7VTX2enuzVswMCEdKEw6kpdKdnzHddJanMi0kLR2hQCIaLoBVkSqHQrKhAfH1gC\nKoOqdrRFreP6SvkvPIX+9q7L/FL+iFW0O2F14rECgYAgDAafEEgjpU+FOz91aFfw\nI2ZDRrMiGP3bitA75t4sT/Ki2UlpKqqYzVbhOA9GIjQxSUen4oH/I/WHVnLrYpwY\n9HVfpqBY30M9NDCw2VwB6rYSBcZz6eY0zwOY49cHf4KkaOn/D6BWf7H6IFLYo2aX\nXSwQa/FBUNlJdR1FTERyDQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "job-management-langauges@onesignalnotificationdem-67428.iam.gserviceaccount.com",
+  "client_id": "115763347691641007623",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/job-management-langauges%40onesignalnotificationdem-67428.iam.gserviceaccount.com"
+}
