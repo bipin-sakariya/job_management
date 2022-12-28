@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
         paddingVertical: wp(2),
-        paddingHorizontal: wp(2.5)
+        paddingHorizontal: wp(2.5),
+        color: colors.dark_blue2_color
     },
     textStyle: {
         fontFamily: fonts.FONT_POP_MEDIUM,

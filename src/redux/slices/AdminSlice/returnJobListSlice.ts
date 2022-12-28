@@ -3,18 +3,65 @@ import { Alert } from "react-native"
 import { ApiConstants } from "../../../config/ApiConstants"
 import { axiosClient } from "../../../config/Axios"
 import { FormDataTypes } from "./formListSlice"
-
-export interface JobDetailsData {
+interface Added_byData {
     id: number | null,
-    duplicates: string,
+    profile_image?: string,
+    user_name?: string,
+    email: string,
+    phone?: string,
+    date_joined: string,
+    role: {
+        id: number | null,
+        title: string
+    },
+    is_active: boolean
+}
+
+interface Return_Job {
+    job: number,
+    comment: string,
+    status: string,
+    duplicate: number,
+    is_duplicate: boolean,
+    duplicate_job: {
+        id: number,
+        address: string,
+        created_at: string,
+        address_information: string,
+        description: string,
+        status: string,
+        images: undefined,
+        attachments: undefined
+    }
+}
+export interface JobDetailsData {
+    id: number,
+    added_by: Added_byData,
+    closed_by?: null,
+    images: undefined,
+    attachments: undefined,
+    forms?: undefined,
+    bills?: undefined,
+    group_forms?: undefined,
     created_at: string,
     updated_at: string,
-    status: string,
-    comment: [],
-    is_duplicate: boolean,
-    duplicate: [],
-    job: [],
-    return_to: number | null
+    address: string,
+    address_information: string,
+    description: string,
+    latitude?: string,
+    longitude?: string,
+    priority?: boolean,
+    further_inspection?: boolean,
+    notes?: null,
+    status?: string,
+    comment?: null,
+    form?: undefined,
+    bill?: undefined,
+    return_job?: Return_Job[] | undefined,
+    transfer_to?: {
+        id: number,
+        name: string
+    }
     // role: { id: number, title: string }
 }
 
@@ -44,17 +91,45 @@ const initialState: InitialState = {
         results: []
     },
     retunJobDetails: {
-        id: null,
-        duplicates: '',
+        id: 0,
+        added_by: {
+            id: null,
+            profile_image: '',
+            user_name: '',
+            email: '',
+            phone: '',
+            date_joined: '',
+            role: {
+                id: null,
+                title: ''
+            },
+            is_active: false
+        },
+        closed_by: null,
+        images: undefined,
+        attachments: undefined,
+        forms: undefined,
+        bills: undefined,
+        group_forms: undefined,
         created_at: '',
         updated_at: '',
+        address: '',
+        address_information: '',
+        description: '',
+        latitude: '',
+        longitude: '',
+        priority: false,
+        further_inspection: false,
+        notes: null,
         status: '',
-        comment: [],
-        is_duplicate: false,
-        duplicate: [],
-        job: [],
-        return_to: null
-
+        comment: null,
+        form: undefined,
+        bill: undefined,
+        return_job: [],
+        transfer_to: {
+            id: 0,
+            name: ''
+        }
     },
 }
 
@@ -68,6 +143,7 @@ interface paramsTypes {
     comment?: string
     job?: number
     duplicate?: number
+    Data?: FormData
 }
 
 export interface apiErrorTypes {
@@ -147,6 +223,19 @@ export const returnJobCreate = createAsyncThunk<JobDetailsData, paramsTypes, { r
         return rejectWithValue(e?.response)
     }
 })
+export const returnJobUpdate = createAsyncThunk<string[], paramsTypes, { rejectValue: apiErrorTypes }>(JOB + "/ returnJobUpdate", async (params, { rejectWithValue }) => {
+    try {
+        console.log(ApiConstants.RETURNJOB)
+        const response = await axiosClient.patch(ApiConstants.RETURNJOB + params.id + '/', params.Data)
+        console.log('data...........=====', { response: response })
+        return response.data
+    } catch (e: any) {
+        if (e.code === "ERR_NETWORK") {
+            Alert.alert(e.message)
+        }
+        return rejectWithValue(e?.response)
+    }
+})
 
 const returnJobListSlice = createSlice({
     name: JOB,
@@ -199,6 +288,32 @@ const returnJobListSlice = createSlice({
             state.error = ''
         });
         builder.addCase(returnJobDetail.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = ''
+        });
+        builder.addCase(recentReturnJobList.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(recentReturnJobList.fulfilled, (state, action) => {
+            state.isLoading = false
+            // state.returnJobListData = { ...state.returnJobListData, results: state.returnJobListData.results.filter(i => i.id !== action.meta.arg) }
+            state.error = ''
+        });
+        builder.addCase(recentReturnJobList.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = ''
+        });
+        builder.addCase(returnJobUpdate.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(returnJobUpdate.fulfilled, (state, action) => {
+            state.isLoading = false
+            // state.returnJobListData = { ...state.returnJobListData, results: state.returnJobListData.results.filter(i => i.id !== action.meta.arg) }
+            state.error = ''
+        });
+        builder.addCase(returnJobUpdate.rejected, (state, action) => {
             state.isLoading = false
             state.error = ''
         });

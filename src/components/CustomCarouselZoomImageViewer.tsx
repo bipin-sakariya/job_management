@@ -8,7 +8,7 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 
 interface ItemProps {
     id: number
-    imgUrl: string
+    image: string
     mediaType: string
 }
 
@@ -23,24 +23,29 @@ const CustomCarouselZoomImageViewer = (props: CustomCarouselZoomImageViewerProps
     const [activeSlide, setActiveSlide] = useState<number>(0)
 
     const renderItem = ({ item, index }: { item: ItemProps, index: number }) => {
+        const type = item.image.split(/[#?]/)[0]?.split(".").pop()?.trim()
+        console.log({ datatype: type, image: item.image })
         return (
             <>
                 {
-                    item.mediaType == "image"
+                    (type == "jpeg" || type == "png" || type == "jpg")
                         ?
                         <ImageViewer
-                            imageUrls={[{ url: item.imgUrl, }]}
+                            imageUrls={[{ url: 'http://142.93.222.204:8001/media/jobimage/23/4.png' }]}
                             renderIndicator={() => <></>}
                             backgroundColor={colors.transparent}
                         />
                         :
                         <View style={{ alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                             <Video
-                                source={{ uri: item.imgUrl }}
+                                source={{ uri: item.image }}
                                 paused={!(index == activeSlide)}
                                 resizeMode={'cover'}
                                 repeat={true}
                                 style={[styles.backgroundVideo, props.videoStyle]}
+
+                                onError={e => { console.log({ e }) }}
+
                             />
                         </View>
                 }

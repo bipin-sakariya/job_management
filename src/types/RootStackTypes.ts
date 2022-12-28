@@ -54,7 +54,7 @@ export type RootStackParamList = {
     RouteScreen: undefined
     RouteChooseLocationDetailScreen: undefined
     RouteMapViewScreen: undefined
-    CreateNewJobScreen: { type?: string }
+    CreateNewJobScreen: { type?: string, jobId?: number }
     JobsScreen: undefined
     ReturnAndAddJobHistoryScreen: { type?: string }
     CustomJobListComponent: { type?: string },

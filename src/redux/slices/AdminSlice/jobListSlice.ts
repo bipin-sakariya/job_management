@@ -18,11 +18,29 @@ interface Added_byData {
     },
     is_active: boolean
 }
+
+interface Return_Job {
+    job: number,
+    comment: string,
+    status: string,
+    duplicate: number,
+    is_duplicate: boolean,
+    duplicate_job: {
+        id: number,
+        address: string,
+        created_at: string,
+        address_information: string,
+        description: string,
+        status: string,
+        images: undefined,
+        attachments: undefined
+    }
+}
 export interface JobDetailsData {
     id: number,
     added_by: Added_byData,
     closed_by?: null,
-    images: undefined,
+    images: { image: undefined }
     attachments: undefined,
     forms?: undefined,
     bills?: undefined,
@@ -41,6 +59,11 @@ export interface JobDetailsData {
     comment?: null,
     form?: undefined,
     bill?: undefined,
+    return_job?: Return_Job,
+    transfer_to?: {
+        id: number,
+        name: string
+    }
     // role: { id: number, title: string }
 }
 
@@ -94,7 +117,7 @@ const initialState: InitialState = {
             is_active: false
         },
         closed_by: null,
-        images: undefined,
+        images: { image: undefined },
         attachments: undefined,
         forms: undefined,
         bills: undefined,
@@ -112,7 +135,12 @@ const initialState: InitialState = {
         status: '',
         comment: null,
         form: undefined,
-        bill: undefined
+        bill: undefined,
+        return_job: undefined,
+        transfer_to: {
+            id: 0,
+            name: ''
+        }
     },
     formData: undefined,
     jobDetailsData: undefined

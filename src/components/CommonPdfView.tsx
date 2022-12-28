@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import { StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { colors } from '../styles/Colors';
 import FontSizes from '../styles/FontSizes';
 import fonts from '../styles/Fonts';
+import RNFetchBlob from 'rn-fetch-blob';
 
 interface CommonPdfViewProps {
     item: itemDetails
@@ -18,21 +19,70 @@ interface CommonPdfViewProps {
 }
 
 interface itemDetails {
-    path: string | undefined,
-    type: string | undefined
-    mb: number | null
-    title: string | null
+    attachment: string | undefined,
+    // type: string | undefined
+    // mb: number | null
+    // title: string | null
 }
 
 const CommonPdfView = (props: CommonPdfViewProps) => {
+    const title = props.item?.attachment?.split('/').pop()
+    const type = title && title.split('.')[1]
+    const [size, setSize] = useState<SetStateAction<number | null>>(null)
+
+    useEffect(() => { if (props?.item?.attachment) { actualDownload(props?.item?.attachment) } }, [])
+
+    const actualDownload = (url: string) => {
+        const { dirs } = RNFetchBlob.fs;
+        RNFetchBlob.config({
+            fileCache: true,
+            addAndroidDownloads: {
+                useDownloadManager: true,
+                notification: true,
+                mediaScannable: true,
+                title: `test.pdf`,
+                path: `${dirs.DownloadDir}/test.pdf`,
+            },
+        })
+            .fetch('GET', url, {})
+            .then((res) => {
+                console.log('The file saved to ', res.path());
+                getSizefromPath(res.path())
+
+            })
+            .catch((e) => {
+                console.log(e)
+            });
+    }
+
+    const getSizefromPath = (url: string) => {
+        RNFetchBlob.fs.stat(url)
+            .then((stats) => {
+                console.log(stats)
+                setSize(stats.size)
+                console.log(formatBytes(stats.size))
+            })
+            .catch((err) => { console.log(err) })
+    }
+
+
+    const formatBytes = (bytes: number, decimals = 2) => {
+        if (!+bytes) return '0 Bytes'
+        const k = 1024
+        const dm = decimals < 0 ? 0 : decimals
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+        const i = Math.floor(Math.log(bytes) / Math.log(k))
+        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
+    }
+
     return (
         <TouchableOpacity onPress={props.onPress} style={[globalStyles.rowView, styles.mainDocView, props.mainView]}>
             <View style={[globalStyles.centerView, styles.docPdfViewStyle, props.imageViewStyle]}>
-                <Text style={[styles.docTypeTxt, props.docTxtStyle, {}]}>{props.item.type}</Text>
+                <Text style={[styles.docTypeTxt, props.docTxtStyle, {}]}>{type && type?.charAt(0).toUpperCase() + type?.slice(1)}</Text>
             </View>
             <View style={[props.detailsViewStyle, { marginHorizontal: wp(1), width: wp("27%") }]}>
-                <Text numberOfLines={1} style={[styles.docFileNameTxt, globalStyles.rtlStyle, props.titleTxtstyle,]}>{props.item.title}</Text>
-                <Text numberOfLines={1} style={[styles.docFileSizeTxt, globalStyles.rtlStyle, props.mbTxtstyle]}>{props.item.mb}</Text>
+                <Text numberOfLines={1} style={[styles.docFileNameTxt, globalStyles.rtlStyle, props.titleTxtstyle,]}>{title}</Text>
+                <Text numberOfLines={1} style={[styles.docFileSizeTxt, globalStyles.rtlStyle, props.mbTxtstyle]}>{formatBytes(size, 0)}</Text>
             </View>
         </TouchableOpacity>
     )

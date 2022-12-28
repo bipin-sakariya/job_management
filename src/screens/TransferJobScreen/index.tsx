@@ -91,7 +91,7 @@ const TransferJobScreen = () => {
         return () => {
             setPage(1)
         }
-    }, [isFocus])
+    }, [isFocus, text])
     const groupListApiCall = (page: number, input?: string) => {
         let params: groupListParams = {
             page: page,
@@ -180,7 +180,7 @@ const TransferJobScreen = () => {
                             autoCapitalize={'none'}
                             autoCorrect={false}
                         />
-                        <TouchableOpacity style={[globalStyles.rowView, {}]} onPress={() => { setIsSearch(false) }}>
+                        <TouchableOpacity style={[globalStyles.rowView, {}]} onPress={() => { setIsSearch(false), setText('') }}>
                             <Image source={ImagesPath.close_icon} style={globalStyles.backArrowStyle} />
                             <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle]}></Text>
                         </TouchableOpacity>

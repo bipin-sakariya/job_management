@@ -30,7 +30,7 @@ interface SignDataProps {
 }
 interface imageList {
     id: number
-    imgUrl: string
+    image: string
     mediaType: string
 }
 interface docList {
@@ -330,7 +330,7 @@ const CloseJobScreen = () => {
         if (updatedImage) {
             updatedImage.map((item, index) => {
                 let images = {
-                    uri: item.imgUrl,
+                    uri: item.image,
                     name: `photo${index}${item.mediaType == "image" ? '.jpg' : '.mp4'}`,
                     type: item.mediaType == "image" ? "image/jpeg" : 'video/mp4'
                 }
@@ -381,8 +381,8 @@ const CloseJobScreen = () => {
                 setDocError(false)
             }
             else {
-                ImageTempArray.push({ imgUrl: res[0].uri, mediaType: res[0]?.type?.split("/")[0] == 'image' ? 'image' : 'video', id: Math.random() })
-                UpdatedImageArray.push({ imgUrl: res[0].uri, mediaType: res[0]?.type?.split("/")[0] == 'image' ? 'image' : 'video', id: Math.random() })
+                ImageTempArray.push({ image: res[0].uri, mediaType: res[0]?.type?.split("/")[0] == 'image' ? 'image' : 'video', id: Math.random() })
+                UpdatedImageArray.push({ image: res[0].uri, mediaType: res[0]?.type?.split("/")[0] == 'image' ? 'image' : 'video', id: Math.random() })
                 setImageError(false)
             }
             setUpdatedImage(UpdatedImageArray)

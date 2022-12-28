@@ -15,6 +15,7 @@ import { ImagesPath } from '../../utils/ImagePaths';
 import { styles } from './styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
+import { colors } from '../../styles/Colors';
 
 const UserValidationSchema = yup.object().shape({
     userName: yup.string().required(strings.usernameRequired),

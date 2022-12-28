@@ -16,6 +16,8 @@ import FileViewer from "react-native-file-viewer";
 import RNFS from "react-native-fs";
 import { jobDetail, jobDetailReducer, JobDetailsData, resetSelectedReducer } from "../../redux/slices/AdminSlice/jobListSlice";
 import { convertDate } from "../../utils/screenUtils";
+import { groupDetails } from "../../redux/slices/AdminSlice/groupListSlice";
+import Video from "react-native-video";
 
 const JobDetailsScreen = () => {
 
@@ -32,6 +34,8 @@ const JobDetailsScreen = () => {
     let id: number = route?.params?.params?.id
     let type = route.params.type
 
+    console.log({ type })
+
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -47,29 +51,33 @@ const JobDetailsScreen = () => {
         dispatch(resetSelectedReducer())
     }, [isFocused])
 
-    const result = [
-        {
-            id: 1,
-            mediaType: "image",
-            imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
-        },
-        {
-            id: 2,
-            mediaType: "video",
-            imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-        },
-        {
-            id: 3,
-            mediaType: "image",
-            imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
-        },
-        {
-            id: 4,
-            mediaType: "video",
-            imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-        }
+    const updateReturnJob = () => {
 
-    ]
+    }
+
+    // const result = [
+    //     {
+    //         id: 1,
+    //         mediaType: "image",
+    //         imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
+    //     },
+    //     {
+    //         id: 2,
+    //         mediaType: "video",
+    //         imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
+    //     },
+    //     {
+    //         id: 3,
+    //         mediaType: "image",
+    //         imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
+    //     },
+    //     {
+    //         id: 4,
+    //         mediaType: "video",
+    //         imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
+    //     }
+
+    // ]
     const FormData = [
         {
             srno: "01",
@@ -202,10 +210,10 @@ const JobDetailsScreen = () => {
         },
 
     ]
-    const pdfData = [
-        { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb", url: "https://www.math.hawaii.edu/~pavel/gcd.pdf" },
-        { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb", url: "https://www.math.hawaii.edu/~pavel/gcd.pdf" },
-    ]
+    // const pdfData = [
+    //     { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb", url: "https://www.math.hawaii.edu/~pavel/gcd.pdf" },
+    //     { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb", url: "https://www.math.hawaii.edu/~pavel/gcd.pdf" },
+    // ]
 
     const renderItem = ({ item, index }: any) => {
         return (
@@ -230,7 +238,7 @@ const JobDetailsScreen = () => {
                 headerRightComponent={
                     <>
                         {
-                            userData?.role != strings.inspector && (data.status == 'Open' || data.status == strings.jobOpen || data.status == strings.jobTransfer) ?
+                            userData?.role != strings.inspector && (jobDetails.status == 'Open' || data.status == strings.jobOpen || data.status == strings.jobTransfer) ?
                                 <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
                                     <Image source={ImagesPath.menu_dots_icon} style={globalStyles.headerIcon} />
                                 </TouchableOpacity>
@@ -247,7 +255,7 @@ const JobDetailsScreen = () => {
             <Container>
                 <ScrollView contentContainerStyle={[{ paddingHorizontal: wp(4) }]} showsVerticalScrollIndicator={false}>
                     {
-                        data.status == strings.jobReturn ?
+                        jobDetails.status == strings.jobReturn ?
                             <View style={styles.warningView}>
                                 <View style={globalStyles.rowView}>
                                     <Image source={ImagesPath.warning_icon} style={styles.imageStyle} />
@@ -259,10 +267,10 @@ const JobDetailsScreen = () => {
                     <View style={[globalStyles.rowView, { justifyContent: "space-between", }]}>
                         <View style={[globalStyles.rowView, { justifyContent: "space-around", alignItems: "center" }]}>
                             <Image source={ImagesPath.infocircle_icon} style={styles.infoCircle} />
-                            <Text numberOfLines={1} style={styles.jobTitle}>{route.params?.params.address}</Text>
+                            <Text numberOfLines={1} style={styles.jobTitle}>{jobDetails.address}</Text>
                         </View>
                         {
-                            data.status ?
+                            jobDetails.status ?
                                 <CustomStatusBtn title={jobDetails.status} /> : null
                         }
                     </View>
@@ -274,11 +282,12 @@ const JobDetailsScreen = () => {
                             // editable={isEdit}
                             onChangeText={(text) => { }}
                         />
-                        {data.status == strings.jobReturn || data.status == strings.jobTransfer ?
+                        {/* {console.log({ data: jobDetails.return_job[0].duplicate })} */}
+                        {jobDetails.status == strings.jobReturn ?
                             <CustomTextInput
-                                title={strings.relatedJobId}
+                                title={strings.relatedJobId[0]}
                                 container={{ marginBottom: wp(5) }}
-                                value={"#123"}
+                                value={jobDetails.return_job && '' + jobDetails?.return_job[0]?.duplicate}
                                 // editable={isEdit}
                                 onChangeText={(text) => { }}
                             /> : null
@@ -311,28 +320,30 @@ const JobDetailsScreen = () => {
                         <CustomDetailsComponent
                             title={strings.description}
                             bottomComponent={
-                                <Text style={[styles.bottomTxtStyle, globalStyles.rtlStyle]}>{data.description}</Text>
+                                <Text style={[styles.bottomTxtStyle, globalStyles.rtlStyle]}>{jobDetails.description}</Text>
                             }
                         />
-                        <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={result} />
+                        <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={jobDetails.images} />
+
                         <CustomDetailsComponent
                             title={strings.attachment}
                             detailsContainerStyle={{ marginVertical: wp(4) }}
                             bottomComponent={
                                 <FlatList
-                                    data={pdfData}
+                                    data={jobDetails.attachments}
                                     numColumns={2}
                                     renderItem={({ item, index }: any) => {
+                                        { console.log({ data: item.url }) }
                                         return (
                                             <CommonPdfView
                                                 item={item}
                                                 onPress={() => {
                                                     setLoading(true)
-                                                    const pdfName = item.url.split(/[#?]/)[0].split('/').pop().split('.')[0];
-                                                    const extension = item.url.split(/[#?]/)[0].split(".").pop().trim();
+                                                    const pdfName = item.attachment.split(/[#?]/)[0].split('/').pop().split('.')[0];
+                                                    const extension = item.attachment.split(/[#?]/)[0].split(".").pop().trim();
                                                     const localFile = `${RNFS.DocumentDirectoryPath}/${pdfName}.${extension}`;
                                                     const options = {
-                                                        fromUrl: item.url,
+                                                        fromUrl: item.attachment,
                                                         toFile: localFile,
                                                     };
                                                     RNFS.downloadFile(options).promise.then(() =>
@@ -348,7 +359,7 @@ const JobDetailsScreen = () => {
                                     showsVerticalScrollIndicator={false} />
                             }
                         />
-                        {data.status == strings.jobClose || data.status == strings.jobPartial ?
+                        {jobDetails.status == strings.jobClose || jobDetails.status == strings.jobPartial ?
                             <>
                                 <CustomDetailsComponent
                                     title={strings.transferTo}
@@ -393,7 +404,7 @@ const JobDetailsScreen = () => {
                                 <CustomJobAddedByComponent date={convertDate(jobDetails?.added_by?.date_joined)} image={{ uri: jobDetails?.added_by?.profile_image }} role={jobDetails?.added_by?.role?.title} userName={jobDetails?.added_by?.user_name} />
                             }
                         />
-                        {data.status == strings.jobClose || data.status == strings.jobPartial ?
+                        {jobDetails.status == strings.jobClose || jobDetails.status == strings.jobPartial ?
                             <CustomDetailsComponent
                                 title={strings.jobClosedBy}
                                 detailsContainerStyle={{ marginTop: wp(4) }}
@@ -403,17 +414,17 @@ const JobDetailsScreen = () => {
                             />
                             : null
                         }
-                        {!type && (data.status == 'Open' || data.status == strings.jobOpen || data.status == strings.jobReturn || data.status == strings.jobTransfer) ?
+                        {type && (jobDetails.status == 'Open' || jobDetails.status == strings.jobOpen || jobDetails.status == strings.jobReturn || jobDetails.status == strings.jobTransfer) ?
                             <CustomDetailsComponent
-                                title={data.status == strings.jobTransfer ? strings.transferTo : strings.furtherInspection}
+                                title={jobDetails.status == strings.jobTransfer ? strings.transferTo : strings.furtherInspection}
                                 detailsContainerStyle={{ marginVertical: wp(4) }}
                                 bottomComponent={
-                                    <Text numberOfLines={1} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left" }]}>{data.status == strings.jobTransfer ? 'P.Maintanence' : 'yes'}</Text>
+                                    <Text numberOfLines={1} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left" }]}>{jobDetails.status == strings.jobTransfer ? 'P.Maintanence' : 'yes'}</Text>
                                 }
                             />
                             : null
                         }
-                        {(type && (userData?.role == strings.inspector || userData?.role == strings.admin) && data.status == strings.jobReturn) &&
+                        {(type == 'returnJob' && (userData?.role == strings.inspector || userData?.role == strings.admin) && jobDetails.status == strings.jobReturn) &&
                             <View style={[globalStyles.rowView, { justifyContent: 'space-between', marginVertical: wp(5) }]}>
                                 <CustomBlackButton
                                     title={strings.delete}
@@ -422,14 +433,14 @@ const JobDetailsScreen = () => {
                                     textStyle={{ color: colors.primary_color }}
                                     buttonStyle={styles.deleteBtnTxt} />
                                 <CustomBlackButton
-                                    onPress={() => { navigation.navigate("CreateNewJobScreen", { type: strings.returnJob }) }}
+                                    onPress={() => { navigation.navigate("CreateNewJobScreen", { type: strings.returnJob, jobId: jobDetails.id }) }}
                                     title={strings.editJob}
                                     image={ImagesPath.pencil_simple_icon}
                                     buttonStyle={{ paddingHorizontal: wp(13), borderRadius: wp(2) }} />
                             </View>
                         }
-                        {((userData?.role == strings.admin || userData?.role == strings.groupManager) && (data.status == strings.jobOpen || data.status == strings.jobPartial)
-                            || (userData?.role == strings.admin && data.status == strings.jobTransfer))
+                        {(type != 'returnJob' && (userData?.role == strings.admin || userData?.role == strings.groupManager) && (jobDetails.status == strings.jobOpen || jobDetails.status == strings.jobPartial || jobDetails.status == strings.jobReturn)
+                            || (userData?.role == strings.admin && jobDetails.status == strings.jobTransfer))
                             ?
                             <CustomBlackButton
                                 title={strings.close}

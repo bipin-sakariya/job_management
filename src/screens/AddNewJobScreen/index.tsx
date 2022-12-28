@@ -21,13 +21,13 @@ import { jobCreate } from '../../redux/slices/AdminSlice/jobListSlice'
 
 interface imageList {
     id: number
-    imgUrl: string
+    image: string
     mediaType: string
 }
 interface docList {
-    path: string,
+    attachment: string,
     type: string | undefined
-    byte: number | null
+    bytes: number | null
     title: string | null
 }
 interface image_arrayList {
@@ -87,7 +87,7 @@ const AddNewJobScreen = () => {
             if (imageList) {
                 imageList.map((item, index) => {
                     let images = {
-                        uri: item.imgUrl,
+                        uri: item.image,
                         name: `photo${index}${item.mediaType == "image" ? '.jpg' : '.mp4'}`,
                         type: item.mediaType == "image" ? "image/jpeg" : 'video/mp4'
                     }
@@ -97,10 +97,10 @@ const AddNewJobScreen = () => {
             if (docList) {
                 docList.map((item) => {
                     let docs = {
-                        uri: item.path,
+                        uri: item.attachment,
                         name: item.title,
                         type: item.type,
-                        byte: item.byte
+                        byte: item.bytes
                     }
                     doc_array.push(docs)
                 })
@@ -191,11 +191,11 @@ const AddNewJobScreen = () => {
             let DocTempArray = [...docList]
             console.log({ title: res })
             if (res[0]?.type?.split("/")[0] == 'application') {
-                DocTempArray.push({ path: res[0].uri, type: res[0]?.type?.split("/")[1], mb: res[0].size, title: res[0].name })
+                DocTempArray.push({ attachment: res[0].uri, type: res[0]?.type?.split("/")[1], bytes: undefined, title: res[0].name })
                 setDocError(false)
             }
             else {
-                ImageTempArray.push({ imgUrl: res[0].uri, mediaType: res[0]?.type?.split("/")[0] == 'image' ? 'image' : 'video', id: Math.random() })
+                ImageTempArray.push({ image: res[0].uri, mediaType: res[0]?.type?.split("/")[0] == 'image' ? 'image' : 'video', id: Math.random() })
                 setImageError(false)
             }
             setImageList(ImageTempArray)
@@ -295,11 +295,11 @@ const AddNewJobScreen = () => {
                                         return (
                                             <CommonPdfView
                                                 onPress={() => {
-                                                    const pdfName = item.path.split(/[#?]/)[0].split('/').pop()?.split('.')[0];
-                                                    const extension = item.path.split(/[#?]/)[0].split('.').pop()?.trim();
+                                                    const pdfName = item.attachment.split(/[#?]/)[0].split('/').pop()?.split('.')[0];
+                                                    const extension = item.attachment.split(/[#?]/)[0].split('.').pop()?.trim();
                                                     const localFile = `${RNFS.DocumentDirectoryPath}/${pdfName}.${extension}`;
                                                     const options = {
-                                                        fromUrl: item.path,
+                                                        fromUrl: item.attachment,
                                                         toFile: localFile,
                                                     };
                                                     RNFS.downloadFile(options).promise.then(() =>

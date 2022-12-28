@@ -8,7 +8,7 @@ import { colors } from '../styles/Colors';
 import { ImagesPath } from '../utils/ImagePaths';
 
 interface CustomTextInputWithImageProps {
-    title: string,
+    title: string | undefined,
     style?: TextStyle,
     container?: ViewStyle,
     mapStyle?: ViewStyle

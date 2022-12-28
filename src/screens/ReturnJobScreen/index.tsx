@@ -33,7 +33,7 @@ const ReturnJobScreen = () => {
         }
         console.log({ params })
         dispatch(returnJobCreate(params)).unwrap().then((res) => {
-            navigation.goBack()
+            navigation.navigate('JobDetailsScreen', { params: res })
         }).catch((e) => {
             console.log({ error: e });
 

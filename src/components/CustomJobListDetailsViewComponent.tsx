@@ -8,16 +8,17 @@ import FontSizes from '../styles/FontSizes';
 import { colors } from '../styles/Colors';
 import { strings } from '../languages/localizedStrings';
 import { JobDetailsData } from '../redux/slices/AdminSlice/jobListSlice';
+import { calendarFormat } from 'moment';
 
 interface CustomeJobListDetailsViewComponentProps {
     item: JobDetailsData
 }
 
 const CustomeJobListDetailsViewComponent = (props: CustomeJobListDetailsViewComponentProps & TouchableOpacityProps) => {
-
+    console.log({ imageData: props?.item?.images[0]?.image })
     return (
         <TouchableOpacity {...props} style={[styles.jobContainerStyle, styles.dropDownShadowStyle]} >
-            <Image source={ImagesPath.placeholder_img} style={styles.jobImageStyle} />
+            <Image source={props?.item?.images[0]?.image ? { uri: props?.item?.images[0]?.image } : ImagesPath.placeholder_img} style={styles.jobImageStyle} />
             <View style={{ flex: 1 }}>
                 <View style={styles.jobTitleContainer}>
                     <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle]}>{props.item.address}</Text>

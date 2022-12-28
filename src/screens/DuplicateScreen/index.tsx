@@ -42,7 +42,7 @@ const DuplicateScreen = () => {
         }
         console.log({ params })
         dispatch(returnJobCreate(params)).unwrap().then((res) => {
-            navigation.navigate('JobDetailsScreen')
+            navigation.navigate('JobDetailsScreen', { params: jobDetails })
         }).catch((e) => {
             console.log({ error: e });
 
@@ -106,7 +106,7 @@ const DuplicateScreen = () => {
                             mapStyle={{
                                 paddingHorizontal: wp(3)
                             }} />
-                        <CustomCarouselImageAndVideo result={result} viewStyle={{ width: '81%', }} />
+                        <CustomCarouselImageAndVideo result={jobDetails.images} viewStyle={{ width: '81%', }} />
                     </View>
                     <CustomSubTitleWithImageComponent
                         disabled
@@ -127,7 +127,7 @@ const DuplicateScreen = () => {
                             mapStyle={{
                                 paddingHorizontal: wp(3)
                             }} />
-                        <CustomCarouselImageAndVideo result={result} viewStyle={{ width: '81%', }} />
+                        <CustomCarouselImageAndVideo result={jobDetails.images} viewStyle={{ width: '81%', }} />
                     </View>
                     <CustomBlackButton
                         onPress={() => updateReturnJob()}

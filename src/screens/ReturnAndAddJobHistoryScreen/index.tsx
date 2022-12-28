@@ -30,6 +30,7 @@ const ReturnAndAddJobHistoryScreen = () => {
     const isFocus = useIsFocused()
     const dispatch = useAppDispatch();
 
+    console.log({ type })
     const [page, setPage] = useState(1);
     const [jobPage, setJobPage] = useState(1)
     const [recentJob, setRecentJob] = useState<JobDetailsData[]>([])
@@ -46,7 +47,7 @@ const ReturnAndAddJobHistoryScreen = () => {
     useEffect(() => {
         recentJobListApiCall(page)
         jobListApiCall(jobPage)
-    }, [])
+    }, [isFocus])
 
     const recentJobListApiCall = (page: number) => {
         let params: jobListParams = {
@@ -97,16 +98,16 @@ const ReturnAndAddJobHistoryScreen = () => {
     const renderItem = ({ item, index }: { item: JobDetailsData, index: number }) => {
         return (
             <TouchableOpacity
-                onPress={() => navigation.navigate('JobDetailsScreen', { params: item, type: "returnJob" })}
+                onPress={() => navigation.navigate('JobDetailsScreen', { params: item })}
                 style={[styles.containerShadow, styles.recentallyView]}>
                 <Image
-                    source={ImagesPath.job_list_image_icon}
+                    source={item?.images[0]?.image ? { uri: item?.images[0]?.image } : ImagesPath.job_list_image_icon}
                     style={styles.imageStyle} />
                 <View style={[globalStyles.rowView, { justifyContent: 'space-between', marginBottom: wp(1) }]}>
                     <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle,]}>{item.address}</Text>
                     <CustomStatusBtn
                         onPress={() => {
-                            navigation.navigate("JobDetailsScreen", { params: item, type: "returnJob" })
+                            navigation.navigate("JobDetailsScreen", { params: item })
                         }} title={item.status} />
                 </View>
                 <Text numberOfLines={2} style={[styles.desTxt, globalStyles.rtlStyle,]}>{item.description}</Text>
@@ -180,7 +181,7 @@ const ReturnAndAddJobHistoryScreen = () => {
                                 return (
                                     <CustomJobListComponent
                                         item={item}
-                                        onPress={() => navigation.navigate('JobDetailsScreen', { params: item })}
+                                        onPress={() => navigation.navigate('JobDetailsScreen', { params: item, type: type })}
                                     />
                                 )
                             }}

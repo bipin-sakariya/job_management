@@ -28,7 +28,7 @@ const CustomJobListComponent = (props: CustomJobListComponentProps & TouchableOp
                 props.type == 'carousel' ? styles.jobContainerBoxShadowStyle : null,
             ]}>
             <FastImage
-                source={ImagesPath.placeholder_img}
+                source={props?.item?.images[0]?.image ? { uri: props?.item?.images[0]?.image } : ImagesPath.job_list_image_icon}
                 style={styles.jobImageStyle}
             />
             <View style={{ flex: 1 }}>

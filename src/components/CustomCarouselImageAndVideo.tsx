@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import Video from 'react-native-video';
@@ -11,7 +11,7 @@ import CustomCarouselZoomImageViewer from './CustomCarouselZoomImageViewer';
 
 interface ItemProps {
     id: number
-    imgUrl: string
+    image: string
     mediaType: string
 
 }
@@ -27,23 +27,29 @@ const CustomCarouselImageAndVideo = (props: CustomCarouselImageAndVideoProps) =>
     const [visible, setIsVisible] = useState<boolean>(false);
 
     const renderItem = ({ item, index }: { item: ItemProps, index: number }) => {
+        const type = item?.image?.split('.').reverse()[0]
+        console.log({ type })
         return (
             <TouchableOpacity style={[styles.imageMainView, props.viewStyle]} onPress={() => setIsVisible(true)}>
-                {item.mediaType == "image"
+                {(item.mediaType == 'image' || type == "jpeg" || type == "png" || type == "jpg")
                     ?
                     <View
                         style={[globalStyles.container, styles.imageView]}>
-                        <Image source={{ uri: item.imgUrl }} resizeMode={'contain'} onError={() => { }} style={[globalStyles.container, styles.imageView]} />
+                        <Image source={{ uri: item.image }} resizeMode={'contain'} onError={() => { }} style={[globalStyles.container, styles.imageView]} />
                     </View>
-                    :
-                    <Video
-                        source={{ uri: item.imgUrl }}
-                        paused={!(index == activeSlide)}
-                        resizeMode={'cover'}
-                        repeat={true}
-                        style={[styles.backgroundVideo, props.videoStyle]}
-                    />
+                    : <View>
+                        <Video
+                            source={{ uri: 'http://142.93.222.204:8001/media/jobimage/8/photo0.mp4' }}
+                            paused={!(index == activeSlide)}
+                            resizeMode={'cover'}
+                            repeat={true}
+                            style={[styles.backgroundVideo, props.videoStyle]}
+                            onError={e => { console.log({ e }) }}
+                        />
+                    </View>
+
                 }
+
                 <Modal
                     isVisible={visible}
                     style={{ margin: 0, backgroundColor: colors.white }}>
@@ -56,7 +62,9 @@ const CustomCarouselImageAndVideo = (props: CustomCarouselImageAndVideoProps) =>
                         <CustomCarouselZoomImageViewer result={props.result} />
                     </>
                 </Modal>
+
             </TouchableOpacity>
+
         )
     }
     return (

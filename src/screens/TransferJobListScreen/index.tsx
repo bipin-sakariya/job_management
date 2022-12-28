@@ -69,7 +69,7 @@ const ReturnAndAddJobHistoryScreen = () => {
   const renderItem = ({ item, index }: { item: JobDetailsData, index: number }) => {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('JobDetailsScreen', { params: item, type: "returnJob" })}
+        onPress={() => navigation.navigate('JobDetailsScreen', { params: item })}
         style={[styles.containerShadow, styles.recentallyView]}>
         <Image
           source={ImagesPath.job_list_image_icon}
@@ -78,7 +78,7 @@ const ReturnAndAddJobHistoryScreen = () => {
           <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle,]}>{item.address}</Text>
           <CustomStatusBtn
             onPress={() => {
-              navigation.navigate("JobDetailsScreen", { params: item, type: "returnJob" })
+              navigation.navigate("JobDetailsScreen", { params: item })
             }} title={item.status} />
         </View>
         <Text numberOfLines={2} style={[styles.desTxt, globalStyles.rtlStyle,]}>{item.description}</Text>

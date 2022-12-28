@@ -51,7 +51,7 @@ export interface inspectorListProps {
 
 interface paramsTypes {
     id?: number
-    data?: FormDataTypes,
+    data?: FormData,
     role?: string,
     page?: number,
     search?: string

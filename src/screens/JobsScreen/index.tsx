@@ -71,7 +71,7 @@ const JobsScreen = () => {
             JobListApiCall(page, text)
 
         }
-        // dispatch(selectedAllGroupReducers(finalSelectedList))
+
     }, [isFocus, btn, text])
 
     const selectedGroup = () => {
@@ -146,7 +146,7 @@ const JobsScreen = () => {
 
     useEffect(() => {
         if (finalGroupData.length) {
-            let catList: any = [{ name: 'All', selected: true, id: 0 }]
+            let catList: any = [{ name: 'All', selected: true, id: undefined }]
             finalGroupData.map((listItem: GroupParams) => {
                 catList.push({
                     name: listItem.name,
@@ -160,28 +160,29 @@ const JobsScreen = () => {
     }, [finalGroupData, groupListData.results]);
 
 
-    // useEffect(() => {
-    //     const data = finalAllGroup.map((item) => {
-    //         if (item.name == selectedGroupData.name) {
-    //             return {
-    //                 ...item,
-    //                 selected: !item.selected,
-    //             };
-    //         } else if (item.name == 'All') {
-    //             return {
-    //                 ...item,
-    //                 selected: false,
-    //             };
-    //         } else {
-    //             return item;
-    //         }
-    //     })
-    //     isFinalSelectedList(data)
-    //     console.log({ data })
-    // }, [])
+    useEffect(() => {
+        const data = finalAllGroup.map((item) => {
+            if (item.name == selectedGroupData.name) {
+                return {
+                    ...item,
+                    selected: !item.selected,
+                };
+            } else if (item.name == 'All') {
+                return {
+                    ...item,
+                    selected: false,
+                };
+            } else {
+                return item;
+            }
+        })
+        isFinalSelectedList(data)
+        dispatch(selectedAllGroupReducers(finalSelectedList))
+        console.log({ data })
+    }, [finalAllGroup, isFocus, selectedGroupData])
     return (
         <View style={globalStyles.container}>
-            {/* {console.log({ finalGroupData })} */}
+            {/* {console.log({ finalSelectedList })} */}
             <Header
                 headerLeftComponent={
                     <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
