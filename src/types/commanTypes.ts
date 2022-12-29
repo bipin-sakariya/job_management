@@ -10,6 +10,6 @@ export interface location {
 export interface MapPositionProps {
     latitude: number
     longitude: number
-    latitudeDelta?: number
-    longitudeDelta?: number
+    latitudeDelta?: number | undefined
+    longitudeDelta?: number | undefined
 }

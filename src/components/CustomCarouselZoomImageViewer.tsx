@@ -31,7 +31,7 @@ const CustomCarouselZoomImageViewer = (props: CustomCarouselZoomImageViewerProps
                     (type == "jpeg" || type == "png" || type == "jpg")
                         ?
                         <ImageViewer
-                            imageUrls={[{ url: 'http://142.93.222.204:8001/media/jobimage/23/4.png' }]}
+                            imageUrls={[{ url: item.image }]}
                             renderIndicator={() => <></>}
                             backgroundColor={colors.transparent}
                         />

@@ -35,7 +35,7 @@ const CreateJobMapScreen = () => {
 
     const [isCurrentLoaction, setIsCurruntLocation] = useState(false)
     const [address, setAddres] = useState('')
-    const [curruntLoaction, setCurruntLoaction] = useState<MapPositionProps | null>(null);
+    const [curruntLoaction, setCurruntLoaction] = useState<MapPositionProps | undefined>(undefined);
     const [tapLoaction, setTapLoaction] = useState<MapPositionProps | null>(null);
     const [ChoosefromMap, setChooseFromMap] = useState(false)
 

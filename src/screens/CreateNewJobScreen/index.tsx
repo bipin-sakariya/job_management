@@ -59,7 +59,7 @@ const CreateNewJobScreen = () => {
     const dispatch = useAppDispatch()
     const isFocused = useIsFocused()
 
-    const Id = route.params.jobId
+    const Id: number = route?.params?.jobId
 
     console.log({ route })
     const [isModelVisible, setIsModelVisible] = useState(false)

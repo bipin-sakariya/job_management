@@ -39,7 +39,7 @@ const CustomCarouselImageAndVideo = (props: CustomCarouselImageAndVideoProps) =>
                     </View>
                     : <View>
                         <Video
-                            source={{ uri: 'http://142.93.222.204:8001/media/jobimage/8/photo0.mp4' }}
+                            source={{ uri: item.image }}
                             paused={!(index == activeSlide)}
                             resizeMode={'cover'}
                             repeat={true}

@@ -242,7 +242,7 @@ const CreateBillSectionScreen = () => {
                                         placeholder={strings.choose}
                                         container={{ marginBottom: wp(5) }}
                                     />
-                                    {countingError || error.type ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.type ? error.type : strings.Typecount_required}</Text> : null}
+                                    {countingError || error.type ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.type ? error.type : strings.typeCountRequired}</Text> : null}
 
                                     <CustomTextInput
                                         title={strings.jumpdish}

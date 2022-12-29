@@ -42,7 +42,7 @@ export interface JobDetailsData {
     added_by: Added_byData,
     closed_by?: null,
     images: [{ image: string | undefined }]
-    attachments: undefined,
+    attachments: [{}],
     forms?: undefined,
     bills?: undefined,
     group_forms?: undefined,
@@ -137,8 +137,8 @@ const initialState: InitialState = {
             is_active: false
         },
         closed_by: null,
-        images: { image: undefined },
-        attachments: undefined,
+        images: [{ image: '' }],
+        attachments: [{}],
         forms: undefined,
         bills: undefined,
         group_forms: undefined,
