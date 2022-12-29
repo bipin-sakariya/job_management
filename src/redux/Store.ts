@@ -29,8 +29,9 @@ const reducers = combineReducers({
     returnJobList: returnJobListSlice
 })
 
+export const USER_LOGOUT = 'USER_LOGOUT'
 const rootReducer = (state: any, action: any) => {
-    if (action.type == 'USER_LOGOUT') {
+    if (action.type == USER_LOGOUT) {
         storage.removeItem('persist:root')
         return reducers(undefined, action)
     }

@@ -72,9 +72,11 @@ const BILL = "BILL";
 export const billList = createAsyncThunk<billDataProps, paramsTypes, { rejectValue: apiErrorTypes }>
     (BILL + "/billList", async (params, { rejectWithValue }) => {
         try {
+            let urlParams = new URLSearchParams({ page: params.page ? params.page.toString() : '', bill_type: params.bill_type ? params.bill_type : '' })
+            params.search && urlParams.append('search', params.search)
             console.log("🚀 ~ file: billListSlice.ts ~ line 60 ~ params", params)
             console.log(ApiConstants.BILL)
-            const response = await axiosClient.get(ApiConstants.BILL + `?page=${params.page}&bill_type=${params.bill_type}&search=${params.search}`)
+            const response = await axiosClient.get(ApiConstants.BILL + "?" + urlParams.toString())
             console.log("🚀 ~ file: billListSlice.ts ~ line 69 ~ response", response)
             return response.data;
         } catch (e: any) {
@@ -85,7 +87,7 @@ export const billList = createAsyncThunk<billDataProps, paramsTypes, { rejectVal
         }
     })
 
-export const billCreate = createAsyncThunk<string[], FormData, { rejectValue: apiErrorTypes }>
+export const billCreate = createAsyncThunk<billData, FormData, { rejectValue: apiErrorTypes }>
     (BILL + "/billCreate", async (params, { rejectWithValue }) => {
         try {
             console.log(ApiConstants.BILL)

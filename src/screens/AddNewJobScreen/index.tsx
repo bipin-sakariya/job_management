@@ -39,7 +39,7 @@ interface doc_arrayList {
     uri: string,
     name: string | null
     type: string | undefined,
-    byte: number | null
+    bytes: number | null
 }
 
 const AddNewJobScreen = () => {
@@ -100,7 +100,7 @@ const AddNewJobScreen = () => {
                         uri: item.attachment,
                         name: item.title,
                         type: item.type,
-                        byte: item.bytes
+                        bytes: item.bytes
                     }
                     doc_array.push(docs)
                 })
@@ -123,12 +123,11 @@ const AddNewJobScreen = () => {
                 })
             }
             if (!isEmptyArray(doc_array)) {
-                docList.map((_doc) => {
+                doc_array.map((_doc) => {
 
                     data.append("attachment", _doc)
                 })
             }
-
             dispatch(jobCreate(data)).unwrap().then((value) => {
                 setIsModelVisible(true)
             }).catch((error) => {
@@ -191,7 +190,7 @@ const AddNewJobScreen = () => {
             let DocTempArray = [...docList]
             console.log({ title: res })
             if (res[0]?.type?.split("/")[0] == 'application') {
-                DocTempArray.push({ attachment: res[0].uri, type: res[0]?.type?.split("/")[1], bytes: undefined, title: res[0].name })
+                DocTempArray.push({ attachment: res[0].uri, type: res[0]?.type?.split("/")[1], bytes: res[0].size, title: res[0].name })
                 setDocError(false)
             }
             else {

@@ -29,6 +29,7 @@ const CustomeJobListDetailsViewComponent = (props: CustomeJobListDetailsViewComp
                         <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>5000 km Away</Text>
                     </View>
                 </View>
+                <Text numberOfLines={2} style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{props.item.id}</Text>
                 <Text numberOfLines={2} style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{props.item.description}</Text>
             </View>
         </TouchableOpacity>

@@ -14,7 +14,7 @@ import { colors } from "../../styles/Colors";
 import { RootRouteProps } from "../../types/RootStackTypes";
 import FileViewer from "react-native-file-viewer";
 import RNFS from "react-native-fs";
-import { jobDetail, jobDetailReducer, JobDetailsData, resetSelectedReducer } from "../../redux/slices/AdminSlice/jobListSlice";
+import { jobDetail, JobDetailsData, resetSelectedFormsBillReducer, jobDetailReducer } from "../../redux/slices/AdminSlice/jobListSlice";
 import { convertDate } from "../../utils/screenUtils";
 import { groupDetails } from "../../redux/slices/AdminSlice/groupListSlice";
 import Video from "react-native-video";
@@ -48,7 +48,7 @@ const JobDetailsScreen = () => {
                 console.log({ error });
             })
         }
-        dispatch(resetSelectedReducer())
+        dispatch(resetSelectedFormsBillReducer())
     }, [isFocused])
 
     const updateReturnJob = () => {
@@ -301,15 +301,15 @@ const JobDetailsScreen = () => {
                             onPress={() => {
                                 navigation.navigate('MapScreen', {
                                     type: 'viewJob', JobDetails: {
-                                        title: 'Job Title',
-                                        description: 'Lorem Ipsum is simply dummy text of the printing...',
-                                        km: '5 km away',
-                                        date: "16 may 2022",
+                                        address: data.address,
+                                        description: data.description,
+                                        km: '',
+                                        created_at: data.created_at,
                                         button: "Open",
-                                        status: "info",
+                                        status: data.status,
                                         coordinate: {
-                                            latitude: 45.524548,
-                                            longitude: -122.6749817,
+                                            latitude: Number(data?.latitude),
+                                            longitude: Number(data?.longitude),
                                             latitudeDelta: 0.04864195044303443,
                                             longitudeDelta: 0.040142817690068,
                                         },

@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
         color: colors.primary_color,
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        marginVertical: wp(3),
+        // marginVertical: wp(3),
         textAlign: 'right'
     },
     forgetPassViewStyle: {

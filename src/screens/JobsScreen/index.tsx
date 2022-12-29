@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, Image, FlatList, TextInput, ActivityIndic
 import React, { useEffect, useRef, useState } from 'react';
 import { DrawerActions, useIsFocused } from '@react-navigation/native';
 import { styles } from './styles';
-import { ButtonTab, CalendarView, Container, CustomBlackButton, CustomBottomSheet, CustomModal, CustomSubTitleWithImageComponent, Header, JobListComponent } from '../../components';
+import { ButtonTab, CalendarView, Container, CustomActivityIndicator, CustomBlackButton, CustomBottomSheet, CustomModal, CustomSubTitleWithImageComponent, Header, JobListComponent } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { globalStyles } from '../../styles/globalStyles';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -16,6 +16,7 @@ import { GroupData, groupList, selectedAllGroupReducers, selectedGroupReducers }
 import { GroupParams } from '../TransferJobScreen';
 import FontSizes from '../../styles/FontSizes';
 import fonts from '../../styles/Fonts';
+import { getNotificatioList } from '../../redux/slices/AdminSlice/notificationSlice';
 
 interface jobListParams {
     page?: number,
@@ -40,8 +41,10 @@ const JobsScreen = () => {
     const [selectedItem, setSelectedItem] = useState<GroupParams | undefined>(undefined);
     const [btn, setBtn] = useState({ open: true, close: false })
     const [page, setPage] = useState(1);
+    const [closeJobApiPage, SetCloseJobApiPage] = useState<number>(1)
+    const [openJobApiPage, SetOpenJobApiPage] = useState<number>(1)
     const [groupPage, setGroupPage] = useState(1)
-    const [openJobList, setOpenJobList] = useState<JobDetailsData[]>([])
+    // const [openJobList, setOpenJobList] = useState<JobDetailsData[]>([])
     const [isSearch, setIsSearch] = useState(false)
     const [text, setText] = useState("");
     const [isFooterLoading, setIsFooterLoading] = useState<boolean>(false)
@@ -54,25 +57,36 @@ const JobsScreen = () => {
     const [edate, setEdate] = useState(' ');
     const [selectedId, setSelectedId] = useState({})
     const [finalSelectedList, isFinalSelectedList] = useState(finalAllGroup)
+    const [onRefreshJobList, setOnRefreshJobList] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
-    const { jobListData } = useAppSelector(state => state.jobList)
-    const { groupListData, selectedGroupData, selectedAllGroupData } = useAppSelector(state => state.groupList)
+    const { jobListData, closedJobList, openedJobList, isLoading: apiCallLoading } = useAppSelector(state => state.jobList)
+    const { groupListData, selectedGroupData } = useAppSelector(state => state.groupList)
 
     useEffect(() => {
         let defaultSelected = finalGroupData.find((i) => i.selected == true)
         setSelectedItem(defaultSelected)
         setSelectedId(selectedGroupData)
-        selectedGroup()
     }, [])
 
     useEffect(() => {
+        setSelectedItem(selectedGroupData)
+    }, [selectedGroupData])
+
+
+    useEffect(() => {
         if (isFocus) {
-            JobListApiCall(page, text)
-
+            if (closedJobList.results.length == 0 || openedJobList.results.length == 0) {
+                setIsLoading(true)
+            }
+            JobListApiCall(undefined, undefined, selectedGroupData?.id, undefined, undefined, strings.close)
         }
+    }, [isFocus])
 
-    }, [isFocus, btn, text])
+    useEffect(() => {
+        JobListApiCall(1, undefined, selectedGroupData?.id, selectedDate?.toDate, selectedDate?.fromDate)
+    }, [btn])
 
     const selectedGroup = () => {
         if (selectedGroupData) {
@@ -98,34 +112,36 @@ const JobsScreen = () => {
             search: '',
             page: groupPage
         }
-
+        // setIsFooterLoading(true)
         dispatch(groupList(params)).unwrap().then((res) => {
+            // setIsFooterLoading(false) setPage(page + 1)
+            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
             setGroupData(res.results)
             setGroupPage(groupPage + 1)
         }).catch((error) => {
             console.log({ error });
         })
+    }, [isFocus, groupListData.results, finalAllGroup])
 
+    const JobListApiCall = (page?: number, input?: string, id?: number, to_date?: string, from_date?: string, status?: string) => {
 
-    }, [isFocus, btn, groupListData.results, finalAllGroup])
-
-    const JobListApiCall = (page: number, input?: string, id?: number, to_date?: string, from_date?: string) => {
         let params: jobListParams = {
-            page: page,
+            page: page ? page : btn.open ? openJobApiPage : btn.close ? closeJobApiPage : 1,
             search: input,
-            status: btn.open ? strings.open : strings.close,
-            id: selectedItem?.id ? selectedItem?.id : id,
+            status: status ? status : btn.open ? strings.open : btn.close ? strings.close : '',
+            id: id != undefined ? id : selectedItem?.id ?? undefined,
             to_date: to_date,
             from_date: from_date
         }
-
         dispatch(jobStatusWiseList(params)).unwrap().then((res) => {
-            if (res.next && !!input) {
-                setPage(page + 1)
-                setOpenJobList(res.results)
-            }
+            setIsFooterLoading(false)
+            setOnRefreshJobList(false)
+            params.status == strings.open && setIsLoading(false)
+            params.status == strings.open ? SetOpenJobApiPage(page ? page + 1 : openJobApiPage + 1) : params.status == strings.close ? SetCloseJobApiPage(page ? page + 1 : closeJobApiPage + 1) : null
         }).catch((error) => {
-            console.log({ error });
+            setIsFooterLoading(false)
+            setOnRefreshJobList(false)
+            setIsLoading(false)
         })
     }
 
@@ -141,48 +157,57 @@ const JobsScreen = () => {
 
     }, [groupData])
 
-    // useEffect(() => {
-    // }, [finalAllGroup])
-
     useEffect(() => {
         if (finalGroupData.length) {
-            let catList: any = [{ name: 'All', selected: true, id: undefined }]
+            let categoryList: any = [{ name: 'All', selected: true, id: 0 }]
             finalGroupData.map((listItem: GroupParams) => {
-                catList.push({
+                categoryList.push({
                     name: listItem.name,
                     selected: false,
                     id: listItem.id
                 });
-                setFinalAllGroup(catList);
+                setFinalAllGroup(categoryList);
             });
+
+            const data = categoryList.map((item) => {
+                if (selectedGroupData.name != 'All') {
+                    if (item.name == selectedGroupData.name) {
+                        return {
+                            ...item,
+                            selected: !item.selected,
+                        };
+                    } else if (item.name == 'All') {
+                        return {
+                            ...item,
+                            selected: false,
+                        };
+                    } else {
+                        return item;
+                    }
+                } else {
+                    if (item.name == 'All') {
+                        return {
+                            ...item,
+                            selected: true,
+                        };
+                    } else {
+                        return {
+                            ...item,
+                            selected: false,
+                        };
+                    }
+                }
+            })
+            setFinalAllGroup(data)
+            console.log({ data })
         }
+    }, [finalGroupData, groupListData.results, selectedGroupData]);
 
-    }, [finalGroupData, groupListData.results]);
+    const groupId: GroupParams | undefined = finalGroupData.find((i) => i.selected == true)
 
-
-    useEffect(() => {
-        const data = finalAllGroup.map((item) => {
-            if (item.name == selectedGroupData.name) {
-                return {
-                    ...item,
-                    selected: !item.selected,
-                };
-            } else if (item.name == 'All') {
-                return {
-                    ...item,
-                    selected: false,
-                };
-            } else {
-                return item;
-            }
-        })
-        isFinalSelectedList(data)
-        dispatch(selectedAllGroupReducers(finalSelectedList))
-        console.log({ data })
-    }, [finalAllGroup, isFocus, selectedGroupData])
     return (
         <View style={globalStyles.container}>
-            {/* {console.log({ finalSelectedList })} */}
+            {isLoading && <CustomActivityIndicator />}
             <Header
                 headerLeftComponent={
                     <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
@@ -218,23 +243,20 @@ const JobsScreen = () => {
 
             <Container>
                 {isSearch &&
-                    <View style={[styles.searchInputView, {}]}>
+                    <View style={[styles.searchInputView]}>
                         <Image source={ImagesPath.search_icon} style={styles.searchViewImage} />
                         <TextInput
                             style={[styles.searchInputText]}
                             placeholder={strings.searchHere}
                             onChangeText={(text) => {
                                 setText(text)
-                                JobListApiCall(page, text)
+                                JobListApiCall(1, text.trim())
                             }}
                             autoCapitalize={'none'}
                             autoCorrect={false}
                         />
-                        <TouchableOpacity style={[globalStyles.rowView, {}]} onPress={() => { setIsSearch(false) }}>
-                            <TouchableOpacity onPress={() => { setIsSearch(false), setText('') }} >
-                                <Image source={ImagesPath.close_icon} style={globalStyles.backArrowStyle} />
-                            </TouchableOpacity>
-                            <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle]}></Text>
+                        <TouchableOpacity onPress={() => { setIsSearch(false), setText(''), JobListApiCall(1) }} >
+                            <Image source={ImagesPath.close_icon} style={globalStyles.backArrowStyle} />
                         </TouchableOpacity>
                     </View>
                 }
@@ -263,9 +285,9 @@ const JobsScreen = () => {
                 </View>
 
                 <FlatList
-                    data={jobListData?.results}
+                    data={btn.open ? openedJobList?.results : btn.close ? closedJobList?.results : []}
                     renderItem={({ item, index }) => {
-                        const isDateVisible = index != 0 ? moment(jobListData?.results[index].created_at).format('ll') == moment(jobListData?.results[index - 1].created_at).format('ll') ? false : true : true
+                        const isDateVisible = index != 0 ? moment(btn.open ? openedJobList?.results[index].created_at : btn.close ? closedJobList?.results[index].created_at : '').format('ll') == moment(btn.open ? openedJobList.results[index - 1].created_at : btn.close ? closedJobList.results[index - 1].created_at : '').format('ll') ? false : true : true
                         return (
                             <JobListComponent
                                 item={item}
@@ -274,10 +296,13 @@ const JobsScreen = () => {
                         )
                     }}
                     onEndReached={() => {
-                        if (jobListData?.next) {
-                            JobListApiCall(page)
+                        console.log('JOB ON END -----', { open: btn.open, close: btn.close, openNEXT: openedJobList?.next, closeNExt: closedJobList.next })
+                        if ((btn.open ? openedJobList?.next : btn.close ? closedJobList?.next : false) && !apiCallLoading) {
+                            setIsFooterLoading(true)
+                            JobListApiCall()
                         }
                     }}
+                    showsVerticalScrollIndicator={false}
                     onEndReachedThreshold={0.1}
                     ListFooterComponent={() => {
                         return (
@@ -286,10 +311,19 @@ const JobsScreen = () => {
                             </>
                         )
                     }}
+                    onRefresh={() => {
+                        setOnRefreshJobList(true)
+                        setSelectedDate({ fromDate: undefined, toDate: undefined })
+                        setSdate('')
+                        setEdate('')
+                        JobListApiCall(1, undefined, undefined, undefined, undefined, strings.open)
+                        JobListApiCall(1, undefined, undefined, undefined, undefined, strings.close)
+                    }}
+                    refreshing={onRefreshJobList}
                     ListEmptyComponent={() => {
                         return (
-                            <View>
-                                <Text>{strings.empty_list}</Text>
+                            <View style={[globalStyles.container, globalStyles.spaceAroundView]}>
+                                <Text style={globalStyles.rtlStyle}>{strings.empty_list}</Text>
                             </View>
                         )
                     }}
@@ -302,11 +336,10 @@ const JobsScreen = () => {
                 data={finalAllGroup}
                 defaultSelected={selectedGroupData}
                 onSelectedTab={(item) => {
-                    JobListApiCall(page, text, item.id)
+                    console.log({ item })
+                    JobListApiCall(1, text, item.id)
                     setSelectedItem(item)
                     dispatch(selectedGroupReducers(item))
-
-                    // selectedGroup()
                     refRBSheet.current?.close()
                 }}
             />
@@ -329,7 +362,7 @@ const JobsScreen = () => {
                             title={strings.apply}
                             onPress={() => {
                                 setIsModelVisible(false)
-                                JobListApiCall(page, text, undefined, selectedDate?.toDate, selectedDate?.fromDate)
+                                JobListApiCall(1, text, undefined, selectedDate?.toDate, selectedDate?.fromDate)
                             }}
                         />
                     </View>

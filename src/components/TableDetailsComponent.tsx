@@ -6,9 +6,10 @@ import fonts from '../styles/Fonts';
 import FontSizes from '../styles/FontSizes';
 import { colors } from '../styles/Colors';
 import useCustomNavigation from '../hooks/useCustomNavigation';
+import { billData } from '../redux/slices/AdminSlice/billListSlice';
 
 interface TableDetailsComponentProps {
-    item: any,
+    item: billData,
     type?: string,
     index: number,
     screenName?: string
@@ -18,13 +19,11 @@ const TableDetailsComponent = ({ item, type, index, screenName }: TableDetailsCo
     const navigation = useCustomNavigation('SignBillDetailScreen')
 
     const handleSubmit = () => {
-        if (screenName) {
-            if (item.type == 'Sign') {
-                navigation.navigate('SignBillDetailScreen', { type: 'Sign', item: item })
-            }
-            else {
-                navigation.navigate('SignBillDetailScreen', { type: 'Material', item: item })
-            }
+        if (item.type == 'Sign') {
+            navigation.navigate('SignBillDetailScreen', { type: 'Sign', item: item, isCloseJob: true })
+        }
+        else {
+            navigation.navigate('SignBillDetailScreen', { type: 'Material', item: item, isCloseJob: true })
         }
 
     }
@@ -36,7 +35,7 @@ const TableDetailsComponent = ({ item, type, index, screenName }: TableDetailsCo
             <View style={[globalStyles.rowView, { width: wp(35) }]}>
                 <Text numberOfLines={1} style={styles.commonScammedTxt}>{item.name}</Text>
             </View>
-            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.quantity}</Text>
+            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.type == 'Sign' ? item.quantity : item.jumping_ration}</Text>
             <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(12) }]}>{item.type_counting}</Text>
         </TouchableOpacity>
     )

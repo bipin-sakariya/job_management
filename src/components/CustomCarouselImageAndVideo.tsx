@@ -10,9 +10,9 @@ import { ImagesPath } from '../utils/ImagePaths';
 import CustomCarouselZoomImageViewer from './CustomCarouselZoomImageViewer';
 
 interface ItemProps {
-    id: number
-    image: string
-    mediaType: string
+    id?: number
+    image?: string | undefined
+    mediaType?: string
 
 }
 interface CustomCarouselImageAndVideoProps {

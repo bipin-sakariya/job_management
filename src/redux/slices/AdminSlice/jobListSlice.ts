@@ -2,10 +2,11 @@ import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit"
 import { Alert } from "react-native"
 import { ApiConstants } from "../../../config/ApiConstants"
 import { axiosClient } from "../../../config/Axios"
-import { billData } from "./billListSlice"
+import { strings } from "../../../languages/localizedStrings"
+import { billCreate, billData } from "./billListSlice"
 import { FormDataTypes } from "./formListSlice"
 
-interface Added_byData {
+export interface Added_byData {
     id: number | null,
     profile_image?: string,
     user_name?: string,
@@ -40,7 +41,7 @@ export interface JobDetailsData {
     id: number,
     added_by: Added_byData,
     closed_by?: null,
-    images: { image: undefined }
+    images: [{ image: string | undefined }]
     attachments: undefined,
     forms?: undefined,
     bills?: undefined,
@@ -78,9 +79,16 @@ interface InitialState {
     isLoading: boolean
     error: object | string | undefined
     jobDetails: JobDetailsData
+    closedJobList: JobDataListProps
+    openedJobList: JobDataListProps
     jobListData: JobDataListProps,
     formData: formdata[] | undefined,
     jobDetailsData: JobDetailsData | undefined
+    selectedFormsDetailForJob: { isSignBill: boolean, selectedFormsBillList: billData[] | [], selectedFormsDetails: FormDataTypes[] | [] }
+    isFromCloseJob: boolean
+    isSignBillUpdatable: boolean
+    newlyCreatedBillsForCloseJob: billData[] | []
+    selectedSignBillsForCloseJob: billData[] | []
 }
 
 
@@ -96,6 +104,18 @@ const initialState: InitialState = {
     isLoading: false,
     error: '',
     jobListData: {
+        count: 0,
+        next: null,
+        previous: null,
+        results: []
+    },
+    closedJobList: {
+        count: 0,
+        next: null,
+        previous: null,
+        results: []
+    },
+    openedJobList: {
         count: 0,
         next: null,
         previous: null,
@@ -143,7 +163,16 @@ const initialState: InitialState = {
         }
     },
     formData: undefined,
-    jobDetailsData: undefined
+    jobDetailsData: undefined,
+    selectedFormsDetailForJob: {
+        isSignBill: false,
+        selectedFormsBillList: [],
+        selectedFormsDetails: [],
+    },
+    isFromCloseJob: false,
+    newlyCreatedBillsForCloseJob: [],
+    isSignBillUpdatable: true,
+    selectedSignBillsForCloseJob: []
 }
 
 
@@ -212,16 +241,14 @@ export const jobStatusWiseList = createAsyncThunk<JobDataListProps, paramsTypes,
     (JOB + "/jobStatusWiseList", async (params, { rejectWithValue }) => {
         try {
             console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
-            const urlParams = new URLSearchParams({ page: params.page?.toString() ?? '', search: params.search ?? '', status: params.status ?? '' })
+            const urlParams = new URLSearchParams({ page: params.page?.toString() ?? '', status: params.status ?? '' })
+            params?.search && urlParams.append('search', params.search ?? '')
             params?.id && urlParams.append('id', params.id.toString())
             params?.from_date && urlParams.append('from_date', params.from_date)
             params?.to_date && urlParams.append('to_date', params.to_date)
             console.log({ urlParams: urlParams.toString() })
 
-            // console.log('p000000000000', ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
             const response = await axiosClient.get(ApiConstants.JOBSTATUSWISE + "?" + urlParams.toString())
-            console.log("🚀 ~ file: jobListSlice.ts ~ line 700 ~ response", response)
-
             return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -251,7 +278,6 @@ export const recentTransferJobList = createAsyncThunk<JobDataListProps, paramsTy
     (JOB + "/recentTransferJobList", async (params, { rejectWithValue }) => {
         try {
             console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
-            // console.log('p000000000000', ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
             const response = await axiosClient.get(ApiConstants.RECENTTRANSFERJOBLIST + `?page=${params.page}&search=${params.search}`)
             console.log("🚀 ~ file: jobListSlice.ts ~ line 69 ~ response", response)
             return response.data;
@@ -267,7 +293,6 @@ export const transferJobList = createAsyncThunk<JobDataListProps, paramsTypes, {
     (JOB + "/transferJobList", async (params, { rejectWithValue }) => {
         try {
             console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
-            // console.log('p000000000000', ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
             const response = await axiosClient.get(ApiConstants.TRANSFERJOB + `?page=${params.page}&search=${params.search}`)
             console.log("🚀 ~ file: jobListSlice.ts ~ line 69 ~ response", response)
             return response.data;
@@ -300,7 +325,6 @@ export const updateTransferJobList = createAsyncThunk<JobDetailsData, paramsType
 
 export const updatejob = createAsyncThunk<string[], paramsTypes, { rejectValue: apiErrorTypes }>(JOB + "/updateJob", async (params, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.JOB)
         const response = await axiosClient.patch(ApiConstants.JOB + params.id + '/', params.formData)
         console.log('data...........=====', { response: response })
         return response.data
@@ -316,11 +340,28 @@ const jobListSlice = createSlice({
     name: JOB,
     initialState,
     reducers: {
-        resetSelectedReducer: (state) => {
-            state.formData = undefined
+        resetSelectedFormsBillReducer: (state) => {
+            state.selectedFormsDetailForJob = { isSignBill: false, selectedFormsBillList: [], selectedFormsDetails: [] }
+            state.isFromCloseJob = false
+            state.newlyCreatedBillsForCloseJob = []
+            state.isSignBillUpdatable = true
+            state.selectedSignBillsForCloseJob = []
         },
-        selectedFormReducers: (state, action) => {
-            state.formData = action.payload
+        selectedFormDetialsForCreateJobReducers: (state, action) => {
+            state.selectedFormsDetailForJob = { ...state.selectedFormsDetailForJob, ...action.payload, isSignBill: state.isSignBillUpdatable ? action.payload.isSignBill : state.selectedFormsDetailForJob.isSignBill }
+            let materialBillData: billData[] = action.payload.selectedFormsBillList.filter((bill: billData) => bill.type == 'Material')
+            let jsonObject = [...materialBillData].map((item) => JSON.stringify(item));
+            let uniqueSet = new Set(jsonObject);
+            let uniqueArray = Array.from(uniqueSet).map((item) => JSON.parse(item));
+            state.selectedFormsDetailForJob.selectedFormsBillList = uniqueArray
+        },
+        storeUserInteractionWithBillCreation: (state) => {
+            state.isFromCloseJob = true
+        },
+        storeCreatedBillDetailsForCloseJob: (state, action: { payload: billData }) => {
+            state.selectedFormsDetailForJob.isSignBill = state.isSignBillUpdatable ? action.payload.type == 'Sign' ? true : state.selectedFormsDetailForJob.isSignBill : state.selectedFormsDetailForJob.isSignBill
+            state.isSignBillUpdatable = action.payload.type == 'Sign' ? false : state.isSignBillUpdatable
+            state.newlyCreatedBillsForCloseJob = [...current(state.newlyCreatedBillsForCloseJob), action.payload]
         },
         jobDetailReducer: (state, action) => {
             state.jobDetailsData = action.payload
@@ -328,6 +369,30 @@ const jobListSlice = createSlice({
         resetJobDetailReducer: (state) => {
             state.jobDetailsData = undefined
         },
+        updateSelectedBilllDetials: (state, action) => {
+            const isFromNewCreateBill = state.newlyCreatedBillsForCloseJob.find((bill) => bill.id == action.payload.id)
+            const isFromFormsBill = state.selectedFormsDetailForJob.selectedFormsBillList.find((bill) => bill.id == action.payload.id)
+            const isFromSignBill = state.selectedSignBillsForCloseJob.find((bill) => bill.id == action.payload.id)
+            if (isFromNewCreateBill) {
+                let index = state.newlyCreatedBillsForCloseJob.findIndex((bill) => bill.id == action.payload.id)
+                state.newlyCreatedBillsForCloseJob.splice(index, 1, action.payload)
+            } else if (isFromFormsBill) {
+                let index = state.selectedFormsDetailForJob.selectedFormsBillList.findIndex((bill) => bill.id == action.payload.id)
+                state.selectedFormsDetailForJob.selectedFormsBillList.splice(index, 1, action.payload)
+            } else if (isFromSignBill) {
+                let index = state.selectedSignBillsForCloseJob.findIndex((bill) => bill.id == action.payload.id)
+                state.selectedSignBillsForCloseJob.splice(index, 1, action.payload)
+            }
+        },
+        updateSelectedSignBillListReducer: (state, action) => {
+            state.selectedFormsDetailForJob.isSignBill = state.isSignBillUpdatable ? action.payload.type == 'Sign' ? true : state.selectedFormsDetailForJob.isSignBill : state.selectedFormsDetailForJob.isSignBill
+            state.isSignBillUpdatable = action.payload.type == 'Sign' ? false : state.isSignBillUpdatable
+            const isSignIn = state.selectedFormsDetailForJob.selectedFormsDetails.find((forms: FormDataTypes) => forms.is_sign)
+
+            state.selectedFormsDetailForJob.isSignBill = (state.newlyCreatedBillsForCloseJob.length || action.payload.signBills.length || isSignIn) ? true : false
+            state.selectedSignBillsForCloseJob = action.payload.signBills
+            state.isSignBillUpdatable = state.selectedFormsDetailForJob.isSignBill === true ? false : true
+        }
     },
     extraReducers(builder) {
         // Job list
@@ -387,9 +452,13 @@ const jobListSlice = createSlice({
             state.isLoading = false
             let tempArray = action.meta.arg.page == 1 ? action.payload : {
                 ...action.payload,
-                results: [...current(state.jobListData?.results), ...action.payload?.results]
+                results: [...current(action.meta.arg.status == strings.open ? state.openedJobList?.results : state.closedJobList?.results), ...action.payload?.results]
             }
-            state.jobListData = action.meta.arg.page == 1 ? action.payload : tempArray
+            if (action.meta.arg.status == strings.open) {
+                state.openedJobList = action.meta.arg.page == 1 ? action.payload : tempArray
+            } else if (action.meta.arg.status == strings.close) {
+                state.closedJobList = action.meta.arg.page == 1 ? action.payload : tempArray
+            }
             state.error = ''
         });
         builder.addCase(jobStatusWiseList.rejected, (state, action) => {
@@ -481,5 +550,5 @@ const jobListSlice = createSlice({
     }
 })
 
-export const { selectedFormReducers, resetSelectedReducer, jobDetailReducer } = jobListSlice.actions
+export const { selectedFormDetialsForCreateJobReducers, resetSelectedFormsBillReducer, storeUserInteractionWithBillCreation, storeCreatedBillDetailsForCloseJob, updateSelectedBilllDetials, updateSelectedSignBillListReducer, jobDetailReducer, resetJobDetailReducer } = jobListSlice.actions
 export default jobListSlice.reducer

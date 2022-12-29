@@ -13,9 +13,10 @@ import { useFormik } from 'formik';
 import * as yup from "yup";
 import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { billCreate } from '../../redux/slices/AdminSlice/billListSlice';
+import { billCreate, billData } from '../../redux/slices/AdminSlice/billListSlice';
 import { colors } from '../../styles/Colors';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { storeCreatedBillDetailsForCloseJob } from '../../redux/slices/AdminSlice/jobListSlice'
 
 interface DropdownProps {
     label: string,
@@ -30,16 +31,15 @@ interface ValuesProps {
 const CreateBillSectionScreen = () => {
     const navigation = useCustomNavigation('CreateBillSectionScreen')
     const route = useRoute<RootRouteProps<'CreateBillSectionScreen'>>();
+    const dispatch = useAppDispatch()
+
     let { type } = route.params
-    console.log(route.params)
     const [countingValue, setCountingValue] = useState<DropdownProps>({ label: '', value: 0 })
     const [countingError, setCountingError] = useState(false)
     const [imageUrl, setImageUrl] = useState<string | undefined>('');
     const [imageError, setImageError] = useState(false)
     const [count, setCount] = useState(1)
-    const dispatch = useAppDispatch()
     const { formData } = useAppSelector(state => state.jobList)
-    // const { error } = useAppSelector(state => state.billList)
     const [error, setError] = useState({
         name: "",
         jumping_ration: "",
@@ -48,6 +48,8 @@ const CreateBillSectionScreen = () => {
         image: '',
         quantity: ''
     })
+    const { isFromCloseJob, newlyCreatedBillsForCloseJob } = useAppSelector(state => state.jobList)
+    // const { error } = useAppSelector(state => state.billList)
 
     const data = [
         { label: strings.meters, value: 'Meters' },
@@ -68,7 +70,7 @@ const CreateBillSectionScreen = () => {
     });
 
     const createbills = (values: ValuesProps) => {
-        console.log("🚀 ~ file: index.tsx ~ line 47 ~ createbills ~ values", values)
+        console.log("🚀  file: index.tsx  line 47  createbills  values", values)
 
         if (!countingValue.value) {
             setCountingError(true)
@@ -91,13 +93,17 @@ const CreateBillSectionScreen = () => {
             if (imageUrl) {
                 data.append("image", images ? images : '')
             }
-            data.append(type == 'material' ? "jumping_ration" : "quantity", route.params.screenName == 'updateJob' ? count : parseFloat(values.ration_qunt))
+            data.append(type == 'material' ? "jumping_ration" : "quantity", route.params.screenName == 'updateJob' ? count : parseFloat(String(values.ration_qunt)))
             data.append("type", type == 'material' ? "Material" : 'Sign')
 
-            console.log("🚀 ~ file: index.tsx ~ line 73 ~ createbills ~ data", data)
+            console.log("🚀  file: index.tsx  line 73  createbills  data", data)
 
-            dispatch(billCreate(data)).unwrap().then((res) => {
-                // formData?.push({ res })
+            dispatch(billCreate(data)).unwrap().then((res: billData) => {
+                if (isFromCloseJob) {
+                    dispatch(storeCreatedBillDetailsForCloseJob(res))
+                    navigation.goBack();
+                    navigation.goBack();
+                }
                 console.log({ res: res });
             }).catch((e) => {
                 console.log({ error: e });
@@ -109,15 +115,7 @@ const CreateBillSectionScreen = () => {
         setCount(count + 1)
     }
 
-    const Decrement = () => {
-        if (count == 0) {
-            setCount(0)
-        }
-        else {
-            setCount(count - 1)
-        }
-    }
-    const { values, errors, touched, handleSubmit, handleChange, } =
+    const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
             initialValues: {
                 name: '',
@@ -244,11 +242,11 @@ const CreateBillSectionScreen = () => {
                                         placeholder={strings.choose}
                                         container={{ marginBottom: wp(5) }}
                                     />
-                                    {countingError || error.type ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.type ? error.type : strings.typeCountRequired}</Text> : null}
+                                    {countingError || error.type ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.type ? error.type : strings.Typecount_required}</Text> : null}
 
                                     <CustomTextInput
                                         title={strings.jumpdish}
-                                        value={values.ration_qunt}
+                                        value={String(values.ration_qunt)}
                                         placeholder={strings.jumpdish}
                                         container={{ marginBottom: wp(5) }}
                                         onChangeText={handleChange("ration_qunt")}
@@ -290,20 +288,27 @@ const CreateBillSectionScreen = () => {
                                 </>
                             }
                         </>}
-                    {route.params.screenName == 'updatedJob' && <View style={[styles.textInputContainer, globalStyles.rtlDirection]}>
-                        <View style={styles.titleContainer}>
-                            <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{type == 'Sign' ? strings.quantity : strings.measurement}</Text>
-                        </View>
-                        <View style={[globalStyles.rowView, globalStyles.rtlDirection, styles.btnContainerStyle]}>
-                            <TouchableOpacity onPress={() => Increment()}>
-                                <Image source={ImagesPath.plus} resizeMode={'contain'} style={styles.btnIconStyle} />
-                            </TouchableOpacity>
-                            <Text style={{ width: wp(10), textAlign: 'center' }}>{count}</Text>
-                            <TouchableOpacity onPress={() => Decrement()}>
-                                <Image source={ImagesPath.minus} resizeMode={'contain'} style={styles.btnIconStyle} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>}
+                    {
+                        route.params.screenName == 'updatedJob' && <View style={[styles.textInputContainer, globalStyles.rtlDirection]}>
+                            <View style={styles.titleContainer}>
+                                <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{type == 'Sign' ? strings.quantity : strings.measurement}</Text>
+                            </View>
+                            <View style={[globalStyles.rowView, globalStyles.rtlDirection, styles.btnContainerStyle]}>
+                                <TouchableOpacity onPress={() => {
+                                    setFieldValue('ration_qunt', count + 1)
+                                    setCount(count + 1)
+                                }}>
+                                    <Image source={ImagesPath.plus} resizeMode={'contain'} style={styles.btnIconStyle} />
+                                </TouchableOpacity>
+                                <Text style={{ width: wp(10), textAlign: 'center' }}>{count}</Text>
+                                <TouchableOpacity onPress={() => {
+                                    setFieldValue('ration_qunt', count > 1 ? count - 1 : 1)
+                                    setCount(count > 1 ? count - 1 : 1)
+                                }}>
+                                    <Image source={ImagesPath.minus} resizeMode={'contain'} style={styles.btnIconStyle} />
+                                </TouchableOpacity>
+                            </View>
+                        </View >}
                     <CustomBlackButton
                         title={strings.createBill}
                         image={ImagesPath.plus_white_circle_icon}
@@ -317,9 +322,9 @@ const CreateBillSectionScreen = () => {
                             handleSubmit()
                         }}
                     />
-                </KeyboardAwareScrollView>
-            </Container>
-        </View>
+                </KeyboardAwareScrollView >
+            </Container >
+        </View >
     )
 }
 

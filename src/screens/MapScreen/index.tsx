@@ -14,11 +14,13 @@ import Carousel from 'react-native-snap-carousel';
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { resetMapRoutesReducer } from '../../redux/slices/MapSlice/MapSlice';
+import { manageMapRoutesReducer, resetMapRoutesReducer } from '../../redux/slices/MapSlice/MapSlice';
 import { RootRouteProps } from '../../types/RootStackTypes';
-import { jobList } from '../../redux/slices/AdminSlice/jobListSlice';
+import { JobDetailsData, jobList } from '../../redux/slices/AdminSlice/jobListSlice';
 import { GroupData, groupList } from '../../redux/slices/AdminSlice/groupListSlice';
 import { GroupParams } from '../TransferJobScreen';
+import Geolocation from '@react-native-community/geolocation';
+import Geocoder from 'react-native-geocoder';
 
 interface jobListParams {
     page?: number,
@@ -41,7 +43,9 @@ const MapScreen = () => {
     const [finalGroupData, setfinalGroupList] = useState<GroupParams[]>([])
 
     useEffect(() => {
-        dispatch(resetMapRoutesReducer())
+        if (isFocused) {
+            dispatch(resetMapRoutesReducer())
+        }
         jobListApiCall(page)
     }, [navigation, isFocused])
 
@@ -56,7 +60,6 @@ const MapScreen = () => {
             search: ''
         }
         dispatch(jobList(params)).unwrap().then((res) => {
-            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
             setPage(page + 1)
         }).catch((error) => {
             console.log({ error });
@@ -72,7 +75,6 @@ const MapScreen = () => {
             }
         })
         setfinalGroupList(findData)
-
     }, [groupData])
 
     useEffect(() => {
@@ -88,11 +90,49 @@ const MapScreen = () => {
         })
     }, [isFocused])
 
-    const renderItem = ({ item, index }: any) => {
+    // for set source and destination address in redux 
+    const handleAddressAndNavigation = () => {
+        if (route?.params?.type == 'viewJob') {
+            Geolocation.getCurrentPosition(
+                position => {
+                    console.log("getCurrentPosition", position.coords)
+                    Geocoder.geocodePosition({ lat: position?.coords?.latitude, lng: position?.coords?.longitude }).then((response: [{ formattedAddress: string }]) => {
+                        let params = {
+                            id: position.coords.latitude,
+                            coordinates: {
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude,
+                            },
+                            address: response[0].formattedAddress,
+                            description: 'current location of user',
+                            isCheckBlank: true
+                        }
+                        dispatch(manageMapRoutesReducer(params))
+                    })
+                })
+            let params = {
+                id: route?.params?.JobDetails?.coordinate ? route?.params?.JobDetails?.coordinate.latitude : 0,
+                coordinates: {
+                    latitude: route?.params?.JobDetails?.coordinate && route?.params?.JobDetails?.coordinate.latitude,
+                    longitude: route?.params?.JobDetails?.coordinate && route?.params?.JobDetails?.coordinate.longitude,
+                },
+                address: route?.params?.JobDetails?.address,
+                description: route?.params?.JobDetails?.description,
+                isCheckBlank: true
+            }
+            dispatch(manageMapRoutesReducer(params))
+            navigation.navigate("RouteScreen")
+        } else {
+            navigation.navigate("RouteScreen")
+        }
+    }
+
+    const renderItem = ({ item }: { item: JobDetailsData }) => {
         return (
             <CustomJobListComponent item={item} type='carousel' listStyle={{ backgroundColor: colors.red }} />
         )
     }
+
     return (
         <View style={globalStyles.container}>
             {route?.params?.type == 'viewJob' ?
@@ -143,25 +183,23 @@ const MapScreen = () => {
                 provider={'google'}
                 customMapStyle={customMapStyle}
                 region={route?.params?.type == 'viewJob' ? route?.params?.JobDetails?.coordinate : {
-                    latitude: Number(jobListData.results[selectedindex].latitude), longitude: Number(jobListData.results[selectedindex].longitude),
+                    latitude: jobListData?.results[selectedindex]?.latitude && Number(jobListData.results[selectedindex].latitude), longitude: jobListData?.results[selectedindex]?.longitude && Number(jobListData.results[selectedindex].longitude),
                     latitudeDelta: 0.04864195044303443,
                     longitudeDelta: 0.040142817690068,
                 }}>
-                {route?.params?.type && route?.params?.JobDetails == 'viewJob' ?
+                {(route?.params?.type && route?.params?.type == 'viewJob' && route?.params?.JobDetails?.coordinate) ?
                     <Marker coordinate={route?.params?.JobDetails?.coordinate}>
                         <Animated.View style={[styles.markerWrap]}>
-                            <Image source={route?.params?.JobDetails?.image[0] ? { uri: route?.params?.JobDetails?.image[0] } : ImagesPath.selected_marker_pin}
+                            <Image source={(route?.params?.JobDetails?.image && route?.params?.JobDetails?.image[0]) ? { uri: route?.params?.JobDetails?.image[0] } : ImagesPath.selected_marker_pin}
                                 style={styles.selected_markerPinIcon} />
                         </Animated.View>
                     </Marker>
                     :
                     jobListData.results.map((marker, index) => {
-                        console.log("data", marker)
-                        if (marker?.latitude != null) {
+                        if (marker.latitude != null) {
                             return (
                                 <Marker key={index} coordinate={{
-                                    latitude: Number(marker?.latitude), longitude: Number(marker.longitude), latitudeDelta: 0.04864195044303443,
-                                    longitudeDelta: 0.040142817690068,
+                                    latitude: Number(marker?.latitude), longitude: Number(marker.longitude),
                                 }}>
                                     <Animated.View style={[styles.markerWrap]}>
                                         <Image source={selectedindex == index ? ImagesPath.selected_marker_pin : ImagesPath.unselected_marker_pin}
@@ -180,7 +218,7 @@ const MapScreen = () => {
 
             </MapView>
             <View style={[styles.carouselStyle, { bottom: wp(5) }]}>
-                <TouchableOpacity style={[styles.routeBut, styles.routeButShadow]} onPress={() => navigation.navigate("RouteScreen")}>
+                <TouchableOpacity style={[styles.routeBut, styles.routeButShadow]} onPress={() => handleAddressAndNavigation()}>
                     <Image source={ImagesPath.route_icon} style={styles.pathIconStyle} />
                 </TouchableOpacity>
                 <Carousel

@@ -22,7 +22,7 @@ interface groupListParams {
 
 export interface GroupParams {
     id: number,
-    manager_details: {
+    manager_details?: {
         user_name: string,
         email: string
         id: number
@@ -30,7 +30,7 @@ export interface GroupParams {
         profile_image: string
         role: number
     },
-    inspector_details: {
+    inspector_details?: {
         user_name: string,
         email: string
         id: number
@@ -38,8 +38,8 @@ export interface GroupParams {
         profile_image: string
         role: number
     },
-    member_details: MemberDetailsProps[],
-    form_details: [{
+    member_details?: MemberDetailsProps[],
+    form_details?: [{
         bill: [],
         created_at: string,
         id: number,
@@ -47,15 +47,15 @@ export interface GroupParams {
         name: string,
         updated_at: string
     }],
-    total_member_in_group: string,
-    assign_jobs: [],
-    created_at: string,
-    updated_at: string,
-    name: string,
-    image: string,
-    manager: number,
-    inspector: number,
-    member: number[],
+    total_member_in_group?: string,
+    assign_jobs?: [],
+    created_at?: string,
+    updated_at?: string,
+    name?: string,
+    image?: string,
+    manager?: number,
+    inspector?: number,
+    member?: number[],
     selected?: boolean
 }
 

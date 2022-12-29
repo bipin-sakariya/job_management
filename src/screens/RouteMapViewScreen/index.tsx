@@ -45,27 +45,25 @@ interface RenderDetailProps extends RenderItemParams<LocationData> {
 const RenderDetail = memo(({ item, getIndex, isActive, drag, jobDetail, selectedAddressIndex, isOnlySourceAndDestination, distanceAndDuration }: RenderDetailProps) => {
     const [distanceFromSource, setDistanceFromSource] = useState<string>('')
 
-    const getDistanceFromLatLong = (lat1: number, lon1: number, lat2: number, lon2: number): string => {
-        let url = `https://maps.googleapis.com/maps/api/directions/json?origin=${lat2 + "," + lon2}&waypoints=&destination=${lat1 + "," + lon1}&key=AIzaSyB4UlbIcjYgMoBLJ_dpWmhwr24VHSeiFpw&mode=driving&language=he&region=undefined`
-        console.log("RES", { url })
-
+    const getDistanceFromLatLong = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+        let url = `https://maps.googleapis.com/maps/api/directions/json?origin=${lat2 + "," + lon2}&waypoints=&destination=${lat1 + "," + lon1}&mode=driving&language=he&region=undefined&key=AIzaSyB4UlbIcjYgMoBLJ_dpWmhwr24VHSeiFpw`
         fetch(url)
             .then(res => res.json())
             .then((res) => {
-                console.log("RES ------", { res, jobDetail, dis: res?.routes[0].legs[0].distance?.text })
+                console.log("SUCCESSS ---------->>>>>>> ", { res })
                 setDistanceFromSource(res?.routes[0].legs[0].distance?.text)
             }).catch((e) => {
-                console.log("RES Catch", { e })
+                console.log("**GET DISTANCE --------------------------------------------------------------**", { e })
+                console.log("**LAT LONG ----------------------------------", lat1, lon1, lat2, lon2)
                 setDistanceFromSource('')
             })
     }
 
     useEffect(() => {
-        console.log("HHHELLO -----", { distanceAndDuration })
         getIndex() != 0 && getDistanceFromLatLong(item?.coordinates?.latitude, item?.coordinates?.longitude, jobDetail[0]?.coordinates?.latitude, jobDetail[0]?.coordinates?.longitude)
     }, [jobDetail]);
 
-
+    console.log("RenderDetail --", { jobDetail, item })
     let currIndex = getIndex() ?? 0
     return (
         <ScaleDecorator>
@@ -74,7 +72,7 @@ const RenderDetail = memo(({ item, getIndex, isActive, drag, jobDetail, selected
                 <View style={{ flexDirection: 'row' }}>
                     <View style={styles.timeLineContainer}>
                         {isOnlySourceAndDestination ?
-                            <Image source={getIndex() == 0 ? ImagesPath.checkBlackCircle : getIndex() == 1 && ImagesPath.mapGrayPin} style={[styles.sourceIconStyle, { tintColor: getIndex() == 1 ? colors.black : undefined }]} />
+                            <Image source={getIndex() == 0 ? ImagesPath.checkBlackCircle : getIndex() == 1 && ImagesPath.mapGrayPin} style={[styles.sourceIconStyle, { tintColor: getIndex() == 1 ? colors.black : undefined, right: getIndex() == 1 ? -1 : undefined }]} />
                             :
                             <Text style={styles.indexValue}>{getIndex()}</Text>
                         }
@@ -103,7 +101,6 @@ const RenderDetail = memo(({ item, getIndex, isActive, drag, jobDetail, selected
                                 {currIndex != 0 &&
                                     <View style={[globalStyles.rowView, { direction: "ltr" }]}>
                                         <Image source={ImagesPath.map_pin_dark_line_icon} style={styles.mapPinStyle} />
-                                        {/* <Text numberOfLines={1} style={[styles.commonLightTxt, globalStyles.rtlStyle, { maxWidth: wp(25) }]}>{calculateDistance(item?.coordinates, jobDetail[0]?.coordinates)}&nbsp;{strings.KM_away}</Text> */}
                                         <Text numberOfLines={1} style={[styles.commonLightTxt, globalStyles.rtlStyle, { maxWidth: wp(25) }]}>{distanceFromSource}</Text>
                                     </View>
                                 }
@@ -147,8 +144,9 @@ const RouteMapViewScreen = () => {
         setIsOnlySourceAndDestination(finalJobRouteList.length <= 2 ? true : false)
         let wayPointsArray: Coordinates[] = []
         jobDetail.slice(1, jobDetail.length - 1).map((jobInfo) => {
-            wayPointsArray.push(jobInfo?.coordinates)
+            jobInfo?.coordinates && wayPointsArray.push(jobInfo?.coordinates)
         })
+        console.log("WAY POINTS ==", { wayPointsArray })
         wayPointsArray.length && setWayPoints(wayPointsArray)
     }
     const origin = { latitude: 21.240880638879975, longitude: 72.88060530857202 };
@@ -212,6 +210,9 @@ const RouteMapViewScreen = () => {
                                 console.log('Distance: Duration', { result, jobDetail })
                                 setDistanceAndDuration(result?.legs)
                             }}
+                            onError={(e) => {
+                                console.log("ERROR WHILE MAP DIREACTION -----", e)
+                            }}
                         />
                         <Marker coordinate={jobDetail[0]?.coordinates} >
                             <Image source={ImagesPath.sourceMarker} style={{ height: wp(16), width: wp(15) }} />
@@ -234,7 +235,9 @@ const RouteMapViewScreen = () => {
                     <CustomSubTitleWithImageComponent disabled title={strings.seeTheDistance} image={ImagesPath.route_drak_line_icon} titleStyle={{ fontSize: FontSizes.MEDIUM_16, color: colors.dark_blue2_color }} />
                     <DraggableFlatList
                         data={jobDetail}
-                        keyExtractor={(item) => item?.id.toString()}
+                        keyExtractor={(item) => {
+                            return item?.index ? item?.index.toString() : item?.id.toString()
+                        }}
                         renderItem={({ drag, getIndex, isActive, item }) => <RenderDetail drag={drag} getIndex={() => getIndex()} isActive={isActive} item={item} distanceAndDuration={distanceAndDuration} isOnlySourceAndDestination={isOnlySourceAndDestination} jobDetail={jobDetail} selectedAddressIndex={selectedAddressIndex} />}
                         showsVerticalScrollIndicator={false}
                         onDragEnd={({ data }) => {

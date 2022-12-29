@@ -109,13 +109,14 @@ export const styles = StyleSheet.create({
     sourceIconStyle: {
         height: wp(6),
         width: wp(6),
+        // backgroundColor: 'red',
     },
     dashedLine: {
         alignItems: "center",
         height: '82%',
         position: "absolute",
         top: 45,
-        left: 10,
+        left: wp(3),
     },
     timeLineContainer: {
         marginTop: wp(5),

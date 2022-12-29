@@ -1,19 +1,21 @@
 import { Image, Text, TouchableOpacity, View, ActivityIndicator, KeyboardAvoidingView, Platform, } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import { globalStyles } from '../../styles/globalStyles';
-import { ImagesPath } from '../../utils/ImagePaths';
-import { styles } from './styles';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { BottomSheet, CustomBlackButton, CustomTextInput } from '../../components';
-import { resetPassword, signin, userDataReducer } from '../../redux/slices/AuthUserSlice';
-import { strings } from '../../languages/localizedStrings';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import * as yup from "yup";
 import { Formik, useFormik } from "formik";
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+
+import { globalStyles } from '../../styles/globalStyles';
+import { ImagesPath } from '../../utils/ImagePaths';
+import { styles } from './styles';
+import { BottomSheet, CustomBlackButton, CustomTextInput } from '../../components';
+import { resetPassword, signin, userDataReducer } from '../../redux/slices/AuthUserSlice';
+import { strings } from '../../languages/localizedStrings';
 import CustomActivityIndicator from '../../components/CustomActivityIndicator';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { colors } from '../../styles/Colors';
+import { jobStatusWiseList } from '../../redux/slices/AdminSlice/jobListSlice';
 
 const SignInScreen = () => {
     const navigation = useCustomNavigation('AuthStack')
@@ -28,6 +30,7 @@ const SignInScreen = () => {
     const [isLoading, setIsLoading] = useState(false)
 
     const { isLoading: loading, error } = useAppSelector(state => state.userDetails)
+    const { selectedGroupData } = useAppSelector(state => state.groupList)
 
     const SignInValidationSchema = yup.object().shape({
         email: yup.string().trim().email(strings.emailInvalid).required(strings.emailInvalid),
@@ -54,6 +57,7 @@ const SignInScreen = () => {
                     role: res.role,
                     accesToken: res.access
                 }
+
                 dispatch(userDataReducer(userData))
                 setIsLoading(false)
                 navigation.reset({ index: 0, routes: [{ name: "DrawerScreens" }] })
@@ -111,10 +115,10 @@ const SignInScreen = () => {
                     placeholder={strings.userName}
                     onChangeText={handleChange("email")}
                     value={values.email}
-                    container={{ marginBottom: wp(5) }}
+                    container={{ marginBottom: wp(4) }}
                     keyboardType={'email-address'}
                 />
-                {touched.email && errors.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors.email}</Text> : null}
+                <Text style={[globalStyles.rtlStyle, { bottom: wp(4), color: colors.red, }]}>{(touched.email && errors.email) ? errors.email : ' '}</Text>
                 <CustomTextInput
                     title={strings.password}
                     placeholder={strings.password}
@@ -127,8 +131,8 @@ const SignInScreen = () => {
                         </TouchableOpacity>
                     }
                 />
-                {touched.password && errors.password ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{errors.password}</Text> : null}
-                {isError ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{error}</Text> : null}
+                <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{(touched.password && errors.password) ? errors.password : isError ? error : ' '}</Text>
+                {/* <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{}</Text> */}
                 <TouchableOpacity onPress={() => {
                     refForgetPassRBSheet.current?.open()
                 }}>
@@ -170,11 +174,12 @@ const SignInScreen = () => {
                                                 placeholder={strings.emailNew}
                                                 value={values.email}
                                                 onChangeText={handleChange("email")} />
-                                            {touched.email && errors.email && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors.email}</Text>}
+                                            <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{(touched.email && errors.email) ? errors.email : ' '}</Text>
                                             <CustomBlackButton
+
                                                 onPress={() => { handleSubmit() }}
                                                 title={strings.requestResetLink}
-                                                buttonStyle={{ paddingHorizontal: wp(23) }} />
+                                                buttonStyle={{ paddingHorizontal: wp(23), marginTop: 0 }} />
                                         </>
                                     )}
                                 </Formik>

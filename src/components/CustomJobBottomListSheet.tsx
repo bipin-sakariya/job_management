@@ -27,7 +27,6 @@ interface CustomJobBottomListSheetProps {
 
 const CustomJobBottomListSheet = React.forwardRef((props: CustomJobBottomListSheetProps & RBSheetProps, ref: any) => {
     const navigation = useCustomNavigation('MapScreen');
-
     const renderItem = ({ item }: { item: JobDetailsData }) => {
         return (
             <CustomJobListComponent item={item} />

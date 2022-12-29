@@ -21,7 +21,7 @@ export interface ListDataProps {
 interface CustomBottomSheetProps {
     data: GroupParams[],
     onSelectedTab: (item: GroupParams) => void
-    defaultSelected: {
+    defaultSelected?: {
         id: number
         name: string
         selected: boolean
@@ -32,6 +32,7 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
     const [data, setData] = useState(props.data)
     const [defaultSelectedId, setDefaultSelectedId] = useState<number>()
 
+    console.log("CustomBottomSheet ---", { DATA: props.data })
     useEffect(() => {
         setData(props.data)
         setDefaultSelectedId(props.defaultSelected?.id)
@@ -106,6 +107,9 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
                         placeholderTextColor={colors.light_brown}
                         autoCorrect={false}
                         autoCapitalize={'none'}
+                        onChangeText={() => {
+
+                        }}
                     />
                 </View>
                 <FlatList

@@ -12,6 +12,7 @@ export interface LocationData {
         longitude: number
     },
     status?: string,
+    index?: number
 }
 
 interface initialStateTypes {
@@ -67,11 +68,11 @@ const MapSlice = createSlice({
             console.log({ action, state })
             console.log({ condition: action.payload?.isCheckBlank })
             if (!action.payload?.isCheckBlank ? (state.selectperticularAddress == 'source') : (!state.source)) {
-                state.source = action.payload
+                state.source = { ...action.payload, index: 0 }
             } else if (!action.payload?.isCheckBlank ? (state.selectperticularAddress == 'destination') : (!state.destination)) {
-                state.destination = action.payload
+                state.destination = { ...action.payload, index: 1 }
             } else if (!action.payload?.isCheckBlank ? (state.selectperticularAddress == 'waypoints') : true) {
-                let routeList: LocationData[] = [...current(state.routeList), action.payload]
+                let routeList: LocationData[] = [...current(state.routeList), { ...action.payload, index: state.routeList.length + 2 }]
                 console.log({ routeList })
                 if (routeList.length <= 8) {
                     state.routeList = routeList
@@ -79,7 +80,7 @@ const MapSlice = createSlice({
             }
         },
         updateFinalMapRoutesReducer: (state) => {
-            let finalRoutes = []
+            let finalRoutes: LocationData[] = []
             state.source && finalRoutes.push(current(state.source))
             state.routeList && finalRoutes.push(...current(state.routeList))
             state.destination && finalRoutes.push(current(state.destination))
@@ -89,7 +90,6 @@ const MapSlice = createSlice({
             state.selectperticularAddress = action.payload
         },
         storeCreateJoblocationReducer: (state, action) => {
-            console.log("storeCreateJoblocation", { action })
             state.createJobLocation = action?.payload
         }
     },

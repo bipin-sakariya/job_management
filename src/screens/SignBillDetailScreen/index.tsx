@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Image, Text, View, TouchableOpacity } from 'react-native';
 import { globalStyles } from '../../styles/globalStyles';
-import { Container, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components';
+import { Container, CustomActivityIndicator, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { ImagesPath } from '../../utils/ImagePaths';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { heightPercentageToDP, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { strings } from '../../languages/localizedStrings';
 import { styles } from './style';
 import { RootRouteProps } from '../../types/RootStackTypes';
@@ -14,18 +14,20 @@ import { useFormik } from 'formik';
 import { colors } from '../../styles/Colors';
 import { billUpdate } from '../../redux/slices/AdminSlice/billListSlice';
 import { useAppDispatch } from '../../hooks/reduxHooks';
+import { updateSelectedBilllDetials } from '../../redux/slices/AdminSlice/jobListSlice';
 
 const SignBillDetailScreen = () => {
     const navigation = useCustomNavigation('SignBillDetailScreen');
     const route = useRoute<RootRouteProps<'SignBillDetailScreen'>>();
     const dispatch = useAppDispatch()
-
+    console.log("SignBillDetailScreen", { route })
     let { type } = route.params
     let quntity = route.params.item.quantity
     let jumping_ration = route.params.item.jumping_ration
 
     const [count, setCount] = useState(type == 'Sign' ? quntity : jumping_ration)
     const [isModelVisible, setIsModelVisible] = useState(false)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const data = [
         { label: strings.meters, value: 'Meters' },
@@ -71,6 +73,8 @@ const SignBillDetailScreen = () => {
         })
 
     const updateBill = (values: { name: string, ration_qunt: string }) => {
+        setIsModelVisible(false)
+        setIsLoading(true)
         console.log({ values, type, float: values.ration_qunt });
         let data = new FormData()
         // data.append('name', values.name)
@@ -85,13 +89,19 @@ const SignBillDetailScreen = () => {
             id: route.params.item.id
         }
         dispatch(billUpdate(params)).unwrap().then((res) => {
+            if (route?.params?.isCloseJob) {
+                dispatch(updateSelectedBilllDetials({ ...res, type: route?.params?.type }))
+                setIsLoading(false)
+            }
             navigation.goBack()
         }).catch((e) => {
+            setIsLoading(false)
         })
     }
 
     return (
         <View style={globalStyles.container}>
+            {isLoading && <CustomActivityIndicator />}
             <Header
                 headerLeftStyle={{
                     width: "50%",
@@ -120,7 +130,7 @@ const SignBillDetailScreen = () => {
                     image={ImagesPath.receipt_icon} />
                 {type == 'Sign' &&
                     <Image
-                        source={ImagesPath.arrow_icon}
+                        source={{ uri: route.params.item.image }}
                         resizeMode={'contain'}
                         style={styles.arrowIconStyle}
                     />}
@@ -135,10 +145,10 @@ const SignBillDetailScreen = () => {
                 {/* type counting  */}
                 <View style={{}}>
                     <DropDownComponent
-                        // disable
+                        disable
                         title={strings.typeCounting}
                         data={data}
-                        image={ImagesPath.down_white_arrow}
+                        // image={ImagesPath.down_white_arrow}
                         labelField="label"
                         valueField="value"
                         onChange={(item) => setFieldValue('name', item)}
@@ -147,7 +157,6 @@ const SignBillDetailScreen = () => {
                         container={{ marginBottom: wp(5) }}
                     />
                 </View>
-
                 {/* measurement */}
                 <View style={[styles.textInputContainer, globalStyles.rtlDirection]}>
                     <View style={styles.titleContainer}>

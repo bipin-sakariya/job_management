@@ -11,6 +11,7 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 import { useAppSelector } from '../../hooks/reduxHooks';
 import { DebugInstructions } from 'react-native/Libraries/NewAppScreen';
 import { resetSelectedGroupReducer } from '../../redux/slices/AdminSlice/groupListSlice';
+import { USER_LOGOUT } from '../../redux/Store';
 
 const AdminDrawerBtn = [
     { btnTitle: strings.drawer_User, image: ImagesPath.user_icon, route: 'UserListScreen' },
@@ -80,8 +81,9 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
                 </View>
             </View>
             <TouchableOpacity onPress={() => {
-                dispatch(resetUserDataReducer())
-                dispatch(resetSelectedGroupReducer())
+                // dispatch(resetUserDataReducer())
+                // dispatch(resetSelectedGroupReducer())
+                dispatch({ type: USER_LOGOUT })
                 navigation.reset({ index: 0, routes: [{ name: "AuthStack" }] })
             }} style={styles.logoutBtnStyle}>
                 <Image source={ImagesPath.logout_icon} style={styles.logoutBtn} />

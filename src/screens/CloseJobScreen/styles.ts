@@ -137,9 +137,10 @@ export const styles = StyleSheet.create({
         fontSize: FontSizes.SMALL_14,
         color: colors.dark_blue2_color,
     },
-    checkBoxIcon: {
-        height: wp(6),
-        width: wp(6)
+    checkIcon: {
+        height: wp(7),
+        width: wp(7),
+        // resizeMode: 'contain',
     },
     checkBoxIcon1: {
         height: wp(5),

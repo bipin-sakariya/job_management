@@ -19,8 +19,6 @@ const BillCreateScreen = () => {
     const navigation = useCustomNavigation('BillCreateScreen');
     const route = useRoute<RootRouteProps<'BillCreateScreen'>>();
 
-
-    // console.log({ route11111: route.params.screenName })
     return (
         <View style={globalStyles.container}>
             <Header
@@ -42,9 +40,7 @@ const BillCreateScreen = () => {
                     viewStyle={{ paddingVertical: wp(8) }}
                     imageStyle={styles.iconStyle}
                     textStyle={{ fontSize: FontSizes.EXTRA_LARGE_24 }}
-                    onPress={() => {
-                        navigation.navigate('CreateBillSectionScreen', { type: "material", screenName: route.params.screenName })
-                    }}
+                    onPress={() => { navigation.navigate('CreateBillSectionScreen', { type: "material", screenName: route.params.screenName }) }}
                     title={strings.createMaterialBill} />
                 <CustomSubTitleWithImageComponent disabled viewStyle={{ marginTop: wp(2) }} title={strings.createSignBillsection} image={ImagesPath.receipt_icon} />
                 <CustomDashedComponent
