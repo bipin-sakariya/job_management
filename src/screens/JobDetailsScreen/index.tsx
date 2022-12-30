@@ -16,8 +16,8 @@ import FileViewer from "react-native-file-viewer";
 import RNFS from "react-native-fs";
 import { jobDetail, JobDetailsData, resetSelectedFormsBillReducer, jobDetailReducer } from "../../redux/slices/AdminSlice/jobListSlice";
 import { convertDate } from "../../utils/screenUtils";
-import { groupDetails } from "../../redux/slices/AdminSlice/groupListSlice";
-import Video from "react-native-video";
+// import Video from "react-native-video";
+import { returnDeleteJob } from "../../redux/slices/AdminSlice/returnJobListSlice";
 
 const JobDetailsScreen = () => {
 
@@ -51,7 +51,12 @@ const JobDetailsScreen = () => {
         dispatch(resetSelectedFormsBillReducer())
     }, [isFocused])
 
-    const updateReturnJob = () => {
+    const deleteReturnJob = (id: number) => {
+        if (id) {
+            dispatch(returnDeleteJob(id)).unwrap().then(() => {
+                navigation.goBack()
+            })
+        }
 
     }
 
@@ -223,7 +228,7 @@ const JobDetailsScreen = () => {
 
     return (
         <View style={globalStyles.container} >
-            {loading && <CustomActivityIndicator size={'small'} />}
+            {(loading || isLoading) && <CustomActivityIndicator />}
             <Header
                 headerLeftStyle={{
                     width: "50%",
@@ -376,7 +381,7 @@ const JobDetailsScreen = () => {
                                         <Text style={[styles.noNameTxt]}>{strings.forms}</Text>
                                     </View>
                                     <FlatList
-                                        data={FormData}
+                                        data={jobDetails.bills}
                                         renderItem={renderItem}
                                         showsVerticalScrollIndicator={false}
                                         ListHeaderComponent={() => {
@@ -427,6 +432,7 @@ const JobDetailsScreen = () => {
                         {(type == 'returnJob' && (userData?.role == strings.inspector || userData?.role == strings.admin) && jobDetails.status == strings.jobReturn) &&
                             <View style={[globalStyles.rowView, { justifyContent: 'space-between', marginVertical: wp(5) }]}>
                                 <CustomBlackButton
+                                    onPress={() => { deleteReturnJob(jobDetails.id) }}
                                     title={strings.delete}
                                     image={ImagesPath.trash_icon}
                                     imageStyle={{ tintColor: colors.primary_color }}

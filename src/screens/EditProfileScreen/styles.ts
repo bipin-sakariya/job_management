@@ -7,5 +7,6 @@ export const styles = StyleSheet.create({
         width: wp(24),
         marginVertical: wp(4),
         alignSelf: 'center',
+        borderRadius: wp(2)
     },
 }) 

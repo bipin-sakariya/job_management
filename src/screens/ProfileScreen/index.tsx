@@ -7,9 +7,40 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { styles } from './styles';
 import { strings } from '../../languages/localizedStrings';
+import { useAppSelector } from '../../hooks/reduxHooks';
+import FastImage from 'react-native-fast-image';
 
 const ProfileScreen = () => {
     const navigation = useCustomNavigation('ProfileScreen')
+    const { userData, token } = useAppSelector(state => state.userDetails)
+    console.log({ userData })
+
+    // const chooseFile = () => {
+    //     ImagePicker.launchImageLibrary(options, (response) => {
+    //         if (response.didCancel) {
+    //             console.log("User cancelled image picker");
+    //         } else if (response.error) {
+    //             console.log("ImagePicker Error: ", response.error);
+    //         } else if (response.customButton) {
+    //             console.log("User tapped custom button: ", response.customButton);
+    //         } else {
+    //             const source = { uri: response.uri };
+    //             console.log({
+    //                 response,
+    //             });
+
+    //             if (response) {
+    //                 isImageClick(true)
+    //             }
+    //             else {
+    //                 isImageClick(false)
+    //             }
+    //             setUserDetail({ ...userDetail, profile_image: response.assets[0].uri });
+    //         }
+    //         setIsImage(true);
+    //     });
+    // };
+
     return (
         <View style={globalStyles.container}>
             <Header
@@ -27,21 +58,24 @@ const ProfileScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <Image source={ImagesPath.add_photo_icon} style={styles.profilePhoto} />
+                <FastImage source={{ uri: token && token.user.profile_image }} style={styles.profilePhoto} />
                 <CustomTextInput
+                    editable={false}
                     title={strings.userName}
                     container={{ marginBottom: wp(5) }}
-                    value={'Stanley Lamb'}
+                    value={token && token.user.user_name}
                 />
                 <CustomTextInput
+                    editable={false}
                     title={strings.email}
                     container={{ marginBottom: wp(5) }}
-                    value={'stanleylamb@gmail.com'}
+                    value={token && token.user.email}
                 />
                 <CustomTextInput
+                    editable={false}
                     title={strings.contactNo}
                     container={{ marginBottom: wp(5) }}
-                    value={'0123456789'}
+                    value={token && token.user.phone}
                 />
                 <TouchableOpacity onPress={() => navigation.navigate('ResetPasswordScreen')} style={styles.btnView}>
                     <Text style={styles.btnTxtStyle}>{strings.changePassword}</Text>

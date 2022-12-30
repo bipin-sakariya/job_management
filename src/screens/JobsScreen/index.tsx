@@ -16,7 +16,7 @@ import { GroupData, groupList, selectedAllGroupReducers, selectedGroupReducers }
 import { GroupParams } from '../TransferJobScreen';
 import FontSizes from '../../styles/FontSizes';
 import fonts from '../../styles/Fonts';
-import { getNotificatioList } from '../../redux/slices/AdminSlice/notificationSlice';
+// import { getNotificatioList } from '../../redux/slices/AdminSlice/notificationSlice';
 
 interface jobListParams {
     page?: number,
@@ -169,7 +169,7 @@ const JobsScreen = () => {
                 setFinalAllGroup(categoryList);
             });
 
-            const data = categoryList.map((item) => {
+            const data = categoryList.map((item: GroupParams) => {
                 if (selectedGroupData.name != 'All') {
                     if (item.name == selectedGroupData.name) {
                         return {

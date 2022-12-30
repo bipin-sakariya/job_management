@@ -55,7 +55,21 @@ const SignInScreen = () => {
                 let userData = {
                     email: values.email,
                     role: res.role,
-                    accesToken: res.access
+                    accesToken: res.access,
+                    user: res.userdata
+                    // user: {
+                    //     id: res.,
+                    //     profile_image: string,
+                    //     user_name: string,
+                    //     email: string,
+                    //     phone: string,
+                    //     date_joined: string,
+                    //     role: {
+                    //         id: number,
+                    //         title: string
+                    //     },
+                    //     is_active: boolean
+                    // }
                 }
 
                 dispatch(userDataReducer(userData))

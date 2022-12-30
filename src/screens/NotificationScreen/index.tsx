@@ -13,6 +13,7 @@ const NotificationScreen = () => {
     const JobData = [
         {
             data: '16 May 2022',
+            images: [{ image: require('../../assets/images/addForm.png') }],
             jobs: [
                 { title: '9 Beit Hadfus', jobstatus: strings.jobAddedBy, author: '@Robert Kramer', km: '2m' },
                 { title: '9 Beit Hadfus', jobstatus: strings.jobClosedBy, author: '@Tiffany Rivas', km: '2m' },
@@ -21,6 +22,7 @@ const NotificationScreen = () => {
         },
         {
             data: '15 May 2022',
+            images: [{ image: require('../../assets/images/addForm.png') }],
             jobs: [
                 { title: '9 Beit Hadfus', jobstatus: strings.jobClosedBy, author: '@Tiffany Rivas', km: '1d' },
                 { title: '9 Beit Hadfus', jobstatus: strings.jobAddedBy, author: '@Robert Kramer', km: '1d' },
@@ -29,6 +31,7 @@ const NotificationScreen = () => {
         },
         {
             data: '14 May 2022',
+            images: [{ image: require('../../assets/images/addForm.png') }],
             jobs: [
                 { title: '9 Beit Hadfus', jobstatus: strings.jobAddedBy, author: '@Robert Kramer', km: '2d' },
                 { title: '9 Beit Hadfus', jobstatus: strings.jobClosedBy, author: '@Tiffany Rivas', km: '2d' },

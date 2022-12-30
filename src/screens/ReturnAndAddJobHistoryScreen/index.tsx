@@ -39,16 +39,17 @@ const ReturnAndAddJobHistoryScreen = () => {
     useEffect(() => {
 
         if (isFocus)
-            recentJobListApiCall(page)
-        jobListApiCall(jobPage)
-        return () => {
-            setPage(1)
-            setJobPage(1)
-        }
+            //  recentJobListApiCall(page)
+            // jobListApiCall(jobPage)
+            return () => {
+                setPage(1)
+                setJobPage(1)
+            }
     }, [isFocus])
     useEffect(() => {
-
-    }, [isFocus])
+        recentJobListApiCall(page)
+        jobListApiCall(jobPage)
+    }, [])
 
     const recentJobListApiCall = (page: number) => {
         let params: jobListParams = {

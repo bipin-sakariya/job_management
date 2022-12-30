@@ -36,7 +36,7 @@ const GroupManagerDrawerBtn = [
 
 const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponentProps) => {
 
-    const { userData } = useAppSelector((state) => state.userDetails)
+    const { userData, token } = useAppSelector((state) => state.userDetails)
     const dispatch = useDispatch()
     const drawerBtn = userData?.role == strings.admin ? AdminDrawerBtn : userData?.role == strings.inspector ? InspectorDrawerBtn : GroupManagerDrawerBtn
 
@@ -44,7 +44,7 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
         <View style={[globalStyles.container,]}>
             <View style={styles.topView} >
                 <Image source={ImagesPath.drawer_Bg} style={styles.drawerBackGroundColor} />
-                <Image source={ImagesPath.user_placeholder_img} style={styles.userPlaceholderStyle} />
+                <Image source={{ uri: token && token.user.profile_image }} style={styles.userPlaceholderStyle} />
             </View>
             <View style={styles.userNameContainer}>
                 <TouchableOpacity
@@ -54,7 +54,7 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
                         navigation.navigate('ProfileScreen')
                     }}
                     style={globalStyles.rowView}>
-                    <Text style={[styles.userNameTxt, globalStyles.rtlStyle]}>Johnny Weis</Text>
+                    <Text style={[styles.userNameTxt, globalStyles.rtlStyle]}>{token && token.user.user_name}</Text>
                     <Image source={ImagesPath.pencil_icon} style={styles.penIcon} />
                 </TouchableOpacity>
                 <Text style={[styles.roleTxt, globalStyles.rtlStyle]}>{userData?.role}</Text>
