@@ -7,6 +7,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import InboxListComponent from '../../components/InboxListComponent';
 import { strings } from '../../languages/localizedStrings';
 import { colors } from '../../styles/Colors';
+import useCustomNavigation from '../../hooks/useCustomNavigation';
 export interface messageListProps {
     id: number,
     title: string,
@@ -29,6 +30,8 @@ const data: messageListProps[] = [
 
 
 const IndoxScreen = () => {
+    const navigation = useCustomNavigation('IndoxScreen')
+
     return (
         <View style={globalStyles.container}>
             <Header
@@ -49,7 +52,20 @@ const IndoxScreen = () => {
                 <FlatList
                     data={data}
                     renderItem={({ item, index }: { item: messageListProps, index: number }) => (
-                        <InboxListComponent item={item} index={index} />
+                        <InboxListComponent item={item} index={index} onPress={() => {
+                            if (index == 0) {
+                                navigation.navigate("ChatScreen", { job: undefined })
+                            } else {
+                                const job = {
+                                    id: 1,
+                                    name: 'job title',
+                                    distance: '5 km',
+                                    descriprion: 'hello this is the job details screen page',
+                                    imageurl: "https://dummyimage.com/600x400/000/fff",
+                                }
+                                navigation.navigate("ChatScreen", { job: job })
+                            }
+                        }} />
                     )}
                     contentContainerStyle={{ paddingBottom: wp(30) }}
                     showsVerticalScrollIndicator={false}

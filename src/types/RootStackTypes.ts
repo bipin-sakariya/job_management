@@ -1,4 +1,5 @@
 import { RouteProp } from "@react-navigation/native";
+import { JobDataProps } from "./commanTypes";
 
 export type BottomStackParamList = {
     JobsScreen: undefined
@@ -37,7 +38,7 @@ export type RootStackParamList = {
     EditProfileScreen: undefined
     CreateFormScreen: undefined
     FormDetailsScreen: { id?: number | undefined, isEdit?: boolean, type?: string }
-    ChatScreen: undefined
+    ChatScreen: { job?: JobDataProps }
     TransferJobScreen: undefined
     ReturnJobScreen: undefined
     DuplicateScreen?: { params?: any }

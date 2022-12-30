@@ -276,5 +276,6 @@ export const hebrew = {
     document: 'מסמך',
     Camera: 'מַצלֵמָה',
     Photos: 'תמונות',
-    Video: 'וִידֵאוֹ'
+    Video: 'וִידֵאוֹ',
+    Please_wait: 'המתן בבקשה...!!',
 }

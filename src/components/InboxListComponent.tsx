@@ -9,10 +9,15 @@ import useCustomNavigation from '../hooks/useCustomNavigation';
 import { messageListProps } from '../screens/InboxScreen';
 import { colors } from '../styles/Colors';
 
-const InboxListComponent = ({ item, index }: { item: messageListProps, index: number }) => {
-    const navigation = useCustomNavigation('IndoxScreen')
+interface InboxListComponentProps {
+    item: messageListProps,
+    index: number,
+    onPress: () => void
+}
+
+const InboxListComponent = ({ item, index, onPress }: InboxListComponentProps) => {
     return (
-        <TouchableOpacity onPress={() => { navigation.navigate("ChatScreen") }} style={styles.itemContainer}>
+        <TouchableOpacity onPress={onPress} style={styles.itemContainer}>
             <Image source={item.imageurl ? { uri: item.imageurl } : ImagesPath.placeholder_img} style={styles.imageStyle} />
             <View style={styles.txtContainer}>
                 <View>

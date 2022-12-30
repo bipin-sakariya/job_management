@@ -15,6 +15,7 @@ interface CommonPdfViewProps {
     titleTxtstyle?: TextStyle
     mbTxtstyle?: TextStyle,
     onPress?: () => void
+    disabled?: boolean
 }
 
 interface itemDetails {
@@ -26,7 +27,7 @@ interface itemDetails {
 }
 const CommonPdfView = (props: CommonPdfViewProps) => {
     return (
-        <TouchableOpacity onPress={props.onPress} style={[globalStyles.rowView, styles.mainDocView, props.mainView]}>
+        <TouchableOpacity disabled={props.disabled ? props.disabled : false} onPress={props.onPress} style={[globalStyles.rowView, styles.mainDocView, props.mainView]}>
             <View style={[globalStyles.centerView, styles.docPdfViewStyle, props.imageViewStyle]}>
                 <Text style={[styles.docTypeTxt, props.docTxtStyle, {}]}>{props.item.type}</Text>
             </View>

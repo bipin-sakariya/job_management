@@ -7,6 +7,7 @@ export interface ImageList {
     id: number
     url: string
     mediaType: string | undefined
+    thumbnail?: undefined
 }
 export interface DocList {
     id: number
@@ -20,4 +21,13 @@ export interface VideoList {
     id: number
     url: string
     mediaType: string | undefined
+    thumbnail?: string
+}
+
+export interface JobDataProps {
+    id: number,
+    name: string,
+    distance: string,
+    descriprion: string,
+    imageurl: string
 }

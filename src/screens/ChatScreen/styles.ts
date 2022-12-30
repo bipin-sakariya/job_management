@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { colors } from "../../styles/Colors";
 import fonts from "../../styles/Fonts";
@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.REGULAR_18,
         marginHorizontal: wp(2),
+        color: colors.balck_color,
     },
     messageTxt: {
         ...globalStyles.rtlStyle,
@@ -72,6 +73,7 @@ export const styles = StyleSheet.create({
         maxWidth: '50%',
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
+        color: colors.dark_blue1_color
     },
     jobDetailHeaderView: {
         justifyContent: "space-between",
@@ -88,6 +90,7 @@ export const styles = StyleSheet.create({
         resizeMode: 'contain'
     },
     jobDistanceTxt: {
+        ...globalStyles.rtlDirection,
         marginHorizontal: wp(0.5),
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_10,
@@ -120,13 +123,16 @@ export const styles = StyleSheet.create({
         width: wp(6),
         alignSelf: 'flex-end',
         resizeMode: "contain",
-        tintColor: colors.black
+        tintColor: colors.white_color
     },
     closeImageBtnStyle: {
         position: 'absolute',
         top: wp(10),
         left: wp(5),
         zIndex: 10,
+        backgroundColor: colors.black,
+        borderRadius: wp(5),
+        padding: wp(2)
     },
     imageStyle: {
         height: wp(20),
@@ -158,6 +164,7 @@ export const styles = StyleSheet.create({
         ...globalStyles.rtlStyle,
         fontSize: FontSizes.EXTRA_SMALL_12,
         fontFamily: fonts.FONT_POP_MEDIUM,
+        color: colors.dark_blue1_color
     },
     sendBtnStyle: {
         height: wp(10),
@@ -212,9 +219,11 @@ export const styles = StyleSheet.create({
         marginTop: wp(12)
     },
     chatFooterMainView: {
-        backgroundColor: colors.light_blue_color,
+        // backgroundColor: colors.light_blue_color,
         borderTopLeftRadius: wp(2),
         borderTopRightRadius: wp(2),
+        backgroundColor: colors.white_color,
+        marginTop: wp(1),
     },
     jobDetailsMainViewStyle: {
         backgroundColor: colors.white_color,
@@ -336,5 +345,129 @@ export const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: colors.white_color,
         borderRadius: wp(3),
+    },
+    linkPreviewContainerStyle: {
+        width: wp(70),
+        alignSelf: 'center',
+        borderRadius: wp(2),
+        margin: wp(2)
+    },
+    leftAvatarStyle: {
+        borderRadius: wp(5),
+        width: wp(8),
+        height: wp(8),
+        justifyContent: "center",
+        alignItems: 'center'
+    },
+    rightAvatarStyle: {
+        borderRadius: wp(5),
+        width: wp(8),
+        height: wp(8),
+        justifyContent: "center",
+        alignItems: 'center',
+        marginTop: wp(5)
+    },
+    toolbarContainerStyle: {
+        borderRadius: wp(2),
+        flex: 1,
+        flexDirection: 'row',
+        backgroundColor: colors.light_blue_color,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    innerChatFooterContainerStyle: {
+        backgroundColor: colors.light_blue_color,
+        width: '85.5%',
+        padding: wp(2),
+        borderTopLeftRadius: wp(2),
+        borderTopRightRadius: wp(2),
+        marginBottom: Platform.OS == 'ios' ? 0 : wp(1)
+    },
+    footerCloseBtnStyle: {
+        margin: wp(1),
+        padding: wp(0.5),
+        alignSelf: 'flex-end',
+        position: "absolute",
+        borderRadius: wp(5),
+        zIndex: 5,
+    },
+    renderMessageImageStyle: {
+        minHeight: wp(65),
+        minWidth: '95%',
+        alignSelf: 'center',
+        marginVertical: wp(1.5),
+        borderRadius: wp(2),
+        resizeMode: 'cover'
+    },
+    renderMessageVideoContainerStyle: {
+        height: wp(65),
+        width: '100%',
+        backgroundColor: colors.transparent_black,
+        borderRadius: wp(2),
+        alignSelf: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        alignItems: 'center',
+        zIndex: 1,
+    },
+    playBtnStyle: {
+        height: wp(20),
+        width: wp(20),
+        resizeMode: 'contain',
+        tintColor: colors.light_blue_color
+    },
+    renderMessageVideoStyle: {
+        minHeight: wp(65),
+        width: wp(70),
+        borderRadius: wp(2),
+        alignSelf: 'center'
+    },
+    closeIconModalContainerStyle: {
+        margin: wp(5),
+        padding: wp(2),
+        alignSelf: 'flex-end',
+        position: "absolute",
+        borderRadius: wp(10),
+        backgroundColor: colors.black,
+        zIndex: 5,
+        left: 0,
+        top: wp(5)
+    },
+    closeIconModalStyle: {
+        width: wp(5),
+        height: wp(5),
+        resizeMode: "contain",
+        tintColor: colors.white
+    },
+    modalVideoContainerStyle: {
+        width: wp(100),
+        height: "100%",
+        alignSelf: 'center',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    modalImageContainerStyle: {
+        height: "100%",
+        width: '100%',
+        resizeMode: 'contain',
+        opacity: 0.7
+    },
+    modalTxtInputContainerStyle: {
+        flexDirection: 'row',
+        height: wp(12),
+        position: 'absolute',
+        width: '100%',
+        bottom: wp(5),
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    bottomSheetContainer: {
+        borderTopLeftRadius: wp(8),
+        borderTopRightRadius: wp(8),
+        shadowColor: 'rgba(0, 0, 0, 0.9)',
+        shadowOpacity: 10,
+        shadowRadius: 10,
+        shadowOffset: { height: 0, width: 0 },
+        elevation: 10,
     },
 })

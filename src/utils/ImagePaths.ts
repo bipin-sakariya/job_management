@@ -116,5 +116,7 @@ export const ImagesPath = {
     camera_image_icon: require('../assets/images/camera_image.png'),
     gallary_image_icon: require('../assets/images/gallary_image.png'),
     video_icon: require('../assets/images/video_image.png'),
+    close_round_icon: require('../assets/images/close_round_icon.png'),
+    play_button_icon: require('../assets/images/playButtonIcon.png'),
 
 }
