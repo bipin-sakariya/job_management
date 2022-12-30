@@ -16,7 +16,7 @@ import { useIsFocused, useRoute } from '@react-navigation/native'
 import CommonPdfView from '../../components/CommonPdfView'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { resetCreateJobLocationReducer } from '../../redux/slices/MapSlice/MapSlice'
-import { jobDetail, jobDetailReducer, resetSelectedReducer } from '../../redux/slices/AdminSlice/jobListSlice'
+import { jobDetail, jobDetailReducer } from '../../redux/slices/AdminSlice/jobListSlice'
 import { useFormik, isEmptyArray } from 'formik'
 import * as yup from 'yup'
 import DocumentPicker from 'react-native-document-picker';
@@ -337,7 +337,7 @@ const CreateNewJobScreen = () => {
                             type == strings.returnJob ?
                                 <>
                                     <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={imageList} />
-                                    {jobDetails?.attachments?.length != 0 && <CustomDetailsComponent
+                                    {jobDetails.attachments.length != 0 && <CustomDetailsComponent
                                         title={strings.attachment}
                                         detailsContainerStyle={{ marginVertical: wp(4) }}
                                         bottomComponent={

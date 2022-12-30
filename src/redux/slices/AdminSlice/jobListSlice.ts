@@ -304,8 +304,8 @@ export const transferJobList = createAsyncThunk<JobDataListProps, paramsTypes, {
         }
     })
 
-export const updateTransferJobList = createAsyncThunk<JobDetailsData, paramsTypes, { rejectValue: apiErrorTypes }>
-    (JOB + "/updateTransferJobList", async (params, { rejectWithValue }) => {
+export const updateTransferJob = createAsyncThunk<JobDetailsData, paramsTypes, { rejectValue: apiErrorTypes }>
+    (JOB + "/updateTransferJob", async (params, { rejectWithValue }) => {
         let obj = {
             group: params.group,
             job: params.job,
@@ -485,16 +485,16 @@ const jobListSlice = createSlice({
             state.error = ''
         });
         //update tranfer job
-        builder.addCase(updateTransferJobList.pending, state => {
+        builder.addCase(updateTransferJob.pending, state => {
             state.isLoading = true
             state.error = ''
         });
-        builder.addCase(updateTransferJobList.fulfilled, (state, action) => {
+        builder.addCase(updateTransferJob.fulfilled, (state, action) => {
             state.isLoading = false
         });
-        builder.addCase(updateTransferJobList.rejected, (state, action) => {
+        builder.addCase(updateTransferJob.rejected, (state, action) => {
             state.isLoading = false
-            state.error = ''
+            state.error = action.payload?.data.detail
         });
 
         //tranferjob list

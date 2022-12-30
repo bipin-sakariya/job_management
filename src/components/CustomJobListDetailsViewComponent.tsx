@@ -9,6 +9,7 @@ import { colors } from '../styles/Colors';
 import { strings } from '../languages/localizedStrings';
 import { JobDetailsData } from '../redux/slices/AdminSlice/jobListSlice';
 import { calendarFormat } from 'moment';
+import FastImage from 'react-native-fast-image';
 
 interface CustomeJobListDetailsViewComponentProps {
     item: JobDetailsData
@@ -18,7 +19,7 @@ const CustomeJobListDetailsViewComponent = (props: CustomeJobListDetailsViewComp
     console.log({ imageData: props?.item?.images[0]?.image })
     return (
         <TouchableOpacity {...props} style={[styles.jobContainerStyle, styles.dropDownShadowStyle]} >
-            <Image source={props?.item?.images[0]?.image ? { uri: props?.item?.images[0]?.image } : ImagesPath.placeholder_img} style={styles.jobImageStyle} />
+            <FastImage source={props?.item?.images[0]?.image ? { uri: props?.item?.images[0]?.image } : ImagesPath.placeholder_img} style={styles.jobImageStyle} />
             <View style={{ flex: 1 }}>
                 <View style={styles.jobTitleContainer}>
                     <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle]}>{props.item.address}</Text>

@@ -294,6 +294,8 @@ const AddNewJobScreen = () => {
                                         return (
                                             <CommonPdfView
                                                 onPress={() => {
+                                                    console.log({ item });
+
                                                     const pdfName = item.attachment.split(/[#?]/)[0].split('/').pop()?.split('.')[0];
                                                     const extension = item.attachment.split(/[#?]/)[0].split('.').pop()?.trim();
                                                     const localFile = `${RNFS.DocumentDirectoryPath}/${pdfName}.${extension}`;

@@ -8,6 +8,7 @@ import { colors } from '../styles/Colors';
 import Modal from 'react-native-modal';
 import { ImagesPath } from '../utils/ImagePaths';
 import CustomCarouselZoomImageViewer from './CustomCarouselZoomImageViewer';
+import FastImage from 'react-native-fast-image';
 
 interface ItemProps {
     id?: number
@@ -35,7 +36,7 @@ const CustomCarouselImageAndVideo = (props: CustomCarouselImageAndVideoProps) =>
                     ?
                     <View
                         style={[globalStyles.container, styles.imageView]}>
-                        <Image source={{ uri: item.image }} resizeMode={'contain'} onError={() => { }} style={[globalStyles.container, styles.imageView]} />
+                        <FastImage source={{ uri: item.image }} resizeMode={'contain'} onError={() => { }} style={[globalStyles.container, styles.imageView]} />
                     </View>
                     : <View>
                         <Video

@@ -13,6 +13,7 @@ import { billData, billDelete } from '../redux/slices/AdminSlice/billListSlice';
 import { useAppDispatch } from '../hooks/reduxHooks';
 import { convertDate } from '../utils/screenUtils'
 import { FormDataTypes, formDelete } from '../redux/slices/AdminSlice/formListSlice';
+import FastImage from 'react-native-fast-image';
 
 interface CustomeListViewProps {
     item: Partial<billData> & Partial<FormDataTypes>,
@@ -82,7 +83,7 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
                 <View style={globalStyles.rowView}>
                     {
                         data.iamgeUrl && !material &&
-                        <Image source={data.iamgeUrl ? { uri: data.iamgeUrl } : ImagesPath.image_white_border} style={[styles.imageView, { backgroundColor: data.iamgeUrl ? colors.white_color : colors.gray_7, }]} />
+                        <FastImage source={data.iamgeUrl ? { uri: data.iamgeUrl } : ImagesPath.image_white_border} style={[styles.imageView, { backgroundColor: data.iamgeUrl ? colors.white_color : colors.gray_7, }]} />
                     }
                     <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle, { marginLeft: wp(2), width: wp(32) }]}>
                         {data.title}

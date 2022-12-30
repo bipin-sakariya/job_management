@@ -223,7 +223,7 @@ export const returnJobCreate = createAsyncThunk<JobDetailsData, paramsTypes, { r
         return rejectWithValue(e?.response)
     }
 })
-export const returnJobUpdate = createAsyncThunk<string[], paramsTypes, { rejectValue: apiErrorTypes }>(JOB + "/ returnJobUpdate", async (params, { rejectWithValue }) => {
+export const returnJobUpdate = createAsyncThunk<string[], paramsTypes, { rejectValue: apiErrorTypes }>(JOB + "/returnJobUpdate", async (params, { rejectWithValue }) => {
     try {
         console.log(ApiConstants.RETURNJOB)
         const response = await axiosClient.patch(ApiConstants.RETURNJOB + params.id + '/', params.Data)

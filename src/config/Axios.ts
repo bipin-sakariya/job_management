@@ -38,8 +38,8 @@ axiosClient.interceptors.request.use(async (config) => {
 			// Alert.alert("nothing")
 		}
 
-		console.log('API check', config.url, ApiConstants.GROUPLIST, config.method)
-		if ((config.url?.includes(ApiConstants.GROUPLIST) || config.url?.includes(ApiConstants.RETURNJOB)) && config.method == 'patch') {
+		console.log('API check', config.url, ApiConstants.RETURNJOB, config.method)
+		if ((config.url?.includes(ApiConstants.GROUPLIST)) && config.method == 'patch') {
 			config.headers = {
 				'Content-Type': 'multipart/form-data',
 				Accept: 'application/json',

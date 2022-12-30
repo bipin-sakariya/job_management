@@ -285,4 +285,5 @@ export const hebrew = {
     KM: 'ק"מ',
     drive: 'נסיעה',
     empty_list: 'לא נמצאו נתונים',
+    try_again: 'נסה שוב'
 }
