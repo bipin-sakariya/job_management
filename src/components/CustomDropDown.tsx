@@ -1,18 +1,6 @@
-import {
-    FlatList,
-    StyleSheet,
-    TouchableOpacity,
-    View,
-    ViewStyle,
-    Text,
-    Dimensions,
-    Image,
-    ImageProps,
-    Platform
-} from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, TouchableOpacity, View, ViewStyle, Text, Dimensions, Image, ImageProps, Platform } from 'react-native';
+import React, { MutableRefObject, useEffect, useState } from 'react';
 import ReactNativeModal from 'react-native-modal';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import fonts from '../styles/Fonts';
 import FontSizes from '../styles/FontSizes';
@@ -32,7 +20,7 @@ interface ComponentProps {
     isVisible: boolean;
     setIsVisible: (prev_state: boolean) => void;
     modalStyle?: ViewStyle;
-    componentRef: any;
+    componentRef: MutableRefObject<View | TouchableOpacity | Image | Text | null>;
 }
 
 const RenderDropdownItem = (dropdownItem: DropdownItem) => {
@@ -44,19 +32,13 @@ const RenderDropdownItem = (dropdownItem: DropdownItem) => {
     );
 };
 
-const CustomDropdown = ({
-    dropdownData,
-    isVisible,
-    setIsVisible,
-    modalStyle,
-    componentRef,
-}: ComponentProps) => {
+const CustomDropdown = ({ dropdownData, isVisible, setIsVisible, modalStyle, componentRef }: ComponentProps) => {
+
     const [offsetData, setOffsetData] = useState({
         horizontal: 0,
         vertical: 0,
         modalHeight: 0,
     });
-    const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
     useEffect(() => {
         if (isVisible) {
@@ -114,6 +96,7 @@ const CustomDropdown = ({
             onBackdropPress={() => {
                 setIsVisible(false);
             }}>
+
             <View style={styles.container}>
                 <FlatList
                     data={dropdownData}

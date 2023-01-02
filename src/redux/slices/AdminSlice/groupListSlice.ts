@@ -2,7 +2,17 @@ import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { Alert } from "react-native";
 import { ApiConstants } from "../../../config/ApiConstants";
 import { axiosClient } from "../../../config/Axios";
+import { FormDataTypes } from "./formListSlice";
 
+
+export interface MemberDetailsProps {
+    email: string
+    id: number
+    phone: string
+    profile_image: string
+    role: number
+    user_name: string
+}
 export interface GroupData {
     id: number,
     manager_details: {
@@ -12,12 +22,16 @@ export interface GroupData {
         phone: string
         profile_image: string
         role: number
-
     },
     inspector_details: {
-        user_name: string
+        user_name: string,
+        email: string
+        id: number
+        phone: string
+        profile_image: string
+        role: number
     },
-    member_details: [],
+    member_details: MemberDetailsProps[],
     form_details: [{
         bill: [],
         created_at: string,
@@ -27,13 +41,14 @@ export interface GroupData {
         updated_at: string
     }],
     total_member_in_group: string,
-    assign_jobs: string,
+    assign_jobs: [],
     created_at: string,
     updated_at: string,
     name: string,
     image: string,
     manager: number,
-    inspector: number
+    inspector: number,
+    member: number[]
 }
 
 interface GroupDataProps {
@@ -47,9 +62,54 @@ interface InitialState {
     isLoading: boolean
     error: object | string | undefined
     groupListData: GroupDataProps,
-    groupDetails: GroupData
+    groupDetails: GroupData,
+    selectedGroupData: {
+        id: number
+        name: string
+        selected: boolean
+    },
+    selectedAllGroupData: undefined
 }
 
+
+export interface selectedGroupData {
+    id: number,
+    manager_details: {
+        user_name: string,
+        email: string
+        id: number
+        phone: string
+        profile_image: string
+        role: number
+    },
+    inspector_details: {
+        user_name: string,
+        email: string
+        id: number
+        phone: string
+        profile_image: string
+        role: number
+    },
+    member_details: MemberDetailsProps[],
+    form_details: [{
+        bill: [],
+        created_at: string,
+        id: number,
+        is_sign: boolean,
+        name: string,
+        updated_at: string
+    }],
+    total_member_in_group: string,
+    assign_jobs: [],
+    created_at: string,
+    updated_at: string,
+    name: string,
+    image: string,
+    manager: number,
+    inspector: number,
+    member: number[],
+    selected?: boolean
+}
 interface paramsTypes {
     id?: number
     data?: FormData,
@@ -76,8 +136,22 @@ const initialState: InitialState = {
             profile_image: '',
             role: 0
         },
-        inspector_details: { user_name: '' },
-        member_details: [],
+        inspector_details: {
+            user_name: '',
+            email: '',
+            id: 0,
+            phone: '',
+            profile_image: '',
+            role: 0
+        },
+        member_details: [{
+            user_name: '',
+            email: '',
+            id: 0,
+            phone: '',
+            profile_image: '',
+            role: 0
+        }],
         form_details: [{
             bill: [],
             created_at: '',
@@ -87,14 +161,21 @@ const initialState: InitialState = {
             updated_at: ''
         }],
         total_member_in_group: '',
-        assign_jobs: '',
+        assign_jobs: [],
         created_at: '',
         updated_at: '',
         name: '',
         image: '',
         manager: 0,
-        inspector: 0
-    }
+        inspector: 0,
+        member: []
+    },
+    selectedGroupData: {
+        id: 0,
+        name: '',
+        selected: false
+    },
+    selectedAllGroupData: undefined
 }
 
 export interface apiErrorTypes {
@@ -105,14 +186,14 @@ export interface apiErrorTypes {
 
 const GROUP = "GROUP";
 
-export const groupList = createAsyncThunk
-    (GROUP + "/groupList", async (params: paramsTypes, { rejectWithValue }) => {
+export const groupList = createAsyncThunk<GroupDataProps, paramsTypes, { rejectValue: apiErrorTypes }>
+    (GROUP + "/groupList", async (params, { rejectWithValue }) => {
         try {
             console.log("🚀 ~ file: groupListSlice.ts ~ line 60 ~ params", params)
             console.log(ApiConstants.GROUPLIST)
             const response = await axiosClient.get(ApiConstants.GROUPLIST + `?page=${params.page}&search=${params.search}`)
             console.log("🚀 ~ file: groupListSlice.ts ~ line 69 ~ response", response)
-            return response;
+            return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
                 Alert.alert(e.message)
@@ -121,7 +202,7 @@ export const groupList = createAsyncThunk
         }
     })
 
-export const groupDelete = createAsyncThunk<string, number, { rejectValue: apiErrorTypes }>(GROUP + "/groupDelete", async (id, { rejectWithValue }) => {
+export const groupDelete = createAsyncThunk<number, number, { rejectValue: apiErrorTypes }>(GROUP + "/groupDelete", async (id, { rejectWithValue }) => {
     try {
         console.log(ApiConstants.GROUPLIST, id)
         const response = await axiosClient.delete(ApiConstants.GROUPLIST + id + '/')
@@ -188,8 +269,22 @@ const groupListSlice = createSlice({
                     profile_image: '',
                     role: 0
                 },
-                inspector_details: { user_name: '' },
-                member_details: [],
+                inspector_details: {
+                    user_name: '',
+                    email: '',
+                    id: 0,
+                    phone: '',
+                    profile_image: '',
+                    role: 0
+                },
+                member_details: [{
+                    user_name: '',
+                    email: '',
+                    id: 0,
+                    phone: '',
+                    profile_image: '',
+                    role: 0
+                }],
                 form_details: [{
                     bill: [],
                     created_at: '',
@@ -199,15 +294,29 @@ const groupListSlice = createSlice({
                     updated_at: ''
                 }],
                 total_member_in_group: '',
-                assign_jobs: '',
+                assign_jobs: [],
                 created_at: '',
                 updated_at: '',
                 name: '',
                 image: '',
                 manager: 0,
-                inspector: 0
+                inspector: 0,
+                member: []
             }
-        }
+        },
+        selectedGroupReducers: (state, action) => {
+            state.selectedGroupData = action.payload
+        },
+        resetSelectedGroupReducer: (state) => {
+            state.selectedGroupData = {
+                id: 0,
+                name: '',
+                selected: false
+            }
+        },
+        selectedAllGroupReducers: (state, action) => {
+            state.selectedAllGroupData = action.payload
+        },
     },
     extraReducers(builder) {
         builder.addCase(groupList.pending, state => {
@@ -216,11 +325,11 @@ const groupListSlice = createSlice({
         });
         builder.addCase(groupList.fulfilled, (state, action) => {
             state.isLoading = false
-            let tempArray: GroupDataProps = action.meta.arg.page == 1 ? [] : {
-                ...action.payload.data,
-                results: [...current(state.groupListData?.results), ...action.payload?.data?.results]
+            let tempArray = action.meta.arg.page == 1 ? action.payload : {
+                ...action.payload,
+                results: [...current(state.groupListData?.results), ...action.payload?.results]
             }
-            state.groupListData = action.meta.arg.page == 1 ? action.payload.data : tempArray
+            state.groupListData = action.meta.arg.page == 1 ? action.payload : tempArray
             state.error = ''
         });
         builder.addCase(groupList.rejected, (state, action) => {
@@ -283,5 +392,5 @@ const groupListSlice = createSlice({
     }
 })
 
-export const { groupDetails } = groupListSlice.actions
+export const { groupDetails, selectedGroupReducers, resetSelectedGroupReducer, selectedAllGroupReducers } = groupListSlice.actions
 export default groupListSlice.reducer

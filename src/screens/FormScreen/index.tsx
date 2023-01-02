@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomListView, Header } from '../../components'
@@ -8,7 +8,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { styles } from './styles'
 import { strings } from '../../languages/localizedStrings'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
-import { formList } from '../../redux/slices/AdminSlice/formListSlice'
+import { FormDataTypes, formList } from '../../redux/slices/AdminSlice/formListSlice'
 import { useIsFocused } from '@react-navigation/native'
 
 interface formListParams {
@@ -16,14 +16,14 @@ interface formListParams {
     search?: string,
 }
 const FormScreen = () => {
-
+    const navigation = useCustomNavigation('FormScreen');
     const dispatch = useAppDispatch();
-    const [page, setPage] = useState(1)
     const isFocus = useIsFocused();
-    const { formListData, isLoading } = useAppSelector(state => state.formList)
-    console.log({ formListData });
-    const [isFooterLoading, setIsFooterLoading] = useState<boolean>(false)
 
+    const { formListData, isLoading } = useAppSelector(state => state.formList)
+
+    const [isFooterLoading, setIsFooterLoading] = useState<boolean>(false)
+    const [page, setPage] = useState(1);
 
     useEffect(() => {
         if (isFocus)
@@ -33,10 +33,8 @@ const FormScreen = () => {
         }
     }, [isFocus])
 
-
-
     const formListApiCall = (page: number) => {
-        let params = {
+        let params: formListParams = {
             page: page,
             search: ''
         }
@@ -64,66 +62,7 @@ const FormScreen = () => {
     //     })
     // }
 
-
-    const navigation = useCustomNavigation('FormScreen');
-    const form = [
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-        {
-            iamgeUrl: '',
-            name: 'Form Name',
-            date: '12 May 2022',
-        },
-    ]
-    const renderItem = ({ item, index }: any) => {
+    const renderItem = ({ item, index }: { item: FormDataTypes, index: number }) => {
         return (
             <CustomListView
                 item={item}
@@ -179,7 +118,7 @@ const FormScreen = () => {
                         return (
                             <View style={[globalStyles.rowView, { marginBottom: wp(4) }]}>
                                 <Image source={ImagesPath.squre_note_icon} style={styles.noteIconStyle} />
-                                <Text style={[styles.billListTxt, globalStyles.rtlStyle]}>{strings.FormList}</Text>
+                                <Text style={[styles.billListTxt, globalStyles.rtlStyle]}>{strings.formList}</Text>
                             </View>
                         )
                     }}

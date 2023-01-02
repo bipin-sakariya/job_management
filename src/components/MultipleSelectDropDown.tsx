@@ -1,27 +1,26 @@
-import { FlatList, I18nManager, Image, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
-import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { globalStyles } from '../styles/globalStyles'
-import { ImagesPath } from '../utils/ImagePaths'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
-import { colors } from '../styles/Colors'
-import { TextInput } from 'react-native-gesture-handler'
-import { roleList } from '../redux/slices/AdminSlice/userListSlice'
-import { useAppDispatch } from '../hooks/reduxHooks'
-import { strings } from '../languages/localizedStrings'
+import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { FlatList, I18nManager, Image, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, TextInput, View, ViewStyle } from 'react-native';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { globalStyles } from '../styles/globalStyles';
+import { ImagesPath } from '../utils/ImagePaths';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import { colors } from '../styles/Colors';
+import { roleList } from '../redux/slices/AdminSlice/userListSlice';
+import { useAppDispatch } from '../hooks/reduxHooks';
+import { strings } from '../languages/localizedStrings';
 
 // We can chanage data type as per the component use in future.
-interface DataTypes {
+export interface DataTypes {
     user_name?: string
     selected?: boolean
     date_joined?: string
     email?: string
-    id?: number
+    id: number
     is_active?: boolean
     phone?: string
     profile_image?: string,
-    role?: { id: number, title: string },
+    role?: { id: number, title?: string },
 }
 
 interface DropDownComponentProps {
@@ -41,7 +40,7 @@ interface DropDownComponentProps {
     setIsAllSign?: (data: boolean) => void
 }
 
-const MultileSelectDropDown = (props: DropDownComponentProps) => {
+const MultipleSelectDropDown = (props: DropDownComponentProps) => {
     const dispatch = useAppDispatch()
 
     const [list, setList] = useState(props.data)
@@ -79,7 +78,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
 
             return _listItem
         })
-
+        props.setIsAllSign && props.setIsAllSign(false)
         props.onCount && props.onCount(newList?.filter(i => i.selected == true)?.length)
         props.setSelectedMembers && props.setSelectedMembers(newList?.filter(i => i.selected))
         setList(newList)
@@ -114,7 +113,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                     <View style={[globalStyles.rowView, { justifyContent: 'space-between', paddingHorizontal: wp(2), paddingTop: wp(2) }]}>
                         <Text
                             style={[globalStyles.rtlStyle, { fontSize: FontSizes.EXTRA_SMALL_12, color: colors.dark_blue2_color }]}>
-                            {props.isVisible ? `${strings.Total} ${tempSelectedItem?.length} ${props?.countTitle}` : `${strings.select} ${props?.countTitle}`}
+                            {props.isVisible ? `${strings.total} ${tempSelectedItem?.length} ${props?.countTitle}` : `${strings.select} ${props?.countTitle}`}
                         </Text>
                         {!props.disabled &&
                             <Image
@@ -139,6 +138,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                     }
                 </TouchableOpacity>
             </View>
+
             {props.isVisible &&
                 <View style={[styles.modalContainer, styles.borderList]}>
                     <KeyboardAvoidingView behavior='padding'>
@@ -146,8 +146,9 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                         <View style={[globalStyles.rowView, globalStyles.rtlDirection, styles.textInputContainer, { paddingHorizontal: wp(2.5), marginBottom: wp(2.5) }]}>
                             <Image source={ImagesPath.search_icon} style={{ height: wp(6), width: wp(6), resizeMode: 'contain' }} />
                             <TextInput
-                                style={[globalStyles.rtlStyle, { height: 40, marginHorizontal: wp(1.5), width: '90%', textAlign: I18nManager.isRTL ? 'right' : 'left', }]}
-                                placeholder={strings.SearchHere}
+                                style={[globalStyles.rtlStyle, { height: 40, marginHorizontal: wp(1.5), width: '90%', textAlign: I18nManager.isRTL ? 'right' : 'left', color: colors.black }]}
+                                placeholder={strings.searchHere}
+                                placeholderTextColor={colors.gray_1}
                                 value={searchTxt}
                                 onChangeText={(txt) => {
                                     const searchData = props.data.filter((i) => i.user_name?.includes(txt.toLowerCase()))
@@ -158,9 +159,9 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
                         </View>
                     </KeyboardAvoidingView>
                     {props.isForm && <TouchableOpacity
-                        onPress={() => { props.setIsAllSign && props.setIsAllSign(!props.isALLSign) }}
+                        onPress={() => props.setIsAllSign && props?.setIsAllSign(!props.isALLSign)}
                         style={[globalStyles.rowView, { justifyContent: 'space-between', paddingHorizontal: wp(2.5), paddingVertical: wp(3.5) }]}>
-                        <Text style={styles.itemListTxt}>{strings.Add_all_sign}</Text>
+                        <Text style={styles.itemListTxt}>{strings.add_all_sign}</Text>
                         {props.isALLSign ?
                             <Image source={ImagesPath.check_box_fill_icon} style={styles.checkBoxIcon} /> :
                             <Image source={ImagesPath.check_box_border_icon} style={styles.checkBoxIcon1} />
@@ -190,7 +191,7 @@ const MultileSelectDropDown = (props: DropDownComponentProps) => {
     )
 }
 
-export default MultileSelectDropDown;
+export default MultipleSelectDropDown;
 
 const styles = StyleSheet.create({
     textInputContainer: {

@@ -48,7 +48,8 @@ const BillListScreen = () => {
         if (isFocus && btn) {
             let params = {
                 page: page,
-                bill_type: btn.open ? 'Material' : 'Sign'
+                bill_type: btn.open ? 'Material' : 'Sign',
+                search: ''
             }
             billListApiCall(params)
         }
@@ -93,25 +94,30 @@ const BillListScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{strings.Bills}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.bills}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
                     <View style={globalStyles.rowView}>
-                        <TouchableOpacity style={{ marginRight: wp(3) }} onPress={() => { navigation.navigate('BillCreateScreen') }}>
+                        <TouchableOpacity style={{ marginRight: wp(3) }} onPress={() => { navigation.navigate('BillCreateScreen', { screenName: 'createBill' }) }}>
                             <Image source={ImagesPath.add_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
-                        <TouchableOpacity >
+                        <TouchableOpacity onPress={() => { navigation.navigate('SearchScreen', { screenName: 'billScreen' }) }}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                     </View>
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <ButtonTab btnOneTitle={strings.accountmaterial} btnTwoTitle={strings.Signabill} setBtn={setBtn} onReset={setPage} btnValue={btn} />
+                <ButtonTab
+                    btnOneTitle={strings.accountMaterial}
+                    btnTwoTitle={strings.signBill}
+                    setBtn={setBtn}
+                    onReset={setPage}
+                    btnValue={btn} />
                 <View style={[globalStyles.rowView, { marginVertical: hp(1) }]}>
                     <Image source={ImagesPath.squre_note_icon} style={styles.noteIconStyle} />
-                    <Text style={[styles.billListTxt, globalStyles.rtlStyle]}>{strings.BillList}</Text>
+                    <Text style={[styles.billListTxt, globalStyles.rtlStyle]}>{strings.billList}</Text>
                 </View>
                 <FlatList
                     data={billListData?.results}
@@ -126,7 +132,7 @@ const BillListScreen = () => {
                             </View>
                         )
                     }}
-                    ListEmptyComponent={() => <CommonEmptyListComponent Txt={strings.Billdatanotfound} />}
+                    ListEmptyComponent={() => <CommonEmptyListComponent Txt={strings.billdatanotfound} />}
                     onEndReached={() => {
                         if (billListData.next) {
                             let param = {

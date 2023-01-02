@@ -6,6 +6,7 @@ import { persistor, store } from './src/redux/Store';
 import { PersistGate } from 'redux-persist/integration/react';
 import SplashScreen from 'react-native-splash-screen';
 import { strings } from './src/languages/localizedStrings';
+import { colors } from './src/styles/Colors';
 
 LogBox.ignoreAllLogs();
 
@@ -25,7 +26,7 @@ const App = () => {
             <PersistGate persistor={persistor}>
                 <StatusBar
                     translucent
-                    backgroundColor="transparent"
+                    backgroundColor={colors.transparent}
                     barStyle="dark-content"
                 />
                 <AppNavigation />

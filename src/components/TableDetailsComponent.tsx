@@ -1,35 +1,43 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { globalStyles } from '../styles/globalStyles'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { ImagesPath } from '../utils/ImagePaths'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
-import { colors } from '../styles/Colors'
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { globalStyles } from '../styles/globalStyles';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import { colors } from '../styles/Colors';
+import useCustomNavigation from '../hooks/useCustomNavigation';
+import { billData } from '../redux/slices/AdminSlice/billListSlice';
 
 interface TableDetailsComponentProps {
-    item: any,
+    item: billData,
     type?: string,
-    index?: number
+    index: number,
+    screenName?: string
 }
 
-const TableDetailsComponent = ({ item, type, index }: TableDetailsComponentProps) => {
+const TableDetailsComponent = ({ item, type, index, screenName }: TableDetailsComponentProps) => {
+    const navigation = useCustomNavigation('SignBillDetailScreen')
+
+    const handleSubmit = () => {
+        if (item.type == 'Sign') {
+            navigation.navigate('SignBillDetailScreen', { type: 'Sign', item: item, isCloseJob: true })
+        }
+        else {
+            navigation.navigate('SignBillDetailScreen', { type: 'Material', item: item, isCloseJob: true })
+        }
+
+    }
+
     return (
 
-        <View style={[globalStyles.rowView, { paddingVertical: wp(1), justifyContent: 'space-around' }]}>
+        <TouchableOpacity onPress={() => handleSubmit()} style={[globalStyles.rowView, { paddingVertical: wp(1), justifyContent: 'space-around' }]}>
             <Text numberOfLines={1} style={[styles.commonScammedTxt, globalStyles.rtlStyle, { width: wp(15) }]}>{index + 1}</Text>
             <View style={[globalStyles.rowView, { width: wp(35) }]}>
-                {/* {
-                    item.imageUrl &&
-                    <View style={[globalStyles.centerView, styles.imageView]}>
-                        <Image source={ImagesPath.image_white_border} style={styles.imageViewStyle} />
-                    </View>
-                } */}
                 <Text numberOfLines={1} style={styles.commonScammedTxt}>{item.name}</Text>
             </View>
-            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.quantity}</Text>
+            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.type == 'Sign' ? item.quantity : item.jumping_ration}</Text>
             <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(12) }]}>{item.type_counting}</Text>
-        </View>
+        </TouchableOpacity>
     )
 }
 

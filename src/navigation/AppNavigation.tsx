@@ -36,7 +36,8 @@ import { useAppSelector } from '../hooks/reduxHooks';
 import AddNewJobScreen from '../screens/AddNewJobScreen';
 import GroupListScreen from '../screens/GroupListScreen';
 import CreateGroupScreen from '../screens/CreateGroupScreen';
-import GroupDetailScreen from '../screens/GroupDetailScreen';
+// import GroupDetailScreen from '../screens/GroupDetailScreen';
+import GroupDetailScreen from '../screens/GroupDetailScreen'
 import UserListScreen from '../screens/UserListScreen';
 import CreateUserScreen from '../screens/CreateUserScreen';
 import UserDetailScreen from '../screens/UserDetailScreen';
@@ -44,6 +45,8 @@ import CreateJobMapScreen from '../screens/CreateJobMapScreen';
 import { colors } from '../styles/Colors';
 import SearchScreen from '../screens/SearchScreen';
 import AssignJobScreen from '../screens/AssignJobScreen';
+import TranferJobListScreen from '../screens/TransferJobListScreen';
+import MapScreen from '../screens/MapScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -110,6 +113,8 @@ const AppNavigation = () => {
                 <Stack.Screen name={'CreateJobMapScreen'} component={CreateJobMapScreen} />
                 <Stack.Screen name={'SearchScreen'} component={SearchScreen} />
                 <Stack.Screen name={'AssignJobScreen'} component={AssignJobScreen} />
+                <Stack.Screen name={'TransferJobListScreen'} component={TranferJobListScreen} />
+                <Stack.Screen name={'MapScreen'} component={MapScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

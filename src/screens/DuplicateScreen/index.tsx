@@ -1,5 +1,5 @@
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
@@ -9,9 +9,46 @@ import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import CustomCarouselImageAndVideo from '../../components/CustomCarouselImageAndVideo'
 import CustomTextInputWithImage from '../../components/CustomTextInputWithImage'
+import { RootRouteProps } from '../../types/RootStackTypes'
+import { useIsFocused, useRoute } from '@react-navigation/native'
+import { jobDetail } from '../../redux/slices/AdminSlice/jobListSlice'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
+import { returnJobCreate } from '../../redux/slices/AdminSlice/returnJobListSlice'
 
 const DuplicateScreen = () => {
     const navigation = useCustomNavigation('DuplicateScreen')
+    const route = useRoute<RootRouteProps<'DuplicateScreen'>>()
+    const isFocused = useIsFocused()
+    const dispatch = useAppDispatch()
+    const { jobDetails, isLoading, jobDetailsData } = useAppSelector(state => state.jobList)
+    console.log({ route })
+    const id: number | undefined = route.params?.params
+    useEffect(() => {
+        if (isFocused && route.params && id) {
+            dispatch(jobDetail(id)).unwrap().then((res) => {
+                // setFormDetails(res)
+                console.log({ formDetails: res });
+            }).catch((error) => {
+                console.log({ error });
+            })
+        }
+    }, [])
+    const updateReturnJob = () => {
+        let params = {
+            status: 'לְשַׁכְפֵּל',
+            comment: '',
+            job: jobDetailsData?.id,
+            duplicate: id
+        }
+        console.log({ params })
+        dispatch(returnJobCreate(params)).unwrap().then((res) => {
+            navigation.navigate('JobDetailsScreen', { params: jobDetails })
+        }).catch((e) => {
+            console.log({ error: e });
+
+        })
+    }
+
     const result = [
         {
             id: 1,
@@ -46,28 +83,30 @@ const DuplicateScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{strings.Duplicate}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.duplicate}</Text>
                     </TouchableOpacity>
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <ScrollView showsVerticalScrollIndicator={false}>
-                    <CustomSubTitleWithImageComponent disabled title={strings.DuplicateJob} image={ImagesPath.files_icon} viewStyle={{ marginBottom: hp(0.5) }} />
+                    <CustomSubTitleWithImageComponent disabled title={strings.duplicateJob} image={ImagesPath.files_icon} viewStyle={{ marginBottom: hp(0.5) }} />
                     <View style={styles.duplicateFirstView}>
                         <CustomTextInput
-                            title={strings.JobId}
+
+                            title={strings.jobId}
                             container={{ marginBottom: wp(4) }}
-                            value={'123'}
+                            value={jobDetailsData?.id.toString()}
                         />
                         <CustomTextInputWithImage
-                            title='9 Oxfort street'
-                            value='9 Oxfort street'
+                            disabled
+                            title={jobDetailsData?.address}
+                            value={jobDetailsData?.address_information}
                             mainContainerStyle={{ flex: 1, }}
                             container={{ width: wp(61) }}
                             mapStyle={{
                                 paddingHorizontal: wp(3)
                             }} />
-                        <CustomCarouselImageAndVideo result={result} viewStyle={{ width: '81%', }} />
+                        <CustomCarouselImageAndVideo result={jobDetails.images} viewStyle={{ width: '81%', }} />
                     </View>
                     <CustomSubTitleWithImageComponent
                         disabled
@@ -77,22 +116,24 @@ const DuplicateScreen = () => {
                     />
                     <View style={[styles.duplicateFirstView, {}]}>
                         <CustomTextInput
-                            title={strings.JobId}
+                            title={strings.jobId}
                             container={{ marginBottom: wp(4) }}
-                            value={'123'}
+                            value={jobDetails.id.toString()}
                         />
-                        <CustomTextInputWithImage title='9 Oxfort street' value='9 Oxfort street'
+                        <CustomTextInputWithImage title={jobDetails.address}
+                            value={jobDetails.address_information}
                             mainContainerStyle={{ flex: 1, }}
                             container={{ width: wp(61) }}
                             mapStyle={{
                                 paddingHorizontal: wp(3)
                             }} />
-                        <CustomCarouselImageAndVideo result={result} viewStyle={{ width: '81%', }} />
+                        <CustomCarouselImageAndVideo result={jobDetails.images} viewStyle={{ width: '81%', }} />
                     </View>
                     <CustomBlackButton
+                        onPress={() => updateReturnJob()}
                         buttonStyle={{ marginVertical: wp(10) }}
                         image={ImagesPath.arrow_counter_clockwise_white_icon}
-                        title={strings.ReturntoInspector}
+                        title={strings.returnToInspector}
                     />
                 </ScrollView>
             </Container>

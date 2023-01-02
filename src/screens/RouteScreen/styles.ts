@@ -3,6 +3,7 @@ import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { colors } from "../../styles/Colors";
 import fonts from "../../styles/Fonts";
 import FontSizes from "../../styles/FontSizes";
+import { scaleSize } from "../../utils/screenUtils";
 
 export const styles = StyleSheet.create({
     textInputStyle: {
@@ -32,5 +33,27 @@ export const styles = StyleSheet.create({
         resizeMode: "contain",
         marginVertical: wp(4),
         marginHorizontal: wp(2)
+    },
+    closeIconContainer: {
+        backgroundColor: colors.gray_1,
+        borderRadius: wp(8),
+        height: wp(6),
+        width: wp(6),
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: wp(2),
+    },
+    closeIcon: {
+        tintColor: colors.white,
+        height: wp(4),
+        width: wp(4),
+        marginLeft: scaleSize(1),
+        marginBottom: scaleSize(0.5)
+    },
+    btnContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: wp(3),
     }
 })

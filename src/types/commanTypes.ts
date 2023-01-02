@@ -11,9 +11,9 @@ export interface ImageList {
 }
 export interface DocList {
     id: number
-    path: string,
+    attachment: string,
     type: string | undefined
-    mb: number | null
+    bytes: number | null
     title: string | null
 }
 
@@ -30,4 +30,21 @@ export interface JobDataProps {
     distance: string,
     descriprion: string,
     imageurl: string
+}
+export interface location {
+    latitude: number,
+    longitude: number
+}
+
+export interface MapPositionProps {
+    latitude: number
+    longitude: number
+    latitudeDelta?: number | undefined
+    longitudeDelta?: number | undefined
+}
+
+export interface ItemProps {
+    id?: number
+    image: string | undefined
+    mediaType?: string
 }

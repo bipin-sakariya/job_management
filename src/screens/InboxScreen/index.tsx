@@ -1,4 +1,4 @@
-import { FlatList, Image, ListViewComponent, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, Header } from '../../components';

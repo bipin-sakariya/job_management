@@ -3,7 +3,6 @@ import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { colors } from "../../styles/Colors";
 import fonts from "../../styles/Fonts";
 import FontSizes from "../../styles/FontSizes";
-import { globalStyles } from "../../styles/globalStyles";
 
 export const styles = StyleSheet.create({
     leftArrowIcon: {
@@ -81,7 +80,7 @@ export const styles = StyleSheet.create({
         backgroundColor: colors.bottom_tab_bg,
     },
     paginationDots: {
-        backgroundColor: 'transparent',
+        backgroundColor: colors.transparent,
         position: 'absolute',
         bottom: wp(-5),
         alignSelf: "center",
@@ -124,11 +123,10 @@ export const styles = StyleSheet.create({
     reasonTxt: {
         color: colors.dark_blue3_color,
         fontFamily: fonts.FONT_POP_REGULAR,
-        fontSize: FontSizes.EXTRA_SMALL_12,
-        ...globalStyles.rtlStyle
+        fontSize: FontSizes.EXTRA_SMALL_12
     },
     commonTxt: {
-        color: '#5B5B5B',
+        color: colors.gray_8,
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.SMALL_14,
         marginVertical: wp(1),
@@ -161,7 +159,9 @@ export const styles = StyleSheet.create({
     },
 
     deleteBtnTxt: {
-        backgroundColor: colors.light_blue_color,
+        backgroundColor: colors.white_5,
+        borderColor: colors.black,
+        borderWidth: wp(0.2),
         paddingHorizontal: wp(9),
         borderRadius: wp(2)
     }

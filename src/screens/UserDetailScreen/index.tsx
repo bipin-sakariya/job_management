@@ -15,12 +15,13 @@ import { ImagesPath } from '../../utils/ImagePaths';
 import { styles } from './styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
+import { colors } from '../../styles/Colors';
 
 const UserValidationSchema = yup.object().shape({
-    userName: yup.string().required(strings.Username_required),
-    email: yup.string().email(strings.email_invalid).required(strings.email_invalid),
-    contactNo: yup.string().length(8, strings.Contectno_invalid).required(strings.Contectno_invalid),
-    role: yup.string().required(strings.role_required),
+    userName: yup.string().required(strings.usernameRequired),
+    email: yup.string().email(strings.emailInvalid).required(strings.emailInvalid),
+    contactNo: yup.string().length(8, strings.contactNoInvalid).required(strings.contactNoInvalid),
+    role: yup.string().required(strings.roleRequired),
 });
 
 const UserDetailScreen = () => {
@@ -109,14 +110,15 @@ const UserDetailScreen = () => {
         dispatch(deleteUser(userId)).unwrap().then((res) => {
             navigation.goBack()
         }).catch((error) => {
-            Alert.alert("some thing went wrong")
+            console.log({ error });
+
         })
     }
 
     const optionData = [
-        { title: strings.Remove, onPress: () => { deleteUserData() }, imageSource: ImagesPath.bin_icon },
+        { title: strings.remove, onPress: () => { deleteUserData() }, imageSource: ImagesPath.bin_icon },
         {
-            title: strings.Edit, onPress: () => {
+            title: strings.edit, onPress: () => {
                 setIsEditable(true)
                 setVisible(false)
             }, imageSource: ImagesPath.edit_icon
@@ -168,49 +170,49 @@ const UserDetailScreen = () => {
                     </TouchableOpacity>
                     <CustomTextInput
                         editable={isEditable}
-                        title={strings.UserName}
+                        title={strings.userName}
                         container={{ marginBottom: wp(5) }}
                         value={values.userName}
                         onChangeText={handleChange('userName')}
-                        placeholder={isEditable ? strings.UserName : ''}
+                        placeholder={isEditable ? strings.userName : ''}
                     />
-                    {(touched?.userName && errors?.userName) || error?.user_name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.userName ? errors.userName : error?.email}</Text> : null}
+                    {(touched?.userName && errors?.userName) || error?.user_name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors?.userName ? errors.userName : error?.email}</Text> : null}
                     <CustomTextInput
                         editable={isEditable}
-                        title={strings.Email}
+                        title={strings.email}
                         container={{ marginBottom: wp(5) }}
                         value={values.email}
                         onChangeText={handleChange('email')}
-                        placeholder={isEditable ? strings.Email : ''}
+                        placeholder={isEditable ? strings.email : ''}
                         keyboardType={'email-address'}
                     />
-                    {(touched?.email && errors?.email) || error?.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors?.email ? errors?.email : error?.email}</Text> : null}
+                    {(touched?.email && errors?.email) || error?.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors?.email ? errors?.email : error?.email}</Text> : null}
                     <CustomTextInput
                         editable={isEditable}
-                        title={strings.Contactno}
+                        title={strings.contactNo}
                         container={{ marginBottom: wp(5) }}
                         value={values.contactNo}
                         onChangeText={handleChange('contactNo')}
-                        placeholder={isEditable ? strings.Contactno : ''}
+                        placeholder={isEditable ? strings.contactNo : ''}
                         keyboardType={'number-pad'}
                     />
-                    {(touched?.contactNo && errors?.contactNo) || error?.phone ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error?.phone ? error.phone : errors.contactNo}</Text> : null}
+                    {(touched?.contactNo && errors?.contactNo) || error?.phone ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error?.phone ? error.phone : errors.contactNo}</Text> : null}
                     <CustomTextInput
                         editable={false}
-                        title={strings.Role}
+                        title={strings.role}
                         container={{ marginBottom: wp(5) }}
                         value={values.role}
                     />
                     <CustomTextInput
                         editable={false}
-                        title={strings.Permission}
+                        title={strings.permission}
                         container={{ marginBottom: wp(5) }}
                         value={userDetails?.role.title}
                     />
 
                 </KeyboardAwareScrollView>
                 {isEditable && <CustomBlackButton
-                    title={strings.Update_user}
+                    title={strings.updateUser}
                     image={ImagesPath.plus_white_circle_icon}
                     onPress={handleSubmit}
                 />}

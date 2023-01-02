@@ -2,10 +2,11 @@ import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import { Alert } from "react-native";
 import { ApiConstants } from "../../../config/ApiConstants";
 import { axiosClient } from "../../../config/Axios";
+import { billData } from "./billListSlice";
 
-export interface FormData {
+export interface FormDataTypes {
     id: number,
-    bill: [{ id: number }],
+    bill: billData[],
     created_at: string,
     updated_at: string,
     name: string,
@@ -16,25 +17,24 @@ interface FormDataProps {
     count: number,
     next?: string | null,
     previous?: string | null,
-    results: FormData[]
+    results: FormDataTypes[]
 }
 
 interface InitialState {
     isLoading: boolean
     error: object | string | undefined
     formListData: FormDataProps,
-    formDetails: FormData
+    formDetails: FormDataTypes
 }
 
 interface paramsTypes {
     id?: number
-    data?: FormData,
-    page?: undefined | number,
+    data?: FormDataTypes,
+    page?: number,
     name?: string,
-    bill?: [],
+    bill?: number[],
     search?: string,
     is_sign?: boolean
-
 }
 
 const initialState: InitialState = {
@@ -48,7 +48,7 @@ const initialState: InitialState = {
     },
     formDetails: {
         id: 0,
-        bill: [{ id: 0 }],
+        bill: [],
         created_at: '',
         updated_at: '',
         name: '',
@@ -63,14 +63,14 @@ export interface apiErrorTypes {
 
 const FORM = "FORM";
 
-export const formList = createAsyncThunk
-    (FORM + "/formList", async (params: paramsTypes, { rejectWithValue }) => {
+export const formList = createAsyncThunk<FormDataProps, paramsTypes, { rejectValue: apiErrorTypes }>
+    (FORM + "/formList", async (params, { rejectWithValue }) => {
         try {
             console.log("🚀 ~ file: formListSlice.ts ~ line 60 ~ params", params)
             console.log(ApiConstants.FORMS)
             const response = await axiosClient.get(ApiConstants.FORMS + `?page=${params.page}&search=${params.search}`)
             console.log("🚀 ~ file: formListSlice.ts ~ line 69 ~ response", response)
-            return response;
+            return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
                 Alert.alert(e.message)
@@ -79,7 +79,7 @@ export const formList = createAsyncThunk
         }
     })
 
-export const formDetail = createAsyncThunk<FormData, number, { rejectValue: apiErrorTypes }>(FORM + "/formDetail", async (id, { rejectWithValue }) => {
+export const formDetail = createAsyncThunk<FormDataTypes, number, { rejectValue: apiErrorTypes }>(FORM + "/formDetail", async (id, { rejectWithValue }) => {
     try {
         console.log(ApiConstants.FORMS, id)
         const response = await axiosClient.get(ApiConstants.FORMS + id + '/')
@@ -105,15 +105,10 @@ export const formDelete = createAsyncThunk<string, number, { rejectValue: apiErr
     }
 })
 
-export const formCreate = createAsyncThunk<FormData, paramsTypes, { rejectValue: apiErrorTypes }>(FORM + "/formCreate", async (params, { rejectWithValue }) => {
-    let obj = {
-        name: params.name,
-        bill: params.bill,
-        is_sign: params.is_sign
-    }
+export const formCreate = createAsyncThunk<FormDataTypes, paramsTypes, { rejectValue: apiErrorTypes }>(FORM + "/formCreate", async (params, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.FORMS, { obj })
-        const response = await axiosClient.post(ApiConstants.FORMS, obj)
+        console.log(ApiConstants.FORMS, { params })
+        const response = await axiosClient.post(ApiConstants.FORMS, params)
         console.log('data...........=====', { response: response })
         return response.data
     } catch (e: any) {
@@ -124,7 +119,7 @@ export const formCreate = createAsyncThunk<FormData, paramsTypes, { rejectValue:
     }
 })
 
-export const formUpdate = createAsyncThunk<FormData, paramsTypes, { rejectValue: apiErrorTypes }>(FORM + "/formUpdate", async (params, { rejectWithValue }) => {
+export const formUpdate = createAsyncThunk<FormDataTypes, paramsTypes, { rejectValue: apiErrorTypes }>(FORM + "/formUpdate", async (params, { rejectWithValue }) => {
     try {
         console.log(ApiConstants.FORMS, params)
         const response = await axiosClient.patch(ApiConstants.FORMS + params.id + '/', params)
@@ -144,7 +139,7 @@ const formListSlice = createSlice({
         formDetails: (state,) => {
             state.formDetails = {
                 id: 0,
-                bill: [{ id: 0 }],
+                bill: [],
                 created_at: '',
                 updated_at: '',
                 name: '',
@@ -159,13 +154,13 @@ const formListSlice = createSlice({
         builder.addCase(formList.fulfilled, (state, action) => {
             state.isLoading = false
             // state.formListData = action.payload.results
-            let tempArray: FormDataProps = action.meta.arg.page == 1 ? [] : {
-                ...action.payload.data,
-                results: [...current(state.formListData?.results), ...action.payload?.data?.results]
+            let tempArray: FormDataProps = action.meta.arg.page == 1 ? action.payload : {
+                ...action.payload,
+                results: [...current(state.formListData?.results), ...action.payload?.results]
 
             }
             console.log('tempdata======>', tempArray)
-            state.formListData = action.meta.arg.page == 1 ? action.payload.data : tempArray
+            state.formListData = action.meta.arg.page == 1 ? action.payload : tempArray
             state.error = ''
         });
         builder.addCase(formList.rejected, (state, action) => {

@@ -1,11 +1,11 @@
-import { Alert, Dimensions, FlatList, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomDashedComponent, CustomeJobListDetailsViewComponent, CustomJobListComponent, CustomSubTitleWithImageComponent, Header } from '../../components'
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import { Container, CustomDashedComponent, CustomJobListComponent, CustomSubTitleWithImageComponent, Header } from '../../components'
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
-import { useRoute } from '@react-navigation/native'
+import { useIsFocused, useRoute } from '@react-navigation/native'
 import { RootRouteProps } from '../../types/RootStackTypes'
 import { strings } from '../../languages/localizedStrings'
 import CustomStatusBtn from '../../components/CustomStatusBtn'
@@ -13,42 +13,103 @@ import { styles } from './styles'
 import FontSizes from '../../styles/FontSizes'
 import { colors } from '../../styles/Colors'
 import { convertDate } from '../../utils/screenUtils'
+import { JobDetailsData, jobList, recentJobList, } from '../../redux/slices/AdminSlice/jobListSlice'
+import { useAppDispatch } from '../../hooks/reduxHooks'
+import { resetCreateJobLocationReducer } from '../../redux/slices/MapSlice/MapSlice'
+import { recentReturnJobList, returnJobList } from '../../redux/slices/AdminSlice/returnJobListSlice'
 
-const data = [
-    { title: 'Job Return', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobReturn, image: ImagesPath.demo1 },
-    { title: 'Job Transfer', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobTransfer, image: ImagesPath.demo2 },
-    { title: 'Job Transfer', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobTransfer, image: ImagesPath.demo1 },
-    { title: 'Job Partial', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobPartial, image: ImagesPath.demo2 },
-    { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.Open, image: ImagesPath.demo1 },
-    { title: 'Job Transfer', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', status: strings.JobTransfer, image: ImagesPath.demo2 },
-]
-const JobData = [
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', date: "16 may 2022", button: strings.Open, status: strings.Open, image: ImagesPath.demo3 },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '15 ק"מ משם', date: "16 may 2022", button: strings.JobTransfer, status: strings.Open, image: ImagesPath.demo4 },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '15 ק"מ משם', date: "16 may 2022", button: strings.JobTransfer, status: strings.Open, image: ImagesPath.demo5 },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '20 ק"מ משם', date: "16 may 2022", button: strings.Open, status: strings.Open, image: ImagesPath.demo3 },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', date: "16 may 2022", button: strings.Open, status: strings.Open, image: ImagesPath.demo4 },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing Lorem Ipsum is simply dummy text of the printing', km: '5 ק"מ משם', date: "16 may 2022", button: strings.Open, status: strings.Open, image: ImagesPath.demo5 }
-]
+interface jobListParams {
+    page?: number,
+    search?: string
+}
+
 const ReturnAndAddJobHistoryScreen = () => {
     const navigation = useCustomNavigation('ReturnAndAddJobHistoryScreen');
     const route = useRoute<RootRouteProps<'ReturnAndAddJobHistoryScreen'>>();
     const { type } = route.params
+    const isFocus = useIsFocused()
+    const dispatch = useAppDispatch();
 
+    console.log({ type })
+    const [page, setPage] = useState(1);
+    const [jobPage, setJobPage] = useState(1)
+    const [recentJob, setRecentJob] = useState<JobDetailsData[]>([])
+    const [isJobList, setJobList] = useState<JobDetailsData[]>([])
 
-    const renderItem = ({ item, index }: any) => {
+    useEffect(() => {
+
+        if (isFocus)
+            //  recentJobListApiCall(page)
+            // jobListApiCall(jobPage)
+            return () => {
+                setPage(1)
+                setJobPage(1)
+            }
+    }, [isFocus])
+    useEffect(() => {
+        recentJobListApiCall(page)
+        jobListApiCall(jobPage)
+    }, [])
+
+    const recentJobListApiCall = (page: number) => {
+        let params: jobListParams = {
+            page: page,
+            search: ''
+        }
+        {
+            type == 'returnJob' ?
+                dispatch(recentReturnJobList(params)).unwrap().then((res) => {
+                    console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+                    setRecentJob(res.results)
+                    setPage(page + 1)
+                }).catch((error) => {
+                    console.log({ error });
+                })
+                :
+                dispatch(recentJobList(params)).unwrap().then((res) => {
+                    console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+                    setRecentJob(res.results)
+                    setPage(page + 1)
+                }).catch((error) => {
+                    console.log({ error });
+                })
+        }
+    }
+
+    const jobListApiCall = (jobpage: number) => {
+        let params: jobListParams = {
+            page: jobPage,
+            search: ''
+        }
+        type == 'returnJob' ? dispatch(returnJobList(params)).unwrap().then((res) => {
+            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+            setJobList(res.results)
+            setJobPage(jobpage + 1)
+        }).catch((error) => {
+            console.log({ error });
+        }) :
+            dispatch(jobList(params)).unwrap().then((res) => {
+                console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+                setJobList(res.results)
+                setJobPage(jobpage + 1)
+            }).catch((error) => {
+                console.log({ error });
+            })
+    }
+
+    const renderItem = ({ item, index }: { item: JobDetailsData, index: number }) => {
         return (
             <TouchableOpacity
-                onPress={() => navigation.navigate('JobDetailsScreen', { params: item, type: "returnJob" })}
+                onPress={() => navigation.navigate('JobDetailsScreen', { params: item })}
                 style={[styles.containerShadow, styles.recentallyView]}>
                 <Image
-                    source={item.image ? item.image : ImagesPath.job_list_image_icon}
+                    source={item?.images[0]?.image ? { uri: item?.images[0]?.image } : ImagesPath.job_list_image_icon}
                     style={styles.imageStyle} />
                 <View style={[globalStyles.rowView, { justifyContent: 'space-between', marginBottom: wp(1) }]}>
-                    <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle,]}>{item.title}</Text>
+                    <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle,]}>{item.address}</Text>
                     <CustomStatusBtn
                         onPress={() => {
-                            navigation.navigate("JobDetailsScreen", { params: item, type: "returnJob" })
+                            navigation.navigate("JobDetailsScreen", { params: item })
                         }} title={item.status} />
                 </View>
                 <Text numberOfLines={2} style={[styles.desTxt, globalStyles.rtlStyle,]}>{item.description}</Text>
@@ -66,11 +127,11 @@ const ReturnAndAddJobHistoryScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView,]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{type == 'returnJob' ? strings.ReturnJob : strings.AddedJobHistory}</Text>
+                        <Text style={globalStyles.headerTitle}>{type == 'returnJob' ? strings.returnJob : strings.addedJobHistory}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
-                    <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { }}>
+                    <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { navigation.navigate('SearchScreen', { screenName: 'recentAndHistoryScreen' }) }}>
                         <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                     </TouchableOpacity>
                 }
@@ -79,28 +140,34 @@ const ReturnAndAddJobHistoryScreen = () => {
                 <ScrollView showsVerticalScrollIndicator={false}>
                     {type == "addJob" ?
                         <CustomDashedComponent
-                            title={strings.ADDNEWJOB}
+                            title={strings.addNewJob}
                             viewStyle={styles.dottedViewStyle}
                             textStyle={styles.dottedTxtStyle}
                             imageStyle={styles.dottedImageStyle}
                             image={ImagesPath.add_icon}
-                            onPress={() => { navigation.navigate('AddNewJobScreen') }}
+                            onPress={() => {
+                                dispatch(resetCreateJobLocationReducer())
+                                navigation.navigate('AddNewJobScreen')
+                            }}
                         />
                         : null
                     }
                     <CustomSubTitleWithImageComponent
                         viewStyle={{ paddingHorizontal: wp(4) }}
-                        title={type == "addJob" ? strings.addedjob : strings.RecentallyReturnedJobs}
+                        title={type == "addJob" ? strings.addedJob : strings.recentllyReturnedJobs}
                         titleStyle={{ fontSize: FontSizes.MEDIUM_16, color: colors.dark_blue2_color }}
                         image={ImagesPath.folder_user_icon}
                         imageStyle={globalStyles.headerIcon}
                     />
                     <View style={{ marginLeft: wp(2) }}>
                         <FlatList
-                            data={data}
+                            data={recentJob}
                             renderItem={renderItem}
                             showsHorizontalScrollIndicator={false}
                             horizontal
+                            onEndReached={() => {
+                                console.log('hello')
+                            }}
                             ItemSeparatorComponent={() => <View style={{ width: wp(3) }} />}
                         />
                     </View>
@@ -109,18 +176,23 @@ const ReturnAndAddJobHistoryScreen = () => {
                         title={convertDate('2022-11-08T12:44:46.142691Z')}
                         image={ImagesPath.calender_icon}
                     />
-                    <View style={styles.jobListViewStyle}>
+                    <View style={[styles.jobListViewStyle]}>
                         <FlatList
-                            data={JobData}
-                            renderItem={({ item, index }: any) => {
+                            data={isJobList}
+                            renderItem={({ item, index }: { item: JobDetailsData, index: number }) => {
                                 return (
                                     <CustomJobListComponent
                                         item={item}
-                                        onPress={() => navigation.navigate('JobDetailsScreen', { params: item, type: strings.JobOpen })}
+                                        onPress={() => navigation.navigate('JobDetailsScreen', { params: item, type: type })}
                                     />
                                 )
                             }}
                             showsVerticalScrollIndicator={false}
+
+                            onEndReached={() => {
+                                console.log('hello')
+                            }}
+                            onEndReachedThreshold={0.5}
                             style={{ marginTop: wp(2), }}
                             ItemSeparatorComponent={() => <View style={{ height: wp(3) }} />}
                         />

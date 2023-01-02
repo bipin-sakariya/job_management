@@ -1,14 +1,13 @@
-import { Modal, ModalProps, Platform, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
-import React, { Dispatch, SetStateAction } from 'react'
-import { BlurView } from '@react-native-community/blur'
-import { globalStyles } from '../styles/globalStyles'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import React from 'react';
+import { Modal, ModalProps, Platform, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { BlurView } from '@react-native-community/blur';
+import { globalStyles } from '../styles/globalStyles';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 interface CustomModalProps {
     onClose?: () => void
-    children?: any
+    children?: React.ReactNode
 }
-
 
 const CustomModal = (props: CustomModalProps & ModalProps) => {
     return (
@@ -28,22 +27,4 @@ const CustomModal = (props: CustomModalProps & ModalProps) => {
     )
 }
 
-export default CustomModal
-
-const styles = StyleSheet.create({
-    blureView: {
-        flex: 1,
-        alignSelf: Platform.OS == "ios" ? 'auto' : 'stretch',
-        backgroundColor: 'transparent',
-        alignItems: 'center',
-        alignContent: 'center',
-        justifyContent: 'center'
-    },
-    mainView: {
-        justifyContent: 'center',
-        alignSelf: 'center',
-        flex: 1
-
-    }
-
-})
+export default CustomModal;

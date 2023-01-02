@@ -3,6 +3,7 @@ import { Alert } from "react-native";
 import { Double } from "react-native/Libraries/Types/CodegenTypes";
 import { ApiConstants } from "../../../config/ApiConstants";
 import { axiosClient } from "../../../config/Axios";
+import { FormDataTypes } from "./formListSlice";
 
 export interface billData {
     id: number,
@@ -18,8 +19,8 @@ export interface billData {
 
 interface billDataProps {
     count: number,
-    next: string | undefined | null,
-    previous: string | undefined | null,
+    next: string | null,
+    previous: string | null,
     results: billData[]
 }
 
@@ -32,9 +33,10 @@ interface initialState {
 
 interface paramsTypes {
     id?: number
-    data?: FormData,
-    page?: undefined | number,
-    bill_type?: string
+    data?: FormDataTypes | FormData,
+    page?: number,
+    bill_type?: string,
+    search?: string
 }
 
 const initialState: initialState = {
@@ -67,14 +69,16 @@ export interface apiErrorTypes {
 
 const BILL = "BILL";
 
-export const billList = createAsyncThunk
-    (BILL + "/billList", async (params: paramsTypes, { rejectWithValue }) => {
+export const billList = createAsyncThunk<billDataProps, paramsTypes, { rejectValue: apiErrorTypes }>
+    (BILL + "/billList", async (params, { rejectWithValue }) => {
         try {
+            let urlParams = new URLSearchParams({ page: params.page ? params.page.toString() : '', bill_type: params.bill_type ? params.bill_type : '' })
+            params.search && urlParams.append('search', params.search)
             console.log("🚀 ~ file: billListSlice.ts ~ line 60 ~ params", params)
             console.log(ApiConstants.BILL)
-            const response = await axiosClient.get(ApiConstants.BILL + `?page=${params.page}&bill_type=${params.bill_type}`)
+            const response = await axiosClient.get(ApiConstants.BILL + "?" + urlParams.toString())
             console.log("🚀 ~ file: billListSlice.ts ~ line 69 ~ response", response)
-            return response;
+            return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
                 Alert.alert(e.message)
@@ -83,7 +87,7 @@ export const billList = createAsyncThunk
         }
     })
 
-export const billCreate = createAsyncThunk<string[], FormData, { rejectValue: apiErrorTypes }>
+export const billCreate = createAsyncThunk<billData, FormData, { rejectValue: apiErrorTypes }>
     (BILL + "/billCreate", async (params, { rejectWithValue }) => {
         try {
             console.log(ApiConstants.BILL)
@@ -162,11 +166,11 @@ const billListSlice = createSlice({
         });
         builder.addCase(billList.fulfilled, (state, action) => {
             state.isLoading = false
-            let tempArray: billDataProps = action.meta.arg.page == 1 ? [] : {
-                ...action.payload.data,
-                results: [...current(state.billListData?.results), ...action.payload?.data?.results]
+            let tempArray = action.meta.arg.page == 1 ? action.payload : {
+                ...action.payload,
+                results: [...current(state.billListData?.results), ...action.payload?.results]
             }
-            state.billListData = action.meta.arg.page == 1 ? action.payload.data : tempArray
+            state.billListData = action.meta.arg.page == 1 ? action.payload : tempArray
             state.error = ''
         });
         builder.addCase(billList.rejected, (state, action) => {

@@ -1,5 +1,5 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import React, { useRef, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
 import { ImagesPath } from '../utils/ImagePaths';
 import fonts from '../styles/Fonts';
@@ -16,13 +16,6 @@ import { GroupData, groupDelete } from '../redux/slices/AdminSlice/groupListSlic
 
 interface itemPropsType {
     item: GroupData,
-    // id: number
-    // profile_image: string,
-    // user_name: string,
-    // email: string,
-    // phone: string,
-    // role: { id: number, title: string },
-    // date_joined: string
 }
 
 const GroupListComponent = ({ item }: itemPropsType) => {
@@ -33,19 +26,19 @@ const GroupListComponent = ({ item }: itemPropsType) => {
     const [visible, setVisible] = useState(false);
 
     const deleteGroupData = (id: number) => {
-        setVisible(false)
+        setVisible(false);
         dispatch(groupDelete(id)).unwrap().then(() => {
         })
     }
 
     const optionData = [
         {
-            title: strings.Remove,
+            title: strings.remove,
             onPress: () => deleteGroupData(item.id),
             imageSource: ImagesPath.bin_icon
         },
         {
-            title: strings.Edit,
+            title: strings.edit,
             onPress: () => {
                 setVisible(false)
                 navigation.navigate("GroupDetailScreen", { params: item, isEdit: true })
@@ -93,7 +86,6 @@ const styles = StyleSheet.create({
     itemImgStyle: {
         height: wp(14),
         width: wp(14),
-        // resizeMode: 'contain',
         borderRadius: 10,
         backgroundColor: colors.gray_7
     },

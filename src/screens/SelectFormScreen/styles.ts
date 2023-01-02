@@ -49,7 +49,7 @@ export const styles = StyleSheet.create({
         color: colors.dark_blue2_color
     },
     dropDownShadowStyle: {
-        shadowColor: Platform.OS == "ios" ? "rgba(0, 0, 0, 0.06)" : "rgba(0, 0, 0, 0.6)",
+        shadowColor: colors.black_opacity_1,
         shadowOpacity: 5,
         shadowRadius: 8,
         shadowOffset: { height: 0, width: 0 },

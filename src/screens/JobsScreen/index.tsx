@@ -1,69 +1,213 @@
-import { View, Text, TouchableOpacity, Image, I18nManager, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Image, FlatList, TextInput, ActivityIndicator } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import { DrawerActions, NavigationProp, useNavigation } from '@react-navigation/native';
+import { DrawerActions, useIsFocused } from '@react-navigation/native';
 import { styles } from './styles';
-import { ButtonTab, Container, CustomBottomSheet, Header, JobListComponent } from '../../components';
+import { ButtonTab, CalendarView, Container, CustomActivityIndicator, CustomBlackButton, CustomBottomSheet, CustomModal, CustomSubTitleWithImageComponent, Header, JobListComponent } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { globalStyles } from '../../styles/globalStyles';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import RBSheet from "react-native-raw-bottom-sheet";
-import { ListDataProps } from '../../components/CustomBottomSheet';
-import { FlatList } from 'react-native-gesture-handler';
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
+import { RootState, useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { JobDetailsData, jobStatusWiseList } from '../../redux/slices/AdminSlice/jobListSlice';
 import moment from 'moment';
-import { RootState, useAppSelector } from '../../hooks/reduxHooks';
+import { GroupData, groupList, selectedAllGroupReducers, selectedGroupReducers } from '../../redux/slices/AdminSlice/groupListSlice';
+import { GroupParams } from '../TransferJobScreen';
+import FontSizes from '../../styles/FontSizes';
+import fonts from '../../styles/Fonts';
+// import { getNotificatioList } from '../../redux/slices/AdminSlice/notificationSlice';
 
-const data = [
-    { id: 1, title: strings.All, selected: true },
-    { id: 2, title: strings.PMaintanence, selected: false },
-    { id: 3, title: strings.Paint, selected: false },
-    { id: 4, title: strings.Council, selected: false },
-]
+interface jobListParams {
+    page?: number,
+    search?: string,
+    status?: string,
+    id?: number,
+    to_date?: string | undefined
+    from_date?: string | undefined
+}
 
-const JobData = [
-    {
-        data: '16 may 2022',
-        jobs: [
-            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
-            { title: 'Job Return', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobReturn },
-            { title: 'Job Transfer', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobTransfer }
-        ]
-    },
-    {
-        data: '16 may 2022',
-        jobs: [
-            { title: 'Job Close', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobClose },
-            { title: 'Job Partial', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobPartial },
-            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen }
-        ]
-    },
-    {
-        data: '16 may 2022',
-        jobs: [
-            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
-            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen },
-            { title: 'Job Open', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', status: strings.JobOpen }
-        ]
-    }
-]
+interface DateParams {
+    toDate?: string | undefined
+    fromDate?: string | undefined
+}
 
 const JobsScreen = () => {
     const navigation = useCustomNavigation('JobsScreen')
     const refRBSheet = useRef<RBSheet | null>(null);
+    const dispatch = useAppDispatch();
+    const isFocus = useIsFocused()
 
-    const [selectedItem, setSelectedItem] = useState<ListDataProps | undefined>(undefined);
-    const [page, setPage] = useState(1)
+    const [selectedItem, setSelectedItem] = useState<GroupParams | undefined>(undefined);
     const [btn, setBtn] = useState({ open: true, close: false })
+    const [page, setPage] = useState(1);
+    const [closeJobApiPage, SetCloseJobApiPage] = useState<number>(1)
+    const [openJobApiPage, SetOpenJobApiPage] = useState<number>(1)
+    const [groupPage, setGroupPage] = useState(1)
+    // const [openJobList, setOpenJobList] = useState<JobDetailsData[]>([])
+    const [isSearch, setIsSearch] = useState(false)
+    const [text, setText] = useState("");
+    const [isFooterLoading, setIsFooterLoading] = useState<boolean>(false)
+    const [groupData, setGroupData] = useState<GroupData[]>([])
+    const [finalGroupData, setfinalGroupList] = useState<GroupParams[]>([])
+    const [finalAllGroup, setFinalAllGroup] = useState<GroupParams[]>([])
+    const [selectedDate, setSelectedDate] = useState<DateParams>({})
+    const [isModelVisible, setIsModelVisible] = useState(false)
+    const [sdate, setSdate] = useState('');
+    const [edate, setEdate] = useState(' ');
+    const [selectedId, setSelectedId] = useState({})
+    const [finalSelectedList, isFinalSelectedList] = useState(finalAllGroup)
+    const [onRefreshJobList, setOnRefreshJobList] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
+    const { jobListData, closedJobList, openedJobList, isLoading: apiCallLoading } = useAppSelector(state => state.jobList)
+    const { groupListData, selectedGroupData } = useAppSelector(state => state.groupList)
+
     useEffect(() => {
-        let defaultSelected = data.find((i) => i.selected == true)
+        let defaultSelected = finalGroupData.find((i) => i.selected == true)
         setSelectedItem(defaultSelected)
+        setSelectedId(selectedGroupData)
     }, [])
+
+    useEffect(() => {
+        setSelectedItem(selectedGroupData)
+    }, [selectedGroupData])
+
+
+    useEffect(() => {
+        if (isFocus) {
+            if (closedJobList.results.length == 0 || openedJobList.results.length == 0) {
+                setIsLoading(true)
+            }
+            JobListApiCall(undefined, undefined, selectedGroupData?.id, undefined, undefined, strings.close)
+        }
+    }, [isFocus])
+
+    useEffect(() => {
+        JobListApiCall(1, undefined, selectedGroupData?.id, selectedDate?.toDate, selectedDate?.fromDate)
+    }, [btn])
+
+    const selectedGroup = () => {
+        if (selectedGroupData) {
+            const data = finalAllGroup.map((i) => {
+
+                if (i.name == selectedGroupData.name) {
+                    return {
+                        ...i,
+                        selected: !i.selected,
+                    };
+                } else {
+                    return i;
+                }
+
+            })
+            setFinalAllGroup(data)
+            console.log({ data })
+        }
+    }
+
+    useEffect(() => {
+        let params = {
+            search: '',
+            page: groupPage
+        }
+        // setIsFooterLoading(true)
+        dispatch(groupList(params)).unwrap().then((res) => {
+            // setIsFooterLoading(false) setPage(page + 1)
+            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+            setGroupData(res.results)
+            setGroupPage(groupPage + 1)
+        }).catch((error) => {
+            console.log({ error });
+        })
+    }, [isFocus, groupListData.results, finalAllGroup])
+
+    const JobListApiCall = (page?: number, input?: string, id?: number, to_date?: string, from_date?: string, status?: string) => {
+
+        let params: jobListParams = {
+            page: page ? page : btn.open ? openJobApiPage : btn.close ? closeJobApiPage : 1,
+            search: input,
+            status: status ? status : btn.open ? strings.open : btn.close ? strings.close : '',
+            id: id != undefined ? id : selectedItem?.id ?? undefined,
+            to_date: to_date,
+            from_date: from_date
+        }
+        dispatch(jobStatusWiseList(params)).unwrap().then((res) => {
+            setIsFooterLoading(false)
+            setOnRefreshJobList(false)
+            params.status == strings.open && setIsLoading(false)
+            params.status == strings.open ? SetOpenJobApiPage(page ? page + 1 : openJobApiPage + 1) : params.status == strings.close ? SetCloseJobApiPage(page ? page + 1 : closeJobApiPage + 1) : null
+        }).catch((error) => {
+            setIsFooterLoading(false)
+            setOnRefreshJobList(false)
+            setIsLoading(false)
+        })
+    }
+
+    useEffect(() => {
+        const findData: GroupParams[] = groupData.map((i: GroupData) => {
+            return {
+                ...i,
+                user_name: i.name,
+                selected: false,
+            }
+        })
+        setfinalGroupList(findData)
+
+    }, [groupData])
+
+    useEffect(() => {
+        if (finalGroupData.length) {
+            let categoryList: any = [{ name: 'All', selected: true, id: 0 }]
+            finalGroupData.map((listItem: GroupParams) => {
+                categoryList.push({
+                    name: listItem.name,
+                    selected: false,
+                    id: listItem.id
+                });
+                setFinalAllGroup(categoryList);
+            });
+
+            const data = categoryList.map((item: GroupParams) => {
+                if (selectedGroupData.name != 'All') {
+                    if (item.name == selectedGroupData.name) {
+                        return {
+                            ...item,
+                            selected: !item.selected,
+                        };
+                    } else if (item.name == 'All') {
+                        return {
+                            ...item,
+                            selected: false,
+                        };
+                    } else {
+                        return item;
+                    }
+                } else {
+                    if (item.name == 'All') {
+                        return {
+                            ...item,
+                            selected: true,
+                        };
+                    } else {
+                        return {
+                            ...item,
+                            selected: false,
+                        };
+                    }
+                }
+            })
+            setFinalAllGroup(data)
+            console.log({ data })
+        }
+    }, [finalGroupData, groupListData.results, selectedGroupData]);
+
+    const groupId: GroupParams | undefined = finalGroupData.find((i) => i.selected == true)
 
     return (
         <View style={globalStyles.container}>
+            {isLoading && <CustomActivityIndicator />}
             <Header
                 headerLeftComponent={
                     <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
@@ -72,49 +216,157 @@ const JobsScreen = () => {
                 }
                 headerCenterComponent={
                     <TouchableOpacity onPress={() => refRBSheet.current?.open()} activeOpacity={1} style={globalStyles.rowView}>
-                        <Text style={styles.jobTypeTxt}>{selectedItem?.title}</Text>
+                        <Text style={styles.jobTypeTxt}>{selectedGroupData?.name ? selectedGroupData?.name : 'All'}</Text>
                         <Image source={ImagesPath.down_icon} style={styles.downIcon} />
                     </TouchableOpacity>
                 }
                 headerRightComponent={
                     <View style={globalStyles.rowView}>
-                        <TouchableOpacity onPress={() => {
-                            // navigation.navigate('ReportGeneratorScreen')
-                        }} style={{ marginRight: wp(3) }}>
+                        <TouchableOpacity onPress={() => setIsSearch(!isSearch)} style={{ marginRight: wp(3) }}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                         {
-                            userData?.role != strings.Group_Manager &&
+                            userData?.role != strings.groupManager &&
                             <TouchableOpacity onPress={() => {
-                                if (userData?.role == strings.Admin) {
+                                if (userData?.role == strings.admin) {
                                     navigation.navigate("NotificationScreen")
                                 } else {
                                     navigation.navigate('CreateNewJobScreen', { type: strings.newJob })
                                 }
                             }}>
-                                <Image source={userData?.role == strings.Admin ? ImagesPath.notification_icon : ImagesPath.add_icon} style={globalStyles.headerIcon} />
+                                <Image source={userData?.role == strings.admin ? ImagesPath.notification_icon : ImagesPath.add_icon} style={globalStyles.headerIcon} />
                             </TouchableOpacity>
                         }
                     </View>
                 }
             />
+
             <Container>
-                <ButtonTab btnOneTitle={strings.Open} btnTwoTitle={strings.Close} setBtn={setBtn} btnValue={btn} onReset={setPage} />
+                {isSearch &&
+                    <View style={[styles.searchInputView]}>
+                        <Image source={ImagesPath.search_icon} style={styles.searchViewImage} />
+                        <TextInput
+                            style={[styles.searchInputText]}
+                            placeholder={strings.searchHere}
+                            onChangeText={(text) => {
+                                setText(text)
+                                JobListApiCall(1, text.trim())
+                            }}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
+                        />
+                        <TouchableOpacity onPress={() => { setIsSearch(false), setText(''), JobListApiCall(1) }} >
+                            <Image source={ImagesPath.close_icon} style={globalStyles.backArrowStyle} />
+                        </TouchableOpacity>
+                    </View>
+                }
+                <ButtonTab
+                    btnOneTitle={strings.open}
+                    btnTwoTitle={strings.close}
+                    setBtn={setBtn}
+                    btnValue={btn}
+                    onReset={setPage}
+                />
+
+                <View style={[globalStyles.rowView, { justifyContent: 'space-between', marginHorizontal: wp(4) }]}>
+                    <CustomSubTitleWithImageComponent
+                        disabled
+                        title={strings.AddedGroups}
+                        image={ImagesPath.group_icon}
+                        viewStyle={{ marginBottom: hp(0), }}
+                        titleStyle={{ fontSize: FontSizes.MEDIUM_16 }}
+                    />
+                    <TouchableOpacity
+                        onPress={() => {
+                            setIsModelVisible(true)
+                        }} style={{ padding: wp(1.5) }}>
+                        <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle, { fontFamily: fonts.FONT_POP_SEMI_BOLD, paddingHorizontal: 0 }]}>{strings.date}</Text>
+                    </TouchableOpacity>
+                </View>
+
                 <FlatList
-                    data={JobData}
-                    renderItem={({ item, index }) => (
-                        <JobListComponent item={item} index={index} />
-                    )}
+                    data={btn.open ? openedJobList?.results : btn.close ? closedJobList?.results : []}
+                    renderItem={({ item, index }) => {
+                        const isDateVisible = index != 0 ? moment(btn.open ? openedJobList?.results[index].created_at : btn.close ? closedJobList?.results[index].created_at : '').format('ll') == moment(btn.open ? openedJobList.results[index - 1].created_at : btn.close ? closedJobList.results[index - 1].created_at : '').format('ll') ? false : true : true
+                        return (
+                            <JobListComponent
+                                item={item}
+                                isDateVisible={isDateVisible}
+                            />
+                        )
+                    }}
+                    onEndReached={() => {
+                        console.log('JOB ON END -----', { open: btn.open, close: btn.close, openNEXT: openedJobList?.next, closeNExt: closedJobList.next })
+                        if ((btn.open ? openedJobList?.next : btn.close ? closedJobList?.next : false) && !apiCallLoading) {
+                            setIsFooterLoading(true)
+                            JobListApiCall()
+                        }
+                    }}
                     showsVerticalScrollIndicator={false}
+                    onEndReachedThreshold={0.1}
+                    ListFooterComponent={() => {
+                        return (
+                            <>
+                                {isFooterLoading && <ActivityIndicator size={'small'} />}
+                            </>
+                        )
+                    }}
+                    onRefresh={() => {
+                        setOnRefreshJobList(true)
+                        setSelectedDate({ fromDate: undefined, toDate: undefined })
+                        setSdate('')
+                        setEdate('')
+                        JobListApiCall(1, undefined, undefined, undefined, undefined, strings.open)
+                        JobListApiCall(1, undefined, undefined, undefined, undefined, strings.close)
+                    }}
+                    refreshing={onRefreshJobList}
+                    ListEmptyComponent={() => {
+                        return (
+                            <View style={[globalStyles.container, globalStyles.spaceAroundView]}>
+                                <Text style={globalStyles.rtlStyle}>{strings.empty_list}</Text>
+                            </View>
+                        )
+                    }}
                 />
             </Container>
+
+            {/* group list  */}
             <CustomBottomSheet
                 ref={refRBSheet}
-                data={data}
+                data={finalAllGroup}
+                defaultSelected={selectedGroupData}
                 onSelectedTab={(item) => {
+                    console.log({ item })
+                    JobListApiCall(1, text, item.id)
                     setSelectedItem(item)
+                    dispatch(selectedGroupReducers(item))
                     refRBSheet.current?.close()
                 }}
+            />
+
+            {/* calendar model */}
+            <CustomModal
+                visible={isModelVisible}
+                onRequestClose={() => { setIsModelVisible(false) }}
+                onClose={() => { setIsModelVisible(false) }}
+                children={
+                    <View style={{ width: wp(90), alignSelf: 'center' }}>
+                        <CalendarView
+                            setSelectedDate={setSelectedDate}
+                            setSdate={setSdate}
+                            setEdate={setEdate}
+                            sdate={sdate}
+                            edate={edate}
+                        />
+                        <CustomBlackButton
+                            title={strings.apply}
+                            onPress={() => {
+                                setIsModelVisible(false)
+                                JobListApiCall(1, text, undefined, selectedDate?.toDate, selectedDate?.fromDate)
+                            }}
+                        />
+                    </View>
+                }
             />
         </View>
     )

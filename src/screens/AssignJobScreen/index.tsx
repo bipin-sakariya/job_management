@@ -24,7 +24,6 @@ interface JobDataProps {
 }
 
 const AssignJobScreen = () => {
-
     const navigation = useCustomNavigation('JobDuplicateListScreen');
 
     const JobData: JobDataProps[] = [
@@ -34,15 +33,11 @@ const AssignJobScreen = () => {
         { id: 4, title: 'Job Title4', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
         { id: 5, title: 'Job Title5', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false, status: 'hjb' },
         { id: 6, title: 'Job Title6', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false, status: 'hjb' },
-
     ]
 
-
     const renderItem = ({ item, index }: any) => {
-        { console.log(item.status) }
         return (
             <TouchableOpacity style={styles.jobMainView}>
-
                 <CustomJobListComponent
                     item={item}
                     listStyle={{ flex: 1, }}
@@ -57,13 +52,13 @@ const AssignJobScreen = () => {
             <Header
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView, { width: wp(60) }]} onPress={() => { navigation.goBack() }}>
-                        <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
-                        <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{strings.All_Assign_job}</Text>
+                        <Image source={ImagesPath.left_arrow_icon} style={[globalStyles.backArrowStyle, {}]} />
+                        <Text numberOfLines={1} style={[globalStyles.headerTitle, globalStyles.rtlStyle]}>{strings.all_Assign_job}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
                     <View style={globalStyles.rowView}>
-                        <TouchableOpacity onPress={() => { }} style={{ marginRight: wp(3) }}>
+                        <TouchableOpacity onPress={() => { }} style={{}}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                     </View>

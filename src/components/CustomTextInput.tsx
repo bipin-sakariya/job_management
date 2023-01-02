@@ -1,6 +1,5 @@
-import { I18nManager, Platform, StyleSheet, Text, TextInputProps, View, ViewStyle } from 'react-native';
 import React from 'react';
-import { TextInput } from 'react-native-gesture-handler';
+import { I18nManager, Platform, StyleSheet, Text, TextInputProps, View, ViewStyle, TextInput } from 'react-native';
 import FontSizes from '../styles/FontSizes';
 import fonts from '../styles/Fonts';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -15,6 +14,7 @@ interface CustomTextInputProps {
 }
 
 const CustomTextInput = (props: CustomTextInputProps & TextInputProps) => {
+
     return (
         <View style={[styles.textInputContainer, props.container, globalStyles.rtlDirection]}>
             <View style={styles.titleContainer}>
@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.SMALL_14,
         width: '100%',
-        // height: 40,
         borderBottomLeftRadius: wp(1.5),
         borderBottomRightRadius: wp(1.5),
         color: colors.dark_blue2_color

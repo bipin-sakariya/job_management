@@ -37,7 +37,7 @@ export const styles = StyleSheet.create({
     textInputFontStyle: {
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.SMALL_14,
-        color: colors.doc_bg_color_dark_gray
+        color: colors.black_1
     },
     modalView: {
         width: wp(85),

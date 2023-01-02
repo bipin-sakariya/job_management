@@ -1,5 +1,6 @@
-import { NativeModules, StyleSheet, View, ViewProps } from 'react-native';
 import React from 'react';
+import { NativeModules, StyleSheet, View, ViewProps } from 'react-native';
+import { colors } from '../styles/Colors';
 const { StatusBarManager } = NativeModules;
 
 const Container = ({ style, children }: ViewProps) => {
@@ -10,12 +11,12 @@ const Container = ({ style, children }: ViewProps) => {
     )
 }
 
-export default Container
+export default Container;
 
 const styles = StyleSheet.create({
     containerStyle: {
         flex: 1,
         marginTop: StatusBarManager.HEIGHT + 54,
-        backgroundColor: 'transparent',
+        backgroundColor: colors.transparent,
     }
 })

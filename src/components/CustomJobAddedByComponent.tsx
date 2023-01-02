@@ -1,23 +1,26 @@
-import { Image, ImageSourcePropType, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { globalStyles } from '../styles/globalStyles'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { colors } from '../styles/Colors'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
-import { strings } from '../languages/localizedStrings'
+import { Image, ImageSourcePropType, StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { globalStyles } from '../styles/globalStyles';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { colors } from '../styles/Colors';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import { strings } from '../languages/localizedStrings';
+
 interface CustomJobAddedByComponentProps {
     image?: ImageSourcePropType,
     userName?: string,
     role?: string,
     date?: string
 }
+
 const CustomJobAddedByComponent = ({ image, userName, role, date }: CustomJobAddedByComponentProps) => {
+    
     return (
         <View style={[globalStyles.rowView, styles.jobView]}>
             <View style={[globalStyles.rowView, globalStyles.spaceAroundView]}>
                 <View style={styles.jobImageView}>
-                    <Image source={image} style={styles.jobImage} />
+                    <Image source={image} resizeMode={'contain'} style={styles.jobImage} />
                 </View>
                 <View style={styles.jobDetailsView}>
                     <Text style={[styles.fieldTxt, globalStyles.rtlStyle, { textAlign: 'left' }]} numberOfLines={1}>{userName}</Text>
@@ -29,7 +32,7 @@ const CustomJobAddedByComponent = ({ image, userName, role, date }: CustomJobAdd
     )
 }
 
-export default CustomJobAddedByComponent
+export default CustomJobAddedByComponent;
 
 const styles = StyleSheet.create({
     jobView: {
@@ -37,8 +40,6 @@ const styles = StyleSheet.create({
         justifyContent: "space-between"
     },
     jobImageView: {
-        height: wp(10),
-        width: wp(10),
         backgroundColor: colors.doc_bg_color_dark_gray,
         borderRadius: wp(2),
         justifyContent: "center",
@@ -48,8 +49,8 @@ const styles = StyleSheet.create({
         marginHorizontal: wp(2),
     },
     jobImage: {
-        height: wp(7),
-        width: wp(7),
+        height: wp(10),
+        width: wp(10),
         resizeMode: 'contain'
     },
     fieldTxt: {
@@ -69,5 +70,4 @@ const styles = StyleSheet.create({
         color: colors.dark_blue2_color,
         maxWidth: wp(40)
     },
-
 })

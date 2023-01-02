@@ -1,7 +1,7 @@
-import { Alert, FlatList, Image, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, Image, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomActivityIndicator, CustomBlackButton, CustomCarouselImageAndVideo, CustomDashedComponent, CustomDetailsComponent, CustomModal, CustomSubTitleWithImageComponent, CustomSwitchComponent, CustomTextInput, CustomTextInputWithImage, Header } from '../../components'
+import { Container, CustomBlackButton, CustomCarouselImageAndVideo, CustomDashedComponent, CustomDetailsComponent, CustomModal, CustomSubTitleWithImageComponent, CustomSwitchComponent, CustomTextInput, CustomTextInputWithImage, Header } from '../../components'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
@@ -21,13 +21,13 @@ import { jobCreate } from '../../redux/slices/AdminSlice/jobListSlice'
 
 interface imageList {
     id: number
-    imgUrl: string
+    image: string
     mediaType: string
 }
 interface docList {
-    path: string,
+    attachment: string,
     type: string | undefined
-    mb: number | null
+    bytes: number | null
     title: string | null
 }
 interface image_arrayList {
@@ -39,29 +39,39 @@ interface doc_arrayList {
     uri: string,
     name: string | null
     type: string | undefined,
-    mb: number | null
+    bytes: number | null
 }
+
 const AddNewJobScreen = () => {
     const navigation = useCustomNavigation('AddNewJobScreen');
+    const dispatch = useAppDispatch()
+
     const [isUrgentJob, setIsUrgentJob] = useState(false)
     const [isFinishNotification, setIsFinishNotification] = useState(false)
     const [isModelVisible, setIsModelVisible] = useState(false)
-    // const [imageUrl, setImageUrl] = useState('')
     const [imageList, setImageList] = useState<imageList[]>([])
     const [docList, setDocList] = useState<docList[] | []>([])
     const [imageError, setImageError] = useState(false)
     const [docError, setDocError] = useState(false)
-    const { isLoading } = useAppSelector(state => state.jobList)
     const [latlong, setLatLong] = useState({ latitude: '', longitude: '' })
-    const dispatch = useAppDispatch()
     const [error, setError] = useState({
         id: '',
         address: '',
         address_information: '',
         description: '',
-        images: '',
-        attachments: ''
     })
+    const { isLoading } = useAppSelector(state => state.jobList)
+    const { createJobLocation } = useAppSelector(state => state.mapData)
+
+
+    useEffect(() => {
+        if (createJobLocation?.address) {
+            setFieldValue('address', createJobLocation?.address)
+        }
+    }, [createJobLocation])
+
+
+
 
     const createJob = (values: {
         jobID: string;
@@ -69,16 +79,15 @@ const AddNewJobScreen = () => {
         addressInformation: string;
         description: string;
     }) => {
-        if (values && !imageError && !docError) {
-            let data = new FormData
-
+        if (values) {
+            let data = new FormData()
             let image_array: image_arrayList[] = []
             let doc_array: doc_arrayList[] = []
 
             if (imageList) {
                 imageList.map((item, index) => {
                     let images = {
-                        uri: item.imgUrl,
+                        uri: item.image,
                         name: `photo${index}${item.mediaType == "image" ? '.jpg' : '.mp4'}`,
                         type: item.mediaType == "image" ? "image/jpeg" : 'video/mp4'
                     }
@@ -86,12 +95,12 @@ const AddNewJobScreen = () => {
                 })
             }
             if (docList) {
-                docList.map((item, index) => {
+                docList.map((item) => {
                     let docs = {
-                        uri: item.path,
+                        uri: item.attachment,
                         name: item.title,
                         type: item.type,
-                        mb: item.mb
+                        bytes: item.bytes
                     }
                     doc_array.push(docs)
                 })
@@ -106,18 +115,22 @@ const AddNewJobScreen = () => {
             }
             data.append("priority", isUrgentJob)
             data.append("further_inspection", isFinishNotification)
-            data.append("status", strings.JobOpen)
+            data.append("status", strings.jobOpen)
+
             if (!isEmptyArray(image_array)) {
-                data.append("image", image_array)
+                image_array.map((item) => {
+                    data.append("image", item)
+                })
             }
             if (!isEmptyArray(doc_array)) {
-                data.append("attachment", docList)
+                doc_array.map((_doc) => {
+
+                    data.append("attachment", _doc)
+                })
             }
-            dispatch(jobCreate(data)).unwrap().then((datas) => {
-                console.log({ datas: datas });
+            dispatch(jobCreate(data)).unwrap().then((value) => {
                 setIsModelVisible(true)
             }).catch((error) => {
-                console.log({ Error: error });
                 setError(error.data)
             })
         } else {
@@ -131,15 +144,13 @@ const AddNewJobScreen = () => {
     }
 
     const CreateJobValidationSchema = yup.object().shape({
-        jobID: yup
-            .string()
-            .trim()
-            .required(strings.jobid_required),
+        jobID: yup.string().trim().required(strings.jobid_required),
         address: yup.string().required(strings.address_required),
         addressInformation: yup.string().required(strings.addressInformation_required),
         description: yup.string().required(strings.description_required),
     });
-    const { values, errors, touched, handleSubmit, handleChange } =
+
+    const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
             enableReinitialize: true,
             initialValues: { jobID: '', address: '', addressInformation: '', description: '', },
@@ -148,7 +159,6 @@ const AddNewJobScreen = () => {
                 createJob(values)
             }
         })
-
 
     useEffect(() => {
         if (values.jobID) {
@@ -169,28 +179,28 @@ const AddNewJobScreen = () => {
         //Opening Document Picker for selection of one file
         try {
             const res = await DocumentPicker.pick({
-                // type: [DocumentPicker.types.images, DocumentPicker.types.pdf, DocumentPicker.types.video],
                 type: [DocumentPicker.types.allFiles],
                 presentationStyle: 'fullScreen',
                 mode: 'import',
                 allowMultiSelection: true,
                 copyTo: 'cachesDirectory'
             })
+
             let ImageTempArray = [...imageList]
             let DocTempArray = [...docList]
+            console.log({ title: res })
             if (res[0]?.type?.split("/")[0] == 'application') {
-                DocTempArray.push({ path: res[0].uri, type: res[0]?.type?.split("/")[1], mb: res[0].size, title: res[0].name })
+                DocTempArray.push({ attachment: res[0].uri, type: res[0]?.type?.split("/")[1], bytes: res[0].size, title: res[0].name })
                 setDocError(false)
             }
             else {
-                ImageTempArray.push({ imgUrl: res[0].uri, mediaType: res[0]?.type?.split("/")[0] == 'image' ? 'image' : 'video', id: Math.random() })
+                ImageTempArray.push({ image: res[0].uri, mediaType: res[0]?.type?.split("/")[0] == 'image' ? 'image' : 'video', id: Math.random() })
                 setImageError(false)
             }
-            console.log(ImageTempArray)
             setImageList(ImageTempArray)
-            console.log({ DocTempArray })
             setDocList(DocTempArray)
-        } catch (err) {
+        }
+        catch (err) {
             if (DocumentPicker.isCancel(err)) {
             } else {
                 Alert.alert('Unknown Error: ' + JSON.stringify(err));
@@ -198,9 +208,10 @@ const AddNewJobScreen = () => {
             }
         }
     };
+
     return (
         <View style={globalStyles.container}>
-            {isLoading && <CustomActivityIndicator size={'small'} />}
+            {/* {isLoading && <CustomActivityIndicator size={'small'} />} */}
             <Header
                 headerLeftStyle={{
                     paddingLeft: wp(3),
@@ -209,45 +220,51 @@ const AddNewJobScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{strings.AddNewJob}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.addNewJob}</Text>
                     </TouchableOpacity>
                 }
             />
             <Container>
                 <ScrollView contentContainerStyle={[{ paddingHorizontal: wp(4), paddingBottom: wp(5) }]} showsVerticalScrollIndicator={false}>
-                    <CustomSubTitleWithImageComponent title={strings.Fillfromtocreatejob} image={ImagesPath.list_bullet_image_icon} />
+                    <CustomSubTitleWithImageComponent title={strings.fillFromToCreateJob} image={ImagesPath.list_bullet_image_icon} />
                     <CustomTextInput
-                        title={strings.JobId}
+                        title={strings.jobId}
                         container={{ marginTop: wp(3) }}
-                        placeholder={strings.JobId}
+                        placeholder={strings.jobId}
                         value={values.jobID}
                         onChangeText={handleChange("jobID")}
+                        keyboardType={'number-pad'}
                     />
-                    {(touched?.jobID && errors?.jobID) || error?.id ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors?.jobID ? errors.jobID : error?.id}</Text> : null}
+                    {(touched?.jobID && errors?.jobID) || error?.id ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{errors?.jobID ? errors.jobID : error?.id}</Text> : null}
                     <CustomTextInputWithImage
-                        title={strings.Address}
+                        title={strings.address}
                         value={values.address}
-                        placeholder={strings.Address}
+                        placeholder={strings.address}
                         placeholderTextColor={colors.dark_blue2_color}
                         onChangeText={handleChange("address")}
                         mainContainerStyle={{ marginTop: wp(5), flex: 1, }}
                         mapStyle={{ paddingVertical: Platform.OS == "ios" ? wp(4.2) : wp(5.5) }}
                         container={{ width: wp(68) }}
-                        onPress={() => navigation.navigate('CreateJobMapScreen')}
+                        onPress={() => navigation.navigate('CreateJobMapScreen', {
+                            isEditing: true,
+                            isAddressPreview: true,
+                            isButtonVisible: true,
+                            screenName: 'AddNewJobScreen',
+                        })}
                     />
-                    {(touched?.address && errors?.address) || error?.address ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors?.address ? errors.address : error?.address}</Text> : null}
+                    {(touched?.address && errors?.address) || error?.address ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{errors?.address ? errors.address : error?.address}</Text> : null}
                     <CustomTextInput
-                        title={strings.Addressinformation}
+                        title={strings.addressInformation}
                         container={{ marginTop: wp(5) }}
                         value={values.addressInformation}
                         onChangeText={handleChange('addressInformation')}
-                        placeholder={strings.Addressinformation}
+                        placeholder={strings.addressInformation}
                     />
-                    <Text style={[{ fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_10, color: colors.dark_blue3_color }]}>{strings.Additionaladdressinformation}</Text>
-                    {(touched?.addressInformation && errors?.addressInformation) || error?.address_information ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors?.addressInformation ? errors.addressInformation : error?.address_information}</Text> : null}
+                    <Text style={[{ fontFamily: fonts.FONT_POP_REGULAR, fontSize: FontSizes.EXTRA_SMALL_10, color: colors.dark_blue3_color }]}>{strings.additionaladdressinformation}</Text>
+                    {(touched?.addressInformation && errors?.addressInformation) || error?.address_information ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{errors?.addressInformation ? errors.addressInformation : error?.address_information}</Text> : null}
                     <CustomDetailsComponent
                         detailsContainerStyle={{ marginTop: wp(4) }}
-                        title={strings.Description}
+                        title={strings.description}
                         bottomComponent={
                             <TextInput
                                 multiline
@@ -256,32 +273,32 @@ const AddNewJobScreen = () => {
                                 placeholderTextColor={colors.dark_blue2_color}
                                 value={values.description}
                                 onChangeText={handleChange('description')}
-                                placeholder={strings.Description}
+                                placeholder={strings.description}
                             />
                         }
                     />
-                    {(touched?.description && errors?.description) || error?.description ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors?.description ? errors.description : error?.description}</Text> : null}
+                    {(touched?.description && errors?.description) || error?.description ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{errors?.description ? errors.description : error?.description}</Text> : null}
                     {imageList && imageList.length != 0 &&
                         <CustomCarouselImageAndVideo
                             viewStyle={{ width: wp(90) }}
                             result={imageList} />}
                     {docList.length != 0 &&
                         <CustomDetailsComponent
-                            title={strings.Attachment}
+                            title={strings.attachment}
                             detailsContainerStyle={{ marginVertical: wp(4) }}
                             bottomComponent={
                                 <FlatList
                                     numColumns={2}
                                     data={docList}
-                                    renderItem={({ item, index }: any) => {
+                                    renderItem={({ item, index }: { item: docList, index: number }) => {
                                         return (
                                             <CommonPdfView
                                                 onPress={() => {
-                                                    const pdfName = item.path.split(/[#?]/)[0].split('/').pop().split('.')[0];
-                                                    const extension = item.path.split(/[#?]/)[0].split(".").pop().trim();;
+                                                    const pdfName = item.attachment.split(/[#?]/)[0].split('/').pop()?.split('.')[0];
+                                                    const extension = item.attachment.split(/[#?]/)[0].split('.').pop()?.trim();
                                                     const localFile = `${RNFS.DocumentDirectoryPath}/${pdfName}.${extension}`;
                                                     const options = {
-                                                        fromUrl: item.path,
+                                                        fromUrl: item.attachment,
                                                         toFile: localFile,
                                                     };
                                                     RNFS.downloadFile(options).promise.then(() =>
@@ -298,30 +315,22 @@ const AddNewJobScreen = () => {
                     <CustomDashedComponent
                         image={ImagesPath.add_icon}
                         onPress={() => selectOneFile()}
-                        title={strings.Addimagesandattachments}
+                        title={strings.addimagesandattachments}
                         viewStyle={{ marginTop: wp(5), paddingVertical: wp(5) }} />
-                    {
-                        imageError && docError ?
-                            <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{strings.ImageandAttachments_required}</Text> :
-                            <>
-                                {imageError || error.images ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.images ? error.images : strings.Image_required}</Text> : null}
-                                {docError || error.attachments ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.attachments ? error.attachments : strings.Attachments_required}</Text> : null}
-                            </>
-                    }
                     <CustomSwitchComponent
                         onPress={() => setIsUrgentJob(!isUrgentJob)}
                         value={isUrgentJob}
                         container={{ marginTop: wp(3) }}
-                        title={strings.Priority}
-                        subTitle={strings.UrgentJob} />
+                        title={strings.priority}
+                        subTitle={strings.urgentJob} />
                     <CustomSwitchComponent
                         onPress={() => setIsFinishNotification(!isFinishNotification)}
                         value={isFinishNotification}
                         container={{ marginTop: wp(4) }}
-                        title={strings.FurtherInspection}
-                        subTitle={strings.FinishNotification} />
+                        title={strings.furtherInspection}
+                        subTitle={strings.finishNotification} />
                     <CustomBlackButton
-                        title={strings.CreateJob}
+                        title={strings.createJob}
                         image={ImagesPath.add_icon}
                         imageStyle={{ tintColor: colors.white_color }}
                         onPress={() => {
@@ -340,11 +349,11 @@ const AddNewJobScreen = () => {
                         children={
                             <View style={styles.modalInnerView}>
                                 <Image source={ImagesPath.check_icon_circle} style={globalStyles.modalImageStyle} />
-                                <Text style={styles.modalDescriptionTxt}>{strings.NewJobAddedSuccessfully}</Text>
+                                <Text style={styles.modalDescriptionTxt}>{strings.newJobAddedSuccessfully}</Text>
                                 <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginVertical: wp(2.5) }} onPress={() => {
                                     setIsModelVisible(false)
                                     navigation.goBack()
-                                }} title={strings.Okay} />
+                                }} title={strings.okay} />
                             </View>
                         }
                     />
@@ -356,8 +365,8 @@ const AddNewJobScreen = () => {
                                     fontFamily: fonts.FONT_POP_REGULAR,
                                     fontSize: FontSizes.MEDIUM_16,
                                     color: colors.black
-                                }}>{strings.NewJobAddedSuccessfully}</Text>
-                                <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginTop: wp(2) }} onPress={() => { setIsModelVisible(false) }} title={strings.Okay} />
+                                }}>{strings.newJobAddedSuccessfully}</Text>
+                                <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginTop: wp(2) }} onPress={() => { setIsModelVisible(false) }} title={strings.okay} />
                             </View>
                         } />
                 </ScrollView>

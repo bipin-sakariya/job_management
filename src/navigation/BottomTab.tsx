@@ -26,7 +26,7 @@ const BottomTab = () => {
                     borderTopLeftRadius: 25,
                     borderTopRightRadius: 25,
                     height: Platform.OS == "ios" ? hp(14) : hp(12.5),
-                    shadowColor: '#000',
+                    shadowColor: colors.black,
                     shadowOpacity: 0.15,
                     shadowRadius: 10,
                     shadowOffset: { height: 2.5, width: 0 },
@@ -45,7 +45,7 @@ const BottomTab = () => {
                                 fontFamily: focused ? fonts.FONT_POP_SEMI_BOLD : fonts.FONT_POP_MEDIUM,
                                 color: focused ? colors.primary_color : colors.light_blue_Txt_color
                             }]}>
-                            {strings.Map}
+                            {strings.map}
                         </Text>
                     ),
                     tabBarIcon: ({ focused }) => (
@@ -64,7 +64,7 @@ const BottomTab = () => {
                                 fontFamily: focused ? fonts.FONT_POP_SEMI_BOLD : fonts.FONT_POP_MEDIUM,
                                 color: focused ? colors.primary_color : colors.light_blue_Txt_color
                             }]}>
-                            {strings.Job}
+                            {strings.job}
                         </Text>
                     ),
                     tabBarIcon: ({ color, focused }) => (
@@ -83,7 +83,7 @@ const BottomTab = () => {
                                 fontFamily: focused ? fonts.FONT_POP_SEMI_BOLD : fonts.FONT_POP_MEDIUM,
                                 color: focused ? colors.primary_color : colors.light_blue_Txt_color
                             }]}>
-                            {strings.Inbox}
+                            {strings.inbox}
                         </Text>
                     ),
                     tabBarIcon: ({ color, focused }) => (

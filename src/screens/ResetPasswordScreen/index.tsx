@@ -8,9 +8,40 @@ import { ImagesPath } from '../../utils/ImagePaths';
 import { strings } from '../../languages/localizedStrings';
 import { colors } from '../../styles/Colors';
 import { styles } from './styles';
+import { useFormik } from 'formik'
+import * as yup from 'yup'
+import { useAppDispatch } from '../../hooks/reduxHooks';
+import { changePassword } from '../../redux/slices/AdminSlice/userListSlice';
 
 const ResetPasswordScreen = () => {
     const navigation = useCustomNavigation('ResetPasswordScreen');
+    const dispatch = useAppDispatch();
+
+    const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
+        useFormik({
+            enableReinitialize: true,
+            initialValues: {
+                old_password: '',
+                new_password: ''
+            },
+            // validationSchema: CreateEditJobValidationSchema,
+            onSubmit: values => {
+                ChangePassword()
+            }
+        })
+
+    const ChangePassword = () => {
+        let params = {
+            old_password: values.old_password,
+            new_password: values.new_password
+        }
+        dispatch(changePassword(params)).unwrap().then((res) => {
+            console.log({ res: res });
+            navigation.goBack()
+        }).catch((e) => {
+            console.log({ error: e });
+        })
+    }
 
     return (
         <View style={globalStyles.container}>
@@ -24,7 +55,7 @@ const ResetPasswordScreen = () => {
                         style={[globalStyles.rowView]}
                         onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.backArrowStyle} />
-                        <Text style={globalStyles.headerTitle}>{strings.ResetPassword}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.resetPassword}</Text>
                     </TouchableOpacity>
                 }
             />
@@ -32,14 +63,15 @@ const ResetPasswordScreen = () => {
                 <CustomSubTitleWithImageComponent
                     disabled
                     titleStyle={{ color: colors.dark_blue1_color }}
-                    title={strings.FillthedeatiltoresetPassword}
+                    title={strings.fillTheDetailToResetPassword}
                     image={ImagesPath.from_list_icon}
                 />
                 <CustomTextInput
-                    title={strings.OldPassword}
-                    placeholder={strings.Password}
+                    title={strings.oldPassword}
+                    placeholder={strings.password}
                     container={{ marginVertical: wp(5) }}
-                    onChangeText={(text) => { }}
+                    value={values.old_password}
+                    onChangeText={handleChange('old_password')}
                     secureTextEntry
                     icon={
                         <TouchableOpacity onPress={() => { }}>
@@ -48,10 +80,11 @@ const ResetPasswordScreen = () => {
                     }
                 />
                 <CustomTextInput
-                    title={strings.NewPassword}
-                    placeholder={strings.Password}
+                    title={strings.newPassword}
+                    placeholder={strings.password}
                     container={{ marginVertical: wp(5) }}
-                    onChangeText={(text) => { }}
+                    value={values.new_password}
+                    onChangeText={handleChange('new_password')}
                     secureTextEntry
                     icon={
                         <TouchableOpacity onPress={() => { }}>
@@ -60,10 +93,11 @@ const ResetPasswordScreen = () => {
                     }
                 />
                 <CustomTextInput
-                    title={strings.ConfirmNewPassword}
-                    placeholder={strings.Password}
+                    title={strings.confirmNewPassword}
+                    placeholder={strings.password}
                     container={{ marginVertical: wp(5) }}
-                    onChangeText={(text) => { }}
+                    value={values.new_password}
+                    onChangeText={handleChange('new_password')}
                     secureTextEntry
                     icon={
                         <TouchableOpacity onPress={() => { }}>
@@ -72,8 +106,8 @@ const ResetPasswordScreen = () => {
                     }
                 />
                 <CustomBlackButton
-                    title={strings.Changepassword}
-                    onPress={() => { }}
+                    title={strings.changePassword}
+                    onPress={() => { handleSubmit() }}
                 />
             </Container>
         </View >

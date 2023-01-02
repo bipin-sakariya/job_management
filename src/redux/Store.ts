@@ -10,6 +10,8 @@ import billListSlice from './slices/AdminSlice/billListSlice';
 import jobListSlice from './slices/AdminSlice/jobListSlice';
 import groupListSlice from './slices/AdminSlice/groupListSlice';
 import formListSlice from './slices/AdminSlice/formListSlice';
+import MapSlice from './slices/MapSlice/MapSlice';
+import returnJobListSlice from './slices/AdminSlice/returnJobListSlice';
 
 const persistConfig = {
     key: "root",
@@ -22,12 +24,14 @@ const reducers = combineReducers({
     billList: billListSlice,
     jobList: jobListSlice,
     groupList: groupListSlice,
-    formList: formListSlice
+    formList: formListSlice,
+    mapData: MapSlice,
+    returnJobList: returnJobListSlice
 })
 
-
+export const USER_LOGOUT = 'USER_LOGOUT'
 const rootReducer = (state: any, action: any) => {
-    if (action.type == 'USER_LOGOUT') {
+    if (action.type == USER_LOGOUT) {
         storage.removeItem('persist:root')
         return reducers(undefined, action)
     }

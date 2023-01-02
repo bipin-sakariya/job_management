@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
     },
     dropdown: {
         height: 50,
-        backgroundColor: 'transparent',
+        backgroundColor: colors.transparent,
         borderBottomColor: 'gray',
         borderBottomWidth: 0.5,
     },

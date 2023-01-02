@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.REGULAR_18,
         marginHorizontal: wp(2),
-        color: colors.balck_color,
+        color: colors.black,
     },
     messageTxt: {
         ...globalStyles.rtlStyle,
@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
         paddingHorizontal: wp(2),
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
-        color: '#444444'
+        color: colors.chat_right_Txt
     },
     composermainview: {
         alignItems: "center",
@@ -47,6 +47,7 @@ export const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: colors.light_blue_color,
         marginHorizontal: wp(1.5),
+        maxHeight: wp(13),
         fontSize: FontSizes.EXTRA_SMALL_12,
         fontFamily: fonts.FONT_POP_MEDIUM,
         color: colors.dark_blue3_color
@@ -123,14 +124,13 @@ export const styles = StyleSheet.create({
         width: wp(6),
         alignSelf: 'flex-end',
         resizeMode: "contain",
-        tintColor: colors.white_color
     },
     closeImageBtnStyle: {
         position: 'absolute',
         top: wp(10),
         left: wp(5),
         zIndex: 10,
-        backgroundColor: colors.black,
+        // backgroundColor: colors.black,
         borderRadius: wp(5),
         padding: wp(2)
     },
@@ -347,7 +347,7 @@ export const styles = StyleSheet.create({
         borderRadius: wp(3),
     },
     linkPreviewContainerStyle: {
-        width: wp(70),
+        width: wp(65),
         alignSelf: 'center',
         borderRadius: wp(2),
         margin: wp(2)
@@ -371,7 +371,9 @@ export const styles = StyleSheet.create({
         borderRadius: wp(2),
         flex: 1,
         flexDirection: 'row',
+        minHeight: wp(13),
         backgroundColor: colors.light_blue_color,
+        // backgroundColor: 'red',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
@@ -392,7 +394,7 @@ export const styles = StyleSheet.create({
         zIndex: 5,
     },
     renderMessageImageStyle: {
-        minHeight: wp(65),
+        minHeight: wp(60),
         minWidth: '95%',
         alignSelf: 'center',
         marginVertical: wp(1.5),
@@ -400,7 +402,7 @@ export const styles = StyleSheet.create({
         resizeMode: 'cover'
     },
     renderMessageVideoContainerStyle: {
-        height: wp(65),
+        height: wp(55),
         width: '100%',
         backgroundColor: colors.transparent_black,
         borderRadius: wp(2),
@@ -417,8 +419,8 @@ export const styles = StyleSheet.create({
         tintColor: colors.light_blue_color
     },
     renderMessageVideoStyle: {
-        minHeight: wp(65),
-        width: wp(70),
+        minHeight: wp(55),
+        width: wp(65),
         borderRadius: wp(2),
         alignSelf: 'center'
     },

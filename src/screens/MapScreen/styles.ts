@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
     titleTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        color: colors.drak_light_brown
+        color: colors.dark_light_brown
     },
     distanceTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
@@ -99,5 +99,17 @@ export const styles = StyleSheet.create({
         height: wp(7),
         width: wp(7),
         resizeMode: 'contain'
+    },
+    markerWrap: {
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    selected_markerPinIcon: {
+        height: wp(15),
+        width: wp(15),
+    },
+    unselected_markerPinIcon: {
+        height: wp(14),
+        width: wp(14),
     },
 })

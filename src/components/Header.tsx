@@ -1,13 +1,14 @@
-import { NativeModules, StyleSheet, View, ViewStyle } from 'react-native';
 import React from 'react';
+import { NativeModules, StyleSheet, View, ViewStyle } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { colors } from '../styles/Colors';
 const { StatusBarManager } = NativeModules;
 
 interface headerProps {
     containerStyle?: ViewStyle;
-    headerLeftComponent?: any;
-    headerCenterComponent?: any;
-    headerRightComponent?: any;
+    headerLeftComponent?: React.ReactNode;
+    headerCenterComponent?: React.ReactNode;
+    headerRightComponent?: React.ReactNode;
     headerRightStyle?: ViewStyle;
     headerCenterStyle?: ViewStyle;
     headerLeftStyle?: ViewStyle;
@@ -22,9 +23,10 @@ const Header = ({ containerStyle, headerLeftComponent, headerCenterComponent, he
                 <View style={[styles.headerLeft, headerLeftStyle]}>
                     {headerLeftComponent}
                 </View>
-                <View style={[styles.headerCenter, headerCenterStyle]}>
-                    {headerCenterComponent}
-                </View>
+                {headerCenterComponent &&
+                    <View style={[styles.headerCenter, headerCenterStyle]}>
+                        {headerCenterComponent}
+                    </View>}
                 <View style={[styles.headerRight, headerRightStyle]}>
                     {headerRightComponent}
                 </View>
@@ -37,7 +39,7 @@ export default Header;
 
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: 'transparent',
+        backgroundColor: colors.transparent,
         position: "absolute",
         top: 0,
         zIndex: 99999,
@@ -48,7 +50,6 @@ const styles = StyleSheet.create({
         height: 54,
         justifyContent: "center",
         alignItems: "center",
-        // backgroundColor: 'red'
     },
     headerCenter: {
         width: "50%",

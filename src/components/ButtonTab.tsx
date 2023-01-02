@@ -1,5 +1,5 @@
+import React, { Dispatch, SetStateAction } from 'react';
 import { StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
-import React, { Dispatch, SetStateAction, useState } from 'react';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { globalStyles } from '../styles/globalStyles';
 import fonts from '../styles/Fonts';
@@ -20,8 +20,9 @@ interface ButtonTabProps {
     btnTwoTxtStyle?: TextStyle
     setBtn: Dispatch<SetStateAction<ButtonTypeProps>>,
     btnValue?: ButtonTypeProps,
-    onReset: Dispatch<SetStateAction<number>>
+    onReset?: Dispatch<SetStateAction<number>>
 }
+
 const ButtonTab = ({ btnOneTitle, btnTwoTitle, btnOneStyle, btnTwoStyle, btnOneTxtStyle, btnTwoTxtStyle, btnValue, setBtn, onReset }: ButtonTabProps) => {
 
     return (
@@ -29,7 +30,7 @@ const ButtonTab = ({ btnOneTitle, btnTwoTitle, btnOneStyle, btnTwoStyle, btnOneT
             <TouchableOpacity
                 onPress={() => {
                     setBtn({ open: true, close: false })
-                    onReset(1)
+                    onReset && onReset(1)
                 }}
                 style={[styles.btnStyle, btnOneStyle, {
                     backgroundColor: btnValue?.open ? colors.primary_color : colors.light_blue_color,
@@ -40,12 +41,13 @@ const ButtonTab = ({ btnOneTitle, btnTwoTitle, btnOneStyle, btnTwoStyle, btnOneT
                     style={[styles.btnTxtStyle, btnOneTxtStyle, {
                         fontFamily: btnValue?.open ? fonts.FONT_POP_MEDIUM : fonts.FONT_POP_REGULAR,
                         color: btnValue?.open ? colors.white_color : colors.dark_blue1_color,
-                    }]}>{btnOneTitle}</Text>
+                    }]}>{btnOneTitle}
+                </Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => {
                     setBtn({ open: false, close: true }),
-                    onReset(1)
+                        onReset && onReset(1)
                 }}
                 style={[styles.btnStyle, btnTwoStyle, {
                     backgroundColor: btnValue?.close ? colors.primary_color : colors.light_blue_color,
@@ -62,13 +64,12 @@ const ButtonTab = ({ btnOneTitle, btnTwoTitle, btnOneStyle, btnTwoStyle, btnOneT
     )
 }
 
-export default ButtonTab
+export default ButtonTab;
 
 const styles = StyleSheet.create({
     buttonContainer: {
         width: wp(80),
         alignSelf: 'center',
-        // backgroundColor: 'red',
         marginBottom: wp(2),
         ...globalStyles.rowView
     },

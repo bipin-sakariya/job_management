@@ -1,18 +1,21 @@
 import { Image, Text, TouchableOpacity, View, ActivityIndicator, KeyboardAvoidingView, Platform, } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import { globalStyles } from '../../styles/globalStyles';
-import { ImagesPath } from '../../utils/ImagePaths';
-import { styles } from './styles';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { BottomSheet, CustomBlackButton, CustomTextInput } from '../../components';
-import { resetPassword, signin, userDataReducer } from '../../redux/slices/AuthUserSlice';
-import { strings } from '../../languages/localizedStrings';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import * as yup from "yup";
 import { Formik, useFormik } from "formik";
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+
+import { globalStyles } from '../../styles/globalStyles';
+import { ImagesPath } from '../../utils/ImagePaths';
+import { styles } from './styles';
+import { BottomSheet, CustomBlackButton, CustomTextInput } from '../../components';
+import { resetPassword, signin, userDataReducer } from '../../redux/slices/AuthUserSlice';
+import { strings } from '../../languages/localizedStrings';
 import CustomActivityIndicator from '../../components/CustomActivityIndicator';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
+import { colors } from '../../styles/Colors';
+import { jobStatusWiseList } from '../../redux/slices/AdminSlice/jobListSlice';
 
 const SignInScreen = () => {
     const navigation = useCustomNavigation('AuthStack')
@@ -27,14 +30,15 @@ const SignInScreen = () => {
     const [isLoading, setIsLoading] = useState(false)
 
     const { isLoading: loading, error } = useAppSelector(state => state.userDetails)
+    const { selectedGroupData } = useAppSelector(state => state.groupList)
 
     const SignInValidationSchema = yup.object().shape({
-        email: yup.string().trim().email(strings.email_invalid).required(strings.email_invalid),
-        password: yup.string().trim().min(5, strings.enter_max_6_character).required(strings.password_invalid)
+        email: yup.string().trim().email(strings.emailInvalid).required(strings.emailInvalid),
+        password: yup.string().trim().min(5, strings.enter_max_6_character).required(strings.passwordInvalid)
     });
 
     const ForgetPassEmailValidationSchema = yup.object().shape({
-        email: yup.string().trim().email(strings.email_invalid).required(strings.email_invalid),
+        email: yup.string().trim().email(strings.emailInvalid).required(strings.emailInvalid),
     });
 
     const login = (values: {
@@ -51,8 +55,23 @@ const SignInScreen = () => {
                 let userData = {
                     email: values.email,
                     role: res.role,
-                    accesToken: res.access
+                    accesToken: res.access,
+                    user: res.userdata
+                    // user: {
+                    //     id: res.,
+                    //     profile_image: string,
+                    //     user_name: string,
+                    //     email: string,
+                    //     phone: string,
+                    //     date_joined: string,
+                    //     role: {
+                    //         id: number,
+                    //         title: string
+                    //     },
+                    //     is_active: boolean
+                    // }
                 }
+
                 dispatch(userDataReducer(userData))
                 setIsLoading(false)
                 navigation.reset({ index: 0, routes: [{ name: "DrawerScreens" }] })
@@ -102,21 +121,21 @@ const SignInScreen = () => {
             <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'padding'}>
                 <Image source={ImagesPath.logo_of_job_managment} style={styles.appLogo} />
                 <View style={[{ paddingTop: wp(4), paddingBottom: wp(8), }]}>
-                    <Text style={styles.titleTxt}>{strings.Welcometo}</Text>
-                    <Text style={styles.titleTxt}>{strings.JobManagement}</Text>
+                    <Text style={styles.titleTxt}>{strings.welcomeTo}</Text>
+                    <Text style={styles.titleTxt}>{strings.jobManagement}</Text>
                 </View>
                 <CustomTextInput
-                    title={strings.UserName}
-                    placeholder={strings.UserName}
+                    title={strings.userName}
+                    placeholder={strings.userName}
                     onChangeText={handleChange("email")}
                     value={values.email}
-                    container={{ marginBottom: wp(5) }}
+                    container={{ marginBottom: wp(4) }}
                     keyboardType={'email-address'}
                 />
-                {touched.email && errors.email ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors.email}</Text> : null}
+                <Text style={[globalStyles.rtlStyle, { bottom: wp(4), color: colors.red, }]}>{(touched.email && errors.email) ? errors.email : ' '}</Text>
                 <CustomTextInput
-                    title={strings.Password}
-                    placeholder={strings.Password}
+                    title={strings.password}
+                    placeholder={strings.password}
                     onChangeText={handleChange("password")}
                     value={values.password}
                     secureTextEntry={secureText}
@@ -126,15 +145,15 @@ const SignInScreen = () => {
                         </TouchableOpacity>
                     }
                 />
-                {touched.password && errors.password ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{errors.password}</Text> : null}
-                {isError ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error}</Text> : null}
+                <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{(touched.password && errors.password) ? errors.password : isError ? error : ' '}</Text>
+                {/* <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{}</Text> */}
                 <TouchableOpacity onPress={() => {
                     refForgetPassRBSheet.current?.open()
                 }}>
-                    <Text style={styles.forgetPassTxt}>{strings.Forgotpassword}</Text>
+                    <Text style={styles.forgetPassTxt}>{strings.forgotPassword}</Text>
                 </TouchableOpacity>
                 <CustomBlackButton
-                    title={strings.Signin}
+                    title={strings.signIn}
                     onPress={() => handleSubmit()}
                     buttonStyle={{ marginVertical: wp(10) }}
                 />
@@ -148,8 +167,8 @@ const SignInScreen = () => {
                         {loading && <ActivityIndicator style={styles.indicatorStyle} />}
                         {!IsSucess ?
                             <View style={styles.forgetPassViewStyle}>
-                                <Text style={[styles.forgetPassTxtStyle, globalStyles.rtlStyle]}>{strings.Forgot_password}</Text>
-                                <Text style={[styles.enterEmailTxtStyle, globalStyles.rtlStyle]}>{strings.Enteryouremail}</Text>
+                                <Text style={[styles.forgetPassTxtStyle, globalStyles.rtlStyle]}>{strings.forgotPassword}</Text>
+                                <Text style={[styles.enterEmailTxtStyle, globalStyles.rtlStyle]}>{strings.enterYourEmail}</Text>
                                 <Formik
                                     validationSchema={ForgetPassEmailValidationSchema}
                                     initialValues={{ email: '' }}
@@ -164,16 +183,17 @@ const SignInScreen = () => {
                                     }) => (
                                         <>
                                             <CustomTextInput
-                                                title={strings.Email_new}
+                                                title={strings.emailNew}
                                                 container={{ marginVertical: wp(5), marginTop: wp(8) }}
-                                                placeholder={strings.Email_new}
+                                                placeholder={strings.emailNew}
                                                 value={values.email}
                                                 onChangeText={handleChange("email")} />
-                                            {touched.email && errors.email && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{errors.email}</Text>}
+                                            <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{(touched.email && errors.email) ? errors.email : ' '}</Text>
                                             <CustomBlackButton
+
                                                 onPress={() => { handleSubmit() }}
-                                                title={strings.Requestaresetlink}
-                                                buttonStyle={{ paddingHorizontal: wp(23) }} />
+                                                title={strings.requestResetLink}
+                                                buttonStyle={{ paddingHorizontal: wp(23), marginTop: 0 }} />
                                         </>
                                     )}
                                 </Formik>
@@ -182,8 +202,8 @@ const SignInScreen = () => {
                             <>
                                 <View style={[styles.forgetPassViewStyle, { alignItems: 'center' }]}>
                                     <Image source={!isError ? ImagesPath.check_icon_circle : ImagesPath.information_icon} resizeMode={'contain'} style={styles.imageStyle} />
-                                    {!isError ? <Text style={[styles.sucessText, globalStyles.rtlStyle]}>{strings.forgot_sucess_text}</Text> :
-                                        <Text style={[styles.sucessText, globalStyles.rtlStyle]}>{strings.forgot_error_text}</Text>
+                                    {!isError ? <Text style={[styles.sucessText, globalStyles.rtlStyle]}>{strings.forgotSucessText}</Text> :
+                                        <Text style={[styles.sucessText, globalStyles.rtlStyle]}>{strings.forgotErrorText}</Text>
                                     }
                                     <CustomBlackButton
                                         onPress={() => {
@@ -191,7 +211,7 @@ const SignInScreen = () => {
                                             setIsSucess(false);
                                             refForgetPassRBSheet.current?.close()
                                         }}
-                                        title={!isError ? strings.Thanks : strings.send_again} buttonStyle={{ paddingHorizontal: isError ? wp(33) : wp(36.5), paddingVertical: wp(3.5) }} />
+                                        title={!isError ? strings.thanks : strings.sendAgain} buttonStyle={{ paddingHorizontal: isError ? wp(33) : wp(36.5), paddingVertical: wp(3.5) }} />
                                 </View>
                             </>
                         }
@@ -203,8 +223,8 @@ const SignInScreen = () => {
                     children={
                         <View style={[styles.forgetPassViewStyle, { alignItems: 'center' }]}>
                             <Image source={ImagesPath.information_icon} resizeMode={'contain'} style={styles.imageStyle} />
-                            <Text style={[styles.sucessText, globalStyles.rtlStyle]}>{strings.forgot_error_text}</Text>
-                            <CustomBlackButton title={strings.send_again} buttonStyle={{ paddingHorizontal: wp(33), paddingVertical: wp(3.5) }} />
+                            <Text style={[styles.sucessText, globalStyles.rtlStyle]}>{strings.forgotErrorText}</Text>
+                            <CustomBlackButton title={strings.sendAgain} buttonStyle={{ paddingHorizontal: wp(33), paddingVertical: wp(3.5) }} />
                         </View>
                     }
                 />

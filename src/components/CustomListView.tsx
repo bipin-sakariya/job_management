@@ -1,22 +1,22 @@
-import { Alert, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useRef, useState } from 'react'
-import { globalStyles } from '../styles/globalStyles'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { ImagesPath } from '../utils/ImagePaths'
-import { colors } from '../styles/Colors'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
-import moment from 'moment'
-import CustomDropdown from './CustomDropDown'
-import { strings } from '../languages/localizedStrings'
-import useCustomNavigation from '../hooks/useCustomNavigation'
-import { billData, billDelete } from '../redux/slices/AdminSlice/billListSlice'
-import { useAppDispatch } from '../hooks/reduxHooks'
-import { formDelete } from '../redux/slices/AdminSlice/formListSlice'
+import React, { useRef, useState } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { globalStyles } from '../styles/globalStyles';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { ImagesPath } from '../utils/ImagePaths';
+import { colors } from '../styles/Colors';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
+import CustomDropdown from './CustomDropDown';
+import { strings } from '../languages/localizedStrings';
+import useCustomNavigation from '../hooks/useCustomNavigation';
+import { billData, billDelete } from '../redux/slices/AdminSlice/billListSlice';
+import { useAppDispatch } from '../hooks/reduxHooks';
 import { convertDate } from '../utils/screenUtils'
+import { FormDataTypes, formDelete } from '../redux/slices/AdminSlice/formListSlice';
+import FastImage from 'react-native-fast-image';
 
 interface CustomeListViewProps {
-    item: billData,
+    item: Partial<billData> & Partial<FormDataTypes>,
     onPress: () => void
     material?: boolean,
     isFrom?: boolean
@@ -26,9 +26,9 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
     const imageRef = useRef(null);
     const [visible, setVisible] = useState(false);
     const navigation = useCustomNavigation('BillListScreen');
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
 
-    let data = {
+    let data: any = {
         id: item.id,
         iamgeUrl: item.image,
         title: item.name,
@@ -37,20 +37,22 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
 
     const optionData = [
         {
-            title: strings.Remove, onPress: () => {
-                if (isFrom) {
-                    //form data
-                    dispatch(formDelete(item.id))
-                    setVisible(false)
-                } else {
-                    //billdata
-                    dispatch(billDelete(item.id)).unwrap()
-                    setVisible(false)
+            title: strings.remove, onPress: () => {
+                if (item.id) {
+                    if (isFrom) {
+                        //form data
+                        dispatch(formDelete(item.id))
+                        setVisible(false)
+                    } else {
+                        //billdata
+                        dispatch(billDelete(item.id)).unwrap()
+                        setVisible(false)
+                    }
                 }
             }, imageSource: ImagesPath.bin_icon
         },
         {
-            title: strings.Edit, onPress: () => {
+            title: strings.edit, onPress: () => {
                 if (isFrom) {
                     let params = {
                         id: data.id,
@@ -81,14 +83,14 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
                 <View style={globalStyles.rowView}>
                     {
                         data.iamgeUrl && !material &&
-                        <Image source={data.iamgeUrl ? { uri: data.iamgeUrl } : ImagesPath.image_white_border} style={[styles.imageView, { backgroundColor: data.iamgeUrl ? colors.white_color : colors.gray_7, }]} />
+                        <FastImage source={data.iamgeUrl ? { uri: data.iamgeUrl } : ImagesPath.image_white_border} style={[styles.imageView, { backgroundColor: data.iamgeUrl ? colors.white_color : colors.gray_7, }]} />
                     }
                     <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle, { marginLeft: wp(2), width: wp(32) }]}>
                         {data.title}
                     </Text>
                 </View>
                 <View style={globalStyles.rowView}>
-                    <Text numberOfLines={1} style={[styles.dateTxt, globalStyles.rtlStyle, { width: wp(22) }]}>{convertDate(data.date)}</Text>
+                    <Text numberOfLines={1} style={[styles.dateTxt, globalStyles.rtlStyle, { width: wp(22) }]}>{convertDate(data.date ? data?.date : '')}</Text>
                     <TouchableOpacity ref={imageRef} onPress={() => setVisible(true)}>
                         <Image style={styles.menuImageStyle} source={ImagesPath.menu_dots_icon} />
                     </TouchableOpacity>
@@ -104,15 +106,17 @@ const CustomListView = ({ item, onPress, material, isFrom }: CustomeListViewProp
     )
 }
 
-export default CustomListView
+export default CustomListView;
 
 const styles = StyleSheet.create({
     dropDownShadowStyle: {
-        shadowColor: Platform.OS == "ios" ? "rgba(0, 0, 0, 0.06)" : "rgba(0, 0, 0, 0.6)",
-        shadowOpacity: 5,
-        shadowRadius: 8,
+        backgroundColor: colors.white_color,
+        shadowColor: colors.black,
+        shadowOpacity: 0.10,
+        shadowRadius: 6,
         shadowOffset: { height: 0, width: 0 },
-        elevation: 5
+        elevation: 5,
+        borderTopWidth: 0,
     },
     listMainView: {
         justifyContent: "space-between",
@@ -137,11 +141,6 @@ const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_REGULAR,
         fontSize: FontSizes.EXTRA_SMALL_12,
         color: colors.dark_blue2_color,
-    },
-    iamgeStyle: {
-        height: wp(5),
-        width: wp(5),
-        resizeMode: "contain"
     },
     menuImageStyle: {
         height: wp(8),

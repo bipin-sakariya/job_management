@@ -1,104 +1,109 @@
+import React, { useEffect, useState } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomSubTitleWithImageComponent, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { styles } from './styles';
 import { strings } from '../../languages/localizedStrings';
 import fonts from '../../styles/Fonts';
 import FontSizes from '../../styles/FontSizes';
 import { convertDate } from '../../utils/screenUtils';
+import { FormDataTypes, formList } from '../../redux/slices/AdminSlice/formListSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { useIsFocused } from '@react-navigation/native';
+import { billData } from '../../redux/slices/AdminSlice/billListSlice';
+import { selectedFormDetialsForCreateJobReducers } from '../../redux/slices/AdminSlice/jobListSlice';
 
-interface formItemProps {
+interface FormTypes {
     id: number,
-    title: string,
-    date: string,
-    isChecked: boolean
+    bill: billData[],
+    created_at: string,
+    updated_at: string,
+    name: string,
+    is_sign?: boolean,
+    isChecked?: boolean
 }
 
 const SelectFormScreen = () => {
     const navigation = useCustomNavigation('SelectFormScreen');
-    const [form, setForm] = useState([
-        {
-            id: 1,
-            title: 'Form Name',
-            date: '12 May 2022',
-            isChecked: false
-        },
-        {
-            id: 2,
-            title: 'Form Name',
-            date: '12 May 2022',
-            isChecked: false
-        },
-        {
-            id: 3,
-            title: 'Form Name',
-            date: '12 May 2022',
-            isChecked: false
-        },
-        {
-            id: 4,
-            title: 'Form Name',
-            date: '12 May 2022',
-            isChecked: false
-        },
-        {
-            id: 5,
-            title: 'Form Name',
-            date: '12 May 2022',
-            isChecked: false
-        },
-        {
-            id: 6,
-            title: 'Form Name',
-            date: '12 May 2022',
-            isChecked: false
-        },
-        {
-            id: 7,
-            title: 'Form Name',
-            date: '12 May 2022',
-            isChecked: false
-        },
-        {
-            id: 8,
-            title: 'Form Name',
-            date: '12 May 2022',
-            isChecked: false
-        },
+    const dispatch = useAppDispatch();
+    const isFoucs = useIsFocused();
 
-    ])
+    const [page, setPage] = useState(1)
+    const [selectedFormsDetails, setselectedFormsDetails] = useState<FormDataTypes[]>([])
+    // const [allForm, setAllForm] = useState<FormDataTypes[]>([])
+    // const [allFormList, setFormList] = useState<FormTypes[]>(allForm)
 
-    const handleChange = (id: number) => {
-        let finalData = form.map((product) => {
-            if (id === product.id) {
-                return { ...product, isChecked: !product.isChecked };
-            }
-            return product;
-        });
-        setForm(finalData);
+    const { formListData } = useAppSelector(state => state.formList)
+    const { selectedFormsDetailForJob } = useAppSelector(state => state.jobList)
+
+    useEffect(() => {
+        if (isFoucs) {
+            handleFormApi(page)
+        }
+    }, [isFoucs])
+
+    useEffect(() => {
+        setselectedFormsDetails(selectedFormsDetailForJob?.selectedFormsDetails)
+    }, [selectedFormsDetailForJob])
+
+
+    const handleFormApi = (page: number) => {
+        let params = {
+            page: page,
+            search: ''
+        }
+        dispatch(formList(params)).unwrap().then((res) => {
+            setPage(page + 1)
+        }).catch((error) => {
+            console.log({ error });
+        })
     }
 
-    const renderItem = ({ item }: { item: formItemProps }) => {
+    //Manage Selection of form data and form's bill data 
+    const handleSelectionOfForms = (item: FormTypes) => {
+        const checkAvailablityOfForm = selectedFormsDetails.find((formData) => formData.id === item.id)
+        if (checkAvailablityOfForm) {
+            setselectedFormsDetails(selectedFormsDetails.filter((forms) => forms.id !== item.id))
+        } else {
+            setselectedFormsDetails([...selectedFormsDetails, item])
+        }
+    }
+
+    // created for manage selected form data state to redux
+    const manageSelectedFormsDetials = () => {
+        let selectedFormsBillList: billData[] = []
+        let isSignBill: boolean | undefined = false
+        selectedFormsDetails.map((formDetail) => {
+            console.log({ IS_SIGN: formDetail.is_sign })
+            isSignBill = !isSignBill ? formDetail.is_sign : true
+            selectedFormsBillList.push(...formDetail.bill)
+        })
+        dispatch(selectedFormDetialsForCreateJobReducers({ isSignBill: isSignBill, selectedFormsBillList: selectedFormsBillList, selectedFormsDetails: selectedFormsDetails }))
+        navigation.goBack()
+    }
+
+    const renderItem = ({ item }: { item: FormTypes }) => {
+        const isSelected = selectedFormsDetails.find((formDetails) => formDetails.id == item.id)
         return (
-            <TouchableOpacity onPress={() => handleChange(item.id)} style={[globalStyles.rowView,]}>
-                <Image source={item.isChecked ? ImagesPath.select_check_box : ImagesPath.check_box} style={styles.checkIcon} />
+            <TouchableOpacity onPress={() => handleSelectionOfForms(item)} style={globalStyles.rowView}>
+                <Image source={isSelected ? ImagesPath.select_check_box : ImagesPath.check_box} style={styles.checkIcon} />
                 <View style={[globalStyles.rowView, styles.listMainView, styles.dropDownShadowStyle]}>
                     <View style={globalStyles.rowView}>
                         <Text style={[styles.titleTxt, globalStyles.rtlStyle, { marginLeft: wp(2) }]}>
-                            {item.title}
+                            {item.name}
                         </Text>
                     </View>
                     <View style={globalStyles.rowView}>
-                        <Text style={[styles.dateTxt, globalStyles.rtlStyle]}>{convertDate(item.date)}</Text>
+                        <Text style={[styles.dateTxt, globalStyles.rtlStyle]}>{convertDate(item.created_at)}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
         )
     }
+
     return (
         <View style={globalStyles.container}>
             <Header
@@ -112,10 +117,10 @@ const SelectFormScreen = () => {
                 headerRightComponent={
                     <View style={globalStyles.rowView}>
                         <TouchableOpacity >
-                            <Image source={ImagesPath.search_icon} style={[globalStyles.headerIcon,]} />
+                            <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { navigation.goBack() }}>
-                            <Text style={{ fontFamily: fonts.FONT_POP_MEDIUM, fontSize: FontSizes.REGULAR_18, marginHorizontal: wp(3) }}>{strings.Done}</Text>
+                        <TouchableOpacity onPress={() => { manageSelectedFormsDetials() }}>
+                            <Text style={{ fontFamily: fonts.FONT_POP_MEDIUM, fontSize: FontSizes.REGULAR_18, marginHorizontal: wp(3) }}>{strings.done}</Text>
                         </TouchableOpacity>
                     </View>
                 }
@@ -123,18 +128,27 @@ const SelectFormScreen = () => {
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomSubTitleWithImageComponent
                     disabled
-                    title={strings.FormList}
+                    title={strings.formList}
                     image={ImagesPath.squre_note_icon}
                 />
                 <FlatList
-                    data={form}
+                    data={formListData?.results}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}
                     ItemSeparatorComponent={() => {
                         return (
                             <View style={{ height: wp(2.5) }} />
                         )
-                    }} />
+                    }}
+                    style={{ paddingTop: hp(1) }}
+                    onEndReached={() => {
+                        console.log("On reach call");
+                        if (formListData?.next) {
+                            handleFormApi(page)
+                        }
+                    }}
+                />
+
             </Container>
         </View>
     )

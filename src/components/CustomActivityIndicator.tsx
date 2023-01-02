@@ -1,19 +1,27 @@
-import { ActivityIndicator, ActivityIndicatorProps, ModalProps, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import CustomModal from './CustomModal'
-import { colors } from '../styles/Colors'
-import { Modal } from 'react-native'
+import React from 'react';
+import { ActivityIndicator, ActivityIndicatorProps, StyleSheet } from 'react-native';
+import { colors } from '../styles/Colors';
 
 const CustomActivityIndicator = (indicatorProps: ActivityIndicatorProps) => {
     return (
         <ActivityIndicator
             {...indicatorProps}
             color={colors.white_color}
-            style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, zIndex: 999999999999999, backgroundColor: colors.transparent_black, }}
+            style={styles.indicatorStyle}
         />
     )
 }
 
-export default CustomActivityIndicator
+export default CustomActivityIndicator;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    indicatorStyle: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 999999999999999,
+        backgroundColor: colors.transparent_black,
+    }
+})

@@ -1,4 +1,4 @@
-import { Alert, Image, Modal, Platform, Pressable, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, Modal, Pressable, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useCallback, useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { BottomSheet, CommonlinkPreview, CommonPdfView, Container, CustomActivityIndicator, CustomJobDetailsBottomButton, Header } from '../../components'
@@ -51,6 +51,16 @@ const PhotoOption: CameraOptions = {
 }
 
 const messageData = [
+    {
+        _id: 5,
+        createdAt: new Date(),
+        text: 'hello',
+        user: {
+            _id: 1,
+            name: 'React Native',
+            avatar: 'https://placeimg.com/140/140/any',
+        },
+    },
     {
         _id: 1,
         text: 'Hello developer 111111',
@@ -124,7 +134,7 @@ const messageData = [
         },
     },
     {
-        _id: 4,
+        _id: 6,
         createdAt: new Date(),
         jobData: {
             id: 1,
@@ -159,10 +169,7 @@ const ChatScreen = () => {
     const menuRef = useRef(null);
     const [imageVideoSelected, setImageVideoSelected] = useState(false)
     const chatRef = useRef<GiftedChat<MessageProps> | null>(null)
-
-    // job data
     const [jobData, setJobData] = useState<JobDataProps | undefined>(job_data)
-
     const [imageList, setImageList] = useState<ImageList | undefined>(undefined)
     const [videoList, setVideoList] = useState<VideoList | undefined>(undefined)
     const [docList, setDocList] = useState<DocList | undefined>(undefined)
@@ -201,7 +208,7 @@ const ChatScreen = () => {
                 video: messages[0].video
             }]
         }
-        if (messages[0].attachment?.path) {
+        if (messages[0].attachment?.attachment) {
             message = [{
                 ...message[0],
                 attachment: messages[0].attachment
@@ -285,9 +292,9 @@ const ChatScreen = () => {
                 if (res[0]?.type?.split("/")[0] == 'application') {
                     setDocList({
                         id: Math.random(),
-                        path: res[0].uri,
+                        attachment: res[0].uri,
                         type: res[0]?.type?.split("/")[1],
-                        mb: res[0].size,
+                        bytes: res[0].size,
                         title: res[0].name
                     })
                     setLoading(false)
@@ -310,7 +317,7 @@ const ChatScreen = () => {
     const customMessage = () => {
         const props = chatRef.current?.props
         const state = chatRef.current?.state
-        if (props?.onSend && (state?.text || imageList?.url || docList?.path || videoList?.url || jobData)) {
+        if (props?.onSend && (state?.text || imageList?.url || docList?.attachment || videoList?.url || jobData)) {
             chatRef?.current?.onSend([{
                 _id: Math.random(),
                 createdAt: new Date(),
@@ -346,39 +353,29 @@ const ChatScreen = () => {
                             <>
                                 {
                                     props.currentMessage?.jobData &&
-                                    <CommonlinkPreview job={props.currentMessage?.jobData} containerStyle={styles.linkPreviewContainerStyle} />
+                                    <CommonlinkPreview onPress={() => {// navigation.navigate("JobDetailsScreen", { params: params })
+                                    }}
+                                        job={props.currentMessage?.jobData}
+                                        containerStyle={styles.linkPreviewContainerStyle} />
                                 }
                                 {
                                     props.currentMessage?.attachment &&
                                     <View style={{ alignItems: 'flex-start', flex: 1 }}>
                                         <CommonPdfView item={props.currentMessage?.attachment} onPress={async () => {
                                             setLoading(true)
-                                            const pdfName = props.currentMessage?.attachment?.path.split(/[#?]/)[0].split('/').pop()?.split('.')[0];
-                                            const extension = props.currentMessage?.attachment?.path.split(/[#?]/)[0].split(".").pop()?.trim();;
+                                            const pdfName = props.currentMessage?.attachment?.attachment.split(/[#?]/)[0].split('/').pop()?.split('.')[0];
+                                            const extension = props.currentMessage?.attachment?.attachment.split(/[#?]/)[0].split(".").pop()?.trim();;
                                             const localFile = `${RNFS.DocumentDirectoryPath}/${pdfName}.${extension}`;
                                             const options = {
-                                                fromUrl: props.currentMessage?.attachment?.path ? props.currentMessage?.attachment?.path : '',
+                                                fromUrl: props.currentMessage?.attachment?.attachment ? props.currentMessage?.attachment?.attachment : '',
                                                 toFile: localFile,
                                             };
-                                            // For testing purpose directly show the pdf view but in the development it is become downloade and after it show
-
-                                            // For testing
-                                            FileViewer.open(options.fromUrl).then(() => {
-                                                setLoading(false)
-                                            }).catch((error) => {
-                                                setLoading(false)
-                                            });
-
-                                            // For development
-                                            // RNFS.downloadFile(options).promise.then(() => {
-                                            // FileViewer.open(options.fromUrl).then(() => {
-                                            //     setLoading(false)
-                                            // }).catch((error) => {
-                                            //     setLoading(false)
-                                            // });
-                                            // }).catch(() => {
-                                            //     setLoading(false)
-                                            // })
+                                            RNFS.downloadFile(options).promise.then(() =>
+                                                FileViewer.open(localFile)).then((data) => {
+                                                    setLoading(false)
+                                                }).catch((error) => {
+                                                    setLoading(false)
+                                                })
                                         }
                                         }
                                         />
@@ -437,7 +434,7 @@ const ChatScreen = () => {
             <Send {...props}
                 sendButtonProps={{
                     onPress: () => {
-                        if (props.onSend && (props.text || imageList?.url || docList?.path || videoList?.url || jobData)) {
+                        if (props.onSend && (props.text || imageList?.url || docList?.attachment || videoList?.url || (jobData && props.text))) {
                             props.onSend({
                                 text: props.text,
                                 image: imageList,
@@ -469,42 +466,39 @@ const ChatScreen = () => {
 
     const renderInputToolbar = (props: InputToolbarProps<IMessage>) => {
         return (
-            <>
-                <InputToolbar
-                    {...props}
-                    primaryStyle={{
-                        marginVertical: Platform.OS == 'ios' ? wp(1.5) : wp(1)
-                    }}
-                    renderComposer={(data: ComposerProps) => {
-                        return (
-                            <View ref={menuRef} style={styles.toolbarContainerStyle}>
-                                <TextInput
-                                    {...data}
-                                    value={data.text}
-                                    onChangeText={data.onTextChanged}
-                                    multiline={false}
-                                    numberOfLines={1}
-                                    placeholder={strings.Write_a_message_here}
-                                    placeholderTextColor={colors.dark_blue3_color}
-                                    style={styles.inputToolBarTextInputStyle}
-                                />
-                                <TouchableOpacity disabled={docList?.path || imageList?.url || videoList?.url ? true : false} style={{ padding: wp(3) }}
-                                    onPress={() => refRBSheet.current?.open()}>
-                                    <Image source={ImagesPath.linkImage} style={styles.linkImageStyle} />
-                                </TouchableOpacity>
-                            </View>
-                        )
-                    }
-                    }
-                />
-            </>
+            <InputToolbar
+                {...props}
+                primaryStyle={{
+                    marginVertical: wp(1)
+                }}
+                renderComposer={(data: ComposerProps) => {
+                    return (
+                        <View ref={menuRef} style={styles.toolbarContainerStyle}>
+                            <TextInput
+                                {...data}
+                                value={data.text}
+                                onChangeText={data.onTextChanged}
+                                multiline={true}
+                                placeholder={strings.write_a_message_here}
+                                placeholderTextColor={colors.dark_blue3_color}
+                                style={styles.inputToolBarTextInputStyle}
+                            />
+                            <TouchableOpacity disabled={docList?.attachment || imageList?.url || videoList?.url ? true : false} style={{ padding: wp(3) }}
+                                onPress={() => refRBSheet.current?.open()}>
+                                <Image source={ImagesPath.linkImage} style={styles.linkImageStyle} />
+                            </TouchableOpacity>
+                        </View>
+                    )
+                }
+                }
+            />
         )
     }
 
     const renderChatFooter = () => {
-        if (jobData || docList?.path) {
+        if (jobData || docList?.attachment) {
             return (
-                <View style={styles.chatFooterMainView}>
+                <View style={[styles.chatFooterMainView,]}>
                     {jobData ? <View style={styles.innerChatFooterContainerStyle}>
                         <TouchableOpacity onPress={() => { setJobData(undefined) }} style={[globalStyles.rtlDirection, styles.footerCloseBtnStyle]}>
                             <Image source={ImagesPath.close_icon} style={styles.closeBtnStyle} />
@@ -512,7 +506,7 @@ const ChatScreen = () => {
                         <CommonlinkPreview job={jobData} />
                     </View> : null}
                     {
-                        docList?.path &&
+                        docList?.attachment &&
                         <View style={{ backgroundColor: colors.white, marginBottom: wp(1) }}>
                             <TouchableOpacity onPress={() => { removeAlldata('doc') }} style={[globalStyles.rtlDirection, styles.footerCloseBtnStyle, { alignSelf: 'center', margin: wp(1.5), paddingRight: wp(1) }]}>
                                 <Image source={ImagesPath.close_icon} style={styles.closeBtnStyle} />
@@ -575,10 +569,11 @@ const ChatScreen = () => {
                     onSend={messages => onSend(messages)}
                     showAvatarForEveryMessage={false}
                     showUserAvatar={true}
-                    renderBubble={renderBubble}
                     renderAvatarOnTop
-                    isKeyboardInternallyHandled
                     minInputToolbarHeight={wp(15)}
+                    bottomOffset={wp(5)}
+                    infiniteScroll={false}
+                    renderBubble={renderBubble}
                     renderAvatar={renderAvatar}
                     renderChatFooter={renderChatFooter}
                     renderInputToolbar={renderInputToolbar}
@@ -609,11 +604,12 @@ const ChatScreen = () => {
                                 })
                             }}
                             style={[styles.closeImageBtnStyle]}>
-                            <Image source={ImagesPath.cross_icon} style={[styles.closeIcon]} />
+                            <Image source={ImagesPath.cross_icon} style={[styles.closeIcon, { tintColor: selectedImageVedio.data.mediaType == 'image' ? colors.white : colors.black }]} />
                         </TouchableOpacity>
                         {
                             selectedImageVedio.data.mediaType == 'image' ?
                                 <ImageViewer
+                                    renderIndicator={() => { return <></> }}
                                     style={{ flex: 1 }} imageUrls={[{
                                         url: selectedImageVedio.data.url
                                     }]}
@@ -659,7 +655,7 @@ const ChatScreen = () => {
                             onChangeText={chatRef?.current?.onInputTextChanged}
                             multiline={false}
                             numberOfLines={1}
-                            placeholder={strings.Write_a_message_here}
+                            placeholder={strings.write_a_message_here}
                             placeholderTextColor={colors.dark_blue3_color}
                             style={[styles.inputToolBarTextInputStyle, { padding: wp(2), borderRadius: wp(2), }]}
                         />
@@ -693,14 +689,14 @@ const ChatScreen = () => {
                         <CustomJobDetailsBottomButton
                             imageStyle={styles.bottomImageStyle}
                             image={ImagesPath.gallary_image_icon}
-                            buttonText={strings.Photos}
+                            buttonText={strings.photos}
                             onPress={async () => {
                                 selectOneFile('photo')
                             }} />
                         <CustomJobDetailsBottomButton
                             imageStyle={styles.bottomImageStyle}
                             image={ImagesPath.camera_image_icon}
-                            buttonText={strings.Camera}
+                            buttonText={strings.camera}
                             onPress={() => {
                                 launchCamera(PhotoOption, response => {
                                     console.log({ response: response });

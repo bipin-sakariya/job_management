@@ -34,6 +34,7 @@ const BillSectionScreen = () => {
     const [typeCountError, setTypeCountError] = useState(false)
     const [imageUrl, setImageUrl] = useState<string | undefined>('');
 
+
     const [error, setError] = useState({
         name: "",
         jumping_ration: "",
@@ -62,7 +63,7 @@ const BillSectionScreen = () => {
 
 
     useEffect(() => {
-        if (isFocus) {
+        if (isFocus && id) {
             dispatch(billDetail(id)).unwrap().then((res) => {
                 console.log({ res });
                 setImageUrl(res.image)
@@ -76,9 +77,9 @@ const BillSectionScreen = () => {
     }, [isFocus])
 
     const optionData = [
-        { title: strings.Remove, onPress: () => deleteBill(), imageSource: ImagesPath.bin_icon },
+        { title: strings.remove, onPress: () => deleteBill(), imageSource: ImagesPath.bin_icon },
         {
-            title: strings.Edit, onPress: () => {
+            title: strings.edit, onPress: () => {
                 setIsEditEditable(true)
                 setVisible(false)
             }, imageSource: ImagesPath.edit_icon
@@ -87,15 +88,17 @@ const BillSectionScreen = () => {
 
     const deleteBill = () => {
         //delete bill 
-        dispatch(billDelete(id)).unwrap().then(() => {
-            setVisible(false)
-            navigation.goBack()
-        })
+        if (id) {
+            dispatch(billDelete(id)).unwrap().then(() => {
+                setVisible(false)
+                navigation.goBack()
+            })
+        }
     }
 
     const CreateMaterialValidationSchema = yup.object().shape({
-        name: yup.string().required(type == "material" ? strings.Billname_required : strings.Signname_required),
-        ration_qunt: yup.string().required(type == "material" ? strings.Jumpingration_required : strings.Quantity_required),
+        name: yup.string().required(type == "material" ? strings.billNameRequired : strings.signNameRequired),
+        ration_qunt: yup.string().required(type == "material" ? strings.jumpingRatioRequired : strings.quantityRequired),
         // imageUrl: yup.string().required(strings.Sign_image_required)
     });
 
@@ -146,7 +149,7 @@ const BillSectionScreen = () => {
                     setError(e.data)
                 })
             } else {
-                Alert.alert("Please enter data")
+                Alert.alert(strings.data_required)
             }
         }
     }
@@ -183,6 +186,7 @@ const BillSectionScreen = () => {
             setError({ ...error, quantity: '' })
         }
     }, [values.ration_qunt])
+
 
     return (
         <View style={globalStyles.container}>
@@ -231,19 +235,19 @@ const BillSectionScreen = () => {
                         </TouchableOpacity>
                         // <Image source={imageUrl ? imageUrl : ImagesPath.add_photo} style={styles.addPhotoStyle} />
                     }
-                    {error.image ? <Text style={[globalStyles.rtlStyle, { color: 'red' }]}>{error.image}</Text> : null}
+                    {error.image ? <Text style={[globalStyles.rtlStyle, { color: colors.red }]}>{error.image}</Text> : null}
                     <CustomTextInput
-                        title={strings.Name}
+                        title={strings.name}
                         container={{ marginVertical: wp(5) }}
                         value={values.name}
-                        placeholder={type == "material" ? strings.Billname : strings.SignName}
+                        placeholder={type == "material" ? strings.billName : strings.signName}
                         editable={isEditable}
                         onChangeText={handleChange('name')}
                     />
-                    {(touched.name && errors.name) || error.name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.name ? error.name : errors.name}</Text> : null}
+                    {(touched.name && errors.name) || error.name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.name ? error.name : errors.name}</Text> : null}
                     {type == "sign" && <>
                         <CustomTextInput
-                            title={strings.Quantity}
+                            title={strings.quantity}
                             container={{ marginBottom: wp(5) }}
                             value={values.ration_qunt}
                             placeholder='2'
@@ -251,10 +255,10 @@ const BillSectionScreen = () => {
                             onChangeText={handleChange('ration_qunt')}
                             keyboardType={'number-pad'}
                         />
-                        {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
+                        {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
                     </>}
                     <DropDownComponent
-                        title={strings.TypeCounting}
+                        title={strings.typeCounting}
                         data={data}
                         disable={isEditable ? !isEditable : true}
                         image={ImagesPath.down_white_arrow}
@@ -270,22 +274,22 @@ const BillSectionScreen = () => {
                         placeholder={strings.choose}
                         container={{ marginBottom: wp(5) }}
                     />
-                    {typeCountError || error.type_counting ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.type_counting ? error.type_counting : strings.Typecount_required}</Text> : null}
+                    {typeCountError || error.type_counting ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.type_counting ? error.type_counting : strings.typeCountRequired}</Text> : null}
                     {type != "sign" && <>
                         <CustomTextInput
-                            title={strings.JumpingRation}
+                            title={strings.jumpingRation}
                             container={{ marginBottom: wp(5) }}
                             value={values.ration_qunt}
                             editable={isEditable}
-                            placeholder={strings.JumpingRation}
+                            placeholder={strings.jumpingRation}
                             onChangeText={handleChange("ration_qunt")}
                             keyboardType={'decimal-pad'}
                         />
-                        {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}
+                        {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}
                     </>}
                     {error.detail ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.detail}</Text> : null}
                     {isEditable && <CustomBlackButton
-                        title={strings.UpdateBill}
+                        title={strings.updateBill}
                         image={ImagesPath.plus_white_circle_icon}
                         onPress={() => {
                             if (!countingValue.value) {

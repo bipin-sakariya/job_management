@@ -8,10 +8,7 @@ interface initialStateTypes {
     isLoading: boolean
     userData?: userData
     error: string | undefined
-    token: {
-        access: string
-        refresh: string
-    } | undefined
+    token: TokenType | undefined
 
 }
 const initialState: initialStateTypes = {
@@ -24,12 +21,29 @@ const initialState: initialStateTypes = {
 interface userData {
     email: string,
     role: string,
-    accesToken: string
+    accesToken: string,
+    user: user
+}
+
+interface user {
+    id: number,
+    profile_image: string,
+    user_name: string,
+    email: string,
+    phone: string,
+    date_joined: string,
+    role: {
+        id: number,
+        title: string
+    },
+    is_active: boolean
+
 }
 interface TokenType {
     access: string
     refresh: string
     role: string
+    user: user
 }
 
 interface paramsTypes {
@@ -50,6 +64,7 @@ export const signin = createAsyncThunk<TokenType, paramsTypes, { rejectValue: ap
         try {
             const response = await axiosClient.post(ApiConstants.LOGIN, params)
             console.log(ApiConstants.LOGIN)
+            console.log({ 'data=====>': response.data })
             return response.data
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -80,6 +95,7 @@ export const UserSlice = createSlice({
     initialState: initialState,
     reducers: {
         userDataReducer: (state, action) => {
+            console.log({ action })
             state.userData = action.payload
         },
         resetUserDataReducer: (state) => {
@@ -94,6 +110,7 @@ export const UserSlice = createSlice({
         builder.addCase(signin.fulfilled, (state, action) => {
             state.isLoading = false
             state.token = action.payload
+            // state.userData = action.payload.userdata
             state.error = ''
         });
         builder.addCase(signin.rejected, (state, action) => {
@@ -114,8 +131,6 @@ export const UserSlice = createSlice({
         });
     },
 })
-
-
 
 export const { userDataReducer, resetUserDataReducer } = UserSlice.actions;
 export default UserSlice.reducer;

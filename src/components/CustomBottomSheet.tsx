@@ -1,5 +1,5 @@
-import { FlatList, I18nManager, Image, StyleSheet, Text, TextInput, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { ForwardedRef, useState } from 'react';
+import { FlatList, I18nManager, Image, StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import RBSheet, { RBSheetProps } from 'react-native-raw-bottom-sheet';
 import fonts from '../styles/Fonts';
 import FontSizes from '../styles/FontSizes';
@@ -7,8 +7,10 @@ import { colors } from '../styles/Colors';
 import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../utils/ImagePaths';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { strings } from '../languages/localizedStrings';
+import { GroupParams } from '../screens/TransferJobScreen';
+import { useEffect } from 'react';
+import { iteratorSymbol } from 'immer/dist/internal';
 
 export interface ListDataProps {
     id: number,
@@ -17,19 +19,44 @@ export interface ListDataProps {
 }
 
 interface CustomBottomSheetProps {
-    data: ListDataProps[],
-    onSelectedTab: (item: ListDataProps) => void
+    data: GroupParams[],
+    onSelectedTab: (item: GroupParams) => void
+    defaultSelected?: {
+        id: number
+        name: string
+        selected: boolean
+    }
 }
 
-const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSheetProps, ref: React.LegacyRef<RBSheet>) => {
+const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSheetProps, ref: ForwardedRef<RBSheet>) => {
     const [data, setData] = useState(props.data)
+    const [defaultSelectedId, setDefaultSelectedId] = useState<number>()
 
-    const onSelectes = (selected: number) => {
-        let mainData = [...data]
-        let finalData = mainData.map((item, index) => {
-            if (index == selected) {
+    console.log("CustomBottomSheet ---", { DATA: props.data })
+    useEffect(() => {
+        setData(props.data)
+        setDefaultSelectedId(props.defaultSelected?.id)
+        // updatedDefaultSelection()
+    }, [props.data])
+
+    // const updatedDefaultSelection = () => {
+    //     console.log("SELECTED=", { data })
+    //     const newData = data.map((item) => {
+    //         if (item.id == defaultSelectedId) {
+    //             return { ...item, selected: true }
+    //         }
+    //         else {
+    //             return { ...item, selected: true }
+    //         }
+    //     })
+    //     setData(newData)
+    // }
+
+    const onSelectes = (finalIndex: number) => {
+        let finalData = props.data.map((item, index) => {
+            if (index == finalIndex) {
                 return {
-                    ...item, selected: item.selected ? false : true
+                    ...item, selected: true
                 }
             } else {
                 return {
@@ -42,6 +69,9 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
         setData(finalData)
     }
 
+
+    const name = props.data.filter((i) => i.selected == true)
+    console.log({ name })
     return (
         <RBSheet
             ref={ref}
@@ -55,10 +85,10 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
                     borderTopRightRadius: 25
                 },
                 wrapper: {
-                    backgroundColor: "transparent",
+                    backgroundColor: colors.transparent,
                 },
                 draggableIcon: {
-                    backgroundColor: "#9E9E9E"
+                    backgroundColor: colors.gray_7
                 }
             }}>
             <View style={{ flex: 1 }}>
@@ -73,17 +103,21 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
                     <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                     <TextInput
                         style={[styles.textInputStyle, { textAlign: I18nManager.isRTL ? 'right' : 'left' }]}
-                        placeholder={strings.SearchHere}
-                        placeholderTextColor={'#666666'}
+                        placeholder={strings.searchHere}
+                        placeholderTextColor={colors.light_brown}
+                        autoCorrect={false}
+                        autoCapitalize={'none'}
+                        onChangeText={() => {
+
+                        }}
                     />
                 </View>
                 <FlatList
                     data={data}
                     renderItem={({ item, index }) => {
-                        console.log("🚀 ~ file: CustomBottomSheet.tsx ~ line 83 ~ CustomBottomSheet ~ item", item)
                         return (
                             <TouchableOpacity onPress={() => onSelectes(index)} style={styles.itemContainer}>
-                                <Text style={styles.itemTitleTxt}>{item.title}</Text>
+                                <Text style={styles.itemTitleTxt}>{item.name}</Text>
                                 <Image source={item.selected ? ImagesPath.check_icon : ImagesPath.unCheck_icon} style={styles.checkIcon} />
                             </TouchableOpacity>
                         )
@@ -125,6 +159,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: wp(2.5),
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        color: '#666666'
+        color: colors.light_brown
     }
 })

@@ -1,10 +1,10 @@
-import { Image, ImageSourcePropType, ImageStyle, StyleSheet, Text, TextStyle, TouchableOpacity, TouchableOpacityProps, View, ViewStyle } from 'react-native'
-import React from 'react'
-import { globalStyles } from '../styles/globalStyles'
-import { colors } from '../styles/Colors'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import fonts from '../styles/Fonts'
-import FontSizes from '../styles/FontSizes'
+import React from 'react';
+import { Image, ImageSourcePropType, ImageStyle, StyleSheet, Text, TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
+import { globalStyles } from '../styles/globalStyles';
+import { colors } from '../styles/Colors';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import fonts from '../styles/Fonts';
+import FontSizes from '../styles/FontSizes';
 
 interface CustomDashedComponentProps {
     title: string
@@ -14,6 +14,7 @@ interface CustomDashedComponentProps {
     imageStyle?: ImageStyle
     textStyle?: TextStyle
 }
+
 const CustomDashedComponent = ({ title, image, onPress, viewStyle, imageStyle, textStyle }: CustomDashedComponentProps) => {
     return (
         <TouchableOpacity onPress={onPress} style={[styles.dashedView, viewStyle]}>
@@ -23,7 +24,7 @@ const CustomDashedComponent = ({ title, image, onPress, viewStyle, imageStyle, t
     )
 }
 
-export default CustomDashedComponent
+export default CustomDashedComponent;
 
 const styles = StyleSheet.create({
     dashedView: {

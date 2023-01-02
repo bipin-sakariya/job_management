@@ -1,11 +1,12 @@
 import { Alert, Linking, PermissionsAndroid, Platform, ToastAndroid } from "react-native";
 import Geolocation from 'react-native-geolocation-service';
 import appConfig from '../../app.json';
+import { strings } from "../languages/localizedStrings";
 
 const hasPermissionIOS = async () => {
     const openSetting = () => {
         Linking.openSettings().catch(() => {
-            Alert.alert('Unable to open settings');
+            Alert.alert(strings.unable_to_open_setting);
         });
     };
     const status = await Geolocation.requestAuthorization('always');
@@ -15,7 +16,7 @@ const hasPermissionIOS = async () => {
     }
 
     if (status === 'denied') {
-        Alert.alert('Location permission denied');
+        Alert.alert(strings.location_permission_denied);
     }
 
     if (status === 'disabled') {

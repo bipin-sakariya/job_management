@@ -1,7 +1,7 @@
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomActivityIndicator, CustomBlackButton, CustomTextInput, Header, MultileSelectDropDown } from '../../components'
+import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, Header, MultipleSelectDropDown } from '../../components'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { ImagesPath } from '../../utils/ImagePaths'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -15,11 +15,11 @@ import FontSizes from '../../styles/FontSizes'
 import { colors } from '../../styles/Colors'
 import { RootRouteProps } from '../../types/RootStackTypes'
 import { useIsFocused, useRoute } from '@react-navigation/native'
-import { formDelete, formDetail, formUpdate } from '../../redux/slices/AdminSlice/formListSlice'
+import { FormDataTypes, formDelete, formDetail, formUpdate } from '../../redux/slices/AdminSlice/formListSlice'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { useFormik } from 'formik'
 import * as yup from "yup";
-import { billList } from '../../redux/slices/AdminSlice/billListSlice'
+import { billData, billList } from '../../redux/slices/AdminSlice/billListSlice'
 import { renameKeys } from '../../utils/screenUtils'
 
 interface DataTypes {
@@ -27,16 +27,28 @@ interface DataTypes {
     selected?: boolean
     date_joined?: string
     email?: string
-    id?: number
+    id: number
     is_active?: boolean
     phone?: string
     profile_image?: string,
-    role?: { id: number, title: string },
+    role?: { id: number, title?: string },
     name?: string
 }
 
 interface Formvalues {
     formName: string
+}
+
+interface billDetails {
+    created_at: string
+    id: number
+    image: string
+    jumping_ration: number
+    name: string
+    quantity: number
+    type: string
+    type_counting: string
+    updated_at: string
 }
 
 const FormDetailsScreen = () => {
@@ -48,12 +60,12 @@ const FormDetailsScreen = () => {
     const isFocused = useIsFocused()
     const [isBillList, setBillList] = useState<DataTypes[]>([])
     const [isAllList, setIsAllList] = useState<DataTypes[]>([])
-    const [list, isList] = useState([])
+    const [list, isList] = useState<billData[]>([])
     const [countingValue, setCountingValue] = useState(0)
     const [selectedMemberData, setSelectedMemberData] = useState<DataTypes[]>([])
-    const [finalArray, setFinalArray] = useState()
+    const [finalArray, setFinalArray] = useState<number[]>([])
     const [page, setPage] = useState(1)
-    const [FormDetails, setFormDetails] = useState()
+    const [FormDetails, setFormDetails] = useState<FormDataTypes>()
 
     const [isselectData, setIsSelectData] = useState<DataTypes[]>([])
     const [isEditable, setIsEditable] = useState(isEdit || route.params.isEdit == true ? true : false)
@@ -86,7 +98,7 @@ const FormDetailsScreen = () => {
 
             dispatch(billList(params)).unwrap().then((res) => {
                 console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-                setBillList(res.data.results)
+                setBillList(res.results)
                 setPage(page + 1)
             }).catch((error) => {
                 console.log({ error });
@@ -94,9 +106,9 @@ const FormDetailsScreen = () => {
 
         }
     }, [isFocused, formDetails?.is_sign])
-    console.log({ isBillList })
+
     useEffect(() => {
-        const findData: any = billListData.results.map((i) => {
+        const findData: billData[] = billListData.results.map((i) => {
             return {
                 ...i,
                 user_name: i.name,
@@ -104,14 +116,13 @@ const FormDetailsScreen = () => {
             }
         })
         isList(findData)
+
         if (formDetails.bill) {
             const finalData: DataTypes[] = isBillList.map((i: DataTypes) => {
-
                 return {
                     ...i,
                     user_name: i.name,
                     // selected: true,
-
                 }
             })
             // console.log({ finalData })
@@ -141,7 +152,7 @@ const FormDetailsScreen = () => {
     console.log({ isAllList })
     console.log({ selectedMemberData })
     useEffect(() => {
-        let data: any = []
+        let data: number[] = []
         selectedMemberData?.map((item) => {
             data.push(item.id)
         }
@@ -152,7 +163,7 @@ const FormDetailsScreen = () => {
 
 
     const CreateGroupValidationSchema = yup.object().shape({
-        formName: yup.string().required(strings.forms_required),
+        formName: yup.string().required(strings.formsRequired),
 
     });
 
@@ -166,9 +177,9 @@ const FormDetailsScreen = () => {
     }
 
     const optionData = [
-        { title: strings.Remove, onPress: () => deleteGroupData(route.params.id), imageSource: ImagesPath.bin_icon },
+        { title: strings.remove, onPress: () => deleteGroupData(route.params.id), imageSource: ImagesPath.bin_icon },
         {
-            title: strings.Edit, onPress: () => {
+            title: strings.edit, onPress: () => {
                 setIsEdit(true)
                 setIsEditable(true)
                 setVisible(false)
@@ -176,7 +187,7 @@ const FormDetailsScreen = () => {
         }
     ]
 
-    const renderItem = ({ item, index }: any) => {
+    const renderItem = ({ item, index }: { item: billData, index: number }) => {
         return (
             <TableDetailsComponent type='form' item={item} index={index} />
         )
@@ -213,14 +224,13 @@ const FormDetailsScreen = () => {
         })
     }
 
-    console.log({ isALLSign })
     return (
         <View style={globalStyles.container}>
             <Header
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView,]} onPress={() => navigation.goBack()}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{strings.Form_Name}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.formName}</Text>
                     </TouchableOpacity>
                 }
                 headerRightComponent={
@@ -232,29 +242,29 @@ const FormDetailsScreen = () => {
 
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomTextInput
-                    title={strings.Form_Name}
+                    title={strings.formName}
                     container={{ marginVertical: wp(5) }}
                     value={values.formName}
                     editable={isEdit}
                     onChangeText={handleChange('formName')}
                 />
                 {isEdit || route.params.isEdit == true ?
-                    <MultileSelectDropDown
+                    <MultipleSelectDropDown
                         isVisible={isEditable}
                         setIsVisible={setIsEditable}
-                        title={strings.AddBill}
+                        title={strings.addBill}
                         data={isselectData}
                         onCount={(count) => { setCountingValue(count) }}
                         setSelectedMembers={(data) => { setSelectedMemberData(data) }}
                         isForm={true}
                         setIsAllSign={setIsAllSign}
                         isALLSign={isALLSign}
-                        countTitle={strings.Forms}
+                        countTitle={strings.forms}
 
                     /> :
                     <View style={[styles.sammedView, globalStyles.rtlDirection, { flexShrink: 1 }]}>
                         <View style={styles.formHeaderView}>
-                            <Text style={[styles.noNameTxt, globalStyles.rtlStyle]}>{strings.Edit}</Text>
+                            <Text style={[styles.noNameTxt, globalStyles.rtlStyle]}>{strings.edit}</Text>
                         </View>
                         <TableHeaderView type={"form"} />
                         <FlatList
@@ -275,7 +285,7 @@ const FormDetailsScreen = () => {
                     </View>}
                 {isEdit || route.params.isEdit == true ? <CustomBlackButton onPress={() => {
                     handleSubmit()
-                }} title={strings.CreateForm} image={ImagesPath.plus_white_circle_icon} imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} /> : null}
+                }} title={strings.createForm} image={ImagesPath.plus_white_circle_icon} imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} /> : null}
             </Container>
             <CustomDropdown
                 componentRef={menuRef}

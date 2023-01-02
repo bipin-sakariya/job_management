@@ -1,8 +1,7 @@
-import { Image, Text, View } from 'react-native';
+import { Image, Text, View, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, Header } from '../../components';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { strings } from '../../languages/localizedStrings';
@@ -33,23 +32,23 @@ const FillFormScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView]} >
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{strings.AsphaltColor}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.asphaltColor}</Text>
                     </TouchableOpacity>
                 } />
             <Container style={{ paddingHorizontal: wp(4) }}>
                 <CustomSubTitleWithImageComponent
                     disabled
-                    title={strings.auto_fill_detail}
+                    title={strings.autoFillDetail}
                     image={ImagesPath.receipt_icon}
                 />
                 <CustomTextInput
-                    title={strings.There}
+                    title={strings.there}
                     container={{ marginVertical: wp(4) }}
                     value={'צבע אספלט'}
                     onChangeText={(text) => { }}
                 />
                 <CustomTextInput
-                    title={strings.TypeCounting}
+                    title={strings.typeCounting}
                     container={{}}
                     value={'Meter'}
                     onChangeText={(text) => { }}
@@ -71,7 +70,7 @@ const FillFormScreen = () => {
                 <CustomBlackButton
                     onPress={() => {
                     }}
-                    title={strings.AddDetail}
+                    title={strings.addDetail}
                 />
             </Container>
         </View>

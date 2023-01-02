@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View, ViewStyle } from 'react-native'
+import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
 import React from 'react'
 import { colors } from '../styles/Colors'
 import { globalStyles } from '../styles/globalStyles'
@@ -10,14 +10,15 @@ import { JobDataProps } from '../types/commanTypes'
 
 interface CommonlinkPreviewProps {
     containerStyle?: ViewStyle,
-    job: JobDataProps
+    job: JobDataProps,
+    onPress?: () => void
 }
 
 const CommonlinkPreview = (props: CommonlinkPreviewProps) => {
     console.log(props);
 
     return (
-        <View style={[globalStyles.rowView, styles.containerStyle, props.containerStyle]}>
+        <Pressable onPress={props.onPress} style={[globalStyles.rowView, styles.containerStyle, props.containerStyle]}>
             <Image source={{ uri: 'https://dummyimage.com/600x400/000/fff' }} style={styles.renderMinimizedImageStyle} />
             <View style={{ flex: 1, paddingLeft: wp(2) }}>
                 <View style={[globalStyles.rowView, globalStyles.rtlDirection, { flex: 1, justifyContent: 'space-between' }]}>
@@ -29,7 +30,7 @@ const CommonlinkPreview = (props: CommonlinkPreviewProps) => {
                 </View>
                 <Text numberOfLines={2} style={[styles.jobDetailsTxt]}>{props.job.descriprion}</Text>
             </View>
-        </View>
+        </Pressable>
     )
 }
 

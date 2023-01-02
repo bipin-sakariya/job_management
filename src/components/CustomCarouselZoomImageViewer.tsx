@@ -1,47 +1,43 @@
-import { StyleSheet, View, ViewStyle } from 'react-native';
 import React, { useState } from 'react';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import Video from 'react-native-video';
 import { colors } from '../styles/Colors';
 import ImageViewer from 'react-native-image-zoom-viewer';
-
-interface ItemProps {
-    id: number
-    imgUrl: string
-    mediaType: string
-
-}
-
+import { ItemProps } from '../types/commanTypes';
 interface CustomCarouselZoomImageViewerProps {
     result: ItemProps[]
     viewStyle?: ViewStyle
     videoStyle?: ViewStyle
-    children?: any
+    children?: React.ReactNode
 }
 
 const CustomCarouselZoomImageViewer = (props: CustomCarouselZoomImageViewerProps) => {
     const [activeSlide, setActiveSlide] = useState<number>(0)
-    
+
     const renderItem = ({ item, index }: { item: ItemProps, index: number }) => {
+        const type = item?.image?.split(/[#?]/)[0]?.split(".").pop()?.trim()
+        console.log({ datatype: type, image: item.image })
         return (
             <>
                 {
-                    item.mediaType == "image"
+                    (type == "jpeg" || type == "png" || type == "jpg")
                         ?
                         <ImageViewer
-                            imageUrls={[{ url: item.imgUrl, }]}
+                            imageUrls={[{ url: item.image ? item.image : '' }]}
                             renderIndicator={() => <></>}
-                            backgroundColor='transparent'
+                            backgroundColor={colors.transparent}
                         />
                         :
                         <View style={{ alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                             <Video
-                                source={{ uri: item.imgUrl }}
+                                source={{ uri: item.image }}
                                 paused={!(index == activeSlide)}
                                 resizeMode={'cover'}
                                 repeat={true}
                                 style={[styles.backgroundVideo, props.videoStyle]}
+                                onError={e => { console.log({ e }) }}
                             />
                         </View>
                 }
@@ -59,7 +55,6 @@ const CustomCarouselZoomImageViewer = (props: CustomCarouselZoomImageViewerProps
                 onSnapToItem={(index: number) => setActiveSlide(index)}
             />
         </View>
-
     )
 }
 
@@ -71,10 +66,5 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: colors.doc_bg_color_light_gray,
         borderRadius: wp(3),
-    },
-    imageView: {
-        height: wp(50),
-        borderRadius: wp(3),
-        resizeMode: "cover"
-    },
+    }
 })

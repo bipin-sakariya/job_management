@@ -13,26 +13,29 @@ const NotificationScreen = () => {
     const JobData = [
         {
             data: '16 May 2022',
+            images: [{ image: require('../../assets/images/addForm.png') }],
             jobs: [
-                { title: '9 Beit Hadfus', jobstatus: strings.JobAddedby, author: '@Robert Kramer', km: '2m' },
-                { title: '9 Beit Hadfus', jobstatus: strings.JobClosedby, author: '@Tiffany Rivas', km: '2m' },
-                { title: '9 Beit Hadfus', jobstatus: strings.JobAddedby, author: '@Robert Kramer', km: '2m' }
+                { title: '9 Beit Hadfus', jobstatus: strings.jobAddedBy, author: '@Robert Kramer', km: '2m' },
+                { title: '9 Beit Hadfus', jobstatus: strings.jobClosedBy, author: '@Tiffany Rivas', km: '2m' },
+                { title: '9 Beit Hadfus', jobstatus: strings.jobAddedBy, author: '@Robert Kramer', km: '2m' }
             ]
         },
         {
             data: '15 May 2022',
+            images: [{ image: require('../../assets/images/addForm.png') }],
             jobs: [
-                { title: '9 Beit Hadfus', jobstatus: strings.JobClosedby, author: '@Tiffany Rivas', km: '1d' },
-                { title: '9 Beit Hadfus', jobstatus: strings.JobAddedby, author: '@Robert Kramer', km: '1d' },
-                { title: '9 Beit Hadfus', jobstatus: strings.JobClosedby, author: '@Tiffany Rivas', km: '1d' }
+                { title: '9 Beit Hadfus', jobstatus: strings.jobClosedBy, author: '@Tiffany Rivas', km: '1d' },
+                { title: '9 Beit Hadfus', jobstatus: strings.jobAddedBy, author: '@Robert Kramer', km: '1d' },
+                { title: '9 Beit Hadfus', jobstatus: strings.jobClosedBy, author: '@Tiffany Rivas', km: '1d' }
             ]
         },
         {
             data: '14 May 2022',
+            images: [{ image: require('../../assets/images/addForm.png') }],
             jobs: [
-                { title: '9 Beit Hadfus', jobstatus: strings.JobAddedby, author: '@Robert Kramer', km: '2d' },
-                { title: '9 Beit Hadfus', jobstatus: strings.JobClosedby, author: '@Tiffany Rivas', km: '2d' },
-                { title: '9 Beit Hadfus', jobstatus: strings.JobAddedby, author: '@Robert Kramer', km: '2d' }
+                { title: '9 Beit Hadfus', jobstatus: strings.jobAddedBy, author: '@Robert Kramer', km: '2d' },
+                { title: '9 Beit Hadfus', jobstatus: strings.jobClosedBy, author: '@Tiffany Rivas', km: '2d' },
+                { title: '9 Beit Hadfus', jobstatus: strings.jobAddedBy, author: '@Robert Kramer', km: '2d' }
             ]
         }
     ]
@@ -46,15 +49,15 @@ const NotificationScreen = () => {
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { navigation.goBack() }}>
                         <Image source={ImagesPath.left_arrow_icon} style={globalStyles.headerIcon} />
-                        <Text style={globalStyles.headerTitle}>{strings.Notifications}</Text>
+                        <Text style={globalStyles.headerTitle}>{strings.notifications}</Text>
                     </TouchableOpacity>
                 }
             />
             <Container>
                 <FlatList
                     data={JobData}
-                    renderItem={({ item, index }) => (
-                        <JobListComponent item={item} index={index} />
+                    renderItem={({ item }: { item: any }) => (
+                        <JobListComponent item={item} />
                     )}
                     showsVerticalScrollIndicator={false}
                 />

@@ -43,6 +43,15 @@ export const styles = StyleSheet.create({
         borderRadius: wp(3),
         borderColor: colors.text_input_border_color
     },
+    roundView: {
+        height: wp(6),
+        width: wp(6),
+        borderRadius: wp(6),
+        borderColor: colors.brown,
+        borderWidth: wp(0.4),
+        alignItems: 'center',
+        justifyContent: "center"
+    },
     jobNameTxt: {
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
@@ -58,13 +67,13 @@ export const styles = StyleSheet.create({
     modalView: {
         width: wp(85),
         height: wp(60),
-        backgroundColor: 'white',
+        backgroundColor: colors.white,
+        alignSelf: 'center',
         borderRadius: wp(3),
         justifyContent: 'space-around',
         alignItems: "center",
         paddingHorizontal: wp(6),
         marginVertical: wp(10),
-        alignSelf: 'center'
     },
     modalTxt: {
         fontFamily: fonts.FONT_POP_REGULAR,
@@ -116,7 +125,7 @@ export const styles = StyleSheet.create({
         paddingVertical: wp(2),
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.MEDIUM_16,
-        color: colors.light_brown
+        color: colors.dark_blue1_color
     },
     textInputContainer: {
         borderRadius: wp(2),
@@ -128,9 +137,10 @@ export const styles = StyleSheet.create({
         fontSize: FontSizes.SMALL_14,
         color: colors.dark_blue2_color,
     },
-    checkBoxIcon: {
-        height: wp(6),
-        width: wp(6)
+    checkIcon: {
+        height: wp(7),
+        width: wp(7),
+        // resizeMode: 'contain',
     },
     checkBoxIcon1: {
         height: wp(5),
