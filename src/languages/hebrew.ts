@@ -206,6 +206,7 @@ export const hebrew = {
     groupMemberRequired: 'דרוש חבר בקבוצה',
     formsRequired: 'נדרשים טפסים',
 
+
     enterUserame: 'הכנס שם משתמש',
     enterGroupName: 'הזן את שם הקבוצה',
     enterEmailAddress: 'הזן כתובת אימייל',
@@ -285,5 +286,6 @@ export const hebrew = {
     KM: 'ק"מ',
     drive: 'נסיעה',
     empty_list: 'לא נמצאו נתונים',
-    try_again: 'נסה שוב'
+    try_again: 'נסה שוב',
+    password_not_match: 'הסיסמה לא צריכה להיות תואמת',
 }

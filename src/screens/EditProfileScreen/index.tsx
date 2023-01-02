@@ -22,8 +22,13 @@ const EditProfileScreen = () => {
     const [imageClick, isImageClick] = useState(false)
     const { userInformation, isLoading } = useAppSelector(state => state.userList)
     const [pickerResponse, setPickerResponse] = useState(userInformation?.profile_image ? userInformation?.profile_image : '');
-
+    const [error, setError] = useState({
+        email: '',
+        phone: ''
+    })
+    console.log({ data: error.email[0], phone: error.phone })
     const phoneNumber = userInformation?.phone.substring(4)
+
 
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
@@ -109,6 +114,7 @@ const EditProfileScreen = () => {
                 navigation.goBack()
             }).catch((e) => {
                 console.log({ error: e });
+                setError(e.data)
             })
         }
     }
@@ -151,12 +157,14 @@ const EditProfileScreen = () => {
                     value={values.email}
                     onChangeText={handleChange('email')}
                 />
+                {error.email && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.email}</Text>}
                 <CustomTextInput
                     title={strings.contactNo}
                     container={{ marginBottom: wp(5) }}
                     value={values.phone}
                     onChangeText={handleChange('phone')}
                 />
+                {error.phone && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.phone}</Text>}
                 <CustomBlackButton
                     title={strings.save}
                     image={ImagesPath.save_icon}
