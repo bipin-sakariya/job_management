@@ -8,11 +8,7 @@ interface initialStateTypes {
     isLoading: boolean
     userData?: userData
     error: string | undefined
-    token: {
-        access: string
-        refresh: string
-        user: user
-    } | undefined
+    token: TokenType | undefined
 
 }
 const initialState: initialStateTypes = {
@@ -47,7 +43,7 @@ interface TokenType {
     access: string
     refresh: string
     role: string
-    userdata: userData
+    user: user
 }
 
 interface paramsTypes {

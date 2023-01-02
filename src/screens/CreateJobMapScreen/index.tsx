@@ -104,7 +104,7 @@ const CreateJobMapScreen = () => {
         }
         console.log(isCurrentLoaction, curruntLoaction)
         if (isCurrentLoaction && curruntLoaction) {
-            mapRef.current?.animateToRegion(curruntLoaction);
+            mapRef.current?.animateToRegion(curruntLoaction, 1000);
             setTapLoaction(curruntLoaction)
             dispatch(setJobLocation({
                 latitude: curruntLoaction.latitude,

@@ -33,9 +33,9 @@ interface SignDataProps {
     selected: boolean,
 }
 interface imageList {
-    id: number
-    image: string
-    mediaType: string
+    id?: number
+    image: string | undefined
+    mediaType?: string
 }
 interface docList {
     path: string,
@@ -166,7 +166,7 @@ const CloseJobScreen = () => {
     }
 
 
-    const signBillListRenderItem = (item) => {
+    const signBillListRenderItem = (item: billData) => {
         let isCheckMarked = selectedSignBills.find((i) => i.id == item.id)
         return (
             <TouchableOpacity
@@ -215,7 +215,7 @@ const CloseJobScreen = () => {
         if (updatedImage) {
             updatedImage.map((item, index) => {
                 let images = {
-                    uri: item.image,
+                    uri: item.image ? item.image : '',
                     name: `photo${index}${item.mediaType == "image" ? '.jpg' : '.mp4'}`,
                     type: item.mediaType == "image" ? "image/jpeg" : 'video/mp4'
                 }

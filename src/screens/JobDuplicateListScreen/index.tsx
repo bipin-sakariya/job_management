@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import useCustomNavigation from "../../hooks/useCustomNavigation";
 import { strings } from "../../languages/localizedStrings";
 import { GroupData } from "../../redux/slices/AdminSlice/groupListSlice";
-import { jobList } from "../../redux/slices/AdminSlice/jobListSlice";
+import { JobDetailsData, jobList } from "../../redux/slices/AdminSlice/jobListSlice";
 import { colors } from "../../styles/Colors";
 import fonts from "../../styles/Fonts";
 import FontSizes from "../../styles/FontSizes";
@@ -92,7 +92,9 @@ const JobDuplicateListScreen = () => {
     }
 
     useEffect(() => {
-        const findData: GroupParams[] = jobListData.results?.map((i: GroupData) => {
+        const findData: GroupParams[] = jobListData.results?.map((i) => {
+            console.log({ i });
+
             return {
                 ...i,
                 // user_name: i.name,

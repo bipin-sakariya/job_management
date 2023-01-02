@@ -9,13 +9,9 @@ import Modal from 'react-native-modal';
 import { ImagesPath } from '../utils/ImagePaths';
 import CustomCarouselZoomImageViewer from './CustomCarouselZoomImageViewer';
 import FastImage from 'react-native-fast-image';
+import { ItemProps } from '../types/commanTypes';
 
-interface ItemProps {
-    id?: number
-    image?: string | undefined
-    mediaType?: string
 
-}
 interface CustomCarouselImageAndVideoProps {
     result: ItemProps[]
     viewStyle?: ViewStyle

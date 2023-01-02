@@ -183,14 +183,15 @@ const MapScreen = () => {
                 provider={'google'}
                 customMapStyle={customMapStyle}
                 region={route?.params?.type == 'viewJob' ? route?.params?.JobDetails?.coordinate : {
-                    latitude: jobListData?.results[selectedindex]?.latitude && Number(jobListData.results[selectedindex].latitude), longitude: jobListData?.results[selectedindex]?.longitude && Number(jobListData.results[selectedindex].longitude),
+                    latitude: jobListData?.results[selectedindex]?.latitude ? Number(jobListData.results[selectedindex].latitude) : 0,
+                    longitude: jobListData?.results[selectedindex]?.longitude ? Number(jobListData.results[selectedindex].longitude) : 0,
                     latitudeDelta: 0.04864195044303443,
                     longitudeDelta: 0.040142817690068,
                 }}>
                 {(route?.params?.type && route?.params?.type == 'viewJob' && route?.params?.JobDetails?.coordinate) ?
                     <Marker coordinate={route?.params?.JobDetails?.coordinate}>
                         <Animated.View style={[styles.markerWrap]}>
-                            <Image source={(route?.params?.JobDetails?.image && route?.params?.JobDetails?.image[0]) ? { uri: route?.params?.JobDetails?.image[0] } : ImagesPath.selected_marker_pin}
+                            <Image source={(route?.params?.JobDetails?.images && route?.params?.JobDetails?.images[0]) ? { uri: route?.params?.JobDetails.images[0]?.image } : ImagesPath.selected_marker_pin}
                                 style={styles.selected_markerPinIcon} />
                         </Animated.View>
                     </Marker>

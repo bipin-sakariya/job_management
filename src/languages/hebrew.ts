@@ -20,11 +20,9 @@ export const hebrew = {
     logOut: 'להתנתק',
     job: 'עבודה',
     all: 'את כל',
-    //
     PMaintanence: 'P. תחזוקה',
     Paint: 'צבע / שלטים',
     Council: 'מועצה',
-    //
     searchHere: 'חפש כאן',
     bills: 'שטרות',
     billList: 'רשימת חשבונות',
@@ -184,6 +182,7 @@ export const hebrew = {
     there: 'שֵׁם',
     asphaltColor: 'צבע   אספלט',
     closeJobModalText: 'האם אתה בטוח שאתה רוצה לסגור את 9 Oxfort street?',
+
     prepareBill: 'הכן את הצעת החוק שלך',
     thanks: 'תודה',
     forgotSucessText: 'שלחנו בהצלחה את הקישור לאיפוס הסיסמה שלך לכתובת הדוא"ל שלך Example@gmail.com. אנא בדוק את תיבת הדואר הנכנס שלך.',
@@ -195,6 +194,7 @@ export const hebrew = {
     passwordInvalid: 'הסיסמה לא חוקית',
     enter_max_6_character: 'נא להזין עוד 6 תווים',
     emailNew: 'אימייל',
+
     usernameRequired: 'נא להזין את שם המשתמש',
     contactNoInvalid: 'התחבר ללא פסול',
     contactNoRequired: 'נא להזין את מספר איש הקשר.',
@@ -262,6 +262,12 @@ export const hebrew = {
     select: 'בחר',
     total: 'סך הכל',
     date: 'תַאֲרִיך',
+
+    message: 'הוֹדָעָה',
+    write_a_message_here: 'לכתוב כאן הודעה.....',
+    document: 'מסמך',
+    camera: 'מַצלֵמָה',
+    photos: 'תמונות',
     add_all_sign: 'הוסף את כל השלטים',
     all_Assign_job: 'כל העבודות שהוקצו',
 

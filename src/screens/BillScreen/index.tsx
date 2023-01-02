@@ -32,7 +32,7 @@ const BillListScreen = () => {
     const { billListData, isLoading } = useAppSelector(state => state.billList)
 
     useEffect(() => {
-        // console.log({ route1: route });
+        console.log({ route1: route });
 
         if (isFocus && route.params) {
             if (route.params?.billType == 'material') {

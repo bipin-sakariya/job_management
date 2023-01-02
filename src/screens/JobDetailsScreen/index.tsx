@@ -30,8 +30,8 @@ const JobDetailsScreen = () => {
     const { jobDetails, isLoading } = useAppSelector(state => state.jobList)
 
 
-    let data: JobDetailsData = route.params.params
-    let id: number = route?.params?.params?.id
+    let data: JobDetailsData | undefined = route.params.params
+    let id: number | undefined = route?.params?.params?.id
     let type = route.params.type
 
     console.log({ type })
@@ -39,7 +39,7 @@ const JobDetailsScreen = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (isFocused && route?.params?.params?.id) {
+        if (isFocused && id) {
             dispatch(jobDetail(id)).unwrap().then((res) => {
                 dispatch(jobDetailReducer(res))
                 // setFormDetails(res)
@@ -81,8 +81,8 @@ const JobDetailsScreen = () => {
     //         mediaType: "video",
     //         imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
     //     }
-
     // ]
+
     const FormData = [
         {
             srno: "01",
@@ -243,7 +243,7 @@ const JobDetailsScreen = () => {
                 headerRightComponent={
                     <>
                         {
-                            userData?.role != strings.inspector && (jobDetails.status == 'Open' || data.status == strings.jobOpen || data.status == strings.jobTransfer) ?
+                            userData?.role != strings.inspector && (jobDetails.status == 'Open' || data?.status == strings.jobOpen || data?.status == strings.jobTransfer) ?
                                 <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
                                     <Image source={ImagesPath.menu_dots_icon} style={globalStyles.headerIcon} />
                                 </TouchableOpacity>
@@ -292,7 +292,7 @@ const JobDetailsScreen = () => {
                             <CustomTextInput
                                 title={strings.relatedJobId[0]}
                                 container={{ marginBottom: wp(5) }}
-                                value={jobDetails.return_job && '' + jobDetails?.return_job[0]?.duplicate}
+                                value={jobDetails.return_job && '' + jobDetails?.return_job?.duplicate}
                                 // editable={isEdit}
                                 onChangeText={(text) => { }}
                             /> : null
@@ -304,14 +304,17 @@ const JobDetailsScreen = () => {
                             mainContainerStyle={{ marginBottom: wp(5), flex: 1, }}
                             container={{ width: wp(68) }}
                             onPress={() => {
+                                console.log({ data: data });
+
                                 navigation.navigate('MapScreen', {
                                     type: 'viewJob', JobDetails: {
-                                        address: data.address,
-                                        description: data.description,
+                                        address: data?.address,
+                                        description: data?.description,
                                         km: '',
-                                        created_at: data.created_at,
+                                        created_at: data?.created_at,
+                                        images: data?.images,
                                         button: "Open",
-                                        status: data.status,
+                                        status: data?.status,
                                         coordinate: {
                                             latitude: Number(data?.latitude),
                                             longitude: Number(data?.longitude),

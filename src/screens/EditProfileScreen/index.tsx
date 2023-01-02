@@ -1,5 +1,5 @@
-import { Alert, Image, Platform, Text, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { Alert, Image, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomActivityIndicator, CustomBlackButton, CustomTextInput, Header } from '../../components';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -12,8 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { useFormik } from 'formik'
 import * as ImagePicker from "react-native-image-picker";
 import FastImage from 'react-native-fast-image';
-import { updateUserProfile, userInfo } from '../../redux/slices/AdminSlice/userListSlice';
-import DeviceInfo from 'react-native-device-info';
+import { updateUserProfile } from '../../redux/slices/AdminSlice/userListSlice';
 
 const EditProfileScreen = () => {
     const navigation = useCustomNavigation('EditProfileScreen');

@@ -188,8 +188,6 @@ const BillSectionScreen = () => {
     }, [values.ration_qunt])
 
 
-
-
     return (
         <View style={globalStyles.container}>
             {isLoading && <CustomActivityIndicator size={'small'} />}
@@ -289,7 +287,6 @@ const BillSectionScreen = () => {
                         />
                         {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}
                     </>}
-
                     {error.detail ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.detail}</Text> : null}
                     {isEditable && <CustomBlackButton
                         title={strings.updateBill}

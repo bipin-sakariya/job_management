@@ -28,9 +28,9 @@ interface ValuesProps {
 }
 
 interface imageList {
-    id: number
-    image: string
-    mediaType: string
+    id?: number
+    image: string | undefined
+    mediaType?: string
 }
 interface docList {
     path: string,
@@ -59,7 +59,7 @@ const CreateNewJobScreen = () => {
     const dispatch = useAppDispatch()
     const isFocused = useIsFocused()
 
-    const Id: number = route?.params?.jobId
+    const Id: number | undefined = route?.params?.jobId
 
     console.log({ route })
     const [isModelVisible, setIsModelVisible] = useState(false)
@@ -100,7 +100,7 @@ const CreateNewJobScreen = () => {
     ]
 
     useEffect(() => {
-        if (isFocused && route?.params?.jobId) {
+        if (isFocused && Id) {
             dispatch(jobDetail(Id)).unwrap().then((res) => {
                 dispatch(jobDetailReducer(res))
                 // setFormDetails(res)
@@ -199,7 +199,7 @@ const CreateNewJobScreen = () => {
             if (imageList) {
                 imageList.map((item, index) => {
                     let images = {
-                        uri: item.image,
+                        uri: item.image ? item.image : '',
                         name: `photo${index}${item.mediaType == "image" ? '.jpg' : '.mp4'}`,
                         type: item.mediaType == "image" ? "image/jpeg" : 'video/mp4'
                     }
@@ -337,7 +337,7 @@ const CreateNewJobScreen = () => {
                             type == strings.returnJob ?
                                 <>
                                     <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={imageList} />
-                                    {jobDetails.attachments.length != 0 && <CustomDetailsComponent
+                                    {jobDetails.attachments.length != 0 ? <CustomDetailsComponent
                                         title={strings.attachment}
                                         detailsContainerStyle={{ marginVertical: wp(4) }}
                                         bottomComponent={
@@ -351,7 +351,7 @@ const CreateNewJobScreen = () => {
                                                 }}
                                                 showsVerticalScrollIndicator={false} />
                                         }
-                                    />}
+                                    /> : null}
                                 </> : null
                         }
                         <CustomDashedComponent

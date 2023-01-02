@@ -22,9 +22,9 @@ const DuplicateScreen = () => {
     const dispatch = useAppDispatch()
     const { jobDetails, isLoading, jobDetailsData } = useAppSelector(state => state.jobList)
     console.log({ route })
-    const id: number = route.params?.params
+    const id: number | undefined = route.params?.params
     useEffect(() => {
-        if (isFocused && route.params) {
+        if (isFocused && route.params && id) {
             dispatch(jobDetail(id)).unwrap().then((res) => {
                 // setFormDetails(res)
                 console.log({ formDetails: res });
