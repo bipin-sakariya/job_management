@@ -20,14 +20,16 @@ const ResetPasswordScreen = () => {
     const [secureText, setSecureText] = useState(true)
     const [oldPassText, setOldPassText] = useState(true)
     const [newPassText, setNewPassText] = useState(true)
-
-
+    const [error, setError] = useState({
+        detail: ''
+    })
 
     const CreateEditProfileValidationSchema = yup.object().shape({
-        new_password: yup.string().required('Password is required'),
+        new_password: yup.string().trim().min(5, strings.enter_max_6_character).required(strings.passwordInvalid),
         confirm_new_password: yup.string()
-            .oneOf([yup.ref('new_password'), null], 'Must match "password" field value'),
+            .oneOf([yup.ref('new_password'), null], 'password should be not match'),
     });
+
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
             enableReinitialize: true,
@@ -38,8 +40,6 @@ const ResetPasswordScreen = () => {
             },
             validationSchema: CreateEditProfileValidationSchema,
             onSubmit: values => {
-                // alert('hytfyj')
-                // console.log({ values })
                 UserChangePassword()
             }
         })
@@ -53,6 +53,7 @@ const ResetPasswordScreen = () => {
             navigation.goBack()
         }).catch((e) => {
             console.log({ error: e });
+            setError(e.data)
         })
     }
 
@@ -92,6 +93,7 @@ const ResetPasswordScreen = () => {
                         </TouchableOpacity>
                     }
                 />
+                {error.detail ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.detail}</Text> : null}
                 <CustomTextInput
                     title={strings.newPassword}
                     placeholder={strings.password}
@@ -105,6 +107,7 @@ const ResetPasswordScreen = () => {
                         </TouchableOpacity>
                     }
                 />
+                {errors.new_password ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors?.new_password ? errors?.new_password : ''}</Text> : null}
                 <CustomTextInput
                     title={strings.confirmNewPassword}
                     placeholder={strings.password}

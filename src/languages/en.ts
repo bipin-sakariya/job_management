@@ -242,5 +242,6 @@ export const eng = {
     srNo: 'Sr. no.',
     billRequired: 'Bill required',
     formNameRequired: 'Form name required',
-    try_again: 'try again'
+    try_again: 'try again',
+    password_not_match: 'password should be not match',
 }

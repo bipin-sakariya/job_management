@@ -11,10 +11,12 @@ import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import FastImage from 'react-native-fast-image';
 import { userInfo } from '../../redux/slices/AdminSlice/userListSlice';
 import { useIsFocused } from '@react-navigation/native';
+import { colors } from '../../styles/Colors';
 
 const ProfileScreen = () => {
     const navigation = useCustomNavigation('ProfileScreen')
-    const { userInformation } = useAppSelector(state => state.userList)
+    const { userInformation, error } = useAppSelector(state => state.userList)
+
 
     const phoneNumber = userInformation?.phone.substring(4)
 
@@ -48,6 +50,7 @@ const ProfileScreen = () => {
                     container={{ marginBottom: wp(5) }}
                     value={userInformation && userInformation.email}
                 />
+                {/* {errors.confirm_new_password && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{}</Text> } */}
                 <CustomTextInput
                     editable={false}
                     title={strings.contactNo}
