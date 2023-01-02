@@ -95,7 +95,7 @@ const JobDuplicateListScreen = () => {
         const findData: GroupParams[] = jobListData.results?.map((i: GroupData) => {
             return {
                 ...i,
-                user_name: i.name,
+                // user_name: i.name,
                 selected: false,
             }
         })

@@ -1,7 +1,7 @@
 import { FlatList, Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, Header } from '../../components'
+import { Container, CustomActivityIndicator, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -86,6 +86,7 @@ const TransferJobScreen = () => {
     const [page, setPage] = useState(1)
     const [finalJobList, setFinaljobList] = useState<GroupParams[]>([])
     const { error } = useAppSelector(state => state.jobList)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     useEffect(() => {
         if (isFocus)
@@ -99,9 +100,9 @@ const TransferJobScreen = () => {
             page: page,
             search: input
         }
-        // setIsFooterLoading(true)
+        setIsLoading(true)
         dispatch(groupList(params)).unwrap().then((res) => {
-            // setIsFooterLoading(false)
+            setIsLoading(false)
             console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
             if (res.next && !!input) {
                 setJobData(res.results)
@@ -152,7 +153,7 @@ const TransferJobScreen = () => {
 
     return (
         <View style={globalStyles.container}>
-            {/* {console.log({ finalJobList })} */}
+            {isLoading && <CustomActivityIndicator />}
             <Header
                 headerLeftStyle={{
                     width: "50%",

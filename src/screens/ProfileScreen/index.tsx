@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomTextInput, Header } from '../../components';
@@ -7,39 +7,16 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { styles } from './styles';
 import { strings } from '../../languages/localizedStrings';
-import { useAppSelector } from '../../hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import FastImage from 'react-native-fast-image';
+import { userInfo } from '../../redux/slices/AdminSlice/userListSlice';
+import { useIsFocused } from '@react-navigation/native';
 
 const ProfileScreen = () => {
     const navigation = useCustomNavigation('ProfileScreen')
-    const { userData, token } = useAppSelector(state => state.userDetails)
-    console.log({ userData })
+    const { userInformation } = useAppSelector(state => state.userList)
 
-    // const chooseFile = () => {
-    //     ImagePicker.launchImageLibrary(options, (response) => {
-    //         if (response.didCancel) {
-    //             console.log("User cancelled image picker");
-    //         } else if (response.error) {
-    //             console.log("ImagePicker Error: ", response.error);
-    //         } else if (response.customButton) {
-    //             console.log("User tapped custom button: ", response.customButton);
-    //         } else {
-    //             const source = { uri: response.uri };
-    //             console.log({
-    //                 response,
-    //             });
-
-    //             if (response) {
-    //                 isImageClick(true)
-    //             }
-    //             else {
-    //                 isImageClick(false)
-    //             }
-    //             setUserDetail({ ...userDetail, profile_image: response.assets[0].uri });
-    //         }
-    //         setIsImage(true);
-    //     });
-    // };
+    const phoneNumber = userInformation?.phone.substring(4)
 
     return (
         <View style={globalStyles.container}>
@@ -58,24 +35,24 @@ const ProfileScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <FastImage source={{ uri: token && token.user.profile_image }} style={styles.profilePhoto} />
+                <FastImage source={{ uri: userInformation && userInformation.profile_image }} style={styles.profilePhoto} />
                 <CustomTextInput
                     editable={false}
                     title={strings.userName}
                     container={{ marginBottom: wp(5) }}
-                    value={token && token.user.user_name}
+                    value={userInformation && userInformation.user_name}
                 />
                 <CustomTextInput
                     editable={false}
                     title={strings.email}
                     container={{ marginBottom: wp(5) }}
-                    value={token && token.user.email}
+                    value={userInformation && userInformation.email}
                 />
                 <CustomTextInput
                     editable={false}
                     title={strings.contactNo}
                     container={{ marginBottom: wp(5) }}
-                    value={token && token.user.phone}
+                    value={phoneNumber}
                 />
                 <TouchableOpacity onPress={() => navigation.navigate('ResetPasswordScreen')} style={styles.btnView}>
                     <Text style={styles.btnTxtStyle}>{strings.changePassword}</Text>

@@ -35,10 +35,14 @@ axiosClient.interceptors.request.use(async (config) => {
 				Authorization: `Bearer ${token}`,
 			};
 		} else if (config.method == "put") {
-			// Alert.alert("nothing")
+			config.headers = {
+				'Content-Type': 'application/json',
+				Accept: 'application/json',
+				Authorization: `Bearer ${token}`,
+			};
 		}
 
-		console.log('API check', config.url, ApiConstants.RETURNJOB, config.method)
+		console.log('API check', config.url)
 		if ((config.url?.includes(ApiConstants.GROUPLIST)) && config.method == 'patch') {
 			config.headers = {
 				'Content-Type': 'multipart/form-data',

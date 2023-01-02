@@ -1,7 +1,7 @@
 import { Alert, Image, Platform, Text, TouchableOpacity, View } from 'react-native';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
-import { Container, CustomBlackButton, CustomTextInput, Header } from '../../components';
+import { Container, CustomActivityIndicator, CustomBlackButton, CustomTextInput, Header } from '../../components';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../../utils/ImagePaths';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
@@ -10,44 +10,31 @@ import { colors } from '../../styles/Colors';
 import { strings } from '../../languages/localizedStrings';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { useFormik } from 'formik'
-import * as yup from 'yup'
 import * as ImagePicker from "react-native-image-picker";
 import FastImage from 'react-native-fast-image';
-import { updateUserProfile } from '../../redux/slices/AdminSlice/userListSlice';
+import { updateUserProfile, userInfo } from '../../redux/slices/AdminSlice/userListSlice';
 import DeviceInfo from 'react-native-device-info';
-
 
 const EditProfileScreen = () => {
     const navigation = useCustomNavigation('EditProfileScreen');
     const dispatch = useAppDispatch();
     const { token } = useAppSelector(state => state.userDetails)
     const [imageClick, isImageClick] = useState(false)
-    const [pickerResponse, setPickerResponse] = useState(token?.user.profile_image ? token?.user.profile_image : '');
-    const [deviceId, setDeviceId] = useState('')
+    const { userInformation, isLoading } = useAppSelector(state => state.userList)
+    const [pickerResponse, setPickerResponse] = useState(userInformation?.profile_image ? userInformation?.profile_image : '');
 
-    useEffect(() => {
-        (async () => {
-            const DeviceId = await DeviceInfo.getUniqueId();
-            setDeviceId(DeviceId)
-        })()
-    }, [])
-    console.log({ deviceId })
-    // const CreateEditJobValidationSchema = yup.object().shape({
-    //     // jobID: yup.string().trim().required(strings.jobid_required),
-    // });
-    // const phoneNumber = token?.user.phone.trim()
-    // console.log({ phoneNumber })
+    const phoneNumber = userInformation?.phone.substring(4)
+
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
             enableReinitialize: true,
             initialValues: {
-                user_name: token?.user.user_name ? token?.user.user_name : '',
-                email: token?.user.email ? token?.user.email : '',
-                phone: token?.user.phone ? token?.user.phone : '',
-                image: token?.user.profile_image ? token?.user.profile_image : '',
-                role: { title: token?.user.role.title ? token?.user.role.title : '', id: token?.user.role.id ? token?.user.role.id : 0 },
+                user_name: userInformation?.user_name ? userInformation?.user_name : '',
+                email: userInformation?.email ? userInformation?.email : '',
+                phone: userInformation?.phone ? phoneNumber : '',
+                profile_image: userInformation?.profile_image ? userInformation?.profile_image : '',
+                role: { title: userInformation?.role.title ? userInformation?.role.title : '', id: userInformation?.role.id ? userInformation?.role.id : 0 },
             },
-            // validationSchema: CreateEditJobValidationSchema,
             onSubmit: values => {
                 editProfile(values)
             }
@@ -90,11 +77,12 @@ const EditProfileScreen = () => {
     const editProfile = (values: {
         user_name: string;
         email: string;
-        phone: string;
+        phone: string | undefined;
         role: {
             title: string;
             id: number;
         };
+        profile_image: string
     }) => {
         if (!pickerResponse) {
             Alert.alert(strings.profile_pic_required)
@@ -129,6 +117,7 @@ const EditProfileScreen = () => {
 
     return (
         <View style={globalStyles.container}>
+            {isLoading && <CustomActivityIndicator />}
             <Header
                 headerLeftStyle={{
                     paddingLeft: wp(3),

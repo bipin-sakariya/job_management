@@ -1,5 +1,5 @@
-import { Image, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react'
+import { Alert, Image, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, Header } from '../../components';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -17,20 +17,33 @@ const ResetPasswordScreen = () => {
     const navigation = useCustomNavigation('ResetPasswordScreen');
     const dispatch = useAppDispatch();
 
+    const [secureText, setSecureText] = useState(true)
+    const [oldPassText, setOldPassText] = useState(true)
+    const [newPassText, setNewPassText] = useState(true)
+
+
+
+    const CreateEditProfileValidationSchema = yup.object().shape({
+        new_password: yup.string().required('Password is required'),
+        confirm_new_password: yup.string()
+            .oneOf([yup.ref('new_password'), null], 'Must match "password" field value'),
+    });
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
             enableReinitialize: true,
             initialValues: {
                 old_password: '',
-                new_password: ''
+                new_password: '',
+                confirm_new_password: ''
             },
-            // validationSchema: CreateEditJobValidationSchema,
+            validationSchema: CreateEditProfileValidationSchema,
             onSubmit: values => {
-                ChangePassword()
+                // alert('hytfyj')
+                // console.log({ values })
+                UserChangePassword()
             }
         })
-
-    const ChangePassword = () => {
+    const UserChangePassword = () => {
         let params = {
             old_password: values.old_password,
             new_password: values.new_password
@@ -72,10 +85,10 @@ const ResetPasswordScreen = () => {
                     container={{ marginVertical: wp(5) }}
                     value={values.old_password}
                     onChangeText={handleChange('old_password')}
-                    secureTextEntry
+                    secureTextEntry={secureText}
                     icon={
-                        <TouchableOpacity onPress={() => { }}>
-                            <Image source={ImagesPath.close_eye_icon} style={styles.iconStyle} />
+                        <TouchableOpacity onPress={() => setSecureText(!secureText)}>
+                            <Image source={secureText ? ImagesPath.close_eye_icon : ImagesPath.open_eye_icon} style={styles.iconStyle} />
                         </TouchableOpacity>
                     }
                 />
@@ -85,10 +98,10 @@ const ResetPasswordScreen = () => {
                     container={{ marginVertical: wp(5) }}
                     value={values.new_password}
                     onChangeText={handleChange('new_password')}
-                    secureTextEntry
+                    secureTextEntry={oldPassText}
                     icon={
-                        <TouchableOpacity onPress={() => { }}>
-                            <Image source={ImagesPath.close_eye_icon} style={styles.iconStyle} />
+                        <TouchableOpacity onPress={() => setOldPassText(!oldPassText)}>
+                            <Image source={oldPassText ? ImagesPath.close_eye_icon : ImagesPath.open_eye_icon} style={styles.iconStyle} />
                         </TouchableOpacity>
                     }
                 />
@@ -96,15 +109,16 @@ const ResetPasswordScreen = () => {
                     title={strings.confirmNewPassword}
                     placeholder={strings.password}
                     container={{ marginVertical: wp(5) }}
-                    value={values.new_password}
-                    onChangeText={handleChange('new_password')}
-                    secureTextEntry
+                    value={values.confirm_new_password}
+                    onChangeText={handleChange('confirm_new_password')}
+                    secureTextEntry={newPassText}
                     icon={
-                        <TouchableOpacity onPress={() => { }}>
-                            <Image source={ImagesPath.close_eye_icon} style={styles.iconStyle} />
+                        <TouchableOpacity onPress={() => setNewPassText(!newPassText)}>
+                            <Image source={newPassText ? ImagesPath.close_eye_icon : ImagesPath.open_eye_icon} style={styles.iconStyle} />
                         </TouchableOpacity>
                     }
                 />
+                {errors.confirm_new_password ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors?.confirm_new_password ? errors?.confirm_new_password : ''}</Text> : null}
                 <CustomBlackButton
                     title={strings.changePassword}
                     onPress={() => { handleSubmit() }}

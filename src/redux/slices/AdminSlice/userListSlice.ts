@@ -76,7 +76,8 @@ interface initialState {
         date_joined: string,
         role: string,
         is_active: boolean
-    }]
+    }],
+    userInformation: UserData | undefined
 }
 
 const initialState: initialState = {
@@ -86,6 +87,7 @@ const initialState: initialState = {
     userDetails: undefined,
     userRoleList: undefined,
     userGroupRoleList: undefined,
+    userInformation: undefined
 
 }
 
@@ -190,7 +192,7 @@ export const roleList = createAsyncThunk<inspectorListProps, paramsTypes, { reje
         }
     })
 
-export const updateUserProfile = createAsyncThunk<string[], paramsTypes, { rejectValue: apiErrorTypes }>(USER + "/updateUserProfile", async (params, { rejectWithValue }) => {
+export const updateUserProfile = createAsyncThunk<UserData, paramsTypes, { rejectValue: apiErrorTypes }>(USER + "/updateUserProfile", async (params, { rejectWithValue }) => {
     try {
         console.log(ApiConstants.USER, params)
         const response = await axiosClient.patch(ApiConstants.USER + params.id + '/', params.data)
@@ -205,7 +207,20 @@ export const updateUserProfile = createAsyncThunk<string[], paramsTypes, { rejec
 export const changePassword = createAsyncThunk<string, paramsTypes, { rejectValue: apiErrorTypes }>(USER + "/changePassword", async (params, { rejectWithValue }) => {
     try {
         console.log(ApiConstants.CHANGEPASSWORD, params)
-        const response = await axiosClient.put(ApiConstants.CHANGEPASSWORD + params)
+        const response = await axiosClient.put(ApiConstants.CHANGEPASSWORD, params)
+        return response.data
+    } catch (e: any) {
+        if (e.code === "ERR_NETWORK") {
+            Alert.alert(e.message)
+        }
+        return rejectWithValue(e?.response)
+    }
+})
+
+export const userInfo = createAsyncThunk<UserData, { rejectValue: apiErrorTypes }>(USER + "/userInfo", async (_, { rejectWithValue }) => {
+    try {
+        console.log(ApiConstants.USERINFO)
+        const response = await axiosClient.get(ApiConstants.USERINFO)
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {
@@ -326,7 +341,7 @@ const userListSlice = createSlice({
         });
         builder.addCase(updateUserProfile.fulfilled, (state, action) => {
             state.isLoading = false
-            // state.userListData = action.payload
+            state.userInformation = action.payload
             state.error = ''
         });
         builder.addCase(updateUserProfile.rejected, (state, action) => {
@@ -345,6 +360,19 @@ const userListSlice = createSlice({
         builder.addCase(changePassword.rejected, (state, action) => {
             state.isLoading = false
             state.error = action.payload?.data
+        });
+        builder.addCase(userInfo.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(userInfo.fulfilled, (state, action) => {
+            state.isLoading = false
+            state.userInformation = action.payload
+            state.error = ''
+        });
+        builder.addCase(userInfo.rejected, (state, action) => {
+            state.isLoading = false
+            // state.error = action.payload?.data
         });
     },
 })

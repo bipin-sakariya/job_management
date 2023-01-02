@@ -18,4 +18,5 @@ export const ApiConstants = {
 	RECENTRETURNJOB: APP_URL + 'job/recent-return-job/',
 	NOTIFICATION_LIST: APP_URL + 'job/job-notification/',
 	CHANGEPASSWORD: APP_URL + 'users/change-password/',
+	USERINFO: APP_URL + 'users/info/'
 };
