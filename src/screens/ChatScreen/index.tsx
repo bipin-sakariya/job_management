@@ -27,7 +27,7 @@ import { useRoute } from '@react-navigation/native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 interface MessageProps {
     createdAt: Date | number;
-    text: string;
+    text?: string;
     user: User;
     image?: ImageList | undefined,
     attachment?: DocList | undefined;
@@ -91,6 +91,55 @@ const messageData = [
             thumbnail: ''
         }
     },
+    {
+        _id: 3,
+        text: 'Hello developer video',
+        createdAt: new Date(),
+        jobData: {
+            id: 1,
+            name: 'job title',
+            distance: '5 km',
+            descriprion: 'hello this is the job details screen page',
+            imageurl: "https://dummyimage.com/600x400/000/fff",
+        },
+        user: {
+            _id: 1,
+            name: 'React Native',
+            avatar: 'https://placeimg.com/140/140/any',
+        },
+        image: {
+            id: 0,
+            url: 'https://dummyimage.com/600x400/000/fff',
+            mediaType: 'image',
+        }
+    },
+    {
+        _id: 4,
+        text: 'Hello developer 123',
+        createdAt: new Date(),
+        user: {
+            _id: 1,
+            name: 'React Native',
+            avatar: 'https://placeimg.com/140/140/any',
+        },
+    },
+    {
+        _id: 4,
+        createdAt: new Date(),
+        jobData: {
+            id: 1,
+            name: 'job title',
+            distance: '5 km',
+            descriprion: 'hello this is the job details screen page',
+            imageurl: "https://dummyimage.com/600x400/000/fff",
+        },
+        user: {
+            _id: 1,
+            name: 'React Native',
+            avatar: 'https://placeimg.com/140/140/any',
+        },
+
+    },
 ]
 
 const currentUser: User = {
@@ -114,24 +163,9 @@ const ChatScreen = () => {
     // job data
     const [jobData, setJobData] = useState<JobDataProps | undefined>(job_data)
 
-    const [imageList, setImageList] = useState<ImageList | undefined>({
-        id: 0,
-        mediaType: '',
-        url: ''
-    })
-    const [videoList, setVideoList] = useState<VideoList | undefined>({
-        id: 0,
-        mediaType: '',
-        url: '',
-        thumbnail: ''
-    })
-    const [docList, setDocList] = useState<DocList | undefined>({
-        id: 0,
-        mb: 0,
-        path: '',
-        type: '',
-        title: ''
-    })
+    const [imageList, setImageList] = useState<ImageList | undefined>(undefined)
+    const [videoList, setVideoList] = useState<VideoList | undefined>(undefined)
+    const [docList, setDocList] = useState<DocList | undefined>(undefined)
     const [selectedImageVedio, setSelectedImageVedio] = useState<SelectedImageProps>({
         visible: false,
         data: {

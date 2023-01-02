@@ -1,5 +1,5 @@
 diff --git a/node_modules/react-native-gifted-chat/lib/Models.d.ts b/node_modules/react-native-gifted-chat/lib/Models.d.ts
-index 78539c7..66414b6 100644
+index 78539c7..d8a0c6b 100644
 --- a/node_modules/react-native-gifted-chat/lib/Models.d.ts
 +++ b/node_modules/react-native-gifted-chat/lib/Models.d.ts
 @@ -1,5 +1,6 @@
@@ -14,8 +14,9 @@ index 78539c7..66414b6 100644
  }
  export interface IMessage {
 -    _id: string | number;
+-    text: string;
 +    _id?: string | number;
-     text: string;
++    text?: string;
      createdAt: Date | number;
      user: User;
 -    image?: string;
