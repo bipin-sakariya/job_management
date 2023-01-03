@@ -1,7 +1,4 @@
-import { AnyAction, createAsyncThunk, createSlice, current } from "@reduxjs/toolkit"
-import { Alert } from "react-native";
-import { string } from "yup";
-import { roleList } from "../AdminSlice/userListSlice";
+import { createSlice, current } from "@reduxjs/toolkit"
 
 export interface LocationData {
     id: number
@@ -59,21 +56,17 @@ const MapSlice = createSlice({
             } else if (action.payload?.type == 'destination') {
                 state.destination = undefined
             } else if (action.payload?.type == 'waypoints') {
-                console.log({ action: action.payload })
                 let latestRoutes = state.routeList.filter((i) => i.id != action.payload?.id)
                 state.routeList = latestRoutes
             }
         },
         manageMapRoutesReducer: (state, action) => {
-            console.log({ action, state })
-            console.log({ condition: action.payload?.isCheckBlank })
             if (!action.payload?.isCheckBlank ? (state.selectperticularAddress == 'source') : (!state.source)) {
                 state.source = { ...action.payload, index: 0 }
             } else if (!action.payload?.isCheckBlank ? (state.selectperticularAddress == 'destination') : (!state.destination)) {
                 state.destination = { ...action.payload, index: 1 }
             } else if (!action.payload?.isCheckBlank ? (state.selectperticularAddress == 'waypoints') : true) {
                 let routeList: LocationData[] = [...current(state.routeList), { ...action.payload, index: state.routeList.length + 2 }]
-                console.log({ routeList })
                 if (routeList.length <= 8) {
                     state.routeList = routeList
                 }

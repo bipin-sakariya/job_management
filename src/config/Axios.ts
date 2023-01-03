@@ -1,9 +1,5 @@
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { Alert } from 'react-native';
 import { store } from '../redux/Store';
-// import { StorageKeys } from '../Utils/StorageKeys';
 import { ApiConstants } from './ApiConstants';
 import { APP_URL } from './Host';
 
@@ -17,9 +13,6 @@ const blacklistUrls = [
 
 axiosClient.interceptors.request.use(async (config) => {
 	try {
-		console.log("🚀 ~ file: Axios.ts ~ line 18 ~ axiosClient.interceptors.request.use ~ config", config)
-		console.log('AAA config', config)
-		// const userString = await AsyncStorage.getItem(StorageKeys.AUTH_TOKEN);
 		const token = store.getState().userDetails.token?.access
 
 		if (token && !blacklistUrls.includes(config.url || '')) {
@@ -42,7 +35,6 @@ axiosClient.interceptors.request.use(async (config) => {
 			};
 		}
 
-		console.log('API check', config.url)
 		if ((config.url?.includes(ApiConstants.GROUPLIST)) && config.method == 'patch') {
 			config.headers = {
 				'Content-Type': 'multipart/form-data',
@@ -62,6 +54,5 @@ axiosClient.interceptors.request.use(async (config) => {
 	} catch (e) {
 		console.error({ e });
 	}
-	console.log('AAA final config', config)
 	return config;
 });

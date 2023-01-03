@@ -4,15 +4,14 @@ import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomDashedComponent, CustomSubTitleWithImageComponent, GroupListComponent, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { useIsFocused, useRoute } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import { styles } from './styles';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
-import { RootRouteProps } from '../../types/RootStackTypes';
 import { strings } from '../../languages/localizedStrings';
 import { colors } from '../../styles/Colors';
 import FontSizes from '../../styles/FontSizes';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { groupDelete, groupList } from '../../redux/slices/AdminSlice/groupListSlice';
+import { groupList } from '../../redux/slices/AdminSlice/groupListSlice';
 
 interface groupListParams {
     page?: number,
@@ -21,15 +20,14 @@ interface groupListParams {
 
 const GroupListScreen = () => {
     const navigation = useCustomNavigation('GroupListScreen');
-    const route = useRoute<RootRouteProps<'GroupListScreen'>>();
     const dispatch = useAppDispatch();
     const isFocus = useIsFocused()
-    const [isFooterLoading, setIsFooterLoading] = useState<boolean>(false)
 
+    const [isFooterLoading, setIsFooterLoading] = useState<boolean>(false)
 
     const [page, setPage] = useState(1)
 
-    const { groupListData, isLoading } = useAppSelector(state => state.groupList)
+    const { groupListData } = useAppSelector(state => state.groupList)
 
     useEffect(() => {
         if (isFocus)
@@ -104,7 +102,6 @@ const GroupListScreen = () => {
                     ItemSeparatorComponent={() => <View style={styles.separator} />}
                     showsVerticalScrollIndicator={false}
                     onEndReached={() => {
-                        console.log("On reach call");
                         if (groupListData.next) {
                             groupListApiCall(page)
                         }

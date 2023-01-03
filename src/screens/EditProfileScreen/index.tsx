@@ -17,17 +17,13 @@ import { updateUserProfile } from '../../redux/slices/AdminSlice/userListSlice';
 const EditProfileScreen = () => {
     const navigation = useCustomNavigation('EditProfileScreen');
     const dispatch = useAppDispatch();
-    const { token } = useAppSelector(state => state.userDetails)
-    const [imageClick, isImageClick] = useState(false)
-    const { userInformation, isLoading } = useAppSelector(state => state.userList)
-    const [pickerResponse, setPickerResponse] = useState(userInformation?.profile_image ? userInformation?.profile_image : '');
-    const [error, setError] = useState({
-        email: '',
-        phone: ''
-    })
-    console.log({ data: error.email[0], phone: error.phone })
-    const phoneNumber = userInformation?.phone.substring(4)
 
+    const { token } = useAppSelector(state => state.userDetails)
+    const { userInformation, isLoading } = useAppSelector(state => state.userList)
+
+    const [pickerResponse, setPickerResponse] = useState(userInformation?.profile_image ? userInformation?.profile_image : '');
+    const [error, setError] = useState({ email: '', phone: '' })
+    const phoneNumber = userInformation?.phone.substring(4)
 
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
@@ -63,21 +59,11 @@ const EditProfileScreen = () => {
             } else if (response.customButton) {
                 console.log("User tapped custom button: ", response.customButton);
             } else {
-                console.log({
-                    response,
-                });
-
-                if (response) {
-                    isImageClick(true)
-                }
-                else {
-                    isImageClick(false)
-                }
                 setPickerResponse(response.assets[0].uri);
             }
-            // setIsImage(true);
         });
     };
+
     const editProfile = (values: {
         user_name: string;
         email: string;
@@ -90,26 +76,30 @@ const EditProfileScreen = () => {
     }) => {
         if (!pickerResponse) {
             Alert.alert(strings.profile_pic_required)
-        } else {
-            var Data = new FormData()
+        }
+        else {
+            var Data = new FormData();
+
             let images = {
                 uri: pickerResponse,
                 name: "photo.jpg",
                 type: "image/jpeg"
             }
+
             if (pickerResponse) {
                 Data.append("profile_image", images ? images : '')
             }
+
             Data.append("user_name", values.user_name)
             Data.append("email", values.email)
             Data.append("phone", `+972${values.phone}`)
+
             let params = {
                 id: token?.user.id,
                 data: Data
             }
 
             dispatch(updateUserProfile(params)).unwrap().then((res) => {
-                console.log({ res: res });
                 navigation.goBack()
             }).catch((e) => {
                 console.log({ error: e });
@@ -117,8 +107,6 @@ const EditProfileScreen = () => {
             })
         }
     }
-
-
 
     return (
         <View style={globalStyles.container}>

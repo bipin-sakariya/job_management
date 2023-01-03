@@ -1,4 +1,4 @@
-import { Alert, Image, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, Header } from '../../components';
@@ -49,7 +49,6 @@ const ResetPasswordScreen = () => {
             new_password: values.new_password
         }
         dispatch(changePassword(params)).unwrap().then((res) => {
-            console.log({ res: res });
             navigation.goBack()
         }).catch((e) => {
             console.log({ error: e });

@@ -6,6 +6,7 @@ import Video from 'react-native-video';
 import { colors } from '../styles/Colors';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import { ItemProps } from '../types/commanTypes';
+
 interface CustomCarouselZoomImageViewerProps {
     result: ItemProps[]
     viewStyle?: ViewStyle
@@ -17,8 +18,8 @@ const CustomCarouselZoomImageViewer = (props: CustomCarouselZoomImageViewerProps
     const [activeSlide, setActiveSlide] = useState<number>(0)
 
     const renderItem = ({ item, index }: { item: ItemProps, index: number }) => {
-        const type = item?.image?.split(/[#?]/)[0]?.split(".").pop()?.trim()
-        console.log({ datatype: type, image: item.image })
+        const type = item.image && item.image.split(/[#?]/)[0]?.split(".").pop()?.trim()
+
         return (
             <>
                 {
@@ -44,6 +45,7 @@ const CustomCarouselZoomImageViewer = (props: CustomCarouselZoomImageViewerProps
             </>
         )
     }
+
     return (
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Carousel

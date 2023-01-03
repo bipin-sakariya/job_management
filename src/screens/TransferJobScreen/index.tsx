@@ -61,32 +61,20 @@ export interface GroupParams {
 
 const TransferJobScreen = () => {
     const navigation = useCustomNavigation('TransferJobScreen');
-    // const data = [
-    //     { id: 1, title: 'titljbhjbgjhbgjk1', selected: false },
-    //     { id: 2, title: 'title1', selected: false },
-    //     { id: 3, title: 'title1', selected: false },
-    //     { id: 4, title: 'title1', selected: false },
-    //     { id: 5, title: 'title1', selected: false },
-    //     { id: 6, title: 'title1', selected: false },
-    //     { id: 7, title: 'title1', selected: false },
-    //     { id: 8, title: 'title1', selected: false },
-    //     { id: 9, title: 'title1', selected: false },
-    //     { id: 10, title: 'title1', selected: false },
-    // ]
-    const [text, setText] = useState("");
-    const [isSearch, setIsSearch] = useState(false)
-
     const dispatch = useAppDispatch();
-    const isFocus = useIsFocused()
+    const isFocus = useIsFocused();
     const route = useRoute<RootRouteProps<'TransferJobScreen'>>();
 
-    const [isModelVisible, setIsModelVisible] = useState(false)
-    const [IsErrorModal, setIsErrorModal] = useState(false)
-    const [jobData, setJobData] = useState<GroupData[]>([])
-    const [page, setPage] = useState(1)
-    const [finalJobList, setFinaljobList] = useState<GroupParams[]>([])
-    const { error } = useAppSelector(state => state.jobList)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [text, setText] = useState("");
+    const [isSearch, setIsSearch] = useState(false);
+
+    const [isModelVisible, setIsModelVisible] = useState(false);
+    const [IsErrorModal, setIsErrorModal] = useState(false);
+    const [jobData, setJobData] = useState<GroupData[]>([]);
+    const [page, setPage] = useState(1);
+    const [finalJobList, setFinaljobList] = useState<GroupParams[]>([]);
+    const { error } = useAppSelector(state => state.jobList);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
         if (isFocus)
@@ -95,6 +83,7 @@ const TransferJobScreen = () => {
             setPage(1)
         }
     }, [isFocus, text])
+    
     const groupListApiCall = (page: number, input?: string) => {
         let params: groupListParams = {
             page: page,

@@ -91,7 +91,6 @@ const SignInScreen = () => {
             email: values.email
         }
         dispatch(resetPassword(param)).unwrap().then((res) => {
-            console.log({ res });
             if (res) {
                 setIsSucess(true)
             }

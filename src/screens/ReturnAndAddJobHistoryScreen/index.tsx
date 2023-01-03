@@ -30,22 +30,19 @@ const ReturnAndAddJobHistoryScreen = () => {
     const isFocus = useIsFocused()
     const dispatch = useAppDispatch();
 
-    console.log({ type })
     const [page, setPage] = useState(1);
     const [jobPage, setJobPage] = useState(1)
     const [recentJob, setRecentJob] = useState<JobDetailsData[]>([])
     const [isJobList, setJobList] = useState<JobDetailsData[]>([])
 
     useEffect(() => {
-
         if (isFocus)
-            //  recentJobListApiCall(page)
-            // jobListApiCall(jobPage)
             return () => {
                 setPage(1)
                 setJobPage(1)
             }
-    }, [isFocus])
+    }, [isFocus]);
+
     useEffect(() => {
         recentJobListApiCall(page)
         jobListApiCall(jobPage)
@@ -57,17 +54,14 @@ const ReturnAndAddJobHistoryScreen = () => {
             search: ''
         }
         {
-            type == 'returnJob' ?
-                dispatch(recentReturnJobList(params)).unwrap().then((res) => {
-                    console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+            type == 'returnJob'
+                ? dispatch(recentReturnJobList(params)).unwrap().then((res) => {
                     setRecentJob(res.results)
                     setPage(page + 1)
                 }).catch((error) => {
                     console.log({ error });
                 })
-                :
-                dispatch(recentJobList(params)).unwrap().then((res) => {
-                    console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+                : dispatch(recentJobList(params)).unwrap().then((res) => {
                     setRecentJob(res.results)
                     setPage(page + 1)
                 }).catch((error) => {
@@ -81,15 +75,14 @@ const ReturnAndAddJobHistoryScreen = () => {
             page: jobPage,
             search: ''
         }
-        type == 'returnJob' ? dispatch(returnJobList(params)).unwrap().then((res) => {
-            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-            setJobList(res.results)
-            setJobPage(jobpage + 1)
-        }).catch((error) => {
-            console.log({ error });
-        }) :
-            dispatch(jobList(params)).unwrap().then((res) => {
-                console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+        type == 'returnJob'
+            ? dispatch(returnJobList(params)).unwrap().then((res) => {
+                setJobList(res.results)
+                setJobPage(jobpage + 1)
+            }).catch((error) => {
+                console.log({ error });
+            })
+            : dispatch(jobList(params)).unwrap().then((res) => {
                 setJobList(res.results)
                 setJobPage(jobpage + 1)
             }).catch((error) => {
@@ -97,7 +90,7 @@ const ReturnAndAddJobHistoryScreen = () => {
             })
     }
 
-    const renderItem = ({ item, index }: { item: JobDetailsData, index: number }) => {
+    const renderItem = ({ item }: { item: JobDetailsData }) => {
         return (
             <TouchableOpacity
                 onPress={() => navigation.navigate('JobDetailsScreen', { params: item })}
@@ -165,9 +158,6 @@ const ReturnAndAddJobHistoryScreen = () => {
                             renderItem={renderItem}
                             showsHorizontalScrollIndicator={false}
                             horizontal
-                            onEndReached={() => {
-                                console.log('hello')
-                            }}
                             ItemSeparatorComponent={() => <View style={{ width: wp(3) }} />}
                         />
                     </View>
@@ -188,10 +178,6 @@ const ReturnAndAddJobHistoryScreen = () => {
                                 )
                             }}
                             showsVerticalScrollIndicator={false}
-
-                            onEndReached={() => {
-                                console.log('hello')
-                            }}
                             onEndReachedThreshold={0.5}
                             style={{ marginTop: wp(2), }}
                             ItemSeparatorComponent={() => <View style={{ height: wp(3) }} />}

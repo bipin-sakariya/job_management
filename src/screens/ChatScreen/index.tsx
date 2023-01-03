@@ -1,30 +1,31 @@
-import { Alert, Image, Modal, Pressable, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useCallback, useRef, useState } from 'react'
-import { globalStyles } from '../../styles/globalStyles'
-import { BottomSheet, CommonlinkPreview, CommonPdfView, Container, CustomActivityIndicator, CustomJobDetailsBottomButton, Header } from '../../components'
-import { ImagesPath } from '../../utils/ImagePaths'
-import useCustomNavigation from '../../hooks/useCustomNavigation'
-import { styles } from './styles'
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { Avatar, AvatarProps, Bubble, BubbleProps, ComposerProps, GiftedChat, IMessage, InputToolbar, InputToolbarProps, MessageImageProps, MessageVideoProps, Send, SendProps, User, } from 'react-native-gifted-chat'
-import { colors } from '../../styles/Colors'
-import fonts from '../../styles/Fonts'
-import FontSizes from '../../styles/FontSizes'
-import moment from 'moment'
-import { strings } from '../../languages/localizedStrings'
-import RBSheet from 'react-native-raw-bottom-sheet'
+import { Alert, Image, Modal, Pressable, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useRef, useState } from 'react';
+import { globalStyles } from '../../styles/globalStyles';
+import { BottomSheet, CommonlinkPreview, CommonPdfView, Container, CustomActivityIndicator, CustomJobDetailsBottomButton, Header } from '../../components';
+import { ImagesPath } from '../../utils/ImagePaths';
+import useCustomNavigation from '../../hooks/useCustomNavigation';
+import { styles } from './styles';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { Avatar, AvatarProps, Bubble, BubbleProps, ComposerProps, GiftedChat, IMessage, InputToolbar, InputToolbarProps, MessageImageProps, MessageVideoProps, Send, SendProps, User, } from 'react-native-gifted-chat';
+import { colors } from '../../styles/Colors';
+import fonts from '../../styles/Fonts';
+import FontSizes from '../../styles/FontSizes';
+import moment from 'moment';
+import { strings } from '../../languages/localizedStrings';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import DocumentPicker from 'react-native-document-picker';
-import { launchCamera, CameraOptions } from 'react-native-image-picker'
-import { DocList, ImageList, JobDataProps, VideoList } from '../../types/commanTypes'
-import ImageViewer from 'react-native-image-zoom-viewer'
+import { launchCamera, CameraOptions } from 'react-native-image-picker';
+import { DocList, ImageList, JobDataProps, VideoList } from '../../types/commanTypes';
+import ImageViewer from 'react-native-image-zoom-viewer';
 import RNFS from "react-native-fs";
 import FileViewer from "react-native-file-viewer";
 import Video from 'react-native-video'
 import RNModal from 'react-native-modal';
-import { createThumbnail } from 'react-native-create-thumbnail'
-import { RootRouteProps } from '../../types/RootStackTypes'
-import { useRoute } from '@react-navigation/native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { createThumbnail } from 'react-native-create-thumbnail';
+import { RootRouteProps } from '../../types/RootStackTypes';
+import { useRoute } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 interface MessageProps {
     createdAt: Date | number;
     text?: string;
@@ -162,11 +163,11 @@ const ChatScreen = () => {
     const navigation = useCustomNavigation('ChatScreen')
     const route = useRoute<RootRouteProps<'ChatScreen'>>();
     const job_data = route.params.job
+    const refRBSheet = useRef<RBSheet | null>(null);
+    const menuRef = useRef(null);
 
     const [messages, setMessages] = useState<MessageProps[]>(messageData)
     const [loading, setLoading] = useState(false);
-    const refRBSheet = useRef<RBSheet | null>(null);
-    const menuRef = useRef(null);
     const [imageVideoSelected, setImageVideoSelected] = useState(false)
     const chatRef = useRef<GiftedChat<MessageProps> | null>(null)
     const [jobData, setJobData] = useState<JobDataProps | undefined>(job_data)
@@ -184,7 +185,6 @@ const ChatScreen = () => {
     });
 
     const onSend = useCallback((messages: MessageProps[] = []) => {
-        console.log("🚀 ~ file: index.tsx:157 ~ onSend ~ messages", messages)
         let message: MessageProps[] = [{
             _id: 1,
             text: messages[0]?.text,
@@ -217,7 +217,6 @@ const ChatScreen = () => {
         //clear all data
         removeAlldata()
         setLoading(false)
-        console.log("🚀 ~ file: index.tsx:146 ~ onSend ~ message", message)
         setMessages(previousMessages => GiftedChat.append(previousMessages, message))
     }, [])
 
@@ -317,6 +316,7 @@ const ChatScreen = () => {
     const customMessage = () => {
         const props = chatRef.current?.props
         const state = chatRef.current?.state
+
         if (props?.onSend && (state?.text || imageList?.url || docList?.attachment || videoList?.url || jobData)) {
             chatRef?.current?.onSend([{
                 _id: Math.random(),
@@ -562,6 +562,7 @@ const ChatScreen = () => {
                 }
                 headerLeftStyle={{ width: "50%", paddingLeft: wp(3) }}
             />
+
             <Container style={styles.mainViewStyle}>
                 <GiftedChat
                     ref={chatRef}
@@ -624,6 +625,7 @@ const ChatScreen = () => {
                     </View>
                 </Modal>
             }
+
             {/* image and video message send modal */}
             {imageVideoSelected && <RNModal
                 isVisible={imageVideoSelected}
@@ -670,12 +672,10 @@ const ChatScreen = () => {
                     </View>
                 </KeyboardAwareScrollView>
             </RNModal>}
+
             {/* chat footer bottomsheet */}
             <BottomSheet
                 ref={refRBSheet}
-                onClose={() => {
-                    // setShowCameraView(false)
-                }}
                 animationType={'slide'}
                 customStyles={{
                     draggableIcon: {
@@ -699,7 +699,6 @@ const ChatScreen = () => {
                             buttonText={strings.camera}
                             onPress={() => {
                                 launchCamera(PhotoOption, response => {
-                                    console.log({ response: response });
                                     if (response.didCancel) {
                                         console.log('User cancelled image picker');
                                         setLoading(false)

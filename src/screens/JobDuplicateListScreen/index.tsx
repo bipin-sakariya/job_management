@@ -7,8 +7,7 @@ import CustomJobListComponent from "../../components/CustomJobListComponent";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import useCustomNavigation from "../../hooks/useCustomNavigation";
 import { strings } from "../../languages/localizedStrings";
-import { GroupData } from "../../redux/slices/AdminSlice/groupListSlice";
-import { JobDetailsData, jobList } from "../../redux/slices/AdminSlice/jobListSlice";
+import { jobList } from "../../redux/slices/AdminSlice/jobListSlice";
 import { colors } from "../../styles/Colors";
 import fonts from "../../styles/Fonts";
 import FontSizes from "../../styles/FontSizes";
@@ -32,16 +31,19 @@ interface jobListParams {
     page?: number,
     search?: string
 }
+
 const JobDuplicateListScreen = () => {
     const navigation = useCustomNavigation('JobDuplicateListScreen');
-    const { jobListData } = useAppSelector(state => state.jobList)
-    const dispatch = useAppDispatch()
-    const isFocused = useIsFocused()
+    const { jobListData } = useAppSelector(state => state.jobList);
+    const dispatch = useAppDispatch();
+    const isFocused = useIsFocused();
 
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState(1);
+    const [isIndex, setIsIndex] = useState(0);
+    const [finalJobList, setFinalJobList] = useState<GroupParams[]>([]);
 
     useEffect(() => {
-        jobListApiCall(page)
+        jobListApiCall(page);
     }, [navigation, isFocused])
 
     const jobListApiCall = (page: number) => {
@@ -50,31 +52,13 @@ const JobDuplicateListScreen = () => {
             search: ''
         }
         dispatch(jobList(params)).unwrap().then((res) => {
-            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-            // setJobList(res.results)
             setPage(page + 1)
         }).catch((error) => {
             console.log({ error });
         })
     }
 
-    const JobData: JobDataProps[] = [
-        { id: 1, title: 'Job Title1', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false, status: 'hjb' },
-        { id: 2, title: 'Job Title2', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false, status: 'hjb' },
-        { id: 3, title: 'Job Title3', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
-        { id: 4, title: 'Job Title4', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
-        { id: 5, title: 'Job Title5', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false, status: 'hjb' },
-        { id: 6, title: 'Job Title6', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false, status: 'hjb' },
-        { id: 7, title: 'Job Title7', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
-        { id: 8, title: 'Job Title8', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
-        { id: 9, title: 'Job Title9', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
-
-    ]
-    const [isIndex, setIsIndex] = useState(0)
-    const [finalJobList, setFinalJobList] = useState<GroupParams[]>([])
-
     const renderItem = ({ item, index }: any) => {
-        { console.log(item.status) }
         return (
             <TouchableOpacity onPress={() => { setSelected(item, index) }} style={styles.jobMainView}>
                 <View style={{ marginLeft: wp(3.5) }}>
@@ -93,21 +77,17 @@ const JobDuplicateListScreen = () => {
 
     useEffect(() => {
         const findData: GroupParams[] = jobListData.results?.map((i) => {
-            console.log({ i });
-
             return {
                 ...i,
-                // user_name: i.name,
                 selected: false,
             }
         })
         setFinalJobList(findData)
-        console.log({ findData })
-
     }, [jobListData])
 
     const setSelected = (item: JobDataProps, index: number) => {
-        let emptyJobList: Array<any> = []
+        let emptyJobList: Array<any> = [];
+
         finalJobList?.map((data) => {
             if (data.id == item.id) {
                 emptyJobList.push({
@@ -123,13 +103,11 @@ const JobDuplicateListScreen = () => {
                 })
             }
         })
-        // navigation.navigate('DuplicateScreen')
         setFinalJobList(emptyJobList)
     }
 
     return (
         <View style={globalStyles.container}>
-            {/* {console.log({ finalJobList })} */}
             <Header
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
@@ -158,4 +136,4 @@ const JobDuplicateListScreen = () => {
     )
 }
 
-export default JobDuplicateListScreen
+export default JobDuplicateListScreen;

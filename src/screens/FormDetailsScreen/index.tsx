@@ -1,7 +1,7 @@
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, Header, MultipleSelectDropDown } from '../../components'
+import { Container, CustomBlackButton, CustomTextInput, Header, MultipleSelectDropDown } from '../../components'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { ImagesPath } from '../../utils/ImagePaths'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -15,7 +15,7 @@ import FontSizes from '../../styles/FontSizes'
 import { colors } from '../../styles/Colors'
 import { RootRouteProps } from '../../types/RootStackTypes'
 import { useIsFocused, useRoute } from '@react-navigation/native'
-import { FormDataTypes, formDelete, formDetail, formUpdate } from '../../redux/slices/AdminSlice/formListSlice'
+import { formDelete, formDetail, formUpdate } from '../../redux/slices/AdminSlice/formListSlice'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { useFormik } from 'formik'
 import * as yup from "yup";
@@ -39,43 +39,26 @@ interface Formvalues {
     formName: string
 }
 
-interface billDetails {
-    created_at: string
-    id: number
-    image: string
-    jumping_ration: number
-    name: string
-    quantity: number
-    type: string
-    type_counting: string
-    updated_at: string
-}
-
 const FormDetailsScreen = () => {
     const navigation = useCustomNavigation('FormDetailsScreen');
-    const route = useRoute<RootRouteProps<'FormDetailsScreen'>>()
+    const route = useRoute<RootRouteProps<'FormDetailsScreen'>>();
+    const menuRef = useRef(null);
+    const isFocused = useIsFocused();
+    const dispatch = useAppDispatch();
+
     const [visible, setVisible] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-    const menuRef = useRef(null);
-    const isFocused = useIsFocused()
-    const [isBillList, setBillList] = useState<DataTypes[]>([])
-    const [isAllList, setIsAllList] = useState<DataTypes[]>([])
-    const [list, isList] = useState<billData[]>([])
-    const [countingValue, setCountingValue] = useState(0)
-    const [selectedMemberData, setSelectedMemberData] = useState<DataTypes[]>([])
-    const [finalArray, setFinalArray] = useState<number[]>([])
-    const [page, setPage] = useState(1)
-    const [FormDetails, setFormDetails] = useState<FormDataTypes>()
+    const [isBillList, setBillList] = useState<DataTypes[]>([]);
+    const [countingValue, setCountingValue] = useState(0);
+    const [selectedMemberData, setSelectedMemberData] = useState<DataTypes[]>([]);
+    const [finalArray, setFinalArray] = useState<number[]>([]);
+    const [page, setPage] = useState(1);
+    const [isselectData, setIsSelectData] = useState<DataTypes[]>([]);
+    const [isEditable, setIsEditable] = useState(isEdit || route.params.isEdit == true ? true : false);
 
-    const [isselectData, setIsSelectData] = useState<DataTypes[]>([])
-    const [isEditable, setIsEditable] = useState(isEdit || route.params.isEdit == true ? true : false)
-
-    const dispatch = useAppDispatch()
-    const { formDetails, isLoading } = useAppSelector(state => state.formList)
-    const { billListData } = useAppSelector(state => state.billList)
-    console.log({ route: route.params })
-    const [isALLSign, setIsAllSign] = useState(formDetails?.is_sign ?? false)
-
+    const { formDetails } = useAppSelector(state => state.formList);
+    const { billListData } = useAppSelector(state => state.billList);
+    const [isALLSign, setIsAllSign] = useState(formDetails?.is_sign ?? false);
 
     useEffect(() => {
         setIsAllSign(formDetails?.is_sign ?? false)
@@ -84,8 +67,6 @@ const FormDetailsScreen = () => {
     useEffect(() => {
         if (isFocused && route.params.id) {
             dispatch(formDetail(route.params.id)).unwrap().then((res) => {
-                setFormDetails(res)
-                console.log({ formDetails: res });
             }).catch((error) => {
                 console.log({ error });
             })
@@ -97,42 +78,18 @@ const FormDetailsScreen = () => {
             }
 
             dispatch(billList(params)).unwrap().then((res) => {
-                console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
                 setBillList(res.results)
                 setPage(page + 1)
             }).catch((error) => {
                 console.log({ error });
             })
-
         }
     }, [isFocused, formDetails?.is_sign])
 
     useEffect(() => {
-        const findData: billData[] = billListData.results.map((i) => {
-            return {
-                ...i,
-                user_name: i.name,
-                selected: false,
-            }
-        })
-        isList(findData)
-
-        if (formDetails.bill) {
-            const finalData: DataTypes[] = isBillList.map((i: DataTypes) => {
-                return {
-                    ...i,
-                    user_name: i.name,
-                    // selected: true,
-                }
-            })
-            // console.log({ finalData })
-            setIsAllList(finalData)
-        }
-
         const results = billListData.results.map((i) => {
             let newKey = { name: "user_name" }
             const renamedObj = renameKeys(i, newKey);
-            console.log({ renamedObj });
 
             return {
                 ...renamedObj,
@@ -140,17 +97,9 @@ const FormDetailsScreen = () => {
             }
         })
         setIsSelectData(results)
-        console.log({ results })
-
 
     }, [isBillList, formDetails.bill])
 
-    // useEffect(() => {
-    //     if(formDetails.is_sign == true)
-    //  },[])
-
-    console.log({ isAllList })
-    console.log({ selectedMemberData })
     useEffect(() => {
         let data: number[] = []
         selectedMemberData?.map((item) => {
@@ -159,12 +108,9 @@ const FormDetailsScreen = () => {
         )
         setFinalArray(data)
     }, [selectedMemberData])
-    console.log('===========', { finalArray })
-
 
     const CreateGroupValidationSchema = yup.object().shape({
         formName: yup.string().required(strings.formsRequired),
-
     });
 
     const deleteGroupData = (id?: number) => {
@@ -173,7 +119,6 @@ const FormDetailsScreen = () => {
                 navigation.goBack()
             })
         }
-
     }
 
     const optionData = [
@@ -193,7 +138,6 @@ const FormDetailsScreen = () => {
         )
     }
 
-
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
             enableReinitialize: true,
@@ -206,8 +150,6 @@ const FormDetailsScreen = () => {
             }
         })
 
-
-
     const createForm = (values: Formvalues) => {
         let params = {
             id: route.params.id,
@@ -215,12 +157,11 @@ const FormDetailsScreen = () => {
             bill: finalArray,
             is_sign: isALLSign
         }
-        console.log({ params })
+
         dispatch(formUpdate(params)).unwrap().then((res) => {
             navigation.goBack()
         }).catch((e) => {
             console.log({ error: e });
-
         })
     }
 

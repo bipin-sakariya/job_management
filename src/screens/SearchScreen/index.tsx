@@ -19,19 +19,17 @@ import { billList } from '../../redux/slices/AdminSlice/billListSlice'
 import { colors } from '../../styles/Colors'
 
 const SearchScreen = () => {
-
     const navigation = useCustomNavigation('SearchScreen');
     const dispatch = useAppDispatch();
-    const route = useRoute<RootRouteProps<'GroupDetailScreen'>>()
-    console.log({ route })
+    const route = useRoute<RootRouteProps<'GroupDetailScreen'>>();
 
-    const [text, setText] = useState("");
-    const [page, setPage] = useState(1)
-    const { formListData, isLoading } = useAppSelector(state => state.formList)
-    const { groupListData } = useAppSelector(state => state.groupList)
-    const { jobListData } = useAppSelector(state => state.jobList)
+    const [page, setPage] = useState(1);
+
+    const { formListData, isLoading } = useAppSelector(state => state.formList);
+    const { groupListData } = useAppSelector(state => state.groupList);
+    const { jobListData } = useAppSelector(state => state.jobList);
     const { userListData } = useAppSelector(state => state.userList);
-    const { billListData } = useAppSelector(state => state.billList)
+    const { billListData } = useAppSelector(state => state.billList);
 
     const searchName = (input: string) => {
         let param = {
@@ -50,17 +48,14 @@ const SearchScreen = () => {
                 if (res.next && !!input) {
                     setPage(page + 1)
                 }
-                console.log({ res })
-
             })
         }
+
         if (route.params.screenName == 'groupScreen') {
             dispatch(groupList(param)).unwrap().then((res) => {
                 if (res.next && !!input) {
                     setPage(page + 1)
                 }
-                console.log({ res })
-
             })
         }
 
@@ -69,8 +64,6 @@ const SearchScreen = () => {
                 if (res.next && !!input) {
                     setPage(page + 1)
                 }
-                console.log({ res })
-
             })
         }
         if (route.params.screenName == 'transferJobScreen') {
@@ -78,7 +71,6 @@ const SearchScreen = () => {
                 if (res.next && !!input) {
                     setPage(page + 1)
                 }
-                console.log({ res })
             })
         }
         if (route.params.screenName == 'userScreen') {
@@ -86,8 +78,6 @@ const SearchScreen = () => {
                 if (res.next && !!input) {
                     setPage(page + 1)
                 }
-                console.log({ res })
-                console.log("🚀 ~ file: index.tsx ~ line 41 ~ dispatch ~ res", res)
             }).catch((error) => {
                 console.log("🚀 ~ file: index.tsx ~ line 38 ~ dispatch ~ error", error)
             })
@@ -97,8 +87,6 @@ const SearchScreen = () => {
                 if (res.next && !!input) {
                     setPage(page + 1)
                 }
-                console.log({ res })
-                console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
             }).catch((error) => {
                 console.log({ error });
             })
@@ -137,7 +125,6 @@ const SearchScreen = () => {
                             placeholder={strings.searchHere}
                             placeholderTextColor={colors.gray_1}
                             onChangeText={(text) => {
-                                setText(text)
                                 searchName(text)
                             }}
                             autoCapitalize={'none'}
@@ -242,4 +229,4 @@ const SearchScreen = () => {
     )
 }
 
-export default SearchScreen
+export default SearchScreen;

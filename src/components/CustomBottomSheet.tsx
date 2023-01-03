@@ -10,7 +10,6 @@ import { ImagesPath } from '../utils/ImagePaths';
 import { strings } from '../languages/localizedStrings';
 import { GroupParams } from '../screens/TransferJobScreen';
 import { useEffect } from 'react';
-import { iteratorSymbol } from 'immer/dist/internal';
 
 export interface ListDataProps {
     id: number,
@@ -30,27 +29,10 @@ interface CustomBottomSheetProps {
 
 const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSheetProps, ref: ForwardedRef<RBSheet>) => {
     const [data, setData] = useState(props.data)
-    const [defaultSelectedId, setDefaultSelectedId] = useState<number>()
 
-    console.log("CustomBottomSheet ---", { DATA: props.data })
     useEffect(() => {
         setData(props.data)
-        setDefaultSelectedId(props.defaultSelected?.id)
-        // updatedDefaultSelection()
     }, [props.data])
-
-    // const updatedDefaultSelection = () => {
-    //     console.log("SELECTED=", { data })
-    //     const newData = data.map((item) => {
-    //         if (item.id == defaultSelectedId) {
-    //             return { ...item, selected: true }
-    //         }
-    //         else {
-    //             return { ...item, selected: true }
-    //         }
-    //     })
-    //     setData(newData)
-    // }
 
     const onSelectes = (finalIndex: number) => {
         let finalData = props.data.map((item, index) => {
@@ -69,9 +51,6 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
         setData(finalData)
     }
 
-
-    const name = props.data.filter((i) => i.selected == true)
-    console.log({ name })
     return (
         <RBSheet
             ref={ref}

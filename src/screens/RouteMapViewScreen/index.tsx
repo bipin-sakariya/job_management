@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef, useState } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { Image, Text, TouchableOpacity, View, ScrollView } from 'react-native'
 import { customMapStyle, globalStyles } from '../../styles/globalStyles'
 import { CustomStatusBtn, CustomSubTitleWithImageComponent, Header } from '../../components'
@@ -20,16 +20,6 @@ import { useAppSelector } from '../../hooks/reduxHooks'
 import { LocationData } from '../../redux/slices/MapSlice/MapSlice'
 import { convertDate } from '../../utils/screenUtils'
 
-
-interface JobDetail {
-    id: number
-    time: string
-    title: string
-    description: string
-    coordinates: Coordinates
-    status?: string
-}
-
 interface Coordinates {
     latitude: number
     longitude: number
@@ -50,11 +40,8 @@ const RenderDetail = memo(({ item, getIndex, isActive, drag, jobDetail, selected
         fetch(url)
             .then(res => res.json())
             .then((res) => {
-                console.log("SUCCESSS ---------->>>>>>> ", { res })
                 setDistanceFromSource(res?.routes[0].legs[0].distance?.text)
             }).catch((e) => {
-                console.log("**GET DISTANCE --------------------------------------------------------------**", { e })
-                console.log("**LAT LONG ----------------------------------", lat1, lon1, lat2, lon2)
                 setDistanceFromSource('')
             })
     }
@@ -63,7 +50,6 @@ const RenderDetail = memo(({ item, getIndex, isActive, drag, jobDetail, selected
         getIndex() != 0 && getDistanceFromLatLong(item?.coordinates?.latitude, item?.coordinates?.longitude, jobDetail[0]?.coordinates?.latitude, jobDetail[0]?.coordinates?.longitude)
     }, [jobDetail]);
 
-    console.log("RenderDetail --", { jobDetail, item })
     let currIndex = getIndex() ?? 0
     return (
         <ScaleDecorator>

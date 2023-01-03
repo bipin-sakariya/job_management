@@ -1,4 +1,4 @@
-import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { Image, Pressable, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import React from 'react'
 import { colors } from '../styles/Colors'
 import { globalStyles } from '../styles/globalStyles'
@@ -15,7 +15,6 @@ interface CommonlinkPreviewProps {
 }
 
 const CommonlinkPreview = (props: CommonlinkPreviewProps) => {
-    console.log(props);
 
     return (
         <Pressable onPress={props.onPress} style={[globalStyles.rowView, styles.containerStyle, props.containerStyle]}>

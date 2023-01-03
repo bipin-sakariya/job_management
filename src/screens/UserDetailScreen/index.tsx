@@ -1,4 +1,4 @@
-import { Alert, Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { useIsFocused, useRoute } from '@react-navigation/native';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
@@ -76,10 +76,12 @@ const UserDetailScreen = () => {
         data.append("user_name", values.userName)
         data.append("email", values.email)
         data.append("phone", `+972${values.contactNo}`)
+
         let params = {
             data: data,
             id: userId
         }
+
         //update user info
         dispatch(updateUser(params)).unwrap().then((res) => {
             setIsEditable(false)
@@ -111,7 +113,6 @@ const UserDetailScreen = () => {
             navigation.goBack()
         }).catch((error) => {
             console.log({ error });
-
         })
     }
 

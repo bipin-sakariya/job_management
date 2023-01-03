@@ -188,7 +188,7 @@ const AddNewJobScreen = () => {
 
             let ImageTempArray = [...imageList]
             let DocTempArray = [...docList]
-            console.log({ title: res })
+
             if (res[0]?.type?.split("/")[0] == 'application') {
                 DocTempArray.push({ attachment: res[0].uri, type: res[0]?.type?.split("/")[1], bytes: res[0].size, title: res[0].name })
                 setDocError(false)

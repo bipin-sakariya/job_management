@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../utils/ImagePaths';
 import FontSizes from '../styles/FontSizes';
 import fonts from '../styles/Fonts';
@@ -10,23 +10,25 @@ import CustomeJobListDetailsViewComponent from './CustomJobListDetailsViewCompon
 import useCustomNavigation from '../hooks/useCustomNavigation';
 import { JobDetailsData } from '../redux/slices/AdminSlice/jobListSlice';
 import { convertDate } from '../utils/screenUtils';
+import { NotificationObjectType } from '../redux/slices/AdminSlice/notificationSlice';
 
-const JobListComponent = ({ item, isDateVisible }: { item: JobDetailsData, isDateVisible?: boolean }) => {
+const JobListComponent = ({ item, isDateVisible, isNotification = false }: { item: Partial<JobDetailsData> & Partial<NotificationObjectType>, isDateVisible?: boolean, isNotification?: boolean }) => {
     const navigation = useCustomNavigation('JobsScreen')
 
     return (
         <View style={styles.itemContainer}>
             <View style={styles.dateTxtContainer}>
-                {isDateVisible && <View style={globalStyles.rowView}>
+                {isDateVisible && <View style={[globalStyles.rowView, { paddingVertical: hp(0.2) }]}>
                     <Image source={ImagesPath.calender_icon} style={styles.calenderIconStyle} />
-                    <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{convertDate(item.created_at)}</Text>
+                    <Text style={[styles.dateTxtStyle, globalStyles.rtlStyle]}>{convertDate(item?.created_at ? item?.created_at : '')}</Text>
                 </View>}
             </View>
             <CustomeJobListDetailsViewComponent
                 onPress={() => {
-                    navigation.navigate("JobDetailsScreen", { params: item, type: item?.status })
+                    !isNotification && navigation.navigate("JobDetailsScreen", { params: item, type: item?.status })
                 }}
                 item={item}
+                isNotification={isNotification}
             />
         </View>
     )

@@ -16,27 +16,24 @@ import { useRoute } from '@react-navigation/native';
 const ReturnJobScreen = () => {
     const navigation = useCustomNavigation('ReturnJobScreen');
     const route = useRoute<RootRouteProps<'ReturnJobScreen'>>();
+    const dispatch = useAppDispatch();
+
     const [isDuplicate, setIsDuplicate] = useState(true)
     const [isModelVisible, setIsModelVisible] = useState(false)
     const [isUpdate, setIsUpdate] = useState(false)
     const [isText, setIsText] = useState('')
-    const dispatch = useAppDispatch()
-
-    console.log({ route })
 
     const updateReturnJob = () => {
         let params = {
-            status: 'מידע שגוי',
+            status: strings.wrongInformation,
             comment: isText,
             job: route.params.jobId,
-            // duplicate: 0
         }
-        console.log({ params })
+
         dispatch(returnJobCreate(params)).unwrap().then((res) => {
             navigation.navigate('JobDetailsScreen', { params: res })
         }).catch((e) => {
             console.log({ error: e });
-
         })
     }
 

@@ -13,9 +13,10 @@ interface TableDetailsComponentProps {
     type?: string,
     index: number,
     screenName?: string
+    isViewOnly?: boolean
 }
 
-const TableDetailsComponent = ({ item, type, index, screenName }: TableDetailsComponentProps) => {
+const TableDetailsComponent = ({ item, type, index, screenName, isViewOnly }: TableDetailsComponentProps) => {
     const navigation = useCustomNavigation('SignBillDetailScreen')
 
     const handleSubmit = () => {
@@ -30,12 +31,12 @@ const TableDetailsComponent = ({ item, type, index, screenName }: TableDetailsCo
 
     return (
 
-        <TouchableOpacity onPress={() => handleSubmit()} style={[globalStyles.rowView, { paddingVertical: wp(1), justifyContent: 'space-around' }]}>
+        <TouchableOpacity onPress={() => !isViewOnly && handleSubmit()} style={[globalStyles.rowView, { paddingVertical: wp(1), justifyContent: 'space-around' }]}>
             <Text numberOfLines={1} style={[styles.commonScammedTxt, globalStyles.rtlStyle, { width: wp(15) }]}>{index + 1}</Text>
             <View style={[globalStyles.rowView, { width: wp(35) }]}>
                 <Text numberOfLines={1} style={styles.commonScammedTxt}>{item.name}</Text>
             </View>
-            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.type == 'Sign' ? item.quantity : item.jumping_ration}</Text>
+            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.type == 'Sign' ? item.measurement : item.jumping_ration}</Text>
             <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(12) }]}>{item.type_counting}</Text>
         </TouchableOpacity>
     )

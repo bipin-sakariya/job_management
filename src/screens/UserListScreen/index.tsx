@@ -4,10 +4,9 @@ import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomDashedComponent, CustomSubTitleWithImageComponent, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { useIsFocused, useRoute } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import { styles } from './styles';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
-import { RootRouteProps } from '../../types/RootStackTypes';
 import UserListComponent from '../../components/UserListComponent';
 import { strings } from '../../languages/localizedStrings';
 import { getListOfUsers } from '../../redux/slices/AdminSlice/userListSlice';
@@ -17,12 +16,11 @@ import FontSizes from '../../styles/FontSizes';
 
 const UserListScreen = () => {
     const navigation = useCustomNavigation('UserListScreen');
-    const route = useRoute<RootRouteProps<'UserListScreen'>>();
     const dispatch = useAppDispatch();
-    const [page, setpage] = useState(1)
-    const { isLoading, userListData } = useAppSelector(state => state.userList);
-
     const isFoucs = useIsFocused();
+
+    const [page, setpage] = useState(1);
+    const { isLoading, userListData } = useAppSelector(state => state.userList);
 
     useEffect(() => {
         if (isFoucs) {
@@ -31,7 +29,6 @@ const UserListScreen = () => {
             }
             dispatch(getListOfUsers(params)).unwrap().then((res) => {
                 setpage(page + 1)
-                console.log("🚀 ~ file: index.tsx ~ line 41 ~ dispatch ~ res", res)
             }).catch((error) => {
                 console.log("🚀 ~ file: index.tsx ~ line 38 ~ dispatch ~ error", error)
             })
@@ -85,7 +82,7 @@ const UserListScreen = () => {
                 />
                 <FlatList
                     data={userListData}
-                    renderItem={({ item, index }) => {
+                    renderItem={({ item }) => {
                         return (
                             <UserListComponent item={item} />
                         )
