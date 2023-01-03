@@ -190,7 +190,7 @@ const AddNewJobScreen = () => {
             let DocTempArray = [...docList]
             console.log({ title: res })
             if (res[0]?.type?.split("/")[0] == 'application') {
-                DocTempArray.push({ attachment: res[0].uri, type: res[0]?.type?.split("/")[1], bytes: res[0].size, title: res[0].name })
+                DocTempArray.push({ attachment: res[0].fileCopyUri ? res[0].fileCopyUri : '', type: res[0]?.type?.split("/")[1], bytes: res[0].size, title: res[0].name })
                 setDocError(false)
             }
             else {
@@ -294,19 +294,11 @@ const AddNewJobScreen = () => {
                                         return (
                                             <CommonPdfView
                                                 onPress={() => {
-                                                    const pdfName = item.attachment.split(/[#?]/)[0].split('/').pop()?.split('.')[0];
-                                                    const extension = item.attachment.split(/[#?]/)[0].split('.').pop()?.trim();
-                                                    const localFile = `${RNFS.DocumentDirectoryPath}/${pdfName}.${extension}`;
-                                                    const options = {
-                                                        fromUrl: item.attachment,
-                                                        toFile: localFile,
-                                                    };
-                                                    RNFS.downloadFile(options).promise.then(() =>
-                                                        FileViewer.open(localFile)).then(() => {
-                                                        }).catch((error) => {
-                                                        });
+                                                    FileViewer.open(item.attachment).then(() => {
+                                                    }).catch((error) => {
+                                                    });
                                                 }}
-                                                item={item} />
+                                                item={{ attachment: item.attachment, bytes: item.bytes }} />
                                         )
                                     }}
                                     showsVerticalScrollIndicator={false} />

@@ -21,18 +21,21 @@ interface CommonPdfViewProps {
 
 interface itemDetails {
     attachment: string | undefined,
+    bytes?: number | null
 }
 
 const CommonPdfView = (props: CommonPdfViewProps) => {
     const title = props.item?.attachment?.split('/').pop()
     const type = title && title.split('.')[1]
-    const [size, setSize] = useState<number>(0)
+    const [size, setSize] = useState<number>(props.item.bytes ? props.item.bytes : 0)
 
     useEffect(() => { if (props?.item?.attachment) { actualDownload(props?.item?.attachment) } }, [])
 
     const actualDownload = (url: string) => {
         const { dirs } = RNFetchBlob.fs;
-        RNFetchBlob.config({
+
+        const checkHttpString = url.includes("http://")
+        checkHttpString && RNFetchBlob.config({
             fileCache: true,
             addAndroidDownloads: {
                 useDownloadManager: true,
@@ -49,7 +52,7 @@ const CommonPdfView = (props: CommonPdfViewProps) => {
 
             })
             .catch((e) => {
-                console.log(e)
+                console.log({ e })
             });
     }
 
@@ -74,7 +77,9 @@ const CommonPdfView = (props: CommonPdfViewProps) => {
     }
 
     return (
-        <TouchableOpacity disabled={props.disabled ? props.disabled : false} onPress={props.onPress} style={[globalStyles.rowView, styles.mainDocView, props.mainView]}>
+        <TouchableOpacity disabled={props.disabled ? props.disabled : false}
+            onPress={props.onPress}
+            style={[globalStyles.rowView, styles.mainDocView, props.mainView]} >
             <View style={[globalStyles.centerView, styles.docPdfViewStyle, props.imageViewStyle]}>
                 <Text style={[styles.docTypeTxt, props.docTxtStyle, {}]}>{type && type?.charAt(0).toUpperCase() + type?.slice(1)}</Text>
             </View>

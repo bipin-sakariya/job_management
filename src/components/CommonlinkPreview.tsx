@@ -19,7 +19,7 @@ const CommonlinkPreview = (props: CommonlinkPreviewProps) => {
 
     return (
         <Pressable onPress={props.onPress} style={[globalStyles.rowView, styles.containerStyle, props.containerStyle]}>
-            <Image source={{ uri: 'https://dummyimage.com/600x400/000/fff' }} style={styles.renderMinimizedImageStyle} />
+            <Image source={ImagesPath.demo3} style={styles.renderMinimizedImageStyle} />
             <View style={{ flex: 1, paddingLeft: wp(2) }}>
                 <View style={[globalStyles.rowView, globalStyles.rtlDirection, { flex: 1, justifyContent: 'space-between' }]}>
                     <Text numberOfLines={1} style={[styles.jobTitleTxt]}>{props.job.name}</Text>

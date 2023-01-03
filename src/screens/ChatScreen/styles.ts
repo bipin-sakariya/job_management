@@ -122,17 +122,13 @@ export const styles = StyleSheet.create({
     closeIcon: {
         height: wp(6),
         width: wp(6),
-        alignSelf: 'flex-end',
+        alignSelf: 'flex-start',
         resizeMode: "contain",
     },
     closeImageBtnStyle: {
-        position: 'absolute',
-        top: wp(10),
-        left: wp(5),
-        zIndex: 10,
-        // backgroundColor: colors.black,
-        borderRadius: wp(5),
-        padding: wp(2)
+        backgroundColor: colors.black,
+        padding: wp(2),
+        alignItems: 'center'
     },
     imageStyle: {
         height: wp(20),
@@ -350,7 +346,7 @@ export const styles = StyleSheet.create({
         width: wp(65),
         alignSelf: 'center',
         borderRadius: wp(2),
-        margin: wp(2)
+        margin: wp(1)
     },
     leftAvatarStyle: {
         borderRadius: wp(5),
@@ -394,16 +390,17 @@ export const styles = StyleSheet.create({
         zIndex: 5,
     },
     renderMessageImageStyle: {
-        minHeight: wp(60),
-        minWidth: '95%',
+        minHeight: wp(55),
+        width: wp(65),
         alignSelf: 'center',
-        marginVertical: wp(1.5),
         borderRadius: wp(2),
-        resizeMode: 'cover'
+        resizeMode: 'cover',
+        margin: wp(0.5)
     },
     renderMessageVideoContainerStyle: {
-        height: wp(55),
-        width: '100%',
+        margin: wp(0.5),
+        minHeight: wp(55),
+        width: wp(65),
         backgroundColor: colors.transparent_black,
         borderRadius: wp(2),
         alignSelf: 'center',
@@ -422,18 +419,16 @@ export const styles = StyleSheet.create({
         minHeight: wp(55),
         width: wp(65),
         borderRadius: wp(2),
+        margin: wp(0.5),
         alignSelf: 'center'
     },
     closeIconModalContainerStyle: {
         margin: wp(5),
         padding: wp(2),
         alignSelf: 'flex-end',
-        position: "absolute",
         borderRadius: wp(10),
         backgroundColor: colors.black,
         zIndex: 5,
-        left: 0,
-        top: wp(5)
     },
     closeIconModalStyle: {
         width: wp(5),
@@ -472,4 +467,24 @@ export const styles = StyleSheet.create({
         shadowOffset: { height: 0, width: 0 },
         elevation: 10,
     },
+    pdfViewStyle: {
+        marginHorizontal: wp(1),
+        marginVertical: wp(0.5)
+    },
+    pressableContainerStyle: {
+        justifyContent: 'center',
+        flex: 1,
+        width: wp(10),
+        alignItems: 'center'
+    },
+    closeIconStyle: {
+        height: wp(5),
+        width: wp(5),
+        resizeMode: 'contain',
+        tintColor: 'white'
+    },
+    closeIconViewStyle: {
+        height: wp(10),
+        backgroundColor: colors.black
+    }
 })

@@ -1,4 +1,4 @@
-import { Alert, Image, Modal, Pressable, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, Modal, Platform, Pressable, StatusBar, Text, TextInput, TextProps, TextStyle, TouchableOpacity, View } from 'react-native'
 import React, { useCallback, useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { BottomSheet, CommonlinkPreview, CommonPdfView, Container, CustomActivityIndicator, CustomJobDetailsBottomButton, Header } from '../../components'
@@ -40,6 +40,10 @@ export interface SelectedImageProps {
     visible: boolean,
     selectedIndex?: number,
     data: ImageList | VideoList | undefined,
+}
+
+interface CloseIconProps {
+    onPress?: () => void
 }
 
 const PhotoOption: CameraOptions = {
@@ -235,6 +239,10 @@ const ChatScreen = () => {
             case 'job':
                 setJobData(undefined)
                 break;
+            case 'image&video':
+                setImageList(undefined)
+                setVideoList(undefined)
+                break;
             default:
                 setImageList(undefined)
                 setDocList(undefined)
@@ -247,27 +255,28 @@ const ChatScreen = () => {
     const selectOneFile = async (type: string) => {
         try {
             setLoading(true)
+            const result = await DocumentPicker.pick({
+                type: type == "photo" ? [DocumentPicker.types.images, DocumentPicker.types.video] : [DocumentPicker.types.pdf, DocumentPicker.types.doc, DocumentPicker.types.docx, DocumentPicker.types.plainText],
+                presentationStyle: 'fullScreen',
+                mode: 'import',
+                allowMultiSelection: true,
+                copyTo: 'cachesDirectory',
+            })
             if (type == "photo") {
-                const result = await DocumentPicker.pick({
-                    type: [DocumentPicker.types.images, DocumentPicker.types.video],
-                    presentationStyle: 'fullScreen',
-                    mode: 'import',
-                    allowMultiSelection: true,
-                    copyTo: 'cachesDirectory'
-                })
                 if (result[0]?.type?.split("/")[0] == 'image') {
                     setImageList({
+                        // url: result[0].fileCopyUri ? result[0].fileCopyUri : "",
                         url: result[0].uri,
                         mediaType: result[0]?.type?.split("/")[0],
                         id: Math.random()
                     })
                 } else {
                     createThumbnail({
-                        url: result[0].uri,
+                        url: result[0].fileCopyUri ? result[0].fileCopyUri : '',
                         timeStamp: 1000,
                     }).then((res) => {
                         setVideoList({
-                            url: result[0].uri,
+                            url: result[0].fileCopyUri ? result[0].fileCopyUri : '',
                             mediaType: result[0]?.type?.split("/")[0],
                             id: Math.random(),
                             thumbnail: res.path
@@ -282,20 +291,13 @@ const ChatScreen = () => {
                 }, 500);
             }
             else {
-                const res = await DocumentPicker.pick({
-                    type: [DocumentPicker.types.pdf, DocumentPicker.types.doc, DocumentPicker.types.docx, DocumentPicker.types.plainText],
-                    presentationStyle: 'fullScreen',
-                    mode: 'import',
-                    allowMultiSelection: true,
-                    copyTo: 'cachesDirectory',
-                })
-                if (res[0]?.type?.split("/")[0] == 'application') {
+                if (result[0]?.type?.split("/")[0] == 'application') {
                     setDocList({
                         id: Math.random(),
-                        attachment: res[0].uri,
-                        type: res[0]?.type?.split("/")[1],
-                        bytes: res[0].size,
-                        title: res[0].name
+                        attachment: result[0].fileCopyUri ? result[0].fileCopyUri : "",
+                        type: result[0]?.type?.split("/")[1],
+                        bytes: result[0].size,
+                        title: result[0].name
                     })
                     setLoading(false)
                     refRBSheet.current?.close()
@@ -303,7 +305,8 @@ const ChatScreen = () => {
                     setLoading(false)
                 }
             }
-        } catch (err) {
+        }
+        catch (err) {
             if (DocumentPicker.isCancel(err)) {
                 setLoading(false)
             } else {
@@ -332,15 +335,15 @@ const ChatScreen = () => {
         }
     }
 
-    const RenderDateTxt = ({ date }: { date: number | Date | undefined }) => {
+    const RenderDateTxt = ({ date, textStyle }: { date: number | Date | undefined, textStyle?: TextStyle }) => {
         return (
-            <Text style={styles.chatDateTxtStyle}>{moment(date).format("HH:MM A")}</Text>
+            <Text style={[styles.chatDateTxtStyle, textStyle]}>{moment(date).format("HH:MM A")}</Text>
         )
     }
 
     const renderBubble = (props: BubbleProps<IMessage>) => {
         return (
-            <View style={{ flex: 1, alignItems: props.position == 'right' ? 'flex-end' : 'flex-start', }}>
+            <View style={{ flex: 1, alignItems: props.position == 'right' ? 'flex-end' : 'flex-start' }}>
                 {
                     props.position == "right" ?
                         <RenderDateTxt date={props.currentMessage?.createdAt} />
@@ -353,7 +356,9 @@ const ChatScreen = () => {
                             <>
                                 {
                                     props.currentMessage?.jobData &&
-                                    <CommonlinkPreview onPress={() => {// navigation.navigate("JobDetailsScreen", { params: params })
+                                    <CommonlinkPreview onPress={() => {
+                                        //for scoket
+                                        // navigation.navigate("JobDetailsScreen", { params: params })
                                     }}
                                         job={props.currentMessage?.jobData}
                                         containerStyle={styles.linkPreviewContainerStyle} />
@@ -361,23 +366,33 @@ const ChatScreen = () => {
                                 {
                                     props.currentMessage?.attachment &&
                                     <View style={{ alignItems: 'flex-start', flex: 1 }}>
-                                        <CommonPdfView item={props.currentMessage?.attachment} onPress={async () => {
-                                            setLoading(true)
-                                            const pdfName = props.currentMessage?.attachment?.attachment.split(/[#?]/)[0].split('/').pop()?.split('.')[0];
-                                            const extension = props.currentMessage?.attachment?.attachment.split(/[#?]/)[0].split(".").pop()?.trim();;
-                                            const localFile = `${RNFS.DocumentDirectoryPath}/${pdfName}.${extension}`;
-                                            const options = {
-                                                fromUrl: props.currentMessage?.attachment?.attachment ? props.currentMessage?.attachment?.attachment : '',
-                                                toFile: localFile,
-                                            };
-                                            RNFS.downloadFile(options).promise.then(() =>
-                                                FileViewer.open(localFile)).then((data) => {
-                                                    setLoading(false)
-                                                }).catch((error) => {
-                                                    setLoading(false)
-                                                })
-                                        }
-                                        }
+                                        <CommonPdfView
+                                            item={{ attachment: props.currentMessage?.attachment.attachment }}
+                                            mainView={styles.pdfViewStyle}
+                                            onPress={async () => {
+                                                setLoading(true)
+                                                const pdfName = props.currentMessage?.attachment?.attachment.split(/[#?]/)[0].split('/').pop()?.split('.')[0];
+                                                const extension = props.currentMessage?.attachment?.attachment.split(/[#?]/)[0].split(".").pop()?.trim();;
+                                                const localFile = `${RNFS.DocumentDirectoryPath}/${pdfName}.${extension}`;
+                                                const options = {
+                                                    fromUrl: props.currentMessage?.attachment?.attachment ? props.currentMessage?.attachment?.attachment : '',
+                                                    toFile: localFile,
+                                                };
+                                                let checkHttpLink = props.currentMessage?.attachment?.attachment.includes("http://")
+                                                checkHttpLink ?
+                                                    RNFS.downloadFile(options).promise.then(() =>
+                                                        FileViewer.open(localFile)).then(() => {
+                                                            setLoading(false)
+                                                        }).catch((error) => {
+                                                            setLoading(false)
+                                                        }) :
+                                                    props.currentMessage?.attachment?.attachment && FileViewer.open(props.currentMessage?.attachment?.attachment).then((data) => {
+                                                        setLoading(false)
+                                                    }).catch((error) => {
+                                                        setLoading(false)
+                                                    })
+                                            }
+                                            }
                                         />
                                     </View>
                                 }
@@ -401,18 +416,16 @@ const ChatScreen = () => {
                     wrapperStyle={{
                         right: {
                             backgroundColor: colors.light_blue_color,
-                            paddingVertical: wp(2),
-                            paddingHorizontal: wp(2),
                             borderRadius: 0,
+                            padding: wp(1),
                             borderBottomRightRadius: wp(3),
                             borderBottomLeftRadius: wp(3),
                             borderTopLeftRadius: wp(3)
                         },
                         left: {
                             backgroundColor: colors.primary_color,
-                            paddingVertical: wp(2),
-                            paddingHorizontal: wp(2),
                             borderRadius: 0,
+                            padding: wp(1),
                             borderTopRightRadius: wp(3),
                             borderBottomLeftRadius: wp(3),
                             borderBottomRightRadius: wp(3)
@@ -511,7 +524,7 @@ const ChatScreen = () => {
                             <TouchableOpacity onPress={() => { removeAlldata('doc') }} style={[globalStyles.rtlDirection, styles.footerCloseBtnStyle, { alignSelf: 'center', margin: wp(1.5), paddingRight: wp(1) }]}>
                                 <Image source={ImagesPath.close_icon} style={styles.closeBtnStyle} />
                             </TouchableOpacity>
-                            <CommonPdfView disabled item={docList} mainView={{ backgroundColor: colors.light_blue_color, width: '50%' }} />
+                            <CommonPdfView disabled item={{ attachment: docList.attachment, bytes: docList.bytes }} mainView={{ backgroundColor: colors.light_blue_color, width: '50%' }} />
                         </View>
                     }
                 </View >
@@ -530,7 +543,7 @@ const ChatScreen = () => {
 
     const renderMessageVideo = (props: MessageVideoProps<MessageProps>) => {
         return (
-            <Pressable style={{ margin: wp(2) }}
+            <Pressable
                 onPress={() => { setSelectedImageVedio({ visible: true, data: props.currentMessage?.video }) }}>
                 <View style={styles.renderMessageVideoContainerStyle} >
                     <Image source={ImagesPath.play_button_icon} style={styles.playBtnStyle} />
@@ -547,9 +560,20 @@ const ChatScreen = () => {
         )
     }
 
+    const CloseIcon = (props: CloseIconProps) => {
+        return (
+            <View style={styles.closeIconViewStyle}>
+                <Pressable onPress={props.onPress} style={styles.pressableContainerStyle}>
+                    <Image source={ImagesPath.cross_icon} style={styles.closeIconStyle} />
+                </Pressable>
+            </View>
+        )
+    }
+
     return (
         <View style={[globalStyles.container]}>
             {loading && <CustomActivityIndicator size={'large'} />}
+            <StatusBar backgroundColor={colors.white_color} />
             <Header
                 containerStyle={{ backgroundColor: colors.white }}
                 headerLeftComponent={
@@ -570,11 +594,11 @@ const ChatScreen = () => {
                     showAvatarForEveryMessage={false}
                     showUserAvatar={true}
                     renderAvatarOnTop
+                    renderAvatar={renderAvatar}
                     minInputToolbarHeight={wp(15)}
-                    bottomOffset={wp(5)}
+                    bottomOffset={Platform.OS == "ios" ? wp(8) : 0}
                     infiniteScroll={false}
                     renderBubble={renderBubble}
-                    renderAvatar={renderAvatar}
                     renderChatFooter={renderChatFooter}
                     renderInputToolbar={renderInputToolbar}
                     renderMessageImage={renderMessageImage}
@@ -588,32 +612,44 @@ const ChatScreen = () => {
             {selectedImageVedio.visible && selectedImageVedio.data &&
                 <Modal
                     visible={selectedImageVedio.visible}
-                    style={{ margin: 0, backgroundColor: colors.white_color }}>
-                    <View style={{ height: '100%', }}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                setSelectedImageVedio({
-                                    visible: false,
-                                    selectedIndex: 0,
-                                    data: {
-                                        id: 0,
-                                        mediaType: "",
-                                        url: '',
-                                        thumbnail: ''
-                                    }
-                                })
-                            }}
-                            style={[styles.closeImageBtnStyle]}>
-                            <Image source={ImagesPath.cross_icon} style={[styles.closeIcon, { tintColor: selectedImageVedio.data.mediaType == 'image' ? colors.white : colors.black }]} />
-                        </TouchableOpacity>
+                    style={{ margin: 0, backgroundColor: colors.white_color }}
+                >
+                    <StatusBar hidden />
+                    <View style={{ height: '100%', width: '100%' }}>
+                        <CloseIcon onPress={() => {
+                            setSelectedImageVedio({
+                                visible: false,
+                                selectedIndex: 0,
+                                data: {
+                                    id: 0,
+                                    mediaType: "",
+                                    url: '',
+                                    thumbnail: ''
+                                }
+                            })
+                        }} />
                         {
                             selectedImageVedio.data.mediaType == 'image' ?
-                                <ImageViewer
-                                    renderIndicator={() => { return <></> }}
-                                    style={{ flex: 1 }} imageUrls={[{
-                                        url: selectedImageVedio.data.url
-                                    }]}
-                                /> :
+                                // temporary use of image
+                                <Image source={{ uri: selectedImageVedio.data.url }} style={{
+                                    height: '100%',
+                                    width: "100%",
+                                    resizeMode: 'cover'
+                                }} />
+                                //we get http url then use this down function
+                                // <ImageViewer
+                                //     failImageSource={{ url: 'https://dummyimage.com/600x400/e800e8/fff' }}
+                                //     renderIndicator={() => {
+                                //         return closeIcon()
+                                //     }}
+                                //     style={{ height: '100%', width: '100%' }}
+                                //     imageUrls={[{
+                                //         // url: selectedImageVedio.data.url
+                                //         url: 'content://com.android.providers.media.documents/document/image%3A1000000340'
+                                //         // url: 'file:///data/user/0/com.job_management/cache/rn_image_picker_lib_temp_f086b91d-9fa8-4d36-baa2-4e394b40a55b.jpg'
+                                //     }]}
+                                // />
+                                :
                                 <Video
                                     source={{ uri: selectedImageVedio.data.url }}
                                     poster={selectedImageVedio.data.thumbnail}
@@ -629,46 +665,47 @@ const ChatScreen = () => {
                 isVisible={imageVideoSelected}
                 style={{ margin: 0 }}
             >
-                <KeyboardAwareScrollView contentContainerStyle={{ flex: 1, backgroundColor: colors.black }}>
-                    <TouchableOpacity onPress={() => {
+                <>
+                    <StatusBar hidden />
+                    <CloseIcon onPress={() => {
                         setImageVideoSelected(false)
                         setLoading(false)
                         chatRef?.current?.onInputTextChanged('')
-                        removeAlldata()
-                    }} style={[globalStyles.rtlDirection, styles.closeIconModalContainerStyle]}>
-                        <Image source={ImagesPath.close_icon} style={styles.closeIconModalStyle} />
-                    </TouchableOpacity>
-                    {
-                        videoList?.url &&
-                        <Video
-                            repeat
-                            source={{ uri: videoList.url }}
-                            style={styles.modalVideoContainerStyle}
-                            resizeMode={'contain'} />
-                    }
-                    {
-                        imageList?.url &&
-                        <Image source={{ uri: imageList?.url }} style={styles.modalImageContainerStyle} />
-                    }
-                    <View ref={menuRef} style={styles.modalTxtInputContainerStyle}>
-                        <TextInput
-                            onChangeText={chatRef?.current?.onInputTextChanged}
-                            multiline={false}
-                            numberOfLines={1}
-                            placeholder={strings.write_a_message_here}
-                            placeholderTextColor={colors.dark_blue3_color}
-                            style={[styles.inputToolBarTextInputStyle, { padding: wp(2), borderRadius: wp(2), }]}
-                        />
-                        <TouchableOpacity style={{ padding: wp(4) }}
-                            onPress={() => {
-                                customMessage()
-                                setImageVideoSelected(false)
-                            }
-                            }>
-                            <Image source={ImagesPath.send_btn_icon} style={styles.sendBtnStyle} />
-                        </TouchableOpacity>
-                    </View>
-                </KeyboardAwareScrollView>
+                        removeAlldata('image&video')
+                    }} />
+                    <KeyboardAwareScrollView contentContainerStyle={{ flex: 1, backgroundColor: colors.black }}>
+                        {
+                            videoList?.url &&
+                            <Video
+                                repeat
+                                source={{ uri: videoList.url }}
+                                style={styles.modalVideoContainerStyle}
+                                resizeMode={'contain'} />
+                        }
+                        {
+                            imageList?.url &&
+                            <Image source={{ uri: imageList?.url }} style={styles.modalImageContainerStyle} />
+                        }
+                        <View ref={menuRef} style={styles.modalTxtInputContainerStyle}>
+                            <TextInput
+                                onChangeText={chatRef?.current?.onInputTextChanged}
+                                multiline={false}
+                                numberOfLines={1}
+                                placeholder={strings.write_a_message_here}
+                                placeholderTextColor={colors.dark_blue3_color}
+                                style={[styles.inputToolBarTextInputStyle, { padding: wp(2), borderRadius: wp(2), }]}
+                            />
+                            <TouchableOpacity style={{ padding: wp(4) }}
+                                onPress={() => {
+                                    customMessage()
+                                    setImageVideoSelected(false)
+                                }
+                                }>
+                                <Image source={ImagesPath.send_btn_icon} style={styles.sendBtnStyle} />
+                            </TouchableOpacity>
+                        </View>
+                    </KeyboardAwareScrollView>
+                </>
             </RNModal>}
             {/* chat footer bottomsheet */}
             <BottomSheet
@@ -702,8 +739,10 @@ const ChatScreen = () => {
                                     console.log({ response: response });
                                     if (response.didCancel) {
                                         console.log('User cancelled image picker');
+                                        refRBSheet.current?.close()
                                         setLoading(false)
                                     } else if (response.errorMessage) {
+                                        refRBSheet.current?.close()
                                         setLoading(false)
                                         console.log('ImagePicker Error: ', response.errorMessage);
                                     } else {
