@@ -33,9 +33,9 @@ interface SignDataProps {
     selected: boolean,
 }
 interface imageList {
-    id: number
-    image: string
-    mediaType: string
+    id?: number
+    image?: string
+    mediaType?: string
 }
 interface docList {
     path: string,
@@ -44,7 +44,7 @@ interface docList {
     title: string | null
 }
 interface image_arrayList {
-    uri: string,
+    uri?: string,
     name: string,
     type: string
 }
@@ -150,7 +150,7 @@ const CloseJobScreen = () => {
 
     const renderItem = ({ item, index }: any) => {
         return (
-            <TableDetailsComponent item={item} index={index} />
+            <TableDetailsComponent item={item} index={index} isViewOnly />
         )
     }
 
@@ -410,6 +410,7 @@ const CloseJobScreen = () => {
                         title={strings.jobId}
                         container={{ marginBottom: wp(4) }}
                         value={notesValue ?? jobDetails.notes}
+                        // placeholder={strings.addNotes}
                         onChangeText={(value) => {
                             setNotesValue(value)
                         }}

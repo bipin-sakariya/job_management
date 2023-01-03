@@ -157,9 +157,7 @@ const JOB = "JOB";
 export const returnJobList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
     (JOB + "/returnJobList", async (params, { rejectWithValue }) => {
         try {
-            console.log("🚀 ~ file: returnJobListSlice.ts ~ line 67 ~ params", params)
             const response = await axiosClient.get(ApiConstants.RETURNJOB + `?page=${params.page}&search=${params.search}`)
-            console.log("🚀 ~ file: returnJobListSlice.ts ~ line 60 ~ response", response)
             return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -171,7 +169,6 @@ export const returnJobList = createAsyncThunk<JobDataListProps, paramsTypes, { r
 
 export const returnDeleteJob = createAsyncThunk<string, number, { rejectValue: apiErrorTypes }>(JOB + "/returnDeleteJob", async (id, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.RETURNJOB, id)
         const response = await axiosClient.delete(ApiConstants.RETURNJOB + id + '/')
         return response.data
     } catch (e: any) {
@@ -184,7 +181,6 @@ export const returnDeleteJob = createAsyncThunk<string, number, { rejectValue: a
 
 export const returnJobDetail = createAsyncThunk<JobDetailsData, number, { rejectValue: apiErrorTypes }>(JOB + "/returnJobDetail", async (id, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.RETURNJOB, id)
         const response = await axiosClient.get(ApiConstants.RETURNJOB + id + '/')
         return response.data
     } catch (e: any) {
@@ -198,10 +194,7 @@ export const returnJobDetail = createAsyncThunk<JobDetailsData, number, { reject
 export const recentReturnJobList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
     (JOB + "/recentReturnJobList", async (params, { rejectWithValue }) => {
         try {
-            console.log("🚀 ~ file:returnJobListSlice.ts ~ line 60 ~ params", params)
-            // console.log('p000000000000', ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
             const response = await axiosClient.get(ApiConstants.RECENTRETURNJOB + `?page=${params.page}&search=${params.search}`)
-            console.log("🚀 ~ file: returnJobListSlice.ts ~ line 69 ~ response", response)
             return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -212,9 +205,7 @@ export const recentReturnJobList = createAsyncThunk<JobDataListProps, paramsType
     })
 export const returnJobCreate = createAsyncThunk<JobDetailsData, paramsTypes, { rejectValue: apiErrorTypes }>(JOB + "/returnJobCreate", async (params, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.RETURNJOB, { params })
         const response = await axiosClient.post(ApiConstants.RETURNJOB, params)
-        console.log('data...........=====', { response: response })
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {
@@ -223,11 +214,9 @@ export const returnJobCreate = createAsyncThunk<JobDetailsData, paramsTypes, { r
         return rejectWithValue(e?.response)
     }
 })
-export const returnJobUpdate = createAsyncThunk<string[], paramsTypes, { rejectValue: apiErrorTypes }>(JOB + "/ returnJobUpdate", async (params, { rejectWithValue }) => {
+export const returnJobUpdate = createAsyncThunk<string[], paramsTypes, { rejectValue: apiErrorTypes }>(JOB + "/returnJobUpdate", async (params, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.RETURNJOB)
         const response = await axiosClient.patch(ApiConstants.RETURNJOB + params.id + '/', params.Data)
-        console.log('data...........=====', { response: response })
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {

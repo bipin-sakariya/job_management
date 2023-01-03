@@ -28,7 +28,7 @@ interface itemDetails {
 const CommonPdfView = (props: CommonPdfViewProps) => {
     const title = props.item?.attachment?.split('/').pop()
     const type = title && title.split('.')[1]
-    const [size, setSize] = useState<SetStateAction<number | null>>(null)
+    const [size, setSize] = useState<number | null>(null)
 
     useEffect(() => { if (props?.item?.attachment) { actualDownload(props?.item?.attachment) } }, [])
 
@@ -82,7 +82,7 @@ const CommonPdfView = (props: CommonPdfViewProps) => {
             </View>
             <View style={[props.detailsViewStyle, { marginHorizontal: wp(1), width: wp("27%") }]}>
                 <Text numberOfLines={1} style={[styles.docFileNameTxt, globalStyles.rtlStyle, props.titleTxtstyle,]}>{title}</Text>
-                <Text numberOfLines={1} style={[styles.docFileSizeTxt, globalStyles.rtlStyle, props.mbTxtstyle]}>{formatBytes(size, 0)}</Text>
+                <Text numberOfLines={1} style={[styles.docFileSizeTxt, globalStyles.rtlStyle, props.mbTxtstyle]}>{formatBytes(size ? size : 0, 0)}</Text>
             </View>
         </TouchableOpacity>
     )

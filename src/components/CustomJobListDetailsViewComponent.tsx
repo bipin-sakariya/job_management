@@ -8,29 +8,56 @@ import FontSizes from '../styles/FontSizes';
 import { colors } from '../styles/Colors';
 import { strings } from '../languages/localizedStrings';
 import { JobDetailsData } from '../redux/slices/AdminSlice/jobListSlice';
-import { calendarFormat } from 'moment';
+import { NotificationObjectType } from '../redux/slices/AdminSlice/notificationSlice';
+import FastImage from 'react-native-fast-image';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 interface CustomeJobListDetailsViewComponentProps {
-    item: JobDetailsData
+    item: Partial<JobDetailsData> & Partial<NotificationObjectType>
+    isNotification?: boolean
 }
 
 const CustomeJobListDetailsViewComponent = (props: CustomeJobListDetailsViewComponentProps & TouchableOpacityProps) => {
-    console.log({ imageData: props?.item?.images[0]?.image })
     return (
         <TouchableOpacity {...props} style={[styles.jobContainerStyle, styles.dropDownShadowStyle]} >
-            <Image source={props?.item?.images[0]?.image ? { uri: props?.item?.images[0]?.image } : ImagesPath.placeholder_img} style={styles.jobImageStyle} />
+            {props.isNotification
+                ?
+
+                <>
+                    {props.item &&
+                        <Image source={props.item.jobs?.images.length ? { uri: props.item.jobs?.images[0]?.image } : ImagesPath.placeholder_img} resizeMode={'contain'} style={styles.notificationImageStyle} />
+                    }
+                </>
+                :
+                <>
+                    {props.item && props.item.images &&
+
+                        <FastImage source={props?.item?.images[0]?.image ? { uri: props?.item?.images[0]?.image } : ImagesPath.placeholder_img} resizeMode={'contain'} style={styles.jobImageStyle} />
+                    }
+                </>
+            }
             <View style={{ flex: 1 }}>
                 <View style={styles.jobTitleContainer}>
-                    <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle]}>{props.item.address}</Text>
+                    <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle]}>{props.isNotification ? props.item.jobs?.address : props.item.address}</Text>
                     <View style={[globalStyles.rowView, { direction: I18nManager.isRTL ? 'ltr' : 'rtl', }]}>
-                        {props.item.status != strings.jobAddedBy && props.item.status != strings.jobClosedBy &&
+                        {(props.item.status != strings.jobAddedBy && props.item.status != strings.jobClosedBy && !props.isNotification) &&
                             <Image source={ImagesPath.map_pin_dark_line_icon} style={styles.iconStyle} />
                         }
-                        <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>5000 km Away</Text>
+                        {props.isNotification &&
+                            <Text style={styles.durationStyle}>2m</Text>
+                        }
+                        <Text style={[styles.distanceTxt, globalStyles.rtlStyle]}>{props.isNotification ? '' : '5000 km Away'}</Text>
                     </View>
                 </View>
-                <Text numberOfLines={2} style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{props.item.id}</Text>
-                <Text numberOfLines={2} style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{props.item.description}</Text>
+                <Text numberOfLines={2} style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{!props.isNotification && props.item.id}</Text>
+                <Text numberOfLines={2} style={[styles.descriptionTxt, globalStyles.rtlStyle]}>{!props.isNotification && props.item.description}</Text>
+                {props.isNotification && <Text numberOfLines={2} style={[styles.descriptionTxt, globalStyles.rtlStyle]}>
+                    {props.item?.notification_type == 'Close' && strings.job_Closed_by}
+                    {props.item?.notification_type == 'Open' && strings.job_Added_by}
+                    {props.item?.notification_type == 'Further_Inspection' && strings.need_Further_Inspection}
+                    {props.item?.notification_type == 'Transfer' && strings.job_Transfer_by}
+                </Text>}
+                {props.isNotification && <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { fontWeight: '500' }]}>{props.isNotification && props.item.senders?.user_name ? props.item.senders?.user_name : props.item.senders?.email?.split('@', 1)}{'@'}</Text>}
             </View>
         </TouchableOpacity>
     )
@@ -50,7 +77,12 @@ const styles = StyleSheet.create({
     jobImageStyle: {
         height: wp(20),
         width: wp(18),
-        resizeMode: 'contain'
+        // resizeMode: 'contain'
+    },
+    notificationImageStyle: {
+        height: wp(25),
+        width: wp(22),
+        // resizeMode: 'contain'
     },
     jobTitleContainer: {
         ...globalStyles.rowView,
@@ -89,5 +121,10 @@ const styles = StyleSheet.create({
         width: wp(5),
         height: wp(5),
         resizeMode: 'contain'
+    },
+    durationStyle: {
+        color: colors.dark_blue3_color,
+        fontSize: RFValue(12),
+        fontFamily: fonts.FONT_POP_MEDIUM,
     }
 })

@@ -66,10 +66,7 @@ const FORM = "FORM";
 export const formList = createAsyncThunk<FormDataProps, paramsTypes, { rejectValue: apiErrorTypes }>
     (FORM + "/formList", async (params, { rejectWithValue }) => {
         try {
-            console.log("🚀 ~ file: formListSlice.ts ~ line 60 ~ params", params)
-            console.log(ApiConstants.FORMS)
             const response = await axiosClient.get(ApiConstants.FORMS + `?page=${params.page}&search=${params.search}`)
-            console.log("🚀 ~ file: formListSlice.ts ~ line 69 ~ response", response)
             return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -81,7 +78,6 @@ export const formList = createAsyncThunk<FormDataProps, paramsTypes, { rejectVal
 
 export const formDetail = createAsyncThunk<FormDataTypes, number, { rejectValue: apiErrorTypes }>(FORM + "/formDetail", async (id, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.FORMS, id)
         const response = await axiosClient.get(ApiConstants.FORMS + id + '/')
         return response.data
     } catch (e: any) {
@@ -94,7 +90,6 @@ export const formDetail = createAsyncThunk<FormDataTypes, number, { rejectValue:
 
 export const formDelete = createAsyncThunk<string, number, { rejectValue: apiErrorTypes }>(FORM + "/formDelete", async (id, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.FORMS, id)
         const response = await axiosClient.delete(ApiConstants.FORMS + id + '/')
         return response.data
     } catch (e: any) {
@@ -107,9 +102,7 @@ export const formDelete = createAsyncThunk<string, number, { rejectValue: apiErr
 
 export const formCreate = createAsyncThunk<FormDataTypes, paramsTypes, { rejectValue: apiErrorTypes }>(FORM + "/formCreate", async (params, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.FORMS, { params })
         const response = await axiosClient.post(ApiConstants.FORMS, params)
-        console.log('data...........=====', { response: response })
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {
@@ -121,7 +114,6 @@ export const formCreate = createAsyncThunk<FormDataTypes, paramsTypes, { rejectV
 
 export const formUpdate = createAsyncThunk<FormDataTypes, paramsTypes, { rejectValue: apiErrorTypes }>(FORM + "/formUpdate", async (params, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.FORMS, params)
         const response = await axiosClient.patch(ApiConstants.FORMS + params.id + '/', params)
         return response.data
     } catch (e: any) {
@@ -159,7 +151,6 @@ const formListSlice = createSlice({
                 results: [...current(state.formListData?.results), ...action.payload?.results]
 
             }
-            console.log('tempdata======>', tempArray)
             state.formListData = action.meta.arg.page == 1 ? action.payload : tempArray
             state.error = ''
         });

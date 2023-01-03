@@ -246,6 +246,7 @@ export const hebrew = {
     addressInformation_required: 'נדרש מידע כתובת',
     description_required: 'נדרש תיאור',
     Sign_image_required: 'נדרשת תמונת סימן',
+    typecount_required: 'נדרשת ספירת סוגים',
 
     place: 'מקום',
     current_loaction: 'מיקום נוכחי',
@@ -285,4 +286,9 @@ export const hebrew = {
     KM: 'ק"מ',
     drive: 'נסיעה',
     empty_list: 'לא נמצאו נתונים',
+
+    job_Added_by: 'המשרה הוספה על ידי',
+    job_Closed_by: 'משרה סגורה',
+    need_Further_Inspection: 'צריך בדיקה נוספת',
+    job_Transfer_by: 'העברת עבודה על ידי',
 }

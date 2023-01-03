@@ -42,10 +42,10 @@ export interface JobDetailsData {
     added_by: Added_byData,
     closed_by?: null,
     images: [{ image: string | undefined }]
-    attachments: undefined,
+    attachments: [{ attachment: string | undefined }],
     forms?: undefined,
-    bills?: undefined,
-    group_forms?: undefined,
+    bills?: [],
+    group_forms?: formdata[] | [],
     created_at: string,
     updated_at: string,
     address: string,
@@ -61,11 +61,13 @@ export interface JobDetailsData {
     form?: undefined,
     bill?: undefined,
     return_job?: Return_Job,
-    transfer_to?: {
-        id: number,
-        name: string
-    }
+    transfer_to: TransferJob[]
     // role: { id: number, title: string }
+}
+
+interface TransferJob {
+    id: number,
+    name: string
 }
 
 

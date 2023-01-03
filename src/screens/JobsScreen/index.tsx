@@ -240,7 +240,6 @@ const JobsScreen = () => {
                     </View>
                 }
             />
-
             <Container>
                 {isSearch &&
                     <View style={[styles.searchInputView]}>
@@ -292,6 +291,7 @@ const JobsScreen = () => {
                             <JobListComponent
                                 item={item}
                                 isDateVisible={isDateVisible}
+                                isNotification={false}
                             />
                         )
                     }}

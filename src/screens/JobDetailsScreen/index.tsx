@@ -14,10 +14,12 @@ import { colors } from "../../styles/Colors";
 import { RootRouteProps } from "../../types/RootStackTypes";
 import FileViewer from "react-native-file-viewer";
 import RNFS from "react-native-fs";
-import { jobDetail, JobDetailsData, resetSelectedFormsBillReducer, jobDetailReducer } from "../../redux/slices/AdminSlice/jobListSlice";
+import { jobDetail, JobDetailsData, resetSelectedFormsBillReducer, jobDetailReducer, selectedFormDetialsForCreateJobReducers } from "../../redux/slices/AdminSlice/jobListSlice";
 import { convertDate } from "../../utils/screenUtils";
 import { groupDetails } from "../../redux/slices/AdminSlice/groupListSlice";
 import Video from "react-native-video";
+import { billData } from "../../redux/slices/AdminSlice/billListSlice";
+import { NotificationObjectType } from "../../redux/slices/AdminSlice/notificationSlice";
 
 const JobDetailsScreen = () => {
 
@@ -26,198 +28,45 @@ const JobDetailsScreen = () => {
     const refRBSheet = useRef<RBSheet | null>(null);
     const dispatch = useAppDispatch()
     const isFocused = useIsFocused()
+
+    const [loading, setLoading] = useState(false);
+
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
     const { jobDetails, isLoading } = useAppSelector(state => state.jobList)
 
-
-    let data: JobDetailsData = route.params.params
-    let id: number = route?.params?.params?.id
+    let data: Partial<JobDetailsData> & Partial<NotificationObjectType> | undefined = route.params.params
+    let id: number | undefined = route?.params?.params?.id
     let type = route.params.type
 
     console.log({ type })
 
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (isFocused && route?.params?.params?.id) {
-            dispatch(jobDetail(id)).unwrap().then((res) => {
+        if (route?.params?.params?.id) {
+            setLoading(true)
+            dispatch(jobDetail(id ?? 0)).unwrap().then((res) => {
                 dispatch(jobDetailReducer(res))
+                setLoading(false)
                 // setFormDetails(res)
                 console.log({ formDetails: res });
             }).catch((error) => {
+                setLoading(false)
                 console.log({ error });
             })
         }
-        dispatch(resetSelectedFormsBillReducer())
+    }, [])
+
+    useEffect(() => {
+        if (isFocused) {
+            dispatch(resetSelectedFormsBillReducer())
+        }
     }, [isFocused])
 
-    const updateReturnJob = () => {
 
-    }
-
-    // const result = [
-    //     {
-    //         id: 1,
-    //         mediaType: "image",
-    //         imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
-    //     },
-    //     {
-    //         id: 2,
-    //         mediaType: "video",
-    //         imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-    //     },
-    //     {
-    //         id: 3,
-    //         mediaType: "image",
-    //         imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
-    //     },
-    //     {
-    //         id: 4,
-    //         mediaType: "video",
-    //         imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-    //     }
-
-    // ]
-    const FormData = [
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            quantity: "",
-            unit: "15",
-            type_counting: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            quantity: "1",
-            unit: "15",
-            type_counting: "Meter",
-            imageUrl: 'dssdfsdfsf'
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            quantity: "1",
-            unit: "15",
-            type_counting: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            quantity: "",
-            unit: "15",
-            type_counting: "Meter",
-            imageUrl: 'dssdfsdfsf'
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            quantity: "1",
-            unit: "15",
-            type_counting: "Meter",
-            imageUrl: 'dssdfsdfsf'
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            quantity: "1",
-            unit: "15",
-            type_counting: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            quantity: "",
-            unit: "15",
-            type_counting: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            quantity: "1",
-            unit: "15",
-            type_counting: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            quantity: "",
-            unit: "15",
-            type_counting: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            quantity: "1",
-            unit: "15",
-            type_counting: "Meter",
-            imageUrl: 'dssdfsdfsf'
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            quantity: "1",
-            unit: "15",
-            type_counting: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            quantity: "",
-            unit: "15",
-            parameter: "Meter",
-            imageUrl: 'dssdfsdfsf'
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            quantity: "1",
-            unit: "15",
-            type_counting: "Meter",
-            imageUrl: 'dssdfsdfsf'
-        },
-
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            quantity: "1",
-            unit: "15",
-            type_counting: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            quantity: "",
-            unit: "15",
-            type_counting: "Meter",
-            imageUrl: ''
-        },
-        {
-            srno: "01",
-            name: "Asphalt Paint",
-            quantity: "1",
-            unit: "15",
-            type_counting: "Meter",
-            imageUrl: ''
-        },
-
-    ]
-    // const pdfData = [
-    //     { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb", url: "https://www.math.hawaii.edu/~pavel/gcd.pdf" },
-    //     { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb", url: "https://www.math.hawaii.edu/~pavel/gcd.pdf" },
-    // ]
 
     const renderItem = ({ item, index }: any) => {
         return (
-            <TableDetailsComponent item={item} index={index} />
+            <TableDetailsComponent item={item} index={index} isViewOnly />
         )
     }
 
@@ -238,7 +87,7 @@ const JobDetailsScreen = () => {
                 headerRightComponent={
                     <>
                         {
-                            userData?.role != strings.inspector && (jobDetails.status == 'Open' || data.status == strings.jobOpen || data.status == strings.jobTransfer) ?
+                            userData?.role != strings.inspector && (jobDetails.status == 'Open' || data?.status == strings.jobOpen || data?.status == strings.jobTransfer) ?
                                 <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
                                     <Image source={ImagesPath.menu_dots_icon} style={globalStyles.headerIcon} />
                                 </TouchableOpacity>
@@ -301,12 +150,12 @@ const JobDetailsScreen = () => {
                             onPress={() => {
                                 navigation.navigate('MapScreen', {
                                     type: 'viewJob', JobDetails: {
-                                        address: data.address,
-                                        description: data.description,
+                                        address: data && data.address,
+                                        description: data && data.description,
                                         km: '',
-                                        created_at: data.created_at,
+                                        created_at: data && data.created_at,
                                         button: "Open",
-                                        status: data.status,
+                                        status: data && data.status,
                                         coordinate: {
                                             latitude: Number(data?.latitude),
                                             longitude: Number(data?.longitude),
@@ -325,7 +174,7 @@ const JobDetailsScreen = () => {
                         />
                         <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={jobDetails.images} />
 
-                        <CustomDetailsComponent
+                        {(jobDetails.attachments) && <CustomDetailsComponent
                             title={strings.attachment}
                             detailsContainerStyle={{ marginVertical: wp(4) }}
                             bottomComponent={
@@ -358,27 +207,29 @@ const JobDetailsScreen = () => {
                                     }}
                                     showsVerticalScrollIndicator={false} />
                             }
-                        />
+                        />}
                         {jobDetails.status == strings.jobClose || jobDetails.status == strings.jobPartial ?
                             <>
-                                <CustomDetailsComponent
+                                {jobDetails.transfer_to.length != 0 && <CustomDetailsComponent
                                     title={strings.transferTo}
                                     detailsContainerStyle={{ marginBottom: wp(4) }}
                                     bottomComponent={
                                         <>
-                                            <Text numberOfLines={1} style={[styles.commonTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>P. Maintanence</Text>
-                                            <Text numberOfLines={1} style={[styles.commonTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>Paint / Signs</Text>
+                                            {jobDetails?.transfer_to?.map((transferData) =>
+                                                <Text numberOfLines={1} style={[styles.commonTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>{transferData?.name}</Text>
+                                            )}
                                         </>
                                     }
-                                />
-                                <View style={[styles.sammedView, { height: wp(100) }]}>
+                                />}
+                                {jobDetails?.bills?.length != 0 && <View style={[styles.sammedView, { maxHeight: wp(88), paddingBottom: wp(2) }]}>
                                     <View style={styles.formHeaderView}>
                                         <Text style={[styles.noNameTxt]}>{strings.forms}</Text>
                                     </View>
                                     <FlatList
-                                        data={FormData}
+                                        data={jobDetails?.bills}
                                         renderItem={renderItem}
                                         showsVerticalScrollIndicator={false}
+                                        extraData={jobDetails?.bills}
                                         ListHeaderComponent={() => {
                                             return (
                                                 <TableHeaderView />
@@ -386,12 +237,12 @@ const JobDetailsScreen = () => {
                                         }}
                                         ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}
                                     />
-                                </View>
+                                </View>}
                                 <CustomDetailsComponent
                                     title={strings.notes}
                                     detailsContainerStyle={{ marginBottom: wp(4) }}
                                     bottomComponent={
-                                        <Text numberOfLines={3} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left" }]}>Lorem Ipsum הוא פשוט טקסט דמה של תעשיית הדפוס והקביעה. לורם איפסום היה של התעשייה...</Text>
+                                        <Text numberOfLines={3} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left" }]}>{jobDetails?.notes}</Text>
                                     }
                                 />
                             </>
@@ -414,16 +265,29 @@ const JobDetailsScreen = () => {
                             />
                             : null
                         }
-                        {type && (jobDetails.status == 'Open' || jobDetails.status == strings.jobOpen || jobDetails.status == strings.jobReturn || jobDetails.status == strings.jobTransfer) ?
+                        {(type && jobDetails.transfer_to.length != 0) && (jobDetails.status == 'Open' || jobDetails.status == strings.jobOpen || jobDetails.status == strings.jobReturn || jobDetails.status == strings.jobTransfer || jobDetails.status == strings.close) ?
                             <CustomDetailsComponent
-                                title={jobDetails.status == strings.jobTransfer ? strings.transferTo : strings.furtherInspection}
+                                title={strings.transferTo}
                                 detailsContainerStyle={{ marginVertical: wp(4) }}
                                 bottomComponent={
-                                    <Text numberOfLines={1} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left" }]}>{jobDetails.status == strings.jobTransfer ? 'P.Maintanence' : 'yes'}</Text>
+                                    <>
+                                        {
+                                            jobDetails?.transfer_to.map((transferData) => (
+                                                <Text numberOfLines={1} style={[styles.commonTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>{transferData?.name}</Text>
+                                            ))
+                                        }
+                                    </>
                                 }
                             />
                             : null
                         }
+                        <CustomDetailsComponent
+                            title={strings.furtherInspection}
+                            detailsContainerStyle={{ marginVertical: wp(4) }}
+                            bottomComponent={
+                                <Text numberOfLines={1} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left" }]}>{jobDetails.further_inspection ? strings.yes : strings.no}</Text>
+                            }
+                        />
                         {(type == 'returnJob' && (userData?.role == strings.inspector || userData?.role == strings.admin) && jobDetails.status == strings.jobReturn) &&
                             <View style={[globalStyles.rowView, { justifyContent: 'space-between', marginVertical: wp(5) }]}>
                                 <CustomBlackButton
@@ -447,6 +311,9 @@ const JobDetailsScreen = () => {
                                 buttonStyle={{ paddingHorizontal: wp(10) }}
                                 onPress={() => {
                                     navigation.navigate("CloseJobScreen", { params: id })
+                                    if (jobDetails.group_forms?.length != 0 && jobDetails.group_forms) {
+                                        dispatch(selectedFormDetialsForCreateJobReducers({ isSignBill: jobDetails.group_forms[0].is_sign, selectedFormsBillList: jobDetails.group_forms[0].bill, selectedFormsDetails: [jobDetails.group_forms[0]] }))
+                                    }
                                 }}
                                 image={ImagesPath.check_circle}
                             />

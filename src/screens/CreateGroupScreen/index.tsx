@@ -89,7 +89,7 @@ const CreateGroupScreen = () => {
 
     useEffect(() => {
         if (isFoucs) {
-            dispatch(getListOfUsers("")).unwrap().then((res) => {
+            dispatch(getListOfUsers({})).unwrap().then((res) => {
                 console.log("🚀 ~ file: index.tsx ~ line 41 ~ dispatch ~ res", res)
             }).catch((error) => {
                 console.log("🚀 ~ file: index.tsx ~ line 38 ~ dispatch ~ error", error)

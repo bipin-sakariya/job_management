@@ -2,6 +2,7 @@ import { RouteProp } from "@react-navigation/native";
 import { date } from "yup";
 import { GroupData } from "../redux/slices/AdminSlice/groupListSlice";
 import { JobDetailsData } from "../redux/slices/AdminSlice/jobListSlice";
+import { NotificationObjectType } from "../redux/slices/AdminSlice/notificationSlice";
 
 export interface JobDetailsProps {
     description: string
@@ -34,7 +35,7 @@ export type RootStackParamList = {
     IndoxScreen: undefined
     JobDuplicateListScreen: undefined
     NotificationScreen: undefined
-    JobDetailsScreen: { params?: JobDetailsData, type?: string }
+    JobDetailsScreen: { params?: Partial<JobDetailsData> & Partial<NotificationObjectType>, type?: string }
     ReportGeneratorScreen: undefined
     BillListScreen: { billType?: string }
     BillCreateScreen: { screenName?: string }

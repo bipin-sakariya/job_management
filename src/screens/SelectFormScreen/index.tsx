@@ -33,17 +33,11 @@ const SelectFormScreen = () => {
 
     const [page, setPage] = useState(1)
     const [selectedFormsDetails, setselectedFormsDetails] = useState<FormDataTypes[]>([])
-    // const [allForm, setAllForm] = useState<FormDataTypes[]>([])
-    // const [allFormList, setFormList] = useState<FormTypes[]>(allForm)
 
     const { formListData } = useAppSelector(state => state.formList)
     const { selectedFormsDetailForJob } = useAppSelector(state => state.jobList)
+    const { jobDetails } = useAppSelector(state => state.jobList)
 
-    useEffect(() => {
-        if (isFoucs) {
-            handleFormApi(page)
-        }
-    }, [isFoucs])
 
     useEffect(() => {
         setselectedFormsDetails(selectedFormsDetailForJob?.selectedFormsDetails)
@@ -86,7 +80,7 @@ const SelectFormScreen = () => {
     }
 
     const renderItem = ({ item }: { item: FormTypes }) => {
-        const isSelected = selectedFormsDetails.find((formDetails) => formDetails.id == item.id)
+        const isSelected = selectedFormsDetails?.find((formDetails) => formDetails.id == item.id)
         return (
             <TouchableOpacity onPress={() => handleSelectionOfForms(item)} style={globalStyles.rowView}>
                 <Image source={isSelected ? ImagesPath.select_check_box : ImagesPath.check_box} style={styles.checkIcon} />
@@ -132,7 +126,7 @@ const SelectFormScreen = () => {
                     image={ImagesPath.squre_note_icon}
                 />
                 <FlatList
-                    data={formListData?.results}
+                    data={jobDetails.group_forms}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}
                     ItemSeparatorComponent={() => {
