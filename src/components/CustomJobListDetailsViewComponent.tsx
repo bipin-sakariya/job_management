@@ -20,21 +20,22 @@ interface CustomeJobListDetailsViewComponentProps {
 const CustomeJobListDetailsViewComponent = (props: CustomeJobListDetailsViewComponentProps & TouchableOpacityProps) => {
     return (
         <TouchableOpacity {...props} style={[styles.jobContainerStyle, styles.dropDownShadowStyle]} >
-            {props.isNotification
-                ?
+            {
+                props.isNotification
+                    ?
 
-                <>
-                    {props.item &&
-                        <Image source={props.item.jobs?.images.length ? { uri: props.item.jobs?.images[0]?.image } : ImagesPath.placeholder_img} resizeMode={'contain'} style={styles.notificationImageStyle} />
-                    }
-                </>
-                :
-                <>
-                    {props.item && props.item.images &&
+                    <>
+                        {props.item &&
+                            <Image source={props.item.jobs?.images.length ? { uri: props.item.jobs?.images[0]?.image } : ImagesPath.placeholder_img} resizeMode={'contain'} style={styles.notificationImageStyle} />
+                        }
+                    </>
+                    :
+                    <>
+                        {props.item && props.item.images &&
 
-                        <FastImage source={props?.item?.images[0]?.image ? { uri: props?.item?.images[0]?.image } : ImagesPath.placeholder_img} resizeMode={'contain'} style={styles.jobImageStyle} />
-                    }
-                </>
+                            <FastImage source={props?.item?.images[0]?.image ? { uri: props?.item?.images[0]?.image } : ImagesPath.placeholder_img} resizeMode={'contain'} style={styles.jobImageStyle} />
+                        }
+                    </>
             }
             <View style={{ flex: 1 }}>
                 <View style={styles.jobTitleContainer}>
@@ -59,7 +60,7 @@ const CustomeJobListDetailsViewComponent = (props: CustomeJobListDetailsViewComp
                 </Text>}
                 {props.isNotification && <Text numberOfLines={1} style={[styles.descriptionTxt, globalStyles.rtlStyle, { fontWeight: '500' }]}>{props.isNotification && props.item.senders?.user_name ? props.item.senders?.user_name : props.item.senders?.email?.split('@', 1)}{'@'}</Text>}
             </View>
-        </TouchableOpacity>
+        </TouchableOpacity >
     )
 }
 

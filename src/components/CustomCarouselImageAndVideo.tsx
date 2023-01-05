@@ -8,6 +8,7 @@ import { colors } from '../styles/Colors';
 import Modal from 'react-native-modal';
 import { ImagesPath } from '../utils/ImagePaths';
 import CustomCarouselZoomImageViewer from './CustomCarouselZoomImageViewer';
+import FastImage from 'react-native-fast-image';
 
 interface ItemProps {
     id?: number
@@ -28,18 +29,17 @@ const CustomCarouselImageAndVideo = (props: CustomCarouselImageAndVideoProps) =>
 
     const renderItem = ({ item, index }: { item: ItemProps, index: number }) => {
         const type = item?.image?.split('.').reverse()[0]
-        console.log({ type })
         return (
             <TouchableOpacity style={[styles.imageMainView, props.viewStyle]} onPress={() => setIsVisible(true)}>
                 {(item.mediaType == 'image' || type == "jpeg" || type == "png" || type == "jpg")
                     ?
                     <View
                         style={[globalStyles.container, styles.imageView]}>
-                        <Image source={{ uri: item.image }} resizeMode={'contain'} onError={() => { }} style={[globalStyles.container, styles.imageView]} />
+                        <FastImage source={{ uri: item.image }} resizeMode={'contain'} onError={() => { }} style={[globalStyles.container, styles.imageView]} />
                     </View>
                     : <View>
                         <Video
-                            source={{ uri: 'http://142.93.222.204:8001/media/jobimage/8/photo0.mp4' }}
+                            source={{ uri: item.image }}
                             paused={!(index == activeSlide)}
                             resizeMode={'cover'}
                             repeat={true}

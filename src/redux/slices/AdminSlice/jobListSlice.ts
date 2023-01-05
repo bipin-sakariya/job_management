@@ -41,8 +41,8 @@ export interface JobDetailsData {
     id: number,
     added_by: Added_byData,
     closed_by?: null,
-    images: [{ image: string | undefined }]
-    attachments: [{ attachment: string | undefined }],
+    images?: { image: string | undefined }[]
+    attachments?: { attachment: string | undefined }[],
     forms?: undefined,
     bills?: [],
     group_forms?: formdata[] | [],
@@ -60,8 +60,8 @@ export interface JobDetailsData {
     comment?: null,
     form?: undefined,
     bill?: undefined,
-    return_job?: Return_Job,
-    transfer_to: TransferJob[]
+    return_job?: Return_Job[],
+    transfer_to?: { id: number, name: string }[]
     // role: { id: number, title: string }
 }
 
@@ -84,8 +84,8 @@ interface InitialState {
     closedJobList: JobDataListProps
     openedJobList: JobDataListProps
     jobListData: JobDataListProps,
+    recentjobListData: JobDataListProps,
     formData: formdata[] | undefined,
-    jobDetailsData: JobDetailsData | undefined
     selectedFormsDetailForJob: { isSignBill: boolean, selectedFormsBillList: billData[] | [], selectedFormsDetails: FormDataTypes[] | [] }
     isFromCloseJob: boolean
     isSignBillUpdatable: boolean
@@ -94,7 +94,7 @@ interface InitialState {
 }
 
 
-interface formdata {
+export interface formdata {
     bill: billData[]
     created_at: string
     id: number
@@ -139,8 +139,8 @@ const initialState: InitialState = {
             is_active: false
         },
         closed_by: null,
-        images: { image: undefined },
-        attachments: undefined,
+        images: [{ image: '' }],
+        attachments: [],
         forms: undefined,
         bills: undefined,
         group_forms: undefined,
@@ -159,13 +159,9 @@ const initialState: InitialState = {
         form: undefined,
         bill: undefined,
         return_job: undefined,
-        transfer_to: {
-            id: 0,
-            name: ''
-        }
+        transfer_to: []
     },
     formData: undefined,
-    jobDetailsData: undefined,
     selectedFormsDetailForJob: {
         isSignBill: false,
         selectedFormsBillList: [],
@@ -202,9 +198,7 @@ const JOB = "JOB";
 export const jobList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
     (JOB + "/jobList", async (params, { rejectWithValue }) => {
         try {
-            console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
             const response = await axiosClient.get(ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
-            console.log("🚀 ~ file: jobListSlice.ts ~ line 69 ~ response", response)
             return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -215,7 +209,6 @@ export const jobList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectV
     })
 export const jobCreate = createAsyncThunk<string[], FormData, { rejectValue: apiErrorTypes }>(JOB + "/jobCreate", async (params, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.JOB, params)
         const response = await axiosClient.post(ApiConstants.JOB, params)
         return response.data
     } catch (e: any) {
@@ -228,7 +221,6 @@ export const jobCreate = createAsyncThunk<string[], FormData, { rejectValue: api
 
 export const jobDetail = createAsyncThunk<JobDetailsData, number, { rejectValue: apiErrorTypes }>(JOB + "/jobDetails", async (id, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.JOB, id)
         const response = await axiosClient.get(ApiConstants.JOB + id + '/')
         return response.data
     } catch (e: any) {
@@ -242,13 +234,11 @@ export const jobDetail = createAsyncThunk<JobDetailsData, number, { rejectValue:
 export const jobStatusWiseList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
     (JOB + "/jobStatusWiseList", async (params, { rejectWithValue }) => {
         try {
-            console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
             const urlParams = new URLSearchParams({ page: params.page?.toString() ?? '', status: params.status ?? '' })
             params?.search && urlParams.append('search', params.search ?? '')
             params?.id && urlParams.append('id', params.id.toString())
             params?.from_date && urlParams.append('from_date', params.from_date)
             params?.to_date && urlParams.append('to_date', params.to_date)
-            console.log({ urlParams: urlParams.toString() })
 
             const response = await axiosClient.get(ApiConstants.JOBSTATUSWISE + "?" + urlParams.toString())
             return response.data;
@@ -263,10 +253,7 @@ export const jobStatusWiseList = createAsyncThunk<JobDataListProps, paramsTypes,
 export const recentJobList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
     (JOB + "/recentJobList", async (params, { rejectWithValue }) => {
         try {
-            console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
-            // console.log('p000000000000', ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
             const response = await axiosClient.get(ApiConstants.RECENTJOBLIST + `?page=${params.page}&search=${params.search}`)
-            console.log("🚀 ~ file: jobListSlice.ts ~ line 69 ~ response", response)
             return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -279,9 +266,7 @@ export const recentJobList = createAsyncThunk<JobDataListProps, paramsTypes, { r
 export const recentTransferJobList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
     (JOB + "/recentTransferJobList", async (params, { rejectWithValue }) => {
         try {
-            console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
             const response = await axiosClient.get(ApiConstants.RECENTTRANSFERJOBLIST + `?page=${params.page}&search=${params.search}`)
-            console.log("🚀 ~ file: jobListSlice.ts ~ line 69 ~ response", response)
             return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -294,9 +279,7 @@ export const recentTransferJobList = createAsyncThunk<JobDataListProps, paramsTy
 export const transferJobList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
     (JOB + "/transferJobList", async (params, { rejectWithValue }) => {
         try {
-            console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
             const response = await axiosClient.get(ApiConstants.TRANSFERJOB + `?page=${params.page}&search=${params.search}`)
-            console.log("🚀 ~ file: jobListSlice.ts ~ line 69 ~ response", response)
             return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -306,16 +289,14 @@ export const transferJobList = createAsyncThunk<JobDataListProps, paramsTypes, {
         }
     })
 
-export const updateTransferJobList = createAsyncThunk<JobDetailsData, paramsTypes, { rejectValue: apiErrorTypes }>
-    (JOB + "/updateTransferJobList", async (params, { rejectWithValue }) => {
-        let obj = {
-            group: params.group,
-            job: params.job,
-        }
+export const updateTransferJob = createAsyncThunk<JobDetailsData, paramsTypes, { rejectValue: apiErrorTypes }>
+    (JOB + "/updateTransferJob", async (params, { rejectWithValue }) => {
         try {
-            console.log(ApiConstants.TRANSFERJOB, { obj })
+            let obj = {
+                group: params.group,
+                job: params.job,
+            }
             const response = await axiosClient.post(ApiConstants.TRANSFERJOB, obj)
-            console.log('data...........=====', { response: response })
             return response.data
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -328,7 +309,6 @@ export const updateTransferJobList = createAsyncThunk<JobDetailsData, paramsType
 export const updatejob = createAsyncThunk<string[], paramsTypes, { rejectValue: apiErrorTypes }>(JOB + "/updateJob", async (params, { rejectWithValue }) => {
     try {
         const response = await axiosClient.patch(ApiConstants.JOB + params.id + '/', params.formData)
-        console.log('data...........=====', { response: response })
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {
@@ -365,12 +345,12 @@ const jobListSlice = createSlice({
             state.isSignBillUpdatable = action.payload.type == 'Sign' ? false : state.isSignBillUpdatable
             state.newlyCreatedBillsForCloseJob = [...current(state.newlyCreatedBillsForCloseJob), action.payload]
         },
-        jobDetailReducer: (state, action) => {
-            state.jobDetailsData = action.payload
-        },
-        resetJobDetailReducer: (state) => {
-            state.jobDetailsData = undefined
-        },
+        // jobDetailReducer: (state, action) => {
+        //     state.jobDetailsData = action.payload
+        // },
+        // resetJobDetailReducer: (state) => {
+        //     state.jobDetailsData = undefined
+        // },
         updateSelectedBilllDetials: (state, action) => {
             const isFromNewCreateBill = state.newlyCreatedBillsForCloseJob.find((bill) => bill.id == action.payload.id)
             const isFromFormsBill = state.selectedFormsDetailForJob.selectedFormsBillList.find((bill) => bill.id == action.payload.id)
@@ -404,12 +384,11 @@ const jobListSlice = createSlice({
         });
         builder.addCase(jobList.fulfilled, (state, action) => {
             state.isLoading = false
-            let tempArray = action.meta.arg.page == 1 ? action.payload : {
+            state.error = ''
+            state.jobListData = action.meta.arg.page == 1 ? action.payload : {
                 ...action.payload,
                 results: [...current(state.jobListData?.results), ...action.payload?.results]
             }
-            state.jobListData = action.meta.arg.page == 1 ? action.payload : tempArray
-            state.error = ''
         });
         builder.addCase(jobList.rejected, (state, action) => {
             state.isLoading = false
@@ -477,9 +456,9 @@ const jobListSlice = createSlice({
             state.isLoading = false
             let tempArray = action.meta.arg.page == 1 ? action.payload : {
                 ...action.payload,
-                results: [...current(state.jobListData?.results), ...action.payload?.results]
+                results: [...current(state.recentjobListData?.results), ...action.payload?.results]
             }
-            state.jobListData = action.meta.arg.page == 1 ? action.payload : tempArray
+            state.recentjobListData = action.meta.arg.page == 1 ? action.payload : tempArray
             state.error = ''
         });
         builder.addCase(recentJobList.rejected, (state, action) => {
@@ -487,16 +466,16 @@ const jobListSlice = createSlice({
             state.error = ''
         });
         //update tranfer job
-        builder.addCase(updateTransferJobList.pending, state => {
+        builder.addCase(updateTransferJob.pending, state => {
             state.isLoading = true
             state.error = ''
         });
-        builder.addCase(updateTransferJobList.fulfilled, (state, action) => {
+        builder.addCase(updateTransferJob.fulfilled, (state, action) => {
             state.isLoading = false
         });
-        builder.addCase(updateTransferJobList.rejected, (state, action) => {
+        builder.addCase(updateTransferJob.rejected, (state, action) => {
             state.isLoading = false
-            state.error = ''
+            state.error = action.payload?.data.detail
         });
 
         //tranferjob list
@@ -552,5 +531,5 @@ const jobListSlice = createSlice({
     }
 })
 
-export const { selectedFormDetialsForCreateJobReducers, resetSelectedFormsBillReducer, storeUserInteractionWithBillCreation, storeCreatedBillDetailsForCloseJob, updateSelectedBilllDetials, updateSelectedSignBillListReducer, jobDetailReducer, resetJobDetailReducer } = jobListSlice.actions
+export const { selectedFormDetialsForCreateJobReducers, resetSelectedFormsBillReducer, storeUserInteractionWithBillCreation, storeCreatedBillDetailsForCloseJob, updateSelectedBilllDetials, updateSelectedSignBillListReducer } = jobListSlice.actions
 export default jobListSlice.reducer

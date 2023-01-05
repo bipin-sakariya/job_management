@@ -41,7 +41,7 @@ const CreateBillSectionScreen = () => {
     const [count, setCount] = useState(0)
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
-    const { formData } = useAppSelector(state => state.jobList)
+    const { formData, jobDetails } = useAppSelector(state => state.jobList)
     const [error, setError] = useState({
         name: "",
         jumping_ration: "",
@@ -71,8 +71,6 @@ const CreateBillSectionScreen = () => {
     });
 
     const createbills = (values: ValuesProps) => {
-        console.log("🚀  file: index.tsx  line 47  createbills  values", values)
-
         if (!countingValue.value) {
             setCountingError(true)
         }
@@ -81,29 +79,30 @@ const CreateBillSectionScreen = () => {
         }
         else {
             setIsLoading(true)
-            var data = new FormData()
-            let images = {
-                uri: imageUrl,
+            const data = new FormData()
+            const images = {
+                uri: imageUrl ?? '',
                 name: "photo.jpg",
                 type: "image/jpeg"
             }
             console.log({ imageUrl });
 
             data.append("name", values.name)
-            data.append("type_counting", countingValue.value)
+            data.append("type_counting", countingValue.value.toString())
 
             if (imageUrl) {
-                data.append("image", images ? images : '')
+                data.append("image", images)
             }
-            data.append(type == 'material' ? "jumping_ration" : "measurement", route.params.screenName == 'updateJob' ? count : parseFloat(String(values.ration_qunt)))
+            data.append(type == 'material' ? "jumping_ration" : "measurement", route.params.screenName == 'updateJob' ? count.toString() : parseFloat(String(values.ration_qunt).toString()))
             data.append("type", type == 'material' ? "Material" : 'Sign')
 
             dispatch(billCreate(data)).unwrap().then((res: billData) => {
                 setIsLoading(false)
                 if (isFromCloseJob) {
                     dispatch(storeCreatedBillDetailsForCloseJob(res))
-                    navigation.goBack();
-                    navigation.goBack();
+                    navigation.navigate('CloseJobScreen', { params: jobDetails.id })
+                } else {
+                    navigation.navigate('BillListScreen', { billType: type })
                 }
                 console.log({ res: res });
             }).catch((e) => {
@@ -187,7 +186,11 @@ const CreateBillSectionScreen = () => {
                                     mediaType: 'photo'
                                 }
                                 const { assets } = await launchImageLibrary(option)
-                                setImageUrl(assets && assets.length !== 0 ? assets[0]?.uri : '')
+
+                                if (assets && assets.length !== 0) {
+                                    setImageUrl(assets[0]?.uri ?? '')
+                                }
+
                                 if (assets && assets[0]?.uri) {
                                     setImageError(false)
                                     setError({ ...error, image: '' })

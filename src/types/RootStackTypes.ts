@@ -50,8 +50,8 @@ export type RootStackParamList = {
     ChatScreen: undefined
     TransferJobScreen: { jobId: number }
     ReturnJobScreen: { jobId: number, status: string | undefined }
-    DuplicateScreen?: { params?: number }
-    CloseJobScreen: { params?: any }
+    DuplicateScreen?: { jobDetails?: JobDetailsData }
+    CloseJobScreen?: { params?: any }
     RouteScreen: undefined
     RouteChooseLocationDetailScreen: undefined
     RouteMapViewScreen: undefined

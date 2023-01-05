@@ -206,6 +206,7 @@ export const hebrew = {
     groupMemberRequired: 'דרוש חבר בקבוצה',
     formsRequired: 'נדרשים טפסים',
 
+
     enterUserame: 'הכנס שם משתמש',
     enterGroupName: 'הזן את שם הקבוצה',
     enterEmailAddress: 'הזן כתובת אימייל',
@@ -291,4 +292,6 @@ export const hebrew = {
     job_Closed_by: 'משרה סגורה',
     need_Further_Inspection: 'צריך בדיקה נוספת',
     job_Transfer_by: 'העברת עבודה על ידי',
+    try_again: 'נסה שוב',
+    password_not_match: 'הסיסמה לא צריכה להיות תואמת',
 }

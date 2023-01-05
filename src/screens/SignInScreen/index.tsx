@@ -55,9 +55,9 @@ const SignInScreen = () => {
                 let userData = {
                     email: values.email,
                     role: res.role,
-                    accesToken: res.access
+                    accesToken: res.access,
+                    user: res.userdata
                 }
-
                 dispatch(userDataReducer(userData))
                 setIsLoading(false)
                 navigation.reset({ index: 0, routes: [{ name: "DrawerScreens" }] })

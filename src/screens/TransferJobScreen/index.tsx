@@ -1,7 +1,7 @@
 import { FlatList, Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, Header } from '../../components'
+import { Container, CustomActivityIndicator, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -9,10 +9,10 @@ import { styles } from './styles'
 import { strings } from '../../languages/localizedStrings'
 import { colors } from '../../styles/Colors'
 import CustomOneItemSelect from '../../components/CustomOneItemSelect'
-import { useAppDispatch } from '../../hooks/reduxHooks'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { useIsFocused, useRoute } from '@react-navigation/native'
 import { GroupData, groupList, MemberDetailsProps } from '../../redux/slices/AdminSlice/groupListSlice'
-import { updateTransferJobList } from '../../redux/slices/AdminSlice/jobListSlice'
+import { updateTransferJob } from '../../redux/slices/AdminSlice/jobListSlice'
 import { RootRouteProps } from '../../types/RootStackTypes'
 
 interface groupListParams {
@@ -81,9 +81,12 @@ const TransferJobScreen = () => {
     const route = useRoute<RootRouteProps<'TransferJobScreen'>>();
 
     const [isModelVisible, setIsModelVisible] = useState(false)
+    const [IsErrorModal, setIsErrorModal] = useState(false)
     const [jobData, setJobData] = useState<GroupData[]>([])
     const [page, setPage] = useState(1)
     const [finalJobList, setFinaljobList] = useState<GroupParams[]>([])
+    const { error } = useAppSelector(state => state.jobList)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     useEffect(() => {
         if (isFocus)
@@ -97,9 +100,9 @@ const TransferJobScreen = () => {
             page: page,
             search: input
         }
-        // setIsFooterLoading(true)
+        setIsLoading(true)
         dispatch(groupList(params)).unwrap().then((res) => {
-            // setIsFooterLoading(false)
+            setIsLoading(false)
             console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
             if (res.next && !!input) {
                 setJobData(res.results)
@@ -132,10 +135,12 @@ const TransferJobScreen = () => {
             job: route.params.jobId,
         }
 
-        dispatch(updateTransferJobList(params)).unwrap().then((res) => {
+        dispatch(updateTransferJob(params)).unwrap().then((res) => {
             setIsModelVisible(false)
             navigation.goBack()
         }).catch((e) => {
+            setIsModelVisible(false)
+            setIsErrorModal(true)
             console.log({ error: e });
         })
     }
@@ -148,7 +153,7 @@ const TransferJobScreen = () => {
 
     return (
         <View style={globalStyles.container}>
-            {/* {console.log({ finalJobList })} */}
+            {isLoading && <CustomActivityIndicator />}
             <Header
                 headerLeftStyle={{
                     width: "50%",
@@ -196,6 +201,16 @@ const TransferJobScreen = () => {
                             <View style={[globalStyles.rowView, { justifyContent: "space-around", width: '100%' }]}>
                                 <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.no} />
                                 <CustomBlackButton onPress={() => { transferJob() }} buttonStyle={{ width: "45%" }} title={strings.yes} />
+                            </View>
+                        </View>
+                    } />
+                <CustomModal
+                    visible={IsErrorModal} onRequestClose={() => { setIsErrorModal(false) }}
+                    children={
+                        <View style={[styles.modalView, { height: wp(30) }]}>
+                            <Text style={[styles.modalTxt, { marginTop: wp(5) }]}>{error}</Text>
+                            <View style={[globalStyles.rowView, { justifyContent: "space-around", width: '100%' }]}>
+                                <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { setIsErrorModal(false) }} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.try_again} />
                             </View>
                         </View>
                     } />

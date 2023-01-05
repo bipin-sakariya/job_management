@@ -17,6 +17,7 @@ import { getListOfUsers, inspectorListProps, roleList, UserData } from '../../re
 import { FormDataTypes, formList } from '../../redux/slices/AdminSlice/formListSlice';
 import { createGroup } from '../../redux/slices/AdminSlice/groupListSlice';
 import { billData } from '../../redux/slices/AdminSlice/billListSlice';
+import { colors } from '../../styles/Colors';
 
 interface DataTypes {
     user_name?: string
@@ -81,6 +82,7 @@ const CreateGroupScreen = () => {
     const [allForm, setAllForm] = useState<FormDataTypes[]>([])
     const [selectedFormsList, setSelectedFormList] = useState<FormDataProps[]>([])
     const [selectedFormsData, setSelectedFormsData] = useState<DataTypes[]>()
+    const [dataPage, setDataPage] = useState(1)
 
 
     const { isLoading, userListData, } = useAppSelector(state => state.userList);
@@ -89,7 +91,12 @@ const CreateGroupScreen = () => {
 
     useEffect(() => {
         if (isFoucs) {
-            dispatch(getListOfUsers({})).unwrap().then((res) => {
+            let dataPrams = {
+                page: dataPage,
+                search: ''
+            }
+            dispatch(getListOfUsers(dataPrams)).unwrap().then((res) => {
+                setDataPage(dataPage + 1)
                 console.log("🚀 ~ file: index.tsx ~ line 41 ~ dispatch ~ res", res)
             }).catch((error) => {
                 console.log("🚀 ~ file: index.tsx ~ line 38 ~ dispatch ~ error", error)
@@ -222,8 +229,8 @@ const CreateGroupScreen = () => {
                 data.append("image", images ? images : '')
             }
             data.append("name", values.groupName)
-            data.append("manager", values.groupManager.id)
-            data.append("inspector", values.inspector.id)
+            data.append("manager", values.groupManager.id.toString())
+            data.append("inspector", values.inspector.id.toString())
             finalArray.map((_member) => {
                 console.log({ _member });
 

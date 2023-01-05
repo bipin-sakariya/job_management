@@ -8,11 +8,12 @@ import FontSizes from '../styles/FontSizes';
 import { globalStyles } from '../styles/globalStyles';
 import { ImagesPath } from '../utils/ImagePaths';
 import { JobDetailsData } from '../redux/slices/AdminSlice/jobListSlice';
+import { JobDetailsData as ReturnJobDetialsType } from '../redux/slices/AdminSlice/returnJobListSlice';
 import { convertDate } from '../utils/screenUtils';
 import FastImage from 'react-native-fast-image';
 
 interface CustomJobListComponentProps {
-    item: JobDetailsData;
+    item: JobDetailsData & ReturnJobDetialsType;
     type?: string;
     listStyle?: TouchableOpacityProps['style'];
     textStyle?: TextProps['style'];
@@ -28,7 +29,7 @@ const CustomJobListComponent = (props: CustomJobListComponentProps & TouchableOp
                 props.type == 'carousel' ? styles.jobContainerBoxShadowStyle : null,
             ]}>
             <FastImage
-                source={props?.item?.images[0]?.image ? { uri: props?.item?.images[0]?.image } : ImagesPath.job_list_image_icon}
+                source={(props?.item?.images && props?.item?.images[0]?.image) ? { uri: props?.item?.images[0]?.image } : ImagesPath.job_list_image_icon}
                 style={styles.jobImageStyle}
             />
             <View style={{ flex: 1 }}>

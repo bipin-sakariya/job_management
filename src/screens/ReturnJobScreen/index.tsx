@@ -1,7 +1,7 @@
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
-import { Container, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, Header } from '../../components';
+import { Container, CustomActivityIndicator, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
@@ -16,27 +16,30 @@ import { useRoute } from '@react-navigation/native';
 const ReturnJobScreen = () => {
     const navigation = useCustomNavigation('ReturnJobScreen');
     const route = useRoute<RootRouteProps<'ReturnJobScreen'>>();
+    const dispatch = useAppDispatch()
+
     const [isDuplicate, setIsDuplicate] = useState(true)
     const [isModelVisible, setIsModelVisible] = useState(false)
     const [isUpdate, setIsUpdate] = useState(false)
     const [isText, setIsText] = useState('')
-    const dispatch = useAppDispatch()
-
-    console.log({ route })
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const updateReturnJob = () => {
+        setIsLoading(true)
         let params = {
-            status: 'מידע שגוי',
+            status: strings.wrongInformation,
             comment: isText,
             job: route.params.jobId,
-            // duplicate: 0
         }
         console.log({ params })
         dispatch(returnJobCreate(params)).unwrap().then((res) => {
-            navigation.navigate('JobDetailsScreen', { params: res })
+            if (res) {
+                setIsLoading(false)
+                navigation.navigate('JobDetailsScreen', { params: res })
+            }
         }).catch((e) => {
+            setIsLoading(false)
             console.log({ error: e });
-
         })
     }
 
@@ -51,6 +54,7 @@ const ReturnJobScreen = () => {
 
     return (
         <View style={globalStyles.container}>
+            {isLoading && <CustomActivityIndicator />}
             <Header
                 headerLeftStyle={{
                     width: '50%',
@@ -100,7 +104,7 @@ const ReturnJobScreen = () => {
                         />
                     </View>
                 </View>
-                {<CustomBlackButton onPress={() => returnJob()} buttonStyle={{ width: '50%' }} title={strings.return} image={ImagesPath.arrow_counter_clockwise_white_icon} />}
+                <CustomBlackButton onPress={() => returnJob()} buttonStyle={{ width: '50%' }} title={strings.return} image={ImagesPath.arrow_counter_clockwise_white_icon} />
             </Container>
         </View>
     )

@@ -20,6 +20,8 @@ import { groupDetails } from "../../redux/slices/AdminSlice/groupListSlice";
 import Video from "react-native-video";
 import { billData } from "../../redux/slices/AdminSlice/billListSlice";
 import { NotificationObjectType } from "../../redux/slices/AdminSlice/notificationSlice";
+// import Video from "react-native-video";
+import { returnDeleteJob } from "../../redux/slices/AdminSlice/returnJobListSlice";
 
 const JobDetailsScreen = () => {
 
@@ -38,14 +40,10 @@ const JobDetailsScreen = () => {
     let id: number | undefined = route?.params?.params?.id
     let type = route.params.type
 
-    console.log({ type })
-
-
     useEffect(() => {
         if (route?.params?.params?.id) {
             setLoading(true)
             dispatch(jobDetail(id ?? 0)).unwrap().then((res) => {
-                dispatch(jobDetailReducer(res))
                 setLoading(false)
                 // setFormDetails(res)
                 console.log({ formDetails: res });
@@ -62,7 +60,13 @@ const JobDetailsScreen = () => {
         }
     }, [isFocused])
 
-
+    const deleteReturnJob = (id: number) => {
+        if (id) {
+            dispatch(returnDeleteJob(id)).unwrap().then(() => {
+                navigation.goBack()
+            })
+        }
+    }
 
     const renderItem = ({ item, index }: any) => {
         return (
@@ -72,7 +76,7 @@ const JobDetailsScreen = () => {
 
     return (
         <View style={globalStyles.container} >
-            {loading && <CustomActivityIndicator size={'small'} />}
+            {(loading || isLoading) && <CustomActivityIndicator />}
             <Header
                 headerLeftStyle={{
                     width: "50%",
@@ -150,15 +154,15 @@ const JobDetailsScreen = () => {
                             onPress={() => {
                                 navigation.navigate('MapScreen', {
                                     type: 'viewJob', JobDetails: {
-                                        address: data && data.address,
-                                        description: data && data.description,
+                                        address: jobDetails.address,
+                                        description: jobDetails.description,
                                         km: '',
-                                        created_at: data && data.created_at,
+                                        created_at: jobDetails.created_at,
                                         button: "Open",
-                                        status: data && data.status,
+                                        status: jobDetails.status,
                                         coordinate: {
-                                            latitude: Number(data?.latitude),
-                                            longitude: Number(data?.longitude),
+                                            latitude: Number(jobDetails?.latitude),
+                                            longitude: Number(jobDetails?.longitude),
                                             latitudeDelta: 0.04864195044303443,
                                             longitudeDelta: 0.040142817690068,
                                         },
@@ -291,6 +295,7 @@ const JobDetailsScreen = () => {
                         {(type == 'returnJob' && (userData?.role == strings.inspector || userData?.role == strings.admin) && jobDetails.status == strings.jobReturn) &&
                             <View style={[globalStyles.rowView, { justifyContent: 'space-between', marginVertical: wp(5) }]}>
                                 <CustomBlackButton
+                                    onPress={() => { deleteReturnJob(jobDetails.id) }}
                                     title={strings.delete}
                                     image={ImagesPath.trash_icon}
                                     imageStyle={{ tintColor: colors.primary_color }}

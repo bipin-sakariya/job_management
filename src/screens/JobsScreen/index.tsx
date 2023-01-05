@@ -16,7 +16,7 @@ import { GroupData, groupList, selectedAllGroupReducers, selectedGroupReducers }
 import { GroupParams } from '../TransferJobScreen';
 import FontSizes from '../../styles/FontSizes';
 import fonts from '../../styles/Fonts';
-import { getNotificatioList } from '../../redux/slices/AdminSlice/notificationSlice';
+// import { getNotificatioList } from '../../redux/slices/AdminSlice/notificationSlice';
 
 interface jobListParams {
     page?: number,
@@ -80,7 +80,8 @@ const JobsScreen = () => {
             if (closedJobList.results.length == 0 || openedJobList.results.length == 0) {
                 setIsLoading(true)
             }
-            JobListApiCall(undefined, undefined, selectedGroupData?.id, undefined, undefined, strings.close)
+            JobListApiCall(1, undefined, selectedGroupData?.id, undefined, undefined, strings.close)
+            JobListApiCall(1, undefined, selectedGroupData?.id, undefined, undefined, strings.open)
         }
     }, [isFocus])
 
@@ -169,7 +170,7 @@ const JobsScreen = () => {
                 setFinalAllGroup(categoryList);
             });
 
-            const data = categoryList.map((item) => {
+            const data = categoryList.map((item: GroupParams) => {
                 if (selectedGroupData.name != 'All') {
                     if (item.name == selectedGroupData.name) {
                         return {
@@ -296,7 +297,6 @@ const JobsScreen = () => {
                         )
                     }}
                     onEndReached={() => {
-                        console.log('JOB ON END -----', { open: btn.open, close: btn.close, openNEXT: openedJobList?.next, closeNExt: closedJobList.next })
                         if ((btn.open ? openedJobList?.next : btn.close ? closedJobList?.next : false) && !apiCallLoading) {
                             setIsFooterLoading(true)
                             JobListApiCall()

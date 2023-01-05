@@ -16,11 +16,11 @@ import { useIsFocused, useRoute } from '@react-navigation/native'
 import CommonPdfView from '../../components/CommonPdfView'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { resetCreateJobLocationReducer } from '../../redux/slices/MapSlice/MapSlice'
-import { jobDetail, jobDetailReducer, resetSelectedReducer } from '../../redux/slices/AdminSlice/jobListSlice'
+import { jobDetail } from '../../redux/slices/AdminSlice/jobListSlice'
 import { useFormik, isEmptyArray } from 'formik'
 import * as yup from 'yup'
-import DocumentPicker from 'react-native-document-picker';
-import { returnJobUpdate } from '../../redux/slices/AdminSlice/returnJobListSlice'
+import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
+import { recentReturnJobList, returnJobUpdate } from '../../redux/slices/AdminSlice/returnJobListSlice'
 
 interface ValuesProps {
     status: string;
@@ -28,9 +28,9 @@ interface ValuesProps {
 }
 
 interface imageList {
-    id: number
-    image: string
-    mediaType: string
+    id?: number
+    image?: string
+    mediaType?: string
 }
 interface docList {
     path: string,
@@ -53,85 +53,65 @@ const CreateNewJobScreen = () => {
     const navigation = useCustomNavigation('CreateNewJobScreen')
     const route = useRoute<RootRouteProps<'CreateNewJobScreen'>>();
     const { type } = route.params
-    const { userData } = useAppSelector(state => state.userDetails)
-    const { jobDetails, isLoading } = useAppSelector(state => state.jobList)
     const refRBSheet = useRef<RBSheet | null>(null)
     const dispatch = useAppDispatch()
     const isFocused = useIsFocused()
 
-    const Id = route.params.jobId
-
-    console.log({ route })
     const [isModelVisible, setIsModelVisible] = useState(false)
     const [isurgent, setIsUrgent] = useState(false)
     const [isnotification, setIsNotification] = useState(false)
-    const [imageList, setImageList] = useState<imageList[]>(jobDetails.images)
+    const [imageList, setImageList] = useState<imageList[]>([])
     const [docList, setDocList] = useState<docList[] | []>([])
     const [updatedImage, setUpdatedImage] = useState<imageList[]>([])
     const [imageError, setImageError] = useState(false)
     const [docError, setDocError] = useState(false)
     const [latlong, setLatLong] = useState({ latitude: '', longitude: '' })
-    const pdfData = [
-        { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb" },
-        { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb" },
-    ]
-    const result = [
-        {
-            id: 1,
-            mediaType: "image",
-            imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
-        },
-        {
-            id: 2,
-            mediaType: "video",
-            imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-        },
-        {
-            id: 3,
-            mediaType: "image",
-            imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
-        },
-        {
-            id: 4,
-            mediaType: "video",
-            imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-        }
 
-    ]
+    const { userData } = useAppSelector(state => state.userDetails)
+    const { jobDetails, isLoading } = useAppSelector(state => state.jobList)
+
+    // const pdfData = [
+    //     { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb" },
+    //     { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb" },
+    // ]
+    // const result = [
+    //     {
+    //         id: 1,
+    //         mediaType: "image",
+    //         imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
+    //     },
+    //     {
+    //         id: 2,
+    //         mediaType: "video",
+    //         imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
+    //     },
+    //     {
+    //         id: 3,
+    //         mediaType: "image",
+    //         imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
+    //     },
+    //     {
+    //         id: 4,
+    //         mediaType: "video",
+    //         imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
+    //     }
+
+    // ]
 
     useEffect(() => {
         if (isFocused && route?.params?.jobId) {
-            dispatch(jobDetail(Id)).unwrap().then((res) => {
-                dispatch(jobDetailReducer(res))
-                // setFormDetails(res)
-                console.log({ formDetails: res });
+            dispatch(jobDetail(route?.params?.jobId)).unwrap().then((res) => {
             }).catch((error) => {
                 console.log({ error });
             })
         }
+        setImageList(jobDetails.images ?? [])
     }, [isFocused])
+
     useEffect(() => {
         dispatch(resetCreateJobLocationReducer())
     }, [])
 
-
-    // const createbills = (values: ValuesProps) => {
-
-    //         var data = new FormData()
-
-    //         data.append('id',)
-    //         data.append("type", type == 'material' ? "Material" : 'Sign')
-
-    //         console.log("🚀 ~ file: index.tsx ~ line 73 ~ createbills ~ data", data)
-
-    //         dispatch(updatejob(data)).unwrap().then((res) => {
-    //             console.log({ res: res });
-    //             navigation.navigate('BillListScreen', { billType: type })
-    //         }).catch((e) => {
-    //             console.log({ error: e });
-    //         })
-
-    // }
     const CreateJobValidationSchema = yup.object().shape({
         jobID: yup.string().trim().required(strings.jobid_required),
     });
@@ -140,10 +120,10 @@ const CreateNewJobScreen = () => {
         useFormik({
             enableReinitialize: true,
             initialValues: {
-                jobID: jobDetails.id ? jobDetails.id : '',
-                address: jobDetails.address ? jobDetails.address : '',
-                addressInformation: jobDetails.address_information ? jobDetails.address_information : '',
-                description: jobDetails.description ? jobDetails.description : '',
+                jobID: jobDetails.id ?? '',
+                address: jobDetails.address ?? '',
+                addressInformation: jobDetails.address_information ?? '',
+                description: jobDetails.description ?? '',
             },
             validationSchema: CreateJobValidationSchema,
             onSubmit: values => {
@@ -161,7 +141,7 @@ const CreateNewJobScreen = () => {
                 allowMultiSelection: true,
                 copyTo: 'cachesDirectory'
             })
-            let UpdatedImageArray = []
+            let UpdatedImageArray: DocumentPickerResponse[] & imageList[] = []
             let ImageTempArray = [...imageList]
             let DocTempArray = [...docList]
 
@@ -199,7 +179,7 @@ const CreateNewJobScreen = () => {
             if (imageList) {
                 imageList.map((item, index) => {
                     let images = {
-                        uri: item.image,
+                        uri: item.image ?? '',
                         name: `photo${index}${item.mediaType == "image" ? '.jpg' : '.mp4'}`,
                         type: item.mediaType == "image" ? "image/jpeg" : 'video/mp4'
                     }
@@ -223,20 +203,22 @@ const CreateNewJobScreen = () => {
                     data.append("image", item)
                 })
             }
-            let params = {
-                id: jobDetails.id,
-                formData: data
-            }
-            dispatch(returnJobUpdate(params)).unwrap().then((value) => {
+            dispatch(returnJobUpdate({ id: jobDetails.id, formData: data })).unwrap().then((value) => {
+                dispatch(recentReturnJobList({ page: 1, search: '' }))
                 setIsModelVisible(true)
             }).catch((error) => {
-
+                console.log({ error })
             })
         } else {
             if (isEmptyArray(imageList)) {
                 setImageError(true)
             }
         }
+    }
+
+    const onCloseResponseModal = () => {
+        setIsModelVisible(false)
+        navigation.navigate('ReturnAndAddJobHistoryScreen', { type: 'returnJob' })
     }
 
 
@@ -271,7 +253,11 @@ const CreateNewJobScreen = () => {
                     </>
                 } />
             <Container style={[globalStyles.container, { paddingHorizontal: wp(4) }]}>
-                <CustomModal visible={isModelVisible} onRequestClose={() => { setIsModelVisible(false) }} children={
+                <CustomModal visible={isModelVisible} onClose={() => {
+                    onCloseResponseModal()
+                }} onRequestClose={() => {
+                    onCloseResponseModal()
+                }} children={
                     <View style={styles.modalInnerView}>
                         <Image source={ImagesPath.check_circle_icon} style={globalStyles.modalImageStyle} />
                         <Text style={{
@@ -279,7 +265,7 @@ const CreateNewJobScreen = () => {
                             fontSize: FontSizes.MEDIUM_16,
                             color: colors.black
                         }}>{strings.newJobAddedSuccessfully}</Text>
-                        <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginTop: wp(2) }} onPress={() => { setIsModelVisible(false) }} title={strings.okay} />
+                        <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginTop: wp(2) }} onPress={() => { onCloseResponseModal() }} title={strings.okay} />
                     </View>
                 } />
                 <ScrollView showsVerticalScrollIndicator={false}>
@@ -337,7 +323,7 @@ const CreateNewJobScreen = () => {
                             type == strings.returnJob ?
                                 <>
                                     <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={imageList} />
-                                    {jobDetails?.attachments?.length != 0 && <CustomDetailsComponent
+                                    {(jobDetails.attachments && jobDetails.attachments.length != 0) && <CustomDetailsComponent
                                         title={strings.attachment}
                                         detailsContainerStyle={{ marginVertical: wp(4) }}
                                         bottomComponent={

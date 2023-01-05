@@ -11,67 +11,59 @@ import CustomCarouselImageAndVideo from '../../components/CustomCarouselImageAnd
 import CustomTextInputWithImage from '../../components/CustomTextInputWithImage'
 import { RootRouteProps } from '../../types/RootStackTypes'
 import { useIsFocused, useRoute } from '@react-navigation/native'
-import { jobDetail } from '../../redux/slices/AdminSlice/jobListSlice'
+import { jobDetail, JobDetailsData } from '../../redux/slices/AdminSlice/jobListSlice'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { returnJobCreate } from '../../redux/slices/AdminSlice/returnJobListSlice'
 
 const DuplicateScreen = () => {
+
     const navigation = useCustomNavigation('DuplicateScreen')
     const route = useRoute<RootRouteProps<'DuplicateScreen'>>()
     const isFocused = useIsFocused()
     const dispatch = useAppDispatch()
-    const { jobDetails, isLoading, jobDetailsData } = useAppSelector(state => state.jobList)
-    console.log({ route })
-    const id: number = route.params?.params
-    useEffect(() => {
-        if (isFocused && route.params) {
-            dispatch(jobDetail(id)).unwrap().then((res) => {
-                // setFormDetails(res)
-                console.log({ formDetails: res });
-            }).catch((error) => {
-                console.log({ error });
-            })
-        }
-    }, [])
+
+    const { jobDetails, isLoading } = useAppSelector(state => state.jobList)
+
+    const selectedJobDetailsForDuplicate: JobDetailsData | undefined = route.params?.jobDetails
+
     const updateReturnJob = () => {
         let params = {
-            status: 'לְשַׁכְפֵּל',
+            status: strings.wrongInformation,
             comment: '',
-            job: jobDetailsData?.id,
-            duplicate: id
+            job: selectedJobDetailsForDuplicate?.id,
+            duplicate: jobDetails?.id
         }
         console.log({ params })
         dispatch(returnJobCreate(params)).unwrap().then((res) => {
             navigation.navigate('JobDetailsScreen', { params: jobDetails })
         }).catch((e) => {
             console.log({ error: e });
-
         })
     }
 
-    const result = [
-        {
-            id: 1,
-            mediaType: "image",
-            imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
-        },
-        {
-            id: 2,
-            mediaType: "video",
-            imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-        },
-        {
-            id: 3,
-            mediaType: "image",
-            imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
-        },
-        {
-            id: 4,
-            mediaType: "video",
-            imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-        }
+    // const result = [
+    //     {
+    //         id: 1,
+    //         mediaType: "image",
+    //         imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
+    //     },
+    //     {
+    //         id: 2,
+    //         mediaType: "video",
+    //         imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
+    //     },
+    //     {
+    //         id: 3,
+    //         mediaType: "image",
+    //         imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
+    //     },
+    //     {
+    //         id: 4,
+    //         mediaType: "video",
+    //         imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
+    //     }
 
-    ]
+    // ]
 
     return (
         <View style={globalStyles.container}>
@@ -92,21 +84,20 @@ const DuplicateScreen = () => {
                     <CustomSubTitleWithImageComponent disabled title={strings.duplicateJob} image={ImagesPath.files_icon} viewStyle={{ marginBottom: hp(0.5) }} />
                     <View style={styles.duplicateFirstView}>
                         <CustomTextInput
-
                             title={strings.jobId}
                             container={{ marginBottom: wp(4) }}
-                            value={jobDetailsData?.id.toString()}
+                            value={jobDetails?.id.toString()}
                         />
                         <CustomTextInputWithImage
                             disabled
-                            title={jobDetailsData?.address}
-                            value={jobDetailsData?.address_information}
+                            title={jobDetails?.address}
+                            value={jobDetails?.address_information}
                             mainContainerStyle={{ flex: 1, }}
                             container={{ width: wp(61) }}
                             mapStyle={{
                                 paddingHorizontal: wp(3)
                             }} />
-                        <CustomCarouselImageAndVideo result={jobDetails.images} viewStyle={{ width: '81%', }} />
+                        <CustomCarouselImageAndVideo result={jobDetails.images ?? []} viewStyle={{ width: '81%', }} />
                     </View>
                     <CustomSubTitleWithImageComponent
                         disabled
@@ -118,16 +109,17 @@ const DuplicateScreen = () => {
                         <CustomTextInput
                             title={strings.jobId}
                             container={{ marginBottom: wp(4) }}
-                            value={jobDetails.id.toString()}
+                            value={selectedJobDetailsForDuplicate?.id.toString()}
                         />
                         <CustomTextInputWithImage title={jobDetails.address}
-                            value={jobDetails.address_information}
+                            disabled
+                            value={selectedJobDetailsForDuplicate?.address_information}
                             mainContainerStyle={{ flex: 1, }}
                             container={{ width: wp(61) }}
                             mapStyle={{
                                 paddingHorizontal: wp(3)
                             }} />
-                        <CustomCarouselImageAndVideo result={jobDetails.images} viewStyle={{ width: '81%', }} />
+                        <CustomCarouselImageAndVideo result={selectedJobDetailsForDuplicate?.images ?? []} viewStyle={{ width: '81%', }} />
                     </View>
                     <CustomBlackButton
                         onPress={() => updateReturnJob()}

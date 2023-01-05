@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomTextInput, Header } from '../../components';
@@ -7,9 +7,19 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { styles } from './styles';
 import { strings } from '../../languages/localizedStrings';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import FastImage from 'react-native-fast-image';
+import { userInfo } from '../../redux/slices/AdminSlice/userListSlice';
+import { useIsFocused } from '@react-navigation/native';
+import { colors } from '../../styles/Colors';
 
 const ProfileScreen = () => {
     const navigation = useCustomNavigation('ProfileScreen')
+    const { userInformation, error } = useAppSelector(state => state.userList)
+
+
+    const phoneNumber = userInformation?.phone.substring(4)
+
     return (
         <View style={globalStyles.container}>
             <Header
@@ -27,21 +37,25 @@ const ProfileScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <Image source={ImagesPath.add_photo_icon} style={styles.profilePhoto} />
+                <FastImage source={{ uri: userInformation && userInformation.profile_image }} style={styles.profilePhoto} />
                 <CustomTextInput
+                    editable={false}
                     title={strings.userName}
                     container={{ marginBottom: wp(5) }}
-                    value={'Stanley Lamb'}
+                    value={userInformation && userInformation.user_name}
                 />
                 <CustomTextInput
+                    editable={false}
                     title={strings.email}
                     container={{ marginBottom: wp(5) }}
-                    value={'stanleylamb@gmail.com'}
+                    value={userInformation && userInformation.email}
                 />
+                {/* {errors.confirm_new_password && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{}</Text> } */}
                 <CustomTextInput
+                    editable={false}
                     title={strings.contactNo}
                     container={{ marginBottom: wp(5) }}
-                    value={'0123456789'}
+                    value={phoneNumber}
                 />
                 <TouchableOpacity onPress={() => navigation.navigate('ResetPasswordScreen')} style={styles.btnView}>
                     <Text style={styles.btnTxtStyle}>{strings.changePassword}</Text>

@@ -54,7 +54,9 @@ interface paramsTypes {
     data?: FormData,
     role?: string,
     page?: number,
-    search?: string
+    search?: string,
+    old_password?: string,
+    new_password?: string,
 }
 interface initialState {
     isLoading: boolean
@@ -74,7 +76,8 @@ interface initialState {
         date_joined: string,
         role: string,
         is_active: boolean
-    }]
+    }],
+    userInformation: UserData | undefined
 }
 
 const initialState: initialState = {
@@ -84,6 +87,7 @@ const initialState: initialState = {
     userDetails: undefined,
     userRoleList: undefined,
     userGroupRoleList: undefined,
+    userInformation: undefined
 
 }
 
@@ -174,33 +178,6 @@ export const updateUser = createAsyncThunk<string, paramsTypes, { rejectValue: a
     }
 })
 
-// export const inspectorList = createAsyncThunk<inspectorListProps, string, { rejectValue: apiErrorTypes }>
-//     (USER + "/inspectorList", async (_: any, { rejectWithValue }) => {
-//         try {
-//             console.log(ApiConstants.USERINSPECTORLIST)
-//             const response = await axiosClient.get(ApiConstants.USERINSPECTORLIST)
-//             return response.data
-//         } catch (e: any) {
-//             if (e.code === "ERR_NETWORK") {
-//                 Alert.alert(e.message)
-//             }
-//             return rejectWithValue(e?.response)
-//         }
-//     })
-
-// export const groupManagerList = createAsyncThunk<inspectorListProps, string, { rejectValue: apiErrorTypes }>
-//     (USER + "/groupmanagerList", async (_: any, { rejectWithValue }) => {
-//         try {
-//             console.log(ApiConstants.USERGROUPMANAGERLIST)
-//             const response = await axiosClient.get(ApiConstants.USERGROUPMANAGERLIST)
-//             return response.data
-//         } catch (e: any) {
-//             if (e.code === "ERR_NETWORK") {
-//                 Alert.alert(e.message)
-//             }
-//             return rejectWithValue(e?.response)
-//         }
-//     })
 export const roleList = createAsyncThunk<inspectorListProps, paramsTypes, { rejectValue: apiErrorTypes }>
     (USER + "/roleList", async (params, { rejectWithValue }) => {
         try {
@@ -215,7 +192,43 @@ export const roleList = createAsyncThunk<inspectorListProps, paramsTypes, { reje
         }
     })
 
+export const updateUserProfile = createAsyncThunk<UserData, paramsTypes, { rejectValue: apiErrorTypes }>(USER + "/updateUserProfile", async (params, { rejectWithValue }) => {
+    try {
+        console.log(ApiConstants.USER, params)
+        const response = await axiosClient.patch(ApiConstants.USER + params.id + '/', params.data)
+        return response.data
+    } catch (e: any) {
+        if (e.code === "ERR_NETWORK") {
+            Alert.alert(e.message)
+        }
+        return rejectWithValue(e?.response)
+    }
+})
+export const changePassword = createAsyncThunk<string, paramsTypes, { rejectValue: apiErrorTypes }>(USER + "/changePassword", async (params, { rejectWithValue }) => {
+    try {
+        console.log(ApiConstants.CHANGEPASSWORD, params)
+        const response = await axiosClient.put(ApiConstants.CHANGEPASSWORD, params)
+        return response.data
+    } catch (e: any) {
+        if (e.code === "ERR_NETWORK") {
+            Alert.alert(e.message)
+        }
+        return rejectWithValue(e?.response)
+    }
+})
 
+export const userInfo = createAsyncThunk<UserData, {}, { rejectValue: apiErrorTypes }>(USER + "/userInfo", async (_, { rejectWithValue }) => {
+    try {
+        console.log(ApiConstants.USERINFO)
+        const response = await axiosClient.get(ApiConstants.USERINFO)
+        return response.data
+    } catch (e: any) {
+        if (e.code === "ERR_NETWORK") {
+            Alert.alert(e.message)
+        }
+        return rejectWithValue(e?.response)
+    }
+})
 const userListSlice = createSlice({
     name: USER,
     initialState,
@@ -321,6 +334,45 @@ const userListSlice = createSlice({
         builder.addCase(roleList.rejected, (state, action) => {
             state.isLoading = false
             state.error = ''
+        });
+        builder.addCase(updateUserProfile.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(updateUserProfile.fulfilled, (state, action) => {
+            state.isLoading = false
+            state.userInformation = action.payload
+            state.error = ''
+        });
+        builder.addCase(updateUserProfile.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = action.payload?.data
+        });
+        builder.addCase(changePassword.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(changePassword.fulfilled, (state, action) => {
+            state.isLoading = false
+            // state.userListData = action.payload
+            state.error = ''
+        });
+        builder.addCase(changePassword.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = action.payload?.data
+        });
+        builder.addCase(userInfo.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(userInfo.fulfilled, (state, action) => {
+            state.isLoading = false
+            state.userInformation = action.payload
+            state.error = ''
+        });
+        builder.addCase(userInfo.rejected, (state, action) => {
+            state.isLoading = false
+            // state.error = action.payload?.data
         });
     },
 })

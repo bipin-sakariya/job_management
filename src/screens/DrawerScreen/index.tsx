@@ -12,6 +12,7 @@ import { useAppSelector } from '../../hooks/reduxHooks';
 import { DebugInstructions } from 'react-native/Libraries/NewAppScreen';
 import { resetSelectedGroupReducer } from '../../redux/slices/AdminSlice/groupListSlice';
 import { USER_LOGOUT } from '../../redux/Store';
+import FastImage from 'react-native-fast-image';
 
 const AdminDrawerBtn = [
     { btnTitle: strings.drawer_User, image: ImagesPath.user_icon, route: 'UserListScreen' },
@@ -36,7 +37,8 @@ const GroupManagerDrawerBtn = [
 
 const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponentProps) => {
 
-    const { userData } = useAppSelector((state) => state.userDetails)
+    const { userData, token } = useAppSelector((state) => state.userDetails)
+    const { userInformation } = useAppSelector((state) => state.userList)
     const dispatch = useDispatch()
     const drawerBtn = userData?.role == strings.admin ? AdminDrawerBtn : userData?.role == strings.inspector ? InspectorDrawerBtn : GroupManagerDrawerBtn
 
@@ -44,7 +46,7 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
         <View style={[globalStyles.container,]}>
             <View style={styles.topView} >
                 <Image source={ImagesPath.drawer_Bg} style={styles.drawerBackGroundColor} />
-                <Image source={ImagesPath.user_placeholder_img} style={styles.userPlaceholderStyle} />
+                <FastImage source={{ uri: userInformation?.profile_image }} style={styles.userPlaceholderStyle} />
             </View>
             <View style={styles.userNameContainer}>
                 <TouchableOpacity
@@ -54,7 +56,7 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
                         navigation.navigate('ProfileScreen')
                     }}
                     style={globalStyles.rowView}>
-                    <Text style={[styles.userNameTxt, globalStyles.rtlStyle]}>Johnny Weis</Text>
+                    <Text style={[styles.userNameTxt, globalStyles.rtlStyle]}>{userInformation?.user_name}</Text>
                     <Image source={ImagesPath.pencil_icon} style={styles.penIcon} />
                 </TouchableOpacity>
                 <Text style={[styles.roleTxt, globalStyles.rtlStyle]}>{userData?.role}</Text>

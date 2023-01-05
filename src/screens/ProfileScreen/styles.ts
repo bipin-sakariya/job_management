@@ -11,7 +11,8 @@ export const styles = StyleSheet.create({
         width: wp(24),
         resizeMode: 'contain',
         marginVertical: wp(4),
-        alignSelf: 'center'
+        alignSelf: 'center',
+        borderRadius: wp(2)
     },
     btnView: {
         ...globalStyles.rowView,
