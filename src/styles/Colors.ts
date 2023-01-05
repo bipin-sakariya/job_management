@@ -13,6 +13,8 @@ export const colors = {
     light_blue_Txt_color: '#93A7C9',
     bottom_sheet_tab: '#DEDEDE',
     transparent_black: 'rgba(0,0,0, 0.5)',
+    light_blue_color_1: '#FAFDFF',
+    dark_gray_color: '#808080',
 
     bottom_tab_btn: '#7F7F7F',
     bottom_tab_btn_blur: '#8C8C8C',

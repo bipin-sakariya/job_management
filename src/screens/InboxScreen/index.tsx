@@ -5,21 +5,33 @@ import { Container, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import InboxListComponent from '../../components/InboxListComponent';
-
-const data = [
-    { title: 'P. Maintanence', description: 'Lorem Ipsum is simply dummy', count: null },
-    { title: 'Paint / Signs', description: 'Lorem Ipsum is simply dummy', count: 2 },
-    { title: 'Council', description: 'Lorem Ipsum is simply dummy', count: null },
-    { title: 'Asphalt', description: 'Lorem Ipsum is simply dummy', count: 2 },
-    { title: 'Project A', description: 'Lorem Ipsum is simply dummy', count: null },
-    { title: 'Project B', description: 'Lorem Ipsum is simply dummy', count: 2 },
-    { title: 'Project c', description: 'Lorem Ipsum is simply dummy', count: null },
-    { title: 'Project d', description: 'Lorem Ipsum is simply dummy', count: 2 },
-    { title: 'Project e', description: 'Lorem Ipsum is simply dummy', count: null },
-    { title: 'Project f', description: 'Lorem Ipsum is simply dummy', count: 2 },
-    { title: 'Project g', description: 'Lorem Ipsum is simply dummy', count: null },
+import { strings } from '../../languages/localizedStrings';
+import { colors } from '../../styles/Colors';
+import useCustomNavigation from '../../hooks/useCustomNavigation';
+export interface messageListProps {
+    id: number,
+    title: string,
+    description: string,
+    count: number | null,
+    imageurl: string
+}
+const data: messageListProps[] = [
+    { id: 1, title: 'P. תחזוקה', description: 'לורם איפסום הוא פשוט דמה', count: null, imageurl: '' },
+    { id: 2, title: 'P. תחזוקה', description: 'לורם איפסום הוא פשוט דמה', count: 2, imageurl: '' },
+    { id: 3, title: 'P. תחזוקה', description: 'לורם איפסום הוא פשוט דמה', count: null, imageurl: '' },
+    { id: 4, title: 'אַספַלט', description: 'לורם איפסום הוא פשוט דמה', count: 2, imageurl: '' },
+    { id: 5, title: 'פרויקט א', description: 'לורם איפסום הוא פשוט דמה', count: null, imageurl: '' },
+    { id: 6, title: 'P. תחזוקה', description: 'לורם איפסום הוא פשוט דמה', count: 2, imageurl: '' },
+    { id: 7, title: 'P. תחזוקה', description: 'לורם איפסום הוא פשוט דמה', count: null, imageurl: '' },
+    { id: 8, title: 'P. תחזוקה', description: 'לורם איפסום הוא פשוט דמה', count: 2, imageurl: '' },
+    { id: 9, title: 'אַספַלט', description: 'לורם איפסום הוא פשוט דמה', count: 2, imageurl: '' },
+    { id: 10, title: 'פרויקט א', description: 'לורם איפסום הוא פשוט דמה', count: null, imageurl: '' },
 ]
+
+
 const IndoxScreen = () => {
+    const navigation = useCustomNavigation('IndoxScreen')
+
     return (
         <View style={globalStyles.container}>
             <Header
@@ -28,10 +40,10 @@ const IndoxScreen = () => {
                     paddingLeft: wp(3)
                 }}
                 headerLeftComponent={
-                    <Text style={globalStyles.headerTitle}>inbox</Text>
+                    <Text style={globalStyles.headerTitle}>{strings.message}</Text>
                 }
                 headerRightComponent={
-                    <TouchableOpacity style={{ marginRight: wp(3) }}>
+                    <TouchableOpacity>
                         <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                     </TouchableOpacity>
                 }
@@ -39,11 +51,29 @@ const IndoxScreen = () => {
             <Container>
                 <FlatList
                     data={data}
-                    renderItem={({ item, index }) => (
-                        <InboxListComponent item={item} />
+                    renderItem={({ item, index }: { item: messageListProps, index: number }) => (
+                        <InboxListComponent item={item} index={index} onPress={() => {
+                            if (index == 0) {
+                                navigation.navigate("ChatScreen", { job: undefined })
+                            } else {
+                                const job = {
+                                    id: 1,
+                                    name: 'job title',
+                                    distance: '5 km',
+                                    descriprion: 'hello this is the job details screen page',
+                                    imageurl: "https://dummyimage.com/600x400/000/fff",
+                                }
+                                navigation.navigate("ChatScreen", { job: job })
+                            }
+                        }} />
                     )}
                     contentContainerStyle={{ paddingBottom: wp(30) }}
                     showsVerticalScrollIndicator={false}
+                    ItemSeparatorComponent={() => {
+                        return (
+                            <View style={{ height: wp(5), backgroundColor: colors.white_color }} />
+                        )
+                    }}
                 />
             </Container>
         </View>

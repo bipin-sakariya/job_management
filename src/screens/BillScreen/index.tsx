@@ -24,16 +24,11 @@ const BillListScreen = () => {
     const isFocus = useIsFocused()
     const route = useRoute<RootRouteProps<'BillListScreen'>>();
 
-    console.log({ route });
-
-
     const [page, setPage] = useState(1)
     const [btn, setBtn] = useState({ open: true, close: false })
     const { billListData, isLoading } = useAppSelector(state => state.billList)
 
     useEffect(() => {
-        // console.log({ route1: route });
-
         if (isFocus && route.params) {
             if (route.params?.billType == 'material') {
                 setBtn({ open: true, close: false })

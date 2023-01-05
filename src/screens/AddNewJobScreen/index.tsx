@@ -194,7 +194,7 @@ const AddNewJobScreen = () => {
 
             let ImageTempArray = [...imageList]
             let DocTempArray = [...docList]
-            console.log({ title: res })
+
             if (res[0]?.type?.split("/")[0] == 'application') {
                 DocTempArray.push({ attachment: res[0].uri, type: res[0]?.type?.split("/")[1], bytes: res[0].size, title: res[0].name })
                 setDocError(false)
@@ -300,8 +300,6 @@ const AddNewJobScreen = () => {
                                         return (
                                             <CommonPdfView
                                                 onPress={() => {
-                                                    console.log({ item });
-
                                                     const pdfName = item.attachment.split(/[#?]/)[0].split('/').pop()?.split('.')[0];
                                                     const extension = item.attachment.split(/[#?]/)[0].split('.').pop()?.trim();
                                                     const localFile = `${RNFS.DocumentDirectoryPath}/${pdfName}.${extension}`;

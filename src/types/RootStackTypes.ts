@@ -1,4 +1,5 @@
 import { RouteProp } from "@react-navigation/native";
+import { JobDataProps } from "./commanTypes";
 import { date } from "yup";
 import { GroupData } from "../redux/slices/AdminSlice/groupListSlice";
 import { JobDetailsData } from "../redux/slices/AdminSlice/jobListSlice";
@@ -31,7 +32,7 @@ export interface JobDetailsProps {
 export type RootStackParamList = {
     AuthStack: AuthStackParamList
     DrawerScreens: DrawerStackParamList
-    MapScreen: { type: 'viewJob' | 'viewJobs', JobDetails?: { id?: number, image?: [string], created_at?: string, status?: string, button?: string, address?: string, description?: string, km?: string, coordinate?: { latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number }, } }
+    MapScreen: { type: 'viewJob' | 'viewJobs', JobDetails?: { id?: number, images?: { image: string | undefined }[], created_at?: string, status?: string, button?: string, address?: string, description?: string, km?: string, coordinate?: { latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number }, } }
     IndoxScreen: undefined
     JobDuplicateListScreen: undefined
     NotificationScreen: undefined
@@ -47,7 +48,7 @@ export type RootStackParamList = {
     EditProfileScreen: undefined
     CreateFormScreen: undefined
     FormDetailsScreen: { id?: number, isEdit?: boolean }
-    ChatScreen: undefined
+    ChatScreen: { job?: JobDataProps }
     TransferJobScreen: { jobId: number }
     ReturnJobScreen: { jobId: number, status: string | undefined }
     DuplicateScreen?: { jobDetails?: JobDetailsData }

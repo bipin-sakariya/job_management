@@ -1,4 +1,4 @@
-import { Alert, FlatList, Image, PermissionsAndroid, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, Image, PermissionsAndroid, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { ButtonTab, CalendarView, Container, Header } from '../../components'
@@ -6,11 +6,8 @@ import { ImagesPath } from '../../utils/ImagePaths'
 import { styles } from './styles'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { LocaleConfig } from 'react-native-calendars';
-import { Calendar } from 'react-native-calendars';
 import moment from 'moment';
 import { colors } from '../../styles/Colors'
-import FontSizes from '../../styles/FontSizes'
-import fonts from '../../styles/Fonts'
 import CustomReportDetailsView from '../../components/CustomReportDetailsView'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import TableHeaderView from '../../components/TableHeaderView'
@@ -24,8 +21,6 @@ const ReportGeneratorScreen = () => {
 
     const [btn, setBtn] = useState({ open: true, close: false })
     const [range, setRange] = useState(0);
-    const [markDates, setMarkedDates] = useState({});
-    const [blockedDays, setBlockedDays] = useState({});
     const [sdate, setSdate] = useState('');
     const [edate, setEdate] = useState(' ');
     const XDate = require("xdate")
@@ -40,8 +35,6 @@ const ReportGeneratorScreen = () => {
         today: 'היום עכשיו'
     };
 
-    let date: string = moment().format("YYYY-MM-DD").toString()
-    let maxDate = moment().add(10, "year").format("YYYY-MM-DD").toString()
     LocaleConfig.defaultLocale = 'hebrew';
 
     const data = [
@@ -167,6 +160,7 @@ const ReportGeneratorScreen = () => {
         const mFromDate = XDate(fromDate);
         const mToDate = XDate(toDate);
         setRange(mFromDate.diffDays(mToDate));
+
         if (fromDate === toDate) {
             markedDates = {
                 [toDate]: {
@@ -176,7 +170,8 @@ const ReportGeneratorScreen = () => {
                     endingDay: true,
                 },
             };
-        } else {
+        }
+        else {
             for (let i = 0; i <= range; i++) {
                 const tempDate = mFromDate
                     .addDays(i === 0 ? 0 : 1)
@@ -192,7 +187,6 @@ const ReportGeneratorScreen = () => {
         if (!isNotValid) {
             setSdate(fromDate);
             setEdate(toDate);
-            setMarkedDates(markedDates);
         }
     };
 
@@ -210,7 +204,7 @@ const ReportGeneratorScreen = () => {
 
     const downloadFile = () => {
         const { dirs } = RNFetchBlob.fs;
-        console.log("DOWN---", { dirs })
+
         RNFetchBlob.config({
             fileCache: true,
             addAndroidDownloads: {
@@ -240,7 +234,6 @@ const ReportGeneratorScreen = () => {
         if (Platform.OS === 'android') {
             try {
                 const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
-                console.log({ granted })
                 if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                     downloadFile()
                 } else {

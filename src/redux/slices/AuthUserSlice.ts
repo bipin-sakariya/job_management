@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Alert } from "react-native";
-import { act } from "react-test-renderer";
 import { ApiConstants } from "../../config/ApiConstants";
 import { axiosClient } from "../../config/Axios";
 
@@ -8,11 +7,7 @@ interface initialStateTypes {
     isLoading: boolean
     userData?: userData
     error: string | undefined
-    token: {
-        access: string
-        refresh: string
-        user: user
-    } | undefined
+    token: TokenType | undefined
 
 }
 const initialState: initialStateTypes = {
@@ -47,7 +42,7 @@ interface TokenType {
     access: string
     refresh: string
     role: string
-    userdata: userData
+    user: user
 }
 
 interface paramsTypes {
@@ -67,8 +62,6 @@ export const signin = createAsyncThunk<TokenType, paramsTypes, { rejectValue: ap
     async (params, { rejectWithValue }) => {
         try {
             const response = await axiosClient.post(ApiConstants.LOGIN, params)
-            console.log(ApiConstants.LOGIN)
-            console.log({ 'data=====>': response.data })
             return response.data
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -97,7 +90,6 @@ export const UserSlice = createSlice({
     initialState: initialState,
     reducers: {
         userDataReducer: (state, action) => {
-            console.log({ action })
             state.userData = action.payload
         },
         resetUserDataReducer: (state) => {

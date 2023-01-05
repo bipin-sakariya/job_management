@@ -1,4 +1,4 @@
-import React, { SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -16,19 +16,17 @@ interface CommonPdfViewProps {
     titleTxtstyle?: TextStyle
     mbTxtstyle?: TextStyle,
     onPress?: () => void
+    disabled?: boolean
 }
 
 interface itemDetails {
     attachment: string | undefined,
-    // type: string | undefined
-    // mb: number | null
-    // title: string | null
 }
 
 const CommonPdfView = (props: CommonPdfViewProps) => {
     const title = props.item?.attachment?.split('/').pop()
     const type = title && title.split('.')[1]
-    const [size, setSize] = useState<number | null>(null)
+    const [size, setSize] = useState<number>(0)
 
     useEffect(() => { if (props?.item?.attachment) { actualDownload(props?.item?.attachment) } }, [])
 
@@ -58,9 +56,7 @@ const CommonPdfView = (props: CommonPdfViewProps) => {
     const getSizefromPath = (url: string) => {
         RNFetchBlob.fs.stat(url)
             .then((stats) => {
-                console.log(stats)
                 setSize(stats.size)
-                console.log(formatBytes(stats.size))
             })
             .catch((err) => { console.log(err) })
     }
@@ -76,7 +72,7 @@ const CommonPdfView = (props: CommonPdfViewProps) => {
     }
 
     return (
-        <TouchableOpacity onPress={props.onPress} style={[globalStyles.rowView, styles.mainDocView, props.mainView]}>
+        <TouchableOpacity disabled={props.disabled ? props.disabled : false} onPress={props.onPress} style={[globalStyles.rowView, styles.mainDocView, props.mainView]}>
             <View style={[globalStyles.centerView, styles.docPdfViewStyle, props.imageViewStyle]}>
                 <Text style={[styles.docTypeTxt, props.docTxtStyle, {}]}>{type && type?.charAt(0).toUpperCase() + type?.slice(1)}</Text>
             </View>

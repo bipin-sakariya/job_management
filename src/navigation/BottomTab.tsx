@@ -21,18 +21,7 @@ const BottomTab = () => {
         <Tab.Navigator
             screenOptions={{
                 headerShown: false,
-                tabBarStyle: {
-                    backgroundColor: colors.white_color,
-                    borderTopLeftRadius: 25,
-                    borderTopRightRadius: 25,
-                    height: Platform.OS == "ios" ? hp(14) : hp(12.5),
-                    shadowColor: colors.black,
-                    shadowOpacity: 0.15,
-                    shadowRadius: 10,
-                    shadowOffset: { height: 2.5, width: 0 },
-                    elevation: 8,
-                    borderTopWidth: 0,
-                },
+                tabBarStyle: styles.tabBarStyle,
             }}
             initialRouteName={'JobsScreen'}>
             <Tab.Screen
@@ -127,5 +116,17 @@ const styles = StyleSheet.create({
         fontFamily: fonts.FONT_POP_MEDIUM,
         fontSize: FontSizes.EXTRA_SMALL_10,
         bottom: Platform.OS == 'ios' ? 0 : 5
+    },
+    tabBarStyle: {
+        backgroundColor: colors.white_color,
+        borderTopLeftRadius: 25,
+        borderTopRightRadius: 25,
+        height: Platform.OS == "ios" ? hp(14) : hp(12.5),
+        shadowColor: colors.black,
+        shadowOpacity: 0.15,
+        shadowRadius: 10,
+        shadowOffset: { height: 2.5, width: 0 },
+        elevation: 8,
+        borderTopWidth: 0,
     }
 })

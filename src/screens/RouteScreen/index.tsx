@@ -48,8 +48,6 @@ const RouteScreen = () => {
             search: ''
         }
         dispatch(jobList(params)).unwrap().then((res) => {
-            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-            // setJobList(res.results)
             setPage(page + 1)
         }).catch((error) => {
             console.log({ error });
@@ -108,7 +106,6 @@ const RouteScreen = () => {
                                 </TouchableOpacity>}
                             </View>
                             {selectedAddress.length ? selectedAddress.slice(0, 8).map((item) => {
-                                console.log({ item })
                                 return (
                                     <View style={styles.btnContainer}>
                                         <Text style={[styles.textInputStyle, globalStyles.rtlStyle, { flex: 1, marginBottom: 0 }]} numberOfLines={2} onPress={() => { dispatch(updatePerticularSelectionOfAddress('waypoints')), navigation.navigate("RouteChooseLocationDetailScreen") }}>
@@ -152,7 +149,8 @@ const RouteScreen = () => {
                         scrollEnabled={false}
                     />
                 </Container>
-            </ScrollView >
+            </ScrollView>
+
             <CustomBlackButton
                 title={strings.done}
                 textStyle={{ marginVertical: wp(1) }}
@@ -173,4 +171,4 @@ const RouteScreen = () => {
     )
 }
 
-export default RouteScreen
+export default RouteScreen;

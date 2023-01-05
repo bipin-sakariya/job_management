@@ -1,0 +1,85 @@
+diff --git a/node_modules/@flyerhq/react-native-link-preview/lib/LinkPreview.js b/node_modules/@flyerhq/react-native-link-preview/lib/LinkPreview.js
+index 7ab00a6..7d945b7 100644
+--- a/node_modules/@flyerhq/react-native-link-preview/lib/LinkPreview.js
++++ b/node_modules/@flyerhq/react-native-link-preview/lib/LinkPreview.js
+@@ -55,7 +55,8 @@ export const LinkPreview = React.memo(({ containerStyle, enableAnimation, header
+         // aspectRatio shouldn't be undefined, just an additional check
+         /* istanbul ignore next */
+         const ar = aspectRatio !== null && aspectRatio !== void 0 ? aspectRatio : 1;
+-        return oneOf(renderImage, React.createElement(Image, { accessibilityRole: 'image', resizeMode: 'contain', source: { uri: image.url }, style: StyleSheet.flatten([
++        return oneOf(renderImage, React.createElement(Image, {
++            accessibilityRole: 'image', resizeMode: 'contain', source: { uri: image.url }, style: StyleSheet.flatten([
+                 styles.image,
+                 ar < 1
+                     ? {
+@@ -68,40 +69,49 @@ export const LinkPreview = React.memo(({ containerStyle, enableAnimation, header
+                         maxHeight: containerWidth,
+                         width: containerWidth,
+                     },
+-            ]) }))(image);
++            ])
++        }))(image);
+     };
+     const renderLinkPreviewNode = () => {
+         return oneOf(renderLinkPreview, React.createElement(React.Fragment, null,
+-            React.createElement(View, { style: StyleSheet.flatten([
++            React.createElement(View, {
++                style: StyleSheet.flatten([
+                     styles.textContainer,
+                     textContainerStyle,
+-                ]) },
++                ])
++            },
+                 renderHeaderNode(),
+                 renderTextNode(),
+                 ((data === null || data === void 0 ? void 0 : data.description) ||
+                     ((data === null || data === void 0 ? void 0 : data.image) &&
+                         aspectRatio === 1 &&
+                         ((data === null || data === void 0 ? void 0 : data.description) || (data === null || data === void 0 ? void 0 : data.title))) ||
+-                    (data === null || data === void 0 ? void 0 : data.title)) && (React.createElement(View, { style: StyleSheet.flatten([
+-                        styles.metadataContainer,
+-                        metadataContainerStyle,
+-                    ]) },
+-                    React.createElement(View, { style: StyleSheet.flatten([
+-                            styles.metadataTextContainer,
+-                            metadataTextContainerStyle,
+-                        ]) },
+-                        (data === null || data === void 0 ? void 0 : data.title) && renderTitleNode(data.title),
+-                        (data === null || data === void 0 ? void 0 : data.description) && renderDescriptionNode(data.description)),
+-                    (data === null || data === void 0 ? void 0 : data.image) &&
++                    (data === null || data === void 0 ? void 0 : data.title)) && (React.createElement(View, {
++                        style: StyleSheet.flatten([
++                            styles.metadataContainer,
++                            metadataContainerStyle,
++                        ])
++                    },
++                        (data === null || data === void 0 ? void 0 : data.image) &&
+                         aspectRatio === 1 &&
+-                        renderMinimizedImageNode(data.image)))),
++                        renderMinimizedImageNode(data.image),
++                        React.createElement(View, {
++                            style: StyleSheet.flatten([
++                                styles.metadataTextContainer,
++                                metadataTextContainerStyle,
++                            ])
++                        },
++                            (data === null || data === void 0 ? void 0 : data.title) && renderTitleNode(data.title),
++                            (data === null || data === void 0 ? void 0 : data.description) && renderDescriptionNode(data.description)),
++
++                    ))),
+             (data === null || data === void 0 ? void 0 : data.image) &&
+-                (aspectRatio !== 1 || (!(data === null || data === void 0 ? void 0 : data.description) && !data.title)) &&
+-                renderImageNode(data.image)))({
+-            aspectRatio,
+-            containerWidth,
+-            previewData: data,
+-        });
++            (aspectRatio !== 1 || (!(data === null || data === void 0 ? void 0 : data.description) && !data.title)) &&
++            renderImageNode(data.image)))({
++                aspectRatio,
++                containerWidth,
++                previewData: data,
++            });
+     };
+     const renderMinimizedImageNode = (image) => {
+         return oneOf(renderMinimizedImage, React.createElement(Image, { accessibilityRole: 'image', source: { uri: image.url }, style: styles.minimizedImage }))(image);

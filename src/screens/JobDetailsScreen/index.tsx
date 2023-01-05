@@ -14,7 +14,7 @@ import { colors } from "../../styles/Colors";
 import { RootRouteProps } from "../../types/RootStackTypes";
 import FileViewer from "react-native-file-viewer";
 import RNFS from "react-native-fs";
-import { jobDetail, JobDetailsData, resetSelectedFormsBillReducer, jobDetailReducer, selectedFormDetialsForCreateJobReducers } from "../../redux/slices/AdminSlice/jobListSlice";
+import { jobDetail, JobDetailsData, resetSelectedFormsBillReducer, selectedFormDetialsForCreateJobReducers } from "../../redux/slices/AdminSlice/jobListSlice";
 import { convertDate } from "../../utils/screenUtils";
 import { groupDetails } from "../../redux/slices/AdminSlice/groupListSlice";
 import Video from "react-native-video";
@@ -24,7 +24,6 @@ import { NotificationObjectType } from "../../redux/slices/AdminSlice/notificati
 import { returnDeleteJob } from "../../redux/slices/AdminSlice/returnJobListSlice";
 
 const JobDetailsScreen = () => {
-
     const navigation = useCustomNavigation('JobDetailsScreen')
     const route = useRoute<RootRouteProps<'JobDetailsScreen'>>();
     const refRBSheet = useRef<RBSheet | null>(null);
@@ -45,8 +44,6 @@ const JobDetailsScreen = () => {
             setLoading(true)
             dispatch(jobDetail(id ?? 0)).unwrap().then((res) => {
                 setLoading(false)
-                // setFormDetails(res)
-                console.log({ formDetails: res });
             }).catch((error) => {
                 setLoading(false)
                 console.log({ error });
@@ -90,21 +87,20 @@ const JobDetailsScreen = () => {
                 }
                 headerRightComponent={
                     <>
-                        {
-                            userData?.role != strings.inspector && (jobDetails.status == 'Open' || data?.status == strings.jobOpen || data?.status == strings.jobTransfer) ?
-                                <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
-                                    <Image source={ImagesPath.menu_dots_icon} style={globalStyles.headerIcon} />
-                                </TouchableOpacity>
-                                : null
+                        {userData?.role != strings.inspector && (jobDetails.status == 'Open' || data?.status == strings.jobOpen || data?.status == strings.jobTransfer) ?
+                            <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
+                                <Image source={ImagesPath.menu_dots_icon} style={globalStyles.headerIcon} />
+                            </TouchableOpacity>
+                            : null
                         }
-                        {
-                            userData?.role == strings.inspector && !type ?
-                                <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
-                                    <Image source={ImagesPath.share_network_icon} style={globalStyles.headerIcon} />
-                                </TouchableOpacity> : null
+                        {userData?.role == strings.inspector && !type ?
+                            <TouchableOpacity onPress={() => { refRBSheet.current?.open() }} >
+                                <Image source={ImagesPath.share_network_icon} style={globalStyles.headerIcon} />
+                            </TouchableOpacity> : null
                         }
                     </>
-                } />
+                }
+            />
             <Container>
                 <ScrollView contentContainerStyle={[{ paddingHorizontal: wp(4) }]} showsVerticalScrollIndicator={false}>
                     {
@@ -132,16 +128,13 @@ const JobDetailsScreen = () => {
                             title={strings.jobId}
                             container={{ marginBottom: wp(5) }}
                             value={`${jobDetails.id}`}
-                            // editable={isEdit}
                             onChangeText={(text) => { }}
                         />
-                        {/* {console.log({ data: jobDetails.return_job[0].duplicate })} */}
                         {jobDetails.status == strings.jobReturn ?
                             <CustomTextInput
                                 title={strings.relatedJobId[0]}
                                 container={{ marginBottom: wp(5) }}
                                 value={jobDetails.return_job && '' + jobDetails?.return_job[0]?.duplicate}
-                                // editable={isEdit}
                                 onChangeText={(text) => { }}
                             /> : null
                         }
@@ -154,12 +147,13 @@ const JobDetailsScreen = () => {
                             onPress={() => {
                                 navigation.navigate('MapScreen', {
                                     type: 'viewJob', JobDetails: {
-                                        address: jobDetails.address,
-                                        description: jobDetails.description,
+                                        address: jobDetails.address ?? data?.address,
+                                        description: jobDetails.description ?? data?.description,
                                         km: '',
-                                        created_at: jobDetails.created_at,
+                                        created_at: jobDetails.created_at ?? data?.created_at,
+                                        images: jobDetails.images ?? data?.images,
                                         button: "Open",
-                                        status: jobDetails.status,
+                                        status: jobDetails.status ?? data?.status,
                                         coordinate: {
                                             latitude: Number(jobDetails?.latitude),
                                             longitude: Number(jobDetails?.longitude),
@@ -176,7 +170,7 @@ const JobDetailsScreen = () => {
                                 <Text style={[styles.bottomTxtStyle, globalStyles.rtlStyle]}>{jobDetails.description}</Text>
                             }
                         />
-                        <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={jobDetails.images} />
+                        <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={jobDetails.images ?? []} />
 
                         {(jobDetails.attachments) && <CustomDetailsComponent
                             title={strings.attachment}
@@ -186,7 +180,6 @@ const JobDetailsScreen = () => {
                                     data={jobDetails.attachments}
                                     numColumns={2}
                                     renderItem={({ item, index }: any) => {
-                                        { console.log({ data: item.url }) }
                                         return (
                                             <CommonPdfView
                                                 item={item}
@@ -211,10 +204,11 @@ const JobDetailsScreen = () => {
                                     }}
                                     showsVerticalScrollIndicator={false} />
                             }
-                        />}
+                        />
+                        }
                         {jobDetails.status == strings.jobClose || jobDetails.status == strings.jobPartial ?
                             <>
-                                {jobDetails.transfer_to.length != 0 && <CustomDetailsComponent
+                                {jobDetails?.transfer_to?.length != 0 && <CustomDetailsComponent
                                     title={strings.transferTo}
                                     detailsContainerStyle={{ marginBottom: wp(4) }}
                                     bottomComponent={
@@ -235,13 +229,12 @@ const JobDetailsScreen = () => {
                                         showsVerticalScrollIndicator={false}
                                         extraData={jobDetails?.bills}
                                         ListHeaderComponent={() => {
-                                            return (
-                                                <TableHeaderView />
-                                            )
+                                            return (<TableHeaderView />)
                                         }}
                                         ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}
                                     />
-                                </View>}
+                                </View>
+                                }
                                 <CustomDetailsComponent
                                     title={strings.notes}
                                     detailsContainerStyle={{ marginBottom: wp(4) }}
@@ -269,14 +262,14 @@ const JobDetailsScreen = () => {
                             />
                             : null
                         }
-                        {(type && jobDetails.transfer_to.length != 0) && (jobDetails.status == 'Open' || jobDetails.status == strings.jobOpen || jobDetails.status == strings.jobReturn || jobDetails.status == strings.jobTransfer || jobDetails.status == strings.close) ?
+                        {(type && jobDetails?.transfer_to?.length != 0) && (jobDetails.status == 'Open' || jobDetails.status == strings.jobOpen || jobDetails.status == strings.jobReturn || jobDetails.status == strings.jobTransfer || jobDetails.status == strings.close) ?
                             <CustomDetailsComponent
                                 title={strings.transferTo}
                                 detailsContainerStyle={{ marginVertical: wp(4) }}
                                 bottomComponent={
                                     <>
                                         {
-                                            jobDetails?.transfer_to.map((transferData) => (
+                                            jobDetails?.transfer_to?.map((transferData) => (
                                                 <Text numberOfLines={1} style={[styles.commonTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>{transferData?.name}</Text>
                                             ))
                                         }
@@ -354,7 +347,7 @@ const JobDetailsScreen = () => {
                     />
                 </ScrollView>
             </Container>
-        </View >
+        </View>
     )
 }
 

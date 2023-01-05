@@ -14,7 +14,7 @@ import { useFormik } from 'formik';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { useIsFocused } from '@react-navigation/native';
 import { getListOfUsers, inspectorListProps, roleList, UserData } from '../../redux/slices/AdminSlice/userListSlice';
-import { FormDataTypes, formList } from '../../redux/slices/AdminSlice/formListSlice';
+import { formList } from '../../redux/slices/AdminSlice/formListSlice';
 import { createGroup } from '../../redux/slices/AdminSlice/groupListSlice';
 import { billData } from '../../redux/slices/AdminSlice/billListSlice';
 import { colors } from '../../styles/Colors';
@@ -62,7 +62,6 @@ const CreateGroupScreen = () => {
     const [formListVisible, setFormListVisible] = useState(false);
     const [isInspector, setIsInspector] = useState<UserData[]>([])
     const [isManager, setIsManager] = useState<UserData[]>([])
-    const [isUser, setIsUser] = useState<UserData[]>([])
     const [page, setPage] = useState(1)
     const [finalArray, setFinalArray] = useState<number[]>([])
     const [finalFormsArray, setFinalFormsArray] = useState<number[]>([])
@@ -79,15 +78,11 @@ const CreateGroupScreen = () => {
     const [selectedMemberData, setSelectedMemberData] = useState<DataTypes[]>([])
     const [formsList, setFormList] = useState<FormDataProps[]>([])
     const [memberList, setMemberList] = useState<DataTypes[]>([])
-    const [allForm, setAllForm] = useState<FormDataTypes[]>([])
-    const [selectedFormsList, setSelectedFormList] = useState<FormDataProps[]>([])
     const [selectedFormsData, setSelectedFormsData] = useState<DataTypes[]>()
     const [dataPage, setDataPage] = useState(1)
 
-
-    const { isLoading, userListData, } = useAppSelector(state => state.userList);
-    const { formListData, formDetails } = useAppSelector(state => state.formList);
-    const { groupDetails } = useAppSelector(state => state.groupList);
+    const { userListData } = useAppSelector(state => state.userList);
+    const { formListData } = useAppSelector(state => state.formList);
 
     useEffect(() => {
         if (isFoucs) {
@@ -106,7 +101,6 @@ const CreateGroupScreen = () => {
                 role: strings.inspector
             }
             dispatch(roleList(params)).unwrap().then((res: inspectorListProps) => {
-                console.log({ res111: res });
                 setIsInspector(res.results)
                 console.log("🚀 ~ file: DrawerStack.tsx ~ line 21 ~ dispatch ~ res", res)
             }).catch((error) => {
@@ -116,7 +110,6 @@ const CreateGroupScreen = () => {
                 role: strings.groupManager
             }
             dispatch(roleList(param)).unwrap().then((res: inspectorListProps) => {
-                console.log({ res });
                 setIsManager(res.results)
                 console.log("🚀 ~ file: DrawerStack.tsx ~ line 21 ~ dispatch ~ res", res)
             }).catch((error) => {
@@ -126,8 +119,6 @@ const CreateGroupScreen = () => {
                 role: ''
             }
             dispatch(roleList(role)).unwrap().then((res) => {
-                console.log({ res });
-                setIsUser(res.results)
                 console.log("🚀 ~ file: DrawerStack.tsx ~ line 21 ~ dispatch ~ res", res)
             }).catch((error) => {
                 console.log("🚀 ~ file: DrawerStack.tsx ~ line 20 ~ dispatch ~ error", error)
@@ -139,7 +130,6 @@ const CreateGroupScreen = () => {
         }
         dispatch(formList(params)).unwrap().then((res) => {
             console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-            setAllForm(res.results)
             setPage(page + 1)
         }).catch((error) => {
             console.log({ error });
@@ -182,6 +172,7 @@ const CreateGroupScreen = () => {
                 // alert('hjgjhgjguighjh')
             }
         })
+
     useEffect(() => {
         let data: number[] = []
         selectedMemberData?.map((item) => {
@@ -198,9 +189,6 @@ const CreateGroupScreen = () => {
         setFinalFormsArray(data)
     }, [selectedFormsData])
 
-    console.log({ finalArray, finalFormsArray });
-
-
     const groupCreate = (values: {
         groupName: string;
         image: string,
@@ -213,36 +201,33 @@ const CreateGroupScreen = () => {
         member: number[],
         forms: number[]
     }) => {
-        console.log("VALUE--->", values);
-
         if (!imageUrl) {
             Alert.alert(strings.profile_pic_required)
-        } else {
+        }
+        else {
             let data = new FormData()
             let images = {
                 uri: imageUrl,
                 name: "photo.jpg",
                 type: "image/jpeg"
             }
-            console.log({ images })
+
             if (imageUrl) {
                 data.append("image", images ? images : '')
             }
-            data.append("name", values.groupName)
-            data.append("manager", values.groupManager.id.toString())
-            data.append("inspector", values.inspector.id.toString())
-            finalArray.map((_member) => {
-                console.log({ _member });
 
-                // data.append()
+            data.append("name", values.groupName)
+            data.append("manager", values.groupManager.id)
+            data.append("inspector", values.inspector.id)
+
+            finalArray.map((_member) => {
                 data.append("member", _member)
             })
             finalFormsArray.map((_form) => {
                 data.append("form", _form)
             })
-            // data.append("form", values.forms.id)
+
             dispatch(createGroup(data)).unwrap().then((res) => {
-                console.log({ res: res });
                 navigation.goBack()
             }).catch((e) => {
                 console.log({ error: e });
@@ -250,9 +235,6 @@ const CreateGroupScreen = () => {
             })
         }
     }
-
-    console.log({ imageUrl });
-
 
     useEffect(() => {
         const findData: FormDataProps[] = formListData.results.map((i) => {
@@ -270,26 +252,10 @@ const CreateGroupScreen = () => {
             }
         })
         setMemberList(finaldata)
-
-        if (formDetails.bill) {
-            const finalData: FormDataProps[] = formDetails?.bill?.map((i: any) => {
-                return {
-                    ...i,
-                    user_name: i.name,
-                    selected: true,
-
-                }
-            })
-            console.log({ finalData })
-            setSelectedFormList(finalData)
-        }
     }, [formListData])
-
 
     return (
         <View style={globalStyles.container}>
-            {/* {console.log({ values })} */}
-
             <Header
                 headerLeftStyle={{
                     paddingLeft: wp(3)
@@ -335,7 +301,7 @@ const CreateGroupScreen = () => {
                             onChangeText={handleChange("groupName")}
                             value={values.groupName}
                         />
-                        {console.log({ values })}
+
                         {(touched.groupName && errors?.groupName) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors?.groupName}</Text>}
                         <DropDownComponent
                             title={strings.groupManager}
@@ -348,6 +314,7 @@ const CreateGroupScreen = () => {
                             placeholder={strings.selectRoleForUser}
                             container={{ marginBottom: wp(5) }}
                         />
+
                         {(touched?.groupManager && errors.groupManager) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.roleRequired}</Text>}
                         <DropDownComponent
                             title={strings.inspector}
@@ -368,7 +335,6 @@ const CreateGroupScreen = () => {
                             data={memberList}
                             title={strings.groupMember}
                             setSelectedMembers={(data: DataTypes[]) => {
-                                console.log({ data });
                                 setSelectedMemberData(data)
                                 setFieldValue('member', data)
                             }}

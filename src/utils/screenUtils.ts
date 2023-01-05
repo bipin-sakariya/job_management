@@ -1,12 +1,11 @@
 import { Dimensions, PixelRatio, Platform, StatusBar } from 'react-native';
 import 'moment/locale/he'
 import moment from 'moment';
-import { object } from 'yup';
 import { location } from '../types/commanTypes';
 import Geocoder from 'react-native-geocoder';
 
-
 export const pixelRatio = PixelRatio.get();
+
 export const defaultPixel = 2; // provided in design 2px
 const fontScale = PixelRatio.getFontScale();
 const defaultWidth = 375;

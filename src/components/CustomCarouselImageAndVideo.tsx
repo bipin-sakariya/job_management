@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import Video from 'react-native-video';
@@ -9,13 +9,8 @@ import Modal from 'react-native-modal';
 import { ImagesPath } from '../utils/ImagePaths';
 import CustomCarouselZoomImageViewer from './CustomCarouselZoomImageViewer';
 import FastImage from 'react-native-fast-image';
+import { ItemProps } from '../types/commanTypes';
 
-interface ItemProps {
-    id?: number
-    image?: string | undefined
-    mediaType?: string
-
-}
 interface CustomCarouselImageAndVideoProps {
     result: ItemProps[]
     viewStyle?: ViewStyle

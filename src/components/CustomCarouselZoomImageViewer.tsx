@@ -5,12 +5,7 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import Video from 'react-native-video';
 import { colors } from '../styles/Colors';
 import ImageViewer from 'react-native-image-zoom-viewer';
-
-interface ItemProps {
-    id?: number
-    image?: string
-    mediaType?: string
-}
+import { ItemProps } from '../types/commanTypes';
 
 interface CustomCarouselZoomImageViewerProps {
     result: ItemProps[]
@@ -24,14 +19,14 @@ const CustomCarouselZoomImageViewer = (props: CustomCarouselZoomImageViewerProps
 
     const renderItem = ({ item, index }: { item: ItemProps, index: number }) => {
         const type = item.image && item.image.split(/[#?]/)[0]?.split(".").pop()?.trim()
-        console.log({ datatype: type, image: item.image })
+
         return (
             <>
                 {
                     (type == "jpeg" || type == "png" || type == "jpg")
                         ?
                         <ImageViewer
-                            imageUrls={[{ url: item.image }]}
+                            imageUrls={[{ url: item.image ? item.image : '' }]}
                             renderIndicator={() => <></>}
                             backgroundColor={colors.transparent}
                         />
@@ -43,15 +38,14 @@ const CustomCarouselZoomImageViewer = (props: CustomCarouselZoomImageViewerProps
                                 resizeMode={'cover'}
                                 repeat={true}
                                 style={[styles.backgroundVideo, props.videoStyle]}
-
                                 onError={e => { console.log({ e }) }}
-
                             />
                         </View>
                 }
             </>
         )
     }
+
     return (
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Carousel

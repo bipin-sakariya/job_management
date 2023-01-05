@@ -1,6 +1,5 @@
-import { Platform, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { colors } from "../../styles/Colors";
 import fonts from "../../styles/Fonts";
 import FontSizes from "../../styles/FontSizes";
 
@@ -31,6 +30,5 @@ export const styles = StyleSheet.create({
         position: 'absolute',
         right: wp(-3.5),
         bottom: wp(2.5)
-    },
-
+    }
 })

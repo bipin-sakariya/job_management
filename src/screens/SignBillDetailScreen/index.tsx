@@ -4,7 +4,7 @@ import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomActivityIndicator, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { ImagesPath } from '../../utils/ImagePaths';
-import { heightPercentageToDP, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { strings } from '../../languages/localizedStrings';
 import { styles } from './style';
 import { RootRouteProps } from '../../types/RootStackTypes';
@@ -54,7 +54,6 @@ const SignBillDetailScreen = () => {
             },
             validationSchema: CreateGroupValidationSchema,
             onSubmit: values => {
-                console.log({ values })
                 updateBill(values)
             }
         })
@@ -62,9 +61,7 @@ const SignBillDetailScreen = () => {
     const updateBill = (values: { name: string, ration_qunt: string }) => {
         setIsModelVisible(false)
         setIsLoading(true)
-        console.log({ values, type, float: values.ration_qunt });
-        let data = new FormData()
-        // data.append('name', values.name)
+        let data = new FormData();
 
         if (type == 'Material' && parseFloat(values.ration_qunt) != quantity) {
             data.append("jumping_ration", parseFloat(values.ration_qunt))
@@ -72,6 +69,7 @@ const SignBillDetailScreen = () => {
         if (type == 'Sign' && parseFloat(values.ration_qunt) != jumping_ration) {
             data.append("measurement", parseFloat(values.ration_qunt))
         }
+
         let params = {
             data: data,
             id: route.params.item.id
@@ -127,7 +125,6 @@ const SignBillDetailScreen = () => {
                     title={strings.there}
                     container={{ marginVertical: wp(4) }}
                     placeholder={route.params.item.name}
-                // onChangeText={(text) => { }}
                 />
 
                 {/* type counting  */}
@@ -136,7 +133,6 @@ const SignBillDetailScreen = () => {
                         disable
                         title={strings.typeCounting}
                         data={data}
-                        // image={ImagesPath.down_white_arrow}
                         labelField="label"
                         valueField="value"
                         onChange={(item) => setFieldValue('name', item)}
@@ -145,6 +141,7 @@ const SignBillDetailScreen = () => {
                         container={{ marginBottom: wp(5) }}
                     />
                 </View>
+
                 {/* measurement */}
                 <View style={[styles.textInputContainer, globalStyles.rtlDirection]}>
                     <View style={styles.titleContainer}>

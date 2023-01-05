@@ -85,7 +85,6 @@ const CreateBillSectionScreen = () => {
                 name: "photo.jpg",
                 type: "image/jpeg"
             }
-            console.log({ imageUrl });
 
             data.append("name", values.name)
             data.append("type_counting", countingValue.value.toString())
@@ -104,7 +103,6 @@ const CreateBillSectionScreen = () => {
                 } else {
                     navigation.navigate('BillListScreen', { billType: type })
                 }
-                console.log({ res: res });
             }).catch((e) => {
                 setIsLoading(false)
                 console.log({ error: e });
@@ -247,7 +245,7 @@ const CreateBillSectionScreen = () => {
                                         placeholder={strings.choose}
                                         container={{ marginBottom: wp(5) }}
                                     />
-                                    {countingError || error.type ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.type ? error.type : strings.typecount_required}</Text> : null}
+                                    {countingError || error.type ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.type ? error.type : strings.typeCountRequired}</Text> : null}
 
                                     <CustomTextInput
                                         title={strings.jumpdish}

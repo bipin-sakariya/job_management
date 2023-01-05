@@ -93,7 +93,7 @@ const ReturnAndAddJobHistoryScreen = () => {
         }
     }
 
-    const renderItem = ({ item, index }: { item: JobDetailsData, index: number }) => {
+    const renderItem = ({ item }: { item: JobDetailsData }) => {
         return (
             <TouchableOpacity
                 onPress={() => navigation.navigate('JobDetailsScreen', { params: item, type: type })}
@@ -183,9 +183,6 @@ const ReturnAndAddJobHistoryScreen = () => {
                             renderItem={renderItem}
                             showsHorizontalScrollIndicator={false}
                             horizontal
-                            onEndReached={() => {
-                                console.log('hello')
-                            }}
                             ItemSeparatorComponent={() => <View style={{ width: wp(3) }} />}
                         />
                     </View>

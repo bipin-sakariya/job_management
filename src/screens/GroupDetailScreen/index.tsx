@@ -13,7 +13,7 @@ import { useFormik } from 'formik';
 import * as Yup from "yup";
 import { colors } from '../../styles/Colors';
 import FontSizes from '../../styles/FontSizes';
-import { groupDelete, groupDetail, groupUpdate, MemberDetailsProps } from '../../redux/slices/AdminSlice/groupListSlice';
+import { groupDelete, groupDetail, groupUpdate } from '../../redux/slices/AdminSlice/groupListSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { RootRouteProps } from '../../types/RootStackTypes';
 import { roleList } from '../../redux/slices/AdminSlice/userListSlice';
@@ -35,6 +35,7 @@ interface DataTypes {
     created_at?: string,
     updated_at?: string
 }
+
 interface GroupValue {
     id: number
     image: string
@@ -45,7 +46,6 @@ interface GroupValue {
     forms: number[] | [{}]
     selected?: boolean
 }
-
 
 const CreateGroupValidationSchema = Yup.object().shape({
     groupName: Yup.string().required(strings.groupNameRequired),
@@ -69,11 +69,6 @@ const GroupDetailScreen = () => {
     const [isInspector, setIsInspector] = useState<DataTypes[]>([])
     const [isManager, setIsManager] = useState<DataTypes[]>([])
     const [isUser, setIsUser] = useState<DataTypes[]>([])
-    const [isMember, setIsMember] = useState<DataTypes[]>([])
-    const [list, isList] = useState<DataTypes[]>([])
-    const [formsList, setFormList] = useState<DataTypes[]>([])
-    const [selectedFormsList, setSelectedFormList] = useState<DataTypes[]>([])
-    const [assignedJobs, setAssignedJobs] = useState([{}, {}, {}])
     const [isEditable, setIsEditable] = useState(route?.params?.isEdit == true ? true : false);
     const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
     const [visible, setVisible] = useState(false);
@@ -87,45 +82,41 @@ const GroupDetailScreen = () => {
     const [setAllForm, isSetAllForm] = useState<DataTypes[]>([])
 
     const { formListData } = useAppSelector(state => state.formList);
-    const { groupDetails, isLoading } = useAppSelector(state => state.groupList)
+    const { groupDetails } = useAppSelector(state => state.groupList)
     const [finalArray, setFinalArray] = useState<number[]>([])
     const [finalFormsArray, setFinalFormsArray] = useState<number[]>([])
 
     useEffect(() => {
         if (isFocused) {
             dispatch(groupDetail(route.params.params.id)).unwrap().then((res) => {
-                console.log({ res });
                 setImageUrl(res.image)
             }).catch((error) => {
                 console.log({ error });
             })
+
             let params = {
                 role: strings.inspector
             }
             dispatch(roleList(params)).unwrap().then((res) => {
-                console.log({ res });
                 setIsInspector(res.results)
-                console.log("🚀 ~ file: DrawerStack.tsx ~ line 21 ~ dispatch ~ res", res)
             }).catch((error) => {
                 console.log("🚀 ~ file: DrawerStack.tsx ~ line 20 ~ dispatch ~ error", error)
             })
+
             let param = {
                 role: strings.groupManager
             }
             dispatch(roleList(param)).unwrap().then((res) => {
-                console.log({ res });
                 setIsManager(res.results)
-                console.log("🚀 ~ file: DrawerStack.tsx ~ line 21 ~ dispatch ~ res", res)
             }).catch((error) => {
                 console.log("🚀 ~ file: DrawerStack.tsx ~ line 20 ~ dispatch ~ error", error)
             })
+
             let role = {
                 role: ''
             }
             dispatch(roleList(role)).unwrap().then((res) => {
-                console.log({ res });
                 setIsUser(res.results)
-                console.log("🚀 ~ file: DrawerStack.tsx ~ line 21 ~ dispatch ~ res", res)
             }).catch((error) => {
                 console.log("🚀 ~ file: DrawerStack.tsx ~ line 20 ~ dispatch ~ error", error)
             })
@@ -133,37 +124,13 @@ const GroupDetailScreen = () => {
     }, [isFocused])
 
     useEffect(() => {
-        const findData = isUser.map((i: DataTypes) => {
-            return {
-                ...i,
-                selected: false
-            }
-        })
-        isList(findData)
-
-        if (groupDetails.member_details) {
-            const finalData: DataTypes[] = groupDetails.member_details.map((i) => {
-                return {
-                    ...i,
-                    role: { id: i.role },
-                    selected: true
-                }
-            })
-            console.log({ finalData })
-            setIsMember(finalData)
-
-        }
-
-    }, [isUser])
-
-    useEffect(() => {
         const results: DataTypes[] = isUser.map((i) => {
-            console.log("🚀 ~ file: index.tsx:212 ~ constresults:MemberValues[]=isUser.map ~ i", i)
             return {
                 ...i,
                 selected: !!(groupDetails.member_details?.find((e) => e.id == i.id))
             }
         })
+
         isSetAllMember(results)
 
         const formResult = formListData.results.map((i) => {
@@ -178,12 +145,10 @@ const GroupDetailScreen = () => {
     }, [groupDetails.member_details, isUser, formListData.results])
 
     const deleteGroupData = (id: number) => {
-
-        const deleteGroupData = (id: number) => {
-            dispatch(groupDelete(id)).unwrap().then(() => {
-            })
-        }
+        dispatch(groupDelete(id)).unwrap().then(() => {
+        })
     }
+
     const optionData = [
         {
             title: strings.remove, onPress: () => {
@@ -198,21 +163,6 @@ const GroupDetailScreen = () => {
             }, imageSource: ImagesPath.edit_icon
         }
     ]
-
-
-
-    // const [countingValue, setCountingValue] = useState<DropdownProps>({
-    //     label: groupDetails.inspector_details?.user_name ?? '',
-    //     value: groupDetails.inspector_details?.user_name ?? ''
-    // })
-    // useEffect(() => {
-    //     if (groupDetails.inspector_details) {
-    //         setCountingValue({
-    //             label: groupDetails.inspector_details?.user_name ? groupDetails.inspector_details?.user_name : '',
-    //             value: groupDetails.inspector_details?.user_name ? groupDetails.inspector_details?.user_name : ''
-    //         })
-    //     }
-    // }, [groupDetails.inspector_details])
 
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
@@ -234,21 +184,17 @@ const GroupDetailScreen = () => {
             },
             validationSchema: CreateGroupValidationSchema,
             onSubmit: (values: GroupValue) => {
-                console.log({ values })
                 updateGroup(values)
             }
         })
 
     useEffect(() => {
-        let data: number[] = []
-        // if (groupDetails.member_details) {
-        //     groupDetails.member_details?.map((item) => {
-        //         data.push(item.id)
-        //     })
-        // }
+        let data: number[] = [];
+
         selectedMemberData?.map((item) => {
             data.push(item.id)
         })
+
         setFinalArray(data)
         setIsId(route.params.params.id)
     }, [groupDetails.member_details, selectedMemberData])
@@ -260,27 +206,6 @@ const GroupDetailScreen = () => {
         })
         setFinalFormsArray(data)
     }, [selectedFormsData])
-
-    // console.log('route========', { route: route.params.id })
-    // const createForm = (values: any) => {
-    //     let params = {
-    //         id: route.params.id,
-    //         name: values.groupName,
-    //         groupManager: values.groupManager.id,
-    //         inspector: values.inspector.id,
-    //         groupMember: finalArray,
-    //         forms: groupDetails?.form_details
-    //     }
-    //     console.log({ params })
-    //     dispatch(groupUpdate(params)).unwrap().then((res) => {
-
-    //         navigation.goBack()
-    //         // navigation.navigate('FormScreen')
-    //     }).catch((e) => {
-    //         console.log({ error: e });
-
-    //     })
-    // }
 
     const updateGroup = (values: {
         id: number
@@ -300,19 +225,21 @@ const GroupDetailScreen = () => {
         if (!imageUrl) {
             Alert.alert(strings.profile_pic_required)
         } else {
-            let data = new FormData()
+            let data = new FormData();
             let images = {
                 uri: imageUrl,
                 name: "photo.jpg",
                 type: "image/jpeg"
             }
-            console.log({ images })
+
             if (imageUrl) {
                 data.append("image", images ? images : '')
             }
+
             data.append("name", values.groupName)
             data.append("manager", values.groupManager.id)
             data.append("inspector", values.inspector.id)
+
             finalArray.map((_member) => {
                 data.append("member", _member)
             })
@@ -325,18 +252,14 @@ const GroupDetailScreen = () => {
                 id: isId
             }
             dispatch(groupUpdate(params)).unwrap().then((res) => {
-                console.log({ res: res });
                 navigation.goBack()
             }).catch((e) => {
                 console.log({ error: e });
-                // setError(e.data)
             })
         }
     }
-    console.log('=============', { id: values.groupManager.id, })
-    console.log('=============', { id: values.inspector.id, })
+    
     const renderItem = ({ item, index }: { item: AssignJobTypeProps, index: number }) => {
-        console.log('assignjob', { item })
         return (
             <AssignedJobsComponent item={item} index={index} />
         )
@@ -344,8 +267,6 @@ const GroupDetailScreen = () => {
 
     return (
         <View style={globalStyles.container}>
-            {/* {console.log("FORMIK ------", { error: errors, values: values })}
-            {console.log('ujghuygtuigh', { selectedMemberData, selectedFormsData })} */}
             <Header
                 headerLeftStyle={{
                     paddingHorizontal: wp(3)
@@ -393,6 +314,7 @@ const GroupDetailScreen = () => {
                         value={values.groupName}
                         onChangeText={handleChange('groupName')}
                     />
+
                     {(touched?.groupName && errors?.groupName) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors?.groupName ? errors.groupName : ''}</Text> : null}
                     <DropDownComponent
                         disable={!isEditable}
@@ -406,7 +328,7 @@ const GroupDetailScreen = () => {
                         placeholder={groupDetails.manager_details?.user_name ? groupDetails.manager_details?.user_name : strings.selectRoleForUser}
                         container={{ marginBottom: wp(5) }}
                     />
-                    {/* {console.log({ countingValue })} */}
+
                     {(touched?.groupManager && errors.groupMember) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.roleRequired}</Text>}
                     <DropDownComponent
                         disable={!isEditable}
@@ -420,19 +342,8 @@ const GroupDetailScreen = () => {
                         placeholder={groupDetails.inspector_details?.user_name ? groupDetails.inspector_details?.user_name : strings.givePermission}
                         container={{ marginBottom: wp(5) }}
                     />
+
                     {(touched?.inspector && errors.inspector) && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.permissionRequired}</Text>}
-                    {/* <MultipleSelectDropDown
-                        disabled={!isEditable}
-                        setIsVisible={setModalShow}
-                        isVisible={modalShow}
-                        data={!isEditable ? isMember : list}
-                        title={strings.groupMember}
-                        setSelectedMembers={(data: DataTypes[]) => {
-                            setSelectedMemberData(data)
-                            setFieldValue('member', data)
-                        }}
-                        countTitle={strings.people}
-                    /> */}
                     <MultipleSelectDropDown
                         disabled={!isEditable}
                         setIsVisible={setModalShow}
@@ -442,59 +353,42 @@ const GroupDetailScreen = () => {
                         setSelectedMembers={(data: DataTypes[]) => {
                             setSelectedMemberData(data)
                             setFieldValue('groupMember', data)
-
-                            console.log('setfield value', { data, isMember })
                         }}
                         countTitle={strings.people}
                     />
-                    {
-                        isEditable ?
-                            <MultipleSelectDropDown
-                                disabled={!isEditable}
-                                setIsVisible={setFormListVisible}
-                                isVisible={formListVisible}
-                                data={setAllForm}
-                                title={strings.groupForms}
-                                setSelectedMembers={(data: DataTypes[]) => {
-                                    setSelectedFormsData(data)
-                                    setFieldValue('forms', data)
-                                    // console.log('setfield value', { data, set })
-                                }}
-                                countTitle={strings.forms}
-                                container={{ marginVertical: heightPercentageToDP(2) }}
-                            />
-                            :
-                            <CustomDetailsComponent
-                                title={strings.groupForms}
-                                detailsContainerStyle={{ marginVertical: wp(5) }}
-                                bottomComponent={
-                                    <View style={[globalStyles.rowView, { flexWrap: "wrap", alignItems: "center" }]}>
-                                        {groupDetails?.form_details?.map((item, index) => {
-                                            return (
-                                                <View style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, borderRadius: wp(2) }]}>
-                                                    <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14, color: colors.dark_blue1_color }]}>{item?.name}</Text>
-                                                </View>
-                                            )
-                                        })}
-                                    </View>
-                                }
-                            />
+
+                    {isEditable ?
+                        <MultipleSelectDropDown
+                            disabled={!isEditable}
+                            setIsVisible={setFormListVisible}
+                            isVisible={formListVisible}
+                            data={setAllForm}
+                            title={strings.groupForms}
+                            setSelectedMembers={(data: DataTypes[]) => {
+                                setSelectedFormsData(data)
+                                setFieldValue('forms', data)
+                            }}
+                            countTitle={strings.forms}
+                            container={{ marginVertical: heightPercentageToDP(2) }}
+                        />
+                        :
+                        <CustomDetailsComponent
+                            title={strings.groupForms}
+                            detailsContainerStyle={{ marginVertical: wp(5) }}
+                            bottomComponent={
+                                <View style={[globalStyles.rowView, { flexWrap: "wrap", alignItems: "center" }]}>
+                                    {groupDetails?.form_details?.map((item, index) => {
+                                        return (
+                                            <View style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, borderRadius: wp(2) }]}>
+                                                <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14, color: colors.dark_blue1_color }]}>{item?.name}</Text>
+                                            </View>
+                                        )
+                                    })}
+                                </View>
+                            }
+                        />
                     }
-                    {/* <CustomDetailsComponent
-                        title={strings.groupForms}
-                        detailsContainerStyle={{ marginVertical: wp(5) }}
-                        bottomComponent={
-                            <View style={[globalStyles.rowView, { flexWrap: "wrap", alignItems: "center" }]}>
-                                {groupDetails?.form_details?.map((item, index) => {
-                                    return (
-                                        <View style={[globalStyles.rowView, styles.tagStyle, { backgroundColor: colors.gray_light_color, borderRadius: wp(2) }]}>
-                                            <Text style={[styles.commonTxtStyle, globalStyles.rtlStyle, { paddingHorizontal: wp(2), fontSize: FontSizes.SMALL_14, color: colors.dark_blue1_color }]}>{item?.name}</Text>
-                                        </View>
-                                    )
-                                })}
-                            </View>
-                        }
-                    /> */}
+
                     <CustomDetailsComponent
                         title={strings.assignedJobs}
                         detailsContainerStyle={{ marginBottom: wp(5) }}
@@ -529,8 +423,8 @@ const GroupDetailScreen = () => {
                             }}
                         />
                     }
-                </KeyboardAwareScrollView >
-            </Container >
+                </KeyboardAwareScrollView>
+            </Container>
             <CustomDropdown
                 componentRef={menuRef}
                 dropdownData={optionData}

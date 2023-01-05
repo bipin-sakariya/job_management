@@ -1,5 +1,5 @@
 import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
@@ -33,37 +33,13 @@ const DuplicateScreen = () => {
             job: selectedJobDetailsForDuplicate?.id,
             duplicate: jobDetails?.id
         }
-        console.log({ params })
+
         dispatch(returnJobCreate(params)).unwrap().then((res) => {
             navigation.navigate('JobDetailsScreen', { params: jobDetails })
         }).catch((e) => {
             console.log({ error: e });
         })
     }
-
-    // const result = [
-    //     {
-    //         id: 1,
-    //         mediaType: "image",
-    //         imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
-    //     },
-    //     {
-    //         id: 2,
-    //         mediaType: "video",
-    //         imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-    //     },
-    //     {
-    //         id: 3,
-    //         mediaType: "image",
-    //         imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
-    //     },
-    //     {
-    //         id: 4,
-    //         mediaType: "video",
-    //         imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-    //     }
-
-    // ]
 
     return (
         <View style={globalStyles.container}>

@@ -32,6 +32,7 @@ interface jobListParams {
     page: number,
     search?: string
 }
+
 const JobDuplicateListScreen = () => {
 
     const navigation = useCustomNavigation('JobDuplicateListScreen');
@@ -136,4 +137,4 @@ const JobDuplicateListScreen = () => {
     )
 }
 
-export default JobDuplicateListScreen
+export default JobDuplicateListScreen;

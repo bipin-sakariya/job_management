@@ -1,7 +1,7 @@
 import { Alert, FlatList, Image, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomBlackButton, CustomCarouselImageAndVideo, CustomDashedComponent, CustomDetailsComponent, CustomJobDetailsBottomButton, CustomModal, CustomSubTitleWithImageComponent, CustomSwitchComponent, CustomTextInput, CustomTextInputWithImage, Header } from '../../components'
+import { Container, CustomBlackButton, CustomCarouselImageAndVideo, CustomDashedComponent, CustomDetailsComponent, CustomModal, CustomSubTitleWithImageComponent, CustomSwitchComponent, CustomTextInput, CustomTextInputWithImage, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
 import { styles } from './styles'
 import { strings } from '../../languages/localizedStrings'
@@ -22,81 +22,45 @@ import * as yup from 'yup'
 import DocumentPicker, { DocumentPickerResponse } from 'react-native-document-picker';
 import { recentReturnJobList, returnJobUpdate } from '../../redux/slices/AdminSlice/returnJobListSlice'
 
-interface ValuesProps {
-    status: string;
-    id: number;
-}
-
 interface imageList {
     id?: number
     image?: string
     mediaType?: string
 }
+
 interface docList {
     path: string,
     type: string | undefined
     mb: number | null
     title: string | null
 }
+
 interface image_arrayList {
     uri: string,
     name: string,
     type: string
 }
-interface doc_arrayList {
-    uri: string,
-    name: string | null
-    type: string | undefined,
-    byte: number | null
-}
+
 const CreateNewJobScreen = () => {
-    const navigation = useCustomNavigation('CreateNewJobScreen')
+
+    const navigation = useCustomNavigation('CreateNewJobScreen');
     const route = useRoute<RootRouteProps<'CreateNewJobScreen'>>();
-    const { type } = route.params
     const refRBSheet = useRef<RBSheet | null>(null)
     const dispatch = useAppDispatch()
     const isFocused = useIsFocused()
+
+    const { type } = route.params;
+    const Id: number | undefined = route?.params?.jobId;
 
     const [isModelVisible, setIsModelVisible] = useState(false)
     const [isurgent, setIsUrgent] = useState(false)
     const [isnotification, setIsNotification] = useState(false)
     const [imageList, setImageList] = useState<imageList[]>([])
     const [docList, setDocList] = useState<docList[] | []>([])
-    const [updatedImage, setUpdatedImage] = useState<imageList[]>([])
-    const [imageError, setImageError] = useState(false)
-    const [docError, setDocError] = useState(false)
     const [latlong, setLatLong] = useState({ latitude: '', longitude: '' })
 
     const { userData } = useAppSelector(state => state.userDetails)
     const { jobDetails, isLoading } = useAppSelector(state => state.jobList)
-
-    // const pdfData = [
-    //     { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb" },
-    //     { title: "Doc_Name.pdf", type: 'Doc', mb: "12 mb" },
-    // ]
-    // const result = [
-    //     {
-    //         id: 1,
-    //         mediaType: "image",
-    //         imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
-    //     },
-    //     {
-    //         id: 2,
-    //         mediaType: "video",
-    //         imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-    //     },
-    //     {
-    //         id: 3,
-    //         mediaType: "image",
-    //         imgUrl: "https://images.unsplash.com/photo-1473177027534-53d906e9abcf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1049&q=80"
-    //     },
-    //     {
-    //         id: 4,
-    //         mediaType: "video",
-    //         imgUrl: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"
-    //     }
-
-    // ]
 
     useEffect(() => {
         if (isFocused && route?.params?.jobId) {
@@ -147,14 +111,11 @@ const CreateNewJobScreen = () => {
 
             if (res[0]?.type?.split("/")[0] == 'application') {
                 DocTempArray.push({ path: res[0].uri, type: res[0]?.type?.split("/")[1], mb: res[0].size, title: res[0].name })
-                setDocError(false)
             }
             else {
                 ImageTempArray.push({ image: res[0].uri, mediaType: res[0]?.type?.split("/")[0] == 'image' ? 'image' : 'video', id: Math.random() })
                 UpdatedImageArray.push({ image: res[0].uri, mediaType: res[0]?.type?.split("/")[0] == 'image' ? 'image' : 'video', id: Math.random() })
-                setImageError(false)
             }
-            setUpdatedImage(UpdatedImageArray)
             setImageList(ImageTempArray)
             setDocList(DocTempArray)
         }
@@ -209,10 +170,6 @@ const CreateNewJobScreen = () => {
             }).catch((error) => {
                 console.log({ error })
             })
-        } else {
-            if (isEmptyArray(imageList)) {
-                setImageError(true)
-            }
         }
     }
 
@@ -323,21 +280,23 @@ const CreateNewJobScreen = () => {
                             type == strings.returnJob ?
                                 <>
                                     <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={imageList} />
-                                    {(jobDetails.attachments && jobDetails.attachments.length != 0) && <CustomDetailsComponent
-                                        title={strings.attachment}
-                                        detailsContainerStyle={{ marginVertical: wp(4) }}
-                                        bottomComponent={
-                                            <FlatList
-                                                data={jobDetails.attachments}
-                                                numColumns={2}
-                                                renderItem={({ item, index }: any) => {
-                                                    return (
-                                                        <CommonPdfView item={item} />
-                                                    )
-                                                }}
-                                                showsVerticalScrollIndicator={false} />
-                                        }
-                                    />}
+                                    {
+                                        (jobDetails.attachments && jobDetails.attachments.length != 0) && <CustomDetailsComponent
+                                            title={strings.attachment}
+                                            detailsContainerStyle={{ marginVertical: wp(4) }}
+                                            bottomComponent={
+                                                <FlatList
+                                                    data={jobDetails.attachments}
+                                                    numColumns={2}
+                                                    renderItem={({ item, index }: any) => {
+                                                        return (
+                                                            <CommonPdfView item={item} />
+                                                        )
+                                                    }}
+                                                    showsVerticalScrollIndicator={false} />
+                                            }
+                                        />
+                                    }
                                 </> : null
                         }
                         <CustomDashedComponent
@@ -366,9 +325,9 @@ const CreateNewJobScreen = () => {
                             }}
                             image={type == strings.returnJob ? ImagesPath.floppy_disk_icon : ImagesPath.plus_white_circle_icon}
                         />
-                    </View>
-                </ScrollView>
-            </Container>
+                    </View >
+                </ScrollView >
+            </Container >
         </View >
     )
 }

@@ -50,7 +50,6 @@ const BillSectionScreen = () => {
         label: billDetails.type_counting ? billDetails.type_counting : '',
         value: billDetails.type_counting ? billDetails.type_counting : ''
     })
-    console.log({ billDetails, countingValue: billDetails.type_counting });
 
     useEffect(() => {
         if (billDetails) {
@@ -65,7 +64,6 @@ const BillSectionScreen = () => {
     useEffect(() => {
         if (isFocus && id) {
             dispatch(billDetail(id)).unwrap().then((res) => {
-                console.log({ res });
                 setImageUrl(res.image)
             }).catch((error) => {
                 console.log({ error });
@@ -99,7 +97,6 @@ const BillSectionScreen = () => {
     const CreateMaterialValidationSchema = yup.object().shape({
         name: yup.string().required(type == "material" ? strings.billNameRequired : strings.signNameRequired),
         ration_qunt: yup.string().required(type == "material" ? strings.jumpingRatioRequired : strings.quantityRequired),
-        // imageUrl: yup.string().required(strings.Sign_image_required)
     });
 
     const data = [
@@ -111,8 +108,6 @@ const BillSectionScreen = () => {
     ];
 
     const updateBill = (values: { name: string, ration_qunt: string }) => {
-        console.log({ values, type, float: values.ration_qunt, billDetails });
-
         if (!countingValue.value) {
             setTypeCountError(true)
         } else {
@@ -137,7 +132,6 @@ const BillSectionScreen = () => {
             if (type == 'sign' && parseFloat(values.ration_qunt) != billDetails.quantity) {
                 data.append("quantity", parseFloat(values.ration_qunt))
             }
-            console.log("🚀 ~ file: index.tsx ~ line 139 ~ updateBill ~ data", data, isEmptyArray(data))
             if (!isEmptyArray(data)) {
                 let params = {
                     data: data,
@@ -161,11 +155,9 @@ const BillSectionScreen = () => {
             initialValues: {
                 name: billDetails.name ? billDetails.name : '',
                 ration_qunt: type == 'material' ? billDetails.jumping_ration ? billDetails.jumping_ration.toString() : '' : billDetails.quantity ? billDetails.quantity.toString() : '',
-                // imageUrl: billDetails.image ? billDetails.image : ''
             },
             validationSchema: CreateMaterialValidationSchema,
             onSubmit: values => {
-                console.log("sdhfhsdfh", values);
                 updateBill(values)
             }
         })
@@ -186,8 +178,6 @@ const BillSectionScreen = () => {
             setError({ ...error, quantity: '' })
         }
     }, [values.ration_qunt])
-
-
 
 
     return (
@@ -289,7 +279,6 @@ const BillSectionScreen = () => {
                         />
                         {(touched.ration_qunt && errors.ration_qunt) || error.jumping_ration ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.jumping_ration ? error.jumping_ration : errors.ration_qunt}</Text> : null}
                     </>}
-
                     {error.detail ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: 'red' }]}>{error.detail}</Text> : null}
                     {isEditable && <CustomBlackButton
                         title={strings.updateBill}

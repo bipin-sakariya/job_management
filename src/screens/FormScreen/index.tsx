@@ -39,28 +39,11 @@ const FormScreen = () => {
             search: ''
         }
         dispatch(formList(params)).unwrap().then((res) => {
-            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
             setPage(page + 1)
         }).catch((error) => {
             console.log({ error });
         })
     }
-
-    // const onReachEndApiCall = () => {
-    //     console.log("RTYRTY");
-    //     const ApiParams = {
-    //         page: page,
-
-    //     }
-    //     dispatch(formList(ApiParams)).unwrap().then((res) => {
-    //         console.log("🚀 ~ file: index.tsx:55 ~ dispatch ~ res", res)
-    //         setIsFooterLoading(false)
-    //         if (res.data.next) {
-    //             Alert.alert("|fdsfs")
-    //         }
-    //         // res.data.next && setPage(page + 1)
-    //     })
-    // }
 
     const renderItem = ({ item, index }: { item: FormDataTypes, index: number }) => {
         return (
@@ -101,7 +84,6 @@ const FormScreen = () => {
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}
                     onEndReached={() => {
-                        console.log("On reach call");
                         if (formListData.next) {
                             formListApiCall(page)
                         }

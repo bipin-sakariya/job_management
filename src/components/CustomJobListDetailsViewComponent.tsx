@@ -20,22 +20,19 @@ interface CustomeJobListDetailsViewComponentProps {
 const CustomeJobListDetailsViewComponent = (props: CustomeJobListDetailsViewComponentProps & TouchableOpacityProps) => {
     return (
         <TouchableOpacity {...props} style={[styles.jobContainerStyle, styles.dropDownShadowStyle]} >
-            {
-                props.isNotification
-                    ?
-
-                    <>
-                        {props.item &&
-                            <Image source={props.item.jobs?.images.length ? { uri: props.item.jobs?.images[0]?.image } : ImagesPath.placeholder_img} resizeMode={'contain'} style={styles.notificationImageStyle} />
-                        }
-                    </>
-                    :
-                    <>
-                        {props.item && props.item.images &&
-
-                            <FastImage source={props?.item?.images[0]?.image ? { uri: props?.item?.images[0]?.image } : ImagesPath.placeholder_img} resizeMode={'contain'} style={styles.jobImageStyle} />
-                        }
-                    </>
+            {props.isNotification
+                ?
+                <>
+                    {props.item &&
+                        <Image source={props.item.jobs?.images.length ? { uri: props.item.jobs?.images[0]?.image } : ImagesPath.placeholder_img} resizeMode={'contain'} style={styles.notificationImageStyle} />
+                    }
+                </>
+                :
+                <>
+                    {props.item && props.item.images &&
+                        <FastImage source={props?.item?.images[0]?.image ? { uri: props?.item?.images[0]?.image } : ImagesPath.placeholder_img} resizeMode={'contain'} style={styles.jobImageStyle} />
+                    }
+                </>
             }
             <View style={{ flex: 1 }}>
                 <View style={styles.jobTitleContainer}>
@@ -78,12 +75,10 @@ const styles = StyleSheet.create({
     jobImageStyle: {
         height: wp(20),
         width: wp(18),
-        // resizeMode: 'contain'
     },
     notificationImageStyle: {
         height: wp(25),
         width: wp(22),
-        // resizeMode: 'contain'
     },
     jobTitleContainer: {
         ...globalStyles.rowView,

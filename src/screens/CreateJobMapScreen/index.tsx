@@ -17,17 +17,7 @@ import { styles } from './styles';
 import Geocoder from 'react-native-geocoder';
 import { MapPositionProps } from '../../types/commanTypes';
 
-const JobData = [
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", status: "info" },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Return", status: "info" },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 km away', date: "16 may 2022", button: "Transfer" },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '20 km away', date: "16 may 2022", button: "Open", status: "info" },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open", status: "info" },
-    { title: 'Job Title', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '5 km away', date: "16 may 2022", button: "Open" }
-]
-
 const CreateJobMapScreen = () => {
-
     const navigation = useCustomNavigation('CreateJobMapScreen')
     const route = useRoute<RootRouteProps<'CreateJobMapScreen'>>();
     const mapRef = useRef<MapView>(null);
@@ -40,7 +30,6 @@ const CreateJobMapScreen = () => {
     const [ChoosefromMap, setChooseFromMap] = useState(false)
 
     useEffect(() => {
-        console.log({ route })
         if (route.params?.isEditing) {
             getUserCurrentLocation()
         } else {
@@ -74,7 +63,7 @@ const CreateJobMapScreen = () => {
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421
                 })
-                console.log(position)
+
                 if (!route?.params?.isButtonVisible) {
                     setChooseFromMap(true)
                     setTapLoaction({
@@ -102,24 +91,21 @@ const CreateJobMapScreen = () => {
         if (route?.params?.isButtonVisible) {
             setIsCurruntLocation(true)
         }
-        console.log(isCurrentLoaction, curruntLoaction)
+
         if (isCurrentLoaction && curruntLoaction) {
-            mapRef.current?.animateToRegion(curruntLoaction);
+            mapRef.current?.animateToRegion(curruntLoaction, 1000);
             setTapLoaction(curruntLoaction)
             dispatch(setJobLocation({
                 latitude: curruntLoaction.latitude,
                 longitude: curruntLoaction.longitude
             }))
         }
-
     }, [isCurrentLoaction])
 
     const getAddress = (location: MapPositionProps) => {
         if (location) {
-            console.log({ lat: curruntLoaction?.latitude, lng: curruntLoaction?.longitude })
             Geocoder.geocodePosition({ lat: location?.latitude, lng: location?.longitude }).then((res: any) => {
                 setAddres(res[0]?.formattedAddress ?? `${location?.latitude} ${location?.longitude}`)
-                console.log(res[0]?.formattedAddress)
             }).catch((err: any) => console.log(err))
         }
     }

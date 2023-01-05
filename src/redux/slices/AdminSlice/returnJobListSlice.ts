@@ -106,8 +106,8 @@ const initialState: InitialState = {
             is_active: false
         },
         closed_by: null,
-        images: undefined,
-        attachments: undefined,
+        images: [{ image: '' }],
+        attachments: [{ attachment: '' }],
         forms: undefined,
         bills: undefined,
         group_forms: undefined,

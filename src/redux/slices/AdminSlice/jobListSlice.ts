@@ -3,7 +3,7 @@ import { Alert } from "react-native"
 import { ApiConstants } from "../../../config/ApiConstants"
 import { axiosClient } from "../../../config/Axios"
 import { strings } from "../../../languages/localizedStrings"
-import { billCreate, billData } from "./billListSlice"
+import { billData } from "./billListSlice"
 import { FormDataTypes } from "./formListSlice"
 
 export interface Added_byData {

@@ -1,4 +1,3 @@
-import { StyleSheet } from 'react-native';
 import React, { useEffect } from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import BottomTab from './BottomTab';
@@ -6,7 +5,7 @@ import { DrawerStackParamList } from '../types/RootStackTypes';
 import DrawerScreen from '../screens/DrawerScreen';
 import { useAppDispatch } from '../hooks/reduxHooks';
 import { useIsFocused } from '@react-navigation/native';
-import { roleList, userInfo, userRoleList } from '../redux/slices/AdminSlice/userListSlice';
+import { userInfo, userRoleList } from '../redux/slices/AdminSlice/userListSlice';
 
 const Drawer = createDrawerNavigator<DrawerStackParamList>();
 
@@ -27,7 +26,6 @@ const DrawerStack = () => {
         }).catch((e) => {
             console.log({ error: e });
         })
-
     }, [isFocus])
 
     return (

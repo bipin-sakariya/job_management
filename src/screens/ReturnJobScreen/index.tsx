@@ -31,7 +31,7 @@ const ReturnJobScreen = () => {
             comment: isText,
             job: route.params.jobId,
         }
-        console.log({ params })
+
         dispatch(returnJobCreate(params)).unwrap().then((res) => {
             if (res) {
                 setIsLoading(false)

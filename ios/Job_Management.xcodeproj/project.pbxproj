@@ -555,7 +555,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.test.jobmgt;
 				PRODUCT_NAME = Job_Management;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = Dev_job_mgt_24;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
