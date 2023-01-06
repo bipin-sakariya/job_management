@@ -27,7 +27,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 interface imageList {
     id?: number
-    image: string | undefined
+    image?: string
     mediaType?: string
 }
 
@@ -165,12 +165,11 @@ const CloseJobScreen = () => {
     }
 
     //for update close job API call
-    const updateCloseJob = () => {
+    const updateCloseJob = (status: string) => {
         setIsLoading(true)
         setIsModelVisible(false)
         let data = new FormData()
-        data.append('status', strings.close)
-
+        data.append('status', status)
         let image_array: image_arrayList[] = []
 
         if (updatedImage) {
@@ -266,10 +265,10 @@ const CloseJobScreen = () => {
                         <Image source={ImagesPath.check_icon_circle} style={[globalStyles.modalImageStyle]} />
                         <Text style={styles.modalTxt}>{strings.closeJobModalText}</Text>
                         <View style={[globalStyles.rowView, { justifyContent: "space-around", width: '100%' }]}>
-                            <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { updateCloseJob() }} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.partial} />
-                            <CustomBlackButton onPress={() => { setIsModelVisible(false) }} buttonStyle={{ width: "45%" }} title={strings.close} />
-                        </View>
-                    </View>
+                            <CustomBlackButton textStyle={styles.noBtnTxt} onPress={() => { updateCloseJob(strings.jobPartial) }} buttonStyle={{ width: "45%", backgroundColor: colors.light_blue_color }} title={strings.partial} />
+                            <CustomBlackButton onPress={() => { updateCloseJob(strings.jobClose) }} buttonStyle={{ width: "45%" }} title={strings.close} />
+                        </View >
+                    </View >
                 } />
                 <KeyboardAwareScrollView showsVerticalScrollIndicator={false} extraScrollHeight={hp(5)} >
                     <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>

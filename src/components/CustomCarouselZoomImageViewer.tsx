@@ -19,7 +19,6 @@ const CustomCarouselZoomImageViewer = (props: CustomCarouselZoomImageViewerProps
 
     const renderItem = ({ item, index }: { item: ItemProps, index: number }) => {
         const type = item.image && item.image.split(/[#?]/)[0]?.split(".").pop()?.trim()
-
         return (
             <>
                 {

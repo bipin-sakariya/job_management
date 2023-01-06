@@ -21,7 +21,7 @@ import RNFS from "react-native-fs";
 import FileViewer from "react-native-file-viewer";
 import Video from 'react-native-video'
 import RNModal from 'react-native-modal';
-import { createThumbnail } from 'react-native-create-thumbnail';
+// import { createThumbnail } from 'react-native-create-thumbnail';
 import { RootRouteProps } from '../../types/RootStackTypes';
 import { useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -261,19 +261,19 @@ const ChatScreen = () => {
                         id: Math.random()
                     })
                 } else {
-                    createThumbnail({
-                        url: result[0].uri,
-                        timeStamp: 1000,
-                    }).then((res) => {
-                        setVideoList({
-                            url: result[0].uri,
-                            mediaType: result[0]?.type?.split("/")[0],
-                            id: Math.random(),
-                            thumbnail: res.path
-                        })
-                    }).catch((error) => {
-                        console.log("Thumbnail not get", error);
-                    })
+                    // createThumbnail({
+                    //     url: result[0].uri,
+                    //     timeStamp: 1000,
+                    // }).then((res) => {
+                    //     setVideoList({
+                    //         url: result[0].uri,
+                    //         mediaType: result[0]?.type?.split("/")[0],
+                    //         id: Math.random(),
+                    //         thumbnail: res.path
+                    //     })
+                    // }).catch((error) => {
+                    //     console.log("Thumbnail not get", error);
+                    // })
                 }
                 refRBSheet.current?.close()
                 setTimeout(() => {

@@ -12,7 +12,7 @@ import FontSizes from '../../styles/FontSizes';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { manageMapRoutesReducer, resetPerticularRoutesReducer, updateFinalMapRoutesReducer, updatePerticularSelectionOfAddress } from '../../redux/slices/MapSlice/MapSlice';
 import { useIsFocused } from '@react-navigation/native';
-import { jobList } from '../../redux/slices/AdminSlice/jobListSlice';
+import { jobList, recentSearchList } from '../../redux/slices/AdminSlice/jobListSlice';
 
 interface JobDetail {
     address?: string
@@ -39,7 +39,7 @@ const RouteScreen = () => {
     const { jobListData } = useAppSelector(state => state.jobList)
 
     useEffect(() => {
-        jobListApiCall(page)
+        if (isFocused) { jobListApiCall(page) }
     }, [navigation, isFocused])
 
     const jobListApiCall = (page: number) => {
@@ -47,7 +47,9 @@ const RouteScreen = () => {
             page: page,
             search: ''
         }
-        dispatch(jobList(params)).unwrap().then((res) => {
+        dispatch(recentSearchList(params)).unwrap().then((res) => {
+            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+            // setJobList(res.results)
             setPage(page + 1)
         }).catch((error) => {
             console.log({ error });
@@ -56,7 +58,7 @@ const RouteScreen = () => {
 
     const renderItem = ({ item, index }: any) => {
         return (
-            <CustomJobListComponent item={item} onPress={() => dispatch(manageMapRoutesReducer({ id: item?.id, address: item?.address, coordinates: item?.coordinates, description: item?.description, isCheckBlank: true }))} />
+            <CustomJobListComponent item={item.jobs} onPress={() => dispatch(manageMapRoutesReducer({ id: item?.id, address: item?.address, coordinates: item?.coordinates, description: item?.description, isCheckBlank: true }))} />
         )
     }
 
@@ -142,7 +144,7 @@ const RouteScreen = () => {
                     </View>
                     <CustomSubTitleWithImageComponent disabled title={strings.recent} image={ImagesPath.clock_counter_clockwise_icon} />
                     <FlatList
-                        data={jobListData.results}
+                        data={jobListData}
                         renderItem={renderItem}
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={{ paddingBottom: wp(20) }}

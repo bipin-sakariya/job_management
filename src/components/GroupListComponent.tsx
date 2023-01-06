@@ -12,18 +12,20 @@ import { colors } from '../styles/Colors';
 import { convertDate } from '../utils/screenUtils';
 import { useAppDispatch } from '../hooks/reduxHooks';
 import FastImage from 'react-native-fast-image';
-import { GroupData, groupDelete } from '../redux/slices/AdminSlice/groupListSlice';
+import { GroupData, groupDelete, groupDetail } from '../redux/slices/AdminSlice/groupListSlice';
 
 interface itemPropsType {
     item: GroupData,
+    onPress: () => void
 }
 
-const GroupListComponent = ({ item }: itemPropsType) => {
+const GroupListComponent = ({ item, onPress }: itemPropsType) => {
     const navigation = useCustomNavigation('GroupListScreen')
     const imageRef = useRef(null);
     const dispatch = useAppDispatch()
 
     const [visible, setVisible] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
 
     const deleteGroupData = (id: number) => {
         setVisible(false);
@@ -47,12 +49,12 @@ const GroupListComponent = ({ item }: itemPropsType) => {
         }
     ]
 
+
+
     return (
         <View style={styles.itemContainer}>
             <TouchableOpacity
-                onPress={() => {
-                    navigation.navigate("GroupDetailScreen", { params: item })
-                }}
+                onPress={onPress}
                 style={globalStyles.rowView}>
                 <FastImage source={item.image ? { uri: item.image } : ImagesPath.placeholder_img} resizeMode={'stretch'} style={styles.itemImgStyle} />
                 <View style={{ paddingHorizontal: wp(2) }}>

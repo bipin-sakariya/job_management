@@ -318,6 +318,39 @@ export const updatejob = createAsyncThunk<string[], paramsTypes, { rejectValue: 
     }
 })
 
+export const recentSearchJob = createAsyncThunk<JobDetailsData, paramsTypes, { rejectValue: apiErrorTypes }>
+    (JOB + "/recentSearchJob", async (params, { rejectWithValue }) => {
+        let obj = {
+            job: params.job,
+        }
+        try {
+            console.log(ApiConstants.RECENTSEARCHJOB, { obj })
+            const response = await axiosClient.post(ApiConstants.RECENTSEARCHJOB, obj)
+            console.log('data...........=====', { response: response })
+            return response.data
+        } catch (e: any) {
+            if (e.code === "ERR_NETWORK") {
+                Alert.alert(e.message)
+            }
+            return rejectWithValue(e?.response)
+        }
+    })
+
+export const recentSearchList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
+    (JOB + "/recentSearchList", async (params, { rejectWithValue }) => {
+        try {
+            console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
+            const response = await axiosClient.get(ApiConstants.RECENTSEARCHJOB + `?page=${params.page}`)
+            console.log("🚀 ~ file: jobListSlice.ts ~ line 69 ~ response", response)
+            return response.data;
+        } catch (e: any) {
+            if (e.code === "ERR_NETWORK") {
+                Alert.alert(e.message)
+            }
+            return rejectWithValue(e?.response)
+        }
+    })
+
 const jobListSlice = createSlice({
     name: JOB,
     initialState,
@@ -527,7 +560,30 @@ const jobListSlice = createSlice({
             state.isLoading = false
             state.error = ''
         });
-
+        builder.addCase(recentSearchJob.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(recentSearchJob.fulfilled, (state, action) => {
+            state.isLoading = false,
+                state.jobListData = action.payload
+        });
+        builder.addCase(recentSearchJob.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = ''
+        });
+        builder.addCase(recentSearchList.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(recentSearchList.fulfilled, (state, action) => {
+            state.isLoading = false,
+                state.jobListData = action.payload
+        });
+        builder.addCase(recentSearchList.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = ''
+        });
     }
 })
 

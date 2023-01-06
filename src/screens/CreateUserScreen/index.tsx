@@ -1,8 +1,8 @@
 import { Alert, Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
-import { Container, CustomActivityIndicator, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components';
-import { heightPercentageToDP, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { Container, CustomActivityIndicator, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header, MultipleSelectDropDown } from '../../components';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
@@ -14,6 +14,7 @@ import * as yup from "yup";
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { createUser } from '../../redux/slices/AdminSlice/userListSlice';
 import { colors } from '../../styles/Colors';
+import { GroupData, groupList } from '../../redux/slices/AdminSlice/groupListSlice';
 
 const roleSchema = yup.object().shape({
     title: yup.string().required(strings.roleRequired),
@@ -38,6 +39,9 @@ const CreateUserScreen = () => {
     const dispatch = useAppDispatch();
 
     const [imageUrl, setImageUrl] = useState<string | undefined>('');
+    const [formListVisible, setFormListVisible] = useState(false);
+    const [formsList, setFormList] = useState<GroupData[]>([])
+    const [selectedFormsData, setSelectedFormsData] = useState()
     const [error, setError] = useState({
         phone: "",
         email: "",
@@ -47,6 +51,7 @@ const CreateUserScreen = () => {
     })
 
     const { isLoading, userDetails, userRoleList } = useAppSelector(state => state.userList);
+    const { groupListData } = useAppSelector(state => state.groupList);
 
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
@@ -63,6 +68,30 @@ const CreateUserScreen = () => {
                 userCreate(values)
             }
         })
+
+
+    useEffect(() => {
+        const findData: GroupData[] = groupListData.results.map((i) => {
+            return {
+                ...i,
+                user_name: i.name,
+                selected: false,
+            }
+        })
+        setFormList(findData)
+    }, [])
+    useEffect(() => {
+        let params = {
+            search: ''
+        }
+        // setIsFooterLoading(true)
+        dispatch(groupList(params)).unwrap().then((res) => {
+            // setIsFooterLoading(false) setPage(page + 1)
+            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+        }).catch((error) => {
+            console.log({ error });
+        })
+    }, [])
 
     const userCreate = (values: {
         userName: string;
@@ -124,7 +153,7 @@ const CreateUserScreen = () => {
                     title={strings.fillFormToCreateUser}
                     image={ImagesPath.from_list_icon}
                 />
-                <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: heightPercentageToDP(20) }} keyboardShouldPersistTaps={'handled'}>
+                <KeyboardAwareScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: hp(20) }} keyboardShouldPersistTaps={'handled'}>
                     <TouchableOpacity
                         onPress={async () => {
                             let options: ImageLibraryOptions = {
@@ -183,7 +212,7 @@ const CreateUserScreen = () => {
                         container={{ marginBottom: wp(5) }}
                     />}
                     {(touched?.role && errors.role) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.roleRequired}</Text> : null}
-                    {userRoleList && <DropDownComponent
+                    {/* {userRoleList && <DropDownComponent
                         title={strings.permission}
                         data={userRoleList}
                         image={ImagesPath.down_white_arrow}
@@ -195,7 +224,19 @@ const CreateUserScreen = () => {
                         value={values.permission.id}
                         placeholder={strings.givePermission}
                         container={{ marginBottom: wp(5) }}
-                    />}
+                    />} */}
+                    <MultipleSelectDropDown
+                        setIsVisible={setFormListVisible}
+                        isVisible={formListVisible}
+                        data={formsList}
+                        title={strings.forms}
+                        setSelectedMembers={(data) => {
+                            setSelectedFormsData(data)
+                            setFieldValue('forms', data)
+                        }}
+                        container={{ marginTop: hp(2.5) }}
+                        countTitle={strings.forms}
+                    />
                     {(touched?.permission && errors.permission) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.permissionRequired}</Text> : null}
                     <CustomBlackButton
                         title={strings.createUser}

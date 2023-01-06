@@ -61,7 +61,9 @@ const SignBillDetailScreen = () => {
     const updateBill = (values: { name: string, ration_qunt: string }) => {
         setIsModelVisible(false)
         setIsLoading(true)
-        let data = new FormData();
+        console.log({ values, type, float: values.ration_qunt });
+        let data = new FormData()
+        // data.append('name', values.name)
 
         if (type == 'Material' && parseFloat(values.ration_qunt) != quantity) {
             data.append("jumping_ration", parseFloat(values.ration_qunt))

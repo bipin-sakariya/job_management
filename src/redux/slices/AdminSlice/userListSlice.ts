@@ -185,40 +185,6 @@ export const roleList = createAsyncThunk<inspectorListProps, paramsTypes, { reje
         }
     })
 
-export const updateUserProfile = createAsyncThunk<UserData, paramsTypes, { rejectValue: apiErrorTypes }>(USER + "/updateUserProfile", async (params, { rejectWithValue }) => {
-    try {
-        const response = await axiosClient.patch(ApiConstants.USER + params.id + '/', params.data)
-        return response.data
-    } catch (e: any) {
-        if (e.code === "ERR_NETWORK") {
-            Alert.alert(e.message)
-        }
-        return rejectWithValue(e?.response)
-    }
-})
-export const changePassword = createAsyncThunk<string, paramsTypes, { rejectValue: apiErrorTypes }>(USER + "/changePassword", async (params, { rejectWithValue }) => {
-    try {
-        const response = await axiosClient.put(ApiConstants.CHANGEPASSWORD, params)
-        return response.data
-    } catch (e: any) {
-        if (e.code === "ERR_NETWORK") {
-            Alert.alert(e.message)
-        }
-        return rejectWithValue(e?.response)
-    }
-})
-
-export const userInfo = createAsyncThunk<UserData, {}, { rejectValue: apiErrorTypes }>(USER + "/userInfo", async (_, { rejectWithValue }) => {
-    try {
-        const response = await axiosClient.get(ApiConstants.USERINFO)
-        return response.data
-    } catch (e: any) {
-        if (e.code === "ERR_NETWORK") {
-            Alert.alert(e.message)
-        }
-        return rejectWithValue(e?.response)
-    }
-})
 const userListSlice = createSlice({
     name: USER,
     initialState,
@@ -323,45 +289,6 @@ const userListSlice = createSlice({
         builder.addCase(roleList.rejected, (state, action) => {
             state.isLoading = false
             state.error = ''
-        });
-        builder.addCase(updateUserProfile.pending, state => {
-            state.isLoading = true
-            state.error = ''
-        });
-        builder.addCase(updateUserProfile.fulfilled, (state, action) => {
-            state.isLoading = false
-            state.userInformation = action.payload
-            state.error = ''
-        });
-        builder.addCase(updateUserProfile.rejected, (state, action) => {
-            state.isLoading = false
-            state.error = action.payload?.data
-        });
-        builder.addCase(changePassword.pending, state => {
-            state.isLoading = true
-            state.error = ''
-        });
-        builder.addCase(changePassword.fulfilled, (state, action) => {
-            state.isLoading = false
-            // state.userListData = action.payload
-            state.error = ''
-        });
-        builder.addCase(changePassword.rejected, (state, action) => {
-            state.isLoading = false
-            state.error = action.payload?.data
-        });
-        builder.addCase(userInfo.pending, state => {
-            state.isLoading = true
-            state.error = ''
-        });
-        builder.addCase(userInfo.fulfilled, (state, action) => {
-            state.isLoading = false
-            state.userInformation = action.payload
-            state.error = ''
-        });
-        builder.addCase(userInfo.rejected, (state, action) => {
-            state.isLoading = false
-            // state.error = action.payload?.data
         });
     },
 })

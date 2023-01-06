@@ -16,15 +16,17 @@ import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { manageMapRoutesReducer, resetMapRoutesReducer } from '../../redux/slices/MapSlice/MapSlice';
 import { RootRouteProps } from '../../types/RootStackTypes';
-import { JobDetailsData, jobList } from '../../redux/slices/AdminSlice/jobListSlice';
-import { GroupData, groupList } from '../../redux/slices/AdminSlice/groupListSlice';
+import { JobDetailsData, jobList, jobStatusWiseList } from '../../redux/slices/AdminSlice/jobListSlice';
+import { GroupData, groupList, selectedGroupReducers } from '../../redux/slices/AdminSlice/groupListSlice';
 import { GroupParams } from '../TransferJobScreen';
 import Geolocation from '@react-native-community/geolocation';
 import Geocoder from 'react-native-geocoder';
 
 interface jobListParams {
     page?: number,
-    search?: string
+    search?: string,
+    id?: number,
+    status: string
 }
 
 const MapScreen = () => {
@@ -35,18 +37,20 @@ const MapScreen = () => {
     const route = useRoute<RootRouteProps<'MapScreen'>>();
 
     const [selectedItem, setSelectedItem] = useState<GroupParams | undefined>(undefined);
-    const { jobListData } = useAppSelector(state => state.jobList)
+    const { jobListData, openedJobList } = useAppSelector(state => state.jobList)
     const [selectedindex, setSelectdeIndex] = useState(0)
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState<number>(1)
     const [groupPage, setGroupPage] = useState(1)
     const [groupData, setGroupData] = useState<GroupData[]>([])
     const [finalGroupData, setfinalGroupList] = useState<GroupParams[]>([])
+    const [finalAllGroup, setFinalAllGroup] = useState<GroupParams[]>([])
+    const { groupListData, selectedGroupData } = useAppSelector(state => state.groupList)
 
     useEffect(() => {
         if (isFocused) {
             dispatch(resetMapRoutesReducer())
         }
-        jobListApiCall(page)
+        jobListApiCall()
     }, [navigation, isFocused])
 
     useEffect(() => {
@@ -54,13 +58,14 @@ const MapScreen = () => {
         setSelectedItem(defaultSelected)
     }, [])
 
-    const jobListApiCall = (page: number) => {
+    const jobListApiCall = (input?: string, id?: number) => {
         let params: jobListParams = {
             page: page,
-            search: ''
+            search: input,
+            id: id != undefined ? id : selectedItem?.id ?? undefined,
+            status: strings.open,
         }
-        dispatch(jobList(params)).unwrap().then((res) => {
-            setPage(page + 1)
+        dispatch(jobStatusWiseList(params)).unwrap().then((res) => {
         }).catch((error) => {
             console.log({ error });
         })
@@ -75,7 +80,54 @@ const MapScreen = () => {
             }
         })
         setfinalGroupList(findData)
+
     }, [groupData])
+
+    useEffect(() => {
+        if (finalGroupData.length) {
+            let categoryList: any = [{ name: 'All', selected: true, id: 0 }]
+            finalGroupData.map((listItem: GroupParams) => {
+                categoryList.push({
+                    name: listItem.name,
+                    selected: false,
+                    id: listItem.id
+                });
+                setFinalAllGroup(categoryList);
+            });
+
+            const data = categoryList.map((item: GroupParams) => {
+                if (selectedGroupData.name != 'All') {
+                    if (item.name == selectedGroupData.name) {
+                        return {
+                            ...item,
+                            selected: !item.selected,
+                        };
+                    } else if (item.name == 'All') {
+                        return {
+                            ...item,
+                            selected: false,
+                        };
+                    } else {
+                        return item;
+                    }
+                } else {
+                    if (item.name == 'All') {
+                        return {
+                            ...item,
+                            selected: true,
+                        };
+                    } else {
+                        return {
+                            ...item,
+                            selected: false,
+                        };
+                    }
+                }
+            })
+            setFinalAllGroup(data)
+            console.log({ data })
+        }
+    }, [finalGroupData, groupListData.results, selectedGroupData]);
 
     useEffect(() => {
         let params = {
@@ -157,7 +209,7 @@ const MapScreen = () => {
                     }
                     headerCenterComponent={
                         <TouchableOpacity onPress={() => refRBSheet.current?.open()} activeOpacity={1} style={globalStyles.rowView}>
-                            <Text style={styles.jobTypeTxt}>{selectedItem?.name}</Text>
+                            <Text style={styles.jobTypeTxt}>{selectedGroupData?.name ? selectedGroupData?.name : 'All'}</Text>
                             <Image source={ImagesPath.down_icon} style={styles.downIcon} />
                         </TouchableOpacity>
                     }
@@ -171,9 +223,13 @@ const MapScreen = () => {
 
             <CustomBottomSheet
                 ref={refRBSheet}
-                data={groupData}
+                data={finalAllGroup}
+                defaultSelected={selectedGroupData}
                 onSelectedTab={(item) => {
+                    console.log({ item })
+                    jobListApiCall('', item.id)
                     setSelectedItem(item)
+                    dispatch(selectedGroupReducers(item))
                     refRBSheet.current?.close()
                 }}
             />
@@ -183,8 +239,8 @@ const MapScreen = () => {
                 provider={'google'}
                 customMapStyle={customMapStyle}
                 region={route?.params?.type == 'viewJob' ? route?.params?.JobDetails?.coordinate : {
-                    latitude: jobListData?.results[selectedindex]?.latitude ? Number(jobListData.results[selectedindex].latitude) : 0,
-                    longitude: jobListData?.results[selectedindex]?.longitude ? Number(jobListData.results[selectedindex].longitude) : 0,
+                    latitude: openedJobList.results[selectedindex]?.latitude ? Number(openedJobList.results[selectedindex].latitude) : 0,
+                    longitude: openedJobList.results[selectedindex]?.longitude ? Number(openedJobList.results[selectedindex].longitude) : 0,
                     latitudeDelta: 0.04864195044303443,
                     longitudeDelta: 0.040142817690068,
                 }}>
@@ -196,7 +252,7 @@ const MapScreen = () => {
                         </Animated.View>
                     </Marker>
                     :
-                    jobListData.results.map((marker, index) => {
+                    openedJobList.results.map((marker, index) => {
                         if (marker.latitude != null) {
                             return (
                                 <Marker key={index} coordinate={{
@@ -224,7 +280,7 @@ const MapScreen = () => {
                     <Image source={ImagesPath.route_icon} style={styles.pathIconStyle} />
                 </TouchableOpacity>
                 <Carousel
-                    data={route?.params?.type == 'viewJob' ? [route?.params?.JobDetails] : jobListData.results}
+                    data={route?.params?.type == 'viewJob' ? [route?.params?.JobDetails] : openedJobList.results}
                     sliderWidth={wp("100%")}
                     itemWidth={wp("83%")}
                     renderItem={renderItem}

@@ -27,12 +27,13 @@ export const styles = StyleSheet.create({
         borderWidth: wp(0.5),
     },
     textInputStyle: {
-        height: wp(20),
+        minHeight: wp(15),
         marginTop: wp(2),
         borderColor: colors.text_input_border_color,
         borderWidth: wp(0.3),
         borderRadius: wp(2),
         padding: wp(2),
+
     },
     textInputFontStyle: {
         fontFamily: fonts.FONT_POP_REGULAR,

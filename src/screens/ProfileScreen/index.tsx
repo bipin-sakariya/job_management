@@ -9,16 +9,17 @@ import { styles } from './styles';
 import { strings } from '../../languages/localizedStrings';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import FastImage from 'react-native-fast-image';
-import { userInfo } from '../../redux/slices/AdminSlice/userListSlice';
+// import { userInfo } from '../../redux/slices/AdminSlice/userListSlice';
 import { useIsFocused } from '@react-navigation/native';
 import { colors } from '../../styles/Colors';
 
 const ProfileScreen = () => {
     const navigation = useCustomNavigation('ProfileScreen')
     const { userInformation, error } = useAppSelector(state => state.userList)
+    const { token } = useAppSelector(state => state.userDetails)
 
 
-    const phoneNumber = userInformation?.phone.substring(4)
+    const phoneNumber = token?.user?.phone.substring(4)
 
     return (
         <View style={globalStyles.container}>
@@ -37,18 +38,18 @@ const ProfileScreen = () => {
                 }
             />
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <FastImage source={{ uri: userInformation && userInformation.profile_image }} style={styles.profilePhoto} />
+                <FastImage source={{ uri: token && token.user.profile_image }} style={styles.profilePhoto} />
                 <CustomTextInput
                     editable={false}
                     title={strings.userName}
                     container={{ marginBottom: wp(5) }}
-                    value={userInformation && userInformation.user_name}
+                    value={token && token.user.user_name}
                 />
                 <CustomTextInput
                     editable={false}
                     title={strings.email}
                     container={{ marginBottom: wp(5) }}
-                    value={userInformation && userInformation.email}
+                    value={token && token.user.email}
                 />
                 {/* {errors.confirm_new_password && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{}</Text> } */}
                 <CustomTextInput

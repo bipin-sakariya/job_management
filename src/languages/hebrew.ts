@@ -246,6 +246,8 @@ export const hebrew = {
     address_required: 'כתובת נדרשת',
     addressInformation_required: 'נדרש מידע כתובת',
     description_required: 'נדרש תיאור',
+    Sign_image_required: 'נדרשת תמונת סימן',
+    typecount_required: 'נדרשת ספירת סוגים',
 
     place: 'מקום',
     current_loaction: 'מיקום נוכחי',
@@ -298,4 +300,5 @@ export const hebrew = {
     job_Transfer_by: 'העברת עבודה על ידי',
     try_again: 'נסה שוב',
     password_not_match: 'הסיסמה לא צריכה להיות תואמת',
+    match_password: 'סיסמה חדשה ואישור סיסמה צריכים להתאים',
 }

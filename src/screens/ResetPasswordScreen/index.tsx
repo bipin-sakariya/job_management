@@ -27,7 +27,7 @@ const ResetPasswordScreen = () => {
     const CreateEditProfileValidationSchema = yup.object().shape({
         new_password: yup.string().trim().min(5, strings.enter_max_6_character).required(strings.passwordInvalid),
         confirm_new_password: yup.string()
-            .oneOf([yup.ref('new_password'), null], 'password should be not match'),
+            .oneOf([yup.ref('new_password'), null], strings.match_password),
     });
 
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =

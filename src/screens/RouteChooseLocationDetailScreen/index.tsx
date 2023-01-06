@@ -12,7 +12,7 @@ import Geocoder from 'react-native-geocoder';
 import { manageMapRoutesReducer, setJobLocation } from '../../redux/slices/MapSlice/MapSlice'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import Geolocation from '@react-native-community/geolocation'
-import { jobList } from '../../redux/slices/AdminSlice/jobListSlice'
+import { jobList, jobStatusWiseList, recentSearchJob, recentSearchList } from '../../redux/slices/AdminSlice/jobListSlice'
 import { useIsFocused } from '@react-navigation/native'
 
 interface jobListParams {
@@ -25,34 +25,85 @@ const RouteChooseLocationDetailScreen = () => {
     const dispatch = useAppDispatch()
     const isFocused = useIsFocused()
 
-    const { jobListData } = useAppSelector(state => state.jobList)
+    const { jobListData, openedJobList } = useAppSelector(state => state.jobList)
     const [selectedAddress, setSelectedAddress] = useState<string>('')
     const [page, setPage] = useState(1)
+    const [text, setText] = useState("");
+    const [searchPage, setSearchPage] = useState(1)
+    const [jobList, setJobList] = useState([])
+    const [allJobList, setAllJobList] = useState([])
 
+    const recentSelectJob = (id: number) => {
+        let params = {
+            job: id
+        }
+        dispatch(recentSearchJob(params)).unwrap().then((res) => {
+
+        }).catch((error) => {
+            console.log({ error });
+        })
+    }
+    console.log('ghfhgfykufguygfyu', jobListData)
     const renderItem = ({ item, index }: any) => {
+        console.log({ item })
         return (
-            <CustomJobListComponent item={item} onPress={() => {
+            <CustomJobListComponent item={text ? item : item.jobs} onPress={() => {
+                recentSelectJob(item.id)
                 dispatch(manageMapRoutesReducer({ id: item?.id, address: item?.address, coordinates: item?.coordinates, description: item?.description }))
                 navigation.goBack()
-            }} />
+            }}
+            />
         )
+    }
+
+    const searchName = (input: string) => {
+        let param = {
+            page: searchPage,
+            search: input,
+            status: strings.open,
+        }
+        dispatch(jobStatusWiseList(param)).unwrap().then((res) => {
+            setJobList(res)
+            console.log({ 'data=========>': res })
+            if (res.next && !!input) {
+                setSearchPage(searchPage + 1)
+            }
+            console.log({ res })
+        }).catch((error) => {
+            console.log({ error });
+        })
+
     }
 
     useEffect(() => {
         jobListApiCall(page)
-    }, [navigation, isFocused])
+    }, [])
 
     const jobListApiCall = (page: number) => {
         let params: jobListParams = {
             page: page,
             search: ''
         }
-        dispatch(jobList(params)).unwrap().then((res) => {
+        dispatch(recentSearchList(params)).unwrap().then((res) => {
+            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
+
             setPage(page + 1)
         }).catch((error) => {
             console.log({ error });
         })
     }
+    // console.log({ data: allJobList })
+    // useEffect(() => {
+    //     const data = []
+    //     jobListData.map((item: any) => {
+    //         data.push({
+
+    //             jobs: item.jobs
+    //         })
+    //     })
+    //     console.log({ data })
+    //     setAllJobList(data)
+    // }, [])
 
     const getCurrentLocation = async () => {
         Geolocation.getCurrentPosition(
@@ -101,8 +152,12 @@ const RouteChooseLocationDetailScreen = () => {
                     <TextInput
                         style={[styles.textInputStyle, globalStyles.rtlStyle, { textAlign: "right" }]}
                         placeholder={strings.chooseStartingLocation}
-                        placeholderTextColor={colors.dark_blue3_color}
-                        value={selectedAddress}
+                        // placeholderTextColor={colors.dark_blue3_color}
+                        value={text}
+                        onChangeText={(text) => {
+                            setText(text)
+                            searchName(text)
+                        }}
                     />
                 </View>
                 <CustomSubTitleWithImageComponent title={strings.yourLocation} image={ImagesPath.cross_hair_icon} titleStyle={styles.commonTxtStyle}
@@ -128,7 +183,7 @@ const RouteChooseLocationDetailScreen = () => {
                     marginTop: wp(2)
                 }} />
                 <CustomSubTitleWithImageComponent viewStyle={{ marginVertical: wp(2) }} disabled title={strings.recent} image={ImagesPath.clock_counter_clockwise_icon} />
-                <FlatList showsVerticalScrollIndicator={false} data={jobListData.results} renderItem={renderItem} />
+                <FlatList showsVerticalScrollIndicator={false} data={text ? openedJobList.results : jobListData} renderItem={renderItem} />
             </Container>
         </View>
     )

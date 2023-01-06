@@ -1,7 +1,7 @@
 import { Alert, FlatList, Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
-import { AssignedJobsComponent, Container, CustomBlackButton, CustomDetailsComponent, CustomDropdown, CustomTextInput, DropDownComponent, Header, MultipleSelectDropDown } from '../../components';
+import { AssignedJobsComponent, Container, CustomActivityIndicator, CustomBlackButton, CustomDetailsComponent, CustomDropdown, CustomTextInput, DropDownComponent, Header, MultipleSelectDropDown } from '../../components';
 import { heightPercentageToDP, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { styles } from './styles';
@@ -20,6 +20,7 @@ import { roleList } from '../../redux/slices/AdminSlice/userListSlice';
 import { useIsFocused, useRoute } from '@react-navigation/native';
 import { billData } from '../../redux/slices/AdminSlice/billListSlice';
 import { AssignJobTypeProps } from '../../components/AssignedJobsComponent';
+import { formList } from '../../redux/slices/AdminSlice/formListSlice';
 
 interface DataTypes {
     user_name?: string
@@ -85,6 +86,8 @@ const GroupDetailScreen = () => {
     const { groupDetails } = useAppSelector(state => state.groupList)
     const [finalArray, setFinalArray] = useState<number[]>([])
     const [finalFormsArray, setFinalFormsArray] = useState<number[]>([])
+    const [formPage, setFormPage] = useState(1)
+    const [Loading, setIsLoading] = useState(false)
 
     useEffect(() => {
         if (isFocused) {
@@ -258,7 +261,7 @@ const GroupDetailScreen = () => {
             })
         }
     }
-    
+
     const renderItem = ({ item, index }: { item: AssignJobTypeProps, index: number }) => {
         return (
             <AssignedJobsComponent item={item} index={index} />
@@ -267,6 +270,9 @@ const GroupDetailScreen = () => {
 
     return (
         <View style={globalStyles.container}>
+            {isLoading && <CustomActivityIndicator />}
+            {/* {console.log("FORMIK ------", { error: errors, values: values })}
+            {console.log('ujghuygtuigh', { selectedMemberData, selectedFormsData })} */}
             <Header
                 headerLeftStyle={{
                     paddingHorizontal: wp(3)

@@ -46,7 +46,7 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
         <View style={[globalStyles.container,]}>
             <View style={styles.topView} >
                 <Image source={ImagesPath.drawer_Bg} style={styles.drawerBackGroundColor} />
-                <FastImage source={{ uri: userInformation?.profile_image }} style={styles.userPlaceholderStyle} />
+                <FastImage source={{ uri: token?.user?.profile_image }} style={styles.userPlaceholderStyle} />
             </View>
             <View style={styles.userNameContainer}>
                 <TouchableOpacity
@@ -56,7 +56,7 @@ const DrawerScreen = ({ navigation, descriptors, state }: DrawerContentComponent
                         navigation.navigate('ProfileScreen')
                     }}
                     style={globalStyles.rowView}>
-                    <Text style={[styles.userNameTxt, globalStyles.rtlStyle]}>{userInformation?.user_name}</Text>
+                    <Text style={[styles.userNameTxt, globalStyles.rtlStyle]}>{token?.user?.user_name}</Text>
                     <Image source={ImagesPath.pencil_icon} style={styles.penIcon} />
                 </TouchableOpacity>
                 <Text style={[styles.roleTxt, globalStyles.rtlStyle]}>{userData?.role}</Text>

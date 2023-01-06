@@ -16,12 +16,12 @@ import FileViewer from "react-native-file-viewer";
 import RNFS from "react-native-fs";
 import { jobDetail, JobDetailsData, resetSelectedFormsBillReducer, selectedFormDetialsForCreateJobReducers } from "../../redux/slices/AdminSlice/jobListSlice";
 import { convertDate } from "../../utils/screenUtils";
+// import Video from "react-native-video";
+import { returnDeleteJob } from "../../redux/slices/AdminSlice/returnJobListSlice";
 import { groupDetails } from "../../redux/slices/AdminSlice/groupListSlice";
 import Video from "react-native-video";
 import { billData } from "../../redux/slices/AdminSlice/billListSlice";
 import { NotificationObjectType } from "../../redux/slices/AdminSlice/notificationSlice";
-// import Video from "react-native-video";
-import { returnDeleteJob } from "../../redux/slices/AdminSlice/returnJobListSlice";
 
 const JobDetailsScreen = () => {
     const navigation = useCustomNavigation('JobDetailsScreen')
@@ -38,6 +38,9 @@ const JobDetailsScreen = () => {
     let data: Partial<JobDetailsData> & Partial<NotificationObjectType> | undefined = route.params.params
     let id: number | undefined = route?.params?.params?.id
     let type = route.params.type
+
+    console.log({ type })
+
 
     useEffect(() => {
         if (route?.params?.params?.id) {
@@ -130,7 +133,8 @@ const JobDetailsScreen = () => {
                             value={`${jobDetails.id}`}
                             onChangeText={(text) => { }}
                         />
-                        {jobDetails.status == strings.jobReturn ?
+                        {/* {console.log({ data: jobDetails.return_job[0].duplicate })} */}
+                        {jobDetails.return_job?.status == strings.duplicate ?
                             <CustomTextInput
                                 title={strings.relatedJobId[0]}
                                 container={{ marginBottom: wp(5) }}
@@ -172,7 +176,7 @@ const JobDetailsScreen = () => {
                         />
                         <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={jobDetails.images ?? []} />
 
-                        {(jobDetails.attachments) && <CustomDetailsComponent
+                        {(jobDetails.attachments.length != 0) && <CustomDetailsComponent
                             title={strings.attachment}
                             detailsContainerStyle={{ marginVertical: wp(4) }}
                             bottomComponent={
@@ -221,7 +225,7 @@ const JobDetailsScreen = () => {
                                 />}
                                 {jobDetails?.bills?.length != 0 && <View style={[styles.sammedView, { maxHeight: wp(88), paddingBottom: wp(2) }]}>
                                     <View style={styles.formHeaderView}>
-                                        <Text style={[styles.noNameTxt]}>{strings.forms}</Text>
+                                        <Text style={[styles.noNameTxt, globalStyles.rtlDirection, { textAlign: 'left' }]}>{strings.forms}</Text>
                                     </View>
                                     <FlatList
                                         data={jobDetails?.bills}
@@ -233,15 +237,14 @@ const JobDetailsScreen = () => {
                                         }}
                                         ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}
                                     />
-                                </View>
-                                }
-                                <CustomDetailsComponent
+                                </View>}
+                                {jobDetails.notes && <CustomDetailsComponent
                                     title={strings.notes}
                                     detailsContainerStyle={{ marginBottom: wp(4) }}
                                     bottomComponent={
                                         <Text numberOfLines={3} style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: "left" }]}>{jobDetails?.notes}</Text>
                                     }
-                                />
+                                />}
                             </>
                             : null
                         }
@@ -262,14 +265,14 @@ const JobDetailsScreen = () => {
                             />
                             : null
                         }
-                        {(type && jobDetails?.transfer_to?.length != 0) && (jobDetails.status == 'Open' || jobDetails.status == strings.jobOpen || jobDetails.status == strings.jobReturn || jobDetails.status == strings.jobTransfer || jobDetails.status == strings.close) ?
+                        {/* {(type && jobDetails.transfer_to.length != 0) && (jobDetails.status == 'Open' || jobDetails.status == strings.jobOpen || jobDetails.status == strings.jobReturn || jobDetails.status == strings.jobTransfer || jobDetails.status == strings.close) ?
                             <CustomDetailsComponent
                                 title={strings.transferTo}
                                 detailsContainerStyle={{ marginVertical: wp(4) }}
                                 bottomComponent={
                                     <>
                                         {
-                                            jobDetails?.transfer_to?.map((transferData) => (
+                                            jobDetails?.transfer_to.map((transferData) => (
                                                 <Text numberOfLines={1} style={[styles.commonTxt, globalStyles.rtlStyle, { textAlign: "left" }]}>{transferData?.name}</Text>
                                             ))
                                         }
@@ -277,7 +280,7 @@ const JobDetailsScreen = () => {
                                 }
                             />
                             : null
-                        }
+                        } */}
                         <CustomDetailsComponent
                             title={strings.furtherInspection}
                             detailsContainerStyle={{ marginVertical: wp(4) }}

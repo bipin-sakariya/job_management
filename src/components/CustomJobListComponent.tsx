@@ -17,9 +17,11 @@ interface CustomJobListComponentProps {
     type?: string;
     listStyle?: TouchableOpacityProps['style'];
     textStyle?: TextProps['style'];
+    recentSerach?: boolean
 }
 
 const CustomJobListComponent = (props: CustomJobListComponentProps & TouchableOpacityProps) => {
+    // console.log({ ddataa: props.item })
     return (
         <TouchableOpacity
             {...props}

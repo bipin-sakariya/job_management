@@ -178,7 +178,7 @@ const SignInScreen = () => {
 
                                                 onPress={() => { handleSubmit() }}
                                                 title={strings.requestResetLink}
-                                                buttonStyle={{ paddingHorizontal: wp(23), marginTop: 0 }} />
+                                                buttonStyle={{ marginTop: 0, paddingHorizontal: wp(20) }} />
                                         </>
                                     )}
                                 </Formik>

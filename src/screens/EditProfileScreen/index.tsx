@@ -10,9 +10,11 @@ import { colors } from '../../styles/Colors';
 import { strings } from '../../languages/localizedStrings';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { useFormik } from 'formik'
+import * as yup from "yup";
 import * as ImagePicker from "react-native-image-picker";
 import FastImage from 'react-native-fast-image';
-import { updateUserProfile } from '../../redux/slices/AdminSlice/userListSlice';
+import DeviceInfo from 'react-native-device-info';
+import { updateUserProfile } from '../../redux/slices/AuthUserSlice';
 
 const EditProfileScreen = () => {
     const navigation = useCustomNavigation('EditProfileScreen');
@@ -20,25 +22,34 @@ const EditProfileScreen = () => {
 
     const { token } = useAppSelector(state => state.userDetails)
     const { userInformation, isLoading } = useAppSelector(state => state.userList)
+    const [pickerResponse, setPickerResponse] = useState(token?.user?.profile_image ? token?.user?.profile_image : '');
+    const [error, setError] = useState({
+        email: '',
+        phone: ''
+    })
+    const phoneNumber = token?.user?.phone.substring(4)
 
-    const [pickerResponse, setPickerResponse] = useState(userInformation?.profile_image ? userInformation?.profile_image : '');
-    const [error, setError] = useState({ email: '', phone: '' })
-    const phoneNumber = userInformation?.phone.substring(4)
+    const UserValidationSchema = yup.object().shape({
+        user_name: yup.string().required(strings.usernameRequired),
+    });
 
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
             enableReinitialize: true,
             initialValues: {
-                user_name: userInformation?.user_name ? userInformation?.user_name : '',
-                email: userInformation?.email ? userInformation?.email : '',
-                phone: userInformation?.phone ? phoneNumber : '',
-                profile_image: userInformation?.profile_image ? userInformation?.profile_image : '',
-                role: { title: userInformation?.role.title ? userInformation?.role.title : '', id: userInformation?.role.id ? userInformation?.role.id : 0 },
+                user_name: token?.user?.user_name ? token?.user?.user_name : '',
+                email: token?.user?.email ? token?.user?.email : '',
+                phone: token?.user?.phone ? phoneNumber : '',
+                profile_image: token?.user?.profile_image ? token?.user?.profile_image : '',
+                role: { title: token?.user?.role.title ? token?.user?.role.title : '', id: token?.user?.role.id ? token?.user?.role.id : 0 },
             },
+            validationSchema: UserValidationSchema,
             onSubmit: values => {
+                console.log({ values })
                 editProfile(values)
             }
         })
+    console.log({ data: errors?.user_name, phone: error.phone })
 
     const chooseFile = () => {
         let options = {
@@ -138,6 +149,7 @@ const EditProfileScreen = () => {
                     value={values.user_name}
                     onChangeText={handleChange('user_name')}
                 />
+                {errors?.user_name && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{errors?.user_name}</Text>}
                 <CustomTextInput
                     title={strings.email}
                     container={{ marginBottom: wp(5) }}

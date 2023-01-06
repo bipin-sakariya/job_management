@@ -22,6 +22,7 @@ const BottomTab = () => {
             screenOptions={{
                 headerShown: false,
                 tabBarStyle: styles.tabBarStyle,
+                tabBarHideOnKeyboard: true
             }}
             initialRouteName={'JobsScreen'}>
             <Tab.Screen

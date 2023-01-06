@@ -1,4 +1,4 @@
-import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomBlackButton, CustomTextInput, Header, MultipleSelectDropDown } from '../../components'
@@ -134,7 +134,7 @@ const FormDetailsScreen = () => {
 
     const renderItem = ({ item, index }: { item: billData, index: number }) => {
         return (
-            <TableDetailsComponent type='form' item={item} index={index} />
+            <TableDetailsComponent type='form' item={item} index={index} isViewOnly />
         )
     }
 
@@ -182,51 +182,53 @@ const FormDetailsScreen = () => {
                 headerLeftStyle={{ width: wp("50%"), paddingLeft: wp(3) }} />
 
             <Container style={{ paddingHorizontal: wp(4) }}>
-                <CustomTextInput
-                    title={strings.formName}
-                    container={{ marginVertical: wp(5) }}
-                    value={values.formName}
-                    editable={isEdit}
-                    onChangeText={handleChange('formName')}
-                />
-                {isEdit || route.params.isEdit == true ?
-                    <MultipleSelectDropDown
-                        isVisible={isEditable}
-                        setIsVisible={setIsEditable}
-                        title={strings.addBill}
-                        data={isselectData}
-                        onCount={(count) => { setCountingValue(count) }}
-                        setSelectedMembers={(data) => { setSelectedMemberData(data) }}
-                        isForm={true}
-                        setIsAllSign={setIsAllSign}
-                        isALLSign={isALLSign}
-                        countTitle={strings.forms}
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <CustomTextInput
+                        title={strings.formName}
+                        container={{ marginVertical: wp(5) }}
+                        value={values.formName}
+                        editable={isEdit}
+                        onChangeText={handleChange('formName')}
+                    />
+                    {isEdit || route.params.isEdit == true ?
+                        <MultipleSelectDropDown
+                            isVisible={isEditable}
+                            setIsVisible={setIsEditable}
+                            title={strings.addBill}
+                            data={isselectData}
+                            onCount={(count) => { setCountingValue(count) }}
+                            setSelectedMembers={(data) => { setSelectedMemberData(data) }}
+                            isForm={true}
+                            setIsAllSign={setIsAllSign}
+                            isALLSign={isALLSign}
+                            countTitle={strings.forms}
 
-                    /> :
-                    <View style={[styles.sammedView, globalStyles.rtlDirection, { flexShrink: 1 }]}>
-                        <View style={styles.formHeaderView}>
-                            <Text style={[styles.noNameTxt, globalStyles.rtlStyle]}>{strings.edit}</Text>
-                        </View>
-                        <TableHeaderView type={"form"} />
-                        <FlatList
-                            data={formDetails.bill}
-                            renderItem={renderItem}
-                            style={{ maxHeight: wp(80) }}
-                            // ListHeaderComponent={() => {
-                            //     return (
-                            //         <TableHeaderView type={"form"} />
-                            //     )
-                            // }}
-                            ListEmptyComponent={() => <View>
-                                <Text></Text>
-                            </View>}
-                            ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}
-                        />
-                        <Text style={[globalStyles.rtlStyle, { fontFamily: fonts.FONT_POP_SEMI_BOLD, fontSize: FontSizes.EXTRA_SMALL_12, color: colors.dark_blue2_color, margin: wp(2) }]}>{strings.assignedSignTitles}</Text>
-                    </View>}
-                {isEdit || route.params.isEdit == true ? <CustomBlackButton onPress={() => {
-                    handleSubmit()
-                }} title={strings.createForm} image={ImagesPath.plus_white_circle_icon} imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} /> : null}
+                        /> :
+                        <View style={[styles.sammedView, globalStyles.rtlDirection, { flexShrink: 1 }]}>
+                            <View style={styles.formHeaderView}>
+                                <Text style={[styles.noNameTxt, globalStyles.rtlStyle]}>{strings.edit}</Text>
+                            </View>
+                            <TableHeaderView type={"form"} />
+                            <FlatList
+                                data={formDetails.bill}
+                                renderItem={renderItem}
+                                style={{ maxHeight: wp(80) }}
+                                // ListHeaderComponent={() => {
+                                //     return (
+                                //         <TableHeaderView type={"form"} />
+                                //     )
+                                // }}
+                                ListEmptyComponent={() => <View>
+                                    <Text></Text>
+                                </View>}
+                                ItemSeparatorComponent={() => <View style={styles.sammedSepratorLine} />}
+                            />
+                            <Text style={[globalStyles.rtlStyle, { fontFamily: fonts.FONT_POP_SEMI_BOLD, fontSize: FontSizes.EXTRA_SMALL_12, color: colors.dark_blue2_color, margin: wp(2) }]}>{strings.assignedSignTitles}</Text>
+                        </View>}
+                    {isEdit || route.params.isEdit == true ? <CustomBlackButton onPress={() => {
+                        handleSubmit()
+                    }} title={strings.createForm} image={ImagesPath.plus_white_circle_icon} imageStyle={{ ...globalStyles.headerIcon, tintColor: colors.white_color }} /> : null}
+                </ScrollView>
             </Container>
             <CustomDropdown
                 componentRef={menuRef}

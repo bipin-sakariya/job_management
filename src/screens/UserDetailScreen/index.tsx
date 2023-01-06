@@ -9,7 +9,7 @@ import { useFormik } from 'formik';
 import * as yup from "yup";
 import { strings } from '../../languages/localizedStrings';
 import { globalStyles } from '../../styles/globalStyles';
-import { Container, CustomActivityIndicator, CustomBlackButton, CustomDropdown, CustomTextInput, Header } from '../../components';
+import { Container, CustomActivityIndicator, CustomBlackButton, CustomDropdown, CustomTextInput, DropDownComponent, Header, MultipleSelectDropDown } from '../../components';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { styles } from './styles';
@@ -34,6 +34,7 @@ const UserDetailScreen = () => {
 
     const [visible, setVisible] = useState(false);
     const [isEditable, setIsEditable] = useState(isEdit ? isEdit : false);
+    const [modalShow, setModalShow] = useState(false);
     const [error, setError] = useState({
         phone: "",
         email: "",
@@ -41,7 +42,8 @@ const UserDetailScreen = () => {
     });
     const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
 
-    const { userDetails, isLoading } = useAppSelector(state => state.userList);
+    const { userDetails, isLoading, userRoleList } = useAppSelector(state => state.userList);
+
 
     useEffect(() => {
         if (isFoucs) {
@@ -51,6 +53,17 @@ const UserDetailScreen = () => {
             }
         }
     }, [isFoucs])
+
+    // useEffect(() => { 
+    //     const results: DataTypes[] = isUser.map((i) => {
+    //         console.log("🚀 ~ file: index.tsx:212 ~ constresults:MemberValues[]=isUser.map ~ i", i)
+    //         return {
+    //             ...i,
+    //             selected: !!(groupDetails.member_details?.find((e) => e.id == i.id))
+    //         }
+    //     })
+    //     isSetAllMember(results)
+    // })
 
     const userDetail = (params: number) => {
         dispatch(detailsOfUser(params)).unwrap().then((res) => {
@@ -92,14 +105,15 @@ const UserDetailScreen = () => {
 
     }
 
-    const { values, errors, touched, handleSubmit, handleChange, } =
+    const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
             enableReinitialize: true,
             initialValues: {
                 userName: userDetails?.user_name ? userDetails.user_name : '',
                 email: userDetails?.email ? userDetails.email : '',
-                contactNo: userDetails?.phone ? userDetails.phone.split("+972")[1] : '',
+                contactNo: userDetails?.phone ? userDetails.phone.substring(4) : '',
                 role: userDetails?.role ? userDetails.role.title : '',
+                permission: userDetails?.role ? userDetails.role.title : '',
             },
             validationSchema: UserValidationSchema,
             onSubmit: values => {
@@ -198,19 +212,55 @@ const UserDetailScreen = () => {
                         keyboardType={'number-pad'}
                     />
                     {(touched?.contactNo && errors?.contactNo) || error?.phone ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error?.phone ? error.phone : errors.contactNo}</Text> : null}
-                    <CustomTextInput
-                        editable={false}
+                    {/* <CustomTextInput
+                        editable={isEditable}
                         title={strings.role}
                         container={{ marginBottom: wp(5) }}
                         value={values.role}
-                    />
-                    <CustomTextInput
-                        editable={false}
-                        title={strings.permission}
+                        placeholder={isEditable ? strings.contactNo : ''}
+                    /> */}
+                    <DropDownComponent
+                        disable={!isEditable}
+                        title={strings.role}
+                        data={userRoleList}
+                        image={isEditable ? ImagesPath.down_white_arrow : ''}
+                        labelField="title"
+                        valueField="id"
+                        onChange={(item) => {
+                            setFieldValue('role', item)
+                        }}
+                        value={values.role}
+                        placeholder={userDetails?.role.title ? userDetails.role.title : strings.selectRoleForUser}
                         container={{ marginBottom: wp(5) }}
-                        value={userDetails?.role.title}
                     />
+                    <DropDownComponent
+                        disable={!isEditable}
+                        title={strings.permission}
+                        data={userRoleList}
+                        image={isEditable ? ImagesPath.down_white_arrow : ''}
+                        labelField="title"
+                        valueField="id"
+                        onChange={(item) => {
+                            setFieldValue('role', item)
+                        }}
+                        value={values.permission}
+                        placeholder={userDetails?.role.title ? userDetails.role.title : strings.permission}
+                        container={{ marginBottom: wp(5) }}
+                    />
+                    {/* <MultipleSelectDropDown
+                        disabled={!isEditable}
+                        setIsVisible={setModalShow}
+                        isVisible={modalShow}
+                        // data={setAllMember}
+                        title={strings.groupMember}
+                        setSelectedMembers={(data: DataTypes[]) => {
+                            // setSelectedMemberData(data)
+                            setFieldValue('groupMember', data)
 
+                            console.log('setfield value', { data, isMember })
+                        }}
+                        countTitle={strings.people}
+                    /> */}
                 </KeyboardAwareScrollView>
                 {isEditable && <CustomBlackButton
                     title={strings.updateUser}

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, FlatList, TextInput, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, Image, FlatList, TextInput, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { DrawerActions, useIsFocused } from '@react-navigation/native';
 import { styles } from './styles';
@@ -95,7 +95,7 @@ const JobsScreen = () => {
         }).catch((error) => {
             console.log({ error });
         })
-    }, [isFocus, groupListData.results, finalAllGroup])
+    }, [isFocus])
 
     const JobListApiCall = (page?: number, input?: string, id?: number, to_date?: string, from_date?: string, status?: string) => {
         let params: jobListParams = {

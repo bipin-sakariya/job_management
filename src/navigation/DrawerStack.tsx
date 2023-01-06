@@ -20,19 +20,24 @@ const DrawerStack = () => {
             console.log("🚀 ~ file: DrawerStack.tsx ~ line 20 ~ dispatch ~ error", error)
         })
 
-        dispatch(userInfo({})).unwrap().then((res) => {
-            console.log({ res: res });
-            // dispatch(userDetailsReducer(res))
-        }).catch((e) => {
-            console.log({ error: e });
-        })
+
+
+        // dispatch(userInfo()).unwrap().then((res) => {
+        //     console.log({ res: res });
+        //     // dispatch(userDetailsReducer(res))
+        // }).catch((e) => {
+        //     console.log({ error: e });
+        // })
+
     }, [isFocus])
 
     return (
         <Drawer.Navigator
             screenOptions={{
                 headerShown: false,
-                drawerType: 'front'
+                drawerType: 'front',
+
+
             }}
             initialRouteName="BottomTabs"
             drawerContent={props => <DrawerScreen {...props} />}>

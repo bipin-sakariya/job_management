@@ -1,7 +1,7 @@
 import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
-import { Container, CustomDashedComponent, CustomSubTitleWithImageComponent, GroupListComponent, Header } from '../../components';
+import { Container, CustomActivityIndicator, CustomDashedComponent, CustomSubTitleWithImageComponent, GroupListComponent, Header } from '../../components';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { useIsFocused } from '@react-navigation/native';
@@ -11,7 +11,7 @@ import { strings } from '../../languages/localizedStrings';
 import { colors } from '../../styles/Colors';
 import FontSizes from '../../styles/FontSizes';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { groupList } from '../../redux/slices/AdminSlice/groupListSlice';
+import { groupDelete, groupDetail, groupList } from '../../redux/slices/AdminSlice/groupListSlice';
 
 interface groupListParams {
     page?: number,
@@ -22,9 +22,8 @@ const GroupListScreen = () => {
     const navigation = useCustomNavigation('GroupListScreen');
     const dispatch = useAppDispatch();
     const isFocus = useIsFocused()
-
     const [isFooterLoading, setIsFooterLoading] = useState<boolean>(false)
-
+    const [Loading, setIsLoading] = useState(false)
     const [page, setPage] = useState(1)
 
     const { groupListData } = useAppSelector(state => state.groupList)
@@ -35,7 +34,7 @@ const GroupListScreen = () => {
         return () => {
             setPage(1)
         }
-    }, [isFocus, groupListData])
+    }, [isFocus])
     const groupListApiCall = (page: number) => {
         let params: groupListParams = {
             page: page,
@@ -49,8 +48,19 @@ const GroupListScreen = () => {
         })
     }
 
+    const groupDetailNavigation = (id: number, item: any) => {
+        setIsLoading(true)
+        dispatch(groupDetail(id)).unwrap().then((res) => {
+            setIsLoading(false)
+            console.log({ res });
+            navigation.navigate("GroupDetailScreen", { params: item })
+        }).catch((error) => {
+            console.log({ error });
+        })
+    }
     return (
         <View style={globalStyles.container}>
+            {Loading && <CustomActivityIndicator />}
             <Header
                 headerLeftStyle={{ width: '50%', paddingRight: wp(3) }}
                 headerLeftComponent={
@@ -96,7 +106,7 @@ const GroupListScreen = () => {
                     data={groupListData?.results}
                     renderItem={({ item, index }) => {
                         return (
-                            <GroupListComponent item={item} />
+                            <GroupListComponent item={item} onPress={() => { groupDetailNavigation(item.id, item) }} />
                         )
                     }}
                     ItemSeparatorComponent={() => <View style={styles.separator} />}

@@ -54,10 +54,11 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
     return (
         <RBSheet
             ref={ref}
+            animationType={'slide'}
             closeOnDragDown={true}
             closeOnPressMask={true}
             dragFromTopOnly={true}
-            height={300}
+            height={500}
             customStyles={{
                 container: {
                     borderTopLeftRadius: 25,
