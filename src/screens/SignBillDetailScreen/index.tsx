@@ -4,7 +4,7 @@ import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomActivityIndicator, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { ImagesPath } from '../../utils/ImagePaths';
-import { heightPercentageToDP, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { strings } from '../../languages/localizedStrings';
 import { styles } from './style';
 import { RootRouteProps } from '../../types/RootStackTypes';
@@ -20,14 +20,15 @@ const SignBillDetailScreen = () => {
     const navigation = useCustomNavigation('SignBillDetailScreen');
     const route = useRoute<RootRouteProps<'SignBillDetailScreen'>>();
     const dispatch = useAppDispatch()
-    console.log("SignBillDetailScreen", { route })
+
     let { type } = route.params
-    let quntity = route.params.item.quantity
+    let quantity = route.params.item.measurement
     let jumping_ration = route.params.item.jumping_ration
 
-    const [count, setCount] = useState(type == 'Sign' ? quntity : jumping_ration)
+    const [count, setCount] = useState(type == 'Sign' ? quantity ?? 0 : jumping_ration ?? 0)
     const [isModelVisible, setIsModelVisible] = useState(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [valueUpdateBy, setValueUpdateBy] = useState<number>(type == 'Sign' ? 1 : jumping_ration == 0 ? 1 : jumping_ration ?? 1)
 
     const data = [
         { label: strings.meters, value: 'Meters' },
@@ -44,30 +45,15 @@ const SignBillDetailScreen = () => {
             .required(type == "Material" ? strings.jumpingRatioRequired : strings.quantityRequired),
     });
 
-    const Increment = () => {
-        type == 'Sign' ? setCount(count + quntity) : setCount(count + jumping_ration)
-    }
-
-    const Decrement = () => {
-        if (count == 1) {
-            setCount(1)
-        }
-        else {
-            type == 'Sign' ? setCount(count - quntity) : setCount(count - jumping_ration)
-        }
-    }
-
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
             enableReinitialize: true,
             initialValues: {
                 name: route.params.item.name,
-                ration_qunt: type == 'Material' ? count ? count.toString() : '' : count ? count.toString() : '',
-
+                ration_qunt: count ? count.toString() : 0
             },
             validationSchema: CreateGroupValidationSchema,
             onSubmit: values => {
-                console.log({ values })
                 updateBill(values)
             }
         })
@@ -75,15 +61,15 @@ const SignBillDetailScreen = () => {
     const updateBill = (values: { name: string, ration_qunt: string }) => {
         setIsModelVisible(false)
         setIsLoading(true)
-        console.log({ values, type, float: values.ration_qunt });
-        let data = new FormData()
-        // data.append('name', values.name)
-        if (type == 'Material' && parseFloat(values.ration_qunt) != quntity) {
+        let data = new FormData();
+
+        if (type == 'Material' && parseFloat(values.ration_qunt) != quantity) {
             data.append("jumping_ration", parseFloat(values.ration_qunt))
         }
         if (type == 'Sign' && parseFloat(values.ration_qunt) != jumping_ration) {
-            data.append("quantity", parseFloat(values.ration_qunt))
+            data.append("measurement", parseFloat(values.ration_qunt))
         }
+
         let params = {
             data: data,
             id: route.params.item.id
@@ -139,7 +125,6 @@ const SignBillDetailScreen = () => {
                     title={strings.there}
                     container={{ marginVertical: wp(4) }}
                     placeholder={route.params.item.name}
-                // onChangeText={(text) => { }}
                 />
 
                 {/* type counting  */}
@@ -148,7 +133,6 @@ const SignBillDetailScreen = () => {
                         disable
                         title={strings.typeCounting}
                         data={data}
-                        // image={ImagesPath.down_white_arrow}
                         labelField="label"
                         valueField="value"
                         onChange={(item) => setFieldValue('name', item)}
@@ -157,17 +141,18 @@ const SignBillDetailScreen = () => {
                         container={{ marginBottom: wp(5) }}
                     />
                 </View>
+
                 {/* measurement */}
                 <View style={[styles.textInputContainer, globalStyles.rtlDirection]}>
                     <View style={styles.titleContainer}>
                         <Text style={[styles.titleTxtStyle, globalStyles.rtlStyle]}>{type == 'Sign' ? strings.quantity : strings.measurement}</Text>
                     </View>
                     <View style={[globalStyles.rowView, globalStyles.rtlDirection, styles.btnContainerStyle]}>
-                        <TouchableOpacity onPress={() => Increment()}>
+                        <TouchableOpacity onPress={() => setCount(count + valueUpdateBy)}>
                             <Image source={ImagesPath.plus} resizeMode={'contain'} style={styles.btnIconStyle} />
                         </TouchableOpacity>
-                        <Text style={{ width: wp(10), textAlign: 'center' }}>{count}</Text>
-                        <TouchableOpacity onPress={() => Decrement()}>
+                        <Text style={{ width: wp(10), textAlign: 'center', marginHorizontal: wp(2) }}>{count}</Text>
+                        <TouchableOpacity onPress={() => count == 0 ? setCount(0) : setCount(count - valueUpdateBy)}>
                             <Image source={ImagesPath.minus} resizeMode={'contain'} style={styles.btnIconStyle} />
                         </TouchableOpacity>
                     </View>

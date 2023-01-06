@@ -57,21 +57,7 @@ const SignInScreen = () => {
                     role: res.role,
                     accesToken: res.access,
                     user: res.userdata
-                    // user: {
-                    //     id: res.,
-                    //     profile_image: string,
-                    //     user_name: string,
-                    //     email: string,
-                    //     phone: string,
-                    //     date_joined: string,
-                    //     role: {
-                    //         id: number,
-                    //         title: string
-                    //     },
-                    //     is_active: boolean
-                    // }
                 }
-
                 dispatch(userDataReducer(userData))
                 setIsLoading(false)
                 navigation.reset({ index: 0, routes: [{ name: "DrawerScreens" }] })
@@ -91,7 +77,6 @@ const SignInScreen = () => {
             email: values.email
         }
         dispatch(resetPassword(param)).unwrap().then((res) => {
-            console.log({ res });
             if (res) {
                 setIsSucess(true)
             }

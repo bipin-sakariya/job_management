@@ -206,6 +206,7 @@ export const hebrew = {
     groupMemberRequired: 'דרוש חבר בקבוצה',
     formsRequired: 'נדרשים טפסים',
 
+
     enterUserame: 'הכנס שם משתמש',
     enterGroupName: 'הזן את שם הקבוצה',
     enterEmailAddress: 'הזן כתובת אימייל',
@@ -245,7 +246,6 @@ export const hebrew = {
     address_required: 'כתובת נדרשת',
     addressInformation_required: 'נדרש מידע כתובת',
     description_required: 'נדרש תיאור',
-    Sign_image_required: 'נדרשת תמונת סימן',
 
     place: 'מקום',
     current_loaction: 'מיקום נוכחי',
@@ -291,5 +291,11 @@ export const hebrew = {
     KM: 'ק"מ',
     drive: 'נסיעה',
     empty_list: 'לא נמצאו נתונים',
-    try_again: 'נסה שוב'
+
+    job_Added_by: 'המשרה הוספה על ידי',
+    job_Closed_by: 'משרה סגורה',
+    need_Further_Inspection: 'צריך בדיקה נוספת',
+    job_Transfer_by: 'העברת עבודה על ידי',
+    try_again: 'נסה שוב',
+    password_not_match: 'הסיסמה לא צריכה להיות תואמת',
 }

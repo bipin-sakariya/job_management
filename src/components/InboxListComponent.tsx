@@ -18,14 +18,14 @@ interface InboxListComponentProps {
 const InboxListComponent = ({ item, index, onPress }: InboxListComponentProps) => {
     return (
         <TouchableOpacity onPress={onPress} style={styles.itemContainer}>
-            <Image source={item.imageurl ? { uri: item.imageurl } : ImagesPath.placeholder_img} style={styles.imageStyle} />
+            <Image source={item.group.image ? { uri: item.group.image } : ImagesPath.placeholder_img} style={styles.imageStyle} />
             <View style={styles.txtContainer}>
                 <View>
-                    <Text numberOfLines={1} style={styles.titleTxt}>{item.title}</Text>
-                    <Text numberOfLines={1} style={styles.descriptionTxt}>{item.description}</Text>
+                    <Text numberOfLines={1} style={styles.titleTxt}>{item?.group.name}</Text>
+                    <Text numberOfLines={1} style={styles.descriptionTxt}>{item?.message}</Text>
                 </View>
-                {item.count && <View style={styles.counterView}>
-                    <Text style={styles.counterTxt}>{item.count}</Text>
+                {item.badge && <View style={styles.counterView}>
+                    <Text style={styles.counterTxt}>{item?.badge}</Text>
                 </View>}
             </View>
         </TouchableOpacity>

@@ -1,7 +1,7 @@
-import { FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, FlatList, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomDashedComponent, CustomJobListComponent, CustomSubTitleWithImageComponent, Header } from '../../components'
+import { Container, CustomActivityIndicator, CustomDashedComponent, CustomJobListComponent, CustomSubTitleWithImageComponent, Header } from '../../components'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
@@ -14,96 +14,92 @@ import FontSizes from '../../styles/FontSizes'
 import { colors } from '../../styles/Colors'
 import { convertDate } from '../../utils/screenUtils'
 import { JobDetailsData, jobList, recentJobList, } from '../../redux/slices/AdminSlice/jobListSlice'
-import { useAppDispatch } from '../../hooks/reduxHooks'
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { resetCreateJobLocationReducer } from '../../redux/slices/MapSlice/MapSlice'
 import { recentReturnJobList, returnJobList } from '../../redux/slices/AdminSlice/returnJobListSlice'
 
 interface jobListParams {
-    page?: number,
+    page: number,
     search?: string
 }
 
 const ReturnAndAddJobHistoryScreen = () => {
-    const navigation = useCustomNavigation('ReturnAndAddJobHistoryScreen');
-    const route = useRoute<RootRouteProps<'ReturnAndAddJobHistoryScreen'>>();
-    const { type } = route.params
+
     const isFocus = useIsFocused()
     const dispatch = useAppDispatch();
+    const navigation = useCustomNavigation('ReturnAndAddJobHistoryScreen');
+    const route = useRoute<RootRouteProps<'ReturnAndAddJobHistoryScreen'>>();
 
-    console.log({ type })
-    const [page, setPage] = useState(1);
-    const [jobPage, setJobPage] = useState(1)
-    const [recentJob, setRecentJob] = useState<JobDetailsData[]>([])
-    const [isJobList, setJobList] = useState<JobDetailsData[]>([])
+    const [JobListApiPage, SetJobListApiPage] = useState<number>(1)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isOnEndReachedApiLoading, setIsOnEndReachedApiLoading] = useState<boolean>(false)
+
+    const { returnJobListData, isLoading: isReturnJobListApiLoader, resentReturnJobList } = useAppSelector(state => state.returnJobList)
+    const { recentjobListData, jobListData, isLoading: jobListApiLoader } = useAppSelector(state => state.jobList)
+
+    const { type } = route.params
 
     useEffect(() => {
-
-        if (isFocus)
-            //  recentJobListApiCall(page)
-            // jobListApiCall(jobPage)
-            return () => {
-                setPage(1)
-                setJobPage(1)
-            }
+        if (isFocus) {
+            setIsLoading(true)
+            recentJobListApiCall(1)
+            jobListApiCall(1)
+        }
     }, [isFocus])
-    useEffect(() => {
-        recentJobListApiCall(page)
-        jobListApiCall(jobPage)
-    }, [])
 
     const recentJobListApiCall = (page: number) => {
         let params: jobListParams = {
             page: page,
             search: ''
         }
-        {
-            type == 'returnJob' ?
-                dispatch(recentReturnJobList(params)).unwrap().then((res) => {
-                    console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-                    setRecentJob(res.results)
-                    setPage(page + 1)
-                }).catch((error) => {
-                    console.log({ error });
-                })
-                :
-                dispatch(recentJobList(params)).unwrap().then((res) => {
-                    console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-                    setRecentJob(res.results)
-                    setPage(page + 1)
-                }).catch((error) => {
-                    console.log({ error });
-                })
+        if (type == 'returnJob') {
+            dispatch(recentReturnJobList(params)).unwrap().catch((error) => {
+                console.log({ error });
+                setIsLoading(false)
+            })
+        } else {
+            dispatch(recentJobList(params)).unwrap().catch((error) => {
+                console.log({ error });
+                setIsLoading(false)
+            })
         }
     }
 
-    const jobListApiCall = (jobpage: number) => {
+    const jobListApiCall = (jobPage?: number) => {
         let params: jobListParams = {
-            page: jobPage,
+            page: jobPage ?? JobListApiPage,
             search: ''
         }
-        type == 'returnJob' ? dispatch(returnJobList(params)).unwrap().then((res) => {
-            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-            setJobList(res.results)
-            setJobPage(jobpage + 1)
-        }).catch((error) => {
-            console.log({ error });
-        }) :
-            dispatch(jobList(params)).unwrap().then((res) => {
-                console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-                setJobList(res.results)
-                setJobPage(jobpage + 1)
+        if (type == 'returnJob') {
+            dispatch(returnJobList(params)).unwrap().then((res) => {
+                SetJobListApiPage(params.page + 1)
+                setIsOnEndReachedApiLoading(false)
+                setIsLoading(false)
             }).catch((error) => {
+                setIsLoading(false)
+                setIsOnEndReachedApiLoading(false)
                 console.log({ error });
             })
+        } else {
+            dispatch(jobList(params)).unwrap().then((res) => {
+                SetJobListApiPage(params.page + 1)
+                setIsOnEndReachedApiLoading(false)
+                setIsLoading(false)
+            }).catch((error) => {
+                setIsLoading(false)
+                setIsOnEndReachedApiLoading(false)
+                console.log({ error });
+            })
+        }
     }
 
-    const renderItem = ({ item, index }: { item: JobDetailsData, index: number }) => {
+    const renderItem = ({ item }: { item: JobDetailsData }) => {
         return (
             <TouchableOpacity
-                onPress={() => navigation.navigate('JobDetailsScreen', { params: item })}
+                onPress={() => navigation.navigate('JobDetailsScreen', { params: item, type: type })}
                 style={[styles.containerShadow, styles.recentallyView]}>
                 <Image
-                    source={item?.images[0]?.image ? { uri: item?.images[0]?.image } : ImagesPath.job_list_image_icon}
+                    source={(item?.images && item?.images[0]?.image) ? { uri: item?.images[0]?.image } : ImagesPath.job_list_image_icon}
                     style={styles.imageStyle} />
                 <View style={[globalStyles.rowView, { justifyContent: 'space-between', marginBottom: wp(1) }]}>
                     <Text numberOfLines={1} style={[styles.titleTxt, globalStyles.rtlStyle,]}>{item.address}</Text>
@@ -117,8 +113,18 @@ const ReturnAndAddJobHistoryScreen = () => {
         )
     }
 
+
+    const isCloseToBottom = (nativeEvent: any) => {
+        const paddingToBottom = 20;
+        return nativeEvent.layoutMeasurement.height + nativeEvent.contentOffset.y >=
+            nativeEvent.contentSize.height - paddingToBottom;
+    }
+
+
+
     return (
         <View style={globalStyles.container}>
+            {isLoading && <CustomActivityIndicator />}
             <Header
                 headerLeftStyle={{
                     width: "70%",
@@ -137,7 +143,19 @@ const ReturnAndAddJobHistoryScreen = () => {
                 }
             />
             <Container>
-                <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView showsVerticalScrollIndicator={false}
+                    nestedScrollEnabled={true}
+                    onScroll={({ nativeEvent }) => {
+                        if (isCloseToBottom(nativeEvent)) {
+                            if (type == 'returnJob' && returnJobListData?.next && !isReturnJobListApiLoader) {
+                                setIsOnEndReachedApiLoading(true)
+                                jobListApiCall()
+                            } else if ((type != 'returnJob' && jobListData?.next && !jobListApiLoader)) {
+                                setIsOnEndReachedApiLoading(true)
+                                jobListApiCall()
+                            }
+                        }
+                    }}>
                     {type == "addJob" ?
                         <CustomDashedComponent
                             title={strings.addNewJob}
@@ -161,13 +179,10 @@ const ReturnAndAddJobHistoryScreen = () => {
                     />
                     <View style={{ marginLeft: wp(2) }}>
                         <FlatList
-                            data={recentJob}
+                            data={type == 'returnJob' ? resentReturnJobList?.results : recentjobListData?.results}
                             renderItem={renderItem}
                             showsHorizontalScrollIndicator={false}
                             horizontal
-                            onEndReached={() => {
-                                console.log('hello')
-                            }}
                             ItemSeparatorComponent={() => <View style={{ width: wp(3) }} />}
                         />
                     </View>
@@ -178,7 +193,7 @@ const ReturnAndAddJobHistoryScreen = () => {
                     />
                     <View style={[styles.jobListViewStyle]}>
                         <FlatList
-                            data={isJobList}
+                            data={type == 'returnJob' ? returnJobListData?.results : jobListData?.results}
                             renderItem={({ item, index }: { item: JobDetailsData, index: number }) => {
                                 return (
                                     <CustomJobListComponent
@@ -188,11 +203,11 @@ const ReturnAndAddJobHistoryScreen = () => {
                                 )
                             }}
                             showsVerticalScrollIndicator={false}
-
-                            onEndReached={() => {
-                                console.log('hello')
-                            }}
-                            onEndReachedThreshold={0.5}
+                            ListFooterComponent={() => (
+                                <>
+                                    {isOnEndReachedApiLoading && <ActivityIndicator />}
+                                </>
+                            )}
                             style={{ marginTop: wp(2), }}
                             ItemSeparatorComponent={() => <View style={{ height: wp(3) }} />}
                         />

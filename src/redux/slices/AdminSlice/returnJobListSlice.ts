@@ -3,6 +3,7 @@ import { Alert } from "react-native"
 import { ApiConstants } from "../../../config/ApiConstants"
 import { axiosClient } from "../../../config/Axios"
 import { FormDataTypes } from "./formListSlice"
+import { formdata } from "./jobListSlice"
 interface Added_byData {
     id: number | null,
     profile_image?: string,
@@ -38,11 +39,11 @@ export interface JobDetailsData {
     id: number,
     added_by: Added_byData,
     closed_by?: null,
-    images: [{ image: string | undefined }],
-    attachments: [{ attachment: string | undefined; }],
+    images?: { image: string | undefined }[],
+    attachments?: { attachment: string | undefined }[],
     forms?: undefined,
-    bills?: undefined,
-    group_forms?: undefined,
+    bills?: [],
+    group_forms?: formdata[] | [],
     created_at: string,
     updated_at: string,
     address: string,
@@ -58,16 +59,13 @@ export interface JobDetailsData {
     form?: undefined,
     bill?: undefined,
     return_job?: Return_Job[] | undefined,
-    transfer_to?: {
-        id: number,
-        name: string
-    }
+    transfer_to?: { id: number, name: string }[]
     // role: { id: number, title: string }
 }
 
 
 interface JobDataListProps {
-    count: number,
+    count?: number,
     next?: string | null,
     previous?: string | null,
     results: JobDetailsData[]
@@ -76,7 +74,9 @@ interface InitialState {
     isLoading: boolean
     error: object | string | undefined
     retunJobDetails: JobDetailsData
-    returnJobListData: JobDataListProps,
+    returnJobListData: JobDataListProps
+    resentReturnJobList: JobDataListProps
+    resentJobList: JobDataListProps
 }
 
 
@@ -126,17 +126,26 @@ const initialState: InitialState = {
         form: undefined,
         bill: undefined,
         return_job: [],
-        transfer_to: {
-            id: 0,
-            name: ''
-        }
+        transfer_to: []
     },
+    resentReturnJobList: {
+        count: undefined,
+        next: undefined,
+        previous: undefined,
+        results: []
+    },
+    resentJobList: {
+        count: undefined,
+        next: undefined,
+        previous: undefined,
+        results: []
+    }
 }
 
 
 interface paramsTypes {
     id?: number
-    // data?: FormDataTypes
+    formData?: FormData
     page?: number
     search?: string
     status?: string
@@ -157,9 +166,7 @@ const JOB = "JOB";
 export const returnJobList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
     (JOB + "/returnJobList", async (params, { rejectWithValue }) => {
         try {
-            console.log("🚀 ~ file: returnJobListSlice.ts ~ line 67 ~ params", params)
             const response = await axiosClient.get(ApiConstants.RETURNJOB + `?page=${params.page}&search=${params.search}`)
-            console.log("🚀 ~ file: returnJobListSlice.ts ~ line 60 ~ response", response)
             return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -171,7 +178,6 @@ export const returnJobList = createAsyncThunk<JobDataListProps, paramsTypes, { r
 
 export const returnDeleteJob = createAsyncThunk<string, number, { rejectValue: apiErrorTypes }>(JOB + "/returnDeleteJob", async (id, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.RETURNJOB, id)
         const response = await axiosClient.delete(ApiConstants.RETURNJOB + id + '/')
         return response.data
     } catch (e: any) {
@@ -184,7 +190,6 @@ export const returnDeleteJob = createAsyncThunk<string, number, { rejectValue: a
 
 export const returnJobDetail = createAsyncThunk<JobDetailsData, number, { rejectValue: apiErrorTypes }>(JOB + "/returnJobDetail", async (id, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.RETURNJOB, id)
         const response = await axiosClient.get(ApiConstants.RETURNJOB + id + '/')
         return response.data
     } catch (e: any) {
@@ -198,10 +203,7 @@ export const returnJobDetail = createAsyncThunk<JobDetailsData, number, { reject
 export const recentReturnJobList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
     (JOB + "/recentReturnJobList", async (params, { rejectWithValue }) => {
         try {
-            console.log("🚀 ~ file:returnJobListSlice.ts ~ line 60 ~ params", params)
-            // console.log('p000000000000', ApiConstants.JOB + `?page=${params.page}&search=${params.search}`)
             const response = await axiosClient.get(ApiConstants.RECENTRETURNJOB + `?page=${params.page}&search=${params.search}`)
-            console.log("🚀 ~ file: returnJobListSlice.ts ~ line 69 ~ response", response)
             return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -212,9 +214,7 @@ export const recentReturnJobList = createAsyncThunk<JobDataListProps, paramsType
     })
 export const returnJobCreate = createAsyncThunk<JobDetailsData, paramsTypes, { rejectValue: apiErrorTypes }>(JOB + "/returnJobCreate", async (params, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.RETURNJOB, { params })
         const response = await axiosClient.post(ApiConstants.RETURNJOB, params)
-        console.log('data...........=====', { response: response })
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {
@@ -224,10 +224,9 @@ export const returnJobCreate = createAsyncThunk<JobDetailsData, paramsTypes, { r
     }
 })
 export const returnJobUpdate = createAsyncThunk<string[], paramsTypes, { rejectValue: apiErrorTypes }>(JOB + "/returnJobUpdate", async (params, { rejectWithValue }) => {
+    console.log({ params })
     try {
-        console.log(ApiConstants.RETURNJOB)
-        const response = await axiosClient.patch(ApiConstants.RETURNJOB + params.id + '/', params.Data)
-        console.log('data...........=====', { response: response })
+        const response = await axiosClient.patch(ApiConstants.RETURNJOB + params.id + '/', params.formData)
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {
@@ -251,12 +250,15 @@ const returnJobListSlice = createSlice({
         });
         builder.addCase(returnJobList.fulfilled, (state, action) => {
             state.isLoading = false
-            let tempArray = action.meta.arg.page == 1 ? action.payload : {
+            state.error = ''
+            // let tempArray = action.meta.arg.page == 1 ? action.payload : {
+            //     ...action.payload,
+            //     results: [...current(state.returnJobListData?.results), ...action.payload?.results]
+            // }
+            state.returnJobListData = action.meta.arg.page == 1 ? action.payload : {
                 ...action.payload,
                 results: [...current(state.returnJobListData?.results), ...action.payload?.results]
             }
-            state.returnJobListData = action.meta.arg.page == 1 ? action.payload : tempArray
-            state.error = ''
         });
         builder.addCase(returnJobList.rejected, (state, action) => {
             state.isLoading = false
@@ -297,6 +299,7 @@ const returnJobListSlice = createSlice({
         });
         builder.addCase(recentReturnJobList.fulfilled, (state, action) => {
             state.isLoading = false
+            state.resentReturnJobList = action.payload
             // state.returnJobListData = { ...state.returnJobListData, results: state.returnJobListData.results.filter(i => i.id !== action.meta.arg) }
             state.error = ''
         });

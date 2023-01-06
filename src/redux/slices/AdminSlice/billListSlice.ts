@@ -12,7 +12,8 @@ export interface billData {
     name: string,
     type_counting: string,
     jumping_ration: Double,
-    quantity: number,
+    quantity?: number,
+    measurement?: number,
     image: string,
     type: string
 }
@@ -74,10 +75,7 @@ export const billList = createAsyncThunk<billDataProps, paramsTypes, { rejectVal
         try {
             let urlParams = new URLSearchParams({ page: params.page ? params.page.toString() : '', bill_type: params.bill_type ? params.bill_type : '' })
             params.search && urlParams.append('search', params.search)
-            console.log("🚀 ~ file: billListSlice.ts ~ line 60 ~ params", params)
-            console.log(ApiConstants.BILL)
             const response = await axiosClient.get(ApiConstants.BILL + "?" + urlParams.toString())
-            console.log("🚀 ~ file: billListSlice.ts ~ line 69 ~ response", response)
             return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -90,9 +88,7 @@ export const billList = createAsyncThunk<billDataProps, paramsTypes, { rejectVal
 export const billCreate = createAsyncThunk<billData, FormData, { rejectValue: apiErrorTypes }>
     (BILL + "/billCreate", async (params, { rejectWithValue }) => {
         try {
-            console.log(ApiConstants.BILL)
             const response = await axiosClient.post(ApiConstants.BILL, params)
-            console.log("🚀 ~ file: billListSlice.ts ~ line 69 ~ response", response)
             return response.data
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -104,7 +100,6 @@ export const billCreate = createAsyncThunk<billData, FormData, { rejectValue: ap
 
 export const billDelete = createAsyncThunk<string, number, { rejectValue: apiErrorTypes }>(BILL + "/billDelete", async (id, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.BILL, id)
         const response = await axiosClient.delete(ApiConstants.BILL + id + '/')
         return response.data
     } catch (e: any) {
@@ -117,7 +112,6 @@ export const billDelete = createAsyncThunk<string, number, { rejectValue: apiErr
 
 export const billDetail = createAsyncThunk<billData, number, { rejectValue: apiErrorTypes }>(BILL + "/billDetail", async (id, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.BILL, id)
         const response = await axiosClient.get(ApiConstants.BILL + id + '/')
         return response.data
     } catch (e: any) {
@@ -130,7 +124,6 @@ export const billDetail = createAsyncThunk<billData, number, { rejectValue: apiE
 
 export const billUpdate = createAsyncThunk<billData, paramsTypes, { rejectValue: apiErrorTypes }>(BILL + "/billUpdate", async (params, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.BILL, params)
         const response = await axiosClient.patch(ApiConstants.BILL + params.id + '/', params.data)
         return response.data
     } catch (e: any) {

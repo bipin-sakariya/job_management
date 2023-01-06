@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Alert } from "react-native";
-import { act } from "react-test-renderer";
 import { ApiConstants } from "../../config/ApiConstants";
 import { axiosClient } from "../../config/Axios";
 
@@ -9,13 +8,15 @@ interface initialStateTypes {
     userData?: userData
     error: string | undefined
     token: TokenType | undefined
+    netInfo: boolean | null
 
 }
 const initialState: initialStateTypes = {
     userData: undefined,
     isLoading: false,
     error: '',
-    token: undefined
+    token: undefined,
+    netInfo: false
 }
 
 interface userData {
@@ -63,8 +64,6 @@ export const signin = createAsyncThunk<TokenType, paramsTypes, { rejectValue: ap
     async (params, { rejectWithValue }) => {
         try {
             const response = await axiosClient.post(ApiConstants.LOGIN, params)
-            console.log(ApiConstants.LOGIN)
-            console.log({ 'data=====>': response.data })
             return response.data
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -76,10 +75,8 @@ export const signin = createAsyncThunk<TokenType, paramsTypes, { rejectValue: ap
 
 export const resetPassword = createAsyncThunk<userData, any, { rejectValue: apiErrorTypes }>(AUTH + "/resetPassword",
     async (params, { rejectWithValue }) => {
-
         try {
             const response = await axiosClient.post(ApiConstants.RESETPASSWORD, params)
-            console.log(ApiConstants.RESETPASSWORD)
             return response.data
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -95,11 +92,13 @@ export const UserSlice = createSlice({
     initialState: initialState,
     reducers: {
         userDataReducer: (state, action) => {
-            console.log({ action })
             state.userData = action.payload
         },
         resetUserDataReducer: (state) => {
             state.userData = undefined
+        },
+        setNetInfo: (state, action) => {
+            state.netInfo = action.payload
         }
     },
     extraReducers(builder) {
@@ -132,5 +131,5 @@ export const UserSlice = createSlice({
     },
 })
 
-export const { userDataReducer, resetUserDataReducer } = UserSlice.actions;
+export const { userDataReducer, resetUserDataReducer, setNetInfo } = UserSlice.actions;
 export default UserSlice.reducer;

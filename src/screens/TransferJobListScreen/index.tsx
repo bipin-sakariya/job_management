@@ -45,7 +45,6 @@ const ReturnAndAddJobHistoryScreen = () => {
       search: ''
     }
     dispatch(recentTransferJobList(params)).unwrap().then((res) => {
-      console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
       setRecentJob(res.results)
       setPage(page + 1)
     }).catch((error) => {
@@ -66,7 +65,7 @@ const ReturnAndAddJobHistoryScreen = () => {
     })
   }
 
-  const renderItem = ({ item, index }: { item: JobDetailsData, index: number }) => {
+  const renderItem = ({ item }: { item: JobDetailsData }) => {
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate('JobDetailsScreen', { params: item })}
@@ -150,4 +149,4 @@ const ReturnAndAddJobHistoryScreen = () => {
   )
 }
 
-export default ReturnAndAddJobHistoryScreen
+export default ReturnAndAddJobHistoryScreen;

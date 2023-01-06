@@ -189,10 +189,7 @@ const GROUP = "GROUP";
 export const groupList = createAsyncThunk<GroupDataProps, paramsTypes, { rejectValue: apiErrorTypes }>
     (GROUP + "/groupList", async (params, { rejectWithValue }) => {
         try {
-            console.log("🚀 ~ file: groupListSlice.ts ~ line 60 ~ params", params)
-            console.log(ApiConstants.GROUPLIST)
             const response = await axiosClient.get(ApiConstants.GROUPLIST + `?page=${params.page}&search=${params.search}`)
-            console.log("🚀 ~ file: groupListSlice.ts ~ line 69 ~ response", response)
             return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -204,7 +201,6 @@ export const groupList = createAsyncThunk<GroupDataProps, paramsTypes, { rejectV
 
 export const groupDelete = createAsyncThunk<number, number, { rejectValue: apiErrorTypes }>(GROUP + "/groupDelete", async (id, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.GROUPLIST, id)
         const response = await axiosClient.delete(ApiConstants.GROUPLIST + id + '/')
         return response.data
     } catch (e: any) {
@@ -216,9 +212,7 @@ export const groupDelete = createAsyncThunk<number, number, { rejectValue: apiEr
 })
 export const groupUpdate = createAsyncThunk<string[], paramsTypes, { rejectValue: apiErrorTypes }>(GROUP + "/groupUpdate", async (params, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.GROUPLIST, params)
         const response = await axiosClient.patch(ApiConstants.GROUPLIST + params.id + '/', params.data)
-        console.log('response check update group', { response })
         return response.data
     } catch (e: any) {
         if (e.code === "ERR_NETWORK") {
@@ -230,7 +224,6 @@ export const groupUpdate = createAsyncThunk<string[], paramsTypes, { rejectValue
 
 export const groupDetail = createAsyncThunk<GroupData, number, { rejectValue: apiErrorTypes }>(GROUP + "/groupDetail", async (id, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.GROUPLIST, id)
         const response = await axiosClient.get(ApiConstants.GROUPLIST + id + '/')
         return response.data
     } catch (e: any) {
@@ -242,7 +235,6 @@ export const groupDetail = createAsyncThunk<GroupData, number, { rejectValue: ap
 })
 export const createGroup = createAsyncThunk<string[], FormData, { rejectValue: apiErrorTypes }>(GROUP + "/createGroup", async (params, { rejectWithValue }) => {
     try {
-        console.log(ApiConstants.GROUPLIST, params)
         const response = await axiosClient.post(ApiConstants.GROUPLIST, params)
         return response.data
     } catch (e: any) {

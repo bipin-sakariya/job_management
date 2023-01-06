@@ -12,6 +12,8 @@ import groupListSlice from './slices/AdminSlice/groupListSlice';
 import formListSlice from './slices/AdminSlice/formListSlice';
 import MapSlice from './slices/MapSlice/MapSlice';
 import returnJobListSlice from './slices/AdminSlice/returnJobListSlice';
+import notificationSlice from './slices/AdminSlice/notificationSlice';
+import ChatSlice from './slices/ChatSlice/ChatSlice';
 
 const persistConfig = {
     key: "root",
@@ -26,7 +28,9 @@ const reducers = combineReducers({
     groupList: groupListSlice,
     formList: formListSlice,
     mapData: MapSlice,
-    returnJobList: returnJobListSlice
+    returnJobList: returnJobListSlice,
+    notificationList: notificationSlice,
+    chatData: ChatSlice
 })
 
 export const USER_LOGOUT = 'USER_LOGOUT'

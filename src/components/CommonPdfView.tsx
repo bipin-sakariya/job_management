@@ -1,4 +1,4 @@
-import React, { SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -59,9 +59,7 @@ const CommonPdfView = (props: CommonPdfViewProps) => {
     const getSizefromPath = (url: string) => {
         RNFetchBlob.fs.stat(url)
             .then((stats) => {
-                console.log(stats)
                 setSize(stats.size)
-                console.log(formatBytes(stats.size))
             })
             .catch((err) => { console.log(err) })
     }
@@ -85,7 +83,7 @@ const CommonPdfView = (props: CommonPdfViewProps) => {
             </View>
             <View style={[props.detailsViewStyle, { marginHorizontal: wp(1), width: wp("27%") }]}>
                 <Text numberOfLines={1} style={[styles.docFileNameTxt, globalStyles.rtlStyle, props.titleTxtstyle,]}>{title}</Text>
-                <Text numberOfLines={1} style={[styles.docFileSizeTxt, globalStyles.rtlStyle, props.mbTxtstyle]}>{formatBytes(size, 0)}</Text>
+                <Text numberOfLines={1} style={[styles.docFileSizeTxt, globalStyles.rtlStyle, props.mbTxtstyle]}>{formatBytes(size ? size : 0, 0)}</Text>
             </View>
         </TouchableOpacity>
     )

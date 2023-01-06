@@ -48,8 +48,6 @@ const RouteChooseLocationDetailScreen = () => {
             search: ''
         }
         dispatch(jobList(params)).unwrap().then((res) => {
-            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-            // setJobList(res.results)
             setPage(page + 1)
         }).catch((error) => {
             console.log({ error });
@@ -59,7 +57,6 @@ const RouteChooseLocationDetailScreen = () => {
     const getCurrentLocation = async () => {
         Geolocation.getCurrentPosition(
             position => {
-                console.log("getCurrentPosition", position.coords)
                 dispatch(setJobLocation({
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,

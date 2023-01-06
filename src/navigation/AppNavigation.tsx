@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, Theme } from '@react-navigation/native';
 import { RootStackParamList } from '../types/RootStackTypes';
@@ -32,7 +32,7 @@ import ReturnAndAddJobHistoryScreen from '../screens/ReturnAndAddJobHistoryScree
 import SelectFormScreen from '../screens/SelectFormScreen';
 import FillFormScreen from '../screens/FillFormScreen';
 import SignBillDetailScreen from '../screens/SignBillDetailScreen';
-import { useAppSelector } from '../hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import AddNewJobScreen from '../screens/AddNewJobScreen';
 import GroupListScreen from '../screens/GroupListScreen';
 import CreateGroupScreen from '../screens/CreateGroupScreen';
@@ -47,12 +47,14 @@ import SearchScreen from '../screens/SearchScreen';
 import AssignJobScreen from '../screens/AssignJobScreen';
 import TranferJobListScreen from '../screens/TransferJobListScreen';
 import MapScreen from '../screens/MapScreen';
+import NetInfo from "@react-native-community/netinfo";
+import { setNetInfo } from '../redux/slices/AuthUserSlice';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
 const AppNavigation = () => {
     const { userData } = useAppSelector(state => state.userDetails)
-
+    const dispatch = useAppDispatch()
     const navTheme: Theme = {
         dark: false,
         colors: {
@@ -64,6 +66,17 @@ const AppNavigation = () => {
             notification: colors.white,
         },
     };
+
+    useEffect(() => {
+        const unsubscribe = NetInfo.addEventListener(state => {
+            console.log("Connection type", state.type);
+            console.log("Is connected?", state.isConnected);
+            dispatch(setNetInfo(state.isConnected))
+        });
+        return () => {
+            unsubscribe()
+        }
+    }, [])
 
     return (
         <NavigationContainer theme={navTheme}>

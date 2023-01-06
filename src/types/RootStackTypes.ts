@@ -3,6 +3,7 @@ import { JobDataProps } from "./commanTypes";
 import { date } from "yup";
 import { GroupData } from "../redux/slices/AdminSlice/groupListSlice";
 import { JobDetailsData } from "../redux/slices/AdminSlice/jobListSlice";
+import { NotificationObjectType } from "../redux/slices/AdminSlice/notificationSlice";
 
 export interface JobDetailsProps {
     description: string
@@ -31,11 +32,11 @@ export interface JobDetailsProps {
 export type RootStackParamList = {
     AuthStack: AuthStackParamList
     DrawerScreens: DrawerStackParamList
-    MapScreen: { type: 'viewJob' | 'viewJobs', JobDetails?: { id?: number, images?: [{ image: string | undefined }], created_at?: string, status?: string, button?: string, address?: string, description?: string, km?: string, coordinate?: { latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number }, } }
+    MapScreen: { type: 'viewJob' | 'viewJobs', JobDetails?: { id?: number, images?: { image: string | undefined }[], created_at?: string, status?: string, button?: string, address?: string, description?: string, km?: string, coordinate?: { latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number }, } }
     IndoxScreen: undefined
     JobDuplicateListScreen: undefined
     NotificationScreen: undefined
-    JobDetailsScreen: { params?: JobDetailsData, type?: string }
+    JobDetailsScreen: { params?: Partial<JobDetailsData> & Partial<NotificationObjectType>, type?: string }
     ReportGeneratorScreen: undefined
     BillListScreen: { billType?: string }
     BillCreateScreen: { screenName?: string }
@@ -50,8 +51,8 @@ export type RootStackParamList = {
     ChatScreen: { job?: JobDataProps }
     TransferJobScreen: { jobId: number }
     ReturnJobScreen: { jobId: number, status: string | undefined }
-    DuplicateScreen?: { params?: number }
-    CloseJobScreen: { params?: any }
+    DuplicateScreen?: { jobDetails?: JobDetailsData }
+    CloseJobScreen?: { params?: any }
     RouteScreen: undefined
     RouteChooseLocationDetailScreen: undefined
     RouteMapViewScreen: undefined

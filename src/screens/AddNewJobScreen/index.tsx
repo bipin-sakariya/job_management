@@ -1,7 +1,7 @@
 import { Alert, FlatList, Image, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomBlackButton, CustomCarouselImageAndVideo, CustomDashedComponent, CustomDetailsComponent, CustomModal, CustomSubTitleWithImageComponent, CustomSwitchComponent, CustomTextInput, CustomTextInputWithImage, Header } from '../../components'
+import { Container, CustomActivityIndicator, CustomBlackButton, CustomCarouselImageAndVideo, CustomDashedComponent, CustomDetailsComponent, CustomModal, CustomSubTitleWithImageComponent, CustomSwitchComponent, CustomTextInput, CustomTextInputWithImage, Header } from '../../components'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
@@ -43,8 +43,9 @@ interface doc_arrayList {
 }
 
 const AddNewJobScreen = () => {
-    const navigation = useCustomNavigation('AddNewJobScreen');
+
     const dispatch = useAppDispatch()
+    const navigation = useCustomNavigation('AddNewJobScreen');
 
     const [isUrgentJob, setIsUrgentJob] = useState(false)
     const [isFinishNotification, setIsFinishNotification] = useState(false)
@@ -60,7 +61,9 @@ const AddNewJobScreen = () => {
         address_information: '',
         description: '',
     })
-    const { isLoading } = useAppSelector(state => state.jobList)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    // const { isLoading } = useAppSelector(state => state.jobList)
     const { createJobLocation } = useAppSelector(state => state.mapData)
 
 
@@ -80,6 +83,7 @@ const AddNewJobScreen = () => {
         description: string;
     }) => {
         if (values) {
+            setIsLoading(true)
             let data = new FormData()
             let image_array: image_arrayList[] = []
             let doc_array: doc_arrayList[] = []
@@ -129,9 +133,11 @@ const AddNewJobScreen = () => {
                 })
             }
             dispatch(jobCreate(data)).unwrap().then((value) => {
+                setIsLoading(false)
                 setIsModelVisible(true)
             }).catch((error) => {
                 setError(error.data)
+                setIsLoading(false)
             })
         } else {
             if (isEmptyArray(imageList)) {
@@ -188,7 +194,7 @@ const AddNewJobScreen = () => {
 
             let ImageTempArray = [...imageList]
             let DocTempArray = [...docList]
-            console.log({ title: res })
+
             if (res[0]?.type?.split("/")[0] == 'application') {
                 DocTempArray.push({ attachment: res[0].fileCopyUri ? res[0].fileCopyUri : '', type: res[0]?.type?.split("/")[1], bytes: res[0].size, title: res[0].name })
                 setDocError(false)
@@ -211,7 +217,7 @@ const AddNewJobScreen = () => {
 
     return (
         <View style={globalStyles.container}>
-            {/* {isLoading && <CustomActivityIndicator size={'small'} />} */}
+            {isLoading && <CustomActivityIndicator size={'small'} />}
             <Header
                 headerLeftStyle={{
                     paddingLeft: wp(3),

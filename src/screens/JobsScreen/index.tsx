@@ -10,13 +10,12 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { RootState, useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { JobDetailsData, jobStatusWiseList } from '../../redux/slices/AdminSlice/jobListSlice';
+import { jobStatusWiseList } from '../../redux/slices/AdminSlice/jobListSlice';
 import moment from 'moment';
-import { GroupData, groupList, selectedAllGroupReducers, selectedGroupReducers } from '../../redux/slices/AdminSlice/groupListSlice';
+import { GroupData, groupList, selectedGroupReducers } from '../../redux/slices/AdminSlice/groupListSlice';
 import { GroupParams } from '../TransferJobScreen';
 import FontSizes from '../../styles/FontSizes';
 import fonts from '../../styles/Fonts';
-// import { getNotificatioList } from '../../redux/slices/AdminSlice/notificationSlice';
 
 interface jobListParams {
     page?: number,
@@ -33,41 +32,37 @@ interface DateParams {
 }
 
 const JobsScreen = () => {
-    const navigation = useCustomNavigation('JobsScreen')
+    const navigation = useCustomNavigation('JobsScreen');
     const refRBSheet = useRef<RBSheet | null>(null);
     const dispatch = useAppDispatch();
-    const isFocus = useIsFocused()
+    const isFocus = useIsFocused();
 
     const [selectedItem, setSelectedItem] = useState<GroupParams | undefined>(undefined);
-    const [btn, setBtn] = useState({ open: true, close: false })
+    const [btn, setBtn] = useState({ open: true, close: false });
     const [page, setPage] = useState(1);
-    const [closeJobApiPage, SetCloseJobApiPage] = useState<number>(1)
-    const [openJobApiPage, SetOpenJobApiPage] = useState<number>(1)
-    const [groupPage, setGroupPage] = useState(1)
-    // const [openJobList, setOpenJobList] = useState<JobDetailsData[]>([])
-    const [isSearch, setIsSearch] = useState(false)
+    const [closeJobApiPage, SetCloseJobApiPage] = useState<number>(1);
+    const [openJobApiPage, SetOpenJobApiPage] = useState<number>(1);
+    const [groupPage, setGroupPage] = useState(1);
+    const [isSearch, setIsSearch] = useState(false);
     const [text, setText] = useState("");
-    const [isFooterLoading, setIsFooterLoading] = useState<boolean>(false)
-    const [groupData, setGroupData] = useState<GroupData[]>([])
-    const [finalGroupData, setfinalGroupList] = useState<GroupParams[]>([])
-    const [finalAllGroup, setFinalAllGroup] = useState<GroupParams[]>([])
-    const [selectedDate, setSelectedDate] = useState<DateParams>({})
-    const [isModelVisible, setIsModelVisible] = useState(false)
+    const [isFooterLoading, setIsFooterLoading] = useState<boolean>(false);
+    const [groupData, setGroupData] = useState<GroupData[]>([]);
+    const [finalGroupData, setfinalGroupList] = useState<GroupParams[]>([]);
+    const [finalAllGroup, setFinalAllGroup] = useState<GroupParams[]>([]);
+    const [selectedDate, setSelectedDate] = useState<DateParams>({});
+    const [isModelVisible, setIsModelVisible] = useState(false);
     const [sdate, setSdate] = useState('');
     const [edate, setEdate] = useState(' ');
-    const [selectedId, setSelectedId] = useState({})
-    const [finalSelectedList, isFinalSelectedList] = useState(finalAllGroup)
-    const [onRefreshJobList, setOnRefreshJobList] = useState<boolean>(false)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [onRefreshJobList, setOnRefreshJobList] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const { userData } = useAppSelector((state: RootState) => state.userDetails)
-    const { jobListData, closedJobList, openedJobList, isLoading: apiCallLoading } = useAppSelector(state => state.jobList)
+    const { closedJobList, openedJobList, isLoading: apiCallLoading } = useAppSelector(state => state.jobList)
     const { groupListData, selectedGroupData } = useAppSelector(state => state.groupList)
 
     useEffect(() => {
         let defaultSelected = finalGroupData.find((i) => i.selected == true)
         setSelectedItem(defaultSelected)
-        setSelectedId(selectedGroupData)
     }, [])
 
     useEffect(() => {
@@ -80,7 +75,8 @@ const JobsScreen = () => {
             if (closedJobList.results.length == 0 || openedJobList.results.length == 0) {
                 setIsLoading(true)
             }
-            JobListApiCall(undefined, undefined, selectedGroupData?.id, undefined, undefined, strings.close)
+            JobListApiCall(1, undefined, selectedGroupData?.id, undefined, undefined, strings.close)
+            JobListApiCall(1, undefined, selectedGroupData?.id, undefined, undefined, strings.open)
         }
     }, [isFocus])
 
@@ -88,34 +84,12 @@ const JobsScreen = () => {
         JobListApiCall(1, undefined, selectedGroupData?.id, selectedDate?.toDate, selectedDate?.fromDate)
     }, [btn])
 
-    const selectedGroup = () => {
-        if (selectedGroupData) {
-            const data = finalAllGroup.map((i) => {
-
-                if (i.name == selectedGroupData.name) {
-                    return {
-                        ...i,
-                        selected: !i.selected,
-                    };
-                } else {
-                    return i;
-                }
-
-            })
-            setFinalAllGroup(data)
-            console.log({ data })
-        }
-    }
-
     useEffect(() => {
         let params = {
             search: '',
             page: groupPage
         }
-        // setIsFooterLoading(true)
         dispatch(groupList(params)).unwrap().then((res) => {
-            // setIsFooterLoading(false) setPage(page + 1)
-            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
             setGroupData(res.results)
             setGroupPage(groupPage + 1)
         }).catch((error) => {
@@ -124,7 +98,6 @@ const JobsScreen = () => {
     }, [isFocus, groupListData.results, finalAllGroup])
 
     const JobListApiCall = (page?: number, input?: string, id?: number, to_date?: string, from_date?: string, status?: string) => {
-
         let params: jobListParams = {
             page: page ? page : btn.open ? openJobApiPage : btn.close ? closeJobApiPage : 1,
             search: input,
@@ -154,7 +127,6 @@ const JobsScreen = () => {
             }
         })
         setfinalGroupList(findData)
-
     }, [groupData])
 
     useEffect(() => {
@@ -199,11 +171,8 @@ const JobsScreen = () => {
                 }
             })
             setFinalAllGroup(data)
-            console.log({ data })
         }
     }, [finalGroupData, groupListData.results, selectedGroupData]);
-
-    const groupId: GroupParams | undefined = finalGroupData.find((i) => i.selected == true)
 
     return (
         <View style={globalStyles.container}>
@@ -240,7 +209,6 @@ const JobsScreen = () => {
                     </View>
                 }
             />
-
             <Container>
                 {isSearch &&
                     <View style={[styles.searchInputView]}>
@@ -292,11 +260,11 @@ const JobsScreen = () => {
                             <JobListComponent
                                 item={item}
                                 isDateVisible={isDateVisible}
+                                isNotification={false}
                             />
                         )
                     }}
                     onEndReached={() => {
-                        console.log('JOB ON END -----', { open: btn.open, close: btn.close, openNEXT: openedJobList?.next, closeNExt: closedJobList.next })
                         if ((btn.open ? openedJobList?.next : btn.close ? closedJobList?.next : false) && !apiCallLoading) {
                             setIsFooterLoading(true)
                             JobListApiCall()
@@ -336,7 +304,6 @@ const JobsScreen = () => {
                 data={finalAllGroup}
                 defaultSelected={selectedGroupData}
                 onSelectedTab={(item) => {
-                    console.log({ item })
                     JobListApiCall(1, text, item.id)
                     setSelectedItem(item)
                     dispatch(selectedGroupReducers(item))

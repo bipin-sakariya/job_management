@@ -4,7 +4,7 @@ import { RootRouteProps } from '../../types/RootStackTypes';
 import { useRoute } from '@react-navigation/native';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { globalStyles } from '../../styles/globalStyles';
-import { Container, CustomBlackButton, CustomDashedComponent, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components';
+import { Container, CustomActivityIndicator, CustomBlackButton, CustomDashedComponent, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header } from '../../components';
 import { styles } from './styles';
 import { ImagesPath } from '../../utils/ImagePaths';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
@@ -38,8 +38,10 @@ const CreateBillSectionScreen = () => {
     const [countingError, setCountingError] = useState(false)
     const [imageUrl, setImageUrl] = useState<string | undefined>('');
     const [imageError, setImageError] = useState(false)
-    const [count, setCount] = useState(1)
-    const { formData } = useAppSelector(state => state.jobList)
+    const [count, setCount] = useState(0)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    const { formData, jobDetails } = useAppSelector(state => state.jobList)
     const [error, setError] = useState({
         name: "",
         jumping_ration: "",
@@ -58,7 +60,6 @@ const CreateBillSectionScreen = () => {
         { label: strings.tons, value: 'Tons' },
         { label: strings.CBM, value: 'CBM' },
     ];
-    console.log({ formData })
 
     const CreateMaterialValidationSchema = yup.object().shape({
         name: yup
@@ -70,8 +71,6 @@ const CreateBillSectionScreen = () => {
     });
 
     const createbills = (values: ValuesProps) => {
-        console.log("🚀  file: index.tsx  line 47  createbills  values", values)
-
         if (!countingValue.value) {
             setCountingError(true)
         }
@@ -79,33 +78,33 @@ const CreateBillSectionScreen = () => {
             Alert.alert(strings.profile_pic_required)
         }
         else {
-            var data = new FormData()
-            let images = {
-                uri: imageUrl,
+            setIsLoading(true)
+            const data = new FormData()
+            const images = {
+                uri: imageUrl ?? '',
                 name: "photo.jpg",
                 type: "image/jpeg"
             }
-            console.log({ imageUrl });
 
             data.append("name", values.name)
-            data.append("type_counting", countingValue.value)
+            data.append("type_counting", countingValue.value.toString())
 
             if (imageUrl) {
-                data.append("image", images ? images : '')
+                data.append("image", images)
             }
-            data.append(type == 'material' ? "jumping_ration" : "quantity", route.params.screenName == 'updateJob' ? count : parseFloat(String(values.ration_qunt)))
+            data.append(type == 'material' ? "jumping_ration" : "measurement", route.params.screenName == 'updateJob' ? count.toString() : parseFloat(String(values.ration_qunt).toString()))
             data.append("type", type == 'material' ? "Material" : 'Sign')
 
-            console.log("🚀  file: index.tsx  line 73  createbills  data", data)
-
             dispatch(billCreate(data)).unwrap().then((res: billData) => {
+                setIsLoading(false)
                 if (isFromCloseJob) {
                     dispatch(storeCreatedBillDetailsForCloseJob(res))
-                    navigation.goBack();
-                    navigation.goBack();
+                    navigation.navigate('CloseJobScreen', { params: jobDetails.id })
+                } else {
+                    navigation.navigate('BillListScreen', { billType: type })
                 }
-                console.log({ res: res });
             }).catch((e) => {
+                setIsLoading(false)
                 console.log({ error: e });
                 setError(e.data)
             })
@@ -144,7 +143,7 @@ const CreateBillSectionScreen = () => {
 
     return (
         <View style={globalStyles.container}>
-            {/* {console.log({ values })} */}
+            {isLoading && <CustomActivityIndicator />}
             <Header
                 headerLeftComponent={
                     <TouchableOpacity style={[globalStyles.rowView, { width: wp(50) }]} onPress={() => navigation.goBack()}>
@@ -185,7 +184,11 @@ const CreateBillSectionScreen = () => {
                                     mediaType: 'photo'
                                 }
                                 const { assets } = await launchImageLibrary(option)
-                                setImageUrl(assets && assets.length !== 0 ? assets[0]?.uri : '')
+
+                                if (assets && assets.length !== 0) {
+                                    setImageUrl(assets[0]?.uri ?? '')
+                                }
+
                                 if (assets && assets[0]?.uri) {
                                     setImageError(false)
                                     setError({ ...error, image: '' })
@@ -302,8 +305,8 @@ const CreateBillSectionScreen = () => {
                                 </TouchableOpacity>
                                 <Text style={{ width: wp(10), textAlign: 'center' }}>{count}</Text>
                                 <TouchableOpacity onPress={() => {
-                                    setFieldValue('ration_qunt', count > 1 ? count - 1 : 1)
-                                    setCount(count > 1 ? count - 1 : 1)
+                                    setFieldValue('ration_qunt', count >= 1 ? count - 1 : 0)
+                                    setCount(count >= 1 ? count - 1 : 0)
                                 }}>
                                     <Image source={ImagesPath.minus} resizeMode={'contain'} style={styles.btnIconStyle} />
                                 </TouchableOpacity>

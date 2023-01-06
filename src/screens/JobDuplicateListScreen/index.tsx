@@ -1,8 +1,8 @@
 import { useIsFocused } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
-import { Container, Header } from "../../components";
+import { Container, CustomActivityIndicator, Header } from "../../components";
 import CustomJobListComponent from "../../components/CustomJobListComponent";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import useCustomNavigation from "../../hooks/useCustomNavigation";
@@ -29,107 +29,73 @@ interface JobDataProps {
 }
 
 interface jobListParams {
-    page?: number,
+    page: number,
     search?: string
 }
+
 const JobDuplicateListScreen = () => {
+
     const navigation = useCustomNavigation('JobDuplicateListScreen');
-    const { jobListData } = useAppSelector(state => state.jobList)
     const dispatch = useAppDispatch()
     const isFocused = useIsFocused()
 
-    const [page, setPage] = useState(1)
+    const [jobListApiPage, setJobListApiPage] = useState(1)
+    const [isIndex, setIsIndex] = useState(0)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [onEndReachedLoader, setOnEndReachedLoader] = useState<boolean>(false)
+    const [selectedJobDetails, setSelectedJobDetails] = useState<JobDetailsData | null>(null)
+
+    const { jobListData, isLoading: jobListApiCallLoading } = useAppSelector(state => state.jobList)
 
     useEffect(() => {
-        jobListApiCall(page)
-    }, [navigation, isFocused])
+        setIsLoading(true)
+        jobListApiCall(1)
+    }, [])
 
-    const jobListApiCall = (page: number) => {
+    useEffect(() => {
+        if (jobListData.results.length != 0 && !Object.keys(selectedJobDetails ?? {}).length) {
+            setSelectedJobDetails(jobListData.results[0])
+        }
+    }, [jobListData])
+
+
+
+    const jobListApiCall = (page?: number) => {
         let params: jobListParams = {
-            page: page,
+            page: page ?? jobListApiPage,
             search: ''
         }
         dispatch(jobList(params)).unwrap().then((res) => {
-            console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
-            // setJobList(res.results)
-            setPage(page + 1)
+            setJobListApiPage(params.page + 1)
+            setOnEndReachedLoader(false)
+            setIsLoading(false)
         }).catch((error) => {
-            console.log({ error });
+            setOnEndReachedLoader(false)
+            setIsLoading(false)
         })
     }
 
-    const JobData: JobDataProps[] = [
-        { id: 1, title: 'Job Title1', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false, status: 'hjb' },
-        { id: 2, title: 'Job Title2', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false, status: 'hjb' },
-        { id: 3, title: 'Job Title3', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
-        { id: 4, title: 'Job Title4', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
-        { id: 5, title: 'Job Title5', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false, status: 'hjb' },
-        { id: 6, title: 'Job Title6', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false, status: 'hjb' },
-        { id: 7, title: 'Job Title7', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
-        { id: 8, title: 'Job Title8', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
-        { id: 9, title: 'Job Title9', description: 'Lorem Ipsum is simply dummy text of the printing...', km: '15 ק"מ משם', date: "16 may 2022", button: "לִפְתוֹחַ", selected: false },
-
-    ]
-    const [isIndex, setIsIndex] = useState(0)
-    const [finalJobList, setFinalJobList] = useState<GroupParams[]>([])
-
-    const renderItem = ({ item, index }: any) => {
-        { console.log(item.status) }
+    const renderItem = ({ item, index }: { item: JobDetailsData, index: number }) => {
+        const isSelctedJob = selectedJobDetails && selectedJobDetails.id == item.id ? true : false
         return (
-            <TouchableOpacity onPress={() => { setSelected(item, index) }} style={styles.jobMainView}>
+            <TouchableOpacity onPress={() => { setSelectedJobDetails(item) }} style={styles.jobMainView}>
                 <View style={{ marginLeft: wp(3.5) }}>
                     <View style={globalStyles.roundView}>
-                        <View style={[styles.roundFillView, { backgroundColor: item.selected ? colors.dark_blue3_color : colors.white_5, }]} />
+                        <View style={[styles.roundFillView, { backgroundColor: isSelctedJob ? colors.dark_blue3_color : colors.white_5, }]} />
                     </View>
                 </View>
                 <CustomJobListComponent
                     item={item}
-                    listStyle={{ flex: 1, }}
+                    listStyle={{ flex: 1 }}
                     textStyle={{ flex: 1 }}
-                    onPress={() => { setSelected(item, index) }} />
+                    onPress={() => setSelectedJobDetails(item)} />
             </TouchableOpacity>
         )
     }
 
-    useEffect(() => {
-        const findData: GroupParams[] = jobListData.results?.map((i) => {
-            console.log({ i });
-
-            return {
-                ...i,
-                // user_name: i.name,
-                selected: false,
-            }
-        })
-        setFinalJobList(findData)
-        console.log({ findData })
-
-    }, [jobListData])
-
-    const setSelected = (item: JobDataProps, index: number) => {
-        let emptyJobList: Array<any> = []
-        finalJobList?.map((data) => {
-            if (data.id == item.id) {
-                emptyJobList.push({
-                    ...data,
-                    selected: !data.selected,
-
-                })
-                setIsIndex(item.id)
-            } else {
-                emptyJobList.push({
-                    ...data,
-                    selected: false
-                })
-            }
-        })
-        // navigation.navigate('DuplicateScreen')
-        setFinalJobList(emptyJobList)
-    }
-
     return (
         <View style={globalStyles.container}>
-            {/* {console.log({ finalJobList })} */}
+            {isLoading && <CustomActivityIndicator />}
             <Header
                 headerLeftComponent={
                     <TouchableOpacity style={globalStyles.rowView} onPress={() => { navigation.goBack() }}>
@@ -142,7 +108,7 @@ const JobDuplicateListScreen = () => {
                         <TouchableOpacity onPress={() => { }} style={{ marginRight: wp(3) }}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { navigation.navigate('DuplicateScreen', { params: isIndex }) }}>
+                        <TouchableOpacity onPress={() => { navigation.navigate('DuplicateScreen', { jobDetails: selectedJobDetails ?? undefined }) }}>
                             <Text style={{ fontFamily: fonts.FONT_POP_MEDIUM, fontSize: FontSizes.REGULAR_18 }}>{strings.done}</Text>
                         </TouchableOpacity>
                     </View>
@@ -150,12 +116,25 @@ const JobDuplicateListScreen = () => {
             />
             <Container>
                 <FlatList
-                    data={finalJobList}
+                    data={jobListData?.results}
                     renderItem={renderItem}
+                    onEndReached={() => {
+                        if (jobListData.next != null && !jobListApiCallLoading) {
+                            setOnEndReachedLoader(true)
+                            jobListApiCall()
+                        }
+                    }}
+                    onEndReachedThreshold={0.01}
+                    showsVerticalScrollIndicator={false}
+                    ListFooterComponent={() => (
+                        <>
+                            {onEndReachedLoader && <ActivityIndicator />}
+                        </>
+                    )}
                 />
             </Container>
         </View>
     )
 }
 
-export default JobDuplicateListScreen
+export default JobDuplicateListScreen;

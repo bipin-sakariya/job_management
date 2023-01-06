@@ -44,6 +44,7 @@ const CustomCarouselZoomImageViewer = (props: CustomCarouselZoomImageViewerProps
             </>
         )
     }
+
     return (
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <Carousel

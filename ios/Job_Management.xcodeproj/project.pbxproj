@@ -542,7 +542,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7639N3C25S;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Job_Management/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

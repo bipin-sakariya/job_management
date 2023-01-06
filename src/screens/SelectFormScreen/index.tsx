@@ -12,7 +12,6 @@ import FontSizes from '../../styles/FontSizes';
 import { convertDate } from '../../utils/screenUtils';
 import { FormDataTypes, formList } from '../../redux/slices/AdminSlice/formListSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { useIsFocused } from '@react-navigation/native';
 import { billData } from '../../redux/slices/AdminSlice/billListSlice';
 import { selectedFormDetialsForCreateJobReducers } from '../../redux/slices/AdminSlice/jobListSlice';
 
@@ -29,26 +28,18 @@ interface FormTypes {
 const SelectFormScreen = () => {
     const navigation = useCustomNavigation('SelectFormScreen');
     const dispatch = useAppDispatch();
-    const isFoucs = useIsFocused();
 
     const [page, setPage] = useState(1)
     const [selectedFormsDetails, setselectedFormsDetails] = useState<FormDataTypes[]>([])
-    // const [allForm, setAllForm] = useState<FormDataTypes[]>([])
-    // const [allFormList, setFormList] = useState<FormTypes[]>(allForm)
 
     const { formListData } = useAppSelector(state => state.formList)
     const { selectedFormsDetailForJob } = useAppSelector(state => state.jobList)
+    const { jobDetails } = useAppSelector(state => state.jobList)
 
-    useEffect(() => {
-        if (isFoucs) {
-            handleFormApi(page)
-        }
-    }, [isFoucs])
 
     useEffect(() => {
         setselectedFormsDetails(selectedFormsDetailForJob?.selectedFormsDetails)
     }, [selectedFormsDetailForJob])
-
 
     const handleFormApi = (page: number) => {
         let params = {
@@ -77,7 +68,6 @@ const SelectFormScreen = () => {
         let selectedFormsBillList: billData[] = []
         let isSignBill: boolean | undefined = false
         selectedFormsDetails.map((formDetail) => {
-            console.log({ IS_SIGN: formDetail.is_sign })
             isSignBill = !isSignBill ? formDetail.is_sign : true
             selectedFormsBillList.push(...formDetail.bill)
         })
@@ -86,7 +76,8 @@ const SelectFormScreen = () => {
     }
 
     const renderItem = ({ item }: { item: FormTypes }) => {
-        const isSelected = selectedFormsDetails.find((formDetails) => formDetails.id == item.id)
+        const isSelected = selectedFormsDetails?.find((formDetails) => formDetails.id == item.id);
+
         return (
             <TouchableOpacity onPress={() => handleSelectionOfForms(item)} style={globalStyles.rowView}>
                 <Image source={isSelected ? ImagesPath.select_check_box : ImagesPath.check_box} style={styles.checkIcon} />
@@ -116,7 +107,7 @@ const SelectFormScreen = () => {
                 }
                 headerRightComponent={
                     <View style={globalStyles.rowView}>
-                        <TouchableOpacity >
+                        <TouchableOpacity>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => { manageSelectedFormsDetials() }}>
@@ -132,7 +123,7 @@ const SelectFormScreen = () => {
                     image={ImagesPath.squre_note_icon}
                 />
                 <FlatList
-                    data={formListData?.results}
+                    data={jobDetails.group_forms}
                     renderItem={renderItem}
                     showsVerticalScrollIndicator={false}
                     ItemSeparatorComponent={() => {
@@ -142,13 +133,11 @@ const SelectFormScreen = () => {
                     }}
                     style={{ paddingTop: hp(1) }}
                     onEndReached={() => {
-                        console.log("On reach call");
                         if (formListData?.next) {
                             handleFormApi(page)
                         }
                     }}
                 />
-
             </Container>
         </View>
     )

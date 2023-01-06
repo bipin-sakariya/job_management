@@ -1,7 +1,7 @@
 import { FlatList, Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
-import { Container, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, Header } from '../../components'
+import { Container, CustomActivityIndicator, CustomBlackButton, CustomModal, CustomSubTitleWithImageComponent, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
@@ -61,31 +61,20 @@ export interface GroupParams {
 
 const TransferJobScreen = () => {
     const navigation = useCustomNavigation('TransferJobScreen');
-    // const data = [
-    //     { id: 1, title: 'titljbhjbgjhbgjk1', selected: false },
-    //     { id: 2, title: 'title1', selected: false },
-    //     { id: 3, title: 'title1', selected: false },
-    //     { id: 4, title: 'title1', selected: false },
-    //     { id: 5, title: 'title1', selected: false },
-    //     { id: 6, title: 'title1', selected: false },
-    //     { id: 7, title: 'title1', selected: false },
-    //     { id: 8, title: 'title1', selected: false },
-    //     { id: 9, title: 'title1', selected: false },
-    //     { id: 10, title: 'title1', selected: false },
-    // ]
-    const [text, setText] = useState("");
-    const [isSearch, setIsSearch] = useState(false)
-
     const dispatch = useAppDispatch();
-    const isFocus = useIsFocused()
+    const isFocus = useIsFocused();
     const route = useRoute<RootRouteProps<'TransferJobScreen'>>();
 
-    const [isModelVisible, setIsModelVisible] = useState(false)
-    const [IsErrorModal, setIsErrorModal] = useState(false)
-    const [jobData, setJobData] = useState<GroupData[]>([])
-    const [page, setPage] = useState(1)
-    const [finalJobList, setFinaljobList] = useState<GroupParams[]>([])
-    const { error } = useAppSelector(state => state.jobList)
+    const [text, setText] = useState("");
+    const [isSearch, setIsSearch] = useState(false);
+
+    const [isModelVisible, setIsModelVisible] = useState(false);
+    const [IsErrorModal, setIsErrorModal] = useState(false);
+    const [jobData, setJobData] = useState<GroupData[]>([]);
+    const [page, setPage] = useState(1);
+    const [finalJobList, setFinaljobList] = useState<GroupParams[]>([]);
+    const { error } = useAppSelector(state => state.jobList);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
         if (isFocus)
@@ -94,14 +83,15 @@ const TransferJobScreen = () => {
             setPage(1)
         }
     }, [isFocus, text])
+    
     const groupListApiCall = (page: number, input?: string) => {
         let params: groupListParams = {
             page: page,
             search: input
         }
-        // setIsFooterLoading(true)
+        setIsLoading(true)
         dispatch(groupList(params)).unwrap().then((res) => {
-            // setIsFooterLoading(false)
+            setIsLoading(false)
             console.log("🚀 ~ file: index.tsx ~ line 92 ~ dispatch ~ res", res)
             if (res.next && !!input) {
                 setJobData(res.results)
@@ -152,7 +142,7 @@ const TransferJobScreen = () => {
 
     return (
         <View style={globalStyles.container}>
-            {/* {console.log({ finalJobList })} */}
+            {isLoading && <CustomActivityIndicator />}
             <Header
                 headerLeftStyle={{
                     width: "50%",

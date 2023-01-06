@@ -14,6 +14,7 @@ import { useIsFocused, useRoute } from '@react-navigation/native'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
 import { billData, billList } from '../../redux/slices/AdminSlice/billListSlice'
 import { formCreate } from '../../redux/slices/AdminSlice/formListSlice'
+
 interface billListParams {
     page?: number,
     search?: string,
@@ -92,7 +93,7 @@ const CreateFormScreen = () => {
             bill: finalArray,
             is_sign: isALLSign
         }
-        console.log({ params })
+
         dispatch(formCreate(params)).unwrap().then((res) => {
             navigation.goBack()
         }).catch((e) => {
@@ -101,7 +102,6 @@ const CreateFormScreen = () => {
     }
 
     useEffect(() => {
-        console.log("🚀 ~ file: index.tsx ~ line 95 ~ useEffect ~ isFocus", isFocus)
         if (isFocus && btn) {
             let params = {
                 page: page,
@@ -116,7 +116,6 @@ const CreateFormScreen = () => {
 
     const billListApiCall = (params: billListParams) => {
         dispatch(billList(params)).unwrap().then((res) => {
-            console.log("billList", res)
             setBillList(res.results)
             setPage(page + 1)
         }).catch((error) => {
@@ -152,7 +151,6 @@ const CreateFormScreen = () => {
         })
         setFinalArray(data)
     }, [selectedMemberData])
-    console.log(finalArray)
 
     return (
         <TouchableWithoutFeedback onPress={() => {

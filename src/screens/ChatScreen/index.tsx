@@ -1,12 +1,12 @@
-import { Alert, Image, Modal, Platform, Pressable, StatusBar, Text, TextInput, TextProps, TextStyle, TouchableOpacity, View } from 'react-native'
-import React, { useCallback, useRef, useState } from 'react'
+import { Alert, Image, Modal, Platform, Pressable, StatusBar, Text, TextInput, TextProps, TextStyle, ViewStyle, TouchableOpacity, View } from 'react-native'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { BottomSheet, CommonlinkPreview, CommonPdfView, Container, CustomActivityIndicator, CustomJobDetailsBottomButton, Header } from '../../components'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { styles } from './styles'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
-import { Avatar, AvatarProps, Bubble, BubbleProps, ComposerProps, GiftedChat, IMessage, InputToolbar, InputToolbarProps, MessageImageProps, MessageVideoProps, Send, SendProps, User, } from 'react-native-gifted-chat'
+import { Avatar, AvatarProps, Bubble, BubbleProps, ComposerProps, GiftedChat, IMessage, InputToolbar, InputToolbarProps, LoadEarlier, LoadEarlierProps, MessageImageProps, MessageVideoProps, Send, SendProps, User, } from 'react-native-gifted-chat'
 import { colors } from '../../styles/Colors'
 import fonts from '../../styles/Fonts'
 import FontSizes from '../../styles/FontSizes'
@@ -15,7 +15,7 @@ import { strings } from '../../languages/localizedStrings'
 import RBSheet from 'react-native-raw-bottom-sheet'
 import DocumentPicker from 'react-native-document-picker';
 import { launchCamera, CameraOptions } from 'react-native-image-picker'
-import { DocList, ImageList, JobDataProps, VideoList } from '../../types/commanTypes'
+import { DocList, ImageList, JobDataProps, MessageProps, VideoList } from '../../types/commanTypes'
 import ImageViewer from 'react-native-image-zoom-viewer'
 import RNFS from "react-native-fs";
 import FileViewer from "react-native-file-viewer";
@@ -25,16 +25,9 @@ import { createThumbnail } from 'react-native-create-thumbnail'
 import { RootRouteProps } from '../../types/RootStackTypes'
 import { useRoute } from '@react-navigation/native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-interface MessageProps {
-    createdAt: Date | number;
-    text?: string;
-    user: User;
-    image?: ImageList | undefined,
-    attachment?: DocList | undefined;
-    _id: string | number;
-    video?: VideoList | undefined;
-    jobData?: JobDataProps | undefined
-}
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
+import { messageListDetails } from '../../redux/slices/ChatSlice/ChatSlice'
+import { SOCKET_URL } from '../../config/Host'
 
 export interface SelectedImageProps {
     visible: boolean,
@@ -43,7 +36,8 @@ export interface SelectedImageProps {
 }
 
 interface CloseIconProps {
-    onPress?: () => void
+    onPress?: () => void,
+    viewStyle?: ViewStyle
 }
 
 const PhotoOption: CameraOptions = {
@@ -156,10 +150,20 @@ const messageData = [
     },
 ]
 
+const CLOSED = 3
+const CLOSING = 2
+const CONNECTING = 0
+const OPEN = 1
+
 const currentUser: User = {
     _id: 1,
     avatar: 'https://placeimg.com/140/140/any',
     name: "Developer"
+}
+
+interface messageListApiCallProps {
+    id?: number,
+    page?: number
 }
 
 const ChatScreen = () => {
@@ -167,8 +171,14 @@ const ChatScreen = () => {
     const route = useRoute<RootRouteProps<'ChatScreen'>>();
     const job_data = route.params.job
 
+    const [page, setPage] = useState<number>(1)
+    const dispatch = useAppDispatch()
+
+    const { token, netInfo } = useAppSelector(state => state.userDetails)
+    const { messageList } = useAppSelector(state => state.chatData)
     const [messages, setMessages] = useState<MessageProps[]>(messageData)
     const [loading, setLoading] = useState(false);
+    const [footerLoading, setFooterLoading] = useState<boolean>(false)
     const refRBSheet = useRef<RBSheet | null>(null);
     const menuRef = useRef(null);
     const [imageVideoSelected, setImageVideoSelected] = useState(false)
@@ -187,6 +197,107 @@ const ChatScreen = () => {
         }
     });
 
+    let chatId = 3
+
+    const url = SOCKET_URL + chatId + `/${token?.access}/`
+    const ws = useRef<WebSocket>(new WebSocket(url)).current
+
+    useEffect(() => {
+        let params = {
+            id: chatId,
+            page: page
+        }
+        // chat list api call
+        setLoading(true)
+        getMessageListApiCall(params)
+    }, [])
+
+    useEffect(() => {
+        socketConnectionOpen()
+
+        ws.addEventListener('open', () => {
+            console.log("SOCKET CONNECTION OPEN");
+        })
+
+        ws.addEventListener('message', (message) => {
+            console.log(message.data);
+
+        })
+
+        ws.addEventListener('error', (error) => {
+            console.log("SOCKET CONNECTION ERROR", error, error.message)
+            if (ws.readyState == CLOSED) {
+                setTimeout(() => {
+                    socketConnectionOpen()
+                }, 5000);
+            }
+        })
+
+        ws.addEventListener('close', (close) => {
+            console.log("SCOKET CONNECTION CLOSE", close);
+        })
+
+        return () => {
+            if (ws.readyState == OPEN) {
+                socketConnectionClose()
+            }
+        }
+    }, [])
+
+    const socketConnectionOpen = () => {
+        ws.onopen
+    }
+
+    const socketConnectionClose = () => {
+        ws.close()
+    }
+
+    const sendMessageOnSocket = (text: string) => {
+        //data
+        ws.send(text)
+    }
+
+    const getMessageListApiCall = (params: messageListApiCallProps) => {
+        dispatch(messageListDetails(params)).unwrap().then((res) => {
+            let tempmessage: MessageProps[] = []
+            res.results.map((item, index) => {
+                console.log("🚀 ~ file: index.tsx:271 ~ res.results.map ~ item", item)
+                let message: MessageProps = {
+                    _id: 5,
+                    createdAt: new Date(),
+                    text: 'hello',
+                    user: {
+                        _id: 1,
+                        name: 'React Native',
+                        avatar: 'https://placeimg.com/140/140/any',
+                    }
+                    // attachment: { attachment: "" },
+                    // image: { url: '' },
+                    // jobData: {
+                    //     id: ''
+                    // },
+                    // video: {
+                    //     url: ''
+                    // }
+                }
+                tempmessage.push(message)
+            })
+            if (params.page == 1) {
+                setMessages(tempmessage)
+                setLoading(false)
+            } else {
+                setMessages([...messages, ...tempmessage])
+                setFooterLoading(false)
+            }
+            setPage(page + 1)
+            setMessages(previousMessages => GiftedChat.append(previousMessages, res.results))
+        }).catch((error) => {
+            setLoading(false)
+            console.log({ error });
+
+        })
+    }
+
     const onSend = useCallback((messages: MessageProps[] = []) => {
         console.log("🚀 ~ file: index.tsx:157 ~ onSend ~ messages", messages)
         let message: MessageProps[] = [{
@@ -196,7 +307,7 @@ const ChatScreen = () => {
             user: {
                 _id: 2,
                 name: 'React Native',
-                avatar: 'https://facebook.github.io/react/img/logo_og.png',
+                avatar: 'https://placeimg.com/140/140/any',
             },
             jobData: messages[0].jobData,
         }]
@@ -220,7 +331,22 @@ const ChatScreen = () => {
         }
         //clear all data
         removeAlldata()
-        setLoading(false)
+
+        if (loading) {
+            Alert.alert("Please wait..!!")
+        } else {
+            if (ws.readyState == OPEN) {
+                messages[0].text && sendMessageOnSocket(messages[0].text)
+            } else {
+                if (netInfo && ws.readyState == CLOSED) {
+                    socketConnectionOpen()
+                    messages[0].text && sendMessageOnSocket(messages[0].text)
+                } else {
+                    Alert.alert("Network connection error...")
+                    socketConnectionOpen()
+                }
+            }
+        }
         console.log("🚀 ~ file: index.tsx:146 ~ onSend ~ message", message)
         setMessages(previousMessages => GiftedChat.append(previousMessages, message))
     }, [])
@@ -394,7 +520,7 @@ const ChatScreen = () => {
                                             }
                                             }
                                         />
-                                    </View>
+                                    </View >
                                 }
                             </>
                         )
@@ -437,7 +563,7 @@ const ChatScreen = () => {
                     props.position == "left" &&
                     <RenderDateTxt date={props.currentMessage?.createdAt} />
                 }
-            </View>
+            </View >
 
         )
     }
@@ -525,7 +651,7 @@ const ChatScreen = () => {
                                 <Image source={ImagesPath.close_icon} style={styles.closeBtnStyle} />
                             </TouchableOpacity>
                             <CommonPdfView disabled item={{ attachment: docList.attachment, bytes: docList.bytes }} mainView={{ backgroundColor: colors.light_blue_color, width: '50%' }} />
-                        </View>
+                        </View >
                     }
                 </View >
             )
@@ -562,7 +688,7 @@ const ChatScreen = () => {
 
     const CloseIcon = (props: CloseIconProps) => {
         return (
-            <View style={styles.closeIconViewStyle}>
+            <View style={[styles.closeIconViewStyle, props.viewStyle]}>
                 <Pressable onPress={props.onPress} style={styles.pressableContainerStyle}>
                     <Image source={ImagesPath.cross_icon} style={styles.closeIconStyle} />
                 </Pressable>
@@ -606,17 +732,45 @@ const ChatScreen = () => {
                     renderSend={renderSend}
                     alwaysShowSend
                     user={currentUser}
+                    listViewProps={{
+                        onEndReached: () => {
+                            setFooterLoading(true)
+                            if (messageList.next) {
+                                let params = {
+                                    id: chatId,
+                                    page: page
+                                }
+                                // chat list api call
+                                setFooterLoading(true)
+                                getMessageListApiCall(params)
+                            }
+                        },
+                        contentContainerStyle: styles.giftedChatContentContainerStyle,
+                    }}
+                    isLoadingEarlier={footerLoading}
+                    renderLoadEarlier={(props: LoadEarlierProps) => {
+                        return (
+                            <LoadEarlier
+                                {...props}
+                                activityIndicatorColor={colors.gray_1}
+                                wrapperStyle={{
+                                    backgroundColor: colors.white_color
+                                }}
+                            />
+                        )
+                    }}
                 />
             </Container>
             {/* image and video full screen display modal */}
-            {selectedImageVedio.visible && selectedImageVedio.data &&
+            {
+                selectedImageVedio.visible && selectedImageVedio.data &&
                 <Modal
                     visible={selectedImageVedio.visible}
                     style={{ margin: 0, backgroundColor: colors.white_color }}
                 >
                     <StatusBar hidden />
-                    <View style={{ height: '100%', width: '100%' }}>
-                        <CloseIcon onPress={() => {
+                    <View style={{ height: '100%', width: '100%', backgroundColor: colors.black }}>
+                        <CloseIcon viewStyle={styles.closeIconCommonViewStyle} onPress={() => {
                             setSelectedImageVedio({
                                 visible: false,
                                 selectedIndex: 0,
@@ -661,52 +815,53 @@ const ChatScreen = () => {
                 </Modal>
             }
             {/* image and video message send modal */}
-            {imageVideoSelected && <RNModal
-                isVisible={imageVideoSelected}
-                style={{ margin: 0 }}
-            >
-                <>
-                    <StatusBar hidden />
-                    <CloseIcon onPress={() => {
-                        setImageVideoSelected(false)
-                        setLoading(false)
-                        chatRef?.current?.onInputTextChanged('')
-                        removeAlldata('image&video')
-                    }} />
-                    <KeyboardAwareScrollView contentContainerStyle={{ flex: 1, backgroundColor: colors.black }}>
-                        {
-                            videoList?.url &&
-                            <Video
-                                repeat
-                                source={{ uri: videoList.url }}
-                                style={styles.modalVideoContainerStyle}
-                                resizeMode={'contain'} />
-                        }
-                        {
-                            imageList?.url &&
-                            <Image source={{ uri: imageList?.url }} style={styles.modalImageContainerStyle} />
-                        }
-                        <View ref={menuRef} style={styles.modalTxtInputContainerStyle}>
-                            <TextInput
-                                onChangeText={chatRef?.current?.onInputTextChanged}
-                                multiline={false}
-                                numberOfLines={1}
-                                placeholder={strings.write_a_message_here}
-                                placeholderTextColor={colors.dark_blue3_color}
-                                style={[styles.inputToolBarTextInputStyle, { padding: wp(2), borderRadius: wp(2), }]}
-                            />
-                            <TouchableOpacity style={{ padding: wp(4) }}
-                                onPress={() => {
-                                    customMessage()
-                                    setImageVideoSelected(false)
-                                }
-                                }>
-                                <Image source={ImagesPath.send_btn_icon} style={styles.sendBtnStyle} />
-                            </TouchableOpacity>
-                        </View>
-                    </KeyboardAwareScrollView>
-                </>
-            </RNModal>}
+            {
+                imageVideoSelected && <RNModal
+                    isVisible={imageVideoSelected}
+                    style={{ margin: 0 }}
+                >
+                    <>
+                        <StatusBar hidden />
+                        <CloseIcon onPress={() => {
+                            setImageVideoSelected(false)
+                            setLoading(false)
+                            chatRef?.current?.onInputTextChanged('')
+                            removeAlldata('image&video')
+                        }} />
+                        <KeyboardAwareScrollView contentContainerStyle={{ flex: 1, backgroundColor: colors.black }}>
+                            {
+                                videoList?.url &&
+                                <Video
+                                    repeat
+                                    source={{ uri: videoList.url }}
+                                    style={styles.modalVideoContainerStyle}
+                                    resizeMode={'contain'} />
+                            }
+                            {
+                                imageList?.url &&
+                                <Image source={{ uri: imageList?.url }} style={styles.modalImageContainerStyle} />
+                            }
+                            <View ref={menuRef} style={styles.modalTxtInputContainerStyle}>
+                                <TextInput
+                                    onChangeText={chatRef?.current?.onInputTextChanged}
+                                    multiline={false}
+                                    numberOfLines={1}
+                                    placeholder={strings.write_a_message_here}
+                                    placeholderTextColor={colors.dark_blue3_color}
+                                    style={[styles.inputToolBarTextInputStyle, { padding: wp(2), borderRadius: wp(2), }]}
+                                />
+                                <TouchableOpacity style={{ padding: wp(4) }}
+                                    onPress={() => {
+                                        customMessage()
+                                        setImageVideoSelected(false)
+                                    }
+                                    }>
+                                    <Image source={ImagesPath.send_btn_icon} style={styles.sendBtnStyle} />
+                                </TouchableOpacity>
+                            </View>
+                        </KeyboardAwareScrollView>
+                    </>
+                </RNModal >}
             {/* chat footer bottomsheet */}
             <BottomSheet
                 ref={refRBSheet}

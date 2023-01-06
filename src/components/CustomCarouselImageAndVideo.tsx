@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import Video from 'react-native-video';
@@ -10,8 +10,6 @@ import { ImagesPath } from '../utils/ImagePaths';
 import CustomCarouselZoomImageViewer from './CustomCarouselZoomImageViewer';
 import FastImage from 'react-native-fast-image';
 import { ItemProps } from '../types/commanTypes';
-
-
 interface CustomCarouselImageAndVideoProps {
     result: ItemProps[]
     viewStyle?: ViewStyle
@@ -25,7 +23,6 @@ const CustomCarouselImageAndVideo = (props: CustomCarouselImageAndVideoProps) =>
 
     const renderItem = ({ item, index }: { item: ItemProps, index: number }) => {
         const type = item?.image?.split('.').reverse()[0]
-        console.log({ type })
         return (
             <TouchableOpacity style={[styles.imageMainView, props.viewStyle]} onPress={() => setIsVisible(true)}>
                 {(item.mediaType == 'image' || type == "jpeg" || type == "png" || type == "jpg")

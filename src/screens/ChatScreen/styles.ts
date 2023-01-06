@@ -486,5 +486,14 @@ export const styles = StyleSheet.create({
     closeIconViewStyle: {
         height: wp(10),
         backgroundColor: colors.black
-    }
+    },
+    closeIconCommonViewStyle: {
+        marginTop: wp(2),
+        marginHorizontal: wp(2)
+    },
+    giftedChatContentContainerStyle: {
+        flexGrow: 1,
+        justifyContent: "flex-end",
+        backgroundColor: colors.white_color,
+    },
 })

@@ -95,7 +95,6 @@ const MapScreen = () => {
         if (route?.params?.type == 'viewJob') {
             Geolocation.getCurrentPosition(
                 position => {
-                    console.log("getCurrentPosition", position.coords)
                     Geocoder.geocodePosition({ lat: position?.coords?.latitude, lng: position?.coords?.longitude }).then((response: [{ formattedAddress: string }]) => {
                         let params = {
                             id: position.coords.latitude,
@@ -178,6 +177,7 @@ const MapScreen = () => {
                     refRBSheet.current?.close()
                 }}
             />
+
             <MapView
                 style={{ flex: 1 }}
                 provider={'google'}
@@ -218,6 +218,7 @@ const MapScreen = () => {
                 }
 
             </MapView>
+
             <View style={[styles.carouselStyle, { bottom: wp(5) }]}>
                 <TouchableOpacity style={[styles.routeBut, styles.routeButShadow]} onPress={() => handleAddressAndNavigation()}>
                     <Image source={ImagesPath.route_icon} style={styles.pathIconStyle} />

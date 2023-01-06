@@ -1,3 +1,5 @@
+import { User } from "react-native-gifted-chat"
+
 export interface DropdownProps {
     title: string,
     id: number
@@ -45,6 +47,24 @@ export interface MapPositionProps {
 
 export interface ItemProps {
     id?: number
-    image: string | undefined
+    image?: string | undefined
     mediaType?: string
 }
+
+export interface MessageListProps {
+    count: number,
+    next: string | null,
+    previous: string | null,
+    results: MessageProps[]
+}
+export interface MessageProps {
+    createdAt: Date | number;
+    text?: string;
+    user: User;
+    image?: ImageList | undefined,
+    attachment?: DocList | undefined;
+    _id: string | number;
+    video?: VideoList | undefined;
+    jobData?: JobDataProps | undefined
+}
+
