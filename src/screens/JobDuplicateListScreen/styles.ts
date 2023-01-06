@@ -1,8 +1,10 @@
-import { StyleSheet } from "react-native";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+import { I18nManager, StyleSheet } from "react-native";
+import { RFValue } from "react-native-responsive-fontsize";
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { colors } from "../../styles/Colors";
 import fonts from "../../styles/Fonts";
 import FontSizes from "../../styles/FontSizes";
+import { globalStyles } from "../../styles/globalStyles";
 
 export const styles = StyleSheet.create({
     jobMainView: {
@@ -39,5 +41,34 @@ export const styles = StyleSheet.create({
         borderRadius: wp(5),
         borderColor: colors.white_5,
         borderWidth: wp(0.5),
+    },
+    searchInputText: {
+        fontFamily: fonts.FONT_POP_MEDIUM,
+        fontSize: RFValue(15),
+        color: colors.black,
+        paddingHorizontal: wp(3),
+        textAlign: I18nManager.isRTL ? 'right' : 'left',
+        writingDirection: I18nManager.getConstants().isRTL ? "rtl" : "ltr",
+        padding: wp(2),
+        flex: 1,
+    },
+    searchViewImage: {
+        width: wp(5),
+        height: wp(5),
+    },
+    searchInputView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'center',
+        ...globalStyles.rtlDirection,
+        backgroundColor: colors.white,
+        borderRadius: wp(3),
+        shadowColor: colors.gray_4,
+        shadowOffset: { height: 0, width: 0 },
+        shadowOpacity: 0.5,
+        elevation: 0,
+        paddingHorizontal: wp(3),
+        width: wp(90),
+        marginBottom: hp(2)
     },
 })

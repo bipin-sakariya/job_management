@@ -1,4 +1,4 @@
-import { Alert, Image, ImageBackground, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, ImageBackground, Text, TouchableOpacity, View, Platform } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { globalStyles } from '../../styles/globalStyles';
 import { Container, CustomActivityIndicator, CustomBlackButton, CustomSubTitleWithImageComponent, CustomTextInput, DropDownComponent, Header, MultipleSelectDropDown } from '../../components';
@@ -15,23 +15,24 @@ import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { createUser } from '../../redux/slices/AdminSlice/userListSlice';
 import { colors } from '../../styles/Colors';
 import { GroupData, groupList } from '../../redux/slices/AdminSlice/groupListSlice';
+import DeviceInfo from 'react-native-device-info';
 
 const roleSchema = yup.object().shape({
     title: yup.string().required(strings.roleRequired),
     id: yup.number().required(strings.roleRequired)
 })
 
-const permissionSchema = yup.object().shape({
-    title: yup.string().required(strings.permissionRequired),
-    id: yup.number().required(strings.permissionRequired)
-})
+// const permissionSchema = yup.object().shape({
+//     title: yup.string().required(strings.permissionRequired),
+//     id: yup.number().required(strings.permissionRequired)
+// })
 
 const CreateUserValidationSchema = yup.object().shape({
     userName: yup.string().required(strings.usernameRequired),
     email: yup.string().email(strings.emailInvalid).required(strings.emailRequired),
     contactNo: yup.string().length(8, strings.contactNoInvalid).required(strings.contactNoRequired),
     role: roleSchema,
-    permission: permissionSchema
+    // permission: permissionSchema
 });
 
 const CreateUserScreen = () => {
@@ -41,17 +42,29 @@ const CreateUserScreen = () => {
     const [imageUrl, setImageUrl] = useState<string | undefined>('');
     const [formListVisible, setFormListVisible] = useState(false);
     const [formsList, setFormList] = useState<GroupData[]>([])
-    const [selectedFormsData, setSelectedFormsData] = useState()
+    const [selectedFormsData, setSelectedFormsData] = useState([])
     const [error, setError] = useState({
         phone: "",
         email: "",
         user_name: "",
         role: {},
-        permission: {},
+        // permission: {},
     })
+    const [deviceId, setDeviceId] = useState('')
+    const [finalArray, setFinalArray] = useState<number[]>([])
 
     const { isLoading, userDetails, userRoleList } = useAppSelector(state => state.userList);
     const { groupListData } = useAppSelector(state => state.groupList);
+    const { token } = useAppSelector(state => state.userDetails)
+
+
+    useEffect(() => {
+        (async () => {
+            const DeviceId = await DeviceInfo.getUniqueId();
+            setDeviceId(DeviceId)
+        })()
+    }, [])
+    console.log({ deviceId })
 
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
@@ -61,10 +74,11 @@ const CreateUserScreen = () => {
                 email: '',
                 contactNo: '',
                 role: { title: '', id: 0 },
-                permission: { title: '', id: 0 },
+                // permission: { title: '', id: 0 },
             },
             validationSchema: CreateUserValidationSchema,
             onSubmit: values => {
+                console.log({ values })
                 userCreate(values)
             }
         })
@@ -93,6 +107,14 @@ const CreateUserScreen = () => {
         })
     }, [])
 
+    useEffect(() => {
+        let data: number[] = []
+        selectedFormsData?.map((item) => {
+            data.push(item.id)
+        })
+        setFinalArray(data)
+    }, [selectedFormsData])
+
     const userCreate = (values: {
         userName: string;
         email: string;
@@ -118,10 +140,16 @@ const CreateUserScreen = () => {
             if (imageUrl) {
                 data.append("profile_image", images ? images : '')
             }
+            data.append("fcm_token", token?.access)
+            data.append("device_id", deviceId)
+            data.append("device_type", Platform.OS)
             data.append("user_name", values.userName)
             data.append("email", values.email)
             data.append("phone", `+972${values.contactNo}`)
             data.append("role", parseInt(values.role.id.toString()))
+            finalArray.map((_form) => {
+                data.append("permissions", _form)
+            })
 
             dispatch(createUser(data)).unwrap().then((res) => {
                 console.log({ res: res });
@@ -237,7 +265,7 @@ const CreateUserScreen = () => {
                         container={{ marginTop: hp(2.5) }}
                         countTitle={strings.forms}
                     />
-                    {(touched?.permission && errors.permission) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.permissionRequired}</Text> : null}
+                    {/* {(touched?.permission && errors.permission) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.permissionRequired}</Text> : null} */}
                     <CustomBlackButton
                         title={strings.createUser}
                         image={ImagesPath.plus_white_circle_icon}

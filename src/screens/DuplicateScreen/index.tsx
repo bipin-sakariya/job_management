@@ -28,7 +28,7 @@ const DuplicateScreen = () => {
 
     const updateReturnJob = () => {
         let params = {
-            status: strings.wrongInformation,
+            status: strings.duplicate,
             comment: '',
             job: selectedJobDetailsForDuplicate?.id,
             duplicate: jobDetails?.id
@@ -87,7 +87,7 @@ const DuplicateScreen = () => {
                             container={{ marginBottom: wp(4) }}
                             value={selectedJobDetailsForDuplicate?.id.toString()}
                         />
-                        <CustomTextInputWithImage title={jobDetails.address}
+                        <CustomTextInputWithImage title={selectedJobDetailsForDuplicate?.address}
                             disabled
                             value={selectedJobDetailsForDuplicate?.address_information}
                             mainContainerStyle={{ flex: 1, }}

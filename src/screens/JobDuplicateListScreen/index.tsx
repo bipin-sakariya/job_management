@@ -1,6 +1,6 @@
 import { useIsFocused } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 import { Container, CustomActivityIndicator, Header } from "../../components";
 import CustomJobListComponent from "../../components/CustomJobListComponent";
@@ -44,26 +44,28 @@ const JobDuplicateListScreen = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [onEndReachedLoader, setOnEndReachedLoader] = useState<boolean>(false)
     const [selectedJobDetails, setSelectedJobDetails] = useState<JobDetailsData | null>(null)
+    const [isSearch, setIsSearch] = useState(false);
+    const [text, setText] = useState("");
 
     const { jobListData, isLoading: jobListApiCallLoading } = useAppSelector(state => state.jobList)
 
     useEffect(() => {
         setIsLoading(true)
-        jobListApiCall(1)
+        jobListApiCall(1, '')
     }, [])
 
     useEffect(() => {
-        if (jobListData.results.length != 0 && !Object.keys(selectedJobDetails ?? {}).length) {
-            setSelectedJobDetails(jobListData.results[0])
+        if (jobListData?.results?.length != 0 && !Object.keys(selectedJobDetails ?? {})?.length) {
+            setSelectedJobDetails(jobListData?.results[0])
         }
     }, [jobListData])
 
 
 
-    const jobListApiCall = (page?: number) => {
+    const jobListApiCall = (page?: number, searchText?: string) => {
         let params: jobListParams = {
             page: page ?? jobListApiPage,
-            search: ''
+            search: searchText
         }
         dispatch(jobList(params)).unwrap().then((res) => {
             setJobListApiPage(params.page + 1)
@@ -105,7 +107,7 @@ const JobDuplicateListScreen = () => {
                 }
                 headerRightComponent={
                     <View style={globalStyles.rowView}>
-                        <TouchableOpacity onPress={() => { }} style={{ marginRight: wp(3) }}>
+                        <TouchableOpacity onPress={() => setIsSearch(!isSearch)} style={{ marginRight: wp(3) }}>
                             <Image source={ImagesPath.search_icon} style={globalStyles.headerIcon} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => { navigation.navigate('DuplicateScreen', { jobDetails: selectedJobDetails ?? undefined }) }}>
@@ -115,6 +117,24 @@ const JobDuplicateListScreen = () => {
                 }
             />
             <Container>
+                {isSearch &&
+                    <View style={[styles.searchInputView]}>
+                        <Image source={ImagesPath.search_icon} style={styles.searchViewImage} />
+                        <TextInput
+                            style={[styles.searchInputText]}
+                            placeholder={strings.searchHere}
+                            onChangeText={(text) => {
+                                setText(text)
+                                jobListApiCall(1, text.trim())
+                            }}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
+                        />
+                        <TouchableOpacity onPress={() => { setIsSearch(false), setText(''), jobListApiCall(1, '') }} >
+                            <Image source={ImagesPath.close_icon} style={globalStyles.backArrowStyle} />
+                        </TouchableOpacity>
+                    </View>
+                }
                 <FlatList
                     data={jobListData?.results}
                     renderItem={renderItem}
