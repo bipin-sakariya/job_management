@@ -126,5 +126,18 @@ export const styles = StyleSheet.create({
         fontSize: FontSizes.MEDIUM_16,
         color: colors.dark_blue1_color,
         fontFamily: fonts.FONT_POP_REGULAR
-    }
+    },
+    boxShadowStyle: {
+        shadowColor: "rgba(0, 0, 0, 0.5)",
+        shadowOpacity: 0.7,
+        shadowOffset: { height: 0, width: 0 },
+        elevation: 5,
+        width: '50%'
+    },
+    emptyTextStyle: {
+        fontSize: FontSizes.SMALL_14,
+        color: colors.dark_blue1_color,
+        fontFamily: fonts.FONT_POP_REGULAR,
+        alignSelf: 'center',
+    },
 })

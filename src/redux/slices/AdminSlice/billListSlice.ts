@@ -6,16 +6,16 @@ import { axiosClient } from "../../../config/Axios";
 import { FormDataTypes } from "./formListSlice";
 
 export interface billData {
-    id: number,
-    created_at: string,
-    updated_at: string,
-    name: string,
-    type_counting: string,
-    jumping_ration: Double,
+    id?: number,
+    created_at?: string,
+    updated_at?: string,
+    name?: string,
+    type_counting?: string,
+    jumping_ration?: Double,
     quantity?: number,
     measurement?: number,
-    image: string,
-    type: string
+    image?: string,
+    type?: string
 }
 
 interface billDataProps {

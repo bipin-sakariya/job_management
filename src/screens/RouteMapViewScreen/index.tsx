@@ -51,6 +51,7 @@ const RenderDetail = memo(({ item, getIndex, isActive, drag, jobDetail, selected
     }, [jobDetail]);
 
     let currIndex = getIndex() ?? 0
+
     return (
         <ScaleDecorator>
             <TouchableOpacity style={styles.mainTimeLineView} onLongPress={drag} disabled={isActive}>
@@ -222,7 +223,7 @@ const RouteMapViewScreen = () => {
                     <DraggableFlatList
                         data={jobDetail}
                         keyExtractor={(item) => {
-                            return item?.index ? item?.index.toString() : item?.id.toString()
+                            return item?.index ? item?.index?.toString() : item?.id?.toString()
                         }}
                         renderItem={({ drag, getIndex, isActive, item }) => <RenderDetail drag={drag} getIndex={() => getIndex()} isActive={isActive} item={item} distanceAndDuration={distanceAndDuration} isOnlySourceAndDestination={isOnlySourceAndDestination} jobDetail={jobDetail} selectedAddressIndex={selectedAddressIndex} />}
                         showsVerticalScrollIndicator={false}

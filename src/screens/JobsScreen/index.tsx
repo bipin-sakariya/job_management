@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, FlatList, TextInput, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TouchableOpacity, Image, FlatList, TextInput, ActivityIndicator } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { DrawerActions, useIsFocused } from '@react-navigation/native';
 import { styles } from './styles';
@@ -173,6 +173,7 @@ const JobsScreen = () => {
             setFinalAllGroup(data)
         }
     }, [finalGroupData, groupListData.results, selectedGroupData]);
+
 
     return (
         <View style={globalStyles.container}>

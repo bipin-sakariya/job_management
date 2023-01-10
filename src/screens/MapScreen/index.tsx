@@ -284,6 +284,8 @@ const MapScreen = () => {
                     sliderWidth={wp("100%")}
                     itemWidth={wp("83%")}
                     renderItem={renderItem}
+                    autoplay={false}
+                    accessibilityLanguage={'he'}
                     onSnapToItem={(index: any) => setSelectdeIndex(index)}
                 />
             </View>

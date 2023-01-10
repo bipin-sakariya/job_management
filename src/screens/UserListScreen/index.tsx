@@ -25,10 +25,10 @@ const UserListScreen = () => {
     useEffect(() => {
         if (isFoucs) {
             let params = {
-                page: page
+                page: 1
             }
             dispatch(getListOfUsers(params)).unwrap().then((res) => {
-                setpage(page + 1)
+                setpage(params.page + 1)
             }).catch((error) => {
                 console.log("🚀 ~ file: index.tsx ~ line 38 ~ dispatch ~ error", error)
             })

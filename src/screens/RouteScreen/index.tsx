@@ -144,7 +144,7 @@ const RouteScreen = () => {
                     </View>
                     <CustomSubTitleWithImageComponent disabled title={strings.recent} image={ImagesPath.clock_counter_clockwise_icon} />
                     <FlatList
-                        data={jobListData}
+                        data={jobListData?.results}
                         renderItem={renderItem}
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={{ paddingBottom: wp(20) }}

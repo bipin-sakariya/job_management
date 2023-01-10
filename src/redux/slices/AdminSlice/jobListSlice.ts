@@ -38,19 +38,19 @@ interface Return_Job {
     }
 }
 export interface JobDetailsData {
-    id: number,
-    added_by: Added_byData,
-    closed_by?: null,
+    id?: number,
+    added_by?: Added_byData,
+    closed_by?: Added_byData,
     images?: { image: string | undefined }[]
     attachments?: { attachment: string | undefined }[],
     forms?: undefined,
-    bills?: [],
+    bills?: billData[],
     group_forms?: formdata[] | [],
-    created_at: string,
-    updated_at: string,
-    address: string,
-    address_information: string,
-    description: string,
+    created_at?: string,
+    updated_at?: string,
+    address?: string,
+    address_information?: string,
+    description?: string,
     latitude?: string,
     longitude?: string,
     priority?: boolean,
@@ -91,6 +91,9 @@ interface InitialState {
     isSignBillUpdatable: boolean
     newlyCreatedBillsForCloseJob: billData[] | []
     selectedSignBillsForCloseJob: billData[] | []
+    generatedReport: string | undefined
+    generatedReportJobDetails: JobDataListProps
+    generatedReportSumUp: []
 }
 
 
@@ -138,7 +141,19 @@ const initialState: InitialState = {
             },
             is_active: false
         },
-        closed_by: null,
+        closed_by: {
+            id: null,
+            profile_image: '',
+            user_name: '',
+            email: '',
+            phone: '',
+            date_joined: '',
+            role: {
+                id: null,
+                title: ''
+            },
+            is_active: false
+        },
         images: [{ image: '' }],
         attachments: [],
         forms: undefined,
@@ -170,7 +185,21 @@ const initialState: InitialState = {
     isFromCloseJob: false,
     newlyCreatedBillsForCloseJob: [],
     isSignBillUpdatable: true,
-    selectedSignBillsForCloseJob: []
+    selectedSignBillsForCloseJob: [],
+    recentjobListData: {
+        count: 0,
+        previous: undefined,
+        next: undefined,
+        results: []
+    },
+    generatedReport: '',
+    generatedReportJobDetails: {
+        count: 0,
+        previous: undefined,
+        next: undefined,
+        results: []
+    },
+    generatedReportSumUp: []
 }
 
 
@@ -185,6 +214,7 @@ interface paramsTypes {
     from_date?: string
     to_date?: string
     formData?: FormData
+    reportType?: 'detail' | 'sum_up'
 }
 
 export interface apiErrorTypes {
@@ -318,15 +348,13 @@ export const updatejob = createAsyncThunk<string[], paramsTypes, { rejectValue: 
     }
 })
 
-export const recentSearchJob = createAsyncThunk<JobDetailsData, paramsTypes, { rejectValue: apiErrorTypes }>
+export const recentSearchJob = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
     (JOB + "/recentSearchJob", async (params, { rejectWithValue }) => {
         let obj = {
             job: params.job,
         }
         try {
-            console.log(ApiConstants.RECENTSEARCHJOB, { obj })
             const response = await axiosClient.post(ApiConstants.RECENTSEARCHJOB, obj)
-            console.log('data...........=====', { response: response })
             return response.data
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -339,9 +367,7 @@ export const recentSearchJob = createAsyncThunk<JobDetailsData, paramsTypes, { r
 export const recentSearchList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
     (JOB + "/recentSearchList", async (params, { rejectWithValue }) => {
         try {
-            console.log("🚀 ~ file: jobListSlice.ts ~ line 60 ~ params", params)
             const response = await axiosClient.get(ApiConstants.RECENTSEARCHJOB + `?page=${params.page}`)
-            console.log("🚀 ~ file: jobListSlice.ts ~ line 69 ~ response", response)
             return response.data;
         } catch (e: any) {
             if (e.code === "ERR_NETWORK") {
@@ -350,6 +376,30 @@ export const recentSearchList = createAsyncThunk<JobDataListProps, paramsTypes, 
             return rejectWithValue(e?.response)
         }
     })
+
+export const generateReport = createAsyncThunk<string, paramsTypes, { rejectValue: apiErrorTypes }>
+    (JOB + '/generateReport', async (params, { rejectWithValue }) => {
+        try {
+            const urlParams = new URLSearchParams({ from_date: params.from_date ?? '', to_date: params.to_date ?? '' })
+            const response = await axiosClient.get(ApiConstants.JOB_CREATE_PDF + '?' + urlParams.toString())
+            return response.data
+        } catch (e: any) {
+            return rejectWithValue(e?.response)
+        }
+    })
+
+export const generatedReportDetails = createAsyncThunk<JobDataListProps & [], paramsTypes, { rejectValue: apiErrorTypes }>
+    (JOB + '/generatedReportdetails', async (params, { rejectWithValue }) => {
+        try {
+            const urlParams = new URLSearchParams({ from_date: params.from_date ?? '', to_date: params.to_date ?? '', report: params.reportType ?? '' })
+            const response = await axiosClient.get(ApiConstants.JOB_REPORT_VIEW + '?' + urlParams.toString())
+            return response.data
+        } catch (e: any) {
+            return rejectWithValue(e?.response)
+        }
+    })
+
+
 
 const jobListSlice = createSlice({
     name: JOB,
@@ -407,6 +457,11 @@ const jobListSlice = createSlice({
             state.selectedFormsDetailForJob.isSignBill = (state.newlyCreatedBillsForCloseJob.length || action.payload.signBills.length || isSignIn) ? true : false
             state.selectedSignBillsForCloseJob = action.payload.signBills
             state.isSignBillUpdatable = state.selectedFormsDetailForJob.isSignBill === true ? false : true
+        },
+        resetGeneratedReportDetailsReducer: (state) => {
+            state.generatedReport = undefined
+            state.generatedReportJobDetails = { count: 0, previous: undefined, next: undefined, results: [] }
+            state.generatedReportSumUp = []
         }
     },
     extraReducers(builder) {
@@ -565,8 +620,8 @@ const jobListSlice = createSlice({
             state.error = ''
         });
         builder.addCase(recentSearchJob.fulfilled, (state, action) => {
-            state.isLoading = false,
-                state.jobListData = action.payload
+            state.isLoading = false
+            state.jobListData = action.payload
         });
         builder.addCase(recentSearchJob.rejected, (state, action) => {
             state.isLoading = false
@@ -577,15 +632,47 @@ const jobListSlice = createSlice({
             state.error = ''
         });
         builder.addCase(recentSearchList.fulfilled, (state, action) => {
-            state.isLoading = false,
-                state.jobListData = action.payload
+            state.isLoading = false
+            state.jobListData = action.payload
         });
         builder.addCase(recentSearchList.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = ''
+        });
+
+        //generate Report 
+        builder.addCase(generateReport.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(generateReport.fulfilled, (state, action) => {
+            state.isLoading = false
+            state.generatedReport = action.payload
+        });
+        builder.addCase(generateReport.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = ''
+        });
+
+        //generate Reports Job Details  
+        builder.addCase(generatedReportDetails.pending, state => {
+            state.isLoading = true
+            state.error = ''
+        });
+        builder.addCase(generatedReportDetails.fulfilled, (state, action) => {
+            state.isLoading = false
+            if (action.meta.arg.reportType == 'detail') {
+                state.generatedReportJobDetails = action.meta.arg.page == 1 ? action.payload : { ...action.payload, results: [...state.generatedReportJobDetails.results, ...action.payload.results] }
+            } else if (action.meta.arg.reportType == 'sum_up') {
+                state.generatedReportSumUp = action.payload
+            }
+        });
+        builder.addCase(generatedReportDetails.rejected, (state, action) => {
             state.isLoading = false
             state.error = ''
         });
     }
 })
 
-export const { selectedFormDetialsForCreateJobReducers, resetSelectedFormsBillReducer, storeUserInteractionWithBillCreation, storeCreatedBillDetailsForCloseJob, updateSelectedBilllDetials, updateSelectedSignBillListReducer } = jobListSlice.actions
+export const { selectedFormDetialsForCreateJobReducers, resetSelectedFormsBillReducer, storeUserInteractionWithBillCreation, storeCreatedBillDetailsForCloseJob, updateSelectedBilllDetials, updateSelectedSignBillListReducer, resetGeneratedReportDetailsReducer } = jobListSlice.actions
 export default jobListSlice.reducer

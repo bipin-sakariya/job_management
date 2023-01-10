@@ -5,14 +5,15 @@ import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import fonts from '../styles/Fonts';
 import FontSizes from '../styles/FontSizes';
 import { colors } from '../styles/Colors';
+import { billData } from '../redux/slices/AdminSlice/billListSlice';
 
-const CustomReportDetailsView = ({ data }: any) => {
+const CustomReportDetailsView = ({ billDetail }: { billDetail: billData }) => {
     return (
         <View style={[globalStyles.rowView, { justifyContent: 'space-between', flex: 1 }]}>
-            <Text style={[styles.commonTxt, globalStyles.rtlStyle]}>{data.title}</Text>
+            <Text style={[styles.commonTxt, globalStyles.rtlStyle]}>{billDetail?.name}</Text>
             <View style={[globalStyles.rowView, { width: wp(30), justifyContent: "space-between" }]}>
-                <Text style={[styles.commonTxt, globalStyles.rtlStyle]}>{data.size}</Text>
-                <Text style={[styles.commonTxt, globalStyles.rtlStyle]}>{data.parameter}</Text>
+                <Text style={[styles.commonTxt, globalStyles.rtlStyle]}>{billDetail?.type == 'Sign' ? billDetail?.measurement : billDetail?.type == 'Material' && billDetail?.jumping_ration}</Text>
+                <Text style={[styles.commonTxt, globalStyles.rtlStyle]}>{billDetail?.type_counting}</Text>
             </View>
         </View>
     )

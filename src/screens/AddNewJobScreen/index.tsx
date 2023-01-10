@@ -2,7 +2,7 @@ import { Alert, FlatList, Image, Platform, ScrollView, Text, TextInput, Touchabl
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { Container, CustomActivityIndicator, CustomBlackButton, CustomCarouselImageAndVideo, CustomDashedComponent, CustomDetailsComponent, CustomModal, CustomSubTitleWithImageComponent, CustomSwitchComponent, CustomTextInput, CustomTextInputWithImage, Header } from '../../components'
-import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import { ImagesPath } from '../../utils/ImagePaths'
 import useCustomNavigation from '../../hooks/useCustomNavigation'
 import { strings } from '../../languages/localizedStrings'
@@ -274,8 +274,7 @@ const AddNewJobScreen = () => {
                         bottomComponent={
                             <TextInput
                                 multiline
-                                numberOfLines={3}
-                                style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: 'right', maxHeight: wp(25) }]}
+                                style={[styles.bottomTxtStyle, globalStyles.rtlStyle, { textAlign: 'right', minHeight: hp(5) }]}
                                 placeholderTextColor={colors.dark_blue2_color}
                                 value={values.description}
                                 onChangeText={handleChange('description')}
@@ -363,7 +362,7 @@ const AddNewJobScreen = () => {
                             </View>
                         }
                     />
-                    <CustomModal visible={isModelVisible} onRequestClose={() => { setIsModelVisible(false) }}
+                    {/* <CustomModal visible={isModelVisible} onRequestClose={() => { setIsModelVisible(false) }}
                         children={
                             <View style={styles.modalInnerView}>
                                 <Image source={ImagesPath.check_icon_circle} style={globalStyles.modalImageStyle} />
@@ -374,7 +373,7 @@ const AddNewJobScreen = () => {
                                 }}>{strings.newJobAddedSuccessfully}</Text>
                                 <CustomBlackButton buttonStyle={{ paddingHorizontal: wp(10), marginTop: wp(2) }} onPress={() => { setIsModelVisible(false) }} title={strings.okay} />
                             </View>
-                        } />
+                        } /> */}
                 </ScrollView>
             </Container>
         </View>

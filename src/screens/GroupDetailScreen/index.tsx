@@ -87,13 +87,16 @@ const GroupDetailScreen = () => {
     const [finalArray, setFinalArray] = useState<number[]>([])
     const [finalFormsArray, setFinalFormsArray] = useState<number[]>([])
     const [formPage, setFormPage] = useState(1)
-    const [Loading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         if (isFocused) {
+            setIsLoading(true)
             dispatch(groupDetail(route.params.params.id)).unwrap().then((res) => {
                 setImageUrl(res.image)
+                setIsLoading(false)
             }).catch((error) => {
+                setIsLoading(false)
                 console.log({ error });
             })
 

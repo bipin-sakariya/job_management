@@ -203,7 +203,7 @@ const CreateNewJobScreen = () => {
                         }
                         {
                             type == strings.returnJob && (userData?.role == strings.admin || userData?.role == strings.inspector) ?
-                                <TouchableOpacity onPress={() => { }} >
+                                <TouchableOpacity onPress={() => handleSubmit()} >
                                     <Text style={globalStyles.headerTitle}>{strings.done}</Text>
                                 </TouchableOpacity> : null
                         }

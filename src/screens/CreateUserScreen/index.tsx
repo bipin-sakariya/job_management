@@ -212,7 +212,7 @@ const CreateUserScreen = () => {
                         container={{ marginBottom: wp(5) }}
                     />}
                     {(touched?.role && errors.role) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.roleRequired}</Text> : null}
-                    {/* {userRoleList && <DropDownComponent
+                    {userRoleList && <DropDownComponent
                         title={strings.permission}
                         data={userRoleList}
                         image={ImagesPath.down_white_arrow}
@@ -224,8 +224,8 @@ const CreateUserScreen = () => {
                         value={values.permission.id}
                         placeholder={strings.givePermission}
                         container={{ marginBottom: wp(5) }}
-                    />} */}
-                    <MultipleSelectDropDown
+                    />}
+                    {/* <MultipleSelectDropDown
                         setIsVisible={setFormListVisible}
                         isVisible={formListVisible}
                         data={formsList}
@@ -236,7 +236,7 @@ const CreateUserScreen = () => {
                         }}
                         container={{ marginTop: hp(2.5) }}
                         countTitle={strings.forms}
-                    />
+                    /> */}
                     {(touched?.permission && errors.permission) ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{strings.permissionRequired}</Text> : null}
                     <CustomBlackButton
                         title={strings.createUser}

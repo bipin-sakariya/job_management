@@ -13,7 +13,7 @@ import { useFormik } from 'formik'
 import * as yup from "yup";
 import * as ImagePicker from "react-native-image-picker";
 import FastImage from 'react-native-fast-image';
-import DeviceInfo from 'react-native-device-info';
+import { ImageLibraryOptions, ImagePickerResponse } from 'react-native-image-picker';
 import { updateUserProfile } from '../../redux/slices/AuthUserSlice';
 
 const EditProfileScreen = () => {
@@ -51,8 +51,18 @@ const EditProfileScreen = () => {
         })
     console.log({ data: errors?.user_name, phone: error.phone })
 
+    interface CustomImageOption extends ImageLibraryOptions {
+        title?: string,
+        customButtons?: { name?: string, title?: string }[]
+        storageOptions?: {
+            skipBackup: Boolean
+            path: string
+        }
+    }
+
     const chooseFile = () => {
-        let options = {
+        let options: CustomImageOption = {
+            mediaType: 'photo',
             title: 'Select Image',
             customButtons: [
                 { name: 'customOptionKey', title: 'Choose Photo from Custom Option' },
@@ -62,15 +72,23 @@ const EditProfileScreen = () => {
                 path: 'images',
             },
         };
-        ImagePicker.launchImageLibrary(options, (response) => {
+        interface ImagePickerResponseType extends ImagePickerResponse {
+            title?: string,
+            customButtons?: { name?: string, title?: string }[]
+            storageOptions?: {
+                skipBackup: Boolean
+                path: string
+            }
+        }
+        ImagePicker.launchImageLibrary(options, (response: ImagePickerResponseType) => {
             if (response.didCancel) {
                 console.log("User cancelled image picker");
-            } else if (response.error) {
-                console.log("ImagePicker Error: ", response.error);
-            } else if (response.customButton) {
-                console.log("User tapped custom button: ", response.customButton);
+            } else if (response.errorCode) {
+                console.log("ImagePicker Error: ", response.errorCode);
+            } else if (response.customButtons) {
+                console.log("User tapped custom button: ", response.customButtons);
             } else {
-                setPickerResponse(response.assets[0].uri);
+                setPickerResponse(response?.assets ? response?.assets[0]?.uri ?? '' : '');
             }
         });
     };
@@ -114,7 +132,7 @@ const EditProfileScreen = () => {
                 navigation.goBack()
             }).catch((e) => {
                 console.log({ error: e });
-                setError(e.data)
+                setError(e?.data)
             })
         }
     }
@@ -156,14 +174,14 @@ const EditProfileScreen = () => {
                     value={values.email}
                     onChangeText={handleChange('email')}
                 />
-                {error.email && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.email}</Text>}
+                {error?.email && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error?.email}</Text>}
                 <CustomTextInput
                     title={strings.contactNo}
                     container={{ marginBottom: wp(5) }}
                     value={values.phone}
                     onChangeText={handleChange('phone')}
                 />
-                {error.phone && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.phone}</Text>}
+                {error?.phone && <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error?.phone}</Text>}
                 <CustomBlackButton
                     title={strings.save}
                     image={ImagesPath.save_icon}

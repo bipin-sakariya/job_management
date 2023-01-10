@@ -7,6 +7,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import SplashScreen from 'react-native-splash-screen';
 import { strings } from './src/languages/localizedStrings';
 import { colors } from './src/styles/Colors';
+import ToastConfig from './src/config/toastConfig';
 
 LogBox.ignoreAllLogs();
 
@@ -31,6 +32,7 @@ const App = () => {
                 />
                 <AppNavigation />
             </PersistGate>
+            <ToastConfig />
         </Provider>
     )
 }

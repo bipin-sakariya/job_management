@@ -56,7 +56,7 @@ const SignInScreen = () => {
                     email: values.email,
                     role: res.role,
                     accesToken: res.access,
-                    user: res.userdata
+                    user: res.user
                 }
                 dispatch(userDataReducer(userData))
                 setIsLoading(false)

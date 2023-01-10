@@ -76,7 +76,7 @@ const JobDetailsScreen = () => {
 
     return (
         <View style={globalStyles.container} >
-            {(loading || isLoading) && <CustomActivityIndicator />}
+            {(loading) && <CustomActivityIndicator />}
             <Header
                 headerLeftStyle={{
                     width: "50%",
@@ -134,9 +134,10 @@ const JobDetailsScreen = () => {
                             onChangeText={(text) => { }}
                         />
                         {/* {console.log({ data: jobDetails.return_job[0].duplicate })} */}
-                        {jobDetails.return_job?.status == strings.duplicate ?
+                        {(jobDetails?.return_job && jobDetails?.return_job[0]?.status == strings.duplicate) ?
                             <CustomTextInput
                                 title={strings.relatedJobId[0]}
+                                editable={false}
                                 container={{ marginBottom: wp(5) }}
                                 value={jobDetails.return_job && '' + jobDetails?.return_job[0]?.duplicate}
                                 onChangeText={(text) => { }}
@@ -148,6 +149,7 @@ const JobDetailsScreen = () => {
                             onChangeText={(text) => { }}
                             mainContainerStyle={{ marginBottom: wp(5), flex: 1, }}
                             container={{ width: wp(68) }}
+                            editable={false}
                             onPress={() => {
                                 navigation.navigate('MapScreen', {
                                     type: 'viewJob', JobDetails: {
@@ -176,7 +178,7 @@ const JobDetailsScreen = () => {
                         />
                         <CustomCarouselImageAndVideo viewStyle={{ width: wp(90) }} result={jobDetails.images ?? []} />
 
-                        {(jobDetails.attachments.length != 0) && <CustomDetailsComponent
+                        {(jobDetails?.attachments?.length != 0) && <CustomDetailsComponent
                             title={strings.attachment}
                             detailsContainerStyle={{ marginVertical: wp(4) }}
                             bottomComponent={

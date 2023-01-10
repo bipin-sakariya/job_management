@@ -70,6 +70,12 @@ const CreateBillSectionScreen = () => {
             .required(type == "material" ? strings.jumpingRatioRequired : strings.quantityRequired),
     });
 
+    const createBillWithoutQuantity = yup.object().shape({
+        name: yup
+            .string()
+            .required(type == "material" ? strings.billNameRequired : strings.signNameRequired),
+    });
+
     const createbills = (values: ValuesProps) => {
         if (!countingValue.value) {
             setCountingError(true)
@@ -92,7 +98,11 @@ const CreateBillSectionScreen = () => {
             if (imageUrl) {
                 data.append("image", images)
             }
-            data.append(type == 'material' ? "jumping_ration" : "measurement", route.params.screenName == 'updateJob' ? count.toString() : parseFloat(String(values.ration_qunt).toString()))
+            if (type == 'material') {
+                data.append("jumping_ration", parseFloat(String(values.ration_qunt).toString()))
+            } else if (type == 'sign' && route.params.screenName != 'createBill') {
+                data.append("measurement", count.toString())
+            }
             data.append("type", type == 'material' ? "Material" : 'Sign')
 
             dispatch(billCreate(data)).unwrap().then((res: billData) => {
@@ -110,17 +120,14 @@ const CreateBillSectionScreen = () => {
             })
         }
     }
-    const Increment = () => {
-        setCount(count + 1)
-    }
 
     const { values, errors, touched, handleSubmit, handleChange, setFieldValue } =
         useFormik({
             initialValues: {
                 name: '',
-                ration_qunt: route.params.screenName == 'updatedJob' ? count : '',
+                ration_qunt: (route.params.screenName == 'createBill' && type != 'material') ? count : '',
             },
-            validationSchema: CreateMaterialValidationSchema,
+            validationSchema: route.params.screenName == 'createBill' ? CreateMaterialValidationSchema : createBillWithoutQuantity,
             onSubmit: values => {
                 createbills(values)
             }
@@ -260,14 +267,14 @@ const CreateBillSectionScreen = () => {
                                 </>
                                 :
                                 <>
-                                    <CustomTextInput
+                                    {/* <CustomTextInput
                                         title={strings.quantity}
                                         placeholder={strings.enterQuantity}
                                         container={{ marginBottom: wp(5) }}
                                         onChangeText={handleChange("ration_qunt")}
                                         keyboardType={'number-pad'}
                                     />
-                                    {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
+                                    {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null} */}
 
                                     <DropDownComponent
                                         title={strings.typeCounting}

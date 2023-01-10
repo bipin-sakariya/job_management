@@ -20,4 +20,6 @@ export const ApiConstants = {
 	CHANGEPASSWORD: APP_URL + 'users/change-password/',
 	USERINFO: APP_URL + 'users/info/',
 	RECENTSEARCHJOB: APP_URL + 'job/recent-search-job/',
+	JOB_REPORT_VIEW: APP_URL + 'job/report-view/',
+	JOB_CREATE_PDF: APP_URL + 'job/create-pdf/',
 };

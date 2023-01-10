@@ -47,6 +47,7 @@ import SearchScreen from '../screens/SearchScreen';
 import AssignJobScreen from '../screens/AssignJobScreen';
 import TranferJobListScreen from '../screens/TransferJobListScreen';
 import MapScreen from '../screens/MapScreen';
+import { navigationRef } from '../utils/NavigationServices';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -66,7 +67,7 @@ const AppNavigation = () => {
     };
 
     return (
-        <NavigationContainer theme={navTheme}>
+        <NavigationContainer theme={navTheme} ref={() => navigationRef}>
             <Stack.Navigator
                 screenOptions={{
                     headerShown: false,

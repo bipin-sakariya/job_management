@@ -62,13 +62,18 @@ const CustomBottomSheet = React.forwardRef((props: CustomBottomSheetProps & RBSh
             customStyles={{
                 container: {
                     borderTopLeftRadius: 25,
-                    borderTopRightRadius: 25
+                    borderTopRightRadius: 25,
+                    elevation: 10,
                 },
                 wrapper: {
                     backgroundColor: colors.transparent,
+                    shadowColor: colors.black,
+                    shadowOpacity: 0.15,
+                    shadowRadius: 8,
+                    shadowOffset: { height: 0, width: 0 },
                 },
                 draggableIcon: {
-                    backgroundColor: colors.gray_7
+                    backgroundColor: colors.gray_7,
                 }
             }}>
             <View style={{ flex: 1 }}>

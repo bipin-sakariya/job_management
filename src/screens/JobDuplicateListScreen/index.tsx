@@ -53,7 +53,7 @@ const JobDuplicateListScreen = () => {
     }, [])
 
     useEffect(() => {
-        if (jobListData.results.length != 0 && !Object.keys(selectedJobDetails ?? {}).length) {
+        if (jobListData?.results?.length != 0 && !Object.keys(selectedJobDetails ?? {}).length) {
             setSelectedJobDetails(jobListData.results[0])
         }
     }, [jobListData])

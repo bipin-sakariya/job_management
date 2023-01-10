@@ -136,7 +136,7 @@ const CloseJobScreen = () => {
 
     const renderItem = ({ item, index }: any) => {
         return (
-            <TableDetailsComponent item={item} index={index} isViewOnly />
+            <TableDetailsComponent item={item} index={index} />
         )
     }
 

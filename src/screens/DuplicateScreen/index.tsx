@@ -28,7 +28,7 @@ const DuplicateScreen = () => {
 
     const updateReturnJob = () => {
         let params = {
-            status: strings.wrongInformation,
+            status: strings.duplicate,
             comment: '',
             job: selectedJobDetailsForDuplicate?.id,
             duplicate: jobDetails?.id
