@@ -25,13 +25,10 @@ const RouteChooseLocationDetailScreen = () => {
     const dispatch = useAppDispatch()
     const isFocused = useIsFocused()
 
-    const { jobListData, openedJobList } = useAppSelector(state => state.jobList)
-    const [selectedAddress, setSelectedAddress] = useState<string>('')
+    const { jobListData, openedJobList, recentSearchJobDetails } = useAppSelector(state => state.jobList)
     const [page, setPage] = useState(1)
     const [text, setText] = useState("");
     const [searchPage, setSearchPage] = useState(1)
-    const [jobList, setJobList] = useState([])
-    const [allJobList, setAllJobList] = useState([])
 
     const recentSelectJob = (id: number) => {
         let params = {
@@ -43,13 +40,13 @@ const RouteChooseLocationDetailScreen = () => {
             console.log({ error });
         })
     }
-    console.log('ghfhgfykufguygfyu', jobListData)
+
     const renderItem = ({ item, index }: any) => {
         console.log({ item })
         return (
             <CustomJobListComponent item={text ? item : item.jobs} onPress={() => {
                 recentSelectJob(item.id)
-                dispatch(manageMapRoutesReducer({ id: item?.id, address: item?.address, coordinates: item?.coordinates, description: item?.description }))
+                dispatch(manageMapRoutesReducer({ id: item?.id, address: item?.jobs?.address, coordinates: item?.jobs?.coordinates, description: item?.jobs?.description }))
                 navigation.goBack()
             }}
             />
@@ -63,7 +60,6 @@ const RouteChooseLocationDetailScreen = () => {
             status: strings.open,
         }
         dispatch(jobStatusWiseList(param)).unwrap().then((res) => {
-            setJobList(res)
             console.log({ 'data=========>': res })
             if (res.next && !!input) {
                 setSearchPage(searchPage + 1)
@@ -183,7 +179,11 @@ const RouteChooseLocationDetailScreen = () => {
                     marginTop: wp(2)
                 }} />
                 <CustomSubTitleWithImageComponent viewStyle={{ marginVertical: wp(2) }} disabled title={strings.recent} image={ImagesPath.clock_counter_clockwise_icon} />
-                <FlatList showsVerticalScrollIndicator={false} data={text ? openedJobList.results : jobListData} renderItem={renderItem} />
+                <FlatList
+                    showsVerticalScrollIndicator={false}
+                    data={text ? openedJobList.results : recentSearchJobDetails}
+                    renderItem={renderItem}
+                />
             </Container>
         </View>
     )

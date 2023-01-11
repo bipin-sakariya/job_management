@@ -237,7 +237,7 @@ const BillSectionScreen = () => {
                         onChangeText={handleChange('name')}
                     />
                     {(touched.name && errors.name) || error.name ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.name ? error.name : errors.name}</Text> : null}
-                    {type == "sign" && <>
+                    {/* {type == "sign" && <>
                         <CustomTextInput
                             title={strings.quantity}
                             container={{ marginBottom: wp(5) }}
@@ -248,7 +248,7 @@ const BillSectionScreen = () => {
                             keyboardType={'number-pad'}
                         />
                         {(touched.ration_qunt && errors.ration_qunt) || error.quantity ? <Text style={[globalStyles.rtlStyle, { bottom: wp(5), color: colors.red }]}>{error.quantity ? error.quantity : errors.ration_qunt}</Text> : null}
-                    </>}
+                    </>} */}
                     <DropDownComponent
                         title={strings.typeCounting}
                         data={data}

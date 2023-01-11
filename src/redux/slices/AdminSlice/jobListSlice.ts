@@ -55,6 +55,7 @@ export interface JobDetailsData {
     longitude?: string,
     priority?: boolean,
     further_inspection?: boolean,
+    further_billing?: boolean,
     notes?: null,
     status?: string,
     comment?: null,
@@ -94,6 +95,7 @@ interface InitialState {
     generatedReport: string | undefined
     generatedReportJobDetails: JobDataListProps
     generatedReportSumUp: []
+    recentSearchJobDetails: JobDetailsData[]
 }
 
 
@@ -199,7 +201,8 @@ const initialState: InitialState = {
         next: undefined,
         results: []
     },
-    generatedReportSumUp: []
+    generatedReportSumUp: [],
+    recentSearchJobDetails: []
 }
 
 
@@ -364,7 +367,7 @@ export const recentSearchJob = createAsyncThunk<JobDataListProps, paramsTypes, {
         }
     })
 
-export const recentSearchList = createAsyncThunk<JobDataListProps, paramsTypes, { rejectValue: apiErrorTypes }>
+export const recentSearchList = createAsyncThunk<JobDetailsData[], paramsTypes, { rejectValue: apiErrorTypes }>
     (JOB + "/recentSearchList", async (params, { rejectWithValue }) => {
         try {
             const response = await axiosClient.get(ApiConstants.RECENTSEARCHJOB + `?page=${params.page}`)
@@ -633,7 +636,7 @@ const jobListSlice = createSlice({
         });
         builder.addCase(recentSearchList.fulfilled, (state, action) => {
             state.isLoading = false
-            state.jobListData = action.payload
+            state.recentSearchJobDetails = action.payload
         });
         builder.addCase(recentSearchList.rejected, (state, action) => {
             state.isLoading = false

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import fonts from '../styles/Fonts';
@@ -30,10 +30,15 @@ const TableDetailsComponent = ({ item, type, index, screenName, isViewOnly }: Ta
     }
 
     return (
-
         <TouchableOpacity onPress={() => !isViewOnly && handleSubmit()} style={[globalStyles.rowView, { paddingVertical: wp(1), justifyContent: 'space-around' }]}>
             <Text numberOfLines={1} style={[styles.commonScammedTxt, globalStyles.rtlStyle, { width: wp(15) }]}>{index + 1}</Text>
             <View style={[globalStyles.rowView, { width: wp(35) }]}>
+                {
+                    item.image &&
+                    <View style={[globalStyles.centerView, styles.imageView]}>
+                        <Image source={{ uri: item.image }} style={styles.imageViewStyle} resizeMode={'contain'} />
+                    </View>
+                }
                 <Text numberOfLines={1} style={styles.commonScammedTxt}>{item.name}</Text>
             </View>
             <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.type == 'Sign' ? item.measurement : item.jumping_ration}</Text>
@@ -52,9 +57,8 @@ const styles = StyleSheet.create({
         ...globalStyles.rtlStyle
     },
     imageViewStyle: {
-        width: wp(3),
-        height: wp(3),
-        resizeMode: 'contain',
+        width: wp(5),
+        height: wp(5),
     },
     imageView: {
         width: wp(5),

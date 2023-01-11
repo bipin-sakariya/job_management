@@ -172,18 +172,14 @@ const RouteMapViewScreen = () => {
                 provider={'google'}
                 customMapStyle={customMapStyle}
                 region={
-                    (jobDetail.length > 0) ? {
-                        ...jobDetail[0]?.coordinates,
+                    {
+                        latitude: jobDetail[0]?.coordinates?.latitude ?? origin.latitude,
+                        longitude: jobDetail[0]?.coordinates?.longitude ?? origin.longitude,
                         latitudeDelta: 0.0922,
                         longitudeDelta: 0.0421
-                    } :
-                        {
-                            latitude: 37.3318456,
-                            longitude: -122.0296002,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421
-                        }} >
-                {(jobDetail.length > 0) &&
+                    }
+                } >
+                {(jobDetail.length > 0 && jobDetail[0]?.coordinates?.latitude && jobDetail[0]?.coordinates?.longitude) &&
                     <>
                         <MapViewDirections
                             origin={jobDetail[0]?.coordinates}
@@ -194,7 +190,6 @@ const RouteMapViewScreen = () => {
                             waypoints={wayPoints}
                             strokeColor={colors.black}
                             onReady={result => {
-                                console.log('Distance: Duration', { result, jobDetail })
                                 setDistanceAndDuration(result?.legs)
                             }}
                             onError={(e) => {
@@ -204,7 +199,7 @@ const RouteMapViewScreen = () => {
                         <Marker coordinate={jobDetail[0]?.coordinates} >
                             <Image source={ImagesPath.sourceMarker} style={{ height: wp(16), width: wp(15) }} />
                         </Marker>
-                        {jobDetail.slice(1, jobDetail.length - 1).map((location) => {
+                        {jobDetail?.slice(1, jobDetail?.length - 1).map((location) => {
                             return (
                                 <Marker coordinate={location?.coordinates} >
                                     <Image source={ImagesPath.selected_marker_pin} style={{ height: wp(12), width: wp(12) }} />
@@ -212,9 +207,9 @@ const RouteMapViewScreen = () => {
                             )
                         })}
 
-                        <Marker coordinate={jobDetail[jobDetail.length - 1]?.coordinates} >
+                        {jobDetail[jobDetail.length - 1]?.coordinates?.latitude && jobDetail[jobDetail.length - 1]?.coordinates?.longitude && <Marker coordinate={jobDetail[jobDetail.length - 1]?.coordinates} >
                             <Image source={ImagesPath.sourceMarker} style={{ height: wp(16), width: wp(15) }} />
-                        </Marker>
+                        </Marker>}
                     </>}
             </MapView>
             <View style={styles.jobListContainer}>

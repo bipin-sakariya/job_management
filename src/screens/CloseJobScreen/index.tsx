@@ -83,9 +83,8 @@ const CloseJobScreen = () => {
     }, [isFocused, billDetail])
 
     useEffect(() => {
-        if (jobDetails.notes) {
-            setNotesValue(jobDetails.notes)
-        }
+        jobDetails.notes && setNotesValue(jobDetails.notes)
+        jobDetails.further_billing && setIsSelected(jobDetails.further_billing)
     }, [jobDetails])
 
 
@@ -189,7 +188,8 @@ const CloseJobScreen = () => {
             })
         }
 
-        data.append("further_inspection", jobDetails.further_inspection == true ? jobDetails.further_inspection : isSelected)
+        data.append("further_billing", isSelected)
+        data.append("further_inspection", jobDetails.further_inspection)
         selectedFormsBillList.map((_bill) => {
             data.append("bill", _bill.id)
         })
@@ -201,7 +201,7 @@ const CloseJobScreen = () => {
         }
 
         dispatch(updatejob(params)).unwrap().then((res) => {
-            dispatch(jobDetail(jobDetails.id))
+            dispatch(jobDetail(jobDetails?.id))
             navigation.goBack()
             setIsLoading(false)
         }).catch((e) => {
@@ -276,7 +276,7 @@ const CloseJobScreen = () => {
                         <CustomTextInput
                             title={strings.jobId}
                             container={{ marginBottom: wp(4) }}
-                            value={jobDetails?.id.toString()}
+                            value={jobDetails?.id?.toString()}
                         />
                         <CustomTextInputWithImage
                             editable={false}
@@ -384,7 +384,7 @@ const CloseJobScreen = () => {
                         <TouchableOpacity onPress={() => { setIsSelected(!isSelected) }} style={[globalStyles.rowView, styles.jobListMainView]}>
                             <Text style={styles.jobNameTxt}>{strings.futhurBilling}</Text>
                             <View style={globalStyles.roundView} >
-                                {(isSelected || jobDetails.further_inspection) && <Image source={ImagesPath.right_white_icon} style={styles.checkView} />}
+                                {(isSelected) && <Image source={ImagesPath.right_white_icon} style={styles.checkView} />}
                             </View>
                         </TouchableOpacity>
                         <CustomBlackButton onPress={() => setIsModelVisible(true)} title={strings.changeJobStatus} buttonStyle={{ marginVertical: wp(10) }} />

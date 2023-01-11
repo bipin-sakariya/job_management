@@ -36,7 +36,7 @@ const RouteScreen = () => {
     const [page, setPage] = useState(1)
 
     const { routeList, destination, source } = useAppSelector(state => state.mapData)
-    const { jobListData } = useAppSelector(state => state.jobList)
+    const { recentSearchJobDetails } = useAppSelector(state => state.jobList)
 
     useEffect(() => {
         if (isFocused) { jobListApiCall(page) }
@@ -58,7 +58,9 @@ const RouteScreen = () => {
 
     const renderItem = ({ item, index }: any) => {
         return (
-            <CustomJobListComponent item={item.jobs} onPress={() => dispatch(manageMapRoutesReducer({ id: item?.id, address: item?.address, coordinates: item?.coordinates, description: item?.description, isCheckBlank: true }))} />
+            <CustomJobListComponent item={item.jobs} onPress={() => {
+                dispatch(manageMapRoutesReducer({ id: item?.id, address: item?.jobs?.address, coordinates: item?.jobs?.coordinates, description: item?.jobs?.description, isCheckBlank: true }))
+            }} />
         )
     }
 
@@ -144,7 +146,7 @@ const RouteScreen = () => {
                     </View>
                     <CustomSubTitleWithImageComponent disabled title={strings.recent} image={ImagesPath.clock_counter_clockwise_icon} />
                     <FlatList
-                        data={jobListData?.results}
+                        data={recentSearchJobDetails}
                         renderItem={renderItem}
                         showsVerticalScrollIndicator={false}
                         contentContainerStyle={{ paddingBottom: wp(20) }}

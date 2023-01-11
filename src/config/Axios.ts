@@ -76,13 +76,20 @@ axiosClient.interceptors.request.use(async (config) => {
 				'Content-Type': 'multipart/form-data',
 				Accept: 'application/json',
 			};
-		} else if (config.method != 'put' || config.url?.includes(ApiConstants.USER)) {
+		} else if (config.method == 'get' && config.url?.includes(ApiConstants.JOB_CREATE_PDF)) {
+			console.log('HERE IS THE PDF METHOD')
+			config.headers = {
+				...config.headers,
+				'Content-Type': 'application/json',
+				Accept: 'text/html',
+			};
+		} else if (config.method != 'put' && config.url?.includes(ApiConstants.USER)) {
 			config.headers = {
 				...config.headers,
 				'Content-Type': 'multipart/form-data',
 				Accept: 'application/json',
 			};
-		} else {
+		} else if (config.method != 'get') {
 			config.headers = {
 				...config.headers,
 				'Content-Type': 'application/json',
