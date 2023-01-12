@@ -41,7 +41,7 @@ const TableDetailsComponent = ({ item, type, index, screenName, isViewOnly }: Ta
                 }
                 <Text numberOfLines={1} style={styles.commonScammedTxt}>{item.name}</Text>
             </View>
-            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}>{item.type == 'Sign' ? item.measurement : item.jumping_ration}</Text>
+            <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(10) }]}> {item?.quantity ? item?.quantity : item.type == 'Sign' ? item.measurement : item.jumping_ration}</Text>
             <Text numberOfLines={1} style={[styles.commonScammedTxt, { width: wp(12) }]}>{item.type_counting}</Text>
         </TouchableOpacity>
     )

@@ -92,7 +92,8 @@ interface InitialState {
     isSignBillUpdatable: boolean
     newlyCreatedBillsForCloseJob: billData[] | []
     selectedSignBillsForCloseJob: billData[] | []
-    generatedReport: string | undefined
+    generatedJobDetailsReport: string | undefined
+    generatedSumUpDetailsReport: string | undefined
     generatedReportJobDetails: JobDataListProps
     generatedReportSumUp: []
     recentSearchJobDetails: JobDetailsData[]
@@ -194,7 +195,8 @@ const initialState: InitialState = {
         next: undefined,
         results: []
     },
-    generatedReport: '',
+    generatedJobDetailsReport: '',
+    generatedSumUpDetailsReport: '',
     generatedReportJobDetails: {
         count: 0,
         previous: undefined,
@@ -206,7 +208,7 @@ const initialState: InitialState = {
 }
 
 
-interface paramsTypes {
+export interface paramsTypes {
     id?: number
     data?: FormDataTypes
     page?: number
@@ -383,7 +385,7 @@ export const recentSearchList = createAsyncThunk<JobDetailsData[], paramsTypes, 
 export const generateReport = createAsyncThunk<string, paramsTypes, { rejectValue: apiErrorTypes }>
     (JOB + '/generateReport', async (params, { rejectWithValue }) => {
         try {
-            const urlParams = new URLSearchParams({ from_date: params.from_date ?? '', to_date: params.to_date ?? '' })
+            const urlParams = new URLSearchParams({ from_date: params.from_date ?? '', to_date: params.to_date ?? '', report: params.reportType ?? '', })
             const response = await axiosClient.get(ApiConstants.JOB_CREATE_PDF + '?' + urlParams.toString())
             return response.data
         } catch (e: any) {
@@ -394,7 +396,7 @@ export const generateReport = createAsyncThunk<string, paramsTypes, { rejectValu
 export const generatedReportDetails = createAsyncThunk<JobDataListProps & [], paramsTypes, { rejectValue: apiErrorTypes }>
     (JOB + '/generatedReportdetails', async (params, { rejectWithValue }) => {
         try {
-            const urlParams = new URLSearchParams({ from_date: params.from_date ?? '', to_date: params.to_date ?? '', report: params.reportType ?? '' })
+            const urlParams = new URLSearchParams({ from_date: params.from_date ?? '', to_date: params.to_date ?? '', report: params.reportType ?? '', page: params.page?.toString() ?? '1' })
             const response = await axiosClient.get(ApiConstants.JOB_REPORT_VIEW + '?' + urlParams.toString())
             return response.data
         } catch (e: any) {
@@ -462,7 +464,8 @@ const jobListSlice = createSlice({
             state.isSignBillUpdatable = state.selectedFormsDetailForJob.isSignBill === true ? false : true
         },
         resetGeneratedReportDetailsReducer: (state) => {
-            state.generatedReport = undefined
+            state.generatedSumUpDetailsReport = undefined
+            state.generatedJobDetailsReport = undefined
             state.generatedReportJobDetails = { count: 0, previous: undefined, next: undefined, results: [] }
             state.generatedReportSumUp = []
         }
@@ -650,7 +653,11 @@ const jobListSlice = createSlice({
         });
         builder.addCase(generateReport.fulfilled, (state, action) => {
             state.isLoading = false
-            state.generatedReport = action.payload
+            if (action.meta.arg.reportType == 'detail') {
+                state.generatedJobDetailsReport = action.payload
+            } else if (action.meta.arg.reportType == 'sum_up') {
+                state.generatedSumUpDetailsReport = action.payload
+            }
         });
         builder.addCase(generateReport.rejected, (state, action) => {
             state.isLoading = false

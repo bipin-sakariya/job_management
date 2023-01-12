@@ -21,7 +21,6 @@ interface CustomJobListComponentProps {
 }
 
 const CustomJobListComponent = (props: CustomJobListComponentProps & TouchableOpacityProps) => {
-    // console.log({ ddataa: props.item })
     return (
         <TouchableOpacity
             {...props}
@@ -57,7 +56,7 @@ const CustomJobListComponent = (props: CustomJobListComponentProps & TouchableOp
                         globalStyles.rtlStyle,
                         { fontSize: FontSizes.EXTRA_SMALL_10, textAlign: 'left' },
                     ]}>
-                    {convertDate(props.item.created_at)}
+                    {convertDate(props?.item?.created_at ?? '')}
                 </Text>
                 <View style={styles.descriptionView}>
                     <Text

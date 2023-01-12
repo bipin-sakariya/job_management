@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit"
 import { Alert } from "react-native"
 import { ApiConstants } from "../../../config/ApiConstants"
 import { axiosClient } from "../../../config/Axios"
+import { billData } from "./billListSlice"
 import { FormDataTypes } from "./formListSlice"
 import { formdata } from "./jobListSlice"
 interface Added_byData {
@@ -36,22 +37,23 @@ interface Return_Job {
     }
 }
 export interface JobDetailsData {
-    id: number,
-    added_by: Added_byData,
-    closed_by?: null,
+    id?: number,
+    added_by?: Added_byData,
+    closed_by?: Added_byData,
     images?: { image: string | undefined }[],
     attachments?: { attachment: string | undefined }[],
     forms?: undefined,
-    bills?: [],
+    bills?: billData[],
     group_forms?: formdata[] | [],
-    created_at: string,
-    updated_at: string,
-    address: string,
-    address_information: string,
-    description: string,
+    created_at?: string,
+    updated_at?: string,
+    address?: string,
+    address_information?: string,
+    description?: string,
     latitude?: string,
     longitude?: string,
     priority?: boolean,
+    further_billing?: boolean,
     further_inspection?: boolean,
     notes?: null,
     status?: string,
@@ -105,7 +107,19 @@ const initialState: InitialState = {
             },
             is_active: false
         },
-        closed_by: null,
+        closed_by: {
+            id: null,
+            profile_image: '',
+            user_name: '',
+            email: '',
+            phone: '',
+            date_joined: '',
+            role: {
+                id: null,
+                title: ''
+            },
+            is_active: false,
+        },
         images: [{ image: '' }],
         attachments: [{ attachment: '' }],
         forms: undefined,

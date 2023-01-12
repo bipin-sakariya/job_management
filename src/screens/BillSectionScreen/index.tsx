@@ -98,6 +98,9 @@ const BillSectionScreen = () => {
         name: yup.string().required(type == "material" ? strings.billNameRequired : strings.signNameRequired),
         ration_qunt: yup.string().required(type == "material" ? strings.jumpingRatioRequired : strings.quantityRequired),
     });
+    const CreateSignBillValidationSchema = yup.object().shape({
+        name: yup.string().required(type == "material" ? strings.billNameRequired : strings.signNameRequired),
+    });
 
     const data = [
         { label: strings.meters, value: 'Meters' },
@@ -156,7 +159,7 @@ const BillSectionScreen = () => {
                 name: billDetails.name ? billDetails.name : '',
                 ration_qunt: type == 'material' ? billDetails.jumping_ration ? billDetails.jumping_ration.toString() : '' : billDetails.quantity ? billDetails.quantity.toString() : '',
             },
-            validationSchema: CreateMaterialValidationSchema,
+            validationSchema: type == 'material' ? CreateMaterialValidationSchema : CreateSignBillValidationSchema,
             onSubmit: values => {
                 updateBill(values)
             }

@@ -10,13 +10,13 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import CustomBottomSheet from '../../components/CustomBottomSheet';
 import MapView, { Marker } from 'react-native-maps';
 import { colors } from '../../styles/Colors';
-import Carousel from 'react-native-snap-carousel';
+import Carousel from 'react-native-reanimated-carousel'
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { manageMapRoutesReducer, resetMapRoutesReducer } from '../../redux/slices/MapSlice/MapSlice';
 import { RootRouteProps } from '../../types/RootStackTypes';
-import { JobDetailsData, jobList, jobStatusWiseList } from '../../redux/slices/AdminSlice/jobListSlice';
+import { JobDetailsData, jobStatusWiseList } from '../../redux/slices/AdminSlice/jobListSlice';
 import { GroupData, groupList, selectedGroupReducers } from '../../redux/slices/AdminSlice/groupListSlice';
 import { GroupParams } from '../TransferJobScreen';
 import Geolocation from '@react-native-community/geolocation';
@@ -180,7 +180,9 @@ const MapScreen = () => {
 
     const renderItem = ({ item }: { item: JobDetailsData }) => {
         return (
-            <CustomJobListComponent item={item} type='carousel' listStyle={{ backgroundColor: colors.red }} />
+            <View style={{ paddingHorizontal: wp(2) }}>
+                <CustomJobListComponent item={item} type='carousel' listStyle={{ height: hp(15) }} />
+            </View>
         )
     }
 
@@ -274,19 +276,24 @@ const MapScreen = () => {
                 }
 
             </MapView>
-
             <View style={[styles.carouselStyle, { bottom: wp(5) }]}>
                 <TouchableOpacity style={[styles.routeBut, styles.routeButShadow]} onPress={() => handleAddressAndNavigation()}>
                     <Image source={ImagesPath.route_icon} style={styles.pathIconStyle} />
                 </TouchableOpacity>
                 <Carousel
-                    data={route?.params?.type == 'viewJob' ? [route?.params?.JobDetails] : openedJobList.results}
-                    sliderWidth={wp("100%")}
-                    itemWidth={wp("83%")}
+                    data={route?.params?.type == 'viewJob' ? route?.params?.JobDetails ? [route?.params?.JobDetails].reverse() : [] : [...openedJobList?.results].reverse()}
+                    width={wp("100%")}
+                    height={wp('30%')}
+                    loop={false}
+                    scrollAnimationDuration={1000}
+                    mode='parallax'
+                    autoPlay={false}
+                    style={globalStyles.rtlDirection}
                     renderItem={renderItem}
-                    autoplay={false}
-                    accessibilityLanguage={'he'}
-                    onSnapToItem={(index: any) => setSelectdeIndex(index)}
+                    defaultIndex={openedJobList?.results?.length - 1}
+                    onSnapToItem={(index: any) => {
+                        setSelectdeIndex(index)
+                    }}
                 />
             </View>
         </View>

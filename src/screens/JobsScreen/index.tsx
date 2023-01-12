@@ -10,7 +10,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { strings } from '../../languages/localizedStrings';
 import useCustomNavigation from '../../hooks/useCustomNavigation';
 import { RootState, useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { jobStatusWiseList } from '../../redux/slices/AdminSlice/jobListSlice';
+import { jobStatusWiseList, resetGeneratedReportDetailsReducer } from '../../redux/slices/AdminSlice/jobListSlice';
 import moment from 'moment';
 import { GroupData, groupList, selectedGroupReducers } from '../../redux/slices/AdminSlice/groupListSlice';
 import { GroupParams } from '../TransferJobScreen';
@@ -63,6 +63,7 @@ const JobsScreen = () => {
     useEffect(() => {
         let defaultSelected = finalGroupData.find((i) => i.selected == true)
         setSelectedItem(defaultSelected)
+        dispatch(resetGeneratedReportDetailsReducer())
     }, [])
 
     useEffect(() => {

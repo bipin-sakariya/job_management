@@ -32,7 +32,25 @@ export interface JobDetailsProps {
 export type RootStackParamList = {
     AuthStack: AuthStackParamList
     DrawerScreens: DrawerStackParamList
-    MapScreen: { type: 'viewJob' | 'viewJobs', JobDetails?: { id?: number, images?: { image: string | undefined }[], created_at?: string, status?: string, button?: string, address?: string, description?: string, km?: string, coordinate?: { latitude: number, longitude: number, latitudeDelta: number, longitudeDelta: number }, } }
+    MapScreen: {
+        type: 'viewJob' | 'viewJobs', JobDetails?:
+        {
+            id?: number,
+            images?: { image: string | undefined }[],
+            created_at?: string,
+            status?: string,
+            button?: string,
+            address?: string,
+            description?: string,
+            km?: string,
+            coordinate?: {
+                latitude: number,
+                longitude: number,
+                latitudeDelta: number,
+                longitudeDelta: number
+            },
+        }
+    }
     IndoxScreen: undefined
     JobDuplicateListScreen: undefined
     NotificationScreen: undefined

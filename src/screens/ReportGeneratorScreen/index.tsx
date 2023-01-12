@@ -1,4 +1,4 @@
-import { Alert, FlatList, Image, PermissionsAndroid, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Alert, FlatList, Image, PermissionsAndroid, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { globalStyles } from '../../styles/globalStyles'
 import { ButtonTab, CalendarView, Container, CustomActivityIndicator, CustomBlackButton, Header } from '../../components'
@@ -15,7 +15,7 @@ import TableDetailsComponent from '../../components/TableDetailsComponent'
 import { strings } from '../../languages/localizedStrings'
 import { convertDate } from '../../utils/screenUtils'
 import RNFetchBlob from 'rn-fetch-blob'
-import { generatedReportDetails, generateReport, JobDetailsData, resetGeneratedReportDetailsReducer } from '../../redux/slices/AdminSlice/jobListSlice'
+import { generatedReportDetails, generateReport, JobDetailsData, paramsTypes, resetGeneratedReportDetailsReducer } from '../../redux/slices/AdminSlice/jobListSlice'
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import FileViewer from 'react-native-file-viewer'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks'
@@ -33,8 +33,9 @@ const ReportGeneratorScreen = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [JobDetailsPage, setJobDetailsPage] = useState<number>(1)
   const [isJobDetailsApiCalled, setIsJobDetailsApiCalled] = useState<boolean>(false)
+  const [isFoodLoader, setIsFoodLoader] = useState<boolean>(false)
 
-  const { generatedReport, generatedReportJobDetails, generatedReportSumUp } = useAppSelector(state => state.jobList)
+  const { generatedJobDetailsReport, generatedSumUpDetailsReport, generatedReportJobDetails, generatedReportSumUp, isLoading: isJobDetailsCall } = useAppSelector(state => state.jobList)
 
   const XDate = require("xdate")
 
@@ -48,19 +49,21 @@ const ReportGeneratorScreen = () => {
   }, [])
 
 
-  const createPDF = async () => {
+  const createPDF = async (report: string) => {
+    setIsLoading(true)
     let options = {
-      html: generatedReport,
-      fileName: 'test',
+      html: report,
+      fileName: 'report',
       directory: 'Documents',
       padding: 20,
       bgColor: colors.white,
     };
-    console.log('options ---------------', { options })
     let file = await RNHTMLtoPDF.convert(options)
-    console.log("HERE IS THE PATH ------", file.filePath);
-    // RNFetchBlob.ios.openDocument(file.filePath)
-    FileViewer.open(file.filePath)
+    FileViewer.open(file.filePath).then(() => {
+      setIsLoading(false)
+    }).catch(() => {
+      setIsLoading(false)
+    })
   }
 
 
@@ -265,6 +268,34 @@ const ReportGeneratorScreen = () => {
       })
   }
 
+  //Check user scroll and reached to end or not
+  const isCloseToBottom = (nativeEvent: any) => {
+    const paddingToBottom = 20;
+    return nativeEvent.layoutMeasurement.height + nativeEvent.contentOffset.y >=
+      nativeEvent.contentSize.height - paddingToBottom;
+  };
+
+  const getJobDetails = (page?: number) => {
+    let params: paramsTypes = {
+      from_date: sdate,
+      to_date: edate,
+      reportType: 'detail',
+      page: page ?? JobDetailsPage
+    }
+    console.log({ params, page, JobDetailsPage })
+    dispatch(generatedReportDetails(params)).unwrap().then(() => {
+      params?.page && setJobDetailsPage(params.page + 1)
+      setIsLoading(false)
+      setIsFoodLoader(false)
+      setIsJobDetailsApiCalled(true)
+    }).catch(() => {
+      params.page == 1 && dispatch(resetGeneratedReportDetailsReducer())
+      setIsLoading(false)
+      setIsJobDetailsApiCalled(true)
+      setIsFoodLoader(false)
+    })
+  }
+
   // report generating functionality
   const checkPermissionForDownloadFile = async () => {
     if (Platform.OS === 'android') {
@@ -290,7 +321,7 @@ const ReportGeneratorScreen = () => {
           btn.open ?
             <View style={styles.mainListView}>
               <View style={[globalStyles.rowView, { justifyContent: "space-between", alignItems: 'center' }]}>
-                <Text style={[styles.titleTxt, globalStyles.rtlStyle]}>{item?.address}</Text>
+                <Text style={[styles.titleTxt, globalStyles.rtlStyle, { flex: 1, marginRight: wp(10) }]} numberOfLines={2}>{item?.address}</Text>
                 <Text style={[styles.commonTxt, globalStyles.rtlStyle]}>{moment(item?.updated_at).format('ll')}</Text>
               </View>
               <Text numberOfLines={1} style={[styles.commonTxt, globalStyles.rtlStyle, { marginVertical: wp(1) }]}>{item?.description}</Text>
@@ -331,7 +362,12 @@ const ReportGeneratorScreen = () => {
         }
       />
       <Container style={{ paddingHorizontal: wp(4) }}>
-        <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true}>
+        <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true} onScroll={({ nativeEvent }) => {
+          if (isCloseToBottom(nativeEvent) && !isJobDetailsCall && generatedReportJobDetails.next) {
+            setIsFoodLoader(true)
+            getJobDetails()
+          }
+        }}>
           <View style={[globalStyles.rowView]}>
             <Image source={ImagesPath.note_icon} style={styles.noteIconStyle} />
             <Text style={[styles.reportTxt, globalStyles.rtlStyle]}>{strings.generateReport}</Text>
@@ -363,15 +399,9 @@ const ReportGeneratorScreen = () => {
             onPress={() => {
               if (sdate && edate) {
                 setIsLoading(true)
-                dispatch(generateReport({ from_date: sdate, to_date: edate }))
-                dispatch(generatedReportDetails({ from_date: sdate, to_date: edate, reportType: 'detail', page: JobDetailsPage })).unwrap().then(() => {
-                  setIsLoading(false)
-                  setIsJobDetailsApiCalled(true)
-                }).catch(() => {
-                  setIsLoading(false)
-                  dispatch(resetGeneratedReportDetailsReducer())
-                  setIsJobDetailsApiCalled(true)
-                })
+                dispatch(generateReport({ from_date: sdate, to_date: edate, reportType: 'detail' }))
+                dispatch(generateReport({ from_date: sdate, to_date: edate, reportType: 'sum_up' }))
+                getJobDetails(1)
                 dispatch(generatedReportDetails({ from_date: sdate, to_date: edate, reportType: 'sum_up' }))
               }
             }}
@@ -393,7 +423,7 @@ const ReportGeneratorScreen = () => {
                       <Image source={ImagesPath.suitcase_icon} style={[styles.iconStyle, { tintColor: colors.dark_blue1_color }]} />
                       <Text style={[styles.JobsTxt, globalStyles.rtlStyle]}>{strings.jobs}</Text>
                     </View>
-                    <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { createPDF() }}>
+                    <TouchableOpacity style={[globalStyles.rowView]} onPress={() => { generatedJobDetailsReport && createPDF(generatedJobDetailsReport) }}>
                       <Image source={ImagesPath.download_simple_icon} style={[styles.iconStyle, { tintColor: colors.dark_blue1_color }]} />
                       <Text style={[styles.genrateTxt, globalStyles.rtlStyle]}>{strings.generateReport}</Text>
                     </TouchableOpacity>
@@ -403,11 +433,16 @@ const ReportGeneratorScreen = () => {
                     data={generatedReportJobDetails?.results}
                     renderItem={renderItem}
                     ItemSeparatorComponent={() => <View style={styles.lineSeprator} />}
+                    ListFooterComponent={() => (
+                      <>
+                        {isFoodLoader && <ActivityIndicator />}
+                      </>
+                    )}
                   />
                 </>
                 :
                 <>
-                  <TouchableOpacity style={[globalStyles.rowView, { marginLeft: 'auto', marginTop: hp(2) }]} onPress={() => { }}>
+                  <TouchableOpacity style={[globalStyles.rowView, { marginLeft: 'auto', marginTop: hp(2) }]} onPress={() => generatedSumUpDetailsReport && createPDF(generatedSumUpDetailsReport)}>
                     <Image source={ImagesPath.download_simple_icon} style={[styles.iconStyle, { tintColor: colors.dark_blue1_color }]} />
                     <Text style={[styles.genrateTxt, globalStyles.rtlStyle]}>{strings.generateReport}</Text>
                   </TouchableOpacity>
